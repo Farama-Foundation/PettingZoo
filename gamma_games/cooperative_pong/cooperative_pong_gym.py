@@ -16,6 +16,9 @@ def get_image(path):
 def deg_to_rad(deg):
     return deg*np.pi/180
 
+def get_flat_shape(width, height):
+    return int(width * height/ (2*4*4))
+
 def get_valid_angle(): 
     # generates an angle in [0, 2*np.pi) that \
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range) 
@@ -202,7 +205,8 @@ class env(gym.Env):
         
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
-        self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(self.s_height, (self.s_width >> 1), 1), dtype=np.uint8) for _ in range(self.num_agents)]
+        flattened_shape = get_flat_shape(self.s_width, self.s_height)
+        self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8) for _ in range(self.num_agents)]
 
         self.clock = pygame.time.Clock()
 
@@ -280,7 +284,7 @@ class env(gym.Env):
         # exapnd dims to 3
         observation = []
         for i in obs:
-            observation.append(np.expand_dims(i, axis=2))
+            observation.append(np.expand_dims(i, axis=2).flatten())
         return observation
     
     def draw(self):
