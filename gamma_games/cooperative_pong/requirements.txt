@@ -1,0 +1,8 @@
+ray==0.8.0
+gym>=0.15.4
+pygame==2.0.0.dev6
+scikit-image>=0.16.2
+numpy>=1.18.0
+matplotlib>=3.1.2
+tensorflow-probability==0.7.0
+tensorflow==1.14.0
