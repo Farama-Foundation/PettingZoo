@@ -11,12 +11,6 @@ def convert_to_dict(list_of_list):
         dict_of_list[idx] = i
     return dict_of_list
 
-def flattened(obs):
-    arr = []
-    for i in obs:
-        arr.append(i.flatten())
-    return arr
-
 class env(MultiAgentEnv):
     
     metadata = {'render.modes': ['human']}	
@@ -45,7 +39,6 @@ class env(MultiAgentEnv):
     
     def observe(self):
         obs = self.env.observe()
-        obs = flattened(obs)
         return convert_to_dict(obs)
 
     def step(self, action_dict):
@@ -63,9 +56,7 @@ class env(MultiAgentEnv):
             actions.append(action)
         
         observation, reward, done, info = self.env.step(actions)
-        
-        # observations must be flattened
-        observation = flattened(observation)
+
         observation_dict = convert_to_dict(observation)
         reward_dict = convert_to_dict(reward)
         info_dict = convert_to_dict(info)
