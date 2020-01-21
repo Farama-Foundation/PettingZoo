@@ -14,10 +14,6 @@ from skimage import measure
 import gym
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-#from . import "piston.png", "background.png"
-#import sys
-#sys.path.append(os.path.dirname(__file__))
-
 _image_library = {}
 
 """
@@ -34,7 +30,8 @@ def get_image(path):
 """
 
 def get_image(path):
-    cwd = os.path.dirname(__file__)
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     return image
 
