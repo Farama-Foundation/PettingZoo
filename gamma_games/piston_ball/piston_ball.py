@@ -16,19 +16,6 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 _image_library = {}
 
-"""
-def get_image(path):
-    global _image_library
-    image = _image_library.get(path)
-    if image is None:
-        canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
-        print(canonicalized_path)
-        print(os.getcwd())
-        image = pygame.image.load(os.getcwd()+'/'+canonicalized_path)
-        _image_library[path] = image
-    return image
-"""
-
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)

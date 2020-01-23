@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .cooperative_pong_gym import env as _env 
+from cooperative_pong_gym import env as _env 
 import numpy as np
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv

@@ -1,9 +1,9 @@
 
 piston_ball:
-	python3 -m gamma_games.piston_ball.test
+	python3 gamma_games/piston_ball/test.py
 
 cooperative_pong:
-	python3 -m gamma_games.cooperative_pong.test
+	python3 gamma_games/cooperative_pong/test.py
 
 pursuit_evade:
 	python3 -m sisl_games.pursuit.test

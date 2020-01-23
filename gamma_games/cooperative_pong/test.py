@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from .cooperative_pong import env as _env
+from cooperative_pong import env as _env
 import pygame
 
 # TODO: change these values for testing
