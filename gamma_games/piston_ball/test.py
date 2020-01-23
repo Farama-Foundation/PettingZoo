@@ -1,9 +1,9 @@
-from .piston_ball import env as _env
+import piston_ball
 import time
 import numpy as np
 import pygame
 
-env = _env()
+env = piston_ball.env()
 
 i = 19
 
