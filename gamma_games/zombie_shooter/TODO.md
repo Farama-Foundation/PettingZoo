@@ -25,3 +25,14 @@ kept keypress for those right now.
 6. Ananth suggested me to append new objects to the sprite list instead of a dictionary to make things easier. However, that 
 didn't work out for some unknown reasons. And actually using a dictionary is making things very difficult especially for cases
 like points 1 & 2.
+
+====
+
+change the sword to a mace and make it swing around the knight.
+    - pause knight movement during mace swing
+
+fix bugs 1 and 2
+
+api
+
+sprite
