@@ -1,5 +1,6 @@
 import pygame
-from src.players import Knight, Archer
+from .weapons import Arrow, Sword
+from .players import Knight, Archer
 
 # Defining Colors
 BLACK = (0, 0, 0)
@@ -31,6 +32,7 @@ knight_player_num = archer_player_num = 0
 archer_killed = False
 knight_killed = False
 sword_killed = False
+OBJ_RADIUS = 3
 
 # Initializing Pygame
 pygame.init()
@@ -49,14 +51,14 @@ knight_list = pygame.sprite.Group()
 # Create a Knight
 blue_trigon = pygame.Surface((60, 60), pygame.SRCALPHA)
 pygame.gfxdraw.filled_polygon(blue_trigon, [(0, 40), (25, 5), (25, 0), (35, 0), (35, 5), (60, 40)], BLUE)
-knight_dict["knight{0}".format(knight_player_num)] = Knight(blue_trigon)
+knight_dict["knight{0}".format(knight_player_num)] = Knight(blue_trigon, OBJ_RADIUS)
 knight_list.add(knight_dict["knight{0}".format(knight_player_num)])
 all_sprites.add(knight_dict["knight{0}".format(knight_player_num)])
 
 # Create an Archer
 red_trigon = pygame.Surface((60, 60), pygame.SRCALPHA)
 pygame.gfxdraw.filled_polygon(red_trigon, [(0, 40), (25, 5), (25, 0), (35, 0), (35, 5), (60, 40)], RED)   # [(20, 0), (10, 20), (30, 20)]
-archer_dict["archer{0}".format(archer_player_num)] = Archer(red_trigon)
+archer_dict["archer{0}".format(archer_player_num)] = Archer(red_trigon, OBJ_RADIUS)
 archer_list.add(archer_dict["archer{0}".format(archer_player_num)])
 all_sprites.add(archer_dict["archer{0}".format(archer_player_num)])
 

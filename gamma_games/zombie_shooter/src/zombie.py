@@ -14,6 +14,7 @@ class Zombie(pygame.sprite.Sprite):
         super().__init__()
         self.image = circle
         self.rect = self.image.get_rect(center=(50, 50))
+        self.radius = variables.OBJ_RADIUS
 
     def update(self):
         rand_x = random.randint(0, 10)

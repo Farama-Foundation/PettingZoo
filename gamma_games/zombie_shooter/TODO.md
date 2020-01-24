@@ -28,6 +28,10 @@ like points 1 & 2.
 
 ====
 
+change img path to use os.path.join
+
+disable strafing. only allow forward/backward and rotating
+
 change the sword to a mace and make it swing around the knight.
     - pause knight movement during mace swing
 
