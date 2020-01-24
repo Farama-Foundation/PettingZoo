@@ -45,18 +45,18 @@ class spawnPlayers(pygame.sprite.Sprite):
     def spawnKnight(self):
         if self.event.key == pygame.K_m:
             self.knight_player_num += 1
-            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight(blue_trigon)
-            self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
-            self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.knight_dict['knight{0}'.format(self.knight_player_num)] = Knight(blue_trigon)
+            self.knight_list.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
+            self.all_sprites.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
         return self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict
 
     # Spawn New Archer
     def spawnArcher(self):
         if self.event.key == pygame.K_x:
             self.archer_player_num += 1
-            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer(red_trigon)
-            self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
-            self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer(red_trigon)
+            self.archer_list.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
+            self.all_sprites.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
         return self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict
             
 # Spawn New Weapons
@@ -86,11 +86,11 @@ class spawnWeapons(pygame.sprite.Sprite):
     def spawnSword(self):
         if (self.event.key == pygame.K_SEMICOLON and self.sword_spawn_rate == 0):
             if not sword_list:      # Sword List is Empty
-                if self.knight_killed == False:
-                    for i in range(0, self.knight_player_num+1):
-                        self.sword_dict["sword{0}".format(i)] = Sword((self.knight_dict["knight{0}".format(i)]), sword_rect)
-                        self.sword_list.add(self.sword_dict[("sword{0}".format(i))])
-                        self.all_sprites.add(self.sword_dict[("sword{0}".format(i))])
+                if not self.knight_killed:
+                    for i in range(0, self.knight_player_num + 1):
+                        self.sword_dict['sword{0}'.format(i)] = Sword((self.knight_dict['knight{0}'.format(i)]), sword_rect)
+                        self.sword_list.add(self.sword_dict[('sword{0}'.format(i))])
+                        self.all_sprites.add(self.sword_dict[('sword{0}'.format(i))])
                     self.sword_spawn_rate = 1
                     self.knight_killed = False
                 else:
@@ -104,11 +104,11 @@ class spawnWeapons(pygame.sprite.Sprite):
     # Spawning Arrows for Players
     def spawnArrow(self):
         if (self.event.key == pygame.K_f and self.arrow_spawn_rate == 0):
-            if self.archer_killed == False:
-                for i in range(0, self.archer_player_num+1):
-                    self.arrow_dict[("arrow{0}".format(i))] = Arrow(self.archer_dict[("archer{0}".format(i))])
-                    self.arrow_list.add(self.arrow_dict[("arrow{0}".format(i))])
-                    self.all_sprites.add(self.arrow_dict[("arrow{0}".format(i))])
+            if not self.archer_killed:
+                for i in range(0, self.archer_player_num + 1):
+                    self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
+                    self.arrow_list.add(self.arrow_dict[('arrow{0}'.format(i))])
+                    self.all_sprites.add(self.arrow_dict[('arrow{0}'.format(i))])
                 self.arrow_spawn_rate = 1
                 self.archer_killed = False   
             else:
@@ -189,7 +189,7 @@ def zombie_sword(zombie_list, sword_list, all_sprites, score):
             zombie_list.remove(zombie)
             all_sprites.remove(zombie)
             score += 1
-            print("Score: ", score)
+            print('Score: ', score)
     return zombie_list, sword_list, all_sprites, score
 
 # Zombie Kills the Arrow
@@ -204,7 +204,7 @@ def zombie_arrow(zombie_list, arrow_list, all_sprites, score):
             zombie_list.remove(zombie)
             all_sprites.remove(zombie)
             score += 1
-            print("Score: ", score)
+            print('Score: ', score)
 
         # Remove the arrow if it flies up off the screen
         if arrow.rect.y < 0:
@@ -216,7 +216,7 @@ def zombie_arrow(zombie_list, arrow_list, all_sprites, score):
 def zombie_endscreen(run, zombie_list):
     for zombie in zombie_list:
         if zombie.rect.y > 690:
-            print("*** GAME OVER - Zombie Reached the End ***")
+            print('*** GAME OVER - Zombie Reached the End ***')
             run = False
     return run
 
@@ -224,7 +224,7 @@ def zombie_endscreen(run, zombie_list):
 def zombie_all_players(knight_list, archer_list, run):
     if not knight_list and not archer_list:
         run = False
-        print("*** GAME OVER - All Players are Dead ***")
+        print('*** GAME OVER - All Players are Dead ***')
     return run
 
 # Game Loop
@@ -262,7 +262,7 @@ while run:
             arrow_spawn_rate, archer_killed, archer_dict, archer_list, archer_player_num, all_sprites, arrow_dict, arrow_list = sw.spawnArrow()
 
     # Spawning Zombies at Random Location at every 100 iterations
-    zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
+    # zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
 
     # Stab the Sword
     sword_list, all_sprites = sword_stab(sword_list, all_sprites)
@@ -282,12 +282,6 @@ while run:
     # Kill the Sword when Knight dies
     sword_killed, sword_list, all_sprites = kill_sword(sword_killed, sword_list, all_sprites)
 
-    # Zombie reaches the End of the Screen
-    run = zombie_endscreen(run, zombie_list)
-
-    # Zombie Kills all Players
-    run = zombie_all_players(knight_list, archer_list, run)
-
     # Call the update() method on all the sprites
     all_sprites.update()
 
@@ -297,10 +291,16 @@ while run:
     pygame.display.flip()               # update screen
     clock.tick(FPS)                      # FPS
 
-    # Condition to Check 900 Frames
-    count += 1
-    if count > 900:
-        print("*** GAME OVER - 900 Frames Completed ***")
-        run = False
+    # # Zombie reaches the End of the Screen
+    # run = zombie_endscreen(run, zombie_list)
+
+    # # Zombie Kills all Players
+    # run = zombie_all_players(knight_list, archer_list, run)
+
+    # # Condition to Check 900 Frames
+    # count += 1
+    # if count > 900:
+    #     print('*** GAME OVER - 900 Frames Completed ***')
+    #     run = False
 
 pygame.quit()

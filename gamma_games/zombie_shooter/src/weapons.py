@@ -39,7 +39,7 @@ class Sword(pygame.sprite.Sprite):
         self.image = sword_rect
         self.image.fill(GRAY)
         self.knight = knight
-        self.rect = self.image.get_rect(center=self.knight.rect.center)
+        self.rect = self.image.get_rect(center = self.knight.rect.center)
         self.direction = self.knight.direction
         self.org_image = self.image.copy()
         self.angle = self.knight.angle
@@ -48,41 +48,16 @@ class Sword(pygame.sprite.Sprite):
     def update(self):
         keys = pygame.key.get_pressed()
         self.i += 1
-        self.rect.y = self.knight.rect.y - 25
-        self.rect.x = self.knight.rect.x + 29
 
-        if (keys[pygame.K_j] and self.rect.x > 0):
-            self.rect.x -= KNIGHT_SPEED
-        if (keys[pygame.K_l] and self.rect.x < WIDTH - 60):
-            self.rect.x += KNIGHT_SPEED
-        if (keys[pygame.K_i] and self.rect.y > 20):
-            self.rect.y -= KNIGHT_SPEED
-        if (keys[pygame.K_k] and self.rect.y < HEIGHT - 40):
-            self.rect.y += KNIGHT_SPEED
+        self.angle = self.knight.angle
+        # Get the angle converted to normal unit circle angles and in radians.
+        rota_angle = math.radians(self.angle  + 90)
 
-        # Turn CCW & CW
-        if keys[pygame.K_u]:
-            # print(self.angle)
-            self.angle += ANGLE_RATE
-            self.rect.center = self.knight.rect.center
-            # self.angle = (self.angle * math.pi) / 180
-            # self.rect.bottom = self.rect.y * math.cos(-self.angle) - (self.knight.rect.x + 29) * math.sin(-self.angle)
-            # # self.rect.x = self.rect.y * math.sin(self.angle) + (self.knight.rect.x + 29) * math.cos(self.angle) - 10
-            # self.angle = (self.angle * 180) / math.pi
-
-        if keys[pygame.K_o]:
-            # print(self.angle)
-            self.angle -= ANGLE_RATE
-            self.rect.center = self.knight.rect.center
-            # self.rect.bottom = self.rect.y * math.cos(-self.angle) - (self.knight.rect.x + 29) * math.sin(-self.angle)
-            # # self.rect.x = self.rect.y * math.sin(self.angle) + (self.knight.rect.x + 29) * math.cos(self.angle) - 10
-            # self.rect.y = self.rect.y + 100
-            # self.rect.x = self.rect.x + 30
+        self.rect = self.image.get_rect(center = self.knight.rect.center)
+        self.image = pygame.transform.rotate(self.org_image, self.angle)
+        self.rect.x += (math.cos(rota_angle) * (self.rect.width / 2)) + (math.cos(rota_angle) * (self.knight.rect.width / 2))
+        self.rect.y -= (math.sin(rota_angle) * (self.rect.height / 2)) + (math.sin(rota_angle) * (self.knight.rect.height / 2))
 
         self.direction = self.knight.direction
-        self.rect = self.image.get_rect(center=self.rect.center)
-
-        # self.rect = self.image.get_rect(center=(self.knight.rect.x + 20, self.knight.rect.y + 20))
-        self.image = pygame.transform.rotate(self.org_image, self.angle)
 
         return self.i

@@ -35,7 +35,7 @@ sword_killed = False
 # Initializing Pygame
 pygame.init()
 WINDOW = pygame.display.set_mode([WIDTH, HEIGHT])
-pygame.display.set_caption("Zombie Shooter")
+pygame.display.set_caption("Zombies, Knights, Archers")
 clock = pygame.time.Clock()
 
 # Creating Sprite Groups
