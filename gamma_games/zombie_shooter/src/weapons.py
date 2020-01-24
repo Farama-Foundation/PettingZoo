@@ -38,6 +38,7 @@ class Sword(pygame.sprite.Sprite):
         self.i = i
         self.image = sword_rect
         self.image.fill(GRAY)
+        # self.image = pygame.image.load("E:\\Drive\\UMD\\Research\\Parameter Sharing\\rlgames\\gamma_games\\zombie_shooter\\sword_test.png")
         self.knight = knight
         self.rect = self.image.get_rect(center = self.knight.rect.center)
         self.direction = self.knight.direction
@@ -59,5 +60,7 @@ class Sword(pygame.sprite.Sprite):
         self.rect.y -= (math.sin(rota_angle) * (self.rect.height / 2)) + (math.sin(rota_angle) * (self.knight.rect.height / 2))
 
         self.direction = self.knight.direction
+
+        print(self.rect.height)
 
         return self.i

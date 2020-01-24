@@ -262,6 +262,7 @@ while run:
             arrow_spawn_rate, archer_killed, archer_dict, archer_list, archer_player_num, all_sprites, arrow_dict, arrow_list = sw.spawnArrow()
 
     # Spawning Zombies at Random Location at every 100 iterations
+    # TODO: uncomment this
     # zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
 
     # Stab the Sword
@@ -291,6 +292,7 @@ while run:
     pygame.display.flip()               # update screen
     clock.tick(FPS)                      # FPS
 
+    # TODO: uncomment this stuff below
     # # Zombie reaches the End of the Screen
     # run = zombie_endscreen(run, zombie_list)
 
