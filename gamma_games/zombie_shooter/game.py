@@ -266,7 +266,7 @@ while run:
     # zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
 
     # Stab the Sword
-    sword_list, all_sprites = sword_stab(sword_list, all_sprites)
+    # sword_list, all_sprites = sword_stab(sword_list, all_sprites)
 
     # Zombie Kills the Arrow
     zombie_list, arrow_list, all_sprites, score = zombie_arrow(zombie_list, arrow_list, all_sprites, score)
