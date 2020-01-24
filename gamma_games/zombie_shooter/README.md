@@ -2,9 +2,9 @@
 
 A Zombie Shooting/Killing Game with two players-
 
-Archer (Red) - Shoots an Arrow
+Archer (Red) - Shoots an arrow
 
-Knight (Blue) - Swings a Sword
+Knight (Blue) - Swings a sword
 
 ## Prerequisites
 
@@ -18,10 +18,10 @@ Run the following command to install the dependencies
 
 ### Archer
 
-Move the Archer using the 'W', 'A', 'S' and 'D' keys. Shoot the Arrow using 'F' key. Rotate the Archer using 'Q' and 'E' keys.
-Press 'X' key to spawn a New Archer.
+Move the archer using the 'W', 'A', 'S' and 'D' keys. Shoot the Arrow using 'F' key. Rotate the archer using 'Q' and 'E' keys.
+Press 'X' key to spawn a new archer.
 
 ### Knight
 
-Move the Knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' key. Rotate the Knight using 'U' and 'O' keys.
-Press 'M' key to spawn a New Archer.
+Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' key. Rotate the knight using 'U' and 'O' keys.
+Press 'M' key to spawn a new knight.
