@@ -6,10 +6,10 @@ cooperative_pong:
 	python3 gamma_games/cooperative_pong/test.py
 
 pursuit_evade:
-	python3 -m sisl_games.pursuit.test
+	python3 -m sisl_games.pursuit_evade.test
 
 waterworld:
 	python3 -m sisl_games.waterworld.test
 
 multi_walker:
-	python3 -m sisl_games.walker.test
+	python3 -m sisl_games.multi_walker.test
