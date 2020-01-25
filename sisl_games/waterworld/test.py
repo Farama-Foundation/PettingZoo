@@ -1,15 +1,32 @@
 #!/usr/bin/env python3
 
-from .waterworld import MAWaterWorld
+import numpy as np
+from .waterworld import env as _env
+import time
 
-env = MAWaterWorld(5, 10, obs_loc=None)
-obs = env.reset()
+env = _env()
+env.reset()
+
 done = False
-
+# start = time.time()
+# for _ in range(100):
 while not done:
-    obs, rew, done, _ = env.step(env.np_random.randn(10) * .5)
-    if rew.sum() > 0:
-        print("Reward = ", rew)
+    # game should run at 15 FPS when rendering
     env.render()
+    time.sleep(0.03)
     
+    action_list = np.array([env.action_space_dict[i].sample() for i in range(env.num_agents)])
+    action_dict = dict(zip(env.agent_ids, action_list))
+    
+    observation, rewards, done_dict, info = env.step(action_dict)
+    done = any(list(done_dict.values()))
+    if sum(rewards.values()) > 0:
+        print("rewards", rewards)
+    if done:
+        print("rewards", rewards, "done", done)
+
+# end = time.time()
+# print("FPS = ", 100/(end-start))
+env.render()
+time.sleep(2)
 env.close()
