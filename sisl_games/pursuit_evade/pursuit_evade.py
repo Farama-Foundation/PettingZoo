@@ -23,8 +23,8 @@ class env(MultiAgentEnv):
         self.agent_ids = list(range(self.num_agents))
         # spaces
         self.n_act_agents = self.env.act_dims[0]
-        self.action_space_dict = dict(zip(self.agent_ids, [self.env.action_space[0]]*self.num_agents))
-        self.observation_space_dict = dict(zip(self.agent_ids, [self.env.observation_space[0]]*self.num_agents))
+        self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
+        self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         
         self.reset()
         
