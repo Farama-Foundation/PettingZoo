@@ -18,7 +18,7 @@ while not done:
     action_dict = dict(zip(env.agent_ids, action_list))
     
     observation, rewards, done_dict, info = env.step(action_dict)
-    done = done_dict[0]
+    done = any(list(done_dict.values()))
     print("rewards", rewards)
     if done:
         print("rewards", rewards, "done", done)
