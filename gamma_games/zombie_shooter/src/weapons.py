@@ -3,6 +3,7 @@
 # Importing Libraries
 import pygame
 import math
+import os
 
 # Game Constants
 BLACK = (0, 0, 0)
@@ -20,7 +21,8 @@ class Arrow(pygame.sprite.Sprite):
     def __init__(self, archer, radius):
         super().__init__()
         self.image = pygame.Surface([6, 6])
-        self.image.fill(BLACK)
+        img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
+        self.image = pygame.image.load(os.path.join(img_path, 'arrow.png'))
         self.archer = archer
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
@@ -39,7 +41,8 @@ class Sword(pygame.sprite.Sprite):
         self.i = i # TODO: remove this. Does it break the code if I remove it?
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
-        self.image = pygame.image.load('img\\mace.png')
+        img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
+        self.image = pygame.image.load(os.path.join(img_path, 'mace.png'))
         self.knight = knight
         self.rect = self.image.get_rect(center = self.knight.rect.center)
         self.direction = self.knight.direction

@@ -4,6 +4,7 @@
 import pygame
 import random
 import math
+import os
 from .weapons import Arrow, Sword
 
 # Game Constants
@@ -21,7 +22,8 @@ class Archer(pygame.sprite.Sprite):
     def __init__(self, red_trigon, radius):
         super().__init__()
         # rand_x = random.randint(20, 1260)
-        self.image = red_trigon
+        img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
+        self.image = pygame.image.load(os.path.join(img_path, 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
         self.org_image = self.image.copy()
         self.angle = 0
@@ -59,7 +61,8 @@ class Knight(pygame.sprite.Sprite):
 
     def __init__(self, blue_trigon, radius):
         super().__init__()
-        self.image = blue_trigon
+        img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
+        self.image = pygame.image.load(os.path.join(img_path, 'knight2.png'))
         self.rect = self.image.get_rect(center=(KNIGHT_X, KNIGHT_Y))
         self.org_image = self.image.copy()
         self.angle = 0

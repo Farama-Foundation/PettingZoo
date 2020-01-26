@@ -56,7 +56,7 @@ class spawnPlayers(pygame.sprite.Sprite):
             self.archer_player_num += 1
             self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer(red_trigon, OBJ_RADIUS)
             self.archer_list.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
-            self.all_sprites.add(self.archer_dict['archer{0}'.fdormat(self.archer_player_num)])
+            self.all_sprites.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
         return self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict
             
 # Spawn New Weapons

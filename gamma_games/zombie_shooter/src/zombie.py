@@ -3,6 +3,7 @@
 # Importing Libraries
 import pygame
 import random
+import os
 
 # Game Constants
 ZOMBIE_Y_SPEED = 5
@@ -12,7 +13,8 @@ class Zombie(pygame.sprite.Sprite):
 
     def __init__(self, color, circle, radius):
         super().__init__()
-        self.image = circle
+        img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
+        self.image = pygame.image.load(os.path.join(img_path, 'zombie.png'))
         self.rect = self.image.get_rect(center=(50, 50))
         self.radius = radius
 
