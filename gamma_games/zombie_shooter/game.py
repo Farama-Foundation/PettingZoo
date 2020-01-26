@@ -45,7 +45,7 @@ class spawnPlayers(pygame.sprite.Sprite):
     def spawnKnight(self):
         if self.event.key == pygame.K_m:
             self.knight_player_num += 1
-            self.knight_dict['knight{0}'.format(self.knight_player_num)] = Knight(blue_trigon)
+            self.knight_dict['knight{0}'.format(self.knight_player_num)] = Knight(blue_trigon, OBJ_RADIUS)
             self.knight_list.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
             self.all_sprites.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
         return self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict
@@ -54,9 +54,9 @@ class spawnPlayers(pygame.sprite.Sprite):
     def spawnArcher(self):
         if self.event.key == pygame.K_x:
             self.archer_player_num += 1
-            self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer(red_trigon)
+            self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer(red_trigon, OBJ_RADIUS)
             self.archer_list.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
-            self.all_sprites.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
+            self.all_sprites.add(self.archer_dict['archer{0}'.fdormat(self.archer_player_num)])
         return self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict
             
 # Spawn New Weapons
@@ -88,14 +88,14 @@ class spawnWeapons(pygame.sprite.Sprite):
             if not sword_list:      # Sword List is Empty
                 if not self.knight_killed:
                     for i in range(0, self.knight_player_num + 1):
-                        self.sword_dict['sword{0}'.format(i)] = Sword((self.knight_dict['knight{0}'.format(i)]), sword_rect)
+                        self.sword_dict['sword{0}'.format(i)] = Sword((self.knight_dict['knight{0}'.format(i)]), OBJ_RADIUS)
                         self.sword_list.add(self.sword_dict[('sword{0}'.format(i))])
                         self.all_sprites.add(self.sword_dict[('sword{0}'.format(i))])
                     self.sword_spawn_rate = 1
                     self.knight_killed = False
                 else:
                     for knight in self.knight_list:
-                        temp = Sword(knight, sword_rect)
+                        temp = Sword(knight, OBJ_RADIUS)
                         self.sword_list.add(temp)
                         self.all_sprites.add(temp)
                     self.sword_spawn_rate = 1
@@ -106,14 +106,14 @@ class spawnWeapons(pygame.sprite.Sprite):
         if (self.event.key == pygame.K_f and self.arrow_spawn_rate == 0):
             if not self.archer_killed:
                 for i in range(0, self.archer_player_num + 1):
-                    self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
+                    self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))], OBJ_RADIUS)
                     self.arrow_list.add(self.arrow_dict[('arrow{0}'.format(i))])
                     self.all_sprites.add(self.arrow_dict[('arrow{0}'.format(i))])
                 self.arrow_spawn_rate = 1
                 self.archer_killed = False   
             else:
                 for archer in self.archer_list:
-                    temp = Arrow(archer)
+                    temp = Arrow(archer, OBJ_RADIUS)
                     self.arrow_list.add(temp)
                     self.all_sprites.add(temp)
                 self.arrow_spawn_rate = 1
@@ -123,8 +123,8 @@ class spawnWeapons(pygame.sprite.Sprite):
 def sword_stab(sword_list, all_sprites):
     try:
         for sword in sword_list:
-            sword_destroy = sword.update()
-            if sword_destroy > SPAWN_STAB_RATE:
+            sword_active = sword.update()
+            if not sword_active: # remove the sprite
                 sword_list.remove(sword)
                 all_sprites.remove(sword)
     except:
@@ -134,7 +134,7 @@ def sword_stab(sword_list, all_sprites):
 # Spawning Zombies at Random Location at every 100 iterations
 def spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites):
     zombie_spawn_rate += 1
-    zombie = Zombie(GREEN, circle)
+    zombie = Zombie(GREEN, circle, OBJ_RADIUS)
 
     if zombie_spawn_rate >= ZOMBIE_SPAWN:
         zombie.rect.x = random.randrange(WIDTH)
@@ -263,10 +263,10 @@ while run:
 
     # Spawning Zombies at Random Location at every 100 iterations
     # TODO: uncomment this
-    # zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
+    zombie_spawn_rate, zombie_list, all_sprites = spawn_zombie(zombie_spawn_rate, zombie_list, all_sprites)
 
     # Stab the Sword
-    # sword_list, all_sprites = sword_stab(sword_list, all_sprites)
+    sword_list, all_sprites = sword_stab(sword_list, all_sprites)
 
     # Zombie Kills the Arrow
     zombie_list, arrow_list, all_sprites, score = zombie_arrow(zombie_list, arrow_list, all_sprites, score)

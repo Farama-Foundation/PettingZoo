@@ -82,18 +82,6 @@ class Knight(pygame.sprite.Sprite):
             if keys[pygame.K_o]:
                 self.angle -= ANGLE_RATE
 
-            # Attack
-            if keys[pygame.K_SEMICOLON]:
-                self.attacking = True
-
-        if self.attacking: #TODO: move this to be below the transform rotation updates at the end of this method?
-            if self.attack_phase < 6:
-                self.weapon.draw(self.attack_phase)
-                self.attack_phase += 1
-            else:
-                self.attack_phase = -5
-                self.attacking = False
-
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
