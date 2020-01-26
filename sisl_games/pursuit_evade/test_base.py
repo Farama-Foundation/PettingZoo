@@ -72,7 +72,8 @@ while not done:
     # print("_quit_loop", _quit_loop)
     if _quit_loop:
         break
-    observation, rewards, done, info = env.step(_actions)
+    observation, rewards, dones, info = env.step(_actions)
+    done = any(dones)
     if done:
         print("rewards", rewards, done)
     
