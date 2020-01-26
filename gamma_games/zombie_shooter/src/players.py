@@ -3,6 +3,7 @@
 # Importing Libraries
 import pygame
 import random
+import math
 from .weapons import Arrow, Sword
 
 # Game Constants
@@ -27,24 +28,27 @@ class Archer(pygame.sprite.Sprite):
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
         self.radius = radius
+        self.attacking = False # disable movement during attacking
+        self.weapon = Arrow(self, radius)
 
     def update(self):
         keys = pygame.key.get_pressed()
-        # Left, Right, Up, Down
-        if (keys[pygame.K_a] and self.rect.x > 0):
-            self.rect.x -= ARCHER_SPEED
-        if (keys[pygame.K_d] and self.rect.x < WIDTH - 60):
-            self.rect.x += ARCHER_SPEED
-        if (keys[pygame.K_w] and self.rect.y > 20):
-            self.rect.y -= ARCHER_SPEED
-        if (keys[pygame.K_s] and self.rect.y < HEIGHT - 40):
-            self.rect.y += ARCHER_SPEED
+        
+        if not self.attacking:
+            move_angle = math.radians(self.angle + 90)
+            # Up and Down movement
+            if (keys[pygame.K_w] and self.rect.y > 20):
+                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
+                self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
+            if (keys[pygame.K_s] and self.rect.y < HEIGHT - 40):
+                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
+                self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
 
-        # Turn CCW & CW
-        if keys[pygame.K_q]:
-            self.angle += ANGLE_RATE
-        if keys[pygame.K_e]:
-            self.angle -= ANGLE_RATE
+            # Turn CCW & CW
+            if keys[pygame.K_q]:
+                self.angle += ANGLE_RATE
+            if keys[pygame.K_e]:
+                self.angle -= ANGLE_RATE
 
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
@@ -70,11 +74,14 @@ class Knight(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if not self.attacking:
+            move_angle = math.radians(self.angle + 90)
             # Up and Down movement
             if (keys[pygame.K_i] and self.rect.y > 20):
-                self.rect.y -= KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
+                self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
             if (keys[pygame.K_k] and self.rect.y < HEIGHT - 40):
-                self.rect.y += KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
+                self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
 
             # Turn CCW & CW
             if keys[pygame.K_u]:
