@@ -77,7 +77,7 @@ while not done:
     for idx, val in enumerate(_actions):
         action_dict[idx][val] = 1
     observation, rewards, done_dict, info = env.step(action_dict)
-    done = done_dict[0]
+    done = any(list(done_dict.values()))
     if done:
         print("rewards", rewards, done)
     

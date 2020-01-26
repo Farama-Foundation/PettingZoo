@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from .waterworld import env as _env
+from .multi_walker import env as _env
 import time
 
 env = _env()
@@ -9,19 +9,17 @@ env.reset()
 
 done = False
 # start = time.time()
-# for _ in range(100):
 while not done:
     # game should run at 15 FPS when rendering
     env.render()
-    time.sleep(0.03)
+    time.sleep(0.04)
     
     action_list = np.array([env.action_space_dict[i].sample() for i in range(env.num_agents)])
     action_dict = dict(zip(env.agent_ids, action_list))
     
     observation, rewards, done_dict, info = env.step(action_dict)
     done = any(list(done_dict.values()))
-    if sum(rewards.values()) > 0:
-        print("rewards", rewards)
+    print("rewards", rewards)
     if done:
         print("rewards", rewards, "done", done)
 

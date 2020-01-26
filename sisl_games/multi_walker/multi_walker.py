@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .pursuit_evade_base import PursuitEvade as _env 
+from .multi_walker_base import MultiWalkerEnv as _env 
 import numpy as np
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
@@ -22,7 +22,7 @@ class env(MultiAgentEnv):
         self.num_agents = self.env.num_agents
         self.agent_ids = list(range(self.num_agents))
         # spaces
-        self.n_act_agents = self.env.act_dims[0]
+        # self.n_act_agents = self.env.act_dims[0]
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         
@@ -44,17 +44,9 @@ class env(MultiAgentEnv):
 
     def step(self, action_dict):
         # unpack actions
-        actions = []
-        for idx, agent in enumerate(self.agent_ids):
-            dist = action_dict[agent]
-            normDist = dist/np.sum(dist)
-            normDist = np.concatenate(([0], normDist))
-            normDist = np.cumsum(normDist)
-            cut = np.random.rand()
-            for action in range(len(normDist)-1):
-                if cut >= normDist[action] and cut < normDist[action+1]:
-                    break
-            actions.append(action)
+        actions = [0.0 for _ in range(len(action_dict))]
+        for key in action_dict.keys():
+            actions[key] = action_dict[key]
         
         observation, reward, done, info = self.env.step(actions)
 
