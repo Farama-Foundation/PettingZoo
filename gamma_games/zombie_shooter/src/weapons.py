@@ -36,10 +36,10 @@ class Sword(pygame.sprite.Sprite):
 
     def __init__(self, knight, radius):
         super().__init__()
-        self.i = i
+        self.i = i # TODO: remove this. Does it break the code if I remove it?
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
-        self.image = pygame.image.load("E:\\Drive\\UMD\\Research\\Parameter Sharing\\rlgames\\gamma_games\\zombie_shooter\\img\\mace.png")
+        self.image = pygame.image.load('img\\mace.png')
         self.knight = knight
         self.rect = self.image.get_rect(center = self.knight.rect.center)
         self.direction = self.knight.direction
@@ -48,28 +48,28 @@ class Sword(pygame.sprite.Sprite):
         self.pos = self.knight.pos
         self.radius = radius
         self.speed = 5
+        self.phase = -5
+        self.active = False
 
     def update(self):
-        # keys = pygame.key.get_pressed()
-        # self.i += 1
+        keys = pygame.key.get_pressed()
+        
+        # Attack
+        if keys[pygame.K_SEMICOLON]:
+            self.active = True
 
-        # self.angle = self.knight.angle
-        # # Get the angle converted to normal unit circle angles and in radians.
-        # rota_angle = math.radians(self.angle  + 90)
+        if self.active:
+            if self.phase < 6:
+                self.phase += 1
+                self.knight.attacking = True
 
-        # self.rect = self.image.get_rect(center = self.knight.rect.center)
-        # self.image = pygame.transform.rotate(self.org_image, self.angle)
-        # self.rect.x += (math.cos(rota_angle) * (self.rect.width / 2)) + (math.cos(rota_angle) * (self.knight.rect.width / 2))
-        # self.rect.y -= (math.sin(rota_angle) * (self.rect.height / 2)) + (math.sin(rota_angle) * (self.knight.rect.height / 2))
-
-        # self.direction = self.knight.direction
-
-        return self.i
-
-    def draw(self, phase):
-        # TODO: hide/remove the mace when the swing is done. need to hide the sprite
-        angle = math.radians(self.knight.angle + self.speed * phase) # TODO: need to add 90 to this to make it normal radians like unit circle? double check
-        self.rect = self.image.get_rect(center = self.knight.rect.center)
-        # self.image = pygame.transform.rotate(self.org_image, self.angle)
-        self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
-        self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
+                angle = math.radians(self.knight.angle + 90 + self.speed * self.phase)
+                self.rect = self.image.get_rect(center = self.knight.rect.center)
+                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
+                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
+            else:
+                self.phase = -5
+                self.active = False
+                self.knight.attacking = False
+                
+        return self.active

@@ -10,11 +10,11 @@ ZOMBIE_X_SPEED = 30
 
 class Zombie(pygame.sprite.Sprite):
 
-    def __init__(self, color, circle):
+    def __init__(self, color, circle, radius):
         super().__init__()
         self.image = circle
         self.rect = self.image.get_rect(center=(50, 50))
-        self.radius = variables.OBJ_RADIUS
+        self.radius = radius
 
     def update(self):
         rand_x = random.randint(0, 10)
