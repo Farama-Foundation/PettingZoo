@@ -146,8 +146,7 @@ class env(MultiAgentEnv):
             return y
 
         if v not in (-1, 0, 1):
-            print(v)
-            raise Exception('Actions must be 0, 1 or 2')
+            raise Exception('Actions must be 0, 1 or 2')  # -1 happens in step before calling this function
 
         piston.position = (piston.position[0], cap(piston.position[1] - v*self.velocity))
 
