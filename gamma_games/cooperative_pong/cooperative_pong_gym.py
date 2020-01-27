@@ -9,17 +9,21 @@ import gym
 import matplotlib.pyplot as plt
 from cake_paddle import CakePaddle
 
+
 def get_image(path):
     image = pygame.image.load(path)
     return image
 
+
 def deg_to_rad(deg):
     return deg*np.pi/180
+
 
 def get_flat_shape(width, height):
     return int(width * height/ (2*4*4))
 
-def get_valid_angle(): 
+
+def get_valid_angle():
     # generates an angle in [0, 2*np.pi) that \
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range) 
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
@@ -33,47 +37,48 @@ def get_valid_angle():
     d1 = deg_to_rad(180 + hor_deg_range)
     c2 = deg_to_rad(360 - hor_deg_range)
     d2 = deg_to_rad(0 + hor_deg_range)
-    
+
     angle = 0
     while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or \
         (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
         angle = 2 * np.pi * np.random.rand()
-        
+
     return angle
+
 
 def get_small_random_value():
     # generates a small random value between [0, 1/100)
     return (1/100) * np.random.rand()
 
+
 class PaddleSprite(pygame.sprite.Sprite):
-    
-    def __init__(self, dims, speed): # def __init__(self, image, speed): 
+    def __init__(self, dims, speed): # def __init__(self, image, speed):
         # self.surf = get_image(image)
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed = speed
-        
+
     def reset(self):
         pass
-        
+
     def draw(self, screen):
         # screen.blit(self.surf, self.rect)
-        pygame.draw.rect(screen, (255,255,255), self.rect)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
     def update(self, area, action):
         # action: 1 - up, 2 - down
-        movepos = [0,0]
+        movepos = [0, 0]
         if action > 0:
             if action == 1:
                 movepos[1] = movepos[1] - self.speed
             elif action == 2:
                 movepos[1] = movepos[1] + self.speed
-                
+
             # make sure the players stay inside the screen
             newpos = self.rect.move(movepos)
             if area.contains(newpos):
                 self.rect = newpos
-        
+
     def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
         '''
 
@@ -120,8 +125,8 @@ class PaddleSprite(pygame.sprite.Sprite):
                 return is_collision, b_rect, b_speed
         return False, b_rect, b_speed
 
+
 class BallSprite(pygame.sprite.Sprite):
-    
     def __init__(self, dims, speed, bounce_randomness = 0): # def __init__(self, image, speed):
         # self.surf = get_image(image)
         self.surf = pygame.Surface(dims)
@@ -140,14 +145,14 @@ class BallSprite(pygame.sprite.Sprite):
         if self.speed[1] != 0:
             done_y = self.move_single_axis(0, self.speed[1], area, p1, p2)
         return (done_x or done_y)
-    
+
     def move_single_axis(self, dx, dy, area, p1, p2):
         # returns done
-        
+
         # move ball rect
         self.rect.x += dx
         self.rect.y += dy
-        
+
         if not area.contains(self.rect):
             # bottom wall
             if dy > 0:
@@ -161,14 +166,14 @@ class BallSprite(pygame.sprite.Sprite):
             else:
                 return True
                 self.speed[0] = -self.speed[0]
-        
+
         else:
             # Do ball and bat collide?
             # add some randomness
             r_val = 0
             if self.bounce_randomness:
                 r_val = get_small_random_value()
-                
+
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
                 is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 1)
@@ -179,13 +184,13 @@ class BallSprite(pygame.sprite.Sprite):
                 is_collision, self.rect, self.speed = p2.process_collision(self.rect, dx, dy, self.speed, 2)
                 if is_collision:
                     self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
-        
+
         return False
-        
-        
+
     def draw(self, screen):
         # screen.blit(self.surf, self.rect)
         pygame.draw.rect(screen, (255,255,255), self.rect)
+
 
 class env(gym.Env):
 
@@ -194,15 +199,15 @@ class env(gym.Env):
     # ball_speed = [3,3], p1_speed = 3, p2_speed = 3
     def __init__(self, ball_speed = 18, p1_speed = 25, p2_speed = 25, is_cake = 1, bounce_randomness = 0):
         super(env, self).__init__()
-                
+
         pygame.init()
         self.num_agents = 2
-                
+
         # Display screen
         self.s_width, self.s_height = 960, 560
         self.screen = pygame.Surface((self.s_width, self.s_height)) # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
-        
+
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         flattened_shape = get_flat_shape(self.s_width, self.s_height)
@@ -211,22 +216,22 @@ class env(gym.Env):
         self.clock = pygame.time.Clock()
 
         self.renderOn = False
-        
+
         # set speed
         self.speed = [ball_speed, p1_speed, p2_speed]
-                
+
         # paddles
         self.p1 = PaddleSprite((20, 80), p1_speed)
         if is_cake:
             self.p2 = CakePaddle(p2_speed)
         else:
             self.p2 = PaddleSprite((20, 100), p2_speed)
-                
+
         # ball
         self.ball = BallSprite((20,20), ball_speed, bounce_randomness)
-        
+
         self.reset()
-        
+
     def reset(self):
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
@@ -241,20 +246,20 @@ class env(gym.Env):
         self.p2.reset()
         self.p1.speed = self.speed[1]
         self.p2.speed = self.speed[2]
-        
+
         self.done = False
-        
+
         self.score = 0
         self.num_frames = 0
-        
+
         self.draw()
         return self.observe()
-        
+
     def close(self):
         if self.renderOn:
             pygame.display.quit()
             self.renderOn = False
-    
+
     def enable_render(self):
         self.screen = pygame.display.set_mode(self.screen.get_size())
         self.renderOn = True
@@ -269,16 +274,15 @@ class env(gym.Env):
         observation = pygame.surfarray.array3d(self.screen)
         observation = np.rot90(observation, k=3) # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation) # laid out in the correct order
-        
         observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
-        
+
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
 
         # Fixed: Uses mean
         observation = measure.block_reduce(observation, block_size=(4, 4), func=mean)
-        
+
         height, width = observation.shape
-                
+
         # partition the entire screen into 2 halves for observing the state
         obs = [observation[:, 0:int(width/2)], observation[:, int(width/2):]]
         # exapnd dims to 3
@@ -286,7 +290,7 @@ class env(gym.Env):
         for i in obs:
             observation.append(np.expand_dims(i, axis=2).flatten())
         return observation
-    
+
     def draw(self):
         # draw background
         # pygame.display.get_surface().fill((0, 0, 0))
@@ -295,7 +299,7 @@ class env(gym.Env):
         self.p1.draw(self.screen)
         self.p2.draw(self.screen)
         self.ball.draw(self.screen)
-    
+
     def step(self, actions):
         # returns a list of observations, list of rewards, list of dones, list of info. 
         # Size of each list = num_agents
@@ -308,11 +312,11 @@ class env(gym.Env):
         # update ball position
         # self.done = self.ball.update(self.area, self.p1.rect, self.p2.rect)
         self.done = self.ball.update2(self.area, self.p1, self.p2)
-        
+
         self.draw()
-        
+
         observation = self.observe()
-        
+
         # reward is the length of time ball is in play
         reward = 0
         if not self.done:
@@ -329,13 +333,13 @@ class env(gym.Env):
             self.clock.tick(15)
         else:
             self.clock.tick()
-        
+
         reward = [reward for _ in range(self.num_agents)]
         done = [self.done for _ in range(self.num_agents)]
         info = [{} for _ in range(self.num_agents)]
-        
+
         return observation, reward, done, info
-    
+
     def plot_obs(self, observation, fname):
         # shrink observation dims
         for i in range(len(observation)):
@@ -349,4 +353,3 @@ class env(gym.Env):
         ax1.set_title("Observation[0]")
         ax2.set_title("Observation[1]")
         plt.savefig(fname)
-        

@@ -11,7 +11,7 @@ def convert_to_dict(list_of_list):
 
 
 class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human']}	
+    metadata = {'render.modes': ['human']}
 
     def __init__(self, *args):
         super(env, self).__init__()
@@ -39,19 +39,9 @@ class env(MultiAgentEnv):
         obs = self.env.observe()
         return convert_to_dict(obs)
 
-    def step(self, action_dict):
-        # unpack actions
-        actions = []
-        for idx, agent in enumerate(self.agent_ids):
-            dist = action_dict[agent]
-            normDist = dist/np.sum(dist)
-            normDist = np.concatenate(([0], normDist))
-            normDist = np.cumsum(normDist)
-            cut = np.random.rand()
-            for action in range(len(normDist)-1):
-                if cut >= normDist[action] and cut < normDist[action+1]:
-                    break
-            actions.append(action)
+    def step(self, actions):
+        if actions[0] or actions[1] not in (0, 1, 2):
+            raise Exception('Actions must be 0, 1 or 2')
 
         observation, reward, done, info = self.env.step(actions)
 
