@@ -69,9 +69,10 @@ class Knight(pygame.sprite.Sprite):
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(1, 0)
         self.radius = radius
-        self.attacking = False # disable movement during attacking
+        self.attacking = False # Used to disable movement during attacking
         self.attack_phase = -5
         self.weapon = Sword(self, radius)
+        self.alive = True # This flag is used to immediately delete the mace object when the knight dies
 
     def update(self):
         keys = pygame.key.get_pressed()
