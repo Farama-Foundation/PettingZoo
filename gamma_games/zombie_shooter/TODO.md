@@ -13,3 +13,5 @@ Note bug 1 exists (future work)
 Sprites
 
 API
+
+Folder name
