@@ -54,6 +54,7 @@ class Archer(pygame.sprite.Sprite):
             elif action == 4:
                 self.angle -= ANGLE_RATE
             elif action == 5:
+                print('archer attack')
                 self.weapon.fired = True
                 # self.attacking = True # gets reset to False in weapon attack
 
@@ -106,6 +107,7 @@ class Knight(pygame.sprite.Sprite):
             elif action == 4:
                 self.angle -= ANGLE_RATE
             elif action == 5:
+                print('knight attack')
                 self.attacking = True # gets reset to False in weapon attack
             
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
