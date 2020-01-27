@@ -4,7 +4,7 @@ A Zombie Shooting/Killing Game with two players-
 
 Archer (Red) - Shoots an arrow
 
-Knight (Blue) - Swings a sword
+Knight (Blue) - Swings a mace
 
 ## Prerequisites
 
