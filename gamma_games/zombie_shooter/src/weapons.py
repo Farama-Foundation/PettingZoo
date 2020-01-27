@@ -61,7 +61,7 @@ class Sword(pygame.sprite.Sprite):
         if keys[pygame.K_SEMICOLON]:
             self.active = True
 
-        if self.active:
+        if self.active and self.knight.alive:
             if self.phase < 6:
                 self.phase += 1
                 self.knight.attacking = True

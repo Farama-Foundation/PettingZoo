@@ -151,6 +151,7 @@ def zombie_knight(zombie_list, knight_list, all_sprites, knight_killed, sword_li
         zombie_knight_list = pygame.sprite.spritecollide(zombie, knight_list, True)
 
         for knight in zombie_knight_list:
+            knight.alive = False
             knight_list.remove(knight)
             all_sprites.remove(knight)
             sword_killed = True
@@ -229,7 +230,6 @@ def zombie_all_players(knight_list, archer_list, run):
 
 # Game Loop
 while run:
-
     # Controls the Spawn Rate of Weapons
     sword_spawn_rate, arrow_spawn_rate = check_weapon_spawn(sword_spawn_rate, arrow_spawn_rate)
 
