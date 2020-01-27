@@ -9,6 +9,7 @@ from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
 from gamma_games.piston_ball import piston_ball
 from gamma_games.cooperative_pong import cooperative_pong
+from sisl_games.pursuit_evade import pursuit_evade
 
 tf = try_import_tf()
 
