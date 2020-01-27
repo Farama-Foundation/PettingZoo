@@ -109,29 +109,29 @@ class Game():
 
         # Spawn New Knight
         def spawnKnight(self):
-            if self.event.key == pygame.K_m:
-                self.knight_player_num += 1
-                self.knight_dict['knight{0}'.format(self.knight_player_num)] = Knight()
-                self.knight_list.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
-                self.all_sprites.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
+            # if self.event.key == pygame.K_m:
+            #     self.knight_player_num += 1
+            #     self.knight_dict['knight{0}'.format(self.knight_player_num)] = Knight()
+            #     self.knight_list.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
+            #     self.all_sprites.add(self.knight_dict['knight{0}'.format(self.knight_player_num)])
             return self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict
 
         # Spawn New Archer
         def spawnArcher(self):
-            if self.event.key == pygame.K_x:
-                self.archer_player_num += 1
-                self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer()
-                self.archer_list.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
-                self.all_sprites.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
+            # if self.event.key == pygame.K_x:
+            #     self.archer_player_num += 1
+            #     self.archer_dict['archer{0}'.format(self.archer_player_num)] = Archer()
+            #     self.archer_list.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
+            #     self.all_sprites.add(self.archer_dict['archer{0}'.format(self.archer_player_num)])
             return self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict
                 
     # Spawn New Weapons
     class spawnWeapons(pygame.sprite.Sprite):
-        def __init__(self, event, sword_spawn_rate, arrow_spawn_rate, knight_killed, archer_killed,
+        def __init__(self, action, sword_spawn_rate, arrow_spawn_rate, knight_killed, archer_killed,
                     knight_dict, archer_dict, knight_list, archer_list, knight_player_num, archer_player_num,
                     all_sprites, sword_dict, arrow_dict, sword_list, arrow_list):
             super().__init__()
-            self.event = event
+            self.action = action
             self.sword_spawn_rate = sword_spawn_rate
             self.arrow_spawn_rate = arrow_spawn_rate
             self.knight_killed = knight_killed
@@ -150,7 +150,7 @@ class Game():
 
         # Spawning Swords for Players
         def spawnSword(self):
-            if (self.event.key == pygame.K_SEMICOLON and self.sword_spawn_rate == 0):
+            if (self.action == 5 and self.sword_spawn_rate == 0):
                 if not self.sword_list:      # Sword List is Empty
                     if not self.knight_killed:
                         for i in range(0, self.knight_player_num + 1):
@@ -169,7 +169,7 @@ class Game():
 
         # Spawning Arrows for Players
         def spawnArrow(self):
-            if (self.event.key == pygame.K_f and self.arrow_spawn_rate == 0):
+            if (self.action == 5 and self.arrow_spawn_rate == 0):
                 if not self.archer_killed:
                     for i in range(0, self.archer_player_num + 1):
                         self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
@@ -314,50 +314,40 @@ class Game():
                     if event.key == pygame.K_BACKSPACE:
                         env.reset() # TODO: should "env" be "self"???
 
-                    # Spawn Players
-                    sp = self.spawnPlayers(event, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
-                    # Knight
-                    self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
-                    # Archer
-                    self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
+                    # TODO: FIXME
+                    # The following commented block is old code from when I controleld the agents with the keyboard
+                    # It should probably be deleted, but I have kept it here just in case I need it soon for something
+                    # # Spawn Players
+                    # sp = self.spawnPlayers(event, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
+                    # # Knight
+                    # self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
+                    # # Archer
+                    # self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
 
-                    # Spawn Weapons
-                    sw = self.spawnWeapons(event, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
-                    # Sword
-                    self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
-                    # Arrow
-                    self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+                    # # Spawn Weapons
+                    # sw = self.spawnWeapons(event, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
+                    # # Sword
+                    # self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
+                    # # Arrow
+                    # self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
 
-                    # TODO: Remove this? It's for manual user input to control the agents
-                    # # Handle archer control
-                    # for i, archer in enumerate(self.archer_list):
-                    #     # # Up and Down movement
-                    #     # if (event.key == pygame.K_w):
-                    #     #     self.archer_list[i].update(1)
-                    #     # if (event.key == pygame.K_s):
-                    #     #     self.archer_list[i].update(2)
-                    #     # # Turn CCW & CW
-                    #     # if event.key == pygame.K_q:
-                    #     #     self.archer_list[i].update(3)
-                    #     # if event.key == pygame.K_e:
-                    #     #     self.archer_list[i].update(4)
-                    #     # if event.key == pygame.K_f:
-                    #     #     self.archer_list[i].update(5)
+            # Handle agent control
+            for i, agent in enumerate(self.agent_list):
+                # Spawn Players
+                sp = self.spawnPlayers(actions[i], self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
+                # Knight
+                self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
+                # Archer
+                self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
 
-                    # # Handle knight control
-                    # for i, knight in enumerate(self.knight_list):
-                    #     # # Up and Down movement
-                    #     # if (event.key == pygame.K_i):
-                    #     #     self.knight_list[i].update(1)
-                    #     # if (event.key == pygame.K_k):
-                    #     #     self.knight_list[i].update(2)
-                    #     # # Turn CCW & CW
-                    #     # if event.key == pygame.K_u:
-                    #     #     self.knight_list[i].update(3)
-                    #     # if event.key == pygame.K_o:
-                    #     #     self.knight_list[i].update(4)
-                    #     # if event.key == pygame.K_SEMICOLON:
-                    #     #     self.knight_list[i].update(5)
+                # Spawn Weapons
+                sw = self.spawnWeapons(actions[i], self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
+                # Sword
+                self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
+                # Arrow
+                self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+                
+                agent.update(actions[i])
 
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
@@ -380,18 +370,11 @@ class Game():
             # Kill the Sword when Knight dies
             self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
 
-            # Handle archer control
-            for i, agent in enumerate(self.agent_list):
-                agent.update(actions[i])
-                agent.weapon.update()
-
             # Call the update() method on sprites
             for zombie in self.zombie_list:
                 zombie.update()
             for arrow in self.arrow_list:
                 arrow.update()
-            # for sword in self.sword_list:
-            #     sword.update()
 
             self.WINDOW.fill((255, 255, 255))
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
@@ -399,7 +382,7 @@ class Game():
             pygame.display.flip()                    # update screen
             self.clock.tick(self.FPS)                # FPS
 
-            self.check_game_end()
+            # self.check_game_end()
         else:
             pass
             # TODO: End game/training here!!
@@ -474,14 +457,12 @@ class Game():
 
 if __name__ == "__main__":
     g = Game(2, 2)
-    # for i in range(40):
-    #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
-    #     actions = [5,5,5,5]
-    #     print(actions)
-    #     g.step(actions)
-    # g.reset()
+    for i in range(40):
+        actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+        print(actions)
+        g.step(actions)
+    g.reset()
     for i in range(40000):
-        # actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
-        actions = [5,5,5,5]
+        actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
         g.step(actions)
     print('simulation ended')
