@@ -219,18 +219,7 @@ class env(MultiAgentEnv):
         #start = time.time()
 
         for i, action in enumerate(self.agent_ids):
-            dist = actions[action]
-            normDist = dist/np.sum(dist)
-            cut = np.random.rand()
-            if cut <= normDist[0]:
-                direction = -1
-            elif cut <= normDist[0] + normDist[1]:
-                direction = 0
-            else:
-                direction = 1
-
-            if direction == 1 or -1:
-                self.move_piston(self.pistonList[i], direction)  # 1 is up, -1 is down, 0 is do nothing
+                self.move_piston(self.pistonList[i], action - 1)  # 1 is up, -1 is down, 0 is do nothing
 
         self.space.step(1/15.0)
 
@@ -291,14 +280,6 @@ Section B (Ball) 11
 Section C (Pistons) 51
 """
 
-#approx factor of 2 performance remains removing unused space from game
-
-#66MB ram
-
-# TODO should I sample from probability distribution of policy output in the game, or at all?
 # TODO CNN policy network of my choosing
 # TODO check caching past 4 frames (support in game?)
 # TODO don't regenerate done dict every time
-# TODO make sampling code faster
-# TODO fix absolute image paths
-# TODO look into built in preprocessor?
