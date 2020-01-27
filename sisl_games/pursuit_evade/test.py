@@ -8,13 +8,14 @@ import time
 
 xs = 5
 ys = 5
+obs_range = 3
 n_evaders = 1
 n_pursuers = 2
 
 # map_mat = two_d_maps.rectangle_map(xs, ys) 
 
 # obs_range should be odd 3, 5, 7, etc
-env = _env() #n_evaders=n_evaders, n_pursuers=n_pursuers)
+env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range) #n_evaders=n_evaders, n_pursuers=n_pursuers)
 
 done = False
 

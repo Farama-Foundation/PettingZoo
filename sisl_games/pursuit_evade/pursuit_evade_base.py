@@ -47,10 +47,11 @@ class PursuitEvade():
 
         # self.map_pool = map_pool
         # map_matrix = map_pool[0]
-        self.map_matrix = two_d_maps.rectangle_map(16, 16)
-        xs, ys = self.map_matrix.shape
-        self.xs = xs
-        self.ys = ys
+        self.xs = kwargs.pop('xs', 16)
+        self.ys = kwargs.pop('ys', 16)
+        xs = self.xs
+        ys = self.ys
+        self.map_matrix = two_d_maps.rectangle_map(self.xs, self.ys)
 
         self._reward_mech = kwargs.pop('reward_mech', 'local')
 
@@ -59,7 +60,7 @@ class PursuitEvade():
         self.num_agents = self.n_pursuers
         self.agent_ids = list(range(self.num_agents))
 
-        self.obs_range = kwargs.pop('obs_range', 7)  # can see 3 grids around them by default
+        self.obs_range = kwargs.pop('obs_range', 7)  # can see 7 grids around them by default
         #assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
 

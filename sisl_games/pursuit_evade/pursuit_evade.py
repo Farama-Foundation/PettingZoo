@@ -15,9 +15,9 @@ class env(MultiAgentEnv):
     
     metadata = {'render.modes': ['human']}	
 		
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         super(env, self).__init__()
-        self.env = _env(*args)
+        self.env = _env(*args, **kwargs)
         
         self.num_agents = self.env.num_agents
         self.agent_ids = list(range(self.num_agents))
