@@ -19,7 +19,7 @@ ANGLE_RATE = 10
 
 class Archer(pygame.sprite.Sprite):
 
-    def __init__(self, red_trigon, radius):
+    def __init__(self):
         super().__init__()
         # rand_x = random.randint(20, 1260)
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
@@ -29,9 +29,8 @@ class Archer(pygame.sprite.Sprite):
         self.angle = 0
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
-        self.radius = radius
         self.attacking = False # disable movement during attacking
-        self.weapon = Arrow(self, radius)
+        self.weapon = Arrow(self)
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -56,10 +55,14 @@ class Archer(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.org_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
 
+    def offset(self, x_offset, y_offset):
+        self.rect.x += x_offset
+        self.rect.y += y_offset
+
 
 class Knight(pygame.sprite.Sprite):
 
-    def __init__(self, blue_trigon, radius):
+    def __init__(self):
         super().__init__()
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
         self.image = pygame.image.load(os.path.join(img_path, 'knight.png'))
@@ -68,10 +71,10 @@ class Knight(pygame.sprite.Sprite):
         self.angle = 0
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(1, 0)
-        self.radius = radius
+        # self.radius = radius
         self.attacking = False # Used to disable movement during attacking
         self.attack_phase = -5
-        self.weapon = Sword(self, radius)
+        self.weapon = Sword(self)
         self.alive = True # This flag is used to immediately delete the mace object when the knight dies
 
     def update(self):
