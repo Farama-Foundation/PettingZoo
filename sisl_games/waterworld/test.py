@@ -4,7 +4,9 @@ import numpy as np
 from .waterworld import env as _env
 import time
 
-env = _env()
+n_pursuers = 5
+
+env = _env(n_pursuers = n_pursuers)
 env.reset()
 
 done = False

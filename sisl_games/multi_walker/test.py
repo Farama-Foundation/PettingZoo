@@ -4,7 +4,9 @@ import numpy as np
 from .multi_walker import env as _env
 import time
 
-env = _env()
+n_walkers = 3
+
+env = _env(n_walkers = n_walkers)
 env.reset()
 
 done = False
