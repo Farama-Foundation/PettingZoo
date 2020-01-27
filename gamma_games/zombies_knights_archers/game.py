@@ -14,47 +14,42 @@ from src.weapons import Arrow, Sword
 from src.variables import *
 
 class Game():
-    # Defining Colors
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    RED = (255, 0, 0)
-    GREEN = (0, 255, 0)
-    BLUE = (0, 0, 255)
-    GRAY = (200, 200, 200)
-
-    # Game Constants
-    ZOMBIE_SPAWN = 20
-    SPAWN_STAB_RATE = 20
-    FPS = 15
-    WIDTH = 1280
-    HEIGHT = 720
-
-    # Dictionaries for holding new players and their weapons
-    archer_dict = {}
-    knight_dict = {}
-    arrow_dict = {}
-    sword_dict = {}
-
-    # Game Variables
-    count = 0
-    score = 0
-    run = True
-    arrow_spawn_rate = sword_spawn_rate = zombie_spawn_rate = 0
-    knight_player_num = archer_player_num = 0
-    archer_killed = False
-    knight_killed = False
-    sword_killed = False
-    OBJ_RADIUS = 3
-
-    # Creating Sprite Groups
-    all_sprites = pygame.sprite.Group()
-    zombie_list = pygame.sprite.Group()
-    arrow_list = pygame.sprite.Group()
-    sword_list = pygame.sprite.Group()
-    archer_list = pygame.sprite.Group()
-    knight_list = pygame.sprite.Group()
 
     def __init__(self, num_archers, num_knights):
+        # Game Constants
+        self.ZOMBIE_SPAWN = 20
+        self.SPAWN_STAB_RATE = 20
+        self.FPS = 15
+        self.WIDTH = 1280
+        self.HEIGHT = 720
+
+        # Dictionaries for holding new players and their weapons
+        self.archer_dict = {}
+        self.knight_dict = {}
+        self.arrow_dict = {}
+        self.sword_dict = {}
+
+        # Game Variables
+        self.frame_count = 0
+        self.score = 0
+        self.run = True
+        self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0
+        self.knight_player_num = self.archer_player_num = 0
+        self.archer_killed = False
+        self.knight_killed = False
+        self.sword_killed = False
+
+        # Creating Sprite Groups
+        self.all_sprites = pygame.sprite.Group()
+        self.zombie_list = pygame.sprite.Group()
+        self.arrow_list = pygame.sprite.Group()
+        self.sword_list = pygame.sprite.Group()
+        self.archer_list = pygame.sprite.Group()
+        self.knight_list = pygame.sprite.Group()
+
+        self.num_archers = num_archers
+        self.num_knights = num_knights
+        
         # Initializing Pygame
         pygame.init()
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
@@ -300,7 +295,7 @@ class Game():
         return run
 
     # Advance game state by 1 timestep
-    def step(self):
+    def step(self, actions):
         if self.run:
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
@@ -333,35 +328,36 @@ class Game():
                     # Arrow
                     self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
 
-                    # Handle archer control
-                    for archer in self.archer_list:
-                        # Up and Down movement
-                        if (event.key == pygame.K_w):
-                            archer.update(1)
-                        if (event.key == pygame.K_s):
-                            archer.update(2)
-                        # Turn CCW & CW
-                        if event.key == pygame.K_q:
-                            archer.update(3)
-                        if event.key == pygame.K_e:
-                            archer.update(4)
-                        if event.key == pygame.K_f:
-                            archer.update(5)
+                    # TODO: Remove this? It's for manual user input to control the agents
+                    # # Handle archer control
+                    # for i, archer in enumerate(self.archer_list):
+                    #     # # Up and Down movement
+                    #     # if (event.key == pygame.K_w):
+                    #     #     self.archer_list[i].update(1)
+                    #     # if (event.key == pygame.K_s):
+                    #     #     self.archer_list[i].update(2)
+                    #     # # Turn CCW & CW
+                    #     # if event.key == pygame.K_q:
+                    #     #     self.archer_list[i].update(3)
+                    #     # if event.key == pygame.K_e:
+                    #     #     self.archer_list[i].update(4)
+                    #     # if event.key == pygame.K_f:
+                    #     #     self.archer_list[i].update(5)
 
-                    # Handle knight control
-                    for knight in self.knight_list:
-                        # Up and Down movement
-                        if (event.key == pygame.K_i):
-                            knight.update(1)
-                        if (event.key == pygame.K_k):
-                            knight.update(2)
-                        # Turn CCW & CW
-                        if event.key == pygame.K_u:
-                            knight.update(3)
-                        if event.key == pygame.K_o:
-                            knight.update(4)
-                        if event.key == pygame.K_SEMICOLON:
-                            knight.update(5)
+                    # # Handle knight control
+                    # for i, knight in enumerate(self.knight_list):
+                    #     # # Up and Down movement
+                    #     # if (event.key == pygame.K_i):
+                    #     #     self.knight_list[i].update(1)
+                    #     # if (event.key == pygame.K_k):
+                    #     #     self.knight_list[i].update(2)
+                    #     # # Turn CCW & CW
+                    #     # if event.key == pygame.K_u:
+                    #     #     self.knight_list[i].update(3)
+                    #     # if event.key == pygame.K_o:
+                    #     #     self.knight_list[i].update(4)
+                    #     # if event.key == pygame.K_SEMICOLON:
+                    #     #     self.knight_list[i].update(5)
 
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
@@ -384,13 +380,20 @@ class Game():
             # Kill the Sword when Knight dies
             self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
 
+            # Handle archer control
+            for i, agent in enumerate(self.agent_list):
+                agent.update(actions[i])
+                agent.weapon.update()
+
             # Call the update() method on sprites
             for zombie in self.zombie_list:
                 zombie.update()
             for arrow in self.arrow_list:
                 arrow.update()
+            # for sword in self.sword_list:
+            #     sword.update()
 
-            self.WINDOW.fill(self.WHITE)
+            self.WINDOW.fill((255, 255, 255))
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
             pygame.display.update()
             pygame.display.flip()                    # update screen
@@ -409,17 +412,76 @@ class Game():
         self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
 
         # Condition to Check 900 Frames
-        self.count += 1
-        if self.count > 900:
+        self.frame_count += 1
+        if self.frame_count > 900:
             print('*** GAME OVER - 900 Frames Completed ***')
             self.run = False
 
     def reset(self):
-        # TODO:
-        pass
+        # Dictionaries for holding new players and their weapons
+        self.archer_dict = {}
+        self.knight_dict = {}
+        self.arrow_dict = {}
+        self.sword_dict = {}
+
+        # Game Variables
+        self.frame_count = 0
+        self.score = 0
+        self.run = True
+        self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0
+        self.knight_player_num = self.archer_player_num = 0
+        self.archer_killed = False
+        self.knight_killed = False
+        self.sword_killed = False
+
+        # Creating Sprite Groups
+        self.all_sprites = pygame.sprite.Group()
+        self.zombie_list = pygame.sprite.Group()
+        self.arrow_list = pygame.sprite.Group()
+        self.sword_list = pygame.sprite.Group()
+        self.archer_list = pygame.sprite.Group()
+        self.knight_list = pygame.sprite.Group()
+
+        # Initializing Pygame
+        pygame.init()
+        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        pygame.display.set_caption("Zombies, Knights, Archers")
+        self.clock = pygame.time.Clock()
+
+        self.agent_list = []
+        self.agent_ids = []
+        
+        for i in range(self.num_archers):
+            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer()
+            self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
+            self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.agent_list.append(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            if i != self.num_archers - 1:
+                self.archer_player_num += 1
+
+        for i in range(self.num_knights):
+            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight()
+            self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
+            self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.agent_list.append(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            if i != self.num_knights - 1:
+                self.knight_player_num += 1
+
+        for i in range(self.num_archers + self.num_knights):
+            self.agent_ids.append(i)
 
 if __name__ == "__main__":
-    g = Game(10, 3)
+    g = Game(2, 2)
+    # for i in range(40):
+    #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+    #     actions = [5,5,5,5]
+    #     print(actions)
+    #     g.step(actions)
+    # g.reset()
     for i in range(40000):
-        g.step()
+        # actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+        actions = [5,5,5,5]
+        g.step(actions)
     print('simulation ended')

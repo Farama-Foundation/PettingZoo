@@ -30,6 +30,8 @@ class Arrow(pygame.sprite.Sprite):
         self.fired = True
 
     def update(self):
+        print('arrow update')
+        print(self.pos)
         self.pos += self.direction * ARROW_SPEED
         self.rect.center = self.pos
 
@@ -55,7 +57,8 @@ class Sword(pygame.sprite.Sprite):
 
     def update(self):
         keys = pygame.key.get_pressed()
-        
+        print('sword update')
+
         # Attack
         if self.knight.action == 5:
             self.active = True
