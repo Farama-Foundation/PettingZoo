@@ -23,7 +23,7 @@ class Archer(pygame.sprite.Sprite):
         super().__init__()
         # rand_x = random.randint(20, 1260)
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'archer.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'icon535.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
         self.org_image = self.image.copy()
         self.angle = 0
@@ -62,7 +62,7 @@ class Knight(pygame.sprite.Sprite):
     def __init__(self, blue_trigon, radius):
         super().__init__()
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'knight2.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'icon716.png'))
         self.rect = self.image.get_rect(center=(KNIGHT_X, KNIGHT_Y))
         self.org_image = self.image.copy()
         self.angle = 0
@@ -96,3 +96,9 @@ class Knight(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
+
+    def offset(self, x_offset, y_offset):
+        self.rect.x += x_offset
+        self.rect.y += y_offset
+
+        
