@@ -218,8 +218,8 @@ class env(MultiAgentEnv):
     def step(self, actions):
         #start = time.time()
 
-        for i, action in enumerate(self.agent_ids):
-                self.move_piston(self.pistonList[i], action - 1)  # 1 is up, -1 is down, 0 is do nothing
+        for i, agent_id in enumerate(self.agent_ids):
+                self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing
 
         self.space.step(1/15.0)
 
