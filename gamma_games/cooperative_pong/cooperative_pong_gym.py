@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -25,7 +23,7 @@ def get_flat_shape(width, height):
 
 def get_valid_angle():
     # generates an angle in [0, 2*np.pi) that \
-    # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range) 
+    # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
     ver_deg_range = 25
     hor_deg_range = 10
@@ -52,8 +50,7 @@ def get_small_random_value():
 
 
 class PaddleSprite(pygame.sprite.Sprite):
-    def __init__(self, dims, speed): # def __init__(self, image, speed):
-        # self.surf = get_image(image)
+    def __init__(self, dims, speed):
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed = speed
@@ -62,7 +59,6 @@ class PaddleSprite(pygame.sprite.Sprite):
         pass
 
     def draw(self, screen):
-        # screen.blit(self.surf, self.rect)
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
     def update(self, area, action):
@@ -189,7 +185,7 @@ class BallSprite(pygame.sprite.Sprite):
 
     def draw(self, screen):
         # screen.blit(self.surf, self.rect)
-        pygame.draw.rect(screen, (255,255,255), self.rect)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
 class env(gym.Env):
@@ -197,7 +193,7 @@ class env(gym.Env):
     metadata = {'render.modes': ['human']}
 
     # ball_speed = [3,3], p1_speed = 3, p2_speed = 3
-    def __init__(self, ball_speed = 18, p1_speed = 25, p2_speed = 25, is_cake = 1, bounce_randomness = 0):
+    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0):
         super(env, self).__init__()
 
         pygame.init()
@@ -205,7 +201,7 @@ class env(gym.Env):
 
         # Display screen
         self.s_width, self.s_height = 960, 560
-        self.screen = pygame.Surface((self.s_width, self.s_height)) # (960, 720) # (640, 480) # (100, 200)
+        self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
 
         # define action and observation spaces
@@ -272,8 +268,8 @@ class env(gym.Env):
 
     def observe(self):
         observation = pygame.surfarray.array3d(self.screen)
-        observation = np.rot90(observation, k=3) # now the obs is laid out as H, W as rows and cols
-        observation = np.fliplr(observation) # laid out in the correct order
+        observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
+        observation = np.fliplr(observation)  # laid out in the correct order
         observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
 
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
@@ -301,11 +297,11 @@ class env(gym.Env):
         self.ball.draw(self.screen)
 
     def step(self, actions):
-        # returns a list of observations, list of rewards, list of dones, list of info. 
+        # returns a list of observations, list of rewards, list of dones, list of info.
         # Size of each list = num_agents
 
         # update p1, p2
-        # actions[i]: 0: do nothing, 
+        # actions[i]: 0: do nothing,
         # actions[i]: 1: p[i] move up, 2: p[i] move down
         self.p1.update(self.area, actions[0])
         self.p2.update(self.area, actions[1])
