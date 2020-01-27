@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 from cooperative_pong import env as _env
 import pygame
@@ -47,10 +45,8 @@ while not done:
     if quit_loop:
         break
     
-    # actions should be a dict of numpy arrays: {0: array([0,1,0])}
-    action_dict = dict(zip(env.agent_ids, [np.array([0,0,0]) for _ in range(env.num_agents)])) # no action = [0,1,0]
-    for idx, val in enumerate(actionList):
-        action_dict[idx][val] = 1
+    # actions should be a dict of numpy arrays
+    action_dict = dict(zip(env.agent_ids, actionList)) # no action = 0
     
     observation, rewards, dones, info = env.step(action_dict)
     env.render()
