@@ -9,6 +9,8 @@ from cake_paddle import CakePaddle
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
+KERNEL_WINDOW_LENGTH = 4
+
 def get_image(path):
     image = pygame.image.load(path)
     return image
@@ -19,7 +21,7 @@ def deg_to_rad(deg):
 
 
 def get_flat_shape(width, height):
-    return int(width * height/ (2*4*4))
+    return int(width * height/ (2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
 
 
 def get_valid_angle():
@@ -276,7 +278,7 @@ class CooperativePong(gym.Env):
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
 
         # Fixed: Uses mean
-        observation = measure.block_reduce(observation, block_size=(4, 4), func=mean)
+        observation = measure.block_reduce(observation, block_size=(KERNEL_WINDOW_LENGTH, KERNEL_WINDOW_LENGTH), func=mean)
 
         height, width = observation.shape
 
@@ -373,18 +375,14 @@ class env(MultiAgentEnv):
         self.reset()
 
     def reset(self):
-        self.env.reset()
-        return self.observe()
+        obs = self.env.reset()
+        return convert_to_dict(obs)
 
     def close(self):
         self.env.close()
 
     def render(self):
         self.env.render()
-
-    def observe(self):
-        obs = self.env.observe()
-        return convert_to_dict(obs)
 
     def step(self, actions):
         for i in self.agent_ids:
