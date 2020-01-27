@@ -16,11 +16,13 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 _image_library = {}
 
+
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     return image
+
 
 class env(MultiAgentEnv):
 
@@ -29,7 +31,7 @@ class env(MultiAgentEnv):
     def __init__(self):
         super(env, self).__init__()
         self.num_agents = 20
-        self.agent_ids = list(range(self.num_agents))  # [str(i) for i in range(self.num_agents)]
+        self.agent_ids = list(range(self.num_agents))
 
         self.action_space_dict = dict(zip(self.agent_ids, [gym.spaces.Discrete(3)]*self.num_agents))
         self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)]*self.num_agents))  # [gym.spaces.Discrete(1500)], [gym.spaces.Box(low=0, high=255, shape=(50, 30, 1), dtype=np.uint8)]
@@ -71,47 +73,26 @@ class env(MultiAgentEnv):
         self.screen.blit(self.background, (0, 0))
 
         self.rect = pygame.Rect(80, 80, 800, 377)
-        
+
         # blit background image if ball goes out of bounds. Ball radius is 40
         self.valid_ball_position_rect = pygame.Rect(self.rect.left + 40, self.rect.top + 40, self.rect.width - 80, self.rect.height - 80)
 
         self.num_frames = 0
 
     def observe(self):
-        #start = time.time()
-
         observation = pygame.surfarray.array3d(self.screen)
-
-        #timeA = time.time()
-
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
         observation = observation[257:457, 40:920, 2]  # take blue channel only instead of doing full greyscale
 
-        #timeB = time.time()
-
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
         observation = skimage.measure.block_reduce(observation, block_size=(4, 4), func=mean)
-
-        #timeC = time.time()
 
         observations = {}
 
         for i in range(len(self.pistonList)):
             cropped = observation[:, i*10:30 + i*10]
-            observations[self.agent_ids[i]] = np.expand_dims(cropped, axis=2).flatten()  # TensorFlow requires this reshape. I don't know why.
-            #print(np.expand_dims(cropped, axis=2).flatten().shape)
-
-        """
-        timeD = time.time()
-        end = timeD
-
-        print('Section A (PyGame Observation) ' + str(int(100*(timeA-start)/(end-start))))
-        print('Section B (Numpy Manipulation) ' + str(int(100*(timeB-timeA)/(end-start))))
-        print('Section C (Mean Pooling) ' + str(int(100*(timeC-timeB)/(end-start))))
-        print('Section D (Cropping) ' + str(int(100*(timeD-timeC)/(end-start))))
-        """
-
+            observations[self.agent_ids[i]] = np.expand_dims(cropped, axis=2).flatten()
         return observations
 
     def enable_render(self):
@@ -187,32 +168,16 @@ class env(MultiAgentEnv):
         return self.observe()
 
     def draw(self):
-        #start = time.time()
-        
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             self.screen.blit(self.background, (0, 0))
-        
+
         pygame.draw.rect(self.screen, (255, 255, 255), self.rect)
-
-        #timeA = time.time()
-
         pygame.draw.circle(self.screen, (65, 159, 221), (int(self.ball.position[0]), int(self.ball.position[1])), 40)
         pygame.draw.line(self.screen, (58, 64, 65), (int(self.ball.position[0]), int(self.ball.position[1])), (int(self.ball.position[0]) + 39*np.cos(self.ball.angle), int(self.ball.position[1]) + 39*np.sin(self.ball.angle)), 3)  # 39 because it kept sticking over by 1 at 40
 
-        #timeB = time.time()
-
         for piston in self.pistonList:
             self.screen.blit(self.pistonSprite, (piston.position[0]-5, piston.position[1]-5))
-
-        """
-        timeC = time.time()
-        end = timeC
-
-        print('Section A (Background) ' + str(int(100*(timeA-start)/(end-start))))
-        print('Section B (Ball) ' + str(int(100*(timeB-timeA)/(end-start))))
-        print('Section C (Pistons) ' + str(int(100*(timeC-timeB)/(end-start))))
-        """
 
     def render(self):
         if not self.renderOn:
@@ -221,18 +186,12 @@ class env(MultiAgentEnv):
         pygame.display.flip()
 
     def step(self, actions):
-        #start = time.time()
-
         for i, agent_id in enumerate(self.agent_ids):
                 self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing
 
         self.space.step(1/15.0)
 
-        #timeA = time.time()
-
         self.draw()
-
-        #timeB = time.time()
 
         newX = int(self.ball.position[0]-40)
         reward = (100/self.distance)*(self.lastX - newX)  # opposite order due to moving right to left
@@ -244,46 +203,18 @@ class env(MultiAgentEnv):
         else:
             self.clock.tick()
 
-        #timeC = time.time()
-
         observation = self.observe()
 
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
 
-        """
-        timeD = time.time()
-        end = timeD
-
-        print('Section A (Physics) ' + str(int(100*(timeA-start)/(end-start))))
-        print('Section B (Drawing) ' + str(int(100*(timeB-timeA)/(end-start))))
-        print('Section C (RL Logic) ' + str(int(100*(timeC-timeB)/(end-start))))
-        print('Section D (Observation) ' + str(int(100*(timeD-timeC)/(end-start))))
-        """
-
         rewardDict = dict(zip(self.agent_ids, [reward/self.num_agents]*self.num_agents))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
-        return observation, rewardDict, doneDict, {}  # infodict issue?
+        return observation, rewardDict, doneDict, {} 
 
-
-"""
-Section A (PyGame Observation) 76
-Section B (Numpy Manipulation) 1
-Section C (Mean Pooling) 22
-Section D (Cropping) 0
-
-Section A (Physics) 2
-Section B (Drawing) 5
-Section C (RL Logic) 0
-Section D (Observation) 91
-
-Section A (Background) 37
-Section B (Ball) 11
-Section C (Pistons) 51
-"""
 
 # TODO CNN policy network of my choosing
 # TODO check caching past 4 frames (support in game?)
