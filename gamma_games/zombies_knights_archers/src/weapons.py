@@ -18,7 +18,7 @@ i = 1
 
 class Arrow(pygame.sprite.Sprite):
 
-    def __init__(self, archer, radius):
+    def __init__(self, archer):
         super().__init__()
         self.image = pygame.Surface([6, 6])
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
@@ -27,16 +27,18 @@ class Arrow(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
         self.pos = pygame.Vector2(self.archer.rect.center)
-        self.radius = radius
+        self.fired = True
 
     def update(self):
+        print('arrow update')
+        print(self.pos)
         self.pos += self.direction * ARROW_SPEED
         self.rect.center = self.pos
 
 
 class Sword(pygame.sprite.Sprite):
 
-    def __init__(self, knight, radius):
+    def __init__(self, knight):
         super().__init__()
         self.i = i # TODO: remove this. Does it break the code if I remove it?
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
@@ -49,21 +51,21 @@ class Sword(pygame.sprite.Sprite):
         self.org_image = self.image.copy()
         self.angle = self.knight.angle
         self.pos = self.knight.pos
-        self.radius = radius
         self.speed = 5
-        self.phase = -5
+        self.phase = 5
         self.active = False
 
     def update(self):
         keys = pygame.key.get_pressed()
-        
+        print('sword update')
+
         # Attack
-        if keys[pygame.K_SEMICOLON]:
+        if self.knight.action == 5:
             self.active = True
 
         if self.active and self.knight.alive:
-            if self.phase < 6:
-                self.phase += 1
+            if self.phase > -5:
+                self.phase -= 1
                 self.knight.attacking = True
 
                 angle = math.radians(self.knight.angle + 90 + self.speed * self.phase)
@@ -71,8 +73,9 @@ class Sword(pygame.sprite.Sprite):
                 self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
                 self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
             else:
-                self.phase = -5
+                self.phase = 5
                 self.active = False
                 self.knight.attacking = False
+                self.knight.action = -1
                 
         return self.active
