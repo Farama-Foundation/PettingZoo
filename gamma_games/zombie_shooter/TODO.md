@@ -40,3 +40,14 @@ fix bugs 1 and 2
 api
 
 sprite
+
+
+===
+
+Fix bug 2
+
+Note bug 1 exists (future work)
+
+Sprites
+
+API
