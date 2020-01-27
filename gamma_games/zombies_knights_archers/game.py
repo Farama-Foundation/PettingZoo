@@ -60,6 +60,9 @@ class Game():
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         pygame.display.set_caption("Zombies, Knights, Archers")
         self.clock = pygame.time.Clock()
+
+        self.agent_list = []
+        self.agent_ids = []
         
         # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
         for i in range(num_archers):
@@ -67,6 +70,7 @@ class Game():
             self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
             self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.agent_list.append(self.archer_dict["archer{0}".format(self.archer_player_num)])
             if i != num_archers - 1:
                 self.archer_player_num += 1
 
@@ -75,8 +79,12 @@ class Game():
             self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
             self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.agent_list.append(self.knight_dict["knight{0}".format(self.knight_player_num)])
             if i != num_knights - 1:
                 self.knight_player_num += 1
+
+        for i in range(num_archers + num_knights):
+            self.agent_ids.append(i)
 
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
@@ -158,7 +166,7 @@ class Game():
                         self.knight_killed = False
                     else:
                         for knight in self.knight_list:
-                            temp = Sword(knight, OBJ_RADIUS)
+                            temp = Sword(knight)
                             self.sword_list.add(temp)
                             self.all_sprites.add(temp)
                         self.sword_spawn_rate = 1
@@ -176,7 +184,7 @@ class Game():
                     self.archer_killed = False   
                 else:
                     for archer in self.archer_list:
-                        temp = Arrow(archer, OBJ_RADIUS)
+                        temp = Arrow(archer)
                         self.arrow_list.add(temp)
                         self.all_sprites.add(temp)
                     self.arrow_spawn_rate = 1
@@ -325,6 +333,36 @@ class Game():
                     # Arrow
                     self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
 
+                    # Handle archer control
+                    for archer in self.archer_list:
+                        # Up and Down movement
+                        if (event.key == pygame.K_w):
+                            archer.update(1)
+                        if (event.key == pygame.K_s):
+                            archer.update(2)
+                        # Turn CCW & CW
+                        if event.key == pygame.K_q:
+                            archer.update(3)
+                        if event.key == pygame.K_e:
+                            archer.update(4)
+                        if event.key == pygame.K_f:
+                            archer.update(5)
+
+                    # Handle knight control
+                    for knight in self.knight_list:
+                        # Up and Down movement
+                        if (event.key == pygame.K_i):
+                            knight.update(1)
+                        if (event.key == pygame.K_k):
+                            knight.update(2)
+                        # Turn CCW & CW
+                        if event.key == pygame.K_u:
+                            knight.update(3)
+                        if event.key == pygame.K_o:
+                            knight.update(4)
+                        if event.key == pygame.K_SEMICOLON:
+                            knight.update(5)
+
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
 
@@ -346,8 +384,11 @@ class Game():
             # Kill the Sword when Knight dies
             self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
 
-            # Call the update() method on all the sprites
-            self.all_sprites.update()
+            # Call the update() method on sprites
+            for zombie in self.zombie_list:
+                zombie.update()
+            for arrow in self.arrow_list:
+                arrow.update()
 
             self.WINDOW.fill(self.WHITE)
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
@@ -355,26 +396,30 @@ class Game():
             pygame.display.flip()                    # update screen
             self.clock.tick(self.FPS)                # FPS
 
-            # Zombie reaches the End of the Screen
-            self.run = self.zombie_endscreen(self.run, self.zombie_list)
-
-            # Zombie Kills all Players
-            self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
-
-            # Condition to Check 900 Frames
-            self.count += 1
-            if self.count > 900:
-                print('*** GAME OVER - 900 Frames Completed ***')
-                self.run = False
+            self.check_game_end()
         else:
             pass
             # TODO: End game/training here!!
+
+    def check_game_end(self):
+        # Zombie reaches the End of the Screen
+        self.run = self.zombie_endscreen(self.run, self.zombie_list)
+
+        # Zombie Kills all Players
+        self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
+
+        # Condition to Check 900 Frames
+        self.count += 1
+        if self.count > 900:
+            print('*** GAME OVER - 900 Frames Completed ***')
+            self.run = False
 
     def reset(self):
         # TODO:
         pass
 
 if __name__ == "__main__":
-    g = Game(20, 3)
-    for i in range(400):
+    g = Game(10, 3)
+    for i in range(40000):
         g.step()
+    print('simulation ended')

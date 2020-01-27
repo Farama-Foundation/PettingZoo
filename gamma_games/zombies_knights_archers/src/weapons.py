@@ -27,6 +27,7 @@ class Arrow(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
         self.pos = pygame.Vector2(self.archer.rect.center)
+        self.fired = True
 
     def update(self):
         self.pos += self.direction * ARROW_SPEED
@@ -56,7 +57,7 @@ class Sword(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         # Attack
-        if keys[pygame.K_SEMICOLON]:
+        if self.knight.action == 5:
             self.active = True
 
         if self.active and self.knight.alive:
@@ -72,5 +73,6 @@ class Sword(pygame.sprite.Sprite):
                 self.phase = 5
                 self.active = False
                 self.knight.attacking = False
+                self.knight.action = -1
                 
         return self.active
