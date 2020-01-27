@@ -22,7 +22,7 @@ class Arrow(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface([6, 6])
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'arrow.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'icon538.png'))
         self.archer = archer
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
@@ -42,7 +42,7 @@ class Sword(pygame.sprite.Sprite):
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'mace.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'icon519.png'))
         self.knight = knight
         self.rect = self.image.get_rect(center = self.knight.rect.center)
         self.direction = self.knight.direction
@@ -51,7 +51,7 @@ class Sword(pygame.sprite.Sprite):
         self.pos = self.knight.pos
         self.radius = radius
         self.speed = 5
-        self.phase = -5
+        self.phase = 5
         self.active = False
 
     def update(self):
@@ -62,8 +62,8 @@ class Sword(pygame.sprite.Sprite):
             self.active = True
 
         if self.active and self.knight.alive:
-            if self.phase < 6:
-                self.phase += 1
+            if self.phase > -5:
+                self.phase -= 1
                 self.knight.attacking = True
 
                 angle = math.radians(self.knight.angle + 90 + self.speed * self.phase)
@@ -71,7 +71,7 @@ class Sword(pygame.sprite.Sprite):
                 self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
                 self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
             else:
-                self.phase = -5
+                self.phase = 5
                 self.active = False
                 self.knight.attacking = False
                 

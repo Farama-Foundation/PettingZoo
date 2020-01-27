@@ -55,6 +55,13 @@ knight_dict["knight{0}".format(knight_player_num)] = Knight(blue_trigon, OBJ_RAD
 knight_list.add(knight_dict["knight{0}".format(knight_player_num)])
 all_sprites.add(knight_dict["knight{0}".format(knight_player_num)])
 
+# # Spawn sceond knight TODO: uncomment 
+# knight_player_num += 1
+# knight_dict['knight{0}'.format(knight_player_num)] = Knight(blue_trigon, OBJ_RADIUS)
+# knight_dict['knight{0}'.format(knight_player_num)].offset(100, -50)
+# knight_list.add(knight_dict['knight{0}'.format(knight_player_num)])
+# all_sprites.add(knight_dict['knight{0}'.format(knight_player_num)])
+
 # Create an Archer
 red_trigon = pygame.Surface((60, 60), pygame.SRCALPHA)
 pygame.gfxdraw.filled_polygon(red_trigon, [(0, 40), (25, 5), (25, 0), (35, 0), (35, 5), (60, 40)], RED)   # [(20, 0), (10, 20), (30, 20)]
