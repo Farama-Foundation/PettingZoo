@@ -57,6 +57,7 @@ class Archer(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
 
 
+
 class Knight(pygame.sprite.Sprite):
 
     def __init__(self, blue_trigon, radius):
