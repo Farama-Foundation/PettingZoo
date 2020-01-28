@@ -34,7 +34,8 @@ class env(MultiAgentEnv):
         self.agent_ids = list(range(self.num_agents))
 
         self.action_space_dict = dict(zip(self.agent_ids, [gym.spaces.Discrete(3)]*self.num_agents))
-        self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)]*self.num_agents))  # [gym.spaces.Discrete(1500)], [gym.spaces.Box(low=0, high=255, shape=(50, 30, 1), dtype=np.uint8)]
+        # self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)]*self.num_agents))  # [gym.spaces.Discrete(1500)], [gym.spaces.Box(low=0, high=255, shape=(50, 30, 1), dtype=np.uint8)]
+        self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -92,7 +93,8 @@ class env(MultiAgentEnv):
 
         for i in range(len(self.pistonList)):
             cropped = observation[:, i*10:30 + i*10]
-            observations[self.agent_ids[i]] = np.expand_dims(cropped, axis=2).flatten()
+            unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
+            observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
         return observations
 
     def enable_render(self):
