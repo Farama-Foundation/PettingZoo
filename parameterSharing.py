@@ -25,98 +25,146 @@ class CustomModel1(Model):
         return output, last_layer
 
 
-if __name__ == "__main__":
-    ray.init()
 
-    # Simple environment with `num_agents` independent cartpole entities
-    ModelCatalog.register_custom_model("model1", CustomModel1)
+ray.init()
 
-    # pursuit
+# Simple environment with `num_agents` independent cartpole entities
+ModelCatalog.register_custom_model("model1", CustomModel1)
 
-    def env_creator(args):
-        return pursuit.env()
+# pursuit
 
-    env = env_creator(1)
-    register_env("pursuit", env_creator)
+def env_creator(args):
+    return pursuit.env()
 
-    obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
-    act_space = gym.spaces.Discrete(5)
+env = env_creator(1)
+register_env("pursuit", env_creator)
 
-    """
-    # cooperative pong
+obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
+act_space = gym.spaces.Discrete(5)
 
-    def env_creator(args):
-        return cooperative_pong.env()
+"""
+# cooperative pong
 
-    env = env_creator(1)
-    register_env("cooperative_pong", env_creator)
+def env_creator(args):
+    return cooperative_pong.env()
 
-    obs_space = gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8)
-    act_space = gym.spaces.Discrete(3)
-    """
+env = env_creator(1)
+register_env("cooperative_pong", env_creator)
 
-    """
-    # pistonball
-    def env_creator(args):
-        return piston_ball.env()
+obs_space = gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8)
+act_space = gym.spaces.Discrete(3)
+"""
 
-    env = env_creator(1)
-    register_env("pistonBall", env_creator)
+"""
+# pistonball
+def env_creator(args):
+    return piston_ball.env()
 
-    obs_space = gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)
-    act_space = gym.spaces.Discrete(3)
-    """
+env = env_creator(1)
+register_env("pistonBall", env_creator)
 
-    # Each policy can have a different configuration (including custom model)
-    def gen_policy(i):
-        config = {
-            "model": {
-                "custom_model": "model1",
-            },
-            "gamma": 0.99,
-        }
-        return (None, obs_space, act_space, config)
+obs_space = gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)
+act_space = gym.spaces.Discrete(3)
+"""
 
-    # Setup PPO with an ensemble of `num_policies` different policies
-    policies = {
-        "policy_{}".format(i): gen_policy(i)
-        for i in range(1)
-    }
-    policy_ids = list(policies.keys())
 
-    tune.run(
-        "DQN",
-        stop={"episodes_total": 60000},
-        checkpoint_freq=100,
-        config={
-
-            # Enviroment specific
-            "env": "pursuit",
-
-            # General
-            "log_level": "ERROR",
-            "num_gpus": 1,
-            "num_workers": 8,
-            "num_envs_per_worker": 8,
-            "learning_starts": 1000,
-            "buffer_size": int(1e5),
-            "compress_observations": True,
-            "sample_batch_size": 20,
-            "train_batch_size": 512,
-            "gamma": .99,
-
-            # Method specific
-
-            "multiagent": {
-                "policies": policies,
-                "policy_mapping_fn": (
-                    lambda agent_id: policy_ids[0]),
-            },
+# Each policy can have a different configuration (including custom model)
+def gen_policy(i):
+    config = {
+        "model": {
+            "custom_model": "model1",
         },
-    )
+        "gamma": 0.99,
+    }
+    return (None, obs_space, act_space, config)
+
+
+policies = {
+    "policy_{}".format(i): gen_policy(i)
+    for i in range(1)
+}
+policy_ids = list(policies.keys())
+
+"""
+tune.run(
+    "DQN",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=100,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "learning_starts": 1000,
+        "buffer_size": int(1e5),
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+
+tune.run(
+    "PPO",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=100,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        # Method specific
+        "lambda": 0.95,
+        "kl_coeff": 0.5,
+        "clip_rewards": True,
+        "clip_param": 0.1,
+        "vf_clip_param": 10.0,
+        "entropy_coeff": 0.01,
+        "train_batch_size": 5000,
+        "sample_batch_size": 100,
+        "sgd_minibatch_size": 500,
+        "num_sgd_iter": 10,
+        "batch_mode": "truncate_episodes",
+        "observation_filter": "NoFilter",
+        "vf_share_layers": True,
+
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
 
 
 """
+# old
     tune.run(
         "APEX",
         stop={"episodes_total": 60000},
