@@ -209,7 +209,9 @@ class env(MultiAgentEnv):
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
-
+        if not self.done:
+            reward -= 0.1
+            
         rewardDict = dict(zip(self.agent_ids, [reward/self.num_agents]*self.num_agents))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
