@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from .waterworld_base import MAWaterWorld as _env 
 import numpy as np
 

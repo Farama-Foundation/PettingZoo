@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-
-from .pursuit_evade_base import PursuitEvade as _env 
+from .pursuit_base import Pursuit as _env 
 import numpy as np
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
@@ -29,18 +27,14 @@ class env(MultiAgentEnv):
         self.reset()
         
     def reset(self):
-        self.env.reset()
-        return self.observe()
+        obs = self.env.reset()
+        return convert_to_dict(obs)
     
     def close(self):
         self.env.close()
     
     def render(self):
         self.env.render()
-    
-    def observe(self):
-        obs = self.env.observe()
-        return convert_to_dict(obs)
 
     def step(self, action_dict):
         # unpack actions
