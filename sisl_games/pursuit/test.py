@@ -71,10 +71,9 @@ while not done:
     # print("_quit_loop", _quit_loop)
     if _quit_loop:
         break
-    # actions should be a dict of numpy arrays: {0: array([0,1,0])}
-    action_dict = dict(zip(env.agent_ids, [np.array([0]*env.n_act_agents) for _ in range(env.num_agents)])) # no action = [0,1,0]
-    for idx, val in enumerate(_actions):
-        action_dict[idx][val] = 1
+    # actions should be a dict of numpy arrays
+    action_dict = dict(zip(env.agent_ids, _actions))
+    
     observation, rewards, done_dict, info = env.step(action_dict)
     done = any(list(done_dict.values()))
     if done:

@@ -38,19 +38,14 @@ class env(MultiAgentEnv):
 
     def step(self, action_dict):
         # unpack actions
-        actions = []
-        for idx, agent in enumerate(self.agent_ids):
-            dist = action_dict[agent]
-            normDist = dist/np.sum(dist)
-            normDist = np.concatenate(([0], normDist))
-            normDist = np.cumsum(normDist)
-            cut = np.random.rand()
-            for action in range(len(normDist)-1):
-                if cut >= normDist[action] and cut < normDist[action+1]:
-                    break
-            actions.append(action)
+        action_list = np.array([4 for _ in range(self.num_agents)])
+        for i in self.agent_ids:
+            if not self.action_space_dict[i].contains(action_dict[i]):
+                raise Exception('Action for agent {} must be in Discrete({}). \
+                                It is currently {}'.format(i, self.action_space_dict[i].n, action_dict[i]))
+            action_list[i] = action_dict[i]
         
-        observation, reward, done, info = self.env.step(actions)
+        observation, reward, done, info = self.env.step(action_list)
 
         observation_dict = convert_to_dict(observation)
         reward_dict = convert_to_dict(reward)
