@@ -78,10 +78,7 @@ def gen_policy(i):
     return (None, obs_space, act_space, config)
 
 
-policies = {
-    "policy_{}".format(i): gen_policy(i)
-    for i in range(1)
-}
+policies = {"policy_0": gen_policy(0)}
 policy_ids = list(policies.keys())
 
 """
