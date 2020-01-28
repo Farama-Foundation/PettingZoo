@@ -9,7 +9,7 @@ from .cake_paddle import CakePaddle
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-KERNEL_WINDOW_LENGTH = 8
+KERNEL_WINDOW_LENGTH = 4
 
 def get_image(path):
     image = pygame.image.load(path)
@@ -210,7 +210,7 @@ class CooperativePong(gym.Env):
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         flattened_shape = get_flat_shape(self.s_width, self.s_height)
-        self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8) for _ in range(self.num_agents)]
+        self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(flattened_shape,), dtype=np.float32) for _ in range(self.num_agents)]
 
         self.clock = pygame.time.Clock()
 
@@ -287,7 +287,8 @@ class CooperativePong(gym.Env):
         # exapnd dims to 3
         observation = []
         for i in obs:
-            observation.append(np.expand_dims(i, axis=2).flatten())
+            unscaled_obs = np.expand_dims(i, axis=2).flatten()
+            observation.append(np.divide(unscaled_obs, 255, dtype=np.float32))
         return observation
 
     def draw(self):
