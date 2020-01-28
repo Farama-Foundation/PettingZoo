@@ -260,9 +260,9 @@ class Pursuit():
         done_list = [done] * self.n_pursuers
 
         if self.reward_mech == 'global':
-            return obslist, [rewards.mean()] * self.n_pursuers, done, {'removed': ev_remove}
+            return obslist, [rewards.mean()] * self.n_pursuers, done_list, {'removed': ev_remove}
         
-        return obslist, rewards, done_list, {'removed': ev_remove}
+        return obslist, rewards, done_list, [] # info: {'removed': ev_remove} 
 
     def update_curriculum(self, itr):
         self.constraint_window += self.curriculum_constrain_rate  # 0 to 1 in 500 iterations

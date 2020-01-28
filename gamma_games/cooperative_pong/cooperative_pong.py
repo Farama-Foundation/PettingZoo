@@ -5,11 +5,11 @@ import numpy as np
 from skimage import measure
 import gym
 import matplotlib.pyplot as plt
-from cake_paddle import CakePaddle
+from .cake_paddle import CakePaddle
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-KERNEL_WINDOW_LENGTH = 4
+KERNEL_WINDOW_LENGTH = 8
 
 def get_image(path):
     image = pygame.image.load(path)
