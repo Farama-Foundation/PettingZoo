@@ -4,6 +4,7 @@ import numpy as np
 import pygame
 
 env = piston_ball.env()
+env.reset()
 
 i = 19
 
