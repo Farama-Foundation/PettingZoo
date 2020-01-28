@@ -39,7 +39,7 @@ if __name__ == "__main__":
     env = env_creator(1)
     register_env("pursuit", env_creator)
 
-    obs_space = gym.spaces.Box(148,)
+    obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
     act_space = gym.spaces.Discrete(5)
 
     """
@@ -65,26 +65,9 @@ if __name__ == "__main__":
 
     obs_space = gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)
     act_space = gym.spaces.Discrete(3)
-
     """
 
     # Each policy can have a different configuration (including custom model)
-    def gen_policy(i):
-        config = {
-            "model": {
-                "custom_model": "model1",
-            },
-            "gamma": 0.99,
-        }
-        return (None, obs_space, act_space, config)
-
-    # Setup PPO with an ensemble of `num_policies` different policies
-    policies = {
-        "policy_{}".format(i): gen_policy(i)
-        for i in range(1)
-    }
-    policy_ids = list(policies.keys())
-
     def gen_policy(i):
         config = {
             "model": {
