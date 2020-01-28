@@ -334,9 +334,9 @@ class CooperativePong(gym.Env):
         else:
             self.clock.tick()
 
-        reward = [reward for _ in range(self.num_agents)]
-        done = [self.done for _ in range(self.num_agents)]
-        info = [{} for _ in range(self.num_agents)]
+        reward = [reward/self.num_agents] * self.num_agents
+        done = [self.done] * self.num_agents
+        info = [{}] * self.num_agents
 
         return observation, reward, done, info
 
