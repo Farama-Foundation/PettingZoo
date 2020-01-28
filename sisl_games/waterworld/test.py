@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 from .waterworld import env as _env
 import time

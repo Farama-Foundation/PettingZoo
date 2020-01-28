@@ -5,8 +5,8 @@ piston_ball:
 cooperative_pong:
 	python3 gamma_games/cooperative_pong/test.py
 
-pursuit_evade:
-	python3 -m sisl_games.pursuit_evade.test
+pursuit:
+	python3 -m sisl_games.pursuit.test
 
 waterworld:
 	python3 -m sisl_games.waterworld.test

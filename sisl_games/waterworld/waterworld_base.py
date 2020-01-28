@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 import scipy.spatial.distance as ssd
 from gym import spaces

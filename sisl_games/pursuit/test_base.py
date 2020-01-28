@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 import numpy as np
-from .pursuit_evade_base import PursuitEvade
+from .pursuit_base import Pursuit
 import time
 
 from .utils import two_d_maps
