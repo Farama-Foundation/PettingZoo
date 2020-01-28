@@ -145,9 +145,6 @@ class env(MultiAgentEnv):
                 y = 451 - (16*self.velocity)
             return y
 
-        if v not in (-1, 0, 1):
-            raise Exception('Actions must be 0, 1 or 2')  # -1 happens in step before calling this function
-
         piston.position = (piston.position[0], cap(piston.position[1] - v*self.velocity))
 
     def reset(self):
