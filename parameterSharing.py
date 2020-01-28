@@ -14,7 +14,7 @@ from sisl_games.pursuit import pursuit
 tf = try_import_tf()
 
 
-class CustomModel1(Model):
+class MLPModel(Model):
     def _build_layers_v2(self, input_dict, num_outputs, options):
         last_layer = tf.layers.dense(
                 input_dict["obs"], 400, activation=tf.nn.relu, name="fc1")
@@ -25,16 +25,16 @@ class CustomModel1(Model):
         return output, last_layer
 
 
-
 ray.init()
 
-# Simple environment with `num_agents` independent cartpole entities
-ModelCatalog.register_custom_model("model1", CustomModel1)
+ModelCatalog.register_custom_model("MLPModel", MLPModel)
 
 # pursuit
 
+
 def env_creator(args):
     return pursuit.env()
+
 
 env = env_creator(1)
 register_env("pursuit", env_creator)
@@ -68,11 +68,10 @@ act_space = gym.spaces.Discrete(3)
 """
 
 
-# Each policy can have a different configuration (including custom model)
 def gen_policy(i):
     config = {
         "model": {
-            "custom_model": "model1",
+            "custom_model": "MLPModel",
         },
         "gamma": 0.99,
     }
