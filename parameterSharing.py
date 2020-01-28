@@ -9,7 +9,7 @@ from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
 from gamma_games.piston_ball import piston_ball
 from gamma_games.cooperative_pong import cooperative_pong
-from sisl_games.pursuit_evade import pursuit_evade
+from sisl_games.pursuit import pursuit
 
 tf = try_import_tf()
 
@@ -31,6 +31,18 @@ if __name__ == "__main__":
     # Simple environment with `num_agents` independent cartpole entities
     ModelCatalog.register_custom_model("model1", CustomModel1)
 
+    # pursuit
+
+    def env_creator(args):
+        return pursuit.env()
+
+    env = env_creator(1)
+    register_env("pursuit", env_creator)
+
+    obs_space = gym.spaces.Box(148,)
+    act_space = gym.spaces.Discrete(5)
+
+    """
     # cooperative pong
 
     def env_creator(args):
@@ -41,6 +53,7 @@ if __name__ == "__main__":
 
     obs_space = gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8)
     act_space = gym.spaces.Discrete(3)
+    """
 
     """
     # pistonball
@@ -91,11 +104,11 @@ if __name__ == "__main__":
     tune.run(
         "DQN",
         stop={"episodes_total": 60000},
-        checkpoint_freq=10,
+        checkpoint_freq=100,
         config={
 
             # Enviroment specific
-            "env": "cooperative_pong",
+            "env": "pursuit",
 
             # General
             "log_level": "ERROR",
