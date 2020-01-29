@@ -7,8 +7,6 @@ BALL_SPEED, P1_SPEED, P2_SPEED, BOUNCE_RANDOMNESS = 18, 25, 25, 0
 # Defaults are 18, 25, 25, 0 as used in cooperative_pong.py. There parameters need not be intialized while creating an env instance.
 
 env = _env(BALL_SPEED, P1_SPEED, P2_SPEED)
-# init_obs = env.reset()
-# print(init_obs[0].shape, init_obs[0].dtype, env.observation_space_dict[0], env.observation_space_dict[0].dtype)
 
 done = False
 quit_loop = 0

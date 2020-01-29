@@ -9,7 +9,7 @@ from .cake_paddle import CakePaddle
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-KERNEL_WINDOW_LENGTH = 8
+KERNEL_WINDOW_LENGTH = 10
 
 def get_image(path):
     image = pygame.image.load(path)
@@ -22,6 +22,9 @@ def deg_to_rad(deg):
 
 def get_flat_shape(width, height):
     return int(width * height/ (2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
+
+def original_obs_shape(screen_width, screen_height):
+    return (int(screen_height/KERNEL_WINDOW_LENGTH), int(screen_width/(2*KERNEL_WINDOW_LENGTH)))
 
 
 def get_valid_angle():
@@ -342,8 +345,10 @@ class CooperativePong(gym.Env):
 
     def plot_obs(self, observation, fname):
         # shrink observation dims
+        shape = original_obs_shape(self.s_width, self.s_height)
         for i in range(len(observation)):
             observation[i] = np.squeeze(observation[i])
+            observation[i] = observation[i].reshape(shape)
         fig = plt.figure()
         # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
         ax1 = fig.add_subplot(121)
@@ -390,8 +395,8 @@ class env(MultiAgentEnv):
     def step(self, actions):
         for i in self.agent_ids:
             if not self.action_space_dict[i].contains(actions[i]):
-                raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
+                raise Exception('Action for agent {} must be in Discrete({}).'
+                                'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
 
         observation, reward, done, info = self.env.step(actions)
 
