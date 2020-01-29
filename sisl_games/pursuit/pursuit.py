@@ -1,5 +1,6 @@
 from .pursuit_base import Pursuit as _env
 import numpy as np
+import gym
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -52,7 +53,7 @@ class env(MultiAgentEnv):
         observation, reward, done, info = self.env.step(action_list)
 
         if self.steps >= 500:
-            done = True
+            done = [True]*self.num_agents
 
         observation_dict = convert_to_dict(observation)
         reward_dict = convert_to_dict(reward)
