@@ -137,7 +137,7 @@ class Pursuit():
 
         self.initial_config = kwargs.pop('initial_config', {})
 
-        self.surround = kwargs.pop('surround', False)
+        self.surround = kwargs.pop('surround', True)
 
         self.constraint_window = kwargs.pop('constraint_window', 1.0)
 
