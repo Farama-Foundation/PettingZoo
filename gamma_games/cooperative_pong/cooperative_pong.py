@@ -9,7 +9,7 @@ from .cake_paddle import CakePaddle
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-KERNEL_WINDOW_LENGTH = 4
+KERNEL_WINDOW_LENGTH = 8
 
 def get_image(path):
     image = pygame.image.load(path)
@@ -354,11 +354,6 @@ class CooperativePong(gym.Env):
         ax2.set_title("Observation[1]")
         plt.savefig(fname)
 
-def convert_to_dict(list_of_list):
-    dict_of_list = {}
-    for idx, i in enumerate(list_of_list):
-        dict_of_list[idx] = i
-    return dict_of_list
 
 class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
@@ -374,10 +369,17 @@ class env(MultiAgentEnv):
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         
         self.reset()
-
+        
+    def convert_to_dict(self, list_of_list):
+        # dict_of_list = {}
+        # for idx, i in enumerate(list_of_list):
+        #     dict_of_list[idx] = i
+        # return dict_of_list
+        return dict(zip(self.agent_ids, list_of_list))
+    
     def reset(self):
         obs = self.env.reset()
-        return convert_to_dict(obs)
+        return self.convert_to_dict(obs)
 
     def close(self):
         self.env.close()
@@ -393,10 +395,10 @@ class env(MultiAgentEnv):
 
         observation, reward, done, info = self.env.step(actions)
 
-        observation_dict = convert_to_dict(observation)
-        reward_dict = convert_to_dict(reward)
-        info_dict = convert_to_dict(info)
-        done_dict = convert_to_dict(done)
+        observation_dict = self.convert_to_dict(observation)
+        reward_dict = self.convert_to_dict(reward)
+        info_dict = self.convert_to_dict(info)
+        done_dict = self.convert_to_dict(done)
         done_dict["__all__"] = done[0]
 
         return observation_dict, reward_dict, done_dict, info_dict

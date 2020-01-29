@@ -7,6 +7,8 @@ BALL_SPEED, P1_SPEED, P2_SPEED, BOUNCE_RANDOMNESS = 18, 25, 25, 0
 # Defaults are 18, 25, 25, 0 as used in cooperative_pong.py. There parameters need not be intialized while creating an env instance.
 
 env = _env(BALL_SPEED, P1_SPEED, P2_SPEED)
+# init_obs = env.reset()
+# print(init_obs[0].shape, init_obs[0].dtype, env.observation_space_dict[0], env.observation_space_dict[0].dtype)
 
 done = False
 quit_loop = 0
@@ -48,15 +50,15 @@ while not done:
     # actions should be a dict of numpy arrays
     action_dict = dict(zip(env.agent_ids, actionList)) # no action = 0
     
-    observation, rewards, dones, info = env.step(action_dict)
+    observation, reward_dict, done_dict, info = env.step(action_dict)
     env.render()
-    totalReward += rewards[0]
-    done = dones[0]
+    totalReward += sum(list(reward_dict.values()))
+    done = any(list(done_dict.values()))
     pygame.event.pump()
     # env.plot_obs(observation, "obs")
     # break
 
-assert (totalReward == env.env.score), "Final score = {} and reward = {} are not the same".format(env.score, totalReward)
+assert (totalReward == env.env.score), "Final score = {} and reward = {} are not the same".format(env.env.score, totalReward)
 print("Final reward is {0:.2f}".format(totalReward))
 # Uncomment next line to print FPS at which the game runs
 # print("fps = ", env.env.clock.get_fps())
