@@ -376,10 +376,6 @@ class env(MultiAgentEnv):
         self.reset()
         
     def convert_to_dict(self, list_of_list):
-        # dict_of_list = {}
-        # for idx, i in enumerate(list_of_list):
-        #     dict_of_list[idx] = i
-        # return dict_of_list
         return dict(zip(self.agent_ids, list_of_list))
     
     def reset(self):
