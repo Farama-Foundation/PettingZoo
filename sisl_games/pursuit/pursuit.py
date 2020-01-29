@@ -25,11 +25,13 @@ class env(MultiAgentEnv):
         self.n_act_agents = self.env.act_dims[0]
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
+        self.steps = 0
 
         self.reset()
 
     def reset(self):
         obs = self.env.reset()
+        self.steps = 0
         return convert_to_dict(obs)
 
     def close(self):
@@ -49,10 +51,15 @@ class env(MultiAgentEnv):
 
         observation, reward, done, info = self.env.step(action_list)
 
+        if self.steps >= 500:
+            done = True
+
         observation_dict = convert_to_dict(observation)
         reward_dict = convert_to_dict(reward)
         info_dict = convert_to_dict(info)
         done_dict = convert_to_dict(done)
         done_dict["__all__"] = done[0]
+
+        self.steps += 1
 
         return observation_dict, reward_dict, done_dict, info_dict
