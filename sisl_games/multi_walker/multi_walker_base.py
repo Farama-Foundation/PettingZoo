@@ -251,12 +251,12 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='global',
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
                  forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
                  one_hot=False):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
 
-        self.n_walkers = n_walkers        
+        self.n_walkers = n_walkers
         self.position_noise = position_noise
         self.angle_noise = angle_noise
         self._reward_mech = reward_mech
@@ -326,7 +326,7 @@ class MultiWalkerEnv():
 
         for walker in self.walkers:
             walker._destroy()
-        
+
     def close(self):
         pass
     
@@ -357,18 +357,27 @@ class MultiWalkerEnv():
             self.drawlist += walker.legs
             self.drawlist += [walker.hull]
 
-        # return self.step(np.array([0, 0, 0, 0] * self.n_walkers))[0]
-        return self.observe()
+        return self.step(np.array([0, 0, 0, 0] * self.n_walkers))[0]
 
-    def observe(self):
-        self.xpos = np.zeros(self.n_walkers)
-        self.rewards = np.zeros(self.n_walkers)
+    def step(self, actions):
+        act_vec = np.reshape(actions, (self.n_walkers, 4))
+        assert len(act_vec) == self.n_walkers
+        for i in range(self.n_walkers):
+            self.walkers[i].apply_action(act_vec[i])
+
+        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
+
+        obs = [walker.get_observation() for walker in self.walkers]
+
+        xpos = np.zeros(self.n_walkers)
         obs = []
+        done = False
+        rewards = np.zeros(self.n_walkers)
 
         for i in range(self.n_walkers):
-            self.pos = self.walkers[i].hull.position
-            x, y = self.pos.x, self.pos.y
-            self.xpos[i] = x
+            pos = self.walkers[i].hull.position
+            x, y = pos.x, pos.y
+            xpos[i] = x
 
             wobs = self.walkers[i].get_observation()
             nobs = []
@@ -394,44 +403,32 @@ class MultiWalkerEnv():
                 nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
-            #shaping = 130 * self.pos[0] / SCALE
+            #shaping = 130 * pos[0] / SCALE
             shaping = 0.0
             shaping -= 5.0 * abs(wobs[0])
-            self.rewards[i] = shaping - self.prev_shaping[i]
+            rewards[i] = shaping - self.prev_shaping[i]
             self.prev_shaping[i] = shaping
-            
-        return obs
-
-    def step(self, actions):
-        act_vec = np.reshape(actions, (self.n_walkers, 4))
-        assert len(act_vec) == self.n_walkers
-        for i in range(self.n_walkers):
-            self.walkers[i].apply_action(act_vec[i])
-
-        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
-        
-        obs = self.observe()
 
         package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
-        self.rewards += (package_shaping - self.prev_package_shaping)
+        rewards += (package_shaping - self.prev_package_shaping)
         self.prev_package_shaping = package_shaping
 
-        self.scroll = self.xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1
+        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1
                                                              ) * WALKER_SEPERATION * TERRAIN_STEP
 
         done = False
-        if self.game_over or self.pos[0] < 0:
-            self.rewards += self.drop_reward
+        if self.game_over or pos[0] < 0:
+            rewards += self.drop_reward
             done = True
-        if self.pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
+        if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
             done = True
-        self.rewards += self.fall_reward * self.fallen_walkers
+        rewards += self.fall_reward * self.fallen_walkers
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
             done = True
 
         if self.reward_mech == 'local':
-            return obs, self.rewards, [done] * self.n_walkers, {}
-        return obs, [self.rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
+            return obs, rewards, [done] * self.n_walkers, {}
+        return obs, [rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
 
     def render(self, mode='human', close=False):
         if close:
