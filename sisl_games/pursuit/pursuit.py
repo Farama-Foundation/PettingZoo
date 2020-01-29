@@ -4,14 +4,6 @@ import gym
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-
-def convert_to_dict(list_of_list):
-    dict_of_list = {}
-    for idx, i in enumerate(list_of_list):
-        dict_of_list[idx] = i
-    return dict_of_list
-
-
 class env(MultiAgentEnv):
 
     metadata = {'render.modes': ['human']}
@@ -30,10 +22,13 @@ class env(MultiAgentEnv):
 
         self.reset()
 
+    def convert_to_dict(self, list_of_list):
+        return dict(zip(self.agent_ids, list_of_list))
+    
     def reset(self):
         obs = self.env.reset()
         self.steps = 0
-        return convert_to_dict(obs)
+        return self.convert_to_dict(obs)
 
     def close(self):
         self.env.close()
@@ -55,10 +50,10 @@ class env(MultiAgentEnv):
         if self.steps >= 500:
             done = [True]*self.num_agents
 
-        observation_dict = convert_to_dict(observation)
-        reward_dict = convert_to_dict(reward)
-        info_dict = convert_to_dict(info)
-        done_dict = convert_to_dict(done)
+        observation_dict = self.convert_to_dict(observation)
+        reward_dict = self.convert_to_dict(reward)
+        info_dict = self.convert_to_dict(info)
+        done_dict = self.convert_to_dict(done)
         done_dict["__all__"] = done[0]
 
         self.steps += 1
