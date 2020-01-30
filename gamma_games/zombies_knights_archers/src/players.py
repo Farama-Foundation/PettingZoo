@@ -66,6 +66,9 @@ class Archer(pygame.sprite.Sprite):
         self.rect.x += x_offset
         self.rect.y += y_offset
 
+    def is_done(self):
+        return self.alive
+
 
 class Knight(pygame.sprite.Sprite):
     def __init__(self):
@@ -116,3 +119,6 @@ class Knight(pygame.sprite.Sprite):
     def offset(self, x_offset, y_offset):
         self.rect.x += x_offset
         self.rect.y += y_offset
+
+    def is_done(self):
+        return self.alive

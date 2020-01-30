@@ -12,6 +12,9 @@ from src.players import Knight, Archer
 from src.zombie import Zombie
 from src.weapons import Arrow, Sword
 from src.variables import *
+import numpy as np
+import skimage
+from skimage import measure
 
 # class env(MultiAgentEnv):
 class Game():
@@ -62,6 +65,7 @@ class Game():
 
         self.agent_list = []
         self.agent_ids = []
+        self.num_agents = num_archers + num_knights
         
         # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
         for i in range(num_archers):
@@ -315,7 +319,7 @@ class Game():
                     if event.key == pygame.K_BACKSPACE:
                         env.reset() # TODO: should "env" be "self"???
 
-                    # TODO: FIXME
+                    # TODO: FIXME:
                     # The following commented block is old code from when I controleld the agents with the keyboard
                     # It should probably be deleted, but I have kept it here just in case I need it soon for something
                     # # Spawn Players
@@ -397,6 +401,22 @@ class Game():
         else:
             pass
             # TODO: End game/training here!!
+
+        reward_dict = dict(zip(self.agent_ids, [self.score/self.num_agents]*self.num_agents)) # FIXME: change this so that each agent has its own reward
+
+        agent_done = [agent.is_done() for agent in self.agent_list]
+        done_dict = dict(zip(self.agent_ids, agent_done))
+        done_dict['__all__'] = not self.run 
+
+        # TODO: this
+        # observation
+        #  TODO: 
+        #   - i will need to pull the red channel instead, most likely
+        #   - scale down the obs for each agent so that after scaling (lambda function and skimage blokc_reduce) its 50x50
+        #   - then scale from 0 to 1 and use float32
+
+
+        # return observation, reward_dict, done_dict, {}
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen
