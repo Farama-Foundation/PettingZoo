@@ -13,9 +13,9 @@ from src.zombie import Zombie
 from src.weapons import Arrow, Sword
 from src.variables import *
 
+# class env(MultiAgentEnv):
 class Game():
-
-    def __init__(self, num_archers, num_knights):
+    def __init__(self, num_archers=2, num_knights=2):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
@@ -466,7 +466,7 @@ class Game():
             self.agent_ids.append(i)
 
 if __name__ == "__main__":
-    g = Game(2, 2)
+    g = Game()
     # for i in range(40):
     #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
     #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
