@@ -55,6 +55,10 @@ class Game():
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         pygame.display.set_caption("Zombies, Knights, Archers")
         self.clock = pygame.time.Clock()
+        self.left_wall = pygame.image.load(os.path.join('img', 'left_wall.png'))
+        self.right_wall = pygame.image.load(os.path.join('img', 'right_wall.png'))
+        self.right_wall_rect = self.right_wall.get_rect()
+        self.right_wall_rect.left = self.WIDTH - self.right_wall_rect.width
 
         self.agent_list = []
         self.agent_ids = []
@@ -381,7 +385,9 @@ class Game():
                 self.arrow_list.remove(arrow)
                 self.all_sprites.remove(arrow)
 
-            self.WINDOW.fill((255, 255, 255))
+            self.WINDOW.fill((66, 40, 53))
+            self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
+            self.WINDOW.blit(self.right_wall, self.right_wall_rect)
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
             pygame.display.update()
             pygame.display.flip()                    # update screen
