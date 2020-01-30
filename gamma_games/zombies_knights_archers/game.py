@@ -239,6 +239,7 @@ class Game():
             zombie_archer_list = pygame.sprite.spritecollide(zombie, archer_list, True)
 
             for archer in zombie_archer_list:
+                archer.alive = False
                 archer_list.remove(archer)
                 all_sprites.remove(archer)
                 archer_killed = True
@@ -373,8 +374,16 @@ class Game():
             # Call the update() method on sprites
             for zombie in self.zombie_list:
                 zombie.update()
+            arrows_to_delete = []
+
             for arrow in self.arrow_list:
                 arrow.update()
+                if not arrow.is_active():
+                    arrows_to_delete.append(arrow)
+            # delete arrows so they don't get rendered
+            for arrow in arrows_to_delete:
+                self.arrow_list.remove(arrow)
+                self.all_sprites.remove(arrow)
 
             self.WINDOW.fill((255, 255, 255))
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
@@ -457,12 +466,14 @@ class Game():
 
 if __name__ == "__main__":
     g = Game(2, 2)
-    for i in range(40):
-        actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
-        print(actions)
-        g.step(actions)
-    g.reset()
+    # for i in range(40):
+    #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+    #     actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+    #     print(actions)
+    #     g.step(actions)
+    # g.reset()
     for i in range(40000):
         actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+        # actions = [1,1,1,1,1]
         g.step(actions)
     print('simulation ended')
