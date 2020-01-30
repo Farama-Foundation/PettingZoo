@@ -257,7 +257,6 @@ class Game():
                 zombie_list.remove(zombie)
                 all_sprites.remove(zombie)
                 score += 1
-                print('Score: ', score)
         return zombie_list, sword_list, all_sprites, score
 
     # Zombie Kills the Arrow
@@ -272,7 +271,6 @@ class Game():
                 zombie_list.remove(zombie)
                 all_sprites.remove(zombie)
                 score += 1
-                print('Score: ', score)
 
             # Remove the arrow if it flies up off the screen
             if arrow.rect.y < 0:
@@ -284,7 +282,6 @@ class Game():
     def zombie_endscreen(self, run, zombie_list):
         for zombie in zombie_list:
             if zombie.rect.y > 690:
-                print('*** GAME OVER - Zombie Reached the End ***')
                 run = False
         return run
 
@@ -292,7 +289,6 @@ class Game():
     def zombie_all_players(self, knight_list, archer_list, run):
         if not knight_list and not archer_list:
             run = False
-            print('*** GAME OVER - All Players are Dead ***')
         return run
 
     # Advance game state by 1 timestep
@@ -391,7 +387,7 @@ class Game():
             pygame.display.flip()                    # update screen
             self.clock.tick(self.FPS)                # FPS
 
-            # self.check_game_end()
+            self.check_game_end()
         else:
             pass
             # TODO: End game/training here!!
@@ -406,7 +402,6 @@ class Game():
         # Condition to Check 900 Frames
         self.frame_count += 1
         if self.frame_count > 900:
-            print('*** GAME OVER - 900 Frames Completed ***')
             self.run = False
 
     def reset(self):
@@ -476,4 +471,3 @@ if __name__ == "__main__":
         actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
         # actions = [1,1,1,1,1]
         g.step(actions)
-    print('simulation ended')
