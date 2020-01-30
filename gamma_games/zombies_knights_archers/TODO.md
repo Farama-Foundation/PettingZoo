@@ -22,8 +22,6 @@ API
 
 -The arrows actually dont kill the zombies on contact a lot
 
--Make the default be 2 archers and 2 knights, but have them be arguments to the enviroment class
-
 -Step and reset need to return the dicts returned in pistonball/cooperative pong
     most of it's trivial (give a reward of 5 for killing a zombie, done, etc.)
     observe is more interesting
