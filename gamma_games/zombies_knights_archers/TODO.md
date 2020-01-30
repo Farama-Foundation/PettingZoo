@@ -16,6 +16,10 @@ API
 -We need some sort of background. We can't have a full pixel art background for performance reasons. Can we like, get castle walls or something on the edges and something that can pass for a decent floor with pygame.draw for the rest?
     -Alternative floor solution: Use a sprite floor, display it tiled, and only redraw it when something moves near it so you aren't redrawing most of the screen
 
+- prevent the zombies and the people from walking on the walls
+
+- 
+
 -Sometimes the arrows dont kill the zombies on contact
 
 -How does hit detection work with the sprites that aren't regular shapes?
