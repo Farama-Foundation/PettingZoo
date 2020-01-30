@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
-
 import numpy as np
-from .pursuit_evade_base import PursuitEvade
+from .pursuit import env as _env
 import time
 
-from .utils import two_d_maps
+# from .utils import two_d_maps
 
 xs = 5
 ys = 5
@@ -15,14 +13,14 @@ n_pursuers = 2
 # map_mat = two_d_maps.rectangle_map(xs, ys) 
 
 # obs_range should be odd 3, 5, 7, etc
-env = PursuitEvade(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
+env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
 
 done = False
 
 global _quit_loop, _totalReward, _actions
 _quit_loop = 0
 _totalReward = 0
-_actions = np.array([4]*env.n_pursuers)
+_actions = np.array([4]*env.num_agents)
 env.reset()
 # controlling only the pursuers
 import matplotlib.pyplot as plt
@@ -73,12 +71,15 @@ while not done:
     # print("_quit_loop", _quit_loop)
     if _quit_loop:
         break
-    observation, rewards, dones, info = env.step(_actions)
-    done = any(dones)
+    # actions should be a dict of numpy arrays
+    action_dict = dict(zip(env.agent_ids, _actions))
+    
+    observation, rewards, done_dict, info = env.step(action_dict)
+    done = any(list(done_dict.values()))
     if done:
         print("rewards", rewards, done)
     
-    _actions = np.array([4]*env.n_pursuers)
+    _actions = np.array([4]*env.num_agents)
 
 # end = time.time()
 # print("FPS = ", 100/(end-start))

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import glob
 import os
 from os.path import join
@@ -22,7 +20,7 @@ from .utils import two_d_maps
 # Implements an Evade Pursuit Problem in 2D
 #################################################################
 
-class PursuitEvade():    
+class Pursuit():    
 
     def __init__(self, **kwargs):
         """
@@ -139,7 +137,7 @@ class PursuitEvade():
 
         self.initial_config = kwargs.pop('initial_config', {})
 
-        self.surround = kwargs.pop('surround', False)
+        self.surround = kwargs.pop('surround', True)
 
         self.constraint_window = kwargs.pop('constraint_window', 1.0)
 
@@ -205,16 +203,9 @@ class PursuitEvade():
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
         if self.train_pursuit:
-            self.agent_layer = self.pursuer_layer
-            self.gone_flags = self.pursuers_gone
+            return self.collect_obs(self.pursuer_layer, self.pursuers_gone)
         else:
-            self.agent_layer = self.evader_layer
-            self.gone_flags = self.evaders_gone
-        return self.observe()
-        # if self.train_pursuit:
-        #     return self.observe(self.pursuer_layer, self.pursuers_gone)
-        # else:
-        #     return self.observe(self.evader_layer, self.evaders_gone)
+            return self.collect_obs(self.evader_layer, self.evaders_gone)
 
     def step(self, actions):
         """
@@ -223,26 +214,26 @@ class PursuitEvade():
         rewards = self.reward()
 
         if self.train_pursuit:
-            # agent_layer = self.pursuer_layer
+            agent_layer = self.pursuer_layer
             opponent_layer = self.evader_layer
             opponent_controller = self.evader_controller
-            self.gone_flags = self.pursuers_gone
+            gone_flags = self.pursuers_gone
         else:
-            # agent_layer = self.evader_layer
+            agent_layer = self.evader_layer
             opponent_layer = self.pursuer_layer
             opponent_controller = self.pursuer_controller
-            self.gone_flags = self.evaders_gone
+            gone_flags = self.evaders_gone
 
         # move allies
         if isinstance(actions, list) or isinstance(actions, np.ndarray):
             # move all agents
             for i, a in enumerate(actions):
-                self.agent_layer.move_agent(i, a)
+                agent_layer.move_agent(i, a)
         else:
             # ravel it up
             act_idxs = np.unravel_index(actions, self.act_dims)
             for i, a in enumerate(act_idxs):
-                self.agent_layer.move_agent(i, a)
+                agent_layer.move_agent(i, a)
 
         # move opponents
         for i in range(opponent_layer.n_agents()):
@@ -258,7 +249,7 @@ class PursuitEvade():
         # remove agents that are caught
         ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
 
-        obslist = self.observe()
+        obslist = self.collect_obs(agent_layer, gone_flags)
 
         # add caught rewards
         rewards += self.term_pursuit * pursuers_who_remove
@@ -269,9 +260,9 @@ class PursuitEvade():
         done_list = [done] * self.n_pursuers
 
         if self.reward_mech == 'global':
-            return obslist, [rewards.mean()] * self.n_pursuers, done, {'removed': ev_remove}
+            return obslist, [rewards.mean()] * self.n_pursuers, done_list, {'removed': ev_remove}
         
-        return obslist, rewards, done_list, {'removed': ev_remove}
+        return obslist, rewards, done_list, [] # info: {'removed': ev_remove} 
 
     def update_curriculum(self, itr):
         self.constraint_window += self.curriculum_constrain_rate  # 0 to 1 in 500 iterations
@@ -410,14 +401,14 @@ class PursuitEvade():
     def n_agents(self):
         return self.pursuer_layer.n_agents()
 
-    def observe(self):
+    def collect_obs(self, agent_layer, gone_flags):
         obs = []
         nage = 0
         for i in range(self.n_agents()):
-            if self.gone_flags[i]:
+            if gone_flags[i]:
                 obs.append(None)
             else:
-                o = self.collect_obs_by_idx(self.agent_layer, nage)
+                o = self.collect_obs_by_idx(agent_layer, nage)
                 obs.append(o)
                 nage += 1
         return obs

@@ -9,12 +9,12 @@ from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
 from gamma_games.piston_ball import piston_ball
 from gamma_games.cooperative_pong import cooperative_pong
-from sisl_games.pursuit_evade import pursuit_evade
+from sisl_games.pursuit import pursuit
 
 tf = try_import_tf()
 
 
-class CustomModel1(Model):
+class MLPModel(Model):
     def _build_layers_v2(self, input_dict, num_outputs, options):
         last_layer = tf.layers.dense(
                 input_dict["obs"], 400, activation=tf.nn.relu, name="fc1")
@@ -25,102 +25,142 @@ class CustomModel1(Model):
         return output, last_layer
 
 
-if __name__ == "__main__":
-    ray.init()
+ray.init()
 
-    # Simple environment with `num_agents` independent cartpole entities
-    ModelCatalog.register_custom_model("model1", CustomModel1)
+ModelCatalog.register_custom_model("MLPModel", MLPModel)
 
-    # cooperative pong
+# pursuit
 
-    def env_creator(args):
-        return cooperative_pong.env()
 
-    env = env_creator(1)
-    register_env("cooperative_pong", env_creator)
+def env_creator(args):
+    return pursuit.env()
 
-    obs_space = gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8)
-    act_space = gym.spaces.Discrete(3)
 
-    """
-    # pistonball
-    def env_creator(args):
-        return piston_ball.env()
+env = env_creator(1)
+register_env("pursuit", env_creator)
 
-    env = env_creator(1)
-    register_env("pistonBall", env_creator)
+obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
+act_space = gym.spaces.Discrete(5)
 
-    obs_space = gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)
-    act_space = gym.spaces.Discrete(3)
+"""
+# cooperative pong
 
-    """
+def env_creator(args):
+    return cooperative_pong.env()
 
-    # Each policy can have a different configuration (including custom model)
-    def gen_policy(i):
-        config = {
-            "model": {
-                "custom_model": "model1",
-            },
-            "gamma": 0.99,
-        }
-        return (None, obs_space, act_space, config)
+env = env_creator(1)
+register_env("cooperative_pong", env_creator)
 
-    # Setup PPO with an ensemble of `num_policies` different policies
-    policies = {
-        "policy_{}".format(i): gen_policy(i)
-        for i in range(1)
-    }
-    policy_ids = list(policies.keys())
+obs_space = gym.spaces.Box(low=0, high=255, shape=(flattened_shape,), dtype=np.uint8)
+act_space = gym.spaces.Discrete(3)
+"""
 
-    def gen_policy(i):
-        config = {
-            "model": {
-                "custom_model": "model1",
-            },
-            "gamma": 0.99,
-        }
-        return (None, obs_space, act_space, config)
+"""
+# pistonball
+def env_creator(args):
+    return piston_ball.env()
 
-    # Setup PPO with an ensemble of `num_policies` different policies
-    policies = {
-        "policy_{}".format(i): gen_policy(i)
-        for i in range(1)
-    }
-    policy_ids = list(policies.keys())
+env = env_creator(1)
+register_env("pistonBall", env_creator)
 
-    tune.run(
-        "DQN",
-        stop={"episodes_total": 60000},
-        checkpoint_freq=10,
-        config={
+obs_space = gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)
+act_space = gym.spaces.Discrete(3)
+"""
 
-            # Enviroment specific
-            "env": "cooperative_pong",
 
-            # General
-            "log_level": "ERROR",
-            "num_gpus": 1,
-            "num_workers": 8,
-            "num_envs_per_worker": 8,
-            "learning_starts": 1000,
-            "buffer_size": int(1e5),
-            "compress_observations": True,
-            "sample_batch_size": 20,
-            "train_batch_size": 512,
-            "gamma": .99,
-
-            # Method specific
-
-            "multiagent": {
-                "policies": policies,
-                "policy_mapping_fn": (
-                    lambda agent_id: policy_ids[0]),
-            },
+def gen_policy(i):
+    config = {
+        "model": {
+            "custom_model": "MLPModel",
         },
-    )
+        "gamma": 0.99,
+    }
+    return (None, obs_space, act_space, config)
+
+
+policies = {"policy_0": gen_policy(0)}
+policy_ids = list(policies.keys())
+
+"""
+tune.run(
+    "DQN",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=100,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "learning_starts": 1000,
+        "buffer_size": int(1e5),
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+
+tune.run(
+    "PPO",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=100,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        # Method specific
+        "lambda": 0.95,
+        "kl_coeff": 0.5,
+        "clip_rewards": True,
+        "clip_param": 0.1,
+        "vf_clip_param": 10.0,
+        "entropy_coeff": 0.01,
+        "train_batch_size": 5000,
+        "sample_batch_size": 100,
+        "sgd_minibatch_size": 500,
+        "num_sgd_iter": 10,
+        "batch_mode": "truncate_episodes",
+        "observation_filter": "NoFilter",
+        "vf_share_layers": True,
+
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
 
 
 """
+# old
     tune.run(
         "APEX",
         stop={"episodes_total": 60000},
