@@ -31,6 +31,7 @@ class Archer(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, -1)
         self.attacking = False # disable movement during attacking
         self.weapon = Arrow(self)
+        self.alive = True
 
     def update(self, action):
         keys = pygame.key.get_pressed()
@@ -38,25 +39,24 @@ class Archer(pygame.sprite.Sprite):
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
             # Up and Down movement
-            # if (keys[pygame.K_i] and self.rect.y > 20):
             if action == 1 and self.rect.y > 20:
                 self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
                 self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
-            # if (keys[pygame.K_k] and self.rect.y < HEIGHT - 40):
             elif action == 2 and self.rect.y < HEIGHT - 40:
                 self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
                 self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
             # Turn CCW & CW
-            # if keys[pygame.K_u]:
             elif action == 3:
                 self.angle += ANGLE_RATE
-            # if keys[pygame.K_o]:
             elif action == 4:
                 self.angle -= ANGLE_RATE
-            elif action == 5:
-                print('archer attack')
+            elif action == 5 and self.alive:
                 self.weapon.fired = True
                 # self.attacking = True # gets reset to False in weapon attack
+
+            # Clamp to stay inside the screen
+            self.rect.x = max(min(self.rect.x, WIDTH - 32), 0)
+            self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
 
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
@@ -91,24 +91,23 @@ class Knight(pygame.sprite.Sprite):
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
             # Up and Down movement
-            # if (keys[pygame.K_i] and self.rect.y > 20):
             if action == 1 and self.rect.y > 20:
                 self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
                 self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
-            # if (keys[pygame.K_k] and self.rect.y < HEIGHT - 40):
             elif action == 2 and self.rect.y < HEIGHT - 40:
                 self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
                 self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
             # Turn CCW & CW
-            # if keys[pygame.K_u]:
             elif action == 3:
                 self.angle += ANGLE_RATE
-            # if keys[pygame.K_o]:
             elif action == 4:
                 self.angle -= ANGLE_RATE
             elif action == 5:
-                print('knight attack')
                 self.attacking = True # gets reset to False in weapon attack
+
+            # Clamp to stay inside the screen
+            self.rect.x = max(min(self.rect.x, WIDTH - 32), 0)
+            self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
             
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
@@ -117,5 +116,3 @@ class Knight(pygame.sprite.Sprite):
     def offset(self, x_offset, y_offset):
         self.rect.x += x_offset
         self.rect.y += y_offset
-
-        
