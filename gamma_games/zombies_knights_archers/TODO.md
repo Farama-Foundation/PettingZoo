@@ -7,25 +7,13 @@ that small duration.
 
 ===
 
-
 Note bug 1 exists (future work)
-
-Sprites
 
 API
 
-Folder name
-
-
 ===================================
 
--Can the arrow sprite be rotated so that they're pointing in the direction of travel?
-
--Can the archer sprites be of an archer dude or elf or something and not just a cross bow?
-
 -We need some sort of background. We can't have a full pixel art background for performance reasons. Can we like, get castle walls or something on the edges and something that can pass for a decent floor with pygame.draw for the rest?
-
--I assume this is disabled for testing purposes, but the game needs to stop after 900 frames (60 seconds at 15 fps) and when a zombie crosses the bottom of the screeen
 
 -Sometimes the arrows dont kill the zombies on contact
 
@@ -35,4 +23,11 @@ Folder name
 
 -The arrows actually dont kill the zombies on contact a lot
 
--The game shouldn't print things, aside from debugging purposes (i.e. no 'game over' print out)
+-Make the default be 2 archers and 2 knights, but have them be arguments to the enviroment class
+
+-Step and reset need to return the dicts returned in pistonball/cooperative pong
+    most of it's trivial (give a reward of 5 for killing a zombie, done, etc.)
+    observe is more interesting
+    the observation for each agent should be a certain box around them, returning black if it's outside the screen
+    maybe like 8 agents x 8 agents in size?
+    Look at the observe function in pistonball to see how
