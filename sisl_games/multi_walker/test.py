@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 from .multi_walker import env as _env
 import time

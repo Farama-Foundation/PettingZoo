@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 from .multi_walker_base import MultiWalkerEnv
 

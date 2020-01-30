@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 import numpy as np
-from cooperative_pong import env as _env
+from .cooperative_pong import env as _env
 import pygame
 
 # TODO: change these values for testing
@@ -47,20 +45,18 @@ while not done:
     if quit_loop:
         break
     
-    # actions should be a dict of numpy arrays: {0: array([0,1,0])}
-    action_dict = dict(zip(env.agent_ids, [np.array([0,0,0]) for _ in range(env.num_agents)])) # no action = [0,1,0]
-    for idx, val in enumerate(actionList):
-        action_dict[idx][val] = 1
+    # actions should be a dict of numpy arrays
+    action_dict = dict(zip(env.agent_ids, actionList)) # no action = 0
     
-    observation, rewards, dones, info = env.step(action_dict)
+    observation, reward_dict, done_dict, info = env.step(action_dict)
     env.render()
-    totalReward += rewards[0]
-    done = dones[0]
+    totalReward += sum(list(reward_dict.values()))
+    done = any(list(done_dict.values()))
     pygame.event.pump()
     # env.plot_obs(observation, "obs")
     # break
 
-assert (totalReward == env.env.score), "Final score = {} and reward = {} are not the same".format(env.score, totalReward)
+assert (totalReward == env.env.score), "Final score = {} and reward = {} are not the same".format(env.env.score, totalReward)
 print("Final reward is {0:.2f}".format(totalReward))
 # Uncomment next line to print FPS at which the game runs
 # print("fps = ", env.env.clock.get_fps())
