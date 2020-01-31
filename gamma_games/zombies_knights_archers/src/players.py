@@ -55,7 +55,7 @@ class Archer(pygame.sprite.Sprite):
                 # self.attacking = True # gets reset to False in weapon attack
 
             # Clamp to stay inside the screen
-            self.rect.x = max(min(self.rect.x, WIDTH - 32), 0)
+            self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
             self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
 
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
@@ -109,7 +109,7 @@ class Knight(pygame.sprite.Sprite):
                 self.attacking = True # gets reset to False in weapon attack
 
             # Clamp to stay inside the screen
-            self.rect.x = max(min(self.rect.x, WIDTH - 32), 0)
+            self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
             self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
             
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
