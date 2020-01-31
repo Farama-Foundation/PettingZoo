@@ -8,6 +8,7 @@ import os
 # Game Constants
 ZOMBIE_Y_SPEED = 5
 ZOMBIE_X_SPEED = 30
+WIDTH = 1280
 
 class Zombie(pygame.sprite.Sprite):
 
@@ -36,3 +37,6 @@ class Zombie(pygame.sprite.Sprite):
                     self.rect.x += 2*ZOMBIE_X_SPEED
                 elif self.rect.x >= 1265:
                     self.rect.x -= 2*ZOMBIE_X_SPEED
+
+        # Clamp to stay inside the screen
+        self.rect.x = max(min(self.rect.x, WIDTH - 100), 100)

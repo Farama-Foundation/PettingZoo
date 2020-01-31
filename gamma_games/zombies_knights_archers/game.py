@@ -317,24 +317,7 @@ class Game():
 
                     # Reset Environment
                     if event.key == pygame.K_BACKSPACE:
-                        env.reset() # TODO: should "env" be "self"???
-
-                    # TODO: FIXME:
-                    # The following commented block is old code from when I controleld the agents with the keyboard
-                    # It should probably be deleted, but I have kept it here just in case I need it soon for something
-                    # # Spawn Players
-                    # sp = self.spawnPlayers(event, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
-                    # # Knight
-                    # self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
-                    # # Archer
-                    # self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
-
-                    # # Spawn Weapons
-                    # sw = self.spawnWeapons(event, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
-                    # # Sword
-                    # self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
-                    # # Arrow
-                    # self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+                        self.reset() 
 
             # Handle agent control
             for i, agent in enumerate(self.agent_list):
