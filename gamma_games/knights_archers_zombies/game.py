@@ -62,6 +62,10 @@ class Game():
         self.right_wall = pygame.image.load(os.path.join('img', 'right_wall.png'))
         self.right_wall_rect = self.right_wall.get_rect()
         self.right_wall_rect.left = self.WIDTH - self.right_wall_rect.width
+        self.floor_patch1 = pygame.image.load(os.path.join('img', 'patch1.png'))
+        self.floor_patch2 = pygame.image.load(os.path.join('img', 'patch2.png'))
+        self.floor_patch3 = pygame.image.load(os.path.join('img', 'patch3.png'))
+        self.floor_patch4 = pygame.image.load(os.path.join('img', 'patch4.png'))
 
         self.agent_list = []
         self.agent_ids = []
@@ -420,6 +424,11 @@ class Game():
         self.WINDOW.fill((66, 40, 53))
         self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
         self.WINDOW.blit(self.right_wall, self.right_wall_rect)
+        self.WINDOW.blit(self.floor_patch1, (500, 500))
+        self.WINDOW.blit(self.floor_patch2, (900, 30))
+        self.WINDOW.blit(self.floor_patch3, (150, 430))
+        self.WINDOW.blit(self.floor_patch4, (300, 50))
+        self.WINDOW.blit(self.floor_patch1, (1000, 250))
         self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
         pygame.display.update()
         pygame.display.flip()                    # update screen
@@ -442,8 +451,6 @@ class Game():
         # shape = original_obs_shape(self.s_width, self.s_height)
         shape = (40, 40)
         for i in range(len(observation)):
-            print(observation[i])
-            print(observation[i].shape)
             observation[i] = np.squeeze(observation[i])
             observation[i] = observation[i].reshape(shape)
 
@@ -531,7 +538,6 @@ if __name__ == "__main__":
         # actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
         actions = [random.randint(1, 5) for x in range(g.num_agents)]
         observations, reward_dict, done_dict, info = g.step(actions)
-        print(observations)
-        g.plot_obs(observations, "obs")
+        # g.plot_obs(observations, "obs")
         done = done_dict['__all__']
         # quit()
