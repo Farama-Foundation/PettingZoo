@@ -11,10 +11,10 @@ import pygame.gfxdraw
 from src.players import Knight, Archer
 from src.zombie import Zombie
 from src.weapons import Arrow, Sword
-from src.variables import *
 import numpy as np
 import skimage
 from skimage import measure
+import matplotlib.pyplot as plt
 
 # class env(MultiAgentEnv):
 class Game():
@@ -338,7 +338,7 @@ class Game():
                 cropped = np.vstack((cropped, pad))
 
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            cropped = skimage.measure.block_reduce(cropped, block_size=(10, 10), func=mean)
+            cropped = skimage.measure.block_reduce(cropped, block_size=(13, 13), func=mean) # scale to 40x40
 
             unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
             observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
@@ -437,6 +437,26 @@ class Game():
 
         return observation, reward_dict, done_dict, {}
 
+    def plot_obs(self, observation, fname):
+        # shrink observation dims
+        # shape = original_obs_shape(self.s_width, self.s_height)
+        shape = (40, 40)
+        for i in range(len(observation)):
+            print(observation[i])
+            print(observation[i].shape)
+            observation[i] = np.squeeze(observation[i])
+            observation[i] = observation[i].reshape(shape)
+
+        fig = plt.figure()
+        # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
+        ax1 = fig.add_subplot(121)
+        ax2 = fig.add_subplot(122)
+        ax1.imshow(observation[0], cmap=plt.cm.gray)
+        ax2.imshow(observation[1], cmap=plt.cm.gray)
+        ax1.set_title("Observation[0]")
+        ax2.set_title("Observation[1]")
+        plt.savefig(fname)
+
     def check_game_end(self):
         # Zombie reaches the End of the Screen
         self.run = self.zombie_endscreen(self.run, self.zombie_list)
@@ -505,9 +525,13 @@ class Game():
             self.agent_ids.append(i)
 
 if __name__ == "__main__":
-    g = Game()
+    g = Game(1,1)
     done = False
     while not done:
-        actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+        # actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
+        actions = [random.randint(1, 5) for x in range(g.num_agents)]
         observations, reward_dict, done_dict, info = g.step(actions)
+        print(observations)
+        g.plot_obs(observations, "obs")
         done = done_dict['__all__']
+        # quit()

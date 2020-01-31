@@ -22,3 +22,11 @@ API
     the observation for each agent should be a certain box around them, returning black if it's outside the screen
     maybe like 8 agents x 8 agents in size?
     Look at the observe function in pistonball to see how
+
+- 40x40 not 50x50
+- pebbles
+- make a new repo: pistonball continuous
+- global and local reward for pistonball
+    - add linear combination parameter for them
+    - reward local pistons for their actions
+- greyscale if it's easy
