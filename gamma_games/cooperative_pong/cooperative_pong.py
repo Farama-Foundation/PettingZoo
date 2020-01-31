@@ -373,6 +373,8 @@ class env(MultiAgentEnv):
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         
+        self.score = self.env.score
+        
         self.reset()
         
     def convert_to_dict(self, list_of_list):
@@ -401,5 +403,7 @@ class env(MultiAgentEnv):
         info_dict = self.convert_to_dict(info)
         done_dict = self.convert_to_dict(done)
         done_dict["__all__"] = done[0]
+        
+        self.score = self.env.score
 
         return observation_dict, reward_dict, done_dict, info_dict
