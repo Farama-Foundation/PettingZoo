@@ -264,7 +264,8 @@ class Game():
                 all_sprites.remove(sword)
                 zombie_list.remove(zombie)
                 all_sprites.remove(zombie)
-                score += 1
+                # score += 1
+                sword.knight.score += 1
         return zombie_list, sword_list, all_sprites, score
 
     # Zombie Kills the Arrow
@@ -278,7 +279,8 @@ class Game():
                 all_sprites.remove(arrow)
                 zombie_list.remove(zombie)
                 all_sprites.remove(zombie)
-                score += 1
+                # score += 1
+                arrow.archer.score += 1
 
             # Remove the arrow if it flies up off the screen
             if arrow.rect.y < 0:
@@ -385,7 +387,7 @@ class Game():
             pass
             # TODO: End game/training here!!
 
-        reward_dict = dict(zip(self.agent_ids, [self.score/self.num_agents]*self.num_agents)) # FIXME: change this so that each agent has its own reward
+        reward_dict = dict(zip(self.agent_ids, [agent.score for agent in self.agent_list]))
 
         agent_done = [agent.is_done() for agent in self.agent_list]
         done_dict = dict(zip(self.agent_ids, agent_done))

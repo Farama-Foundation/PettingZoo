@@ -32,6 +32,7 @@ class Archer(pygame.sprite.Sprite):
         self.attacking = False # disable movement during attacking
         self.weapon = Arrow(self)
         self.alive = True
+        self.score = 0
 
     def update(self, action):
         keys = pygame.key.get_pressed()
@@ -86,6 +87,7 @@ class Knight(pygame.sprite.Sprite):
         self.weapon = Sword(self)
         self.alive = True # This flag is used to immediately delete the mace object when the knight dies
         self.action = -1
+        self.score = 0
 
     def update(self, action):
         keys = pygame.key.get_pressed()
