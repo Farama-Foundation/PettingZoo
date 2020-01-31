@@ -22,7 +22,7 @@ class Arrow(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface([6, 6])
         img_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'arrow_rotated.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'arrow.png'))
         self.archer = archer
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
