@@ -21,7 +21,10 @@ pygame.key.set_repeat(20,0)
 
 num_agents = env.num_agents # 20
 
-while not done:
+counter = 0
+
+while not done and counter < 2000:
+    counter += 1
     action_list = np.array([1 for _ in range(num_agents)])
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -50,9 +53,11 @@ while not done:
     action_dict = dict(zip(env.agent_ids, action_list)) 
 
     observations, reward_dict, done_dict, info = env.step(action_dict)
-    env.render()
+    # env.render()
     totalReward += sum(reward_dict.values())
     done = any(done_dict.values())
+
+print(counter / (time.time() - start))
 
 print("Total final reward is ", totalReward)
 # Uncomment next line to print FPS at which the game runs
