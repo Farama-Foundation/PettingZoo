@@ -57,6 +57,8 @@ class env(MultiAgentEnv):
         self.pistonRewards = [] # Keeps track of individual rewards
         self.recentFrameLimit = 20 # Defines what "recent" means in terms of number of frames.
         self.recentPistons = set() # Set of pistons that have touched the ball recently
+        self.global_reward_weight = 0.5 #TODO: Change this as you please
+        self.local_reward_weight = 1 - self.global_reward_weight
 
         self.add_walls()
 
@@ -200,6 +202,10 @@ class env(MultiAgentEnv):
 
         return nearby_pistons
 
+    def get_local_reward(self, prev_position, curr_position):
+        local_reward = 5 * (prev_position - curr_position) # TODO: FIXME: I don't know what the local reward should be. I just chose 5 arbitrarily. 
+        return local_reward * self.local_reward_weight
+
     def render(self):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
@@ -230,7 +236,10 @@ class env(MultiAgentEnv):
         observation = self.observe()
 
         local_pistons_to_reward = self.get_nearby_pistons()
-        
+        global_reward = [(reward/self.num_agents) * self.global_reward_weight] * self.num_agents
+        local_reward = self.get_local_reward(self.lastX, newX)
+        for index in local_pistons_to_reward:
+            global_reward[index] += local_reward
 
         self.num_frames += 1
         if self.num_frames == 900:
@@ -241,7 +250,7 @@ class env(MultiAgentEnv):
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
             
-        rewardDict = dict(zip(self.agent_ids, [reward/self.num_agents]*self.num_agents))
+        rewardDict = dict(zip(self.agent_ids, global_reward)
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
