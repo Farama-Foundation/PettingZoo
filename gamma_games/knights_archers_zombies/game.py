@@ -17,7 +17,7 @@ from skimage import measure
 import matplotlib.pyplot as plt
 
 # class env(MultiAgentEnv):
-class Game():
+class env():
     def __init__(self, num_archers=2, num_knights=2):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
@@ -54,8 +54,10 @@ class Game():
         self.num_knights = num_knights
 
         # Initializing Pygame
+        self.render_on = False
         pygame.init()
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.clock = pygame.time.Clock()
         self.left_wall = pygame.image.load(os.path.join('img', 'left_wall.png'))
@@ -310,6 +312,7 @@ class Game():
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
         observation = observation[:, :, 0]  # take red channel only instead of doing full greyscale
+        # observation = np.dot(observation[..., :3], [0.299, 0.587, 0.114])
 
         agent_positions = []
         for agent in self.agent_list:
@@ -321,7 +324,6 @@ class Game():
             max_x = agent_positions[i][1] + (32 * 8)
             min_y = agent_positions[i][0] - (32 * 8)
             max_y = agent_positions[i][0] + (32 * 8)
-            # cropped = observation[min_y:max_y, min_x:max_x]
             cropped = observation[max(min_y, 0):min(max_y, self.HEIGHT), max(min_x, 0):min(max_x, self.WIDTH)]
 
             # Add blackness to the left side of the window
@@ -430,9 +432,12 @@ class Game():
         self.WINDOW.blit(self.floor_patch4, (300, 50))
         self.WINDOW.blit(self.floor_patch1, (1000, 250))
         self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
-        pygame.display.update()
-        pygame.display.flip()                    # update screen
-        self.clock.tick(self.FPS)                # FPS
+        # pygame.display.update()
+        # pygame.display.flip()                    # update screen
+        if self.render_on:
+            self.clock.tick(self.FPS)                # FPS
+        else:
+            self.clock.tick()
 
         self.check_game_end()
 
@@ -445,6 +450,24 @@ class Game():
         observation = self.observe()
 
         return observation, reward_dict, done_dict, {}
+
+    def enable_render(self):
+        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+        self.render_on = True
+        self.reset()
+
+    def render(self):
+        if not self.render_on:
+            # sets self.render_on to true and initializes display
+            self.enable_render()
+        pygame.display.flip()
+
+    def close(self):
+        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+        self.render_on = False
+        pygame.display.quit()
 
     def plot_obs(self, observation, fname):
         # shrink observation dims
@@ -504,6 +527,7 @@ class Game():
         # Initializing Pygame
         pygame.init()
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Zombies, Knights, Archers")
         self.clock = pygame.time.Clock()
 
