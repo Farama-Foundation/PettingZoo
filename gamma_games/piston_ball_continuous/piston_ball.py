@@ -235,11 +235,11 @@ class env(MultiAgentEnv):
 
         observation = self.observe()
 
-        local_pistons_to_reward = self.get_nearby_pistons()
-        global_reward = [(reward/self.num_agents) * self.global_reward_weight] * self.num_agents
+        total_reward = [(reward/self.num_agents) * self.global_reward_weight] * self.num_agents # start with global reward
         local_reward = self.get_local_reward(self.lastX, newX)
+        local_pistons_to_reward = self.get_nearby_pistons()
         for index in local_pistons_to_reward:
-            global_reward[index] += local_reward
+            total_reward[index] += local_reward # add local reward
 
         self.num_frames += 1
         if self.num_frames == 900:
@@ -250,7 +250,7 @@ class env(MultiAgentEnv):
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
             
-        rewardDict = dict(zip(self.agent_ids, global_reward)
+        rewardDict = dict(zip(self.agent_ids, total_reward)
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
