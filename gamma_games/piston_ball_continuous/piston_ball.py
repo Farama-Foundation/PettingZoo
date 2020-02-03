@@ -54,6 +54,9 @@ class env(MultiAgentEnv):
         self.space.iterations = 10  # 10 is default in PyMunk
 
         self.pistonList = []
+        self.pistonRewards = [] # Keeps track of individual rewards
+        self.recentFrameLimit = 20 # Defines what "recent" means in terms of number of frames.
+        self.recentPistons = set() # Set of pistons that have touched the ball recently
 
         self.add_walls()
 
@@ -139,7 +142,7 @@ class env(MultiAgentEnv):
         return piston
 
     def move_piston(self, piston, v):
-
+        # TODO: ask justin about continuous. I don't know where to store or "ask" the RL agent for the continuous offset value. Right now it picks an integer for up or down. Doesn't hte actions dict require integer options? if it requires int options, how do I change the code so that it accepts the int of up/down AND the float value of the amount to move up/down? Also, the value is already stored as a float, so it's already "continuous" in some sense?
         def cap(y):
             if y > 451:
                 y = 451
@@ -177,6 +180,26 @@ class env(MultiAgentEnv):
         for piston in self.pistonList:
             self.screen.blit(self.pistonSprite, (piston.position[0]-5, piston.position[1]-5))
 
+    def get_nearby_pistons(self):
+        # first piston = leftmost
+        nearby_pistons = []
+        ball_pos = int(self.ball.position[0]-40)
+        closest = abs(self.pistonList[0].position.x - ball_pos)
+        closest_piston_index = 0
+        for i in range(len(self.pistonList)):
+            next_distance = abs(self.pistonList[i].position.x - ball_pos)
+            if next_distance < closest:
+                closest = next_distance
+                closest_piston_index = i
+
+        if closest_piston_index > 0:
+            nearby_pistons.append(closest_piston_index - 1)
+        nearby_pistons.append(closest_piston_index)
+        if closest_piston_index < len(self.pistonList) - 1:
+            nearby_pistons.append(closest_piston_index + 1)
+
+        return nearby_pistons
+
     def render(self):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
@@ -206,11 +229,17 @@ class env(MultiAgentEnv):
 
         observation = self.observe()
 
+        local_pistons_to_reward = self.get_nearby_pistons()
+        
+
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
         if not self.done:
             reward -= 0.1
+        # Clear the list of recent pistons for the next reward cycle
+        if self.num_frames % self.recentFrameLimit == 0:
+            self.recentPistons = set()
             
         rewardDict = dict(zip(self.agent_ids, [reward/self.num_agents]*self.num_agents))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
