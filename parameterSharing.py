@@ -112,7 +112,6 @@ tune.run(
         },
     },
 )
-
 """
 
 """
@@ -130,7 +129,7 @@ tune.run(
         "num_gpus": 1,
         "num_workers": 8,
         "num_envs_per_worker": 8,
-        "compress_observations": True,
+        "compress_observations": False,
         "gamma": .99,
 
 
@@ -158,6 +157,7 @@ tune.run(
 )
 """
 
+"""
 tune.run(
     "IMPALA",
     stop={"episodes_total": 60000},
@@ -179,6 +179,87 @@ tune.run(
 
         "clip_rewards": True,
         "lr_schedule": [[0, 0.0005],[20000000, 0.000000000001]],
+
+        # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+"""
+tune.run(
+    "A2C",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=10,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "compress_observations": False,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        "lr_schedule": [[0, 0.0007],[20000000, 0.000000000001]],
+
+        # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+
+tune.run(
+    "APEX",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=10,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "INFO",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "learning_starts": 1000,
+        "buffer_size": int(1e5),
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        "double_q": False,
+        "dueling": False,
+        "num_atoms": 1,
+        "noisy": False,
+        "n_step": 3,
+        "lr": .0001,
+        "adam_epsilon": .00015,
+        "exploration_final_eps": 0.01,
+        "exploration_fraction": .1,
+        "prioritized_replay_alpha": 0.5,
+        "beta_annealing_fraction": 1.0,
+        "final_prioritized_replay_beta": 1.0,
+        "target_network_update_freq": 50000,
+        "timesteps_per_iteration": 25000,
 
         # Method specific
 
