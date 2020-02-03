@@ -204,6 +204,10 @@ class env(MultiAgentEnv):
 
     def get_local_reward(self, prev_position, curr_position):
         local_reward = 5 * (prev_position - curr_position) # TODO: FIXME: I don't know what the local reward should be. I just chose 5 arbitrarily. 
+        # FIXME: This isn't working. prev and curr position are the same for some reason
+        # print(prev_position)
+        # print(curr_position)
+        # print(prev_position - curr_position)
         return local_reward * self.local_reward_weight
 
     def render(self):
@@ -241,6 +245,8 @@ class env(MultiAgentEnv):
         for index in local_pistons_to_reward:
             total_reward[index] += local_reward # add local reward
 
+        # print(set(total_reward))
+
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
@@ -250,7 +256,7 @@ class env(MultiAgentEnv):
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
             
-        rewardDict = dict(zip(self.agent_ids, total_reward)
+        rewardDict = dict(zip(self.agent_ids, total_reward))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
