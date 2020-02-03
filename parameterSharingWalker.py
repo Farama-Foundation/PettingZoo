@@ -8,6 +8,7 @@ from ray.rllib.models import Model, ModelCatalog
 from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
 from sisl_games.pursuit import pursuit
+from sisl_games.multi_walker import multi_walker
 
 tf = try_import_tf()
 
@@ -189,7 +190,7 @@ tune.run(
 )
 """
 
-"""
+
 tune.run(
     "A2C",
     stop={"episodes_total": 60000},
@@ -220,9 +221,8 @@ tune.run(
         },
     },
 )
+
 """
-
-
 tune.run(
     "APEX",
     stop={"episodes_total": 60000},
@@ -268,3 +268,4 @@ tune.run(
         },
     },
 )
+"""
