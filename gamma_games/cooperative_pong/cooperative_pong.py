@@ -322,6 +322,10 @@ class CooperativePong(gym.Env):
 
         # reward is the length of time ball is in play
         reward = 0
+        # ball is out-of-bounds
+        if self.done:
+            reward = -100
+            self.score += reward
         if not self.done:
             self.num_frames += 1
             # scaling reward so that the max reward is 100
