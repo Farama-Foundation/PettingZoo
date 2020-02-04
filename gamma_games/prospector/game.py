@@ -97,7 +97,7 @@ class agent1(pygame.sprite.Sprite):
         self.pos = vec(x, y) * TILESIZE
         self.collision = [False] * 9
 
-    def get_keys(self):
+    def handle_keyboard_input(self):
         self.rot_speed = 0
         self.vel = vec(0, 0)
         keys = pygame.key.get_pressed()
@@ -121,7 +121,7 @@ class agent1(pygame.sprite.Sprite):
         
     def update(self, pos, area, p1):
         """ Called each frame. """
-        self.get_keys()
+        self.handle_keyboard_input()
         self.rot = (self.rot + self.rot_speed) % 360
         self.image = pg.transform.rotate(self.base_image,self.rot)
         self.image = pygame.transform.scale(self.image, (50, 50)) 
