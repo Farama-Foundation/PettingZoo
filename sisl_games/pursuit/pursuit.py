@@ -4,6 +4,7 @@ import gym
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
+
 class env(MultiAgentEnv):
 
     metadata = {'render.modes': ['human']}
@@ -24,7 +25,7 @@ class env(MultiAgentEnv):
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agent_ids, list_of_list))
-    
+
     def reset(self):
         obs = self.env.reset()
         self.steps = 0
