@@ -433,8 +433,9 @@ class MAWaterWorld():
         ])
         self._timesteps += 1
         done = self.is_terminal
-        info = dict(evcatches=len(ev_caught), pocatches=len(po_caught))
-        return obslist, rewards, [done] * self.n_pursuers, info
+        # info = dict(evcatches=len(ev_caught), pocatches=len(po_caught))
+        info = {}
+        return obslist, rewards, [done] * self.n_pursuers, [info] * self.n_pursuers
 
     def render(self, screen_size=800, rate=10, mode='human'):
         import cv2
