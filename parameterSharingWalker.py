@@ -28,18 +28,26 @@ class MLPModel(Model):
 
 ModelCatalog.register_custom_model("MLPModel", MLPModel)
 
-# pursuit
-
-
+# multi_walker
 def env_creator(args):
-    return pursuit.env()
-
+    return multi_walker.env()
 
 env = env_creator(1)
-register_env("pursuit", env_creator)
+register_env("multi_walker", env_creator)
 
-obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
-act_space = gym.spaces.Discrete(5)
+obs_space = env.observation_space_dict[0]  # gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
+act_space = env.action_space_dict[0]  # gym.spaces.Discrete(5)
+
+
+# def env_creator(args):
+#     return pursuit.env()
+# 
+# 
+# env = env_creator(1)
+# register_env("pursuit", env_creator)
+# 
+# obs_space = gym.spaces.Box(low=0, high=1, shape=(148,), dtype=np.float32)
+# act_space = gym.spaces.Discrete(5)
 
 """
 # cooperative pong
@@ -80,6 +88,8 @@ def gen_policy(i):
 policies = {"policy_0": gen_policy(0)}
 policy_ids = list(policies.keys())
 
+# DQN and Apex-DQN do not work with continuous actions
+
 """
 tune.run(
     "DQN",
@@ -88,7 +98,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "ERROR",
@@ -113,7 +123,6 @@ tune.run(
 )
 """
 
-"""
 tune.run(
     "PPO",
     stop={"episodes_total": 60000},
@@ -121,7 +130,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "ERROR",
@@ -154,7 +163,6 @@ tune.run(
         },
     },
 )
-"""
 
 """
 tune.run(
@@ -164,7 +172,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "ERROR",
@@ -190,7 +198,7 @@ tune.run(
 )
 """
 
-
+"""
 tune.run(
     "A2C",
     stop={"episodes_total": 60000},
@@ -198,7 +206,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "ERROR",
@@ -221,6 +229,7 @@ tune.run(
         },
     },
 )
+"""
 
 """
 tune.run(
@@ -230,7 +239,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "INFO",
