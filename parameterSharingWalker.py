@@ -90,6 +90,7 @@ policy_ids = list(policies.keys())
 
 # DQN and Apex-DQN do not work with continuous actions
 
+"""
 tune.run(
     "PPO",
     stop={"episodes_total": 60000},
@@ -130,6 +131,7 @@ tune.run(
         },
     },
 )
+"""
 
 """
 tune.run(
@@ -240,7 +242,6 @@ tune.run(
 )
 """
 
-"""
 tune.run(
     "TD3",
     stop={"episodes_total": 60000},
@@ -274,7 +275,6 @@ tune.run(
         },
     },
 )
-"""
 
 """
 tune.run(
@@ -284,7 +284,7 @@ tune.run(
     config={
 
         # Enviroment specific
-        "env": "pursuit",
+        "env": "multi_walker",
 
         # General
         "log_level": "ERROR",
@@ -298,27 +298,30 @@ tune.run(
         "train_batch_size": 512,
         "gamma": .99,
 
-        horizon: 200
-        soft_horizon: False
-        Q_model:
-          hidden_activation: relu
-          hidden_layer_sizes: [256, 256]
-        tau: 0.005
-        target_entropy: auto
-        no_done_at_end: True
-        n_step: 1
-        prioritized_replay: False
-        target_network_update_freq: 1
-        timesteps_per_iteration: 1000
-        exploration_enabled: True
-        optimization:
-          actor_learning_rate: 0.0003
-          critic_learning_rate: 0.0003
-          entropy_learning_rate: 0.0003
-        clip_actions: False
-        normalize_actions: True
-        evaluation_interval: 1
-        metrics_smoothing_episodes: 5
+        "horizon": 200,
+        "soft_horizon": False,
+        "Q_model": {
+          "hidden_activation": "relu",
+          "hidden_layer_sizes": [256, 256]
+          },
+        "tau": 0.005,
+        "target_entropy": "auto",
+        "no_done_at_end": True,
+        "n_step": 1,
+        "prioritized_replay": False,
+        "target_network_update_freq": 1,
+        "timesteps_per_iteration": 1000,
+        "exploration_enabled": True,
+        "optimization": {
+          "actor_learning_rate": 0.0003,
+          "critic_learning_rate": 0.0003,
+          "entropy_learning_rate": 0.0003,
+          },
+        "clip_actions": False,
+        #TODO -- True
+        "normalize_actions": False,
+        "evaluation_interval": 1,
+        "metrics_smoothing_episodes": 5,
 
         "multiagent": {
             "policies": policies,
