@@ -1,12 +1,10 @@
 from .multi_walker_base import MultiWalkerEnv as _env
-import numpy as np
-
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 
 class env(MultiAgentEnv):
 
-    metadata = {'render.modes': ['human']}	
+    metadata = {'render.modes': ['human']}
 
     def __init__(self, *args, **kwargs):
         super(env, self).__init__()
