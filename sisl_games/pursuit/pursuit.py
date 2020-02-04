@@ -1,8 +1,6 @@
 from .pursuit_base import Pursuit as _env
-import numpy as np
-import gym
-
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import numpy as np
 
 
 class env(MultiAgentEnv):
