@@ -1,5 +1,6 @@
 from .multi_walker_base import MultiWalkerEnv as _env
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import numpy as np
 
 
 class env(MultiAgentEnv):
@@ -36,11 +37,13 @@ class env(MultiAgentEnv):
         # unpack actions
         actions = [0.0 for _ in range(len(action_dict))]
 
-        for i in self.agent_ids:
-            if not self.action_space_dict[i].contains(action_dict[i]):
+        for agent_id in self.agent_ids:
+            if any(np.isnan(action_dict[agent_id])):
+                action_dict[agent_id] = [0 for _ in action_dict[agent_id]]
+            elif not self.action_space_dict[agent_id].contains(action_dict[agent_id]):
                 raise Exception('Action for agent {} must be in {}. \
-                                It is currently {}'.format(i, self.action_space_dict[i], action_dict[i]))
-            actions[i] = action_dict[i]
+                                It is currently {}'.format(agent_id, self.action_space_dict[agent_id], action_dict[agent_id]))
+            actions[agent_id] = action_dict[agent_id]
 
         observation, reward, done, info = self.env.step(actions)
 
