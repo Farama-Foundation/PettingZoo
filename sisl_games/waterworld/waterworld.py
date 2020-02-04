@@ -1,5 +1,6 @@
 from .waterworld_base import MAWaterWorld as _env
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import numpy as np
 
 
 class env(MultiAgentEnv):
