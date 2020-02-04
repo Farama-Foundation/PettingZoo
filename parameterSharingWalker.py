@@ -90,39 +90,6 @@ policy_ids = list(policies.keys())
 
 # DQN and Apex-DQN do not work with continuous actions
 
-"""
-tune.run(
-    "DQN",
-    stop={"episodes_total": 60000},
-    checkpoint_freq=10,
-    config={
-
-        # Enviroment specific
-        "env": "multi_walker",
-
-        # General
-        "log_level": "ERROR",
-        "num_gpus": 1,
-        "num_workers": 8,
-        "num_envs_per_worker": 8,
-        "learning_starts": 1000,
-        "buffer_size": int(1e5),
-        "compress_observations": True,
-        "sample_batch_size": 20,
-        "train_batch_size": 512,
-        "gamma": .99,
-
-        # Method specific
-
-        "multiagent": {
-            "policies": policies,
-            "policy_mapping_fn": (
-                lambda agent_id: policy_ids[0]),
-        },
-    },
-)
-"""
-
 tune.run(
     "PPO",
     stop={"episodes_total": 60000},
@@ -233,7 +200,7 @@ tune.run(
 
 """
 tune.run(
-    "APEX",
+    "APEX_DDPG",
     stop={"episodes_total": 60000},
     checkpoint_freq=10,
     config={
@@ -242,7 +209,7 @@ tune.run(
         "env": "multi_walker",
 
         # General
-        "log_level": "INFO",
+        "log_level": "ERROR",
         "num_gpus": 1,
         "num_workers": 8,
         "num_envs_per_worker": 8,
@@ -253,14 +220,8 @@ tune.run(
         "train_batch_size": 512,
         "gamma": .99,
 
-        "double_q": False,
-        "dueling": False,
-        "num_atoms": 1,
-        "noisy": False,
         "n_step": 3,
         "lr": .0001,
-        "adam_epsilon": .00015,
-        "exploration_final_eps": 0.01,
         "exploration_fraction": .1,
         "prioritized_replay_alpha": 0.5,
         "beta_annealing_fraction": 1.0,
@@ -269,6 +230,95 @@ tune.run(
         "timesteps_per_iteration": 25000,
 
         # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+"""
+tune.run(
+    "TD3",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=10,
+    config={
+
+        # Enviroment specific
+        "env": "multi_walker",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "learning_starts": 5000,
+        "buffer_size": int(1e5),
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        "critic_hiddens": [256, 256],
+        "pure_exploration_steps": 5000,
+
+        # Method specific
+
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": (
+                lambda agent_id: policy_ids[0]),
+        },
+    },
+)
+"""
+
+"""
+tune.run(
+    "SAC",
+    stop={"episodes_total": 60000},
+    checkpoint_freq=10,
+    config={
+
+        # Enviroment specific
+        "env": "pursuit",
+
+        # General
+        "log_level": "ERROR",
+        "num_gpus": 1,
+        "num_workers": 8,
+        "num_envs_per_worker": 8,
+        "learning_starts": 1000,
+        "buffer_size": int(1e5),
+        "compress_observations": True,
+        "sample_batch_size": 20,
+        "train_batch_size": 512,
+        "gamma": .99,
+
+        horizon: 200
+        soft_horizon: False
+        Q_model:
+          hidden_activation: relu
+          hidden_layer_sizes: [256, 256]
+        tau: 0.005
+        target_entropy: auto
+        no_done_at_end: True
+        n_step: 1
+        prioritized_replay: False
+        target_network_update_freq: 1
+        timesteps_per_iteration: 1000
+        exploration_enabled: True
+        optimization:
+          actor_learning_rate: 0.0003
+          critic_learning_rate: 0.0003
+          entropy_learning_rate: 0.0003
+        clip_actions: False
+        normalize_actions: True
+        evaluation_interval: 1
+        metrics_smoothing_episodes: 5
 
         "multiagent": {
             "policies": policies,
