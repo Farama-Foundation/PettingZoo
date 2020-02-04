@@ -185,7 +185,9 @@ class env(MultiAgentEnv):
 
     def step(self, actions):
         for i, agent_id in enumerate(self.agent_ids):
-            if not self.action_space_dict[i].contains(actions[i]):
+            if np.isnan(actions[agent_id]):
+                actions[agent_id] = 1
+            elif not self.action_space_dict[i].contains(actions[i]):
                 raise Exception('Action for agent {} must be in Discrete({}).' 
                                 'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
             self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing

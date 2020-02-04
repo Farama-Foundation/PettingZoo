@@ -395,10 +395,12 @@ class env(MultiAgentEnv):
         self.env.render()
 
     def step(self, actions):
-        for i in self.agent_ids:
-            if not self.action_space_dict[i].contains(actions[i]):
+        for agent_id in self.agent_ids:
+            if np.isnan(actions[agent_id]):
+                actions[agent_id] = 0
+            elif not self.action_space_dict[agent_id].contains(actions[agent_id]):
                 raise Exception('Action for agent {} must be in Discrete({}).'
-                                'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
+                                'It is currently {}'.format(agent_id, self.action_space_dict[agent_id].n, actions[agent_id]))
 
         observation, reward, done, info = self.env.step(actions)
 
