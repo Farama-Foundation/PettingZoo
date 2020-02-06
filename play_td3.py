@@ -63,9 +63,12 @@ while not done:
         action_dict[agent_id] = action
 
     observations, rewards, dones, info = env.step(action_dict)
-    env.render()
-    totalReward += rewards[0]
+    # env.render()
+    totalReward += sum(rewards.values())
     done = any(list(dones.values()))
+    # if sum(rewards.values()) > 0:
+    #     print("rewards", rewards)
+    print(sum(rewards.values()))
 
 env.close()
 
