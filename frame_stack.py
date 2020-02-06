@@ -4,6 +4,7 @@ Frame stacking for flattened observations only
 
 from copy import deepcopy
 import numpy as np
+from gym.spaces import Box
 from gamma_games.cooperative_pong.cooperative_pong import env as _env
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
@@ -20,9 +21,9 @@ class env(MultiAgentEnv):
         # spaces
         self.stack_size = stack_size
         self.action_space_dict = deepcopy(self.env.action_space_dict)
-        self.observation_space_dict = deepcopy(self.env.observation_space_dict)
-        for agent_id in self.observation_space_dict.keys():
-            self.observation_space_dict[agent_id].shape = (self.observation_space_dict[agent_id].shape[0]*self.stack_size,)
+        new_obs_space_shape = (self.env.observation_space_dict[0].shape[0] * self.stack_size,)
+        self.observation_space_dict = {agent_id : Box(low=0.0, high=1.0, shape=new_obs_space_shape, dtype=np.float32)\
+                for agent_id in self.env.observation_space_dict.keys()}
         
         self.reset()
     
