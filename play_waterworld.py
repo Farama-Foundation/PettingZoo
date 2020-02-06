@@ -3,6 +3,7 @@ import ray
 from ray.tune.registry import register_trainable, register_env
 import ray.rllib.agents.dqn as dqn
 import ray.rllib.agents.ddpg.td3 as td3
+import ray.rllib.agents.ddpg.apex as apex
 import os
 import pickle
 import numpy as np
@@ -11,7 +12,8 @@ from ray.rllib.models import ModelCatalog
 
 env_name = "waterworld"
 # path should end with checkpoint-<> data file
-checkpoint_path = "/home/ananth/ray_results/TD3/TD3_waterworld_20cc0cbc_2020-02-05_15-00-16w7onxvxh/checkpoint_23450/checkpoint-23450"
+#checkpoint_path = "/home/ananth/ray_results/TD3/TD3_waterworld_20cc0cbc_2020-02-05_15-00-16w7onxvxh/checkpoint_23450/checkpoint-23450"
+checkpoint_path = "/home/ananth/ray_results_wworld/APEX_DDPG/APEX_DDPG_waterworld_ed407022_2020-02-05_11-24-04z4idxqkl/checkpoint_200/checkpoint-200"
 
 # TODO: see ray/rllib/rollout.py -- `run` method for checkpoint restoring
 
@@ -35,8 +37,8 @@ print(env.observation_space_dict)
 # exit()
 
 ray.init()
-TD3Agent = td3.TD3Trainer(env=env_name, config=config)
-TD3Agent.restore(checkpoint_path)
+RLAgent = apex.ApexDDPGTrainer(env=env_name, config=config)
+RLAgent.restore(checkpoint_path)
 
 # init obs, action, reward
 observations = env.reset()
@@ -53,12 +55,13 @@ done = False
 
 # TODO: extra parameters : /home/ananth/miniconda3/envs/maddpg/lib/python3.7/site-packages/ray/rllib/policy/policy.py
 
+iteration = 0
 while not done:
     action_dict = {}
     # compute_action does not cut it. Go to the policy directly
     for agent_id in env.agent_ids:
         # print("id {}, obs {}, rew {}".format(agent_id, observations[agent_id], rewards[agent_id]))
-        action, _, _ = TD3Agent.get_policy("policy_0").compute_single_action(observations[agent_id], prev_reward=rewards[agent_id]) # prev_action=action_dict[agent_id]
+        action, _, _ = RLAgent.get_policy("policy_0").compute_single_action(observations[agent_id], prev_reward=rewards[agent_id]) # prev_action=action_dict[agent_id]
         # print(action)
         action_dict[agent_id] = action
 
@@ -68,7 +71,8 @@ while not done:
     done = any(list(dones.values()))
     # if sum(rewards.values()) > 0:
     #     print("rewards", rewards)
-    print(sum(rewards.values()))
+    print("iter:", iteration, sum(rewards.values()))
+    iteration += 1
 
 env.close()
 
