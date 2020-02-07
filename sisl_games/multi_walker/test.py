@@ -13,8 +13,8 @@ total_reward = 0
 # start = time.time()
 while not done:
     # game should run at 15 FPS when rendering
-    # env.render()
-    # time.sleep(0.04)
+    env.render()
+    time.sleep(0.04)
     
     action_list = np.array([env.action_space_dict[i].sample() for i in range(env.num_agents)])
     action_dict = dict(zip(env.agent_ids, action_list))

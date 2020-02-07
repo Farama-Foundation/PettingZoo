@@ -67,7 +67,7 @@ while not done:
     observation, rewards, done_dict, info = env.step(action_dict)
     done = any(list(done_dict.values()))
     total_reward += sum(rewards.values())
-    print("step reward = ", sum(rewards.values())
+    print("step reward = ", sum(rewards.values()))
     if done:
         print("Total reward", total_reward, done)
     
