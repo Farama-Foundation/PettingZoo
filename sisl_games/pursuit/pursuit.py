@@ -1,8 +1,7 @@
 from .pursuit_base import Pursuit as _env
-import numpy as np
-import gym
-
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import numpy as np
+
 
 class env(MultiAgentEnv):
 
@@ -24,7 +23,7 @@ class env(MultiAgentEnv):
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agent_ids, list_of_list))
-    
+
     def reset(self):
         obs = self.env.reset()
         self.steps = 0
@@ -39,11 +38,14 @@ class env(MultiAgentEnv):
     def step(self, action_dict):
         # unpack actions
         action_list = np.array([4 for _ in range(self.num_agents)])
-        for i in self.agent_ids:
-            if not self.action_space_dict[i].contains(action_dict[i]):
+
+        for agent_id in self.agent_ids:
+            if np.isnan(action_dict[agent_id]):
+                action_dict[agent_id] = 4
+            elif not self.action_space_dict[agent_id].contains(action_dict[agent_id]):
                 raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(i, self.action_space_dict[i].n, action_dict[i]))
-            action_list[i] = action_dict[i]
+                                It is currently {}'.format(agent_id, self.action_space_dict[agent_id].n, action_dict[agent_id]))
+            action_list[agent_id] = action_dict[agent_id]
 
         observation, reward, done, info = self.env.step(action_list)
 
