@@ -203,7 +203,7 @@ class env(MultiAgentEnv):
         return nearby_pistons
 
     def get_local_reward(self, prev_position, curr_position):
-        local_reward = 5 * (prev_position - curr_position) # TODO: FIXME: I don't know what the local reward should be. I just chose 5 arbitrarily. 
+        local_reward = 5 * (prev_position - curr_position) # TODO: I don't know what the local reward should be. I just chose 5 arbitrarily. 
         # FIXME: This isn't working. prev and curr position are the same for some reason
         # print(prev_position)
         # print(curr_position)
@@ -228,7 +228,8 @@ class env(MultiAgentEnv):
         self.draw()
 
         newX = int(self.ball.position[0]-40)
-        reward = (100/self.distance)*(self.lastX - newX)  # opposite order due to moving right to left
+        local_reward = self.get_local_reward(self.lastX, newX)
+        global_reward = (100/self.distance)*(self.lastX - newX)  # opposite order due to moving right to left
         self.lastX = newX
         if newX <= 81:
             self.done = True
@@ -239,19 +240,16 @@ class env(MultiAgentEnv):
 
         observation = self.observe()
 
-        total_reward = [(reward/self.num_agents) * self.global_reward_weight] * self.num_agents # start with global reward
-        local_reward = self.get_local_reward(self.lastX, newX)
+        total_reward = [(global_reward/self.num_agents) * self.global_reward_weight] * self.num_agents # start with global reward
         local_pistons_to_reward = self.get_nearby_pistons()
         for index in local_pistons_to_reward:
             total_reward[index] += local_reward # add local reward
-
-        # print(set(total_reward))
 
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
         if not self.done:
-            reward -= 0.1
+            global_reward -= 0.1
         # Clear the list of recent pistons for the next reward cycle
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
