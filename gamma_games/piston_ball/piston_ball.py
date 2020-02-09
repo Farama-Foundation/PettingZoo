@@ -54,6 +54,11 @@ class env(MultiAgentEnv):
         self.space.iterations = 10  # 10 is default in PyMunk
 
         self.pistonList = []
+        self.pistonRewards = [] # Keeps track of individual rewards
+        self.recentFrameLimit = 20 # Defines what "recent" means in terms of number of frames.
+        self.recentPistons = set() # Set of pistons that have touched the ball recently
+        self.global_reward_weight = 0.5 #TODO: Change this as you please
+        self.local_reward_weight = 1 - self.global_reward_weight
 
         self.add_walls()
 
@@ -177,6 +182,30 @@ class env(MultiAgentEnv):
         for piston in self.pistonList:
             self.screen.blit(self.pistonSprite, (piston.position[0]-5, piston.position[1]-5))
 
+    def get_nearby_pistons(self):
+        # first piston = leftmost
+        nearby_pistons = []
+        ball_pos = int(self.ball.position[0]-40)
+        closest = abs(self.pistonList[0].position.x - ball_pos)
+        closest_piston_index = 0
+        for i in range(len(self.pistonList)):
+            next_distance = abs(self.pistonList[i].position.x - ball_pos)
+            if next_distance < closest:
+                closest = next_distance
+                closest_piston_index = i
+
+        if closest_piston_index > 0:
+            nearby_pistons.append(closest_piston_index - 1)
+        nearby_pistons.append(closest_piston_index)
+        if closest_piston_index < len(self.pistonList) - 1:
+            nearby_pistons.append(closest_piston_index + 1)
+
+        return nearby_pistons
+
+    def get_local_reward(self, prev_position, curr_position):
+        local_reward = 5 * (prev_position - curr_position) # TODO: I don't know what the local reward should be. I just chose 5 arbitrarily. 
+        return local_reward * self.local_reward_weight
+
     def render(self):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
@@ -195,7 +224,8 @@ class env(MultiAgentEnv):
         self.draw()
 
         newX = int(self.ball.position[0]-40)
-        reward = (100/self.distance)*(self.lastX - newX)  # opposite order due to moving right to left
+        local_reward = self.get_local_reward(self.lastX, newX)
+        global_reward = (100/self.distance)*(self.lastX - newX)  # opposite order due to moving right to left
         self.lastX = newX
         if newX <= 81:
             self.done = True
@@ -206,13 +236,21 @@ class env(MultiAgentEnv):
 
         observation = self.observe()
 
+        total_reward = [(global_reward/self.num_agents) * self.global_reward_weight] * self.num_agents # start with global reward
+        local_pistons_to_reward = self.get_nearby_pistons()
+        for index in local_pistons_to_reward:
+            total_reward[index] += local_reward # add local reward
+
         self.num_frames += 1
         if self.num_frames == 900:
             self.done = True
         if not self.done:
-            reward -= 0.1
+            global_reward -= 0.1
+        # Clear the list of recent pistons for the next reward cycle
+        if self.num_frames % self.recentFrameLimit == 0:
+            self.recentPistons = set()
             
-        rewardDict = dict(zip(self.agent_ids, [reward/self.num_agents]*self.num_agents))
+        rewardDict = dict(zip(self.agent_ids, total_reward))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
