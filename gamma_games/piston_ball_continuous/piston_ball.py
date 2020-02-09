@@ -144,13 +144,13 @@ class env(MultiAgentEnv):
         return piston
 
     def move_piston(self, piston, v):
-        # TODO: ask justin about continuous. I don't know where to store or "ask" the RL agent for the continuous offset value. Right now it picks an integer for up or down. Doesn't hte actions dict require integer options? if it requires int options, how do I change the code so that it accepts the int of up/down AND the float value of the amount to move up/down? Also, the value is already stored as a float, so it's already "continuous" in some sense?
         def cap(y):
             if y > 451:
                 y = 451
             elif y < 451 - (16*self.velocity):
                 y = 451 - (16*self.velocity)
             return y
+        print(v)
 
         piston.position = (piston.position[0], cap(piston.position[1] - v*self.velocity))
 
@@ -204,10 +204,6 @@ class env(MultiAgentEnv):
 
     def get_local_reward(self, prev_position, curr_position):
         local_reward = 5 * (prev_position - curr_position) # TODO: I don't know what the local reward should be. I just chose 5 arbitrarily. 
-        # FIXME: This isn't working. prev and curr position are the same for some reason
-        # print(prev_position)
-        # print(curr_position)
-        # print(prev_position - curr_position)
         return local_reward * self.local_reward_weight
 
     def render(self):
@@ -218,10 +214,10 @@ class env(MultiAgentEnv):
 
     def step(self, actions):
         for i, agent_id in enumerate(self.agent_ids):
-            if not self.action_space_dict[i].contains(actions[i]):
-                raise Exception('Action for agent {} must be in Discrete({}).' 
-                                'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
-            self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing
+            if actions[i] < -1 or actions[i] > 1:
+                raise Exception('Action for agent {} must be a real between -1 and 1.' 
+                                'It is currently {}'.format(i, actions[i]))
+            self.move_piston(self.pistonList[i], actions[agent_id])  # 1 is up, -1 is down, 0 is do nothing
 
         self.space.step(1/15.0)
 
