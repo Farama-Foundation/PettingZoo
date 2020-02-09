@@ -13,7 +13,7 @@ from matplotlib.patches import Rectangle
 from six.moves import xrange
 from .utils import agent_utils
 from .utils.agent_layer import AgentLayer
-from .utils.controllers import RandomPolicy
+from .utils.controllers import RandomPolicy, SingleActionPolicy
 from .utils import two_d_maps
 
 #################################################################
@@ -84,6 +84,8 @@ class Pursuit():
 
         self.evader_controller = kwargs.pop('evader_controller', RandomPolicy(n_act_purs))
         self.pursuer_controller = kwargs.pop('pursuer_controller', RandomPolicy(n_act_ev))
+        # self.evader_controller = kwargs.pop('evader_controller', SingleActionPolicy(4))
+        # self.pursuer_controller = kwargs.pop('pursuer_controller', SingleActionPolicy(4))
 
         self.current_agent_layer = np.zeros((xs, ys), dtype=np.int32)
 
