@@ -31,3 +31,23 @@ while not done:
 env.render()
 time.sleep(2)
 env.close()
+
+#  # for random trials
+#  num_trials = 1000
+#  total_reward = [0.0]*num_trials
+#  for i in range(num_trials):
+#      env.reset()
+#      done = False
+#      while not done:
+#          action_list = np.array([env.action_space_dict[i].sample() for i in range(env.num_agents)])
+#          action_dict = dict(zip(env.agent_ids, action_list))
+#          
+#          observation, rewards, done_dict, info = env.step(action_dict)
+#          done = any(list(done_dict.values()))
+#          total_reward[i] += sum(rewards.values())
+#          # print("step reward = ", sum(rewards.values()))
+#          if done:
+#              print("Total reward of iter ", i, total_reward[i], done)
+#  
+#  print("Average over all trials = ", sum(total_reward)/num_trials)
+#  env.close()
