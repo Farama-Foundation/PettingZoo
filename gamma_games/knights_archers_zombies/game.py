@@ -56,8 +56,8 @@ class env():
         # Initializing Pygame
         self.render_on = False
         pygame.init()
-        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.clock = pygame.time.Clock()
         self.left_wall = pygame.image.load(os.path.join('img', 'left_wall.png'))
@@ -464,8 +464,8 @@ class env():
         pygame.display.flip()
 
     def close(self):
-        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.render_on = False
         pygame.display.quit()
 
@@ -525,11 +525,11 @@ class env():
         self.knight_list = pygame.sprite.Group()
 
         # Initializing Pygame
-        pygame.init()
-        self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
-        pygame.display.set_caption("Zombies, Knights, Archers")
-        self.clock = pygame.time.Clock()
+        # pygame.init()
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+        # pygame.display.set_caption("Zombies, Knights, Archers")
+        # self.clock = pygame.time.Clock()
 
         self.agent_list = []
         self.agent_ids = []
