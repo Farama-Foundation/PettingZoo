@@ -24,7 +24,7 @@ def get_flat_shape(width, height):
     return int(width * height/ (2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
 
 def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height/KERNEL_WINDOW_LENGTH), int(screen_width/(2*KERNEL_WINDOW_LENGTH)))
+    return (int(screen_height/KERNEL_WINDOW_LENGTH), int(screen_width/(2*KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle():
@@ -199,7 +199,7 @@ class CooperativePong(gym.Env):
     metadata = {'render.modes': ['human']}
 
     # ball_speed = [3,3], p1_speed = 3, p2_speed = 3
-    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0):
+    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0, flatten_obs=True):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -211,9 +211,14 @@ class CooperativePong(gym.Env):
         self.area = self.screen.get_rect()
 
         # define action and observation spaces
+        self.flatten_obs = flatten_obs
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
-        flattened_shape = get_flat_shape(self.s_width, self.s_height)
-        self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(flattened_shape,), dtype=np.float32) for _ in range(self.num_agents)]
+        if self.flatten_obs:
+            flattened_shape = get_flat_shape(self.s_width, self.s_height)
+            self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(flattened_shape,), dtype=np.float32) for _ in range(self.num_agents)]
+        else:
+            original_shape = original_obs_shape(self.s_width, self.s_height)
+            self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
 
         self.clock = pygame.time.Clock()
 
@@ -290,7 +295,10 @@ class CooperativePong(gym.Env):
         # exapnd dims to 3
         observation = []
         for i in obs:
-            unscaled_obs = np.expand_dims(i, axis=2).flatten()
+            if self.flatten_obs:
+                unscaled_obs = np.expand_dims(i, axis=2).flatten()
+            else:
+                unscaled_obs = np.expand_dims(i, axis=2)
             observation.append(np.divide(unscaled_obs, 255, dtype=np.float32))
         return observation
 
@@ -351,8 +359,8 @@ class CooperativePong(gym.Env):
         # shrink observation dims
         shape = original_obs_shape(self.s_width, self.s_height)
         for i in range(len(observation)):
-            observation[i] = np.squeeze(observation[i])
             observation[i] = observation[i].reshape(shape)
+            observation[i] = np.squeeze(observation[i])
         fig = plt.figure()
         # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
         ax1 = fig.add_subplot(121)
@@ -367,9 +375,9 @@ class CooperativePong(gym.Env):
 class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, *args):
+    def __init__(self, **kwargs):
         super(env, self).__init__()
-        self.env = CooperativePong(*args)
+        self.env = CooperativePong(**kwargs)
 
         self.num_agents = 2
         self.agent_ids = list(range(self.num_agents))

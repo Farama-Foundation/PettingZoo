@@ -11,8 +11,8 @@ n_evaders = 1
 n_pursuers = 2
 
 # obs_range should be odd 3, 5, 7, etc
-env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
-# env = _env()
+# env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
+env = _env()
 
 done = False
 
@@ -78,3 +78,27 @@ while not done:
 env.render()
 time.sleep(2)
 env.close()
+
+#  # for random trials
+#  num_trials = 1000
+#  total_reward = [0.0]*num_trials
+#  for i in range(num_trials):
+#      env.reset()
+#      done = False
+#      while not done:
+#          if _quit_loop[0]:
+#              break
+#          # actions should be a dict of numpy arrays
+#          action_dict = dict(zip(env.agent_ids, _actions))
+#          
+#          observation, rewards, done_dict, info = env.step(action_dict)
+#          done = any(list(done_dict.values()))
+#          total_reward[i] += sum(rewards.values())
+#          # print("step reward = ", sum(rewards.values()))
+#          if done:
+#              print("Total reward of iter ", i, total_reward[i], done)
+#          
+#          _actions = np.array([4]*env.num_agents)
+#  
+#  print("Average over all trials = ", sum(total_reward)/num_trials)
+#  env.close()
