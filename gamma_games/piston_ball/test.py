@@ -1,11 +1,10 @@
-# import piston_ball
 from .piston_ball import env as _env
 import time
 import numpy as np
 import pygame
 
-# env = piston_ball.env()
-env = _env()
+# flatten_obs is True by default
+env = _env(flatten_obs=True)
 env.reset()
 
 i = 19

@@ -150,7 +150,6 @@ class env(MultiAgentEnv):
             elif y < 451 - (16*self.velocity):
                 y = 451 - (16*self.velocity)
             return y
-        print(v)
 
         piston.position = (piston.position[0], cap(piston.position[1] - v*self.velocity))
 
