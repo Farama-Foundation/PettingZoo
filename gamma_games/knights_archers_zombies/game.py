@@ -14,10 +14,12 @@ from src.weapons import Arrow, Sword
 import numpy as np
 import skimage
 from skimage import measure
+from skimage.io import imsave
 import matplotlib.pyplot as plt
+import time
+from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
-# class env(MultiAgentEnv):
-class env():
+class env(MultiAgentEnv):
     def __init__(self, num_archers=2, num_knights=2):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
@@ -95,6 +97,7 @@ class env():
         for i in range(num_archers + num_knights):
             self.agent_ids.append(i)
 
+
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
         if sword_spawn_rate > 0:
@@ -141,7 +144,7 @@ class env():
 
     # Spawn New Weapons
     class spawnWeapons(pygame.sprite.Sprite):
-        def __init__(self, action, sword_spawn_rate, arrow_spawn_rate, knight_killed, archer_killed,
+        def __init__(self, action, agent_index, agent_list, sword_spawn_rate, arrow_spawn_rate, knight_killed, archer_killed,
                     knight_dict, archer_dict, knight_list, archer_list, knight_player_num, archer_player_num,
                     all_sprites, sword_dict, arrow_dict, sword_list, arrow_list):
             super().__init__()
@@ -162,9 +165,12 @@ class env():
             self.sword_list = sword_list
             self.arrow_list = arrow_list
 
+            self.agent_index = agent_index
+            self.agent_list = agent_list
+
         # Spawning Swords for Players
         def spawnSword(self):
-            if (self.action == 5 and self.sword_spawn_rate == 0):
+            if (self.action == 5 and self.sword_spawn_rate == 0 and self.agent_list[self.agent_index].is_knight):
                 if not self.sword_list:      # Sword List is Empty
                     if not self.knight_killed:
                         for i in range(0, self.knight_player_num + 1):
@@ -183,12 +189,13 @@ class env():
 
         # Spawning Arrows for Players
         def spawnArrow(self):
-            if (self.action == 5 and self.arrow_spawn_rate == 0):
+            if (self.action == 5 and self.arrow_spawn_rate == 0 and self.agent_list[self.agent_index].is_archer):
                 if not self.archer_killed:
                     for i in range(0, self.archer_player_num + 1):
-                        self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
-                        self.arrow_list.add(self.arrow_dict[('arrow{0}'.format(i))])
-                        self.all_sprites.add(self.arrow_dict[('arrow{0}'.format(i))])
+                        if i == self.agent_index:
+                            self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
+                            self.arrow_list.add(self.arrow_dict[('arrow{0}'.format(i))])
+                            self.all_sprites.add(self.arrow_dict[('arrow{0}'.format(i))])
                     self.arrow_spawn_rate = 1
                     self.archer_killed = False
                 else:
@@ -308,11 +315,11 @@ class env():
         return run
 
     def observe(self):
+        total_time = 0
         observation = pygame.surfarray.array3d(self.WINDOW)
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
         observation = observation[:, :, 0]  # take red channel only instead of doing full greyscale
-        # observation = np.dot(observation[..., :3], [0.299, 0.587, 0.114])
 
         agent_positions = []
         for agent in self.agent_list:
@@ -344,7 +351,8 @@ class env():
                 cropped = np.vstack((cropped, pad))
 
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            cropped = skimage.measure.block_reduce(cropped, block_size=(13, 13), func=mean) # scale to 40x40
+            cropped = skimage.measure.block_reduce(cropped, block_size=(10, 10), func=mean) # scale to 40x40
+            imsave("img{}.png".format(i), cropped) # FIXME: TODO: @Justin, uncomment this if you want to save the scaled down observations as images. Remember to call quit() before this function returns so that you don't save the images at every frame
 
             unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
             observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
@@ -356,6 +364,7 @@ class env():
         # Controls the Spawn Rate of Weapons
         self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
+        # Keyboard input check
         for event in pygame.event.get():
             # Quit Game
             if event.type == pygame.QUIT:
@@ -380,7 +389,7 @@ class env():
             self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
 
             # Spawn Weapons
-            sw = self.spawnWeapons(actions[i], self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
+            sw = self.spawnWeapons(actions[i], i, self.agent_list, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
             # Sword
             self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
             # Arrow
@@ -479,13 +488,20 @@ class env():
 
         fig = plt.figure()
         # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
-        ax1 = fig.add_subplot(121)
-        ax2 = fig.add_subplot(122)
+        ax1 = fig.add_subplot(221)
+        ax2 = fig.add_subplot(222)
+        ax3 = fig.add_subplot(223)
+        ax4 = fig.add_subplot(224)
         ax1.imshow(observation[0], cmap=plt.cm.gray)
         ax2.imshow(observation[1], cmap=plt.cm.gray)
+        ax3.imshow(observation[2], cmap=plt.cm.gray)
+        ax4.imshow(observation[3], cmap=plt.cm.gray)
         ax1.set_title("Observation[0]")
         ax2.set_title("Observation[1]")
+        ax3.set_title("Observation[2]")
+        ax4.set_title("Observation[3]")
         plt.savefig(fname)
+        quit()
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen
@@ -523,13 +539,6 @@ class env():
         self.sword_list = pygame.sprite.Group()
         self.archer_list = pygame.sprite.Group()
         self.knight_list = pygame.sprite.Group()
-
-        # Initializing Pygame
-        # pygame.init()
-        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        # # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
-        # pygame.display.set_caption("Zombies, Knights, Archers")
-        # self.clock = pygame.time.Clock()
 
         self.agent_list = []
         self.agent_ids = []

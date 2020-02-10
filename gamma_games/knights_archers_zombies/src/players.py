@@ -33,9 +33,12 @@ class Archer(pygame.sprite.Sprite):
         self.weapon = Arrow(self)
         self.alive = True
         self.score = 0
+        self.is_archer = True
+        self.is_knight = False
 
     def update(self, action):
         keys = pygame.key.get_pressed()
+        # print('archer action:', action)
         
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
@@ -54,6 +57,8 @@ class Archer(pygame.sprite.Sprite):
             elif action == 5 and self.alive:
                 self.weapon.fired = True
                 # self.attacking = True # gets reset to False in weapon attack
+            elif action == 6:
+                pass
 
             # Clamp to stay inside the screen
             self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
@@ -88,10 +93,13 @@ class Knight(pygame.sprite.Sprite):
         self.alive = True # This flag is used to immediately delete the mace object when the knight dies
         self.action = -1
         self.score = 0
+        self.is_archer = False
+        self.is_knight = True
 
     def update(self, action):
         keys = pygame.key.get_pressed()
         self.action = action
+        # print('knight action:', self.action)
 
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
@@ -109,6 +117,8 @@ class Knight(pygame.sprite.Sprite):
                 self.angle -= ANGLE_RATE
             elif action == 5:
                 self.attacking = True # gets reset to False in weapon attack
+            elif action == 6:
+                pass
 
             # Clamp to stay inside the screen
             self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
