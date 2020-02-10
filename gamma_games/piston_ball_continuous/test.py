@@ -3,6 +3,7 @@ import piston_ball
 import time
 import numpy as np
 import pygame
+import random
 
 env = piston_ball.env()
 # env = _env()
@@ -25,7 +26,7 @@ counter = 0
 
 while not done and counter < 2000:
     counter += 1
-    action_list = np.array([1 for _ in range(num_agents)])
+    action_list = np.array([random.uniform(-1, 1) for _ in range(num_agents)])
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -53,7 +54,7 @@ while not done and counter < 2000:
     action_dict = dict(zip(env.agent_ids, action_list)) 
 
     observations, reward_dict, done_dict, info = env.step(action_dict)
-    # env.render()
+    env.render()
     totalReward += sum(reward_dict.values())
     done = any(done_dict.values())
 
