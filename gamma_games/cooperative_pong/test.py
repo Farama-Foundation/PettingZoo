@@ -1,15 +1,14 @@
 import numpy as np
-# from .cooperative_pong import env as _env
-from frame_stack import env as _env
+from .cooperative_pong import env as _env
+# from frame_stack import env as _env
 import pygame
 
 # TODO: change these values for testing
 BALL_SPEED, P1_SPEED, P2_SPEED, BOUNCE_RANDOMNESS = 18, 25, 25, 0
 # Defaults are 18, 25, 25, 0 as used in cooperative_pong.py. There parameters need not be intialized while creating an env instance.
 
-# env = _env(BALL_SPEED, P1_SPEED, P2_SPEED)
-env = _env()
-env.reset()
+# flatten_obs is True by default
+env = _env(flatten_obs = True)
 
 done = False
 quit_loop = 0
