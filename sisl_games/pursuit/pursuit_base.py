@@ -219,14 +219,21 @@ class Pursuit():
             agent_layer = self.pursuer_layer
             opponent_layer = self.evader_layer
             opponent_controller = self.evader_controller
+            agent_controller = self.pursuer_controller
             gone_flags = self.pursuers_gone
         else:
             agent_layer = self.evader_layer
             opponent_layer = self.pursuer_layer
             opponent_controller = self.pursuer_controller
+            agent_controller = self.evader_controller
             gone_flags = self.evaders_gone
 
         # move allies
+        #  # For random trials
+        #  for i in range(agent_layer.n_agents()):
+        #      # controller input should be an observation, but doesn't matter right now
+        #      action = agent_controller.act(self.model_state)
+        #      agent_layer.move_agent(i, action)
         if isinstance(actions, list) or isinstance(actions, np.ndarray):
             # move all agents
             for i, a in enumerate(actions):
