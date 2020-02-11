@@ -11,7 +11,8 @@ if __name__ == "__main__":
                  "piston_ball", 
                  "pursuit", 
                  "waterworld", 
-                 "multi_walker"
+                 "multi_walker",
+                 "pursuit_sa", 
                 ]
     if arg not in game_list:
         raise Exception("Input a valid game. Choose from {}".format(game_list))
@@ -30,3 +31,6 @@ if __name__ == "__main__":
     
     if arg == "multi_walker":
         import sisl_games.multi_walker.test
+
+    if arg == "pursuit_sa":
+        import sisl_games.pursuit_single_action.test
