@@ -21,6 +21,7 @@ global _quit_loop, _actions, _agent_id
 _quit_loop = np.array([0])
 _actions = np.array([4]*env.num_agents)
 _agent_id = np.array([0])
+
 # controlling only the pursuers
 import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
