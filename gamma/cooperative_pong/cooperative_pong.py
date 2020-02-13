@@ -11,6 +11,7 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 KERNEL_WINDOW_LENGTH = 10
 
+
 def get_image(path):
     image = pygame.image.load(path)
     return image
@@ -21,7 +22,8 @@ def deg_to_rad(deg):
 
 
 def get_flat_shape(width, height):
-    return int(width * height/ (2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
+    return int(width * height/(2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
+
 
 def original_obs_shape(screen_width, screen_height):
     return (int(screen_height/KERNEL_WINDOW_LENGTH), int(screen_width/(2*KERNEL_WINDOW_LENGTH)), 1)
@@ -43,8 +45,8 @@ def get_valid_angle():
     d2 = deg_to_rad(0 + hor_deg_range)
 
     angle = 0
-    while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or \
-        (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
+    while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or
+           (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
         angle = 2 * np.pi * np.random.rand()
 
     return angle
@@ -129,7 +131,7 @@ class PaddleSprite(pygame.sprite.Sprite):
 
 
 class BallSprite(pygame.sprite.Sprite):
-    def __init__(self, dims, speed, bounce_randomness = 0): # def __init__(self, image, speed):
+    def __init__(self, dims, speed, bounce_randomness=0):  # def __init__(self, image, speed):
         # self.surf = get_image(image)
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
@@ -235,7 +237,7 @@ class CooperativePong(gym.Env):
             self.p2 = PaddleSprite((20, 100), p2_speed)
 
         # ball
-        self.ball = BallSprite((20,20), ball_speed, bounce_randomness)
+        self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
 
         self.reset()
 
@@ -384,14 +386,14 @@ class env(MultiAgentEnv):
         # spaces
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
-        
+
         self.score = self.env.score
-        
+
         self.reset()
-        
+
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agent_ids, list_of_list))
-    
+
     def reset(self):
         obs = self.env.reset()
         return self.convert_to_dict(obs)
@@ -417,7 +419,7 @@ class env(MultiAgentEnv):
         info_dict = self.convert_to_dict(info)
         done_dict = self.convert_to_dict(done)
         done_dict["__all__"] = done[0]
-        
+
         self.score = self.env.score
 
         return observation_dict, reward_dict, done_dict, info_dict

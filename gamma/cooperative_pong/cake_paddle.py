@@ -1,11 +1,11 @@
-import numpy as np
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
+
 class CakePaddle(pygame.sprite.Sprite):
-    
-    def __init__(self, speed = 25):
+
+    def __init__(self, speed=25):
         # surf is the right-most (largest) tier of the cake
         self.surf = pygame.Surface((30, 120))
         self.rect = self.surf.get_rect()
@@ -15,29 +15,29 @@ class CakePaddle(pygame.sprite.Sprite):
         self.rect3 = self.surf3.get_rect()
         self.surf4 = pygame.Surface((30, 10))
         self.rect4 = self.surf4.get_rect()
-        
+
         self.speed = speed
-        
+
     def reset(self):
         # self.rect is set from env class
         self.rect2.midright = self.rect.midleft
         self.rect3.midright = self.rect2.midleft
         self.rect4.midright = self.rect3.midleft
-    
+
     def draw(self, screen):
-        pygame.draw.rect(screen, (255,255,255), self.rect)
-        pygame.draw.rect(screen, (255,255,255), self.rect2)
-        pygame.draw.rect(screen, (255,255,255), self.rect3)
-        pygame.draw.rect(screen, (255,255,255), self.rect4)
-        
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect2)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect3)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect4)
+
     def update(self, area, action):
         # action: 1 - up, 2 - down
-        movepos = [0,0]
+        movepos = [0, 0]
         if action == 1:
             movepos[1] = movepos[1] - self.speed
         elif action == 2:
             movepos[1] = movepos[1] + self.speed
-        
+
         newpos = self.rect.move(movepos)
         if area.contains(newpos):
             self.rect = newpos
@@ -45,7 +45,7 @@ class CakePaddle(pygame.sprite.Sprite):
             self.rect2 = self.rect2.move(movepos)
             self.rect3 = self.rect3.move(movepos)
             self.rect4 = self.rect4.move(movepos)
-            
+
     def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
         '''
 
