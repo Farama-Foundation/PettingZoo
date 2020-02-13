@@ -33,7 +33,6 @@ def feasible_position(map_matrix, constraints=None):
     Returns a feasible position on map (map_matrix)
     """
     xs, ys = map_matrix.shape
-    loop_count = 0
     while True:
         if constraints is None:
             x = np.random.randint(xs)

@@ -11,6 +11,7 @@ def rectangle_map(xs, ys, xb=0.3, yb=0.2):
     Map is a 2D numpy array
     xb and yb are buffers for each dim representing the raio of the map to leave open on each side
     """
+
     rmap = np.zeros((xs, ys), dtype=np.int32)
     for i in xrange(xs):
         for j in xrange(ys):
@@ -36,10 +37,11 @@ def complex_map(xs, ys):
     return cmap
 
 
-def gen_map(xs, ys, n_obs, center_bounds=[0.0, 1.0], length_bounds=[0.1,0.5], gmap=None):
+def gen_map(xs, ys, n_obs, center_bounds=[0.0, 1.0], length_bounds=[0.1, 0.5], gmap=None):
     cl, cu = center_bounds
     ll, lu = length_bounds
-    if gmap is None: gmap = np.zeros((xs, ys), dtype=np.int32)
+    if gmap is None:
+        gmap = np.zeros((xs, ys), dtype=np.int32)
     for _ in xrange(n_obs):
         xc = np.random.uniform(cl, cu)
         yc = np.random.uniform(cl, cu)
@@ -47,6 +49,7 @@ def gen_map(xs, ys, n_obs, center_bounds=[0.0, 1.0], length_bounds=[0.1,0.5], gm
         yl = np.random.uniform(ll, lu)
         gmap = add_rectangle(gmap, xc=xc, yc=yc, xl=xl, yl=yl)
     return gmap
+
 
 def multi_scale_map(xs, ys, scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.05, 0.1]), (150, [0.01, 0.05])]):
     gmap = np.zeros((xs, ys), dtype=np.int32)
@@ -58,7 +61,7 @@ def multi_scale_map(xs, ys, scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.0
 
 def add_rectangle(input_map, xc, yc, xl, yl):
     """
-    Add a rectangle to the input map 
+    Add a rectangle to the input map
     centered a xc, yc with dimensions xl, yl.
     Input specs are normalized wrt the map.
     """
@@ -76,16 +79,17 @@ def add_rectangle(input_map, xc, yc, xl, yl):
     else:
         y_lbound, y_upbound = ycc - yll/2, ycc + yll/2
 
-    #assert x_lbound >= 0 and x_upbound < xs, "Invalid rectangel config, x out of bounds" 
-    #assert y_lbound >= 0 and y_upbound < ys, "Invalid rectangel config, y out of bounds" 
+    # assert x_lbound >= 0 and x_upbound < xs, "Invalid rectangel config, x out of bounds"
+    # assert y_lbound >= 0 and y_upbound < ys, "Invalid rectangel config, y out of bounds"
 
     x_lbound, x_upbound = np.clip([x_lbound, x_upbound], 0, xs)
     y_lbound, y_upbound = np.clip([y_lbound, y_upbound], 0, ys)
 
     for i in xrange(x_lbound, x_upbound):
         for j in xrange(y_lbound, y_upbound):
-            input_map[j,i] = -1
+            input_map[j, i] = -1
     return input_map
+
 
 def resize(scale, old_mats):
     new_mats = []
@@ -97,16 +101,12 @@ def resize(scale, old_mats):
 def simple_soccer_map(xs=6, ys=9):
     assert xs % 2 == 0, "xs must be even"
     smap = np.zeros((xs, ys), dtype=np.int32)
-    smap[0:xs/2-1,0] = -1
-    smap[xs/2+1:xs,0] = -1
-    smap[0:xs/2-1,ys-1] = -1
-    smap[xs/2+1:xs,ys-1] = -1
+    smap[0:xs/2-1, 0] = -1
+    smap[xs/2+1:xs, 0] = -1
+    smap[0:xs/2-1, ys-1] = -1
+    smap[xs/2+1:xs, ys-1] = -1
     return smap
-
 
 
 def cross_map(xs, ys):
     pass
-
-
-
