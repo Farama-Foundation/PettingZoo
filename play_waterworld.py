@@ -1,4 +1,4 @@
-from sisl_games.waterworld.waterworld import env as custom_env
+from sisl.waterworld.waterworld import env as custom_env
 import ray
 from ray.tune.registry import register_trainable, register_env
 import ray.rllib.agents.dqn as dqn
