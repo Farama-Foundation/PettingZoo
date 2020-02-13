@@ -79,18 +79,18 @@ We maintain a leaderboard for the best performance on each dataset with the docu
 
 The following games should be done (though haven't been fully reconfigured for the new API):
 
-*gamma/knights_archers_zombies
-*gamma/pistonball
-*gamma/cooperative_pong
-*sisl/pursuit
-*sisl/multiwalker
-*sisl/waterworld
+* gamma/knights_archers_zombies
+* gamma/pistonball
+* gamma/cooperative_pong
+* sisl/pursuit
+* sisl/multiwalker
+* sisl/waterworld
 
 The following games are under active development:
 
-*gamma/prospector
-*gamma/prison (not merged into this repo yet)
-*sisl/multiant
-*other_envs/rock_paper_scissors
-*other_envs/rock_paper_scissors_lizard_spock
-*mpe/*
+* gamma/prospector
+* gamma/prison (not merged into this repo yet)
+* sisl/multiant
+* other_envs/rock_paper_scissors
+* other_envs/rock_paper_scissors_lizard_spock
+* mpe/*
