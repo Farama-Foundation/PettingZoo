@@ -1,7 +1,6 @@
 import numpy as np
 from .pursuit import env as _env
 import time
-import matplotlib.pyplot as plt
 
 xs = 5
 ys = 5
@@ -11,7 +10,7 @@ n_pursuers = 2
 
 # obs_range should be odd 3, 5, 7, etc
 # env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
-env = _env()
+env = _env()  # freeze_evaders = True
 env.reset()
 
 done = False
@@ -20,10 +19,10 @@ global _quit_loop, _actions, _agent_id
 _quit_loop = np.array([0])
 _actions = np.array([4]*env.num_agents)
 _agent_id = np.array([0])
-# controlling only the pursuers
 
+# ------ controlling pursuers ------ 
+import matplotlib.pyplot as plt
 fig, ax = plt.subplots()
-
 
 def on_key(event):
     # print('you pressed', event.key)
@@ -54,8 +53,8 @@ def on_key(event):
         # p1: down
         _actions[_agent_id[0]] = 2
 
-
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
+# ------ controlling pursuers ------ 
 
 done = False
 num_frames = 0
