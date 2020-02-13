@@ -77,7 +77,7 @@ For more detailed documentation about all the different enviroments, and configu
 We maintain a leaderboard for the best performance on each dataset with the documentation for each game. If you've beaten a high score and would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default parameters for every game, with the exception that we 2 have seperate leaderboards for games that support both continuous and discrete action spaces.
 
 
-## Development
+## Development Notes
 
 The following games should be done (though haven't been fully reconfigured for the new API):
 
