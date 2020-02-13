@@ -80,6 +80,7 @@ If you want to watch an enviroment run with random actions taken for all the age
 ```
 from pettingzoo.utils import random_demo
 random_demo(env)
+```
 
 ## Documentation
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
