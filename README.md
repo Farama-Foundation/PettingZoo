@@ -43,6 +43,8 @@ rewards = {0:[first agents reward], 1:[second agents reward] ... n:[n-1th agents
 dones = {0:[first agents done state], 1:[second agents done state] ... n:[n-1th agents done state]}
 ```
 
+When some agents are `done` and other's are not, the `done` agents don't respond to input, and return 0s for their entire output space. 
+
 ## Utils
 
 For games that support manual control, you can run the following script to play the game yourself to try them out:
@@ -71,3 +73,22 @@ children(env)
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
 
 We maintain a leaderboard for the best performance on each dataset with the documentation for each game. If you've beat a high score and would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted.
+
+
+## Development
+
+The following games should be done (though haven't been fully reconfigured for the new API):
+gamma/knights_archers_zombies
+gamma/pistonball
+gamma/cooperative_pong
+sisl/pursuit
+sisl/multiwalker
+sisl/waterworld
+
+The following games are under active development:
+gamma/prospector
+gamma/prison (not merged into this repo yet)
+sisl/multiant
+other_envs/rock_paper_scissors
+other_envs/rock_paper_scissors_lizard_spock
+mpe/*
