@@ -22,7 +22,7 @@ Using enviroments in PettingZoo is very similar to Gym, i.e. you would run
 
 `from pettingzoo.gamma import pistonball`
 
-`env = pistonball.([arguments])`
+`env = pistonball.([custom enviroment parameters])`
 
 The basic functionality is the same as Gym, but plural i.e.:
 
