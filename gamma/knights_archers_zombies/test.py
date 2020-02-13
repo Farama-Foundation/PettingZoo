@@ -1,12 +1,9 @@
-# from .game import env as _env
 import game
 import time
-import numpy as np
 import pygame
-import random
 
 if __name__ == "__main__":
-    env = game.env(2,2)
+    env = game.env(2, 2)
     done = False
 
     cur_agent = 0
@@ -17,11 +14,11 @@ if __name__ == "__main__":
     quit_game = 0
 
     while not done:
-    # while frame_count < frame_limit: # Uncomment this if you want the game to run for fame_limit amount of frames instead of ending by normal game conditions (useful for testing purposes)
+        # while frame_count < frame_limit: # Uncomment this if you want the game to run for fame_limit amount of frames instead of ending by normal game conditions (useful for testing purposes)
         agents = env.agent_list
         frame_count += 1
         # actions = [random.randint(1, 5) for x in range(env.num_agents)] # If you want to do random inputs
-        actions = [6 for x in range(env.num_agents)] # If you want to do manual input
+        actions = [6 for x in range(env.num_agents)]  # If you want to do manual input
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -56,9 +53,7 @@ if __name__ == "__main__":
 
         observations, reward_dict, done_dict, info = env.step(actions)
         env.render()
-        # env.plot_obs(observations, "obs")
         done = done_dict['__all__']
-        # quit()
 
     end_time = time.time()
     total_time = end_time - start_time
