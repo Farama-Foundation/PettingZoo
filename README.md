@@ -51,7 +51,7 @@ For games that support manual control, you can run the following script to play 
 
 ```
 from pettingzoo.utils import manual_control
-env = pistonball.([enviroment specs])
+env = pistonball.env([enviroment specs])
 manual_control(env)
 ```
 
