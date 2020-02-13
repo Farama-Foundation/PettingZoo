@@ -7,7 +7,7 @@ from ray import tune
 from ray.rllib.models import Model, ModelCatalog
 from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
-from sisl_games.pursuit_single_action import pursuit
+from sisl.pursuit_single_action import pursuit
 
 tf = try_import_tf()
 
