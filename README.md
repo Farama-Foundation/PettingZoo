@@ -57,7 +57,7 @@ Additionally, we include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
-env = wrapper(env,frame_stacking=4, grey_scale=True, scaling = True)
+env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=True, flatten=False)
 ```
 
 Finally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
