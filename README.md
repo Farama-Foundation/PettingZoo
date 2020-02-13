@@ -16,7 +16,7 @@ PettingZoo breaks its games down into several categories, largely including game
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
 
-## API
+## Base API
 
 Using environments in PettingZoo is very similar to Gym, i.e. you would run 
 
@@ -45,7 +45,7 @@ dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1t
 
 When some agents are `done` and others are not, the `done` agents don't respond to input, and return 0s for every value of their observation space. 
 
-### Utils
+## Utils API
 
 For games that support manual control, you can run the following script to play the game yourself to try them out:
 
