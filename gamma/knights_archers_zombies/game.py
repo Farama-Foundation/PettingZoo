@@ -1,6 +1,3 @@
-#!usr/bin/env python3
-
-# Importing Libraries
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import sys
@@ -13,11 +10,9 @@ from src.zombie import Zombie
 from src.weapons import Arrow, Sword
 import numpy as np
 import skimage
-from skimage import measure
-from skimage.io import imsave
 import matplotlib.pyplot as plt
-import time
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+
 
 class env(MultiAgentEnv):
     def __init__(self, num_archers=2, num_knights=2):
@@ -97,7 +92,6 @@ class env(MultiAgentEnv):
         for i in range(num_archers + num_knights):
             self.agent_ids.append(i)
 
-
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
         if sword_spawn_rate > 0:
@@ -145,8 +139,8 @@ class env(MultiAgentEnv):
     # Spawn New Weapons
     class spawnWeapons(pygame.sprite.Sprite):
         def __init__(self, action, agent_index, agent_list, sword_spawn_rate, arrow_spawn_rate, knight_killed, archer_killed,
-                    knight_dict, archer_dict, knight_list, archer_list, knight_player_num, archer_player_num,
-                    all_sprites, sword_dict, arrow_dict, sword_list, arrow_list):
+                     knight_dict, archer_dict, knight_list, archer_list, knight_player_num, archer_player_num,
+                     all_sprites, sword_dict, arrow_dict, sword_list, arrow_list):
             super().__init__()
             self.action = action
             self.sword_spawn_rate = sword_spawn_rate
@@ -211,7 +205,7 @@ class env(MultiAgentEnv):
         try:
             for sword in sword_list:
                 sword_active = sword.update()
-                if not sword_active: # remove the sprite
+                if not sword_active:  # remove the sprite
                     sword_list.remove(sword)
                     all_sprites.remove(sword)
         except:
@@ -248,7 +242,7 @@ class env(MultiAgentEnv):
     # Kill the Sword when Knight dies
     def kill_sword(self, sword_killed, sword_list, all_sprites):
         for sword in sword_list:
-            if sword_killed == True:
+            if sword_killed:
                 sword_list.remove(sword)
                 all_sprites.remove(sword)
                 sword_killed = False
@@ -315,7 +309,6 @@ class env(MultiAgentEnv):
         return run
 
     def observe(self):
-        total_time = 0
         observation = pygame.surfarray.array3d(self.WINDOW)
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
@@ -323,7 +316,7 @@ class env(MultiAgentEnv):
 
         agent_positions = []
         for agent in self.agent_list:
-            agent_positions.append([agent.rect.y, agent.rect.x]) # y first because the 2d array is row-major
+            agent_positions.append([agent.rect.y, agent.rect.x])  # y first because the 2d array is row-major
 
         observations = {}
         for i in range(len(self.agent_list)):
@@ -351,8 +344,7 @@ class env(MultiAgentEnv):
                 cropped = np.vstack((cropped, pad))
 
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            cropped = skimage.measure.block_reduce(cropped, block_size=(10, 10), func=mean) # scale to 40x40
-            imsave("img{}.png".format(i), cropped) # FIXME: TODO: @Justin, uncomment this if you want to save the scaled down observations as images. Remember to call quit() before this function returns so that you don't save the images at every frame
+            cropped = skimage.measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40
 
             unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
             observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
@@ -563,14 +555,3 @@ class env(MultiAgentEnv):
 
         for i in range(self.num_archers + self.num_knights):
             self.agent_ids.append(i)
-
-if __name__ == "__main__":
-    g = Game(1,1)
-    done = False
-    while not done:
-        # actions = [random.randint(1, 5), random.randint(1, 5), random.randint(1, 5), random.randint(1, 5)]
-        actions = [random.randint(1, 5) for x in range(g.num_agents)]
-        observations, reward_dict, done_dict, info = g.step(actions)
-        # g.plot_obs(observations, "obs")
-        done = done_dict['__all__']
-        # quit()
