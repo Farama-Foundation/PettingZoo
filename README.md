@@ -74,7 +74,7 @@ Set `save_image_observations=True` if you'd like to save all of the observations
 ## Documentation
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
 
-We maintain a leaderboard for the best performance on each dataset with the documentation for each game. If you've beat a high score and would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted.
+We maintain a leaderboard for the best performance on each dataset with the documentation for each game. If you've beaten a high score and would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted.
 
 
 ## Development
