@@ -1,4 +1,4 @@
-from sisl_games.pursuit.pursuit import env as custom_env
+from sisl_games.pursuit_single_action.pursuit import env as custom_env
 import ray
 from ray.tune.registry import register_trainable, register_env
 # from ray.rllib.agents.dqn import DQNTrainer as _Trainer
@@ -14,6 +14,8 @@ from parameterSharingPursuitSingleAction import MLPModel
 env_name = "pursuit"
 # path should end with checkpoint-<> data file
 # checkpoint_path = "/home/ananth/ray_results/PPO_pursuit/PPO_pursuit_c4266ace_2020-02-03_17-44-41m1ryxpme/checkpoint_230/checkpoint-230"
+# checkpoint_path = "/home/ananth/ray_results/PPO/PPO_pursuit_sa_e840ad8e_2020-02-10_21-33-37i6j_r3rh/checkpoint_120/checkpoint-120"
+checkpoint_path = "/home/ananth/ray_results/A2C/A2C_pursuit_sa_b3dde2d8_2020-02-11_19-29-16w8i8f1kp/checkpoint_1770/checkpoint-1770"
 
 # TODO: see ray/rllib/rollout.py -- `run` method for checkpoint restoring
 
