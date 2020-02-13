@@ -1,6 +1,7 @@
 # Overview
 PettingZoo is library of enviroments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
+
 # Games and Installation
 
 PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
@@ -45,13 +46,14 @@ dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1t
 
 When some agents are `done` and others are not, the `done` agents don't respond to input, and return 0s for every value of their observation space. 
 
+
 ## Utils API
 
 For games that support manual control, you can run the following script to play the game yourself to try them out:
 
 ```
 from pettingzoo.utils import manual_control
-env = pistonball.([enviroment specs])
+env = pistonball.env([enviroment specs])
 manual_control(env)
 ```
 
@@ -69,7 +71,8 @@ from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
+Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
+
 
 ## Documentation
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
@@ -96,3 +99,18 @@ The following games are under active development:
 * other_envs/rock_paper_scissors
 * other_envs/rock_paper_scissors_lizard_spock
 * mpe/*
+
+
+## Requirements
+
+Requirements are being kept below until we get the requirments.txt issues fixed
+
+```
+gym>=0.15.4	
+pygame==2.0.0.dev6	
+scikit-image>=0.16.2	
+numpy>=1.18.0	
+matplotlib>=3.1.2
+pymunk>=5.6.0
+gym[box2d]>=0.15.4
+```
