@@ -2,12 +2,11 @@ from .piston_ball import env as _env
 import time
 import numpy as np
 import pygame
-from ..utils.func import save_observation
 
 # flatten_obs is True by default
 env = _env(flatten_obs=False)
 obs_dict = env.reset()
-## Use save_observation to save a dictionary of observations
+# Use save_observation to save a dictionary of observations
 # save_observation(obs_dict, reverse_colors=False)
 # exit()
 
@@ -21,9 +20,9 @@ start = time.time()
 done = False
 quit_game = 0
 
-pygame.key.set_repeat(20,0)
+pygame.key.set_repeat(20, 0)
 
-num_agents = env.num_agents # 20
+num_agents = env.num_agents  # 20
 
 while not done:
     action_list = np.array([1 for _ in range(num_agents)])
@@ -51,11 +50,11 @@ while not done:
     if quit_game:
         break
     # actions should be a dict of numpy arrays
-    action_dict = dict(zip(env.agent_ids, action_list)) 
+    action_dict = dict(zip(env.agent_ids, action_list))
 
     observations, reward_dict, done_dict, info = env.step(action_dict)
-    #save_observation(observations)
-    #exit()
+    # save_observation(observations)
+    # exit()
     env.render()
     totalReward += sum(reward_dict.values())
     done = any(done_dict.values())
