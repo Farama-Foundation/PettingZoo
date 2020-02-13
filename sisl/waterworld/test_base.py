@@ -10,5 +10,5 @@ while not done:
         print("Reward = ", rew)
     done = any(dones)
     env.render()
-    
+
 env.close()
