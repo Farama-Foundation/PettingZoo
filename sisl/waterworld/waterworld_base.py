@@ -18,7 +18,7 @@ class Archea(Agent):
         if speed_features:
             self._sensor_obscoord += 3
         self._obscoord_from_sensors = self._n_sensors * self._sensor_obscoord
-        self._obs_dim = self._obscoord_from_sensors + 2  #+ 1  #2 for type, 1 for id
+        self._obs_dim = self._obscoord_from_sensors + 2  # + 1  #2 for type, 1 for id
         if addid:
             self._obs_dim += 1
 
@@ -70,6 +70,7 @@ class Archea(Agent):
             sensorvals_K_N[:, self._idx - 1] = np.inf
         return sensorvals_K_N
 
+
 class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
@@ -110,7 +111,7 @@ class MAWaterWorld():
         self._poisons = [
             Archea(npo + 1, self.radius * 3 / 4, self.n_poison, 0) for npo in range(self.n_poison)
         ]
-        
+
         self.num_agents = self.n_pursuers
         self.action_space = [agent.action_space for agent in self._pursuers]
         self.observation_space = [agent.observation_space for agent in self._pursuers]
@@ -479,4 +480,3 @@ class MAWaterWorld():
         cv2.imshow('Waterworld', img)
         cv2.waitKey(rate)
         return np.asarray(img)[..., ::-1]
-
