@@ -170,6 +170,7 @@ class env(MultiAgentEnv):
         self.lastX = int(self.ball.position[0]-40)
         self.distance = self.lastX-80
         self.screen.blit(self.background, (0, 0))
+        self.draw()
 
         self.done = False
 
