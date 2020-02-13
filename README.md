@@ -11,7 +11,7 @@ PettingZoo breaks it's games down into several categories, largely including gam
 * magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * card: A set of card games that can be played.
 * atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
-* other-envs: A collection of enviroments that don't fit anywhere else. Currently all developed by us.
+* other-envs: A small collection of enviroments that don't fit anywhere else.
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
