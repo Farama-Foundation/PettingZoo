@@ -8,9 +8,7 @@ import pymunk.pygame_util
 import random
 import math
 import numpy as np
-import time
 import skimage
-from skimage import measure
 import gym
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -32,14 +30,14 @@ class env(MultiAgentEnv):
         super(env, self).__init__()
         self.num_agents = 20
         self.agent_ids = list(range(self.num_agents))
-        
+
         self.flatten_obs = flatten_obs
 
         self.action_space_dict = dict(zip(self.agent_ids, [gym.spaces.Discrete(3)]*self.num_agents))
         if self.flatten_obs:
             self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
         else:
-            self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(50,30,1), dtype=np.float32)]*self.num_agents))
+            self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(50, 30, 1), dtype=np.float32)]*self.num_agents))
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -58,10 +56,10 @@ class env(MultiAgentEnv):
         self.space.iterations = 10  # 10 is default in PyMunk
 
         self.pistonList = []
-        self.pistonRewards = [] # Keeps track of individual rewards
-        self.recentFrameLimit = 20 # Defines what "recent" means in terms of number of frames.
-        self.recentPistons = set() # Set of pistons that have touched the ball recently
-        self.global_reward_weight = 0.5 #TODO: Change this as you please
+        self.pistonRewards = []  # Keeps track of individual rewards
+        self.recentFrameLimit = 20  # Defines what "recent" means in terms of number of frames.
+        self.recentPistons = set()  # Set of pistons that have touched the ball recently
+        self.global_reward_weight = 0.5
         self.local_reward_weight = 1 - self.global_reward_weight
 
         self.add_walls()
@@ -121,9 +119,9 @@ class env(MultiAgentEnv):
 
     def add_walls(self):
         walls = [pymunk.Segment(self.space.static_body, (80, 80), (880, 80), 1)
-                    , pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1)
-                    , pymunk.Segment(self.space.static_body, (80, 480), (880, 480), 1)
-                    , pymunk.Segment(self.space.static_body, (880, 80), (880, 480), 1)]
+                 , pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1)
+                 , pymunk.Segment(self.space.static_body, (80, 480), (880, 480), 1)
+                 , pymunk.Segment(self.space.static_body, (880, 80), (880, 480), 1)]
         for wall in walls:
             wall.friction = .64
             self.space.add(wall)
@@ -211,7 +209,7 @@ class env(MultiAgentEnv):
         return nearby_pistons
 
     def get_local_reward(self, prev_position, curr_position):
-        local_reward = 5 * (prev_position - curr_position) # TODO: I don't know what the local reward should be. I just chose 5 arbitrarily. 
+        local_reward = .5 * (prev_position - curr_position)
         return local_reward * self.local_reward_weight
 
     def render(self):
@@ -225,7 +223,7 @@ class env(MultiAgentEnv):
             if np.isnan(actions[agent_id]):
                 actions[agent_id] = 1
             elif not self.action_space_dict[i].contains(actions[i]):
-                raise Exception('Action for agent {} must be in Discrete({}).' 
+                raise Exception('Action for agent {} must be in Discrete({}).'
                                 'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
             self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing
 
@@ -246,10 +244,10 @@ class env(MultiAgentEnv):
 
         observation = self.observe()
 
-        total_reward = [(global_reward/self.num_agents) * self.global_reward_weight] * self.num_agents # start with global reward
+        total_reward = [(global_reward/self.num_agents) * self.global_reward_weight] * self.num_agents  # start with global reward
         local_pistons_to_reward = self.get_nearby_pistons()
         for index in local_pistons_to_reward:
-            total_reward[index] += local_reward # add local reward
+            total_reward[index] += local_reward
 
         self.num_frames += 1
         if self.num_frames == 900:
@@ -259,14 +257,9 @@ class env(MultiAgentEnv):
         # Clear the list of recent pistons for the next reward cycle
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
-            
+
         rewardDict = dict(zip(self.agent_ids, total_reward))
         doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
-        return observation, rewardDict, doneDict, {} 
-
-
-# TODO CNN policy network of my choosing
-# TODO check caching past 4 frames (support in game?)
-# TODO don't regenerate done dict every time
+        return observation, rewardDict, doneDict, {}
