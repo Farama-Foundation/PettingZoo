@@ -1,17 +1,15 @@
 import numpy as np
 from .cooperative_pong import env as _env
-# from frame_stack import env as _env
 import pygame
-from ..utils.func import save_observation
 
 # TODO: change these values for testing
 BALL_SPEED, P1_SPEED, P2_SPEED, BOUNCE_RANDOMNESS = 18, 25, 25, 0
 # Defaults are 18, 25, 25, 0 as used in cooperative_pong.py. There parameters need not be intialized while creating an env instance.
 
 # flatten_obs is True by default
-env = _env(flatten_obs = False)
+env = _env(flatten_obs=False)
 obs_dict = env.reset()
-## Use save_observation to save a dictionary of observations
+# Use save_observation to save a dictionary of observations
 # save_observation(obs_dict, reverse_colors=False)
 # exit()
 
@@ -20,15 +18,15 @@ quit_loop = 0
 
 totalReward = 0
 # Fixed: Key held down will generate multiple events
-pygame.key.set_repeat(20,0)
+pygame.key.set_repeat(20, 0)
 
 while not done:
-    
-    actionList = np.array([0]*env.num_agents) # do nothing
+
+    actionList = np.array([0]*env.num_agents)  # do nothing
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-                quit_loop = 1
-                break
+            quit_loop = 1
+            break
         elif event.type == pygame.KEYDOWN:
             # Quit if ESC is pressed
             if event.key == pygame.K_ESCAPE:
@@ -51,10 +49,10 @@ while not done:
                 actionList[1] = 2
     if quit_loop:
         break
-    
+
     # actions should be a dict of numpy arrays
-    action_dict = dict(zip(env.agent_ids, actionList)) # no action = 0
-    
+    action_dict = dict(zip(env.agent_ids, actionList))  # no action = 0
+
     observation, reward_dict, done_dict, info = env.step(action_dict)
     env.render()
     totalReward += sum(list(reward_dict.values()))
