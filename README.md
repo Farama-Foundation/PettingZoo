@@ -37,10 +37,10 @@ While True:
 The way we handle multiple agents, or groups of them, is the the enviroment assigns each an integer ID, and every single agent thing is passed as dictionaries based on those IDs, i.e.
 
 ```
-observations = {0:[first agents observation], 1:[second agents observation] ... n:[n-1th agents observation]}
-actions = {0:[first agents action], 1:[second agents action] ... n:[n-1th agents action]}
-rewards = {0:[first agents reward], 1:[second agents reward] ... n:[n-1th agents reward]}
-dones = {0:[first agents done state], 1:[second agents done state] ... n:[n-1th agents done state]}
+observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
+actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
+rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
+dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
 ```
 
 When some agents are `done` and other's are not, the `done` agents don't respond to input, and return 0s for their entire output space. 
