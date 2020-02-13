@@ -1,4 +1,4 @@
-from sisl_games.pursuit_single_action.pursuit import env as custom_env
+from sisl.pursuit_single_action.pursuit import env as custom_env
 import ray
 from ray.tune.registry import register_trainable, register_env
 # from ray.rllib.agents.dqn import DQNTrainer as _Trainer
