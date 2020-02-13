@@ -113,5 +113,4 @@ numpy>=1.18.0
 matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
-config>=0.4.2
 ```
