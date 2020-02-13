@@ -71,7 +71,7 @@ from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
+Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
 
 
 ## Documentation
