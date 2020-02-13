@@ -3,10 +3,10 @@ PettingZoo is library of enviroments for conducting research in multi-agent rein
 
 # Games and Installation
 
-PettingZoo breaks it's games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
+PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
 
 * gamma: Graphical games developed by us, in PyGame
-* sisl: An ecclectic collection of 4 games developed by SISL, originally from https://github.com/sisl/MADRL
+* sisl: An eclectic collection of 4 games developed by SISL, originally from https://github.com/sisl/MADRL
 * mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
 * magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * card: A set of card games that can be played.
@@ -18,7 +18,7 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 
 ## API
 
-Using enviroments in PettingZoo is very similar to Gym, i.e. you would run 
+Using environments in PettingZoo is very similar to Gym, i.e. you would run 
 
 `from pettingzoo.gamma import pistonball`
 
@@ -28,13 +28,13 @@ The basic functionality is the same as Gym, but plural i.e.:
 
 ```
 env.reset()
-While True:
+while True:
     actions = policy(actions)
     # add env.render() here if you want to watch the game playing and the game supports it
     observations, rewards, dones, info = env.step(actions)
 ```
 
-The way we handle multiple agents is the the enviroment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
+The way we handle multiple agents is that the enviroment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
@@ -43,7 +43,7 @@ rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agen
 dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
 ```
 
-When some agents are `done` and other's are not, the `done` agents don't respond to input, and return 0s for every value of their observation space. 
+When some agents are `done` and others are not, the `done` agents don't respond to input, and return 0s for every value of their observation space. 
 
 ## Utils
 
