@@ -21,9 +21,10 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 
 Using environments in PettingZoo is very similar to Gym, i.e. you would run 
 
-`from pettingzoo.gamma import pistonball`
-
-`env = pistonball.([custom enviroment parameters])`
+```
+from pettingzoo.gamma.pistonball import pistonball
+env = pistonball.env([custom enviroment parameters])
+```
 
 The basic functionality is the same as Gym, but plural i.e.:
 
@@ -49,22 +50,14 @@ When some agents are `done` and others are not, the `done` agents don't respond 
 
 ## Utils API
 
-For games that support manual control, you can run the following script to play the game yourself to try them out:
-
-```
-from pettingzoo.utils import manual_control
-env = pistonball.env([enviroment specs])
-manual_control(env)
-```
-
-Additionally, we include popular preprocessing methods out of the box:
+We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=True, flatten=False)
 ```
 
-Finally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
+Additionally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
 
 ```
 from pettingzoo.utils import children
@@ -73,6 +66,20 @@ children(env, save_image_observations=False)
 
 Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
 
+## Demos
+
+If you want to try to play a game to get an impression for how it works, you can play games that supports manual cotrol via
+
+```
+from pettingzoo.gamma.pistonball import pistonball
+pistonball.manual_control([enviroment specs])
+```
+
+If you want to watch an enviroment run with random actions taken for all the agents, for enviroments that support viewing, run
+
+```
+from pettingzoo.utils import random_demo
+random_demo(env)
 
 ## Documentation
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
