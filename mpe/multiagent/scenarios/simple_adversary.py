@@ -117,7 +117,6 @@ class Scenario(BaseScenario):
                 adv_rew += 5
             return adv_rew
 
-
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
         entity_pos = []
@@ -130,7 +129,8 @@ class Scenario(BaseScenario):
         # communication of all other agents
         other_pos = []
         for other in world.agents:
-            if other is agent: continue
+            if other is agent:
+                continue
             other_pos.append(other.state.p_pos - agent.state.p_pos)
 
         if not agent.adversary:
