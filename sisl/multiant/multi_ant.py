@@ -1,23 +1,15 @@
-import copy
-import math
-import sys
 import os
 from lxml import etree
-import lxml.builder    
-
 import gym
 import numpy as np
 from gym import spaces
-from gym import utils
 from gym.utils import seeding
 from gym.envs.mujoco import mujoco_env
-
-from madrl_environments import AbstractMAEnv, Agent
-
 from rltools.util import EzPickle
+from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 
-class AntLeg(Agent):
+class AntLeg(MultiAgentEnv):
 
     def __init__(self, model, idx, n_legs,
                  pos_noise=1e-3,
@@ -31,11 +23,9 @@ class AntLeg(Agent):
         self.vel_noise = vel_noise
         self.force_noise = force_noise
 
-
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
- 
 
     @property
     def action_space(self):
@@ -46,14 +36,13 @@ class AntLeg(Agent):
         # 18 force observations for each leg + 4 pos + vel per leg (2 neighboring legs) + 11 world coords
         return spaces.Box(low=-np.inf, high=np.inf, shape=(18 + 4 + 4 + 4 + 11,))
 
-    
     def get_observation(self):
         idx = self._idx
         n1_idx = idx-1 if idx > 0 else self.n_legs-1
         n2_idx = idx+1 if idx < (self.n_legs - 1) else 0
         return np.concatenate([
-            np.random.normal(self.model.data.qpos.flat[2:7], self.pos_noise), # body pos
-            np.random.normal(self.model.data.qvel.flat[:6], self.vel_noise), # body vel
+            np.random.normal(self.model.data.qpos.flat[2:7], self.pos_noise),  # body pos
+            np.random.normal(self.model.data.qvel.flat[:6], self.vel_noise),  # body vel
             np.random.normal(self.model.data.qpos.flat[7+2*idx:9+2*idx], self.pos_noise),
             np.random.normal(self.model.data.qvel.flat[6+2*idx:8+2*idx], self.vel_noise),
             np.random.normal(self.model.data.qpos.flat[7+2*n1_idx:9+2*n1_idx], self.pos_noise),
@@ -66,7 +55,7 @@ class AntLeg(Agent):
 
 class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
 
-    def __init__(self, 
+    def __init__(self,
                  n_legs=4,
                  ts=0.02,
                  integrator='RK4',
@@ -78,9 +67,7 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
                  vel_noise=1e-3,
                  force_noise=1e-3
                  ):
-        EzPickle.__init__(self, n_legs, ts, integrator, leg_length,
-                                out_file, base_file, reward_mech,
-                                pos_noise, vel_noise, force_noise)
+        EzPickle.__init__(self, n_legs, ts, integrator, leg_length, out_file, base_file, reward_mech, pos_noise, vel_noise, force_noise)
         self.n_legs = n_legs
         self.ts = ts
         self.integrator = integrator
@@ -88,7 +75,7 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
         self.out_file = out_file
         self.base_file = base_file
         self._reward_mech = reward_mech
-        
+
         self.pos_noise = pos_noise
         self.vel_noise = vel_noise
         self.force_noise = force_noise
@@ -102,21 +89,17 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
         mujoco_env.MujocoEnv.__init__(self, self.out_file_path, 5)
         self.legs = [AntLeg(self.model, i, n_legs, pos_noise=pos_noise, vel_noise=vel_noise, force_noise=force_noise) for i in range(self.n_legs)]
 
-
     @property
     def agents(self):
         return self.legs
-
 
     @property
     def reward_mech(self):
         return self._reward_mech
 
-
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
         return [seed_]
-
 
     def setup(self):
         self.seed()
@@ -125,8 +108,7 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
 
         mujoco_env.MujocoEnv.__init__(self, self.out_file_path, 5)
         self.legs = [AntLeg(self.model, i, self.n_legs, pos_noise=self.pos_noise, vel_noise=self.vel_noise,
-            force_noise=self.force_noise) for i in range(self.n_legs)]
-
+                     force_noise=self.force_noise) for i in range(self.n_legs)]
 
     def _step(self, a):
         xposbefore = self.get_body_com("torso")[0]
@@ -154,7 +136,7 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
         return np.array(obs)
 
     def reset_model(self):
-        qpos = self.init_qpos + self.np_random.uniform(size=self.model.nq,low=-.1,high=.1)
+        qpos = self.init_qpos + self.np_random.uniform(size=self.model.nq, low=-.1, high=.1)
         qvel = self.init_qvel + self.np_random.randn(self.model.nv) * .1
         self.set_state(qpos, qvel)
         return self._get_obs()
@@ -162,10 +144,7 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
     def viewer_setup(self):
         self.viewer.cam.distance = self.model.stat.extent * 0.5
 
-
-
-    def gen_xml(self, out_file="ant.xml",
-                      og_file="ant_og.xml"):
+    def gen_xml(self, out_file="ant.xml", og_file="ant_og.xml"):
         """Write .xml file for the ant problem.
         Modify original 4 leg ant defintion.
         """
@@ -174,7 +153,6 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
 
         parser = etree.XMLParser(remove_blank_text=True)
         og = etree.parse(og_file, parser)
-
 
         # add legs
         torso = og.find('.//body')
@@ -221,7 +199,6 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
                              type="capsule",
                              size="0.08",
                              fromto="0.0 0.0 0.0 "+self.leg_geom_string_2x[i])
-                            
 
         # add new motors
         actuators = og.find('actuator')
@@ -238,10 +215,8 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
 
         og.write(out_file, pretty_print=True)
 
-
     def init_geometry(self):
         self.gen_leg_geometry()
-
 
     def gen_leg_geometry(self):
         self.leg_geom = np.zeros((self.n_legs, 3))
@@ -251,10 +226,9 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
         self.angle_range = []
         for i in range(self.n_legs):
             x, y = np.round(self.get_point_on_circle(self.leg_length, i, self.n_legs), decimals=5)
-            self.leg_geom[i,:] = np.array([x,y,0.0])
+            self.leg_geom[i, :] = np.array([x, y, 0.0])
             self.leg_geom_string.append(str(x) + " " + str(y) + " " + "0.0")
             self.leg_geom_string_2x.append(str(2*x) + " " + str(2*y) + " " + "0.0")
-            # TODO (max): y no switch?
             if (x >= 0.0 and y >= 0.0):
                 self.angle_range.append("30 70")
                 self.leg_axis.append("-1 1 0")
@@ -268,14 +242,12 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
                 self.angle_range.append("-70 -30")
                 self.leg_axis.append("1 1 0")
 
-
     def get_point_on_circle(self, r, current_point, total_points):
-        theta = 2*np.pi / total_points 
+        theta = 2*np.pi / total_points
         angle = theta * current_point + np.pi/self.n_legs
         x = r * np.cos(angle)
         y = r * np.sin(angle)
         return x, y
-
 
     def set_param_values(self, lut):
         for k, v in lut.items():
@@ -284,16 +256,3 @@ class MultiAnt(EzPickle, mujoco_env.MujocoEnv):
 
     def get_param_values(self):
         return self.__dict__
-
-
-if __name__ == '__main__':
-    env = MultiAnt(4)
-    env.reset()
-    for i in range(250):
-        env.render()
-        a = np.array([l.action_space.sample() for l in env.agents])
-        o, r, done, _ = env.step(a)
-        print("\nStep:", i)
-        print("Rewards:", r)
-        if done:
-            break
