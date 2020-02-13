@@ -7,9 +7,7 @@ from ray import tune
 from ray.rllib.models import Model, ModelCatalog
 from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
-from gamma_games.piston_ball import piston_ball
-#from gamma_games.cooperative_pong import cooperative_pong
-from sisl_games.pursuit import pursuit
+from gamma.cooperative_pong import cooperative_pong
 import frame_stack
 
 tf = try_import_tf()
