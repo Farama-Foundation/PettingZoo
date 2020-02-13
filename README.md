@@ -66,8 +66,10 @@ Finally, we have a basic test to check for enviroment compliance, if you've made
 
 ```
 from pettingzoo.utils import children
-children(env)
+children(env, save_image_observations=False)
 ```
+
+Set `save_image_observations=True` if you'd like to save all of the observations of the first 2 steps of enviroment to disk as png files. This is very helpful in debugging graphical enviroments. 
 
 ## Documentation
 For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
