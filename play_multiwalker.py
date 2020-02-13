@@ -1,5 +1,5 @@
 #from sisl_games.waterworld import waterworld
-from sisl_games.multi_walker import multi_walker
+from sisl.multi_walker import multi_walker
 import ray
 from ray.tune.registry import register_trainable, register_env
 import ray.rllib.agents.dqn as dqn  # DQNTrainer
