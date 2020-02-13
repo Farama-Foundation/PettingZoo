@@ -11,7 +11,7 @@ from matplotlib.patches import Rectangle
 
 from .utils import agent_utils
 from .utils.agent_layer import AgentLayer
-from .utils.controllers import RandomPolicy
+from .utils.controllers import RandomPolicy, SingleActionPolicy
 from .utils import two_d_maps
 
 
@@ -77,10 +77,14 @@ class Pursuit():
         n_act_purs = self.pursuer_layer.get_nactions(0)
         n_act_ev = self.evader_layer.get_nactions(0)
 
-        self.evader_controller = kwargs.pop('evader_controller', RandomPolicy(n_act_purs))
-        self.pursuer_controller = kwargs.pop('pursuer_controller', RandomPolicy(n_act_ev))
-        # self.evader_controller = kwargs.pop('evader_controller', SingleActionPolicy(4))
-        # self.pursuer_controller = kwargs.pop('pursuer_controller', SingleActionPolicy(4))
+        self.freeze_evaders = kwargs.pop('freeze_evaders', False)
+        
+        if self.freeze_evaders:
+            self.evader_controller = kwargs.pop('evader_controller', SingleActionPolicy(4))
+            self.pursuer_controller = kwargs.pop('pursuer_controller', SingleActionPolicy(4))
+        else:
+            self.evader_controller = kwargs.pop('evader_controller', RandomPolicy(n_act_purs))
+            self.pursuer_controller = kwargs.pop('pursuer_controller', RandomPolicy(n_act_ev))
 
         self.current_agent_layer = np.zeros((xs, ys), dtype=np.int32)
 
