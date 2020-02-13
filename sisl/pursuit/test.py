@@ -1,8 +1,7 @@
 import numpy as np
 from .pursuit import env as _env
 import time
-
-# from .utils import two_d_maps
+import matplotlib.pyplot as plt
 
 xs = 5
 ys = 5
@@ -22,8 +21,9 @@ _quit_loop = np.array([0])
 _actions = np.array([4]*env.num_agents)
 _agent_id = np.array([0])
 # controlling only the pursuers
-import matplotlib.pyplot as plt
+
 fig, ax = plt.subplots()
+
 
 def on_key(event):
     # print('you pressed', event.key)
@@ -54,6 +54,7 @@ def on_key(event):
         # p1: down
         _actions[_agent_id[0]] = 2
 
+
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
 done = False
@@ -67,14 +68,14 @@ while not done:
         break
     # actions should be a dict of numpy arrays
     action_dict = dict(zip(env.agent_ids, _actions))
-    
+
     observation, rewards, done_dict, info = env.step(action_dict)
     done = any(list(done_dict.values()))
     total_reward += sum(rewards.values())
     print("step reward = ", sum(rewards.values()))
     if done:
         print("Total reward", total_reward, done)
-    
+
     _actions = np.array([4]*env.num_agents)
 
 # end = time.time()
@@ -94,15 +95,15 @@ env.close()
 #              break
 #          # actions should be a dict of numpy arrays
 #          action_dict = dict(zip(env.agent_ids, _actions))
-#          
+#
 #          observation, rewards, done_dict, info = env.step(action_dict)
 #          done = any(list(done_dict.values()))
 #          total_reward[i] += sum(rewards.values())
 #          # print("step reward = ", sum(rewards.values()))
 #          if done:
 #              print("Total reward of iter ", i, total_reward[i], done)
-#          
+#
 #          _actions = np.array([4]*env.num_agents)
-#  
+#
 #  print("Average over all trials = ", sum(total_reward)/num_trials)
 #  env.close()

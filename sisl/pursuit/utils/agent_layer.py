@@ -4,15 +4,16 @@ import numpy as np
 # Implements a Cooperating Agent Layer for 2D problems
 #################################################################
 
-class AgentLayer():
 
-    # constructor
-    def __init__(self,
-                 xs, # x size of map
-                 ys, # y size of map
-                 allies, # list of ally agents
-                 seed=1): # should we have a seeds array for each agent?
+class AgentLayer():
+    def __init__(self, xs, ys, allies, seed=1):
+
         """
+        xs: x size of map
+        ys: y size of map
+        allies: list of ally agents
+        seed: seed
+
         Each ally agent must support:
         - move(action)
         - current_position()
@@ -31,7 +32,7 @@ class AgentLayer():
         return self.allies[agent_idx].step(action)
 
     def set_position(self, agent_idx, x, y):
-        self.allies[agent_idx].set_position(x,y)
+        self.allies[agent_idx].set_position(x, y)
 
     def get_position(self, agent_idx):
         """
@@ -60,7 +61,7 @@ class AgentLayer():
         gs.fill(0)
         for ally in self.allies:
             x, y = ally.current_position()
-            gs[x,y] += 1    
+            gs[x, y] += 1
         return gs
 
     def get_state(self):
@@ -70,4 +71,3 @@ class AgentLayer():
             pos[idx:(idx+2)] = ally.get_state()
             idx += 2
         return pos
-

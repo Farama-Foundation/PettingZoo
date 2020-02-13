@@ -3,24 +3,19 @@ import os
 from os.path import join
 from subprocess import call
 
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
 from matplotlib.patches import Rectangle
 
-from six.moves import xrange
 from .utils import agent_utils
 from .utils.agent_layer import AgentLayer
-from .utils.controllers import RandomPolicy, SingleActionPolicy
+from .utils.controllers import RandomPolicy
 from .utils import two_d_maps
 
-#################################################################
-# Implements an Evade Pursuit Problem in 2D
-#################################################################
 
-class Pursuit():    
+class Pursuit():
 
     def __init__(self, **kwargs):
         """
@@ -59,7 +54,7 @@ class Pursuit():
         self.agent_ids = list(range(self.num_agents))
 
         self.obs_range = kwargs.pop('obs_range', 7)  # can see 7 grids around them by default
-        #assert self.obs_range % 2 != 0, "obs_range should be odd"
+        # assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
 
         self.flatten = kwargs.pop('flatten', True)
@@ -114,8 +109,7 @@ class Pursuit():
             if self.flatten:
                 self.observation_space = [spaces.Box(self.low, self.high) for _ in range(self.n_pursuers)]
             else:
-                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf,
-                                                    shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_pursuers)]
+                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf, shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_pursuers)]
             self.local_obs = np.zeros(
                 (self.n_pursuers, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
@@ -129,8 +123,7 @@ class Pursuit():
             if self.flatten:
                 self.observation_space = [spaces.Box(self.low, self.high) for _ in range(self.n_evaders)]
             else:
-                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf,
-                                                    shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_evaders)]
+                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf, shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_evaders)]
             self.local_obs = np.zeros(
                 (self.n_evaders, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]
@@ -150,7 +143,7 @@ class Pursuit():
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
 
         self.model_state = np.zeros((4,) + self.map_matrix.shape, dtype=np.float32)
-        
+
     def close(self):
         pass
 
@@ -174,7 +167,7 @@ class Pursuit():
         return self.__dict__
 
     def reset(self):
-        #print "Check:", self.n_evaders, self.n_pursuers, self.catchr
+        # print "Check:", self.n_evaders, self.n_pursuers, self.catchr
         self.pursuers_gone.fill(False)
         self.evaders_gone.fill(False)
         if self.random_opponents:
@@ -270,8 +263,8 @@ class Pursuit():
 
         if self.reward_mech == 'global':
             return obslist, [rewards.mean()] * self.n_pursuers, done_list, {'removed': ev_remove}
-        
-        return obslist, rewards, done_list, [] # info: {'removed': ev_remove} 
+
+        return obslist, rewards, done_list, []  # info: {'removed': ev_remove}
 
     def update_curriculum(self, itr):
         self.constraint_window += self.curriculum_constrain_rate  # 0 to 1 in 500 iterations
@@ -370,20 +363,7 @@ class Pursuit():
         plt.savefig(file_name, dpi=200)
 
     def reward(self):
-        """
-        Computes the joint reward for pursuers
-        """
-        # rewarded for each tagged evader
-        ps = self.pursuer_layer.get_state_matrix()  # pursuer positions
         es = self.evader_layer.get_state_matrix()  # evader positions
-        # tag reward
-        #tagged = (ps > 0) * es
-        #rewards = [
-        #    self.catchr *
-        #    tagged[self.pursuer_layer.get_position(i)[0], self.pursuer_layer.get_position(i)[1]]
-        #    for i in xrange(self.n_pursuers)
-        #]
-        # proximity reward
         rewards = [
             self.catchr * np.sum(es[np.clip(
                 self.pursuer_layer.get_position(i)[0] + self.surround_mask[:, 0], 0, self.xs - 1
@@ -395,8 +375,8 @@ class Pursuit():
 
     @property
     def is_terminal(self):
-        #ev = self.evader_layer.get_state_matrix()  # evader positions
-        #if np.sum(ev) == 0.0:
+        # ev = self.evader_layer.get_state_matrix()  # evader positions
+        # if np.sum(ev) == 0.0:
         if self.evader_layer.n_agents() == 0:
             return True
         return False
@@ -424,7 +404,6 @@ class Pursuit():
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
         # returns a flattened array of all the observations
-        n = agent_layer.n_agents()
         self.local_obs[agent_idx][0].fill(1.0 / self.layer_norm)  # border walls set to -0.1?
         xp, yp = agent_layer.get_position(agent_idx)
 
@@ -440,11 +419,10 @@ class Pursuit():
                 o = np.append(o, float(agent_idx) / self.n_agents())
             return o
         # reshape output from (C, H, W) to (H, W, C)
-        #return self.local_obs[agent_idx]
+        # return self.local_obs[agent_idx]
         return np.rollaxis(self.local_obs[agent_idx], 0, 3)
 
     def obs_clip(self, x, y):
-        # :( this is a mess, beter way to do the slicing? (maybe np.ix_)
         xld = x - self.obs_offset
         xhd = x + self.obs_offset
         yld = y - self.obs_offset
@@ -533,21 +511,3 @@ class Pursuit():
             if self.model_state[0][xn, yn] == -1:
                 tosur -= 1
         return tosur
-
-
-
-    #################################################################  
-    ################## Model Based Methods ##########################
-    #################################################################  
-
-    def idx2state(self, idx):
-        # return the index of a state
-        # assume single evader for now
-        pos = np.unravel_index(idx, [self.xs, self.ys] * (self.n_evaders + self.n_pursuers), 'F')
-        s = np.zeros(self.model_state.shape)
-        
-        return s
-
-
-    def n_states(self):
-        return (self.xs * self.ys) ** (self.n_evaders + self.n_pursuers)
