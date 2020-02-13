@@ -1,12 +1,8 @@
 import copy
 import math
-import sys
-
-import gym
 import numpy as np
 from gym import spaces
-from gym.utils import colorize, seeding
-from six.moves import xrange
+from gym.utils import seeding
 import Box2D
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
@@ -121,7 +117,7 @@ class BipedalWalker(Agent):
                 density=5.0,
                 friction=0.1,
                 categoryBits=0x002,
-                #maskBits=(0x001 & 0x002),  # collide only with ground
+                # maskBits=(0x001 & 0x002),  # collide only with ground
                 restitution=0.0)  # 0.99 bouncy
         )
         self.hull.color1 = (0.5, 0.4, 0.9)
@@ -238,12 +234,13 @@ class BipedalWalker(Agent):
     @property
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
-        idx = MAX_AGENTS if self.one_hot else 1  # TODO
+        idx = MAX_AGENTS if self.one_hot else 1
         return spaces.Box(low=-np.inf, high=np.inf, shape=(24 + 4 + 3 + idx,))
 
     @property
     def action_space(self):
         return spaces.Box(low=-1, high=1, shape=(4,))
+
 
 class MultiWalkerEnv():
 
@@ -329,7 +326,7 @@ class MultiWalkerEnv():
 
     def close(self):
         pass
-    
+
     def reset(self):
         self._destroy()
         self.world.contactListener_bug_workaround = ContactDetector(self)
@@ -340,9 +337,6 @@ class MultiWalkerEnv():
         self.prev_package_shaping = 0.0
         self.scroll = 0.0
         self.lidar_render = 0
-
-        W = VIEWPORT_W / SCALE
-        H = VIEWPORT_H / SCALE
 
         self._generate_package()
         self._generate_terrain(self.hardcore)
@@ -403,7 +397,7 @@ class MultiWalkerEnv():
                 nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
-            #shaping = 130 * pos[0] / SCALE
+            # shaping = 130 * pos[0] / SCALE
             shaping = 0.0
             shaping -= 5.0 * abs(wobs[0])
             rewards[i] = shaping - self.prev_shaping[i]
@@ -413,8 +407,7 @@ class MultiWalkerEnv():
         rewards += (package_shaping - self.prev_package_shaping)
         self.prev_package_shaping = package_shaping
 
-        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1
-                                                             ) * WALKER_SEPERATION * TERRAIN_STEP
+        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
 
         done = False
         if self.game_over or pos[0] < 0:
@@ -458,8 +451,7 @@ class MultiWalkerEnv():
                 continue
             if x1 > self.scroll / 2 + VIEWPORT_W / SCALE * self.package_scale:
                 continue
-            self.viewer.draw_polygon([(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1,
-                                                                                            1))
+            self.viewer.draw_polygon([(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1))
         for poly, color in self.terrain_poly:
             if poly[1][0] < self.scroll:
                 continue
@@ -510,7 +502,7 @@ class MultiWalkerEnv():
                 density=1.0,
                 friction=0.5,
                 categoryBits=0x004,
-                #maskBits=0x001,  # collide only with ground
+                # maskBits=0x001,  # collide only with ground
                 restitution=0.0)  # 0.99 bouncy
         )
         self.package.color1 = (0.5, 0.4, 0.9)
@@ -533,7 +525,7 @@ class MultiWalkerEnv():
             if state == GRASS and not oneshot:
                 velocity = 0.8 * velocity + 0.01 * np.sign(TERRAIN_HEIGHT - y)
                 if i > TERRAIN_STARTPAD:
-                    velocity += self.np_random.uniform(-1, 1) / SCALE  #1
+                    velocity += self.np_random.uniform(-1, 1) / SCALE
                 y += velocity
 
             elif state == PIT and oneshot:
@@ -642,4 +634,3 @@ class MultiWalkerEnv():
             x1 = min([p[0] for p in poly])
             x2 = max([p[0] for p in poly])
             self.cloud_poly.append((poly, x1, x2))
-
