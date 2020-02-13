@@ -7,8 +7,7 @@ from ray import tune
 from ray.rllib.models import Model, ModelCatalog
 from ray.tune.registry import register_env
 from ray.rllib.utils import try_import_tf
-from sisl_games.pursuit import pursuit
-from sisl_games.multi_walker import multi_walker
+from sisl.multi_walker import multi_walker
 
 tf = try_import_tf()
 
