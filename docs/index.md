@@ -1,6 +1,5 @@
 # Environment Documentation
 
-Supp
 
 ## Gamma Enviroments
 
