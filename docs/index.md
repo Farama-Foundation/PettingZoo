@@ -31,7 +31,11 @@ Supp
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
 
 ### Knights Archers Zombies ('KAZ')
 
@@ -57,7 +61,11 @@ Supp
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
 
 ### Prison
 
@@ -75,7 +83,17 @@ Supp
 
 *about arguments*
 
-*toplist*
+Discrete Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
+
+Continuous Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
 
 ### Prospector
 
@@ -93,7 +111,12 @@ Supp
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
+
 
 ## SISL Enviroments
 
@@ -135,7 +158,13 @@ Please additionally cite
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | x      | x            |   x   |   x  |
+
+Add Gupta et al and DDPG paper results too
 
 ### Multiwalker
 
@@ -153,13 +182,19 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | PPO    | UMD          |       |      |
+
+Add Gupta et al and DDPG paper results too
 
 ### Pursuit
 
 | Observations | Actions    | Agents | Manual Control |
 |--------------|------------|--------|----------------|
-| Graphical    |   Either     | 8 (+/-)| No             |
+| Graphical    |   Either   | 8 (+/-)| No             |
 
 `pettingzoo.sisl.pursuit`
 
@@ -171,7 +206,13 @@ By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | PPO    | UMD          |       |      |
+
+Add Gupta et al and DDPG paper results too
 
 ### Waterworld
 
@@ -189,7 +230,14 @@ By default there are 5 agents (purple), 5 food targets (green) and 10 poison tar
 
 *about arguments*
 
-*toplist*
+Leaderboard:
+
+| Average Total Reward | Method | Institutions | Paper | Code |
+|----------------------|--------|--------------|-------|------|
+|  x                   | PPO    | UMD          |       |      |
+
+Add Gupta et al and DDPG paper results too
+
 
 ## Other Enviroments
 
@@ -214,7 +262,6 @@ By default there are 5 agents (purple), 5 food targets (green) and 10 poison tar
 
 *about arguments*
 
-*toplist*
 
 ### Rock Paper Scissors Lizard Spock
 
@@ -229,5 +276,3 @@ By default there are 5 agents (purple), 5 food targets (green) and 10 poison tar
 *arguments*
 
 *about arguments*
-
-*toplist*
