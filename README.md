@@ -1,4 +1,4 @@
-# Overview
+# PettingZoo
 PettingZoo is library of enviroments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
 
