@@ -11,7 +11,7 @@ Please cite
 | Cooperative Pong        | Graphical    | Discrete   |   2    |
 | Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)|
 | Pistonball              | Graphical    |   Both     |   20   |
-| Prison                  |     Both     |   Both     |   20   |
+| Prison                  |     Both     |   Both     |   8    |
 | Prospector              |    Graphical | Continuous | 4 (+/-)|
 
 
@@ -58,6 +58,19 @@ Leaderboard
 | Multiwalker             |  Vector      | Discrete   | 3 (+/-)|
 | Pursuit                 | Graphical    |   Both     | 8 (+/-)|
 | Waterworld              |     Vector   |   Both     | 3 (+/-)|
+
+Please additionally cite 
+
+```
+@inproceedings{gupta2017cooperative,
+  title={Cooperative multi-agent control using deep reinforcement learning},
+  author={Gupta, Jayesh K and Egorov, Maxim and Kochenderfer, Mykel},
+  booktitle={International Conference on Autonomous Agents and Multiagent Systems},
+  pages={66--83},
+  year={2017},
+  organization={Springer}
+}
+```
 
 ### Multiant
 
