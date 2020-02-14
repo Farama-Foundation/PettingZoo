@@ -1,7 +1,5 @@
 # Environment Documentation
 
-Note nongraphical observatons that are viewable
-
 ## Gamma
 
 `pettingzoo.sisl`
@@ -10,16 +8,16 @@ Note nongraphical observatons that are viewable
 |-------------------------|--------------|------------|--------|----------------|
 | Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            |
 | Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)| No             |
-| Pistonball              | Graphical    |   Both     |   20   | Yes            |
-| Prison                  |     Both     |   Both     |   8    | Yes            |
+| Pistonball              | Graphical    |   Either     |   20   | Yes            |
+| Prison                  |     Either     |   Either     |   8    | Yes            |
 | Prospector              |    Graphical | Continuous | 4 (+/-)| Yes            |
 
 
 ### Cooperative Pong
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+| Graphical    | Discrete   |   2    | Yes            |
 
 `pettingzoo.gamma.cooperative_pong`
 
@@ -35,9 +33,9 @@ Note nongraphical observatons that are viewable
 
 ### Knights Archers Zombies ('KAZ')
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)| No             |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+|  Graphical   | Discrete   | 4 (+/-)| No             |
 
 `pettingzoo.gamma.knights_archers_zombies`
 
@@ -45,23 +43,23 @@ Note nongraphical observatons that are viewable
 
 | Environment             | Observations | Actions    | Agents | Manual Control |
 |-------------------------|--------------|------------|--------|----------------|
-| Pistonball              | Graphical    |   Both     |   20   | Yes            |
+| Pistonball              | Graphical    |   Either     |   20   | Yes            |
 
 `pettingzoo.gamma.pistonball`
 
 ### Prison
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Prison                  | Both         |   Both     |   8    | Yes            |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+| Either         |   Either     |   8    | Yes            |
 
 `pettingzoo.gamma.prison`
 
 ### Prospector
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Prospector              |    Graphical | Continuous | 4 (+/-)| Yes            |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+|    Graphical | Continuous | 4 (+/-)| Yes            |
 
 `pettingzoo.gamma.prospector`
 
@@ -74,8 +72,8 @@ Note nongraphical observatons that are viewable
 |-------------------------|--------------|------------|--------|----------------|
 | Multiant                | ?            | Continuous |   ?    | No             |
 | Multiwalker             |  Vector    (viewable)  | Discrete   | 3 (+/-)| No             |
-| Pursuit                 | Graphical    |   Both     | 8 (+/-)| No             |
-| Waterworld              |     Vector (viewable)   |   Both     | 3 (+/-)| No             |
+| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |
+| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
 
 Please additionally cite 
 
@@ -92,17 +90,17 @@ Please additionally cite
 
 ### Multiant
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Multiant                | ?            | Continuous |   ?    | No             |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+| ?            | Continuous |   ?    | No             |
 
 `pettingzoo.sisl.multiant`
 
 ### Multiwalker
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Multiwalker             |  Vector      | Discrete   | 3 (+/-)| No             |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+|  Vector      | Discrete   | 3 (+/-)| No             |
 
 `pettingzoo.sisl.multiwalker`
 
@@ -112,9 +110,9 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 
 ### Pursuit
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Pursuit                 | Graphical    |   Both     | 8 (+/-)| No             |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+| Graphical    |   Either     | 8 (+/-)| No             |
 
 `pettingzoo.sisl.pursuit`
 
@@ -124,9 +122,9 @@ By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid
 
 ### Waterworld
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Waterworld              |     Vector (viewable)   |   Both     | 3 (+/-)| No             |
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+|     Vector (viewable)   |   Either     | 3 (+/-)| No             |
 
 `pettingzoo.sisl.waterworld`
 
@@ -138,10 +136,23 @@ By default there are 5 agents (purple), 5 food targets (green) and 10 poison tar
 
 `pettingzoo.other_envs`
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Rock Paper Scissors                | Vector            | Discrete |   2    | No             |
+| Rock Paper Scissors Lizard Spock     |  Vector    (  | Discrete   | 2 | No             |
+
 ### Rock Paper Scissors
+
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+| Vector            | Discrete |   2    | No             |
 
 `pettingzoo.other_envs.rps`
 
 ### Rock Paper Scissors Lizard Spock
+
+| Observations | Actions    | Agents | Manual Control |
+|--------------|------------|--------|----------------|
+|  Vector      | Discrete   | 2 | No             |
 
 `pettingzoo.other_envs.rpsls`
