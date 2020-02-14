@@ -28,7 +28,8 @@ add n inputs and output dims to tables
 *blurb*
 
 ```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?, right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
+cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
+right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
 *about arguments*
@@ -52,7 +53,8 @@ Leaderboard:
 *blurb*
 
 ```
-knights_archers_zombies.env(spawn_rate=?, knights=2, archers=2, killable_nights=True, killable_archers=True, line_death=True, max_frames=900)
+knights_archers_zombies.env(spawn_rate=?, knights=2, archers=2, 
+killable_nights=True, killable_archers=True, line_death=True, max_frames=900)
 ```
 
 *about arguments*
@@ -78,7 +80,9 @@ Leaderboard:
 Arguments:
 
 ```
-pistonball.env(local_ratio=.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass = .75, ball.friction=.3, ball.elasticity=1.5, max_frames=900)
+pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
+starting_angular_momentum=True, ball_mass = .75, ball.friction=.3,
+ball.elasticity=1.5, max_frames=900)
 ```
 
 *about arguments*
@@ -103,7 +107,8 @@ Leaderboard:
 
 Arguments:
 ```
-prison.env(graphical_output=True, discrete_input=True, syncronized_start=False, max_frames=900)
+prison.env(graphical_output=True, discrete_input=True,
+syncronized_start=False, max_frames=900)
 ```
 
 *about arguments*
