@@ -1,9 +1,29 @@
-# Enviroment Documentation
+# Environment Documentation
 
+Graphical
+
+Vector
+
+Discrete
+
+Continuous
+
+Argents
+
+Variable Agents
 
 ## Gamma
 
 `pettingzoo.sisl`
+
+| Environment             | Observations | Actions    | Agents |
+|-------------------------|--------------|------------|--------|
+| Cooperative Pong        | Graphical    | Discrete   |   2    |
+| Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)|
+| Pistonball              | Graphical    |   Both     |   20   |
+| Prison                  |     Both     |   Both     |   20   |
+| Prospector              |    Graphical | Continuous | 4 (+/-)|
+
 
 ### Cooperative Pong
 
