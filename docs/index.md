@@ -107,8 +107,8 @@ Leaderboard:
 
 Arguments:
 ```
-prison.env(graphical_output=True, discrete_input=True,
-syncronized_start=False, max_frames=900)
+prison.env(graphical_output=True, discrete_input=True, syncronized_start=False,
+max_frames=900)
 ```
 
 *about arguments*
@@ -235,7 +235,12 @@ By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid
 Arguments:
 
 ```
-pursuit.env(sample_maps=False, reward_mech='local', n_evaders=30, n_pursuers=8, obs_range=7, layer_norm=10, n_catch=2, random_opponents=False, max_opponents=10, freeze_evaders=False, catchr=0.01, caughtr=-0.01, term_pursuit=5.0, term_evader=-5.0, urgency_reward=0.0, include_id=True, initial_config={}, surround=True, constraint_window=1.0, cirriculum_remove_every=500, cirriculum_constrain_rate = 0.0, cirriculum_turn_off_shaping=np.inf)
+pursuit.env(sample_maps=False, reward_mech='local', n_evaders=30, n_pursuers=8,
+obs_range=7, layer_norm=10, n_catch=2, random_opponents=False, max_opponents=10,
+freeze_evaders=False, catchr=0.01, caughtr=-0.01, term_pursuit=5.0, term_evader=-5.0,
+urgency_reward=0.0, include_id=True, initial_config={}, surround=True,
+constraint_window=1.0, cirriculum_remove_every=500, cirriculum_constrain_rate = 0.0,
+cirriculum_turn_off_shaping=np.inf)
 ```
 
 Remove ones that people can't use, or should never use
