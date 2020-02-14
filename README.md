@@ -58,6 +58,8 @@ from pettingzoo.utils import wrapper
 env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=True, flatten=False)
 ```
 
+Only games with a graphical observation space can be greyscaled, downscaled, or flattened.
+
 Additionally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
 
 ```
@@ -69,14 +71,16 @@ Set `save_image_observations=True` if you want to save all of the observations o
 
 ## Demos
 
-If you want to try to play a game to get an impression for how it works, you can play games that supports manual cotrol via
+Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered. 
+
+Of the games that can be played, many can be played by humans, and functionality to do so is included.
 
 ```
 from pettingzoo.gamma.pistonball import pistonball
 pistonball.manual_control([enviroment specs])
 ```
 
-If you want to watch an enviroment run with random actions taken for all the agents, for enviroments that support viewing, run
+For viewable games that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions, via:
 
 ```
 from pettingzoo.utils import random_demo
