@@ -1,6 +1,22 @@
 # Environment Documentation
 
+None done:
 add n inputs and output dims to tables
+Add images
+About arguments
+
+Partially done:
+Write gamma blurbs
+Multiwalker arguments
+add 500 frame flag to every arguments
+
+
+Game work:
+Remove arguments that people can't use, or should never use from SISL games (ally_layer and oponent layer in pursuit?)
+Handle 500 a flag in all sisl games
+Move flatten functionality out of pursuit
+Have multiwalker accept arguments
+Add argument handling for cooperative pong, pistonball, KAZ
 
 ## Gamma Enviroments
 
@@ -248,10 +264,7 @@ surround=True, constraint_window=1.0, cirriculum_remove_every=500,
 cirriculum_constrain_rate = 0.0, cirriculum_turn_off_shaping=np.inf)
 ```
 
-Remove ones that people can't use, or should never use
-Make 500 a flag
-ally_layer? Oponent layer?
-Move flatten functionality out of game
+*about arguments*
 
 Leaderboard:
 
@@ -259,7 +272,6 @@ Leaderboard:
 |----------------------|--------|--------------|-------|------|
 |  x                   | PPO    | UMD          |       |      |
 
-Add Gupta et al and DDPG paper results too
 
 ### Waterworld
 
