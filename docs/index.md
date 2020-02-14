@@ -1,49 +1,67 @@
 # Environment Documentation
 
-Please cite
+Note nongraphical observatons that are viewable
 
 ## Gamma
 
 `pettingzoo.sisl`
 
-| Environment             | Observations | Actions    | Agents |
-|-------------------------|--------------|------------|--------|
-| Cooperative Pong        | Graphical    | Discrete   |   2    |
-| Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)|
-| Pistonball              | Graphical    |   Both     |   20   |
-| Prison                  |     Both     |   Both     |   8    |
-| Prospector              |    Graphical | Continuous | 4 (+/-)|
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            |
+| Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)| No             |
+| Pistonball              | Graphical    |   Both     |   20   | Yes            |
+| Prison                  |     Both     |   Both     |   8    | Yes            |
+| Prospector              |    Graphical | Continuous | 4 (+/-)| Yes            |
 
 
 ### Cooperative Pong
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            |
+
 `pettingzoo.gamma.cooperative_pong`
 
-Image
+*image*
 
-Arguments
+*arguments*
 
-About arguments
+*about arguments*
 
-Blurb
+*blurb*
 
-Cite
-
-Leaderboard
+*toplist*
 
 ### Knights Archers Zombies ('KAZ')
+
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)| No             |
 
 `pettingzoo.gamma.knights_archers_zombies`
 
 ### Pistonball
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Pistonball              | Graphical    |   Both     |   20   | Yes            |
+
 `pettingzoo.gamma.pistonball`
 
 ### Prison
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Prison                  | Both         |   Both     |   8    | Yes            |
+
 `pettingzoo.gamma.prison`
 
 ### Prospector
+
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Prospector              |    Graphical | Continuous | 4 (+/-)| Yes            |
 
 `pettingzoo.gamma.prospector`
 
@@ -52,12 +70,12 @@ Leaderboard
 
 `pettingzoo.sisl`
 
-| Environment             | Observations | Actions    | Agents |
-|-------------------------|--------------|------------|--------|
-| Multiant                | ?            | Continuous |   ?    |
-| Multiwalker             |  Vector      | Discrete   | 3 (+/-)|
-| Pursuit                 | Graphical    |   Both     | 8 (+/-)|
-| Waterworld              |     Vector   |   Both     | 3 (+/-)|
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Multiant                | ?            | Continuous |   ?    | No             |
+| Multiwalker             |  Vector    (viewable)  | Discrete   | 3 (+/-)| No             |
+| Pursuit                 | Graphical    |   Both     | 8 (+/-)| No             |
+| Waterworld              |     Vector (viewable)   |   Both     | 3 (+/-)| No             |
 
 Please additionally cite 
 
@@ -74,9 +92,17 @@ Please additionally cite
 
 ### Multiant
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Multiant                | ?            | Continuous |   ?    | No             |
+
 `pettingzoo.sisl.multiant`
 
 ### Multiwalker
+
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Multiwalker             |  Vector      | Discrete   | 3 (+/-)| No             |
 
 `pettingzoo.sisl.multiwalker`
 
@@ -86,6 +112,10 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 
 ### Pursuit
 
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Pursuit                 | Graphical    |   Both     | 8 (+/-)| No             |
+
 `pettingzoo.sisl.pursuit`
 
 *image*
@@ -93,6 +123,10 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames.
 
 ### Waterworld
+
+| Environment             | Observations | Actions    | Agents | Manual Control |
+|-------------------------|--------------|------------|--------|----------------|
+| Waterworld              |     Vector (viewable)   |   Both     | 3 (+/-)| No             |
 
 `pettingzoo.sisl.waterworld`
 
