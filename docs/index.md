@@ -52,7 +52,7 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -77,7 +77,7 @@ killable_knights=True, killable_archers=True, line_death=True, max_frames=900)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -105,7 +105,7 @@ ball.elasticity=1.5, max_frames=900)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -131,13 +131,13 @@ max_frames=900)
 
 Discrete Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
 Continuous Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -159,7 +159,7 @@ Continuous Leaderboard:
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -206,7 +206,7 @@ Please additionally cite
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | x      | x            |   x   |   x  |
 
@@ -235,7 +235,7 @@ Refactor game to take arguments
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | PPO    | UMD          |       |      |
 
@@ -268,7 +268,7 @@ cirriculum_constrain_rate = 0.0, cirriculum_turn_off_shaping=np.inf)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | PPO    | UMD          |       |      |
 
@@ -297,7 +297,7 @@ reward_mech='local', addid=True, speed_features=True)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institutions | Paper | Code |
+| Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|--------------|-------|------|
 |  x                   | PPO    | UMD          |       |      |
 
