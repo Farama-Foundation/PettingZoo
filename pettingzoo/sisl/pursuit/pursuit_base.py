@@ -241,11 +241,11 @@ class Pursuit():
             for i, a in enumerate(act_idxs):
                 agent_layer.move_agent(i, a)
 
-        # move opponents
-        for i in range(opponent_layer.n_agents()):
-            # controller input should be an observation, but doesn't matter right now
-            action = opponent_controller.act(self.model_state)
-            opponent_layer.move_agent(i, action)
+        # # move opponents
+        # for i in range(opponent_layer.n_agents()):
+        #     # controller input should be an observation, but doesn't matter right now
+        #     action = opponent_controller.act(self.model_state)
+        #     opponent_layer.move_agent(i, action)
 
         # model state always has form: map, purusers, opponents, current agent id
         self.model_state[0] = self.map_matrix
@@ -254,6 +254,18 @@ class Pursuit():
 
         # remove agents that are caught
         ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
+
+        # move opponents after computing the results of the action
+        # model state always has form: map, purusers, opponents, current agent id
+        self.model_state[0] = self.map_matrix
+        self.model_state[1] = self.pursuer_layer.get_state_matrix()
+        self.model_state[2] = self.evader_layer.get_state_matrix()
+
+        # move opponents
+        for i in range(opponent_layer.n_agents()):
+            # controller input should be an observation, but doesn't matter right now
+            action = opponent_controller.act(self.model_state)
+            opponent_layer.move_agent(i, action)
 
         obslist = self.collect_obs(agent_layer, gone_flags)
 
