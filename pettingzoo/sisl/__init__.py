@@ -19,3 +19,8 @@ class Agent(object):
 
     def __str__(self):
         return '<{} instance>'.format(type(self).__name__)
+
+
+from .pursuit import pursuit 
+from .waterworld import waterworld
+from .multiwalker import multiwalker
