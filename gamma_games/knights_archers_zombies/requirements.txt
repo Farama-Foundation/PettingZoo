@@ -1,8 +1,0 @@
-pygame==2.0.0.dev6
-ray==0.8.0
-gym>=0.15.4
-numpy>=1.18.0
-tensorflow-probability==0.7.0
-tensorflow==1.14.0
-psutil
-ray[rllib]
