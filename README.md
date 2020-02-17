@@ -23,7 +23,7 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 Using environments in PettingZoo is very similar to Gym, i.e. you would run 
 
 ```
-from pettingzoo.gamma.pistonball import pistonball
+from pettingzoo.gamma import pistonball
 env = pistonball.env([custom enviroment parameters])
 ```
 
