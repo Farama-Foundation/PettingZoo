@@ -1,4 +1,4 @@
-from .piston_ball import env as _env
+from .pistonball import env as _env
 import time
 import numpy as np
 import pygame
