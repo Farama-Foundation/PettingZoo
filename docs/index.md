@@ -6,10 +6,11 @@ Add images
 About arguments
 
 Partially done:
-Write gamma blurbs
+Write pistonball and prison blurbs
+Review KAZ blurb
 Multiwalker arguments
-add 500 frame flag to every arguments
-
+Add 500 frame flag to every arguments
+Review cooperative pong blurb once done
 
 Game work:
 Remove arguments that people can't use, or should never use from SISL games (ally_layer and oponent layer in pursuit?)
