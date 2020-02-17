@@ -9,7 +9,7 @@ from src.players import Knight, Archer
 from src.zombie import Zombie
 from src.weapons import Arrow, Sword
 import numpy as np
-import skimage
+from skimage import measure
 import matplotlib.pyplot as plt
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -344,7 +344,7 @@ class env(MultiAgentEnv):
                 cropped = np.vstack((cropped, pad))
 
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            cropped = skimage.measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40
+            cropped = measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40
 
             unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
             observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
