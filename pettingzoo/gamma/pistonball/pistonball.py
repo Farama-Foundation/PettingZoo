@@ -8,7 +8,7 @@ import pymunk.pygame_util
 import random
 import math
 import numpy as np
-import skimage
+from skimage import measure
 import gym
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -94,7 +94,7 @@ class env(MultiAgentEnv):
         observation = observation[257:457, 40:920, 2]  # take blue channel only instead of doing full greyscale
 
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-        observation = skimage.measure.block_reduce(observation, block_size=(4, 4), func=mean)
+        observation = measure.block_reduce(observation, block_size=(4, 4), func=mean)
 
         observations = {}
 
