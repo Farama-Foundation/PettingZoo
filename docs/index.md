@@ -60,7 +60,7 @@ Leaderboard:
 
 | Observations | Actions    | Agents | Manual Control |
 |--------------|------------|--------|----------------|
-|  Graphical   | Discrete   | 4 (+/-)| No             |
+|  Graphical   | Discrete   | 4 (+/-)| Yes            |
 
 `pettingzoo.gamma.knights_archers_zombies`
 
