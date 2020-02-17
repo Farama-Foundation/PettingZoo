@@ -1,9 +1,9 @@
-import game
+import knights_archers_zombies
 import time
 import pygame
 
 if __name__ == "__main__":
-    env = game.env(2, 2)
+    env = knights_archers_zombies.env(2, 2)
     done = False
 
     cur_agent = 0
