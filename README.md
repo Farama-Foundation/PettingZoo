@@ -76,7 +76,7 @@ Often, you want to be able to play a game or watch it play to get an impression 
 Of the games that can be played, many can be played by humans, and functionality to do so is included.
 
 ```
-from pettingzoo.gamma.pistonball import pistonball
+from pettingzoo.gamma import pistonball
 pistonball.manual_control([enviroment specs])
 ```
 
