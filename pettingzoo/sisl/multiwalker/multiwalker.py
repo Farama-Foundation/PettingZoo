@@ -1,4 +1,4 @@
-from .multi_walker_base import MultiWalkerEnv as _env
+from .multiwalker_base import MultiWalkerEnv as _env
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 import numpy as np
 
@@ -17,6 +17,8 @@ class env(MultiAgentEnv):
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         self.steps = 0
+        self.display_wait = 0.04
+
         self.reset()
 
     def convert_to_dict(self, list_of_list):

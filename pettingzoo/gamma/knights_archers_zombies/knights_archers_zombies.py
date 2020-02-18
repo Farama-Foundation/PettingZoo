@@ -98,6 +98,8 @@ class env(MultiAgentEnv):
         for i in range(num_archers + num_knights):
             self.agent_ids.append(i)
 
+        self.display_wait = 0.0
+
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
         if sword_spawn_rate > 0:

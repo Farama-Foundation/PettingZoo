@@ -18,6 +18,7 @@ class env(MultiAgentEnv):
         self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
         self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
         self.steps = 0
+        self.display_wait = 0.0
 
         self.reset()
 
