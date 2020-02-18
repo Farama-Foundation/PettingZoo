@@ -109,15 +109,14 @@ The following games are under active development:
 
 * gamma/prospector (Rui)
 * gamma/prison (Mario)
-* sisl/multiant
 * classic/rock_paper_scissors (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
+* clasic/checkers (Tianchen)
 * mpe/*
 
 Development has not yet started on the following games:
 
 * classic/backgammon
-* classic/checkers
 * classic/chess
 * classic/connect_four
 * classic/mahjong (rlcard)
