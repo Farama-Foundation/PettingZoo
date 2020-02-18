@@ -54,7 +54,7 @@ We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
-env = wrapper(env, frame_stacking=4, color_reduction='', downscale=(x_factor,y_factor), flatten=False,
+env = wrapper(env, frame_stacking=4, color_reduction='', down_scale=(x_factor,y_factor), flatten=False,
 scale=(min,max), nan_handling=False)
 ```
 
