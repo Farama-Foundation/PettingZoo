@@ -331,34 +331,37 @@ class env(MultiAgentEnv):
 
         observations = {}
         for i in range(len(self.agent_list)):
-            min_x = agent_positions[i][1] - (32 * 8)
-            max_x = agent_positions[i][1] + (32 * 8)
-            min_y = agent_positions[i][0] - (32 * 8)
-            max_y = agent_positions[i][0] + (32 * 8)
-            cropped = observation[max(min_y, 0):min(max_y, self.HEIGHT), max(min_x, 0):min(max_x, self.WIDTH)]
+            if not self.agent_list[i].alive:
+                observations[self.agent_ids[i]] = np.zeros(2704)
+            else:
+                min_x = agent_positions[i][1] - (32 * 8)
+                max_x = agent_positions[i][1] + (32 * 8)
+                min_y = agent_positions[i][0] - (32 * 8)
+                max_y = agent_positions[i][0] + (32 * 8)
+                cropped = observation[max(min_y, 0):min(max_y, self.HEIGHT), max(min_x, 0):min(max_x, self.WIDTH)]
 
-            # Add blackness to the left side of the window
-            if min_x < 0:
-                pad = np.zeros((abs(min_x)) * cropped.shape[0]).reshape(cropped.shape[0], abs(min_x))
-                cropped = np.hstack((pad, cropped))
-            # Add blackness to the right side of the window
-            if max_x > self.WIDTH:
-                pad = np.zeros((max_x - self.WIDTH) * cropped.shape[0]).reshape(cropped.shape[0], max_x - self.WIDTH)
-                cropped = np.hstack((cropped, pad))
-            # Add blackness to the top side of the window
-            if min_y < 0:
-                pad = np.zeros(abs(min_y) * cropped.shape[1]).reshape(abs(min_y), cropped.shape[1])
-                cropped = np.vstack((pad, cropped))
-            # Add blackness to the bottom side of the window
-            if max_y > self.HEIGHT:
-                pad = np.zeros((max_y - self.HEIGHT) * cropped.shape[1]).reshape(max_y - self.HEIGHT, cropped.shape[1])
-                cropped = np.vstack((cropped, pad))
+                # Add blackness to the left side of the window
+                if min_x < 0:
+                    pad = np.zeros((abs(min_x)) * cropped.shape[0]).reshape(cropped.shape[0], abs(min_x))
+                    cropped = np.hstack((pad, cropped))
+                # Add blackness to the right side of the window
+                if max_x > self.WIDTH:
+                    pad = np.zeros((max_x - self.WIDTH) * cropped.shape[0]).reshape(cropped.shape[0], max_x - self.WIDTH)
+                    cropped = np.hstack((cropped, pad))
+                # Add blackness to the top side of the window
+                if min_y < 0:
+                    pad = np.zeros(abs(min_y) * cropped.shape[1]).reshape(abs(min_y), cropped.shape[1])
+                    cropped = np.vstack((pad, cropped))
+                # Add blackness to the bottom side of the window
+                if max_y > self.HEIGHT:
+                    pad = np.zeros((max_y - self.HEIGHT) * cropped.shape[1]).reshape(max_y - self.HEIGHT, cropped.shape[1])
+                    cropped = np.vstack((cropped, pad))
 
-            mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            cropped = measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40
+                mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
+                cropped = measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40 FIXME: This is not scaling it to 40x40. There was some bug with the image downscaling and Justin told me (Niall) to just push it with the bug and he would figure it out. this scale to (10, 10) was a suggest Justin wanted me to try before he told me to push it with the bug. If you want it to be 40x40, change the (10, 10) to (13, 13)
 
-            unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
-            observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
+                unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
+                observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
 
         return observations
 
