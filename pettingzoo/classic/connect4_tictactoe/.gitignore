@@ -1,0 +1,17 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+.DS_Store
+*.pyc
+ann/*
+models/*
+*.h5*
+*.pickle
+*.pkl
+*.bkp
