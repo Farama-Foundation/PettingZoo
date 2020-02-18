@@ -55,7 +55,7 @@ We include popular preprocessing methods out of the box:
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=(x_factor,y_factor), flatten=False,
-scale=(min,max), continuous_cap=(min,max))
+scale=(min,max), nan_handling=False)
 ```
 
 Only games with a graphical observation space can be greyscaled, downscaled, or flattened.
