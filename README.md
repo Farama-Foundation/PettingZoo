@@ -1,5 +1,5 @@
 # PettingZoo
-PettingZoo is library of enviroments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
+PettingZoo is Python library of enviroments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
 
 ## Games and Installation
@@ -16,7 +16,7 @@ PettingZoo breaks its games down into several categories, largely including game
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
-We only support Python 3.6, 3.7 and 3.8. We do not support Python 2.7, though it will probably mostly work on it for now.
+We support Python 3.6, 3.7 and 3.8.
 
 ## Base API
 
