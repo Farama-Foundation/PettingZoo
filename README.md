@@ -55,7 +55,7 @@ We include popular preprocessing methods out of the box:
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=(x_factor,y_factor), flatten=False,
-action_cropping=False, obs_padding=False)
+action_cropping=False, obs_padding=False, normalize=False, continuous_cap=(min,max))
 ```
 
 Only games with a graphical observation space can be greyscaled, downscaled, or flattened. action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogenous action spaces.
