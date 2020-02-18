@@ -1,0 +1,11 @@
+ARG PROJECT
+FROM gcr.io/$PROJECT/cc-base:latest
+
+WORKDIR /app
+# Now bring in the rest of our code; changing our code will only trigger rebuilds below here
+COPY staging /app
+COPY staging/rl_loop/ /app
+COPY staging/mask_flags.py /app
+
+RUN bazel build -c opt cc/selfplay --define=tf=1 --define=tpu=0 --define=bt=1
+CMD ["sh", "-c", "python rl_loop/selfplay.py --bucket_name=$BUCKET_NAME --mode=cc"]

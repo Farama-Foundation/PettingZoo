@@ -1,0 +1,8 @@
+# One line per flag
+# For example --someflag=value
+--conv_width=8
+--fc_width=2
+--trunk_layers=1
+--cbt_project=foo
+--cbt_instance=bar
+--cbt_table=baz

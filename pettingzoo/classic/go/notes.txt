@@ -1,0 +1,84 @@
+
+== v5 notes
+
+1. 3/4 of the way through v125, change squash from 0.95 => 0.98, change temp cutoff
+to move 30 (from 31, because odd number = bias against black)
+
+1. v192 -- learning rate erroneously cut to 0.001.  v207 returned to 0.01.
+(v206 trained with 0.001, v207 @0.01)
+
+1. v231 -- moved #readouts to 900 from 800.
+
+1. v 295-6 -- move shuffle buffer to 1M from 200k
+
+1. v347 -- changed filter amount to 0.02.  (first present for v347)
+
+1. v348 reverted #4
+
+1. v352 change filter to 0.03 and move shuffle buffer back to 200k
+
+1. during v354 (for 355) change steps per generation to 1M from 2M, shuffle
+buffer down to 100k
+
+1. 23.2M steps -- change l2_strength to 0.0002 (from 0.0001)
+
+1. v360ish -- entered experimental mode; freely adjusted learning rate up and
+down, adjusted batch size, etc, to see if valnet divergence could be fixed.
+
+
+== v7a
+
+Rolled back to v5 model 173 and continued from there; first v7 model was
+174.  Moved minimum games before starting training
+from 5k up to 10k.
+
+1. for 215, adjusted validation set to be last 30 models instead of last 50.
+It's hard coded and non-adaptive but it's an easy fix to make on a sunday :)
+
+1. Easy change on a sunday = famous last words.  Also at 215, also discovered
+haven't been writing holdout games for models 174-onwards.  Oops.  Should make
+for an interesting spike on tensorboard's validation error now as the
+validation set will be entirely games from 215.  This new cc image ends up
+causing disk pressure on the nodes leading to all the jobs stopping.  Sigh.
+
+1. 217 onwards -- resign disabled amount is 10%, not 5%.
+
+ROLLBACK
+
+== v7
+
+Resign-disabled percent moved from 5% => 20%
+model 190: move resign threshold 0.89 => .85
+model 206: rotation in training on. (from 5/20 00:20 PST)
+model 230ish: move resign threshold 0.85 => .90
+model 242: cut learning rate from 1e-3 to 1e-4 (step 11.47M)
+model 302: resign threshold 0.89=>0.91
+model 330: learning rate cut from 1e-4 to 3e-5
+model 375: learning rate cut from 3e-5 to 1e-5
+model 380: learning rate increased from 1e-5 to 1e-4
+model 389: learning rate increased from 1e-4 to 3e-4
+model 409: learning rate decreased from 3e-4 to 3e-5
+model 433: batch norm momentum decreased from 0.997 to 0.95
+model 450: learning rate increased from 3e-5 to 1e-4
+model 456: learning rate decreased from 1e-4 to 3e-5
+model 476: dropped-in 20x256 model trained via running start.  Learning rate to
+e3-4
+model 506: learning rate to 1e-5
+model 508: learning rate to 4e-5
+
+
+== v12
+
+chunk 567 and onwards: no moves after move #400
+857 onwards use 750k window size + pick3
+LR cut in half at v12-792
+
+
+"if you take the system as a combination of "the topology" with "a motion
+across the topology"
+for a large learning rate it makes sense that would be unstable
+for a small learning rate, it makes sense that you would find a stable minima
+and get stuck.
+
+suggests making data window larger as the LR drops.
+

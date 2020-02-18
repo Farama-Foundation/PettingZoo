@@ -1,0 +1,19 @@
+ARG PROJECT
+FROM gcr.io/$PROJECT/cc-base:latest
+
+# Tensorflow is needed for gfile
+RUN pip3 install tensorflow==1.15.0
+WORKDIR /app
+
+ARG RUNMODE
+
+ENV RUNMODE=$RUNMODE
+ENV BOARD_SIZE="19"
+
+COPY staging /app
+
+COPY staging/rl_loop/ /app
+COPY staging/mask_flags.py /app
+
+RUN bazel build -c opt cc/selfplay --define=tf=1 --define=tpu=1 --define=bt=1
+CMD ["sh", "-c", "python rl_loop/selfplay.py --bucket_name=$BUCKET_NAME --mode=$RUNMODE"]
