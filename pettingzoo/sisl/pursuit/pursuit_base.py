@@ -149,7 +149,8 @@ class Pursuit():
         self.model_state = np.zeros((4,) + self.map_matrix.shape, dtype=np.float32)
 
     def close(self):
-        pass
+        if self.renderOn:
+            plt.close()
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #
