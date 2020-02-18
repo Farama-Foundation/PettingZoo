@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "ESNEXT",
+        "module": "system",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "minigui/static/",
+        "sourceMap": true,
+	"module": "amd"
+    },
+    "include": [
+        "minigui/*.ts"
+    ],
+    "exclude": [
+    ]
+}
+

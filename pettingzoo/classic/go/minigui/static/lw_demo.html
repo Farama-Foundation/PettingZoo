@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+  <head>
+    <title>Minigo: LW demo</title>
+    <link href="style.css" rel="stylesheet">
+    <script type="text/javascript" src="socketio/socket.io.min.js"></script>
+    <script data-main="demo" src="require/require.js"></script>
+    <style>
+      .minigui {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        height: 90vh;
+        margin-top: 5vh;
+      }
+
+      #main-board { width: 100%; height: 100%; }
+      .main-board-pad { height: 100%; width: 90vh; padding: 3vh; }
+
+      .button {
+        font-size: 1.3vh;
+        border-radius: 0.6vh;
+        width: 7vh;
+        height: 4vh;
+      }
+
+      #black-player { background-color: #222; color: #eee; }
+      #white-player { background-color: #fff; color: #222; }
+      #pass { background-color: #9c9389; color: #222; }
+      #reset { background-color: #8c6845; color: #ffe; }
+
+      .graph { width: 34vh; height: 19vh; }
+      .log-container { width: 34vh; height: 61vh; }
+      .log { height: calc(61vh - 24px); font-size: 0.7vh; }
+      .console-wrapper { height: 24px; }
+      .console-prompt { font-size: 10px; width: 16px; }
+      .console { font-size: 10px; width: calc(34vh - 16px); }
+    </style>
+  </head>
+
+  <body>
+    <div class="minigui"
+         data-gtp-report_search_interval="250">
+      <div class="main-board-pad board"><div id="main-board"></div></div>
+      <div class="sp-3vh"></div>
+      <div class="fs-0">
+        <div class="fs-0">
+          <div id="black-player" class="button">Human</div>
+          <div class="sp-2vh"></div>
+          <div id="white-player" class="button">Human</div>
+          <div class="sp-2vh"></div>
+          <div id="pass" class="button">Pass</div>
+          <div class="sp-2vh"></div>
+          <div id="reset" class="button">Reset</div>
+        </div>
+        <div class="sp-3vh"></div>
+        <div id="winrate-graph" class="graph"></div>
+        <div class="sp-3vh"></div>
+        <div class="log-container">
+          <div id="log" class="log"></div>
+          <div class="console-wrapper">
+            <div class="console-prompt">&gt;</div><div contenteditable id="console" class="console"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
