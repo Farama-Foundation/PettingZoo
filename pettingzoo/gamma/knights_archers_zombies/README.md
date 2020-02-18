@@ -27,6 +27,8 @@ Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' k
 Press 'M' key to spawn a new knight.
 
 # Credit:
-Purchased pixel art:
+Pixel art purchased from:
+
 https://finalbossblues.itch.io/time-fantasy-monsters
+
 https://finalbossblues.itch.io/icons
