@@ -55,10 +55,10 @@ We include popular preprocessing methods out of the box:
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env,frame_stacking=4, grey_scale=True, downscale=(x_factor,y_factor), flatten=False,
-action_cropping=False, obs_padding=False, normalize=False, continuous_cap=(min,max))
+normalize=False, continuous_cap=(min,max))
 ```
 
-Only games with a graphical observation space can be greyscaled, downscaled, or flattened. action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogenous action spaces.
+Only games with a graphical observation space can be greyscaled, downscaled, or flattened.
 
 Additionally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
 
@@ -128,6 +128,9 @@ Development has not yet started on the following games:
 * magent/*
 * atari/*
 * robotics/*
+
+Future wrapper work:
+"action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogenous action spaces."
 
 ## Requirements
 
