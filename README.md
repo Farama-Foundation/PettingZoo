@@ -6,13 +6,13 @@ PettingZoo is library of enviroments for conducting research in multi-agent rein
 
 PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
 
-* gamma: Graphical games developed by us, in PyGame
-* sisl: An eclectic collection of 4 games developed by SISL, originally from https://github.com/sisl/MADRL
-* mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
-* magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
-* robotics: A collection of 3D mujuco enviroments for multiagent robot simulations
 * classic: Enviroments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
+* gamma: Graphical games developed by us, in PyGame. All games are cooperative, and many pose features very challenging to reinforcement learning.
+* magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
+* mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
+* robotics: A collection of 3D multiagent robot enviroments, simulated with PyBullet
+* sisl: An eclectic collection of 4 games developed by SISL, originally from https://github.com/sisl/MADRL
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
