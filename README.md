@@ -10,10 +10,9 @@ PettingZoo breaks its games down into several categories, largely including game
 * sisl: An eclectic collection of 4 games developed by SISL, originally from https://github.com/sisl/MADRL
 * mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
 * magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
-* card: A set of card games that can be played.
 * atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
 * mujuco: A collection of 3D mujuco enviroments for multiagent robot simulations
-* other-envs: A small collection of enviroments that don't fit anywhere else.
+* classic: Enviroments for classical games that two humans play against each other (rock paper scissors, chess, popker, go, etc.)
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
