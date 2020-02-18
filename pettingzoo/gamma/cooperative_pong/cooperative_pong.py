@@ -11,7 +11,6 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 KERNEL_WINDOW_LENGTH = 10
 
-
 def get_image(path):
     image = pygame.image.load(path)
     return image
@@ -423,3 +422,5 @@ class env(MultiAgentEnv):
         self.score = self.env.score
 
         return observation_dict, reward_dict, done_dict, info_dict
+
+from .manual_test import manual_control

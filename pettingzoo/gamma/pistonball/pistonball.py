@@ -263,3 +263,5 @@ class env(MultiAgentEnv):
         doneDict['__all__'] = self.done
 
         return observation, rewardDict, doneDict, {}
+
+from .manual_test import manual_control

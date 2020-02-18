@@ -5,14 +5,20 @@ sys.dont_write_bytecode = True
 import pygame
 import random
 import pygame.gfxdraw
-from src.players import Knight, Archer
-from src.zombie import Zombie
-from src.weapons import Arrow, Sword
+from .src.players import Knight, Archer
+from .src.zombie import Zombie
+from .src.weapons import Arrow, Sword
 import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
+
+def get_image(path):
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + '/' + path)
+    return image
 
 class env(MultiAgentEnv):
     def __init__(self, num_archers=2, num_knights=2):
@@ -57,14 +63,14 @@ class env(MultiAgentEnv):
         self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.clock = pygame.time.Clock()
-        self.left_wall = pygame.image.load(os.path.join('img', 'left_wall.png'))
-        self.right_wall = pygame.image.load(os.path.join('img', 'right_wall.png'))
+        self.left_wall = get_image(os.path.join('img', 'left_wall.png'))
+        self.right_wall = get_image(os.path.join('img', 'right_wall.png'))
         self.right_wall_rect = self.right_wall.get_rect()
         self.right_wall_rect.left = self.WIDTH - self.right_wall_rect.width
-        self.floor_patch1 = pygame.image.load(os.path.join('img', 'patch1.png'))
-        self.floor_patch2 = pygame.image.load(os.path.join('img', 'patch2.png'))
-        self.floor_patch3 = pygame.image.load(os.path.join('img', 'patch3.png'))
-        self.floor_patch4 = pygame.image.load(os.path.join('img', 'patch4.png'))
+        self.floor_patch1 = get_image(os.path.join('img', 'patch1.png'))
+        self.floor_patch2 = get_image(os.path.join('img', 'patch2.png'))
+        self.floor_patch3 = get_image(os.path.join('img', 'patch3.png'))
+        self.floor_patch4 = get_image(os.path.join('img', 'patch4.png'))
 
         self.agent_list = []
         self.agent_ids = []
@@ -555,3 +561,5 @@ class env(MultiAgentEnv):
 
         for i in range(self.num_archers + self.num_knights):
             self.agent_ids.append(i)
+
+from .manual_test import manual_control
