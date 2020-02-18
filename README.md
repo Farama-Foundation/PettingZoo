@@ -109,17 +109,15 @@ The following games are under active development:
 * gamma/prospector
 * gamma/prison
 * sisl/multiant
-* other_envs/rock_paper_scissors
-* other_envs/rock_paper_scissors_lizard_spock
+* classic/rock_paper_scissors
+* classic/rock_paper_scissors_lizard_spock
 * mpe/*
 
 Development has not yet started on the following games:
 
 * magent/*
 * atari/*
-* card/*
 * mujuco/*
-
 
 ## Requirements
 
