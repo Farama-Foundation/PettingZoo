@@ -61,3 +61,5 @@ class env(MultiAgentEnv):
         self.steps += 1
 
         return observation_dict, reward_dict, done_dict, info_dict
+
+from .manual_test import manual_control
