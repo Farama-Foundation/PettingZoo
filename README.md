@@ -12,7 +12,7 @@ PettingZoo breaks its games down into several categories, largely including game
 * magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
 * mujuco: A collection of 3D mujuco enviroments for multiagent robot simulations
-* classic: Enviroments for classical games that two humans play against each other (rock paper scissors, chess, popker, go, etc.)
+* classic: Enviroments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
