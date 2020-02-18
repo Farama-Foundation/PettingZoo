@@ -325,7 +325,9 @@ class MultiWalkerEnv():
             walker._destroy()
 
     def close(self):
-        pass
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
 
     def reset(self):
         self._destroy()

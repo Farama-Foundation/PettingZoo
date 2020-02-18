@@ -1,5 +1,5 @@
 import numpy as np
-from .multi_walker_base import MultiWalkerEnv
+from .multiwalker_base import MultiWalkerEnv
 
 env = MultiWalkerEnv()
 env.reset()

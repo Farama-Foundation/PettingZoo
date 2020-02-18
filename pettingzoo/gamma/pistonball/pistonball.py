@@ -86,6 +86,7 @@ class env(MultiAgentEnv):
         self.valid_ball_position_rect = pygame.Rect(self.rect.left + 40, self.rect.top + 40, self.rect.width - 80, self.rect.height - 80)
 
         self.num_frames = 0
+        self.display_wait = 0.0
 
     def observe(self):
         observation = pygame.surfarray.array3d(self.screen)

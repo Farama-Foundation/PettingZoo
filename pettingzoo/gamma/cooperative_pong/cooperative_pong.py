@@ -238,6 +238,8 @@ class CooperativePong(gym.Env):
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
 
+        self.display_wait = 0.0
+
         self.reset()
 
     def reset(self):
