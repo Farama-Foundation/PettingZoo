@@ -16,6 +16,7 @@ PettingZoo breaks its games down into several categories, largely including game
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
 
+We only support Python 3.6, 3.7 and 3.8. We do not support Python 2.7, though it will probably mostly work on it for now.
 
 ## Base API
 
@@ -146,4 +147,6 @@ pymunk>=5.6.0
 gym[box2d]>=0.15.4
 ```
 
+## OS Support
 
+We support Linux first and it's what we do our CI testing on. We support on macOS, but do not do CI testing on it. We don't explicitly support Windows, but we will accept PRs related to problems running on Windows. We're open to adding formally supporting Windows and adding CI for macOS and Windows if a party was interested in helping and had servers to run the CI on, but we don't currently have the resources to do so.
