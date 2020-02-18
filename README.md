@@ -106,11 +106,11 @@ The following games should be done (though they aren't compliant with the wrappe
 
 The following games are under active development:
 
-* gamma/prospector
-* gamma/prison
+* gamma/prospector (Rui)
+* gamma/prison (Mario)
 * sisl/multiant
-* classic/rock_paper_scissors
-* classic/rock_paper_scissors_lizard_spock
+* classic/rock_paper_scissors (Sharry)
+* classic/rock_paper_scissors_lizard_spock (Sharry)
 * mpe/*
 
 Development has not yet started on the following games:
