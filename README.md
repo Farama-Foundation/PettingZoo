@@ -127,7 +127,7 @@ Development has not yet started on the following games:
 * classic/go
 * magent/*
 * atari/*
-* mujuco/*
+* robotics/*
 
 ## Requirements
 
