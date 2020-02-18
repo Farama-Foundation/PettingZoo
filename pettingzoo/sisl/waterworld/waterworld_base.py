@@ -116,8 +116,12 @@ class MAWaterWorld():
         self.action_space = [agent.action_space for agent in self._pursuers]
         self.observation_space = [agent.observation_space for agent in self._pursuers]
 
+        self.renderOn = False
+
     def close(self):
-        pass
+        if self.renderOn:
+            import cv2
+            cv2.destroyAllWindows()
 
     @property
     def reward_mech(self):
@@ -439,6 +443,7 @@ class MAWaterWorld():
         return obslist, rewards, [done] * self.n_pursuers, [info] * self.n_pursuers
 
     def render(self, screen_size=800, rate=10, mode='human'):
+        self.renderOn = True
         import cv2
         img = np.empty((screen_size, screen_size, 3), dtype=np.uint8)
         img[...] = 255
