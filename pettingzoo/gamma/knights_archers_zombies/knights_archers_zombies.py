@@ -12,6 +12,7 @@ import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from gym.spaces import Box, Discrete
 
 
 def get_image(path):
@@ -98,6 +99,8 @@ class env(MultiAgentEnv):
         for i in range(num_archers + num_knights):
             self.agent_ids.append(i)
 
+        self.observation_space_dict = dict(zip(self.agent_ids, [Box(low=0, high=1, shape=(40,40), dtype=np.float32) for _ in enumerate(self.agent_ids)]))
+        self.action_space_dict = dict(zip(self.agent_ids, [Discrete(6) for _ in enumerate(self.agent_ids)]))
         self.display_wait = 0.0
 
     # Controls the Spawn Rate of Weapons
@@ -563,5 +566,7 @@ class env(MultiAgentEnv):
 
         for i in range(self.num_archers + self.num_knights):
             self.agent_ids.append(i)
+
+        return self.observe()
 
 from .manual_test import manual_control
