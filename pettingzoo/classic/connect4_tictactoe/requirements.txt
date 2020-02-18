@@ -68,7 +68,7 @@ pyparsing==2.2.0
 PySocks==1.6.8
 python-dateutil==2.7.3
 pytz==2018.5
-PyYAML==3.12
+PyYAML==5.1
 pyzmq==17.0.0
 QtAwesome==0.4.4
 qtconsole==4.3.1
