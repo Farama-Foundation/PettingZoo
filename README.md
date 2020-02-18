@@ -18,6 +18,7 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 
 We support Python 3.6, 3.7 and 3.8.
 
+
 ## Base API
 
 Using environments in PettingZoo is very similar to Gym, i.e. you would run 
@@ -95,6 +96,8 @@ We maintain a leaderboard for the best performance on every game, included in th
 
 
 ## Development Notes
+
+All game code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
 The following games should be done (though they aren't compliant with the wrapper API yet):
 
