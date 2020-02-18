@@ -74,7 +74,7 @@ QtAwesome==0.4.4
 qtconsole==4.3.1
 QtPy==1.4.2
 requests==2.19.1
-rope==0.10.7
+rope==0.11.0
 scipy==1.1.0
 Send2Trash==1.5.0
 simplegeneric==0.8.1
