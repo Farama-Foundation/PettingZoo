@@ -115,6 +115,16 @@ The following games are under active development:
 
 Development has not yet started on the following games:
 
+* classic/backgammon
+* classic/checkers
+* classic/chess
+* classic/connect_four
+* classic/mahjong (rlcard)
+* classic/texasholdem (rlcard)
+* classic/texasholdem_nolimit (rlcard)
+* classic/tictactoe
+* classic/uno (rlcard)
+* classic/go
 * magent/*
 * atari/*
 * mujuco/*
