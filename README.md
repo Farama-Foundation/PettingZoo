@@ -96,7 +96,7 @@ We maintain a leaderboard for the best performance on every game, included in th
 
 ## Development Notes
 
-The following games should be done (though haven't been fully reconfigured for the new API):
+The following games should be done (though they aren't compliant with the wrapper API yet):
 
 * gamma/knights_archers_zombies
 * gamma/pistonball
@@ -108,7 +108,7 @@ The following games should be done (though haven't been fully reconfigured for t
 The following games are under active development:
 
 * gamma/prospector
-* gamma/prison (not merged into this repo yet)
+* gamma/prison
 * sisl/multiant
 * other_envs/rock_paper_scissors
 * other_envs/rock_paper_scissors_lizard_spock
