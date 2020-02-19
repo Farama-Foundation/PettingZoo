@@ -115,19 +115,19 @@ The following games are under active development:
 * classic/rock_paper_scissors (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * clasic/checkers (Tianchen)
+* classic/tictactoe (Upamanyu)
+* classic/connect_four (Upamanyu)
 * mpe/*
 
 Development has not yet started on the following games:
 
 * classic/backgammon
 * classic/chess
-* classic/connect_four
+* classic/go
 * classic/mahjong (rlcard)
 * classic/texasholdem (rlcard)
 * classic/texasholdem_nolimit (rlcard)
-* classic/tictactoe
 * classic/uno (rlcard)
-* classic/go
 * magent/*
 * atari/*
 * robotics/*
