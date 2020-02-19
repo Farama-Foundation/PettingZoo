@@ -122,7 +122,7 @@ The following games are under active development:
 Development has not yet started on the following games:
 
 * classic/backgammon
-* classic/chess
+* classic/chess (https://github.com/niklasf/python-chess)
 * classic/go
 * classic/mahjong (rlcard)
 * classic/texasholdem (rlcard)
