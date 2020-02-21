@@ -31,9 +31,9 @@ env = pistonball.env([custom enviroment parameters])
 The basic functionality is the same as Gym, but plural i.e.:
 
 ```
-env.reset()
+observations = env.reset()
 while True:
-    actions = policy(actions)
+    actions = policy(observations)
     # add env.render() here if you want to watch the game playing and the game supports it
     observations, rewards, dones, info = env.step(actions)
 ```
@@ -117,6 +117,10 @@ The following games are under active development:
 * clasic/checkers (Tianchen)
 * classic/tictactoe (Upamanyu)
 * classic/connect_four (Upamanyu)
+* classic/mahjong (rlcard) (Luis)
+* classic/texasholdem (rlcard) (Luis)
+* classic/texasholdem_nolimit (rlcard) (Luis)
+* classic/uno (rlcard) (Luis)
 * mpe/*
 
 Development has not yet started on the following games:
@@ -124,10 +128,6 @@ Development has not yet started on the following games:
 * classic/backgammon
 * classic/chess (https://github.com/niklasf/python-chess)
 * classic/go
-* classic/mahjong (rlcard)
-* classic/texasholdem (rlcard)
-* classic/texasholdem_nolimit (rlcard)
-* classic/uno (rlcard)
 * magent/*
 * atari/*
 * robotics/*
