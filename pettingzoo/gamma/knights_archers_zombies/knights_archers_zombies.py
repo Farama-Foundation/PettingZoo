@@ -21,6 +21,7 @@ def get_image(path):
     image = pygame.image.load(cwd + '/' + path)
     return image
 
+
 class env(MultiAgentEnv):
     def __init__(self, num_archers=2, num_knights=2):
         # Game Constants
@@ -99,7 +100,7 @@ class env(MultiAgentEnv):
         for i in range(num_archers + num_knights):
             self.agent_ids.append(i)
 
-        self.observation_space_dict = dict(zip(self.agent_ids, [Box(low=0, high=1, shape=(40,40), dtype=np.float32) for _ in enumerate(self.agent_ids)]))
+        self.observation_space_dict = dict(zip(self.agent_ids, [Box(low=0, high=1, shape=(40, 40), dtype=np.float32) for _ in enumerate(self.agent_ids)]))
         self.action_space_dict = dict(zip(self.agent_ids, [Discrete(6) for _ in enumerate(self.agent_ids)]))
         self.display_wait = 0.0
 
