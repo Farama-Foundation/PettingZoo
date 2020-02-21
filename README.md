@@ -147,6 +147,7 @@ numpy>=1.18.0
 matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
+python-chess
 ```
 
 ## OS Support
