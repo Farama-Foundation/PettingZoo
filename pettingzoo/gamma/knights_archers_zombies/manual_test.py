@@ -2,6 +2,7 @@ from .knights_archers_zombies import env as _env
 import time
 import pygame
 
+
 def manual_control(**kwargs):
     env = _env(**kwargs)
     done = False
@@ -10,14 +11,13 @@ def manual_control(**kwargs):
 
     start_time = time.time()
     frame_count = 0
-    frame_limit = 500
+    # frame_limit = 500
     quit_game = 0
 
     while not done:
         # while frame_count < frame_limit: # Uncomment this if you want the game to run for fame_limit amount of frames instead of ending by normal game conditions (useful for testing purposes)
         agents = env.agent_list
         frame_count += 1
-        # actions = [random.randint(1, 5) for x in range(env.num_agents)] # If you want to do random inputs
         actions = [6 for x in range(env.num_agents)]  # If you want to do manual input
 
         for event in pygame.event.get():
