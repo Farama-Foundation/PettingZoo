@@ -29,5 +29,4 @@ while True:
     env.render()
 
     if True in list(done.values()):
-        surfdemo_show(obs[1], "bs")
         break
