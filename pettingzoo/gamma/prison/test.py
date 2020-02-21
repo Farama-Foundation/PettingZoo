@@ -1,8 +1,8 @@
-from .prison_game import env as _env
+from .prison import env as _env
 import pygame
 import numpy as np
 
-env = _env()
+env = _env(continuous=True, vector_observation=False)
 
 x = 0
 y = 0
@@ -20,16 +20,14 @@ while True:
             elif event.key == pygame.K_s:
                 y = min(3, y+1)
             elif event.key == pygame.K_j:
-                agent_actions[env.convert_coord_to_prisoner_id((x, y))] = -1
+                agent_actions[env.convert_coord_to_prisoner_id((x, y))] = -20
             elif event.key == pygame.K_k:
-                agent_actions[env.convert_coord_to_prisoner_id((x, y))] = 1
+                agent_actions[env.convert_coord_to_prisoner_id((x, y))] = 20
 
     actions = dict(zip(env.agent_list, agent_actions))
     obs, reward, done, info = env.step(actions)
     env.render()
 
-    print(reward)
-    print(done)
-
-    if 1 in list(reward.values()):
+    if True in list(done.values()):
+        surfdemo_show(obs[1], "bs")
         break
