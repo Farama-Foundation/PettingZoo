@@ -42,7 +42,8 @@ def stack_obs(frame_stack, new_obs_dict):
     '''
     for agent_id in new_obs_dict.keys():
         new_obs = new_obs_dict[agent_id]
-        last_axis_len = new_obs.shape[-1]
+        obs_shape = new_obs.shape
+        last_axis_len = obs_shape[-1]
 
         # stack frames in 1-D
         if len(obs_shape) == 1:
