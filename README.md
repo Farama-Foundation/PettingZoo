@@ -153,3 +153,16 @@ python-chess
 ## OS Support
 
 We support Linux first and it's what we do our CI testing on. We support on macOS, but do not do CI testing on it. We don't explicitly support Windows, but we will accept PRs related to problems running on Windows. We're open to adding formally supporting Windows and adding CI for macOS and Windows if a party was interested in helping and had servers to run the CI on, but we don't currently have the resources to do so.
+
+
+## New API
+
+```
+policy_list = []
+observation = env.reset()
+while True:
+	for agent in range(0,nAgents):
+		policy  = policy_list[agent]
+		action = eval(policy(observation)
+    	observation, reward, done, info = env.step(action)
+ ```
