@@ -28,26 +28,21 @@ from pettingzoo.gamma import pistonball
 env = pistonball.env([custom enviroment parameters])
 ```
 
-The basic functionality is the same as Gym, but plural i.e.:
+Our API models the games as Agent Enviroment Cycle (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
+
+Assuming you have a list of policy functions, interacting with your enviroment looks this looks like:
 
 ```
-observations = env.reset()
+policy_list = [policy_1, policy_2 ... policy_n]
+observation = env.reset()
 while True:
-    actions = policy(observations)
-    # add env.render() here if you want to watch the game playing and the game supports it
-    observations, rewards, dones, info = env.step(actions)
-```
+	for agent in range(0,nAgents):
+		policy  = policy_list[agent]
+		action = eval(policy(observation)
+    	observation, reward, done, info = env.turn(action)
+ ```
 
-The way we handle multiple agents is that the enviroment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
-
-```
-observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
-actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
-rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
-dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
-```
-
-When some agents are `done` and others are not, the `done` agents don't respond to input, and return 0s for every value of their observation space. 
+This is almost the same as a normal Gym game, but with one noteably exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn.
 
 
 ## Utils API
@@ -155,14 +150,21 @@ python-chess
 We support Linux first and it's what we do our CI testing on. We support on macOS, but do not do CI testing on it. We don't explicitly support Windows, but we will accept PRs related to problems running on Windows. We're open to adding formally supporting Windows and adding CI for macOS and Windows if a party was interested in helping and had servers to run the CI on, but we don't currently have the resources to do so.
 
 
-## New API
+## Old API for Development Reference
 
 ```
-policy_list = []
-observation = env.reset()
+observations = env.reset()
 while True:
-	for agent in range(0,nAgents):
-		policy  = policy_list[agent]
-		action = eval(policy(observation)
-    	observation, reward, done, info = env.step(action)
- ```
+    actions = policy(observations)
+    # add env.render() here if you want to watch the game playing and the game supports it
+    observations, rewards, dones, info = env.step(actions)
+```
+
+The way we handle multiple agents is that the enviroment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
+
+```
+observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
+actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
+rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
+dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
+```
