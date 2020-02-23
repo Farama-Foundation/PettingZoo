@@ -25,7 +25,14 @@ Using environments in PettingZoo is very similar to Gym, i.e. you load an enviro
 
 ```
 from pettingzoo.gamma import pistonball
-env = pistonball.env([custom environment parameters])
+env = pistonball.env()
+```
+
+Enviroments are all easily highly configurable, so that the effects of different unique enviromental parameters on multi-agent learning can be more easily studied. This is done in the form optional arguments bassed to the environment when it's created. For example:
+
+```
+cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
+right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
 Our API models the games as *Agent Environment Cycle* (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
