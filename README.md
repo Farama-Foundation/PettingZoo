@@ -38,7 +38,7 @@ observation = env.reset()
 while True:
 	for agent in range(0,env.num_gents):
 		policy  = policy_list[agent]
-		action = eval(policy(observation)
+		action = eval(policy(observation))
     	observation, reward, done, info = env.turn(action)
  ```
 
