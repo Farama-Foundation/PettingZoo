@@ -21,7 +21,7 @@ We support Python 3.6, 3.7 and 3.8.
 
 ## Base API
 
-Using environments in PettingZoo is very similar to Gym, i.e. you would run 
+Using environments in PettingZoo is very similar to Gym, i.e. you load an enviroment via:
 
 ```
 from pettingzoo.gamma import pistonball
