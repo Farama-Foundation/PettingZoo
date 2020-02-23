@@ -1,4 +1,7 @@
-This code is licensed under the MIT license, except for the GO enviroment (based on code from Google's minigo repo) and for the Rock Paper Scissors and Rock Paper Scissors Lizard Spock enviroments (based on code from the Ray Project's RLlib), which are licensed under the Apache 2.0.
+This code is licensed under the MIT license, except for:
+The GO enviroment (based on code from Google's minigo repo)
+The Rock Paper Scissors and Rock Paper Scissors Lizard Spock enviroments (based on code from the Ray Project's RLlib)
+Those enviroments are licensed under the Apache 2.0 license, and originate from those organizations repos.
 
 Copyrights go to the authors of the code. The MIT and Apache licenses are included below:
 
