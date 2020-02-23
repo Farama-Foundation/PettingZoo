@@ -1,5 +1,5 @@
 # PettingZoo
-PettingZoo is Python library of enviroments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
+PettingZoo is Python library of environments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
 
 ## Games and Installation
@@ -7,11 +7,11 @@ PettingZoo is Python library of enviroments for conducting research in multi-age
 PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
 
 * atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
-* classic: Enviroments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
+* classic: Environments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
 * gamma: Graphical games developed by us, in PyGame. All games are cooperative, and many pose features very challenging to reinforcement learning.
-* magent: A set of enviroments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
+* magent: A set of environments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
-* robotics: A collection of 3D multiagent robot enviroments, simulated with PyBullet
+* robotics: A collection of 3D multi-agent robot environments, simulated with MuJoC
 * sisl: An eclectic collection of 3 games developed by SISL, originally from https://github.com/sisl/MADRL
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
@@ -21,16 +21,16 @@ We support Python 3.6, 3.7 and 3.8.
 
 ## Base API
 
-Using environments in PettingZoo is very similar to Gym, i.e. you load an enviroment via:
+Using environments in PettingZoo is very similar to Gym, i.e. you load an environment via:
 
 ```
 from pettingzoo.gamma import pistonball
-env = pistonball.env([custom enviroment parameters])
+env = pistonball.env([custom environment parameters])
 ```
 
-Our API models the games as Agent Enviroment Cycle (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
+Our API models the games as *Agent Environment Cycle* (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
 
-Assuming you have a list of policy functions, interacting with your enviroment looks this looks like:
+Assuming you have a list of policy functions, interacting with your environment looks this looks like:
 
 ```
 policy_list = [policy_1, policy_2 ... policy_n]
@@ -42,7 +42,7 @@ while True:
     	observation, reward, done, info = env.turn(action)
  ```
 
-This is almost the same as a normal Gym game, but with one noteably exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn.
+This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn.
 
 
 ## Utils API
@@ -51,20 +51,31 @@ We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
-env = wrapper(env, frame_stacking=4, color_reduction='', down_scale=(x_factor,y_factor), flatten=False,
-scale=(env_min,env_max))
+env = wrapper(env, frame_stacking=4, color_reduction='', down_scale=(x_scale, y_scale), flatten=False,
+range_scale=(env_min, env_max))
 ```
 
-Only games with a graphical observation space can be greyscaled, downscaled, or flattened.
+*Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s.
 
-Additionally, we have a basic test to check for enviroment compliance, if you've made your own custom enviroment with PettingZoo and want to get a good guess about whether or not you did it right.
+*Color reduction* removes color information from game outputs to easier processing with neural networks. An argument of '' does nothing. An argument of 'full' does a full greyscaling of the observation. Arguments of 'R','G' or'B' just the corresponding R, G or B color channel from observation, as a dramatically more computationally efficient and generally adequate method of greyscaling games. This is only available for graphical games with 3D outputs.
+
+*Down scaling* uses mean pooling to reduce the observations output by each game by the given x and y scales. The dimension of an environment must be an integer multiple of it's scale. Downscaling is important for making the output of an environment small enough to work with commonly used architectures for deep reinforcement learning. This is only available for graphical games with 2D or 3D outputs.
+
+*Flattening* flattens the 2D or 3D output of environments to a 1D vector, to be usable with simpler neural network architectures. This can not be used for 1D environments.
+
+*Range scaling* linearly scales observations such that env_min is 0 and env_max is 1. This is useful because neural networks generally perform better on normalized inputs, and for example graphical games output observations over (0, 255).
+
+Operations are applied in the order of arguments to the wrapper function.
+
+
+Additionally, we have a basic test to check for environment compliance, if you've made your own custom environment with PettingZoo and want to get a good guess about whether or not you did it right.
 
 ```
 from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of enviroment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical enviroments. 
+Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments. 
 
 ## Demos
 
@@ -74,7 +85,7 @@ Of the games that can be played, many can be played by humans, and functionality
 
 ```
 from pettingzoo.gamma import pistonball
-pistonball.manual_control([enviroment specs])
+pistonball.manual_control([environment specs])
 ```
 
 For viewable games that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions, via:
@@ -85,9 +96,9 @@ random_demo(env)
 ```
 
 ## Documentation
-For more detailed documentation about all the different enviroments, and configuration options for them go to [website].
+For more detailed documentation about all the different environments, and configuration options for them go to [website].
 
-We maintain a leaderboard for the best performance on every game, included in the documentation for each game. If you have a score that you would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default parameters for every game, with the exception that we 2 have seperate leaderboards for games that support both continuous and discrete action spaces.
+We maintain a leader board for the best performance on every game, included in the documentation for each game. If you have a score that you would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default parameters for every game, with the exception that we 2 have separate leader boards for games that support both continuous and discrete action spaces.
 
 
 ## Development Notes
@@ -128,11 +139,11 @@ Development has not yet started on the following games:
 * robotics/*
 
 Future wrapper work:
-"action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogenous action spaces."
+"action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
 
 ## Requirements
 
-Requirements are being kept below until we get the requirments.txt issues fixed
+Requirements are being kept below until we get the requirements.txt issues fixed
 
 ```
 gym>=0.15.4	
@@ -160,7 +171,7 @@ while True:
     observations, rewards, dones, info = env.step(actions)
 ```
 
-The way we handle multiple agents is that the enviroment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
+The way we handle multiple agents is that the environment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
