@@ -60,20 +60,20 @@ dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1t
 These are natively supported by RLlib.
 
 
-## Turn Based Games API
-Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based game. An example of this with two single agents is chess.
+## Turn Based Markov Games API
+Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based Markov game. An example of this with two single agents is chess.
 
 ```
 from pettingzoo.utils import turn_game
 env = turn_game(env)
 observations = env.reset()
 while True:
-    for agent in env.agents:
-        actions = policy(observations, agent)
-        observation, reward, done, info = env.step(actions) # observation is to be used by next agent
+    for group in env.groups:
+        actions = policy(observations, group)
+        observation, reward, done, info = env.turn(actions) # observation is to be used by next group
 ```
 
-After a step is taken for one agent, control automatically flips to the next agent.
+After a step is taken for one group, control automatically flips to the next group.
 
 Alternate:
 
