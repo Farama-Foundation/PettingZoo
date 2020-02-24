@@ -69,8 +69,8 @@ env = turn_game(env)
 observations = env.reset()
 while True:
     for group in env.groups:
-        actions = policy(observations, group)
-        observations, rewards, dones, info = env.turn(actions) # observation is to be used by next group
+        actions = policy(env.observe(group), group)
+        observations, rewards, dones, info = env.turn(actions) # observ
 ```
 
 After a step is taken for one group, control automatically flips to the next group.
