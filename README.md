@@ -70,7 +70,7 @@ observations = env.reset()
 while True:
     for group in env.groups:
         actions = policy(env.observe(group), group)
-        observations, rewards, dones, info = env.turn(actions) # observ
+        observations, rewards, dones, info = env.turn(actions)
 ```
 
 After a step is taken for one group, control automatically flips to the next group.
