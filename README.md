@@ -64,7 +64,7 @@ These are natively supported by RLlib.
 Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based Markov game. An example of this with two single agents is chess.
 
 ```
-from pettingzoo.utils import turn_game
+from pettingzoo.utils import turn_based_markov_game
 env = turn_game(env)
 observations = env.reset()
 while True:
