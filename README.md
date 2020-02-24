@@ -84,7 +84,7 @@ observations = env.reset()
 while True:
     for agent in env.agents:
         actions = policy(observations, agent)
-        observation = env.turns(actions) # observation is to be used by next agent
+        observation = env.turn(actions) # observation is to be used by next agent
     rewards, dones = env.step()
 ```
 
@@ -251,6 +251,4 @@ pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
 ```
-
-
 
