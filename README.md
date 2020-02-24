@@ -60,8 +60,8 @@ dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1t
 These are natively supported by RLlib.
 
 
-## Turn Based Games API
-Enviroments where each agent takes cycling independent turns and can get instant reward based on their action (like chess) can be modeled as a turn based game.
+## Turn Based Battle Games API
+Environments which cycle between individual agents (or groups of agents which simultaneously move), and can get instant reward based on their action can be modeled as a turn based game. A single agent example is chess.
 
 ```
 from pettingzoo.utils import turn_game
