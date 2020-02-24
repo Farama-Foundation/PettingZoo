@@ -93,6 +93,7 @@ Our AEC environments have the following attributes:
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
 Our AEC environments have the following methods:
+
 `env.observe(agent)`: Returns the observation an agent currently can make.
 
 `env.turn(action)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken.
