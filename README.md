@@ -43,10 +43,10 @@ Assuming you have a dictionary of policy functions, interacting with your enviro
 policy_dict = {0:policy_0, 1:policy_1 ... 2:policy_n}
 observation = env.reset()
 while True:
-	for agent in env.agents:
-		policy  = policy_list[agent]
-		action = eval(policy(observation))
-    		observation, reward, done, info = env.turn(action)
+    for agent in env.agents:
+        policy  = policy_list[agent]
+	action = eval(policy(env.observe(agent)))
+    	observation, reward, done, info = env.turn(action)
  ```
 
 This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn. Agent's are assigned integer names, and env.agents is a list of all agents currently in the enviroment (enviroments with a mutable number of agents are supported with PettingZoo).
