@@ -80,7 +80,7 @@ PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) 
 
 Our AEC environments have the following attributes:
 
-`env.agents`: a list of the names of all current agents, typically integers. These may be changed as an enviroment progresses.
+`env.agents`: a list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
 
 `env.observation_spaces`: a dict of the gym observation spaces of every agent, by name.
 
