@@ -86,9 +86,9 @@ Our AEC environments have the following attributes:
 
 `env.action_spaces`: a dict of the gym action spaces of every agent, by name.
 
-`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gaurunteed to be "final" until the agent's turn is reached again.
+`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
 
-`env.done`: a dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gaurunteed to be "final" until the agent's turn is reached again.
+`env.dones`: a dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
 
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
