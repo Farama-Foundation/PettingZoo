@@ -43,7 +43,7 @@ Assuming you have a list of policy functions, interacting with your environment 
 policy_list = [policy_1, policy_2 ... policy_n]
 observation = env.reset()
 while True:
-	for agent in range(0,env.num_gents):
+	for agent in env.agents:
 		policy  = policy_list[agent]
 		action = eval(policy(observation))
     		observation, reward, done, info = env.turn(action)
