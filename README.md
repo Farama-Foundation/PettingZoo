@@ -59,6 +59,7 @@ dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1t
 
 These are natively supported by RLlib.
 
+
 ## Turn Based Games API
 Enviroments where each agent takes cycling independent turns and can get instant reward based on their action (like chess) can be modeled as a turn based game.
 
@@ -74,6 +75,7 @@ while True:
 
 After a step is taken for one agent, control automatically flips to the next agent.
 
+
 ## Low Level (AEC Game) API
 
 PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent). Working with such a general API can be very challenging, so we introduced the above wrappers for the two main kinds of games, built upon it. If you're trying to implement your own environment or learn more interesting games than those, you'll have to use this API. 
@@ -82,7 +84,7 @@ Our AEC environments have the following attributes:
 
 `env.agents`: A list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
 
-`env.agent_order`: A list of the order agents take turns in.
+`env.agent_order`: A list of the order agents take turns in. The 0th element of the list acts first, and so on.
 
 `env.observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
@@ -118,6 +120,7 @@ while True:
         env.turn(action)
 ```
 
+
 ## Wrapper API
 
 We include popular preprocessing methods out of the box:
@@ -141,6 +144,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 *New dtypes* turn your observations into a certain dtype when output from the wrapper. This is helpful because, for instance, most graphical games output tensors of `uint8` dtype, while most neural networks require `float32`.
 
 Operations are applied in the order of arguments to the wrapper function.
+
 
 ## Other Utils
 
