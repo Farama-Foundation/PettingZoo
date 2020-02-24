@@ -80,19 +80,28 @@ PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) 
 
 Our AEC environments have the following attributes:
 
-`env.agents`: a list of the names of all current agents, typically integers. These may be changed.
-`env.observation_spaces`: a dict of the gym observation spaces of every agent, by name
-`env.action_spaces`: a dict of the gym action spaces of every agent, by name
-`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gauntleted to be "final" until the agent's turn is reached again.
-`env.done`: a dict of the done state of every agent at the time called, by name
+`env.agents`: a list of the names of all current agents, typically integers. These may be changed as an enviroment progresses.
+
+`env.observation_spaces`: a dict of the gym observation spaces of every agent, by name.
+
+`env.action_spaces`: a dict of the gym action spaces of every agent, by name.
+
+`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gaurunteed to be "final" until the agent's turn is reached again.
+
+`env.done`: a dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gaurunteed to be "final" until the agent's turn is reached again.
+
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
 Our AEC environments have the following methods:
-`env.observe(agent)`: Returns the observation an agent currently can make
+`env.observe(agent)`: Returns the observation an agent currently can make.
+
 `env.turn(action)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken.
+
 `env.reset()`: Resets the environment to a starting state.
-`env.render()`: Displays a rendered frame from the enviroment, if supported
-`env.close()`: Closes the rendering window
+
+`env.render()`: Displays a rendered frame from the enviroment, if supported.
+
+`env.close()`: Closes the rendering window.
 
 The most general example of interacting with an enviroment with this API looks like this:
 
