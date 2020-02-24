@@ -61,7 +61,7 @@ These are natively supported by RLlib.
 
 
 ## Turn Based Battle Games API
-Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based game. A single agent example is chess.
+Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based battle game. A single agent example is chess.
 
 ```
 from pettingzoo.utils import turn_game
