@@ -75,6 +75,18 @@ while True:
 
 After a step is taken for one agent, control automatically flips to the next agent.
 
+Alternate:
+
+```
+from pettingzoo.utils import turn_game
+env = turn_game(env)
+observations = env.reset()
+while True:
+    for agent in env.agents:
+        actions = policy(observations, agent)
+        observation = env.turns(actions) # observation is to be used by next agent
+    rewards, dones = env.step()
+```
 
 ## Low Level (AEC Game) API
 
