@@ -74,15 +74,15 @@ Our AEC environments have the following methods:
 
 `env.observe(agent)`: Returns the observation an agent currently can make.
 
-`env.turn(action)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken.
+`env.turn(action=None)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken. Taking turns with `action=None` can be used to cycle through turns of the enviroment if desired.
 
-`env.reset()`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment
+`env.reset()`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment.
 
-`env.render()`: Displays a rendered frame from the enviroment, if supported.
+`env.render(observe=True)`: Displays a rendered frame from the enviroment, if supported. Set `observe=False` to not call `env.observe()`.
 
 `env.close()`: Closes the rendering window.
 
-`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent.
+`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
 
 
 ## Wrapper API
@@ -203,5 +203,3 @@ pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
 ```
-
-a
