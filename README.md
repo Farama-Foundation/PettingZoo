@@ -59,7 +59,7 @@ We include popular preprocessing methods out of the box:
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env, color_reduction=None, down_scale=(x_scale, y_scale), reshape=None,
-range_scale=(obs_min, obs_max), frame_stacking=1, new_dtype=None)
+range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 ```
 
 *Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being turned off.
