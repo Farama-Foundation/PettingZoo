@@ -59,10 +59,10 @@ We include popular preprocessing methods out of the box:
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env, color_reduction='', down_scale=(x_scale, y_scale), flatten=False,
-range_scale=(env_min, env_max), frame_stacking=4)
+range_scale=(env_min, env_max), frame_stacking=4, new_dtype=None)
 ```
 
-*Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s.
+*Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being off.
 
 *Color reduction* removes color information from game outputs to easier processing with neural networks. An argument of '' does nothing. An argument of 'full' does a full greyscaling of the observation. Arguments of 'R','G' or'B' just the corresponding R, G or B color channel from observation, as a dramatically more computationally efficient and generally adequate method of greyscaling games. This is only available for graphical games with 3D outputs.
 
@@ -71,6 +71,8 @@ range_scale=(env_min, env_max), frame_stacking=4)
 *Flattening* flattens the 2D or 3D output of environments to a 1D vector, to be usable with simpler neural network architectures. This can not be used for 1D environments.
 
 *Range scaling* linearly scales observations such that env_min is 0 and env_max is 1. This is useful because neural networks generally perform better on normalized inputs, and for example graphical games output observations over (0, 255).
+
+*New dtypes* turn your observations into a certain dtype when output from the wrapper. This is helpful because, for instance, most graphical games output tensors of `uint8` dtype, while most neural networks require `float32`.
 
 Operations are applied in the order of arguments to the wrapper function.
 
