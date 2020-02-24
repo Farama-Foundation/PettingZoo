@@ -1,3 +1,4 @@
+import gym
 from gym.spaces import Discrete
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
