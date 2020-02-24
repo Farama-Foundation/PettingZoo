@@ -68,6 +68,8 @@ PettingZoo environments have the following attributes:
 
 `env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
 
+`env.info`: A dict of info for each agent, by name. Included for extensability, and becase info is a part of the Gym API. No games built into this repo use this.
+
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
 Our AEC environments have the following methods:
