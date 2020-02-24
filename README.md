@@ -70,10 +70,12 @@ observations = env.reset()
 while True:
     for group in env.groups:
         actions = policy(observations, group)
-        observation, reward, done, info = env.turn(actions) # observation is to be used by next group
+        observations, rewards, dones, info = env.turn(actions) # observation is to be used by next group
 ```
 
 After a step is taken for one group, control automatically flips to the next group.
+
+Actions, observations, rewards, and dones are dictionaries the same as in the Markov game API.
 
 Alternate:
 
