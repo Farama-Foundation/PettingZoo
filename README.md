@@ -77,19 +77,6 @@ After a step is taken for one group, control automatically flips to the next gro
 
 Actions, observations, rewards, and dones are dictionaries the same as in the Markov game API.
 
-Alternate:
-
-```
-from pettingzoo.utils import turn_game
-env = turn_game(env)
-observations = env.reset()
-while True:
-    for agent in env.agents:
-        actions = policy(observations, agent)
-        observation = env.turn(actions) # observation is to be used by next agent
-    rewards, dones = env.step()
-```
-
 ## Low Level (AEC Game) API
 
 PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent). Working with such a general API can be very challenging, so we introduced the above wrappers for the two main kinds of games, built upon it. If you're trying to implement your own environment or learn more interesting games than those, you'll have to use this API. 
