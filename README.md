@@ -37,14 +37,14 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 
 
 ## Simple Enviroment Interactions
-Games can be interacted with as follows in the simplest case, in a manner very similar to Gym.
+Games can be interacted with as follows in the simplest case, in a manner very similar to Gym: 
 
 ```
 first_observation = env.reset()
 while True:
     for agent in env.agents:
         action = policy(agent,env.observe(agent))) # this could also be cached from last the observation that agent took
-        observation, reward, done, info = env.step(action)
+        observation, reward, done, info = env.step(action) # control shifts to next agent
 ```
 
 For games where the instant observations or reward are undesired (or other intersting things are happening), you must make additional calls to the full API.
@@ -82,7 +82,7 @@ Our AEC environments have the following methods:
 
 `env.close()`: Closes the rendering window.
 
-`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment.
+`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent.
 
 
 ## Wrapper API
