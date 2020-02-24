@@ -37,10 +37,10 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 
 Our API models the games as *Agent Environment Cycle* (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
 
-Assuming you have a list of policy functions, interacting with your environment looks this looks like:
+Assuming you have a dictionary of policy functions, interacting with your environment looks like:
 
 ```
-policy_list = [policy_1, policy_2 ... policy_n]
+policy_dict = {0:policy_0, 1:policy_1 ... 2:policy_n}
 observation = env.reset()
 while True:
 	for agent in env.agents:
@@ -49,7 +49,7 @@ while True:
     		observation, reward, done, info = env.turn(action)
  ```
 
-This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn.
+This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn. Agent's are assigned integer names, and env.agents is a list of all agents currently in the enviroment (enviroments with a mutable number of agents are supported with PettingZoo).
 
 
 ## Utils API
