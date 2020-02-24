@@ -19,9 +19,9 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 We support Python 3.6, 3.7 and 3.8.
 
 
-## Base API
+## Initializing Enviroments
 
-Using environments in PettingZoo is very similar to Gym, i.e. you load an environment via:
+Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
 from pettingzoo.gamma import pistonball
@@ -35,53 +35,26 @@ cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
 right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
-## Markov Games API
-Games which cycle between all agents simulateously stepping forward and the enviroment stepping forward can be modeled as Markov games, and can use the Markov Games API.
+
+## Simple Enviroment Interactions
+Games can be interacted with as follows in the simplest case, in a manner very similar to Gym.
 
 ```
-from pettingzoo.utils import markov_game
-env = markov_game(env)
-observations = env.reset()
+first_observation = env.reset()
 while True:
-    actions = policy(observations)
-    # add env.render() here if you want to watch the game playing and the game supports it
-    observations, rewards, dones, info = env.step(actions)
+    for agent in env.agents:
+        action = policy(agent,env.observe(agent))) # this could also be cached from last the observation that agent took
+        observation, reward, done, info = env.step(action)
 ```
 
-The way we handle multiple agents is that the environment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
-
-```
-observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
-actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
-rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
-dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
-```
-
-These are natively supported by RLlib.
+For games where the instant observations or reward are undesired (or other intersting things are happening), you must make additional calls to the full API.
 
 
-## Turn Based Markov Games API
-Environments which cycle between individual agents (or groups of agents which can be thought of as simultaneously stepping forward), and can get instant reward based on their action can be modeled as a turn based Markov game. An example of this with two single agents is chess.
+## Full Enviroment API
 
-```
-from pettingzoo.utils import turn_based_markov_game
-env = turn_game(env)
-observations = env.reset()
-while True:
-    for group in env.groups:
-        actions = policy(env.observe(group), group)
-        observations, rewards, dones, info = env.turn(actions)
-```
+PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent).
 
-After a step is taken for one group, control automatically flips to the next group.
-
-Actions, observations, rewards, and dones are dictionaries the same as in the Markov game API.
-
-## Low Level (AEC Game) API
-
-PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent). Working with such a general API can be very challenging, so we introduced the above wrappers for the two main kinds of games, built upon it. If you're trying to implement your own environment or learn more interesting games than those, you'll have to use this API. 
-
-Our AEC environments have the following attributes:
+PettingZoo environments have the following attributes:
 
 `env.agents`: A list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
 
@@ -103,23 +76,13 @@ Our AEC environments have the following methods:
 
 `env.turn(action)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken.
 
-`env.reset()`: Resets the environment to a starting state.
+`env.reset()`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment
 
 `env.render()`: Displays a rendered frame from the enviroment, if supported.
 
 `env.close()`: Closes the rendering window.
 
-The most general example of interacting with an enviroment with this API looks like this:
-
-```
-env.reset()
-while True:
-    for agent in env.agents:
-    	previous_done = env.done[agent]
-        previous_reward = env.reward[agent]
-        action = policy(agent,env.observe(agent)))
-        env.turn(action)
-```
+`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment.
 
 
 ## Wrapper API
