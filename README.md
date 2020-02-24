@@ -2,7 +2,7 @@
 PettingZoo is Python library of environments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
 
-## Enviroment Types and Installation
+## Environment Types and Installation
 
 PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
 
@@ -10,7 +10,7 @@ PettingZoo breaks its games down into several categories, largely including game
 * classic: Environments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
 * gamma: Graphical games developed by us, in PyGame. All games are cooperative, and many pose features very challenging to reinforcement learning.
 * magent: A set of environments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
-* mpe: 'Multi-agent Particle Enviroments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
+* mpe: 'Multi-agent Particle Environments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
 * robotics: A collection of 3D multi-agent robot environments, simulated with MuJoC
 * sisl: An eclectic collection of 3 games developed by SISL, originally from https://github.com/sisl/MADRL
 
@@ -19,7 +19,7 @@ To install a set of games, use `pip3 install pettingzoo[atari]`, substituting at
 We support Python 3.6, 3.7 and 3.8.
 
 
-## Initializing Enviroments
+## Initializing Environments
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
@@ -28,7 +28,7 @@ from pettingzoo.gamma import pistonball
 env = pistonball.env()
 ```
 
-Enviroments are all easily highly configurable, so that the effects of different unique enviromental parameters on multi-agent learning can be more easily studied. This is done in the form optional arguments bassed to the environment when it's created. For example:
+Environments are all easily highly configurable, so that the effects of different unique environmental parameters on multi-agent learning can be more easily studied. This is done in the form optional arguments based to the environment when it's created. For example:
 
 ```
 cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
@@ -36,7 +36,7 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
 
-## Simple Enviroment Interactions
+## Simple Environment Interactions
 Games can be interacted with as follows in the simplest case, in a manner very similar to Gym: 
 
 ```
@@ -47,10 +47,10 @@ while True:
         observation, reward, done, info = env.step(action) # control shifts to next agent
 ```
 
-For games where the instant observations or reward are undesired (or other intersting things are happening), you must make additional calls to the full API.
+For games where the instant observations or reward are undesired (or other interesting things are happening), you must make additional calls to the full API.
 
 
-## Full Enviroment API
+## Full Environment API
 
 PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent).
 
@@ -68,7 +68,7 @@ PettingZoo environments have the following attributes:
 
 `env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
 
-`env.info`: A dict of info for each agent, by name. Included for extensability, and becase info is a part of the Gym API. All games built into this repo only output '' for each agent.
+`env.info`: A dict of info for each agent, by name. Included for extensibility, and because info is a part of the Gym API. All games built into this repo only output '' for each agent.
 
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
@@ -76,15 +76,15 @@ Our AEC environments have the following methods:
 
 `env.observe(agent)`: Returns the observation an agent currently can make.
 
-`env.turn(action=None)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken. Taking turns with `action=None` can be used to cycle through turns of the enviroment if desired.
+`env.turn(action=None)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken. Taking turns with `action=None` can be used to cycle through turns of the environment if desired.
 
 `env.reset()`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment.
 
-`env.render(observe=True)`: Displays a rendered frame from the enviroment, if supported. Set `observe=False` to not call `env.observe()`.
+`env.render(observe=True)`: Displays a rendered frame from the environment, if supported. Set `observe=False` to not call `env.observe()`.
 
 `env.close()`: Closes the rendering window.
 
-`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the enviroment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
+`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the environment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
 
 
 ## Wrapper API
@@ -103,7 +103,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 
 *Down scaling* uses mean pooling to reduce the observations output by each game by the given x and y scales. The dimension of an environment must be an integer multiple of it's scale. Downscaling is important for making the output of an environment small enough to work with commonly used architectures for deep reinforcement learning. This is only available for graphical games with 2D or 3D outputs. The default is `None`.
 
-*Reshapping* can take argument `flatten`, and turn 2D or 3D observations into a 1D vector, to be usable with simpler neural network architectures. It can also take argument `expand`, which adds an empty deminsion to the observation (i.e. turning a 2D array into a 1 tall 3D array).
+*Reshapping* can take argument `flatten`, and turn 2D or 3D observations into a 1D vector, to be usable with simpler neural network architectures. It can also take argument `expand`, which adds an empty dimension to the observation (i.e. turning a 2D array into a 1 tall 3D array).
 
 *Range scaling* linearly scales observations such that env_min is 0 and env_max is 1. This is useful because neural networks generally perform better on normalized inputs, and for example graphical games output observations over (0, 255). The default is `None`.
 
@@ -143,12 +143,12 @@ random_demo(env)
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on Linux. We will accept PRs related to windows, but do not offiically support it. We're open to help adding macOS CI and proper Windows support/CI.
+We support Linux and macOS, and conduct CI testing on Linux. We will accept PRs related to windows, but do not officially support it. We're open to help adding macOS CI and proper Windows support/CI.
 
 ## Further Documentation
 For more detailed documentation about all the different environments, and a leader board for each, go to [website].
 
-If you'd like to be listed on the leader board for your enviroment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default enviroment parameters.
+If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
 
 
 
@@ -164,16 +164,15 @@ The following games should be done (though they aren't compliant with the wrappe
 * sisl/pursuit
 * sisl/multiwalker
 * sisl/waterworld
+* classic/rock_paper_scissors
 
 The following games are under active development:
 
 * gamma/prospector (Rui)
 * gamma/prison (Mario)
-* classic/rock_paper_scissors (Sharry)
+* classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * clasic/checkers (Tianchen)
-* classic/tictactoe (Upamanyu)
-* classic/connect_four (Upamanyu)
 * classic/mahjong (rlcard) (Luis)
 * classic/texasholdem (rlcard) (Luis)
 * classic/texasholdem_nolimit (rlcard) (Luis)
@@ -184,7 +183,8 @@ Development has not yet started on the following games:
 
 * classic/backgammon
 * classic/chess (https://github.com/niklasf/python-chess)
-* classic/go
+* classic/tictactoe
+* classic/connect_four
 * magent/*
 * atari/*
 * robotics/*
