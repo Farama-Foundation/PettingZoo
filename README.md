@@ -58,17 +58,17 @@ We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
-env = wrapper(env, color_reduction='', down_scale=(x_scale, y_scale), flatten=False,
-range_scale=(env_min, env_max), frame_stacking=4, new_dtype=None)
+env = wrapper(env, color_reduction=None, down_scale=(x_scale, y_scale), reshape=None,
+range_scale=(obs_min, obs_max), frame_stacking=1, new_dtype=None)
 ```
 
-*Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being off.
+*Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being turned off.
 
 *Color reduction* removes color information from game outputs to easier processing with neural networks. An argument of '' does nothing. An argument of 'full' does a full greyscaling of the observation. Arguments of 'R','G' or'B' just the corresponding R, G or B color channel from observation, as a dramatically more computationally efficient and generally adequate method of greyscaling games. This is only available for graphical games with 3D outputs.
 
 *Down scaling* uses mean pooling to reduce the observations output by each game by the given x and y scales. The dimension of an environment must be an integer multiple of it's scale. Downscaling is important for making the output of an environment small enough to work with commonly used architectures for deep reinforcement learning. This is only available for graphical games with 2D or 3D outputs.
 
-*Flattening* flattens the 2D or 3D output of environments to a 1D vector, to be usable with simpler neural network architectures. This can not be used for 1D environments.
+*Reshapping* can take argument `flatten`, and turn 2D or 3D observations into a 1D vector, to be usable with simpler neural network architectures. It can also take argument `expand`, which adds an empty deminsion to the observation (i.e. turning a 2D array into a 1 tall 3D array).
 
 *Range scaling* linearly scales observations such that env_min is 0 and env_max is 1. This is useful because neural networks generally perform better on normalized inputs, and for example graphical games output observations over (0, 255).
 
