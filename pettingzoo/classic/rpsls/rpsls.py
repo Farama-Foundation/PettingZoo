@@ -15,8 +15,8 @@ class rockpaperscissorsEnv(MultiAgentEnv):
     The observation is simply the last opponent action."""
 
     def __init__(self, _):
-        self.action_space = Discrete(3)
-        self.observation_space = Discrete(3)
+        self.action_space = Discrete(5)
+        self.observation_space = Discrete(5)
         self.player1 = "player1"
         self.player2 = "player2"
         self.last_move = None
