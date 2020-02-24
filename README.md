@@ -46,7 +46,7 @@ while True:
 	for agent in range(0,env.num_gents):
 		policy  = policy_list[agent]
 		action = eval(policy(observation))
-    	observation, reward, done, info = env.turn(action)
+    		observation, reward, done, info = env.turn(action)
  ```
 
 This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn.
