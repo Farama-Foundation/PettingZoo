@@ -80,15 +80,17 @@ PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) 
 
 Our AEC environments have the following attributes:
 
-`env.agents`: a list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
+`env.agents`: A list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
 
-`env.observation_spaces`: a dict of the gym observation spaces of every agent, by name.
+`env.agent_order`: A list of the order agents take turns in.
 
-`env.action_spaces`: a dict of the gym action spaces of every agent, by name.
+`env.observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
-`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
+`env.action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`env.dones`: a dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
+`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
+
+`env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
 
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
