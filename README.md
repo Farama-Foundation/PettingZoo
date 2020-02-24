@@ -115,8 +115,8 @@ The most general example of interacting with an enviroment with this API looks l
 env.reset()
 while True:
     for agent in env.agents:
-    	last_done = env.done[agent]
-        last_reward = env.reward[agent]
+    	previous_done = env.done[agent]
+        previous_reward = env.reward[agent]
         action = policy(agent,env.observe(agent)))
         env.turn(action)
 ```
