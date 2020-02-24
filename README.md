@@ -2,7 +2,7 @@
 PettingZoo is Python library of environments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
 
 
-## Games and Installation
+## Enviroment Types and Installation
 
 PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
 
@@ -35,25 +35,78 @@ cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
 right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
-Our API models the games as *Agent Environment Cycle* (AEC) games. This is because the conventional game model (Markov Games) descendant APIs for multi-agent RL can't model many games that you'd like to, [Arxiv Link].
-
-Assuming you have a dictionary of policy functions, interacting with your environment looks like:
+## Markov Games API
+Games which cycle between all agents simulateously stepping forward and the enviroment stepping forward can be modeled as Markov games, and can use the Markov Games API.
 
 ```
-policy_dict = {0:policy_0, 1:policy_1 ... 2:policy_n}
-observation = env.reset()
+from pettingzoo.utils import markov_game
+env = markov_game(env)
+observations = env.reset()
+while True:
+    actions = policy(observations)
+    # add env.render() here if you want to watch the game playing and the game supports it
+    observations, rewards, dones, info = env.step(actions)
+```
+
+The way we handle multiple agents is that the environment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
+
+```
+observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
+actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
+rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
+dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
+```
+
+These are natively supported by RLlib.
+
+## Turn Based Games API
+Enviroments where each agent takes cycling independent turns and can get instant reward based on their action (like chess) can be modeled as a turn based game.
+
+```
+from pettingzoo.utils import turn_game
+env = turn_game(env)
+observations = env.reset()
 while True:
     for agent in env.agents:
-        if not env.done(agent):
-            policy  = policy_list[agent]
-            action = eval(policy(env.observe(agent)))
-            last_reward = env.turn(action)
+        actions = policy(observations, agent)
+        observation, reward, done, info = env.step(actions) # observation is to be used by next agent
 ```
 
-This is almost the same as a normal Gym game, but with one notable exception: You use env.turn(action) instead of env.step(action). A turn moves a single agent at a time, comprising a full step after all agent's have taken their turn. Agent's are assigned integer names, and env.agents is a list of all agents currently in the enviroment (enviroments with a mutable number of agents are supported with PettingZoo).
+After a step is taken for one agent, control automatically flips to the next agent.
 
+## Low Level (AEC Game) API
 
-## Utils API
+PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent). Working with such a general API can be very challenging, so we introduced the above wrappers for the two main kinds of games, built upon it. If you're trying to implement your own environment or learn more interesting games than those, you'll have to use this API. 
+
+Our AEC environments have the following attributes:
+
+`env.agents`: a list of the names of all current agents, typically integers. These may be changed.
+`env.observation_spaces`: a dict of the gym observation spaces of every agent, by name
+`env.action_spaces`: a dict of the gym action spaces of every agent, by name
+`env.rewards`: a dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't gauntleted to be "final" until the agent's turn is reached again.
+`env.done`: a dict of the done state of every agent at the time called, by name
+`env.agent_selection`: Gives name of agent currently poised to be acted on.
+
+Our AEC environments have the following methods:
+`env.observe(agent)`: Returns the observation an agent currently can make
+`env.turn(action)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken.
+`env.reset()`: Resets the environment to a starting state.
+`env.render()`: Displays a rendered frame from the enviroment, if supported
+`env.close()`: Closes the rendering window
+
+The most general example of interacting with an enviroment with this API looks like this:
+
+```
+env.reset()
+while True:
+    for agent in env.agents:
+    	last_done = env.done[agent]
+        last_reward = env.reward[agent]
+        action = policy(agent,env.observe(agent)))
+        env.turn(action)
+```
+
+## Wrapper API
 
 We include popular preprocessing methods out of the box:
 
@@ -77,6 +130,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 
 Operations are applied in the order of arguments to the wrapper function.
 
+## Other Utils
 
 Additionally, we have a basic test to check for environment compliance, if you've made your own custom environment with PettingZoo and want to get a good guess about whether or not you did it right.
 
@@ -105,13 +159,18 @@ from pettingzoo.utils import random_demo
 random_demo(env)
 ```
 
-## Documentation
-For more detailed documentation about all the different environments, and configuration options for them go to [website].
+## OS Support
 
-We maintain a leader board for the best performance on every game, included in the documentation for each game. If you have a score that you would like to be included, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default parameters for every game, with the exception that we 2 have separate leader boards for games that support both continuous and discrete action spaces.
+We support Linux and macOS, and conduct CI testing on Linux. We will accept PRs related to windows, but do not offiically support it. We're open to help adding macOS CI and proper Windows support/CI.
+
+## Further Documentation
+For more detailed documentation about all the different environments, and a leader board for each, go to [website].
+
+If you'd like to be listed on the leader board for your enviroment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default enviroment parameters.
 
 
-## Development Notes
+
+## Development stuff:
 
 All game code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
@@ -151,7 +210,6 @@ Development has not yet started on the following games:
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
 
-## Requirements
 
 Requirements are being kept below until we get the requirements.txt issues fixed
 
@@ -166,26 +224,5 @@ gym[box2d]>=0.15.4
 python-chess
 ```
 
-## OS Support
-
-We support Linux first and it's what we do our CI testing on. We support on macOS, but do not do CI testing on it. We don't explicitly support Windows, but we will accept PRs related to problems running on Windows. We're open to adding formally supporting Windows and adding CI for macOS and Windows if a party was interested in helping and had servers to run the CI on, but we don't currently have the resources to do so.
 
 
-## Old API for Development Reference
-
-```
-observations = env.reset()
-while True:
-    actions = policy(observations)
-    # add env.render() here if you want to watch the game playing and the game supports it
-    observations, rewards, dones, info = env.step(actions)
-```
-
-The way we handle multiple agents is that the environment assigns each agent an integer ID, and everything is passed as dictionaries with the IDs as keys, i.e.:
-
-```
-observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
-actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
-rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
-dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
-```
