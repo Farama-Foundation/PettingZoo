@@ -381,10 +381,10 @@ class env(MultiAgentEnv):
         self.env = CooperativePong(**kwargs)
 
         self.num_agents = 2
-        self.agent_ids = list(range(self.num_agents))
+        self.agents = list(range(self.num_agents))
         # spaces
-        self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
-        self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
+        self.action_spaces = dict(zip(self.agents, self.env.action_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
 
         self.score = self.env.score
         self.display_wait = 0.0
@@ -392,7 +392,7 @@ class env(MultiAgentEnv):
         self.reset()
 
     def convert_to_dict(self, list_of_list):
-        return dict(zip(self.agent_ids, list_of_list))
+        return dict(zip(self.agents, list_of_list))
 
     def reset(self):
         obs = self.env.reset()
@@ -405,12 +405,12 @@ class env(MultiAgentEnv):
         self.env.render()
 
     def step(self, actions):
-        for agent_id in self.agent_ids:
+        for agent_id in self.agents:
             if np.isnan(actions[agent_id]):
                 actions[agent_id] = 0
-            elif not self.action_space_dict[agent_id].contains(actions[agent_id]):
+            elif not self.action_spaces[agent_id].contains(actions[agent_id]):
                 raise Exception('Action for agent {} must be in Discrete({}).'
-                                'It is currently {}'.format(agent_id, self.action_space_dict[agent_id].n, actions[agent_id]))
+                                'It is currently {}'.format(agent_id, self.action_spaces[agent_id].n, actions[agent_id]))
 
         observation, reward, done, info = self.env.step(actions)
 

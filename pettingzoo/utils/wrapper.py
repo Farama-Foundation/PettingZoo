@@ -46,10 +46,10 @@ class wrapper(MultiAgentEnv):
         self.new_dtype = new_dtype
         self.frame_stacking = frame_stacking
         
-        self.agent_ids = self.env.agent_ids
-        self.num_agents = len(self.agent_ids)
-        self.observation_space_dict = self.env.observation_space_dict
-        self.action_space_dict = self.env.action_space_dict
+        self.agents = self.env.agents
+        self.num_agents = len(self.agents)
+        self.observation_spaces = self.env.observation_spaces
+        self.action_spaces = self.env.action_spaces
         
         if self.frame_stacking > 1:
             self.stack_of_frames = {}
@@ -59,7 +59,7 @@ class wrapper(MultiAgentEnv):
         if self._check_box_space():
             self.modify_observation_space()
         else:
-            warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_space_dict))
+            warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
         
     def _check_wrapper_params(self):
         '''
@@ -73,21 +73,21 @@ class wrapper(MultiAgentEnv):
         if self.color_reduction is not None:
             assert isinstance(self.color_reduction, str) or isinstance(self.color_reduction, dict), "color_reduction must be str or dict. It is {}".format(self.color_reduction)
             if isinstance(self.color_reduction, str):
-                self.color_reduction = dict(zip(self.agent_ids, [self.color_reduction for _ in enumerate(self.agent_ids)]))            
+                self.color_reduction = dict(zip(self.agents, [self.color_reduction for _ in enumerate(self.agents)]))            
             if isinstance(self.color_reduction, dict):
-                for agent in self.agent_ids:
+                for agent in self.agents:
                     assert agent in self.color_reduction.keys(), "Agent id {} is not a key of color_reduction {}".format(agent, self.color_reduction)
                     assert self.color_reduction[agent] in COLOR_RED_LIST, "color_reduction must be in {}".format(COLOR_RED_LIST)
-                    assert len(self.observation_space_dict[agent].low.shape) == 3, "To apply color_reduction, length of shape of obs space of the agent should be 3. It is {}".format(len(self.observation_space_dict[agent].low.shape))
+                    assert len(self.observation_spaces[agent].low.shape) == 3, "To apply color_reduction, length of shape of obs space of the agent should be 3. It is {}".format(len(self.observation_spaces[agent].low.shape))
                     if self.color_reduction[agent] == "full":
                         warn("You have chosen true grayscaling. It might be too slow. Choose a specific channel for better performance")
 
         if self.down_scale is not None:
             assert isinstance(self.down_scale, tuple) or isinstance(self.down_scale, dict), "down_scale must be tuple or dict. It is {}".format(self.down_scale)
             if isinstance(self.down_scale, tuple):
-                self.down_scale = dict(zip(self.agent_ids, [self.down_scale for _ in enumerate(self.agent_ids)]))
+                self.down_scale = dict(zip(self.agents, [self.down_scale for _ in enumerate(self.agents)]))
             if isinstance(self.down_scale, dict):
-                for agent in self.agent_ids:
+                for agent in self.agents:
                     assert agent in self.down_scale.keys(), "Agent id {} is not a key of down_scale {}".format(agent, self.down_scale)
 
         if self.reshape is not None:
@@ -96,9 +96,9 @@ class wrapper(MultiAgentEnv):
         if self.range_scale is not None:
             assert isinstance(self.range_scale, tuple) or isinstance(self.range_scale, dict) or isinstance(self.range_scale, str), "range_scale must be tuple or dict. It is {}".format(self.range_scale)
             if isinstance(self.range_scale, tuple):
-                self.range_scale = dict(zip(self.agent_ids, [self.range_scale for _ in enumerate(self.agent_ids)]))
+                self.range_scale = dict(zip(self.agents, [self.range_scale for _ in enumerate(self.agents)]))
             if isinstance(self.range_scale, dict):
-                for agent in self.agent_ids:
+                for agent in self.agents:
                     assert agent in self.range_scale.keys(), "Agent id {} is not a key of range_scale {}".format(agent, self.range_scale)
                     assert len(self.range_scale[agent]) == 2, "Length of range_scale for agent {} is not 2.".format(agent)
                     assert self.range_scale[agent][0] <= self.range_scale[agent][1], "range_scale: for agent {}, low is greater than high".format(agent)
@@ -108,9 +108,9 @@ class wrapper(MultiAgentEnv):
         if self.new_dtype is not None:
             assert isinstance(self.new_dtype, type) or isinstance(self.new_dtype, dict), "new_dtype must be type or dict. It is {}".format(self.new_dtype)
             if isinstance(self.new_dtype, type):
-                self.new_dtype = dict(zip(self.agent_ids, [self.new_dtype for _ in enumerate(self.agent_ids)]))            
+                self.new_dtype = dict(zip(self.agents, [self.new_dtype for _ in enumerate(self.agents)]))            
             if isinstance(self.new_dtype, dict):
-                for agent in self.agent_ids:
+                for agent in self.agents:
                     assert agent in self.new_dtype.keys(), "Agent id {} is not a key of new_dtype {}".format(agent, self.new_dtype)
                     assert isinstance(self.new_dtype[agent], type), "new_dtype[agent] must be a dict of types. It is {}".format(self.new_dtype[agent])
 
@@ -122,13 +122,13 @@ class wrapper(MultiAgentEnv):
         -------
         boolean.
         '''
-        return all([isinstance(obs_space, Box) for obs_space in self.observation_space_dict.values()])
+        return all([isinstance(obs_space, Box) for obs_space in self.observation_spaces.values()])
         
     def modify_observation_space(self):
         # reduce color channels to 1
         if self.color_reduction is not None:
-            for agent in self.agent_ids:
-                obs_space = self.observation_space_dict[agent]
+            for agent in self.agents:
+                obs_space = self.observation_spaces[agent]
                 dtype = obs_space.dtype
                 color_reduction = self.color_reduction[agent]
                 if color_reduction == 'R':
@@ -144,26 +144,26 @@ class wrapper(MultiAgentEnv):
                     # TODO: do grayscale
                     low = np.average(obs_space.low, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
                     high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
-                self.observation_space_dict[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: color_reduction", self.observation_space_dict)
+                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            print("Mod obs space: color_reduction", self.observation_spaces)
         
         # downscale (image, typically)
         if self.down_scale is not None:
-            for agent in self.agent_ids:
-                obs_space = self.observation_space_dict[agent]
+            for agent in self.agents:
+                obs_space = self.observation_spaces[agent]
                 dtype = obs_space.dtype
                 down_scale = self.down_scale[agent]
                 shape = obs_space.shape
                 new_shape = tuple([int(shape[i]/down_scale[i]) for i in range(len(shape))])
                 low = obs_space.low.flatten()[:np.product(new_shape)].reshape(new_shape)
                 high = obs_space.high.flatten()[:np.product(new_shape)].reshape(new_shape)
-                self.observation_space_dict[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: down_scale", self.observation_space_dict)
+                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            print("Mod obs space: down_scale", self.observation_spaces)
         
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-            for agent in self.agent_ids:
-                obs_space = self.observation_space_dict[agent]
+            for agent in self.agents:
+                obs_space = self.observation_spaces[agent]
                 reshape = self.reshape
                 dtype = obs_space.dtype
                 if reshape is OBS_RESHAPE_LIST[0]:
@@ -174,13 +174,13 @@ class wrapper(MultiAgentEnv):
                     # flatten
                     low = obs_space.low.flatten()
                     high = obs_space.high.flatten()
-                self.observation_space_dict[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: reshape", self.observation_space_dict)
+                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            print("Mod obs space: reshape", self.observation_spaces)
         
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-            for agent in self.agent_ids:
-                obs_space = self.observation_space_dict[agent]
+            for agent in self.agents:
+                obs_space = self.observation_spaces[agent]
                 range_scale = self.range_scale[agent]
                 if self.new_dtype is not None:
                     dtype = self.new_dtype[agent]
@@ -189,26 +189,26 @@ class wrapper(MultiAgentEnv):
                 min_obs, max_obs = range_scale
                 low = np.subtract(np.divide(obs_space.low, max_obs-min_obs, dtype=dtype), min_obs)
                 high = np.subtract(np.divide(obs_space.high, max_obs-min_obs, dtype=dtype), min_obs)
-                self.observation_space_dict[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: range_scale", self.observation_space_dict)
+                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            print("Mod obs space: range_scale", self.observation_spaces)
         elif self.new_dtype is not None:
-            for agent in self.agent_ids:
+            for agent in self.agents:
                 dtype = self.new_dtype[agent]
                 low = obs_space.low
                 high = obs_space.high
-                self.observation_space_dict[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: new_dtype", self.observation_space_dict)
+                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            print("Mod obs space: new_dtype", self.observation_spaces)
             
         if self.frame_stacking > 1:
-            self.observation_space_dict = stack_obs_space(self.observation_space_dict, self.frame_stacking)
-            print("Mod obs space: frame_stacking", self.observation_space_dict)
+            self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
+            print("Mod obs space: frame_stacking", self.observation_spaces)
 
     def modify_observations(self, observation):
         # reduce color channels to 1
         if self.color_reduction is not None:
             # TODO: any other method?? 
             # reducing the array by *adding* the last axis values
-            for agent in self.agent_ids:
+            for agent in self.agents:
                 obs = observation[agent]
                 color_reduction = self.color_reduction[agent]
                 if color_reduction == 'R':
@@ -224,7 +224,7 @@ class wrapper(MultiAgentEnv):
         
         # downscale (image, typically)
         if self.down_scale is not None:
-            for agent in self.agent_ids:
+            for agent in self.agents:
                 obs = observation[agent]
                 down_scale = self.down_scale[agent]
                 mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
@@ -233,7 +233,7 @@ class wrapper(MultiAgentEnv):
         
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-            for agent in self.agent_ids:
+            for agent in self.agents:
                 obs = observation[agent]
                 reshape = self.reshape
                 dtype = obs.dtype
@@ -247,7 +247,7 @@ class wrapper(MultiAgentEnv):
         
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-            for agent in self.agent_ids:
+            for agent in self.agents:
                 obs = observation[agent]
                 range_scale = self.range_scale[agent]
                 if self.new_dtype is not None:

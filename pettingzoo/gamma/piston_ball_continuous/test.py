@@ -51,7 +51,7 @@ while not done and counter < 2000:
     if quit_game:
         break
     # actions should be a dict of numpy arrays
-    action_dict = dict(zip(env.agent_ids, action_list)) 
+    action_dict = dict(zip(env.agents, action_list)) 
 
     observations, reward_dict, done_dict, info = env.step(action_dict)
     env.render()

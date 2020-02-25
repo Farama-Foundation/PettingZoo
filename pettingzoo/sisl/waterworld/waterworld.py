@@ -12,17 +12,17 @@ class env(MultiAgentEnv):
         self.env = _env(*args, **kwargs)
 
         self.num_agents = self.env.num_agents
-        self.agent_ids = list(range(self.num_agents))
+        self.agents = list(range(self.num_agents))
         # spaces
-        self.action_space_dict = dict(zip(self.agent_ids, self.env.action_space))
-        self.observation_space_dict = dict(zip(self.agent_ids, self.env.observation_space))
+        self.action_spaces = dict(zip(self.agents, self.env.action_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.03
 
         self.reset()
 
     def convert_to_dict(self, list_of_list):
-        return dict(zip(self.agent_ids, list_of_list))
+        return dict(zip(self.agents, list_of_list))
 
     def reset(self):
         observation = self.env.reset()
@@ -39,12 +39,12 @@ class env(MultiAgentEnv):
         # unpack actions
         actions = [0.0 for _ in range(len(action_dict))]
 
-        for agent_id in self.agent_ids:
+        for agent_id in self.agents:
             if any(np.isnan(action_dict[agent_id])):
                 action_dict[agent_id] = [0 for _ in action_dict[agent_id]]
-            elif not self.action_space_dict[agent_id].contains(action_dict[agent_id]):
+            elif not self.action_spaces[agent_id].contains(action_dict[agent_id]):
                 raise Exception('Action for agent {} must be in {}. \
-                                It is currently {}'.format(agent_id, self.action_space_dict[agent_id], action_dict[agent_id]))
+                                It is currently {}'.format(agent_id, self.action_spaces[agent_id], action_dict[agent_id]))
             actions[agent_id] = action_dict[agent_id]
 
         observation, reward, done, info = self.env.step(actions)

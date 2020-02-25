@@ -18,8 +18,8 @@ def random_demo(env):
         env.render()
         time.sleep(env.display_wait)
     
-        action_list = np.array([env.action_space_dict[i].sample() for i in range(env.num_agents)])
-        action_dict = dict(zip(env.agent_ids, action_list))
+        action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
+        action_dict = dict(zip(env.agents, action_list))
     
         observation, rewards, done_dict, info = env.step(action_dict)
         done = any(list(done_dict.values()))
