@@ -321,7 +321,7 @@ class env(MultiAgentEnv):
         return run
 
     def observe(self):
-        observation = pygame.surfarray.array3d(self.WINDOW)
+        observation = pygame.surfarray.pixels3d(self.WINDOW)
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
         observation = observation[:, :, 0]  # take red channel only instead of doing full greyscale
