@@ -87,7 +87,7 @@ Our AEC environments have the following methods:
 `env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the environment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
 
 
-## Observation Wrapper API
+## Observation Wrapper
 
 We include popular preprocessing methods out of the box:
 
@@ -111,7 +111,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 
 Operations are applied in the order of arguments to the wrapper function.
 
-## Markov Game Wrapper API
+## Markov Game Wrapper
 
 We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below:
 
