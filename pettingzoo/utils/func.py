@@ -11,7 +11,6 @@ def save_observation(observation_dict, reverse_colors=False):
         image = np.squeeze(observation_dict[key])
         if image.ndim < 2:
             raise ValueError("Image should be at least 2-dimensional. It is {}".format(image.ndim))
-        print(image.shape)
         # image is range [0, 1] - float32. Else, use np.divide
 
         if reverse_colors:

@@ -277,12 +277,12 @@ class wrapper(MultiAgentEnv):
             return obs
         
     def step(self, action_dict):
-        obs, rewards, done, info = self.env.step(action_dict)
-        
-        mod_obs = self.modify_observations(obs)            
+        obs, rewards, dones, infos = self.env.step(action_dict)
+
+        self.modify_observations(obs)
         if self.frame_stacking > 1:
-            observation = stack_obs(self.stack_of_frames, mod_obs)
+            observations = stack_obs(self.stack_of_frames, obs)
         else:
-            observation = mod_obs
+            observations = obs
         
-        return observation, rewards, done, info
+        return observations, rewards, dones, infos
