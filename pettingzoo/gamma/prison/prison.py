@@ -1,9 +1,9 @@
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
-import pygame
 import os
 import random
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+import pygame
 
 
 def get_image(path):
@@ -128,7 +128,7 @@ class env(MultiAgentEnv):
                        p.right_bound - x)
                 observations[i] = obs
         else:
-            capture = pygame.surfarray.array3d(self.screen)
+            capture = pygame.surfarray.pixels3d(self.screen)
             print(capture.shape)
             for i in self.agent_list:
                 p = self.prisoners[i]

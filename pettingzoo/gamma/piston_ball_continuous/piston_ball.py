@@ -86,7 +86,7 @@ class env(MultiAgentEnv):
         self.num_frames = 0
 
     def observe(self):
-        observation = pygame.surfarray.array3d(self.screen)
+        observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)
         observation = np.fliplr(observation)
         observation = observation[257:457, 40:920, 2]  # take blue channel only instead of doing full greyscale
