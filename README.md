@@ -131,7 +131,7 @@ Of the games that can be played, many can be played by humans, and functionality
 
 ```
 from pettingzoo.gamma import pistonball
-pistonball.manual_control(game.env([environment specs]))
+pistonball.manual_control([environment specs])
 ```
 
 For viewable games that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions, via:
