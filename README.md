@@ -78,9 +78,9 @@ Our AEC environments have the following methods:
 
 `env.turn(action=None)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken. Taking turns with `action=None` can be used to cycle through turns of the environment if desired.
 
-`env.reset()`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment.
+`env.reset(observe=True)`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment if `observe=True`.
 
-`env.render(observe=True)`: Displays a rendered frame from the environment, if supported. Set `observe=False` to not call `env.observe()`.
+`env.render()`: Displays a rendered frame from the environment, if supported.
 
 `env.close()`: Closes the rendering window.
 
