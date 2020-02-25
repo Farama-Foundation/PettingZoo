@@ -75,7 +75,7 @@ class env(MultiAgentEnv):
         self.floor_patch4 = get_image(os.path.join('img', 'patch4.png'))
 
         self.agent_list = []
-        self.agent_ids = []
+        self.agents = []
         self.num_agents = num_archers + num_knights
 
         # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
@@ -98,10 +98,10 @@ class env(MultiAgentEnv):
                 self.knight_player_num += 1
 
         for i in range(num_archers + num_knights):
-            self.agent_ids.append(i)
+            self.agents.append(i)
 
-        self.observation_space_dict = dict(zip(self.agent_ids, [Box(low=0, high=1, shape=(40, 40), dtype=np.float32) for _ in enumerate(self.agent_ids)]))
-        self.action_space_dict = dict(zip(self.agent_ids, [Discrete(6) for _ in enumerate(self.agent_ids)]))
+        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=1, shape=(40, 40), dtype=np.float32) for _ in enumerate(self.agents)]))
+        self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
 
     # Controls the Spawn Rate of Weapons
@@ -333,7 +333,7 @@ class env(MultiAgentEnv):
         observations = {}
         for i in range(len(self.agent_list)):
             if not self.agent_list[i].alive:
-                observations[self.agent_ids[i]] = np.zeros(2704)
+                observations[self.agents[i]] = np.zeros(2704)
             else:
                 min_x = agent_positions[i][1] - (32 * 8)
                 max_x = agent_positions[i][1] + (32 * 8)
@@ -362,7 +362,7 @@ class env(MultiAgentEnv):
                 cropped = measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40 FIXME: This is not scaling it to 40x40. There was some bug with the image downscaling and Justin told me (Niall) to just push it with the bug and he would figure it out. this scale to (10, 10) was a suggest Justin wanted me to try before he told me to push it with the bug. If you want it to be 40x40, change the (10, 10) to (13, 13)
 
                 unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
-                observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
+                observations[self.agents[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
 
         return observations
 
@@ -457,10 +457,10 @@ class env(MultiAgentEnv):
 
         self.check_game_end()
 
-        reward_dict = dict(zip(self.agent_ids, [agent.score for agent in self.agent_list]))
+        reward_dict = dict(zip(self.agents, [agent.score for agent in self.agent_list]))
 
         agent_done = [agent.is_done() for agent in self.agent_list]
-        done_dict = dict(zip(self.agent_ids, agent_done))
+        done_dict = dict(zip(self.agents, agent_done))
         done_dict['__all__'] = not self.run
 
         observation = self.observe()
@@ -548,7 +548,7 @@ class env(MultiAgentEnv):
         self.knight_list = pygame.sprite.Group()
 
         self.agent_list = []
-        self.agent_ids = []
+        self.agents = []
 
         for i in range(self.num_archers):
             self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer()
@@ -569,7 +569,7 @@ class env(MultiAgentEnv):
                 self.knight_player_num += 1
 
         for i in range(self.num_archers + self.num_knights):
-            self.agent_ids.append(i)
+            self.agents.append(i)
 
         return self.observe()
 

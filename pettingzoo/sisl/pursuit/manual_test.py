@@ -66,7 +66,7 @@ def manual_control(**kwargs):
         if _quit_loop[0]:
             break
         # actions should be a dict of numpy arrays
-        action_dict = dict(zip(env.agent_ids, _actions))
+        action_dict = dict(zip(env.agents, _actions))
     
         observation, rewards, done_dict, info = env.step(action_dict)
         done = any(list(done_dict.values()))
@@ -93,7 +93,7 @@ def manual_control(**kwargs):
     #          if _quit_loop[0]:
     #              break
     #          # actions should be a dict of numpy arrays
-    #          action_dict = dict(zip(env.agent_ids, _actions))
+    #          action_dict = dict(zip(env.agents, _actions))
     #
     #          observation, rewards, done_dict, info = env.step(action_dict)
     #          done = any(list(done_dict.values()))

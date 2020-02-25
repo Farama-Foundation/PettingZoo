@@ -51,7 +51,7 @@ class Pursuit():
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
         self.num_agents = self.n_pursuers
-        self.agent_ids = list(range(self.num_agents))
+        self.agents = list(range(self.num_agents))
 
         self.obs_range = kwargs.pop('obs_range', 7)  # can see 7 grids around them by default
         # assert self.obs_range % 2 != 0, "obs_range should be odd"

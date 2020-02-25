@@ -29,15 +29,15 @@ class env(MultiAgentEnv):
     def __init__(self, flatten_obs=True):
         super(env, self).__init__()
         self.num_agents = 20
-        self.agent_ids = list(range(self.num_agents))
+        self.agents = list(range(self.num_agents))
 
         self.flatten_obs = flatten_obs
 
-        self.action_space_dict = dict(zip(self.agent_ids, [gym.spaces.Discrete(3)]*self.num_agents))
+        self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)]*self.num_agents))
         if self.flatten_obs:
-            self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
+            self.observation_spaces = dict(zip(self.agents, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
         else:
-            self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(50, 30, 1), dtype=np.float32)]*self.num_agents))
+            self.observation_spaces = dict(zip(self.agents, [gym.spaces.Box(low=0.0, high=1.0, shape=(50, 30, 1), dtype=np.float32)]*self.num_agents))
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -105,7 +105,7 @@ class env(MultiAgentEnv):
                 unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
             else:
                 unscaled_obs = np.expand_dims(cropped, axis=2)
-            observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
+            observations[self.agents[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
         return observations
 
     def enable_render(self):
@@ -220,12 +220,12 @@ class env(MultiAgentEnv):
         pygame.display.flip()
 
     def step(self, actions):
-        for i, agent_id in enumerate(self.agent_ids):
+        for i, agent_id in enumerate(self.agents):
             if np.isnan(actions[agent_id]):
                 actions[agent_id] = 1
-            elif not self.action_space_dict[i].contains(actions[i]):
+            elif not self.action_spaces[i].contains(actions[i]):
                 raise Exception('Action for agent {} must be in Discrete({}).'
-                                'It is currently {}'.format(i, self.action_space_dict[i].n, actions[i]))
+                                'It is currently {}'.format(i, self.action_spaces[i].n, actions[i]))
             self.move_piston(self.pistonList[i], actions[agent_id] - 1)  # 1 is up, -1 is down, 0 is do nothing
 
         self.space.step(1/15.0)
@@ -259,8 +259,8 @@ class env(MultiAgentEnv):
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
 
-        rewardDict = dict(zip(self.agent_ids, total_reward))
-        doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
+        rewardDict = dict(zip(self.agents, total_reward))
+        doneDict = dict(zip(self.agents, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
         return observation, rewardDict, doneDict, {}

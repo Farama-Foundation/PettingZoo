@@ -52,7 +52,7 @@ def manual_control(**kwargs):
             break
     
         # actions should be a dict of numpy arrays
-        action_dict = dict(zip(env.agent_ids, actionList))  # no action = 0
+        action_dict = dict(zip(env.agents, actionList))  # no action = 0
     
         observation, reward_dict, done_dict, info = env.step(action_dict)
         env.render()

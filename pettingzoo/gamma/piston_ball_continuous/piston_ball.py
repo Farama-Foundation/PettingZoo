@@ -31,11 +31,11 @@ class env(MultiAgentEnv):
     def __init__(self):
         super(env, self).__init__()
         self.num_agents = 20
-        self.agent_ids = list(range(self.num_agents))
+        self.agents = list(range(self.num_agents))
 
-        self.action_space_dict = dict(zip(self.agent_ids, [gym.spaces.Discrete(3)]*self.num_agents))
-        # self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)]*self.num_agents))  # [gym.spaces.Discrete(1500)], [gym.spaces.Box(low=0, high=255, shape=(50, 30, 1), dtype=np.uint8)]
-        self.observation_space_dict = dict(zip(self.agent_ids, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
+        self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)]*self.num_agents))
+        # self.observation_spaces = dict(zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(1500,), dtype=np.uint8)]*self.num_agents))  # [gym.spaces.Discrete(1500)], [gym.spaces.Box(low=0, high=255, shape=(50, 30, 1), dtype=np.uint8)]
+        self.observation_spaces = dict(zip(self.agents, [gym.spaces.Box(low=0.0, high=1.0, shape=(1500,), dtype=np.float32)]*self.num_agents))
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -99,7 +99,7 @@ class env(MultiAgentEnv):
         for i in range(len(self.pistonList)):
             cropped = observation[:, i*10:30 + i*10]
             unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
-            observations[self.agent_ids[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
+            observations[self.agents[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
         return observations
 
     def enable_render(self):
@@ -212,7 +212,7 @@ class env(MultiAgentEnv):
         pygame.display.flip()
 
     def step(self, actions):
-        for i, agent_id in enumerate(self.agent_ids):
+        for i, agent_id in enumerate(self.agents):
             if actions[i] < -1 or actions[i] > 1:
                 raise Exception('Action for agent {} must be a real between -1 and 1.' 
                                 'It is currently {}'.format(i, actions[i]))
@@ -249,8 +249,8 @@ class env(MultiAgentEnv):
         if self.num_frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
             
-        rewardDict = dict(zip(self.agent_ids, total_reward))
-        doneDict = dict(zip(self.agent_ids, [self.done]*self.num_agents))
+        rewardDict = dict(zip(self.agents, total_reward))
+        doneDict = dict(zip(self.agents, [self.done]*self.num_agents))
         doneDict['__all__'] = self.done
 
         return observation, rewardDict, doneDict, {} 
