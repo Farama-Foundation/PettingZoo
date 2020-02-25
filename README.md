@@ -157,7 +157,7 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
-* gamma/prison (needs AEC API port) (Mario)
+* gamma/prison (needs AEC API port) (needs demo API port) (Mario)
 * gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port)
 * gamma/pistonball (needs AEC API port) (needs wrapper API port)
 * gamma/cooperative_pong (needs AEC API port) (needs wrapper API port)
