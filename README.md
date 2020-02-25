@@ -151,25 +151,24 @@ For more detailed documentation about all the different environments, and a lead
 If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
 
 
-
 ## Development stuff:
 
-All game code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
+All environment code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
-The following games should be done (though they aren't compliant with the wrapper API yet):
+The following environments should be done:
 
-* gamma/knights_archers_zombies
-* gamma/pistonball
-* gamma/cooperative_pong
-* sisl/pursuit
-* sisl/multiwalker
-* sisl/waterworld
-* classic/rock_paper_scissors
+* gamma/prison (needs AEC API port) (Mario)
+* gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port)
+* gamma/pistonball (needs AEC API port) (needs wrapper API port)
+* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port)
+* sisl/pursuit (needs AEC API port) (needs wrapper API port) (Mario)
+* sisl/multiwalker (needs AEC API port) (needs wrapper API port) (Mario)
+* sisl/waterworld (needs AEC API port) (needs wrapper API port) (Mario)
+* classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
 The following games are under active development:
 
 * gamma/prospector (Rui)
-* gamma/prison (Mario)
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * clasic/checkers (Tianchen)
@@ -177,7 +176,7 @@ The following games are under active development:
 * classic/texasholdem (rlcard) (Luis)
 * classic/texasholdem_nolimit (rlcard) (Luis)
 * classic/uno (rlcard) (Luis)
-* mpe/*
+* magent/* (Mario)
 
 Development has not yet started on the following games:
 
@@ -185,7 +184,7 @@ Development has not yet started on the following games:
 * classic/chess (https://github.com/niklasf/python-chess)
 * classic/tictactoe
 * classic/connect_four
-* magent/*
+* mpe/*
 * atari/*
 * robotics/*
 
