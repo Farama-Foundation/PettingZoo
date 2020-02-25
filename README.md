@@ -11,7 +11,7 @@ PettingZoo breaks its games down into several categories, largely including game
 * gamma: Graphical games developed by us, in PyGame. All games are cooperative, and many pose features very challenging to reinforcement learning.
 * magent: A set of environments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
 * mpe: 'Multi-agent Particle Environments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
-* robotics: A collection of 3D multi-agent robot environments, simulated with MuJoC
+* robotics: A collection of 3D multi-agent robot environments, simulated with MuJoCo
 * sisl: An eclectic collection of 3 games developed by SISL, originally from https://github.com/sisl/MADRL
 
 To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
@@ -87,7 +87,7 @@ Our AEC environments have the following methods:
 `env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the environment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
 
 
-## Wrapper API
+## Observation Wrapper API
 
 We include popular preprocessing methods out of the box:
 
@@ -111,6 +111,28 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 
 Operations are applied in the order of arguments to the wrapper function.
 
+## Markov Game Wrapper API
+
+We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below:
+
+```
+from petttingzoo.utils import markov_game
+env = markov_game(env)
+observations = env.reset()
+while True:
+    actions = policy(actions)
+    # add env.render() here if you want to watch the game playing and the game supports it
+    observations, rewards, dones, info = env.step(actions)
+```
+
+Where
+
+```
+observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
+actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
+rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
+dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
+```
 
 ## Other Utils
 
