@@ -279,7 +279,7 @@ class CooperativePong(gym.Env):
         pygame.display.flip()
 
     def observe(self):
-        observation = pygame.surfarray.array3d(self.screen)
+        observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
         observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
