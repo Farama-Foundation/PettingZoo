@@ -19,4 +19,3 @@ class agent_selection():
 #     print(env.agent_select)
 #     if i == 4:
 #         env.reinit([11,21,31,41])
-    

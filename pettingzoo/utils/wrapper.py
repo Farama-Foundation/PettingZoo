@@ -281,7 +281,8 @@ class wrapper(MultiAgentEnv):
 
         self.modify_observations(obs)
         if self.frame_stacking > 1:
-            observations = stack_obs(self.stack_of_frames, obs)
+            stack_obs(self.stack_of_frames, obs)
+            observations = self.stack_of_frames
         else:
             observations = obs
         
