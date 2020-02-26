@@ -199,6 +199,7 @@ The following games are under active development:
 * classic/texasholdem_nolimit (rlcard) (Luis)
 * classic/uno (rlcard) (Luis)
 * magent/* (Mario)
+* mpe/* (Ben)
 
 Development has not yet started on the following games:
 
@@ -206,7 +207,6 @@ Development has not yet started on the following games:
 * classic/chess (https://github.com/niklasf/python-chess)
 * classic/tictactoe
 * classic/connect_four
-* mpe/*
 * atari/*
 * robotics/*
 
