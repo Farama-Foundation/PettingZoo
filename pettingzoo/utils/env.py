@@ -1,4 +1,7 @@
 class Env(object):
+    def __init__(self):
+        pass
+
     def step(self, action, observe=True):
         raise NotImplementedError
 
