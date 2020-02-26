@@ -43,7 +43,7 @@ Games can be interacted with as follows in the simplest case, in a manner very s
 first_observation = env.reset()
 while True:
     for agent in env.agents:
-        action = policy(agent,env.observe(agent))) # this could also be cached from last the observation that agent took
+        action = policy(agent,env.observe(agent))) # this could also be cached from the last observation
         observation, reward, done, info = env.step(action) # control shifts to next agent
 ```
 
