@@ -64,9 +64,13 @@ PettingZoo environments have the following attributes:
 
 `env.action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
+`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. This looks like:
 
-`env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again.
+`{0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}`
+
+`env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. This looks like: 
+
+`dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}`
 
 `env.infos`: A dict of info for each agent, by name. Included for extensibility, and because info is a part of the Gym API. All games built into this repo only output '' for each agent.
 
@@ -123,13 +127,11 @@ while True:
     observations, rewards, dones, info = env.step(actions)
 ```
 
-Where
+This class is similar to our default environment class, except that it doesn't include `self.agent_order`, `self.agent_selection` and `self.observe(agent)`. It also adds observations and actions, which behave similarly to dones and rewards:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n:[n-1th agent's observation]}
 actions = {0:[first agent's action], 1:[second agent's action] ... n:[n-1th agent's action]}
-rewards = {0:[first agent's reward], 1:[second agent's reward] ... n:[n-1th agent's reward]}
-dones = {0:[first agent's done state], 1:[second agent's done state] ... n:[n-1th agent's done state]}
 ```
 
 ## Other Utils
