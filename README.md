@@ -82,7 +82,7 @@ Our AEC environments have the following methods:
 
 `env.reset(observe=True)`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment if `observe=True`.
 
-`env.render()`: Displays a rendered frame from the environment, if supported.
+`env.render(mode='human')`: Displays a rendered frame from the environment, if supported. Different modes can be used for different output styles, for example some environments support `rgb_array` which returns numpy arrays of the screen for visualizations or turning it into a video.
 
 `env.close()`: Closes the rendering window.
 
@@ -112,6 +112,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 *New dtypes* turn your observations into a certain dtype when output from the wrapper. This is helpful because, for instance, most graphical games output tensors of `uint8` dtype, while most neural networks require `float32`.
 
 Operations are applied in the order of arguments to the wrapper function.
+
 
 ## Markov Game Wrapper
 
