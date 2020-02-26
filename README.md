@@ -76,15 +76,13 @@ Our AEC environments have the following methods:
 
 `env.observe(agent)`: Returns the observation an agent currently can make.
 
-`env.turn(action=None)`: Has the selected agent take a turn, selects the next agent. In AEC games, after every agent takes a turn a step is said to have been taken. Taking turns with `action=None` can be used to cycle through turns of the environment if desired.
-
 `env.reset(observe=True)`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment if `observe=True`.
 
 `env.render()`: Displays a rendered frame from the environment, if supported.
 
 `env.close()`: Closes the rendering window.
 
-`env.step(actions)`: Makes calls to other parts of the API to take a Gym like step in the environment, returning the observation, reward, done state and info for the selected agent in the environment. Control shifts to next agent. This is different than the notion of a step in an AEC game.
+`env.step(actions, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` is returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired.
 
 
 ## Observation Wrapper
