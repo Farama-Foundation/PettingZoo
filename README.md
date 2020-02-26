@@ -82,7 +82,7 @@ Our AEC environments have the following methods:
 
 `env.close()`: Closes the rendering window.
 
-`env.step(actions, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` are returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired.
+`env.step(action, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` are returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired.
 
 
 ## Observation Wrapper
