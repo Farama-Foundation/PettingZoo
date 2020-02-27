@@ -24,8 +24,10 @@ def stack_obs_space(obs_space_dict, stack_size):
         # stack 1-D frames
         if len(obs_shape) == 1:
             shape = (stack_size, 1)
+        # stack 2-D frames
         elif len(obs_shape) == 2:
             shape = (stack_size, 1, 1)
+        # stack 3-D frames
         elif len(obs_shape) == 3:
             shape = (stack_size, 1, 1, 1)
         low = np.tile(obs_space.low, shape)
@@ -43,8 +45,10 @@ def stack_reset_obs(obs_dict, stack_size):
         # stack 1-D frames
         if len(obs_shape) == 1:
             shape = (stack_size, 1)
+        # stack 2-D frames
         elif len(obs_shape) == 2:
             shape = (stack_size, 1, 1)
+        # stack 3-D frames
         elif len(obs_shape) == 3:
             shape = (stack_size, 1, 1, 1)
         frame_stack[agent_id] =  np.tile(obs_dict[agent_id], shape)
