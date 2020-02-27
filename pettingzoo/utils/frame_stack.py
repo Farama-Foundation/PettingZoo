@@ -16,20 +16,38 @@ def stack_obs_space(obs_space_dict, stack_size):
 
     new_obs_space_dict = {}
 
-    for key in obs_space_dict.keys():
-        obs_space = obs_space_dict[key]
+    for agent_id in obs_space_dict.keys():
+        obs_space = obs_space_dict[agent_id]
         assert isinstance(obs_space, Box), "Stacking is currently only allowed for Box obs space. The given obs space is {}".format(obs_space)
         dtype = obs_space.dtype
-        low = np.tile(obs_space.low, stack_size)
-        high = np.tile(obs_space.high, stack_size)
-        new_obs_space_dict[key] = Box(low=low, high=high, dtype=dtype)
+        obs_shape = obs_space_dict[agent_id].shape
+        # stack 1-D frames
+        if len(obs_shape) == 1:
+            shape = (stack_size, 1)
+        elif len(obs_shape) == 2:
+            shape = (stack_size, 1, 1)
+        elif len(obs_shape) == 3:
+            shape = (stack_size, 1, 1, 1)
+        low = np.tile(obs_space.low, shape)
+        high = np.tile(obs_space.high, shape)
+        new_obs_space_dict[agent_id] = Box(low=low, high=high, dtype=dtype)
     return new_obs_space_dict
 
 def stack_reset_obs(obs_dict, stack_size):
     '''
     Reset observations are only 1 obs per agent. Tile them.
     '''
-    frame_stack = {agent_id: np.tile(obs_dict[agent_id], stack_size) for agent_id in obs_dict.keys()}
+    frame_stack = {}
+    for agent_id in obs_dict.keys():
+        obs_shape = obs_dict[agent_id].shape
+        # stack 1-D frames
+        if len(obs_shape) == 1:
+            shape = (stack_size, 1)
+        elif len(obs_shape) == 2:
+            shape = (stack_size, 1, 1)
+        elif len(obs_shape) == 3:
+            shape = (stack_size, 1, 1, 1)
+        frame_stack[agent_id] =  np.tile(obs_dict[agent_id], shape)
     return frame_stack
 
 def stack_obs(frame_stack, new_obs_dict):
@@ -42,22 +60,5 @@ def stack_obs(frame_stack, new_obs_dict):
     '''
     for agent_id in new_obs_dict.keys():
         new_obs = new_obs_dict[agent_id]
-        obs_shape = new_obs.shape
-        last_axis_len = obs_shape[-1]
-
-        # stack frames in 1-D
-        if len(obs_shape) == 1:
-            frame_stack[agent_id][:-last_axis_len] = frame_stack[agent_id][last_axis_len:]
-            frame_stack[agent_id][-last_axis_len:] = new_obs
-
-        # stack frames in 2-D
-        elif len(obs_shape) == 2:
-            frame_stack[agent_id][:, :-last_axis_len] = frame_stack[agent_id][:, last_axis_len:]
-            frame_stack[agent_id][:, -last_axis_len:] = new_obs
-
-        # stack frames in 3-D
-        elif len(obs_shape) == 3:
-            frame_stack[agent_id][:, :, :-last_axis_len] = frame_stack[agent_id][:, :, last_axis_len:]
-            frame_stack[agent_id][:, :, -last_axis_len:] = new_obs
-    # return frame_stack
-    # frame_stack itself changes
+        frame_stack[agent_id][:-1] = frame_stack[agent_id][1:]
+        frame_stack[agent_id][-1] = new_obs
