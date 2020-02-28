@@ -40,11 +40,12 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 Games can be interacted with as follows in the simplest case, in a manner very similar to Gym: 
 
 ```
-first_observation = env.reset()
+observation = env.reset()
 while True:
     for agent in env.agents:
-        action = policy(agent,env.observe(agent))) # this could also be cached from the last observation
+        action = policy(agent,observe)) # this could also be cached from the last observation
         observation, reward, done, info = env.step(action) # control shifts to next agent
+        # observation is for agent which takes next turn
 ```
 
 For games where the instant observations or reward are undesired (or other interesting things are happening), you must make additional calls to the full API.
@@ -88,7 +89,7 @@ Our AEC environments have the following methods:
 
 `env.close()`: Closes the rendering window.
 
-`env.step(action, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` are returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired.
+`env.step(action, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` are returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired. The observation returned is the observation from the agent which will take the next turn.
 
 
 ## Observation Wrapper
