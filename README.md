@@ -183,10 +183,13 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
-* gamma/prison (needs AEC API port) (needs demo API port) (Mario)
+* gamma/prison
+* mpe/*
+
+The following environments are done but require porting:
 * gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port)
 * gamma/pistonball (needs AEC API port) (needs wrapper API port)
-* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port)
+* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port) (Justin)
 * sisl/pursuit (needs AEC API port) (needs wrapper API port) (Mario)
 * sisl/multiwalker (needs AEC API port) (needs wrapper API port) (Mario)
 * sisl/waterworld (needs AEC API port) (needs wrapper API port) (Mario)
@@ -203,7 +206,7 @@ The following games are under active development:
 * classic/texasholdem_nolimit (rlcard) (Luis)
 * classic/uno (rlcard) (Luis)
 * magent/* (Mario)
-* mpe/* (Ben)
+* class/chess (Ben)
 
 Development has not yet started on the following games:
 
