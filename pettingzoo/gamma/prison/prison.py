@@ -1,9 +1,9 @@
-
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import pygame
 import os
 import random
+import gym  
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
 
 
 def get_image(path):
@@ -32,12 +32,15 @@ class env(MultiAgentEnv):
     def __init__(self, continuous=False, vector_observation=True):
         # super(env, self).__init__()
         self.num_agents = 8
-        self.agent_list = list(range(0, self.num_agents))
+        self.agents = list(range(0, self.num_agents))
+        self.agent_order = self.agents
+        self.agent_selection = 0
 
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((750, 650))
         self.num_frames = 0
+        self.done_val = False
 
         self.background = get_image('background.png')
         self.prisoner_sprite = get_image('prisoner.png')
@@ -118,50 +121,60 @@ class env(MultiAgentEnv):
 
         # self.space.debug_draw(self.options)
 
-    def observe(self):
-        observations = {}
+    def observe(self, agent):
+        
         if self.vector_obs:
-            for i in self.agent_list:
-                p = self.prisoners[i]
-                x = p.position[0]
-                obs = (x-p.left_bound,
-                       p.right_bound - x)
-                observations[i] = obs
+            
+            p = self.prisoners[agent]
+            x = p.position[0]
+            obs = (x-p.left_bound,p.right_bound - x)
+            return obs
         else:
             capture = pygame.surfarray.pixels3d(self.screen)
-            print(capture.shape)
-            for i in self.agent_list:
-                p = self.prisoners[i]
-                x1, y1, x2, y2 = p.window
-                sub_screen = capture[x1:x2,
-                                     y1:y2, :]
-                observations[i] = sub_screen
-        return observations
+            p = self.prisoners[agent]
+            x1, y1, x2, y2 = p.window
+            sub_screen = capture[x1:x2,y1:y2, :]
+            return sub_screen
 
-    def step(self, actions):
+    def reset(self, observe=True):
+        self.num_frames = 0
+        self.done_val = False
+        prisoner_spawn_locs = [(200, 150-self.prisoner_sprite_y, 50, 350, (50, 50, 350, 150)), (550, 150-self.prisoner_sprite_y, 400, 700, (400, 50, 700, 150)), (200, 300-self.prisoner_sprite_y, 50, 350, (50, 200, 350, 300)),(550, 300-self.prisoner_sprite_y, 400, 700, (400, 200, 700, 300)), (200, 450-self.prisoner_sprite_y, 50, 350, (50, 350, 350, 450)), (550, 450-self.prisoner_sprite_y, 400, 700, (400, 350, 700, 450)), (200, 600-self.prisoner_sprite_y, 50, 350, (50, 500, 350, 600)), (550, 600-self.prisoner_sprite_y, 400, 700, (400, 500, 700, 600))]
+        self.agent_selection = 0
+        for i in self.agents:
+            p = self.prisoners[i]
+            x, y, l, r, u = prisoner_spawn_locs[i]
+            p.position = (x + random.randint(-20,20), y)
+
+        if observe:
+            return self.observe(0)
+        
+
+    def step(self, action):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
-        reward_list = []
-        action_list = list(actions.values())
-        for i in range(0, 8):
 
-            # if not continuous, input must be normalized
-            if action_list[i] != 0 and not self.continuous:
-                action_list[i] = action_list[i]/abs(action_list[i])
-            r = self.move_prisoner(i, action_list[i])
-            reward_list.append(r)
+        # if not continuous, input must be normalized
+        reward = 0
+        if action != None:
+            if action != 0 and not self.continuous:
+                action = action/abs(action)
+            reward = self.move_prisoner(self.agent_selection, action)
+        
         self.clock.tick(15)
         self.draw()
 
         self.num_frames += 1
-        done_val = False
         if (self.num_frames >= 500):
-            done_val = True
+            self.done_val = True
 
-        rewards = dict(zip(self.agent_list, reward_list))
-        observation = self.observe()
-        done = dict(((i, done_val) for i in self.agent_list))
+        observation = self.observe(self.agent_selection)
+        done = self.done_val
         info = {}
-        return observation, rewards, done, info
+
+        self.agent_selection = (self.agent_selection + 1) % self.num_agents
+        return observation, reward, done, info
 
     def render(self):
         pygame.display.flip()
+
+from .manual_test import manual_control
