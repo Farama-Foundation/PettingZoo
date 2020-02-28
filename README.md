@@ -64,7 +64,7 @@ PettingZoo environments have the following attributes:
 
 `env.action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. This looks like:
+`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. Rewards for an agent are summed from the last time it took a turn, and zeroed before it takes another turn. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
