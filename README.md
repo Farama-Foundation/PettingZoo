@@ -72,7 +72,9 @@ PettingZoo environments have the following attributes:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`env.infos`: A dict of info for each agent, by name. Included for extensibility, and because info is a part of the Gym API. All games built into this repo only output `{}` for each agent.
+`env.infos`: A dict of info for each agent, by name. Included for extensibility, and because info is a part of the Gym API. All games built into this repo only output `''` for each agent. This looks like:
+
+`dones = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `env.agent_selection`: Gives name of agent currently poised to be acted on.
 
