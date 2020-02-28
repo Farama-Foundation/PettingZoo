@@ -59,7 +59,7 @@ PettingZoo environments have the following attributes:
 
 `env.agents`: A list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
 
-`env.agent_order`: A list of the order agents take turns in. The 0th element of the list acts first, and so on.
+`env.agent_order`: A list of the agent names in the order agents take turns in. The 0th element of the list acts first, and so on.
 
 `env.observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
