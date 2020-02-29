@@ -202,7 +202,7 @@ The following games are under active development:
 * gamma/prospector (Rui)
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
-* clasic/checkers (Tianchen)
+* classic/checkers (Tianchen)
 * classic/mahjong (rlcard) (Luis)
 * classic/texasholdem (rlcard) (Luis)
 * classic/texasholdem_nolimit (rlcard) (Luis)
