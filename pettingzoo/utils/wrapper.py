@@ -122,7 +122,7 @@ class wrapper(MultiAgentEnv):
 
         Returns
         -------
-        boolean.
+        True if all obs spaces are gym.spaces.Box.
         '''
         return all([isinstance(obs_space, Box) for obs_space in self.observation_spaces.values()])
         
@@ -204,7 +204,7 @@ class wrapper(MultiAgentEnv):
             self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
             print("Mod obs space: frame_stacking", self.observation_spaces)
 
-    def modify_observation(self, agent, observation, is_reset=0):
+    def modify_observation(self, agent, observation, is_reset=False):
         obs = observation
         # reduce color channels to 1
         if self.color_reduction is not None:
@@ -220,30 +220,30 @@ class wrapper(MultiAgentEnv):
         
         # downscale (image, typically)
         if self.down_scale is not None:
-                down_scale = self.down_scale[agent]
-                mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-                obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
+            down_scale = self.down_scale[agent]
+            mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
+            obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
         
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-                reshape = self.reshape
-                dtype = obs.dtype
-                if reshape is OBS_RESHAPE_LIST[0]:
-                    # expand dim by 1
-                    obs = np.expand_dims(obs, axis=-1)
-                elif reshape is OBS_RESHAPE_LIST[1]:
-                    # flatten
-                    obs = obs.flatten()
+            reshape = self.reshape
+            dtype = obs.dtype
+            if reshape is OBS_RESHAPE_LIST[0]:
+                # expand dim by 1
+                obs = np.expand_dims(obs, axis=-1)
+            elif reshape is OBS_RESHAPE_LIST[1]:
+                # flatten
+                obs = obs.flatten()
         
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-                range_scale = self.range_scale[agent]
-                if self.new_dtype is not None:
-                    dtype = self.new_dtype[agent]
-                else:
-                    dtype = obs.dtype
-                min_obs, max_obs = range_scale
-                obs = np.divide(np.subtract(obs, min_obs), max_obs-min_obs, dtype=dtype)
+            range_scale = self.range_scale[agent]
+            if self.new_dtype is not None:
+                dtype = self.new_dtype[agent]
+            else:
+                dtype = obs.dtype
+            min_obs, max_obs = range_scale
+            obs = np.divide(np.subtract(obs, min_obs), max_obs-min_obs, dtype=dtype)
         elif self.new_dtype is not None:
             dtype = self.new_dtype[agent]
             obs = obs.astype(dtype)
@@ -260,21 +260,30 @@ class wrapper(MultiAgentEnv):
     def close(self):
         self.env.close()
     
-    def render(self):
-        self.env.render()
+    def render(self, mode='human'):
+        self.env.render(mode)
         
-    def reset(self):
-        obs = self.env.reset()
-        observations = {agent: self.modify_observation(agent, obs, is_reset=1) for agent in self.agents}
-        return observations
+    def reset(self, observe=True):
+        if observe:
+            obs = self.env.reset(observe=True)
+            agent = self.env.selected_agent
+            observation = self.modify_observation(agent, obs, is_reset=True)
+            return observation
+        else:
+            self.env.reset(observe=False)
 
     def observe(self, agent):
         obs = self.env.observe(agent)
-        observation = self.modify_observation(agent, obs, is_reset=0)
+        observation = self.modify_observation(agent, obs, is_reset=False)
         return observation
     
-    def step(self, agent, action):
-        obs, reward, done, info = self.env.step(agent, action)
+    def step(self, action, observe=True):
+        if observe:
+            obs, reward, done, info = self.env.step(action, observe=True)
 
-        observation = self.modify_observation(agent, obs, is_reset=0)
-        return observation, reward, done, info
+            agent = self.env.selected_agent
+            observation = self.modify_observation(agent, obs, is_reset=False)
+            return observation, reward, done, info
+        else:
+            self.env.step(action, observe=False)
+
