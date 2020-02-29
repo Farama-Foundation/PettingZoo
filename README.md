@@ -65,7 +65,7 @@ PettingZoo environments have the following attributes:
 
 `env.action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. Rewards for an agent are summed from the last time it took a turn, and zeroed before it takes another turn. This looks like:
+`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
@@ -119,7 +119,7 @@ Operations are applied in the order of arguments to the wrapper function.
 
 ## Markov Games Wrapper
 
-We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below:
+We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below. This assumes a constant number of agents.
 
 ```
 from petttingzoo.utils import markov_game
@@ -130,6 +130,8 @@ while True:
     # add env.render() here if you want to watch the game playing and the game supports it
     observations, rewards, dones, info = env.step(actions)
 ```
+
+This can combined with the observation wrapper in the order `markov_game(wrapper(env))`.
 
 This class is similar to our default environment class, except that it doesn't include `self.agent_order`, `self.agent_selection` and `self.observe(agent)`. It also adds observations and actions, which behave similarly to dones and rewards:
 
@@ -200,7 +202,7 @@ The following games are under active development:
 * gamma/prospector (Rui)
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
-* clasic/checkers (Tianchen)
+* classic/checkers (Tianchen)
 * classic/mahjong (rlcard) (Luis)
 * classic/texasholdem (rlcard) (Luis)
 * classic/texasholdem_nolimit (rlcard) (Luis)
