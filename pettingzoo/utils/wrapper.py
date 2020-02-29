@@ -3,6 +3,7 @@ from gym.spaces import Box
 from warnings import warn
 from skimage import measure
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from .env import Env
 
 from .frame_stack import stack_obs_space, stack_reset_obs, stack_obs
 
@@ -10,7 +11,7 @@ COLOR_RED_LIST = ["full", 'R', 'G', 'B']
 OBS_RESHAPE_LIST = ["expand", "flatten"]
 
 
-class wrapper(MultiAgentEnv):
+class wrapper(Env):
     
     def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, frame_stacking=1):
         '''
@@ -38,6 +39,7 @@ class wrapper(MultiAgentEnv):
         None.
 
         '''
+        super(wrapper, self).__init__()
         self.env = env
         self.color_reduction = color_reduction
         self.down_scale = down_scale
@@ -266,7 +268,7 @@ class wrapper(MultiAgentEnv):
     def reset(self, observe=True):
         if observe:
             obs = self.env.reset(observe=True)
-            agent = self.env.selected_agent
+            agent = self.env.agent_selection
             observation = self.modify_observation(agent, obs, is_reset=True)
             return observation
         else:
@@ -281,7 +283,7 @@ class wrapper(MultiAgentEnv):
         if observe:
             obs, reward, done, info = self.env.step(action, observe=True)
 
-            agent = self.env.selected_agent
+            agent = self.env.agent_selection
             observation = self.modify_observation(agent, obs, is_reset=False)
             return observation, reward, done, info
         else:
