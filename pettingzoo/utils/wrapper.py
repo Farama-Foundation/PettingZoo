@@ -51,6 +51,8 @@ class wrapper(MultiAgentEnv):
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = self.env.action_spaces
         
+        self.agent_order = self.env.agent_order
+        
         if self.frame_stacking > 1:
             self.stack_of_frames = {}
         
@@ -141,7 +143,6 @@ class wrapper(MultiAgentEnv):
                     low = obs_space.low[:, :, 2]
                     high = obs_space.high[:, :, 2]
                 if color_reduction == 'full':
-                    # TODO: do grayscale
                     low = np.average(obs_space.low, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
                     high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
@@ -203,38 +204,28 @@ class wrapper(MultiAgentEnv):
             self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
             print("Mod obs space: frame_stacking", self.observation_spaces)
 
-    def modify_observations(self, observation):
+    def modify_observation(self, agent, observation, is_reset=0):
+        obs = observation
         # reduce color channels to 1
         if self.color_reduction is not None:
-            # TODO: any other method?? 
-            # reducing the array by *adding* the last axis values
-            for agent in self.agents:
-                obs = observation[agent]
-                color_reduction = self.color_reduction[agent]
-                if color_reduction == 'R':
-                    obs = obs[:, :, 0]
-                if color_reduction == 'G':
-                    obs = obs[:, :, 1]
-                if color_reduction == 'B':
-                    obs = obs[:, :, 2]
-                if color_reduction == 'full':
-                    # TODO: do grayscale
-                    obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)
-                observation[agent] = obs                
+            color_reduction = self.color_reduction[agent]
+            if color_reduction == 'R':
+                obs = obs[:, :, 0]
+            if color_reduction == 'G':
+                obs = obs[:, :, 1]
+            if color_reduction == 'B':
+                obs = obs[:, :, 2]
+            if color_reduction == 'full':
+                obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)              
         
         # downscale (image, typically)
         if self.down_scale is not None:
-            for agent in self.agents:
-                obs = observation[agent]
                 down_scale = self.down_scale[agent]
                 mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
                 obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
-                observation[agent] = obs
         
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-            for agent in self.agents:
-                obs = observation[agent]
                 reshape = self.reshape
                 dtype = obs.dtype
                 if reshape is OBS_RESHAPE_LIST[0]:
@@ -243,12 +234,9 @@ class wrapper(MultiAgentEnv):
                 elif reshape is OBS_RESHAPE_LIST[1]:
                     # flatten
                     obs = obs.flatten()
-                observation[agent] = obs
         
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-            for agent in self.agents:
-                obs = observation[agent]
                 range_scale = self.range_scale[agent]
                 if self.new_dtype is not None:
                     dtype = self.new_dtype[agent]
@@ -256,10 +244,18 @@ class wrapper(MultiAgentEnv):
                     dtype = obs.dtype
                 min_obs, max_obs = range_scale
                 obs = np.divide(np.subtract(obs, min_obs), max_obs-min_obs, dtype=dtype)
-                observation[agent] = obs
         elif self.new_dtype is not None:
             dtype = self.new_dtype[agent]
-            observation[agent] = obs.astype(dtype)
+            obs = obs.astype(dtype)
+
+        # frame_stacking
+        if self.frame_stacking > 1:
+            if is_reset:
+                self.stack_of_frames = stack_reset_obs(obs, self.frame_stacking)
+            else:
+                stack_obs(self.stack_of_frames, obs)
+            obs = self.stack_of_frames
+        return obs
 
     def close(self):
         self.env.close()
@@ -269,21 +265,16 @@ class wrapper(MultiAgentEnv):
         
     def reset(self):
         obs = self.env.reset()
-        self.modify_observations(obs)
-        if self.frame_stacking > 1:
-            self.stack_of_frames = stack_reset_obs(obs, self.frame_stacking)
-            return self.stack_of_frames
-        else:
-            return obs
-        
-    def step(self, action_dict):
-        obs, rewards, dones, infos = self.env.step(action_dict)
+        observations = {agent: self.modify_observation(agent, obs, is_reset=1) for agent in self.agents}
+        return observations
 
-        self.modify_observations(obs)
-        if self.frame_stacking > 1:
-            stack_obs(self.stack_of_frames, obs)
-            observations = self.stack_of_frames
-        else:
-            observations = obs
-        
-        return observations, rewards, dones, infos
+    def observe(self, agent):
+        obs = self.env.observe(agent)
+        observation = self.modify_observation(agent, obs, is_reset=0)
+        return observation
+    
+    def step(self, agent, action):
+        obs, reward, done, info = self.env.step(agent, action)
+
+        observation = self.modify_observation(agent, obs, is_reset=0)
+        return observation, reward, done, info
