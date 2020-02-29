@@ -2,15 +2,12 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 import numpy as np
 
 class markov_game(MultiAgentEnv):
-    def __init__(self, AECenv):
+    def __init__(self, AECEnv):
         super(markov_game, self).__init__()
-        self.AECenv = AECenv
-        self.agents = AECenv.agents
-        self.observation_spaces = AECenv.observation_spaces
-        self.action_spaces = AECenv.action_spaces
-        self.dones = AECenv.dones
-        self.rewards = AECenv.rewards
-        self.infos = AECenv.infos
+        self.AECenv = AECEnv
+        self.agents = AECEnv.agents
+        self.observation_spaces = AECEnv.observation_spaces
+        self.action_spaces = AECEnv.action_spaces
         self.observations = dict(zip(self.agents, len(self.agents)*[np.array([0])]))
 
     def reset(self):
@@ -31,9 +28,6 @@ class markov_game(MultiAgentEnv):
             self.AECenv.step(actions[agent], observe=False)
 
         for agent in self.agents:
-            self.observations[agent] = observation
-            self.rewards[agent] = reward
-            self.dones[agent] = done
-            self.infos[agent] = info
+            self.observations[agent] = AECEnv.observe(agent)
 
-        return self.observations, self.rewards, self.dones, self.infos
+        return self.observations, self.AECEnv.rewards, self.AECEnv.dones, self.AECEnv.infos
