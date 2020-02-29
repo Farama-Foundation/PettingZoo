@@ -117,7 +117,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 Operations are applied in the order of arguments to the wrapper function.
 
 
-## Markov Gamesa Wrapper
+## Markov Games Wrapper
 
 We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below:
 
