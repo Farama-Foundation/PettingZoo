@@ -28,6 +28,6 @@ class markov_game(MultiAgentEnv):
             self.AECenv.step(actions[agent], observe=False)
 
         for agent in self.agents:
-            self.observations[agent] = AECEnv.observe(agent)
+            self.observations[agent] = self.AECEnv.observe(agent)
 
         return self.observations, self.AECEnv.rewards, self.AECEnv.dones, self.AECEnv.infos
