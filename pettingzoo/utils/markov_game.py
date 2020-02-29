@@ -8,10 +8,10 @@ class markov_game(MultiAgentEnv):
         self.agents = AECEnv.agents
         self.observation_spaces = AECEnv.observation_spaces
         self.action_spaces = AECEnv.action_spaces
-        self.observations = dict(zip(self.agents, len(self.agents)*[np.array([0])]))
 
     def reset(self):
         self.AECenv.reset(observe=False)
+        self.observations = {}
         for agent in self.agents:
             self.observations[agent] = self.AECenv.observe(agent)
         return self.observations
