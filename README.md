@@ -211,7 +211,6 @@ The following games are under active development:
 Development has not yet started on the following games:
 
 * classic/backgammon
-* classic/chess (https://github.com/niklasf/python-chess)
 * classic/tictactoe
 * classic/connect_four
 * atari/*
