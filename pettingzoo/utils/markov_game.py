@@ -28,7 +28,9 @@ class markov_game(MultiAgentEnv):
     def step(self, actions):
         for _ in self.agents:
             agent = self.AECenv.agent_selection
-            observation, reward, done, info = self.AECenv.step(actions[agent])
+            self.AECenv.step(actions[agent], observe=False)
+
+        for agent in self.agents:
             self.observations[agent] = observation
             self.rewards[agent] = reward
             self.dones[agent] = done
