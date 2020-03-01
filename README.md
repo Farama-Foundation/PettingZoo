@@ -57,7 +57,7 @@ PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) 
 
 PettingZoo environments have the following attributes:
 
-`env.agents`: A list of the names of all current agents, typically integers. These may be changed as an enviroment progresses (i.e. agents can be added or removed).
+`env.agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
 `env.agent_order`: A list of the agent names in the order agents take turns in. The 0th element of the list acts first, and so on.
 
@@ -108,7 +108,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 
 *Down scaling* uses mean pooling to reduce the observations output by each game by the given x and y scales. The dimension of an environment must be an integer multiple of it's scale. Downscaling is important for making the output of an environment small enough to work with commonly used architectures for deep reinforcement learning. This is only available for graphical games with 2D or 3D outputs. The default is `None`.
 
-*Reshapping* can take argument `flatten`, and turn 2D or 3D observations into a 1D vector, to be usable with simpler neural network architectures. It can also take argument `expand`, which adds an empty dimension to the observation (i.e. turning a 2D array into a 1 tall 3D array).
+*Reshaping* can take argument `flatten`, and turn 2D or 3D observations into a 1D vector, to be usable with simpler neural network architectures. It can also take argument `expand`, which adds an empty dimension to the observation (i.e. turning a 2D array into a 1 tall 3D array).
 
 *Range scaling* linearly scales observations such that env_min is 0 and env_max is 1. This is useful because neural networks generally perform better on normalized inputs, and for example graphical games output observations over (0, 255). The default is `None`.
 
@@ -119,7 +119,7 @@ Operations are applied in the order of arguments to the wrapper function.
 
 ## Partially Observable Markov Games API
 
-We also include an alternative API and wrapper to handle partially observeable Markov games only. Markov games are games which alternate between the environment stepping and all agents stepping at once, and exclude chess for instance. Important existing multi-agent code bases, like RLlib, are built around this API. This API assumes the number of agents cannot be changed. Using it looks like this:
+We also include an alternative API and wrapper to handle partially observable Markov games only. Markov games are games which alternate between the environment stepping and all agents stepping at once, and exclude chess for instance. Important existing multi-agent code bases, like RLlib, are built around this API. This API assumes the number of agents cannot be changed. Using it looks like this:
 
 ```
 from petttingzoo.utils import markov_game
@@ -133,7 +133,7 @@ while True:
 
 This can combined with the observation wrapper in the order `markov_game(wrapper(env))`.
 
-The differences from the AEC enviornment API are as follows:
+The differences from the AEC environment API are as follows:
 
 *`self.agent_order`, `self.agent_selection` and `self.observe(agent)` are not included.
 
@@ -191,7 +191,7 @@ For more detailed documentation about all the different environments, and a lead
 If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
 
 
-## Development stuff:
+## Development Stuff:
 
 All environment code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
@@ -201,12 +201,11 @@ The following environments should be done:
 * mpe/*
 
 The following environments are done but require porting:
+
 * gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port)
-* gamma/pistonball (needs AEC API port) (needs wrapper API port)
-* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port) (Justin)
-* sisl/pursuit (needs AEC API port) (needs wrapper API port) (Mario)
-* sisl/multiwalker (needs AEC API port) (needs wrapper API port) (Mario)
-* sisl/waterworld (needs AEC API port) (needs wrapper API port) (Mario)
+* gamma/pistonball (needs AEC API port) (needs wrapper API port) (Justin)
+* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port) (Ananth)
+* sisl/* (needs AEC API port) (needs wrapper API port) (Mario)
 * classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
 The following games are under active development:
@@ -237,10 +236,10 @@ Future wrapper work:
 Requirements are being kept below until we get the requirements.txt issues fixed
 
 ```
-gym>=0.15.4	
-pygame==2.0.0.dev6	
-scikit-image>=0.16.2	
-numpy>=1.18.0	
+gym>=0.15.4
+pygame==2.0.0.dev6
+scikit-image>=0.16.2
+numpy>=1.18.0
 matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
