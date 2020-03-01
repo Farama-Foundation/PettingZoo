@@ -6,9 +6,8 @@ adversary to goal. Adversary is rewarded for its distance to the goal.
 
 
 import numpy as np
-from multiagent.core import World, Agent, Landmark
-from multiagent.scenario import BaseScenario
-
+from . import World, Agent, Landmark
+from . import BaseScenario
 
 class CryptoAgent(Agent):
     def __init__(self):
