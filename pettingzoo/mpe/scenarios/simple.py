@@ -1,7 +1,9 @@
 import numpy as np
-from multiagent.core import World, Agent, Landmark
-from multiagent.scenario import BaseScenario
+from . import World, Agent, Landmark
+from . import BaseScenario
 
+
+#class env()
 
 class Scenario(BaseScenario):
     def make_world(self):
