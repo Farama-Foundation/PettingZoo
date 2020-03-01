@@ -1,4 +1,4 @@
-class Env(object):
+class AECEnv(object):
     def __init__(self):
         pass
 
