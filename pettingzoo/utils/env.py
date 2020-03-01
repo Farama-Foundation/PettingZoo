@@ -25,9 +25,9 @@ class MarkovEnv(object):
         raise NotImplementedError
     
     def reset(self):
-        raise
+        raise NotImplementedError
         
-    def render(self):
+    def render(self, mode='human'):
         raise NotImplementedError
     
     def close(self):
