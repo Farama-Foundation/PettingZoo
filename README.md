@@ -147,7 +147,7 @@ observations = {0:[first agent's observation], 1:[second agent's observation] ..
 actions = {0:[first agent's action], 1:[second agent's action] ... n-1:[nth agent's action]}
 ```
 
-No environments included in PettingZoo are around this API. Supporting this API alone allows for small performance optimizations by through parallization. The cumulative effect of these may prove useful when working with environments with tens of thousands of agents or more. This API uses a different env class as well- `MarkovEnv` instead of `AECEnv`.
+No environments included in PettingZoo are around this API. Supporting this API alone allows for small performance optimizations by through parallelization. The cumulative effect of these may prove useful when working with environments with tens of thousands of agents or more. This API uses a different env class as well- `MarkovEnv` instead of `AECEnv`.
 
 
 ## Other Utils
