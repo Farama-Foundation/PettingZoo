@@ -220,12 +220,12 @@ The following games are under active development:
 * classic/uno (rlcard) (Luis)
 * magent/* (Mario)
 * class/chess (Ben)
+* classic/tictactoe (Praveen)
+* classic/connect_four (Praveen)
 
 Development has not yet started on the following games:
 
 * classic/backgammon
-* classic/tictactoe
-* classic/connect_four
 * atari/*
 * robotics/*
 
