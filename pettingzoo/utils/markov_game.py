@@ -1,4 +1,4 @@
-from PettingZoo import MarkovEnv
+from pettingzoo.utils import MarkovEnv
 import numpy as np
 
 class markov_game(MarkovEnv):
@@ -16,7 +16,7 @@ class markov_game(MarkovEnv):
             self.observations[agent] = self.AECenv.observe(agent)
         return self.observations
 
-    def render(self, mode=mode):
+    def render(self, mode='human'):
         self.AECenv.render(mode=mode)
 
     def close(self):

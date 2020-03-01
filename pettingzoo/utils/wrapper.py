@@ -3,7 +3,7 @@ from gym.spaces import Box
 from warnings import warn
 from skimage import measure
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
-from .env import Env
+from .env import AECEnv
 
 from .frame_stack import stack_obs_space, stack_reset_obs, stack_obs
 
@@ -11,7 +11,7 @@ COLOR_RED_LIST = ["full", 'R', 'G', 'B']
 OBS_RESHAPE_LIST = ["expand", "flatten"]
 
 
-class wrapper(Env):
+class wrapper(AECEnv):
     
     def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, frame_stacking=1):
         '''
