@@ -117,9 +117,9 @@ range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
 Operations are applied in the order of arguments to the wrapper function.
 
 
-## Markov Games Wrapper
+## Partially Observable Markov Games API
 
-We also include a wrapper to adapt games compliant with our API to a Markov game only API that some libraries, like RLlib, use, demonstrated below. This assumes a constant number of agents.
+We also include an alternative API and wrapper to handle partially observeable Markov games only. Markov games are games which alternate between the environment stepping and all agents stepping at once, and exclude chess for instance. Important existing multi-agent code bases, like RLlib, are built around this API. This API assumes the number of agents cannot be changed. Using it looks like this:
 
 ```
 from petttingzoo.utils import markov_game
@@ -133,12 +133,22 @@ while True:
 
 This can combined with the observation wrapper in the order `markov_game(wrapper(env))`.
 
-This class is similar to our default environment class, except that it doesn't include `self.agent_order`, `self.agent_selection` and `self.observe(agent)`. It also adds observations and actions, which behave similarly to dones and rewards:
+The differences from the AEC enviornment API are as follows:
+
+*`self.agent_order`, `self.agent_selection` and `self.observe(agent)` are not included.
+
+
+* Reset and step also do not include their additional flags.
+
+*The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n-1:[nth agent's observation]}
 actions = {0:[first agent's action], 1:[second agent's action] ... n-1:[nth agent's action]}
 ```
+
+No environments included in PettingZoo are around this API. Supporting this API alone allows for small performance optimizations by through parallization. The cumulative effect of these may prove useful when working with environments with tens of thousands of agents or more. This API uses a different env class as well- `MarkovEnv` instead of `AECEnv`.
+
 
 ## Other Utils
 
@@ -150,6 +160,7 @@ children(env, save_image_observations=False)
 ```
 
 Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments. 
+
 
 ## Demos
 
@@ -168,6 +179,7 @@ For viewable games that can't be played by humans, you easily can get an impress
 from pettingzoo.utils import random_demo
 random_demo(env)
 ```
+
 
 ## OS Support
 
