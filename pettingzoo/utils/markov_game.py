@@ -1,7 +1,7 @@
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from PettingZoo import MarkovEnv
 import numpy as np
 
-class markov_game(MultiAgentEnv):
+class markov_game(MarkovEnv):
     def __init__(self, AECEnv):
         super(markov_game, self).__init__()
         self.AECenv = AECEnv
