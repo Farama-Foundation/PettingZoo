@@ -16,3 +16,19 @@ class AECEnv(object):
 
     def close(self):
         pass
+
+class MarkovEnv(object):
+    def __init__(self):
+        pass
+    
+    def step(self, action):
+        raise NotImplementedError
+    
+    def reset(self):
+        raise
+        
+    def render(self):
+        raise NotImplementedError
+    
+    def close(self):
+        pass
