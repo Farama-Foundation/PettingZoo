@@ -16,8 +16,8 @@ class markov_game(MarkovEnv):
             self.observations[agent] = self.AECenv.observe(agent)
         return self.observations
 
-    def render(self):
-        self.AECenv.render()
+    def render(self,mode=mode):
+        self.AECenv.render(mode=mode)
 
     def close(self):
         self.AECenv.close()
