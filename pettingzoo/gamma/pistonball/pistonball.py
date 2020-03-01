@@ -10,7 +10,7 @@ import math
 import numpy as np
 from skimage import measure
 import gym
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo import AECEnvc
 
 _image_library = {}
 
@@ -22,7 +22,7 @@ def get_image(path):
     return image
 
 
-class env(MultiAgentEnv):
+class env(AECEnvc):
 
     metadata = {'render.modes': ['human']}
 
