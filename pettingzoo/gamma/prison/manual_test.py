@@ -28,6 +28,9 @@ def manual_control(**kwargs):
         actions = dict(zip(env.agents, agent_actions))
         test_done = False
         for i in env.agents:
+            reward, done, info = env.last_cycle()
+            if done:
+                test_done = True
             action = actions[i]
             obs = env.step(action)
         env.render()

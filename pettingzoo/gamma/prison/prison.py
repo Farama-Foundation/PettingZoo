@@ -26,6 +26,10 @@ class Prisoner:
         self.window = w
         self.first_touch = -1  # rewarded on touching bound != first_touch
         self.last_touch = -1  # to track last touched wall
+        self.sprite = None
+
+    def set_sprite(self, s):
+        self.sprite = get_image(s)
 
 
 class env(AECEnv):
@@ -36,6 +40,8 @@ class env(AECEnv):
         self.agents = list(range(0, self.num_agents))
         self.agent_order = self.agents
         self.agent_selection = 0
+        self.sprite_list = ["sprites/alien_cropped.png", "sprites/drone_cropped.png", "sprites/glowy_cropped.png", "sprites/reptile_cropped.png", "sprites/ufo_cropped.png"]
+        self.last_rewards = [0 for _ in self.agents]
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -68,6 +74,11 @@ class env(AECEnv):
             x, y, l, r, u = p
             self.prisoners.append(self.create_prisoner(
                 x + random.randint(-20, 20), y, l, r, u))
+
+        sprite = 0
+        for p in self.prisoners:
+            p.set_sprite(self.sprite_list[sprite])
+            sprite = (sprite + 1) % len(self.sprite_list)
 
         self.screen.blit(self.background, (0, 0))
 
@@ -118,7 +129,7 @@ class env(AECEnv):
             pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect(k))
 
         for p in self.prisoners:
-            self.screen.blit(self.prisoner_sprite, p.position)
+            self.screen.blit(p.sprite, p.position)
 
         # self.space.debug_draw(self.options)
 
@@ -146,9 +157,9 @@ class env(AECEnv):
             p = self.prisoners[i]
             x, y, l, r, u = prisoner_spawn_locs[i]
             p.position = (x + random.randint(-20,20), y)
-
+        self.last_rewards = [0 for _ in self.agents]
         if observe:
-            return self.observe(1)
+            return self.observe(0)
         
 
     def step(self, action):
@@ -161,6 +172,7 @@ class env(AECEnv):
                 action = action/abs(action)
             reward = self.move_prisoner(self.agent_selection, action)
         
+        self.last_rewards[self.agent_selection] = reward
         self.clock.tick(15)
         self.draw()
 
@@ -170,10 +182,14 @@ class env(AECEnv):
 
         self.agent_selection = (self.agent_selection + 1) % self.num_agents
         observation = self.observe(self.agent_selection)
-        done = self.done_val
-        info = {}
 
         return observation
+
+    def last_cycle(self):
+        r = self.last_rewards[self.agent_selection]
+        d = self.done_val
+        i = None
+        return r, d, i
 
     def render(self):
         pygame.display.flip()
