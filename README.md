@@ -6,7 +6,7 @@ PettingZoo is Python library for conducting research in multi-agent reinforcemen
 
 PettingZoo includes the following sets of games:
 
-* atari: Multi-player Atari games (both cooperative and competative)
+* atari: Multi-player Atari 2600 games (both cooperative and competative)
 * classic: Classical, nongraphical, competative games (i.e. chess, Texas hold 'em, and go)
 * gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
 * magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
