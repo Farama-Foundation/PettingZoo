@@ -42,7 +42,7 @@ Games can be interacted with as follows in the simplest case, in a manner very s
 ```
 observation = env.reset()
 while True:
-    for agent in env.agents:
+    for agent in env.agent_order:
         action = policy(agent, observation))
         observation, reward, done, info = env.step(action) # control shifts to next agent
         # observation is for agent which takes next turn
@@ -53,13 +53,13 @@ For games where the instant observations or reward are undesired (or other inter
 
 ## Full Environment API
 
-PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent).
+PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games [link to paper], because they can handle any environment considerable by RL (including single agent).
 
 PettingZoo environments have the following attributes:
 
 `env.agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-`env.agent_order`: A list of the agent names in the order agents take turns in. The 0th element of the list acts first, and so on.
+`env.agent_order`: A list of the agent names in the order agents take turns in. The 0th element of the list acts first, and so on. An agent can be in this twice (i.e. act twice in a cycle), and the order (along with the existance of agents) can change as an environment is stepped through.
 
 `env.observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
