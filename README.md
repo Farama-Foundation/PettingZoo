@@ -1,20 +1,20 @@
 # PettingZoo
-PettingZoo is Python library of environments for conducting research in multi-agent reinforcement learning. It's basically a multi-agent version of OpenAI's Gym library.
+PettingZoo is Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
 
 ## Environment Types and Installation
 
-PettingZoo breaks its games down into several categories, largely including games from other's which we've ported to our consistent API, in many cases fixed, and centrally distribute.
+PettingZoo includes the following sets of games:
 
-* atari: A collection of easily runnable multi-player Atari games in the Stella emulator, similar to what you find in Gym.
-* classic: Environments for classical games that two humans play against each other (rock paper scissors, chess, Texas hold 'em poker, go, etc.)
-* gamma: Graphical games developed by us, in PyGame. All games are cooperative, and many pose features very challenging to reinforcement learning.
-* magent: A set of environments involving massive numbers of agents doing various tasks, originally from https://github.com/geek-ai/MAgent
-* mpe: 'Multi-agent Particle Environments', a set of simple nongraphical communication tasks created by OpenAI: https://github.com/openai/multiagent-particle-envs
+* atari: Multi-player Atari games (both cooperative and competative)
+* classic: Classical, nongraphical, competative games (i.e. chess, Texas hold 'em, and go)
+* gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
+* magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
+* mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * robotics: A collection of 3D multi-agent robot environments, simulated with MuJoCo
-* sisl: An eclectic collection of 3 games developed by SISL, originally from https://github.com/sisl/MADRL
+* sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-To install a set of games, use `pip3 install pettingzoo[atari]`, substituting atari for other classes of games when desired.
+To install a set of games, use `pip3 install pettingzoo[atari]` (or whichever set of games you want).
 
 We support Python 3.6, 3.7 and 3.8.
 
@@ -28,69 +28,63 @@ from pettingzoo.gamma import pistonball
 env = pistonball.env()
 ```
 
-Environments are all easily highly configurable, so that the effects of different unique environmental parameters on multi-agent learning can be more easily studied. This is done in the form optional arguments based to the environment when it's created. For example:
+Environments are generally highly configurable via arguments at creation, i.e.:
 
 ```
 cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
 right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 ```
 
-
-## Simple Environment Interactions
-Games can be interacted with as follows in the simplest case, in a manner very similar to Gym: 
+## Interacting With Environments
+Environments can be interacted with in a manner very similar to Gym:
 
 ```
 observation = env.reset()
 while True:
-    for agent in env.agents:
-        action = policy(agent, observation))
-        observation, reward, done, info = env.step(action) # control shifts to next agent
-        # observation is for agent which takes next turn
+    for _ in env.agent_order:
+        reward, done, info = env.last_cycle() 
+        action = policy(observation)
+        observation = env.step(action)
 ```
 
-For games where the instant observations or reward are undesired (or other interesting things are happening), you must make additional calls to the full API.
+The commonly used methods are:
 
+`agent_order` is a list of the order agents take turns in. The 0th element acts first and so on. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
 
-## Full Environment API
+`last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't gaurunteed to be fully known until right before an agent's next turn.
 
-PettingZoo fundamentally models environments as *Agent Environment Cycle* (AEC) games, because they can handle any environment considerable by RL (including single agent).
+`agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argunment above).
 
-PettingZoo environments have the following attributes:
+`reset(observe=True)` is the same as in Gym- it resets the environment (and set's it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
-`env.agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
+`step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent in `env.agent_order`, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
 
-`env.agent_order`: A list of the agent names in the order agents take turns in. The 0th element of the list acts first, and so on.
+## Advanced Environment API
+When working in multi-agent learning, there are a of fantastically wierd cases and needs. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functions are also needed to implement by the high level functions above anyways.
 
-`env.observation_spaces`: A dict of the gym observation spaces of every agent, by name.
+`agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-`env.action_spaces`: A dict of the gym action spaces of every agent, by name.
+`observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
-`env.rewards`: A dict of the rewards of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This looks like:
+`action_spaces`: A dict of the gym action spaces of every agent, by name.
+
+`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last_cycle`. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`env.dones`: A dict of the done state of every agent at the time called, by name. This can generally be changed at any point in the metaenvironment portion of the AEC cycle, and so isn't guaranteed to be "final" until the agent's turn is reached again. This looks like: 
+`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like: 
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`env.infos`: A dict of info for each agent, by name. Included for extensibility, and because info is a part of the Gym API. All games built into this repo only output `''` for each agent. This looks like:
+`infos`: A dict of info for each agent, by name. This is called by `last_cycle`. This looks like:
 
-`dones = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
+`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
-`env.agent_selection`: Gives name of agent currently poised to be acted on.
+`observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
-Our AEC environments have the following methods:
+`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes, such as `rgb_array` (which returns numpy arrays of the screen).
 
-`env.observe(agent)`: Returns the observation an agent currently can make.
-
-`env.reset(observe=True)`: Resets the environment to a starting state. Returns the observation for the first moving agent in the environment if `observe=True`.
-
-`env.render(mode='human')`: Displays a rendered frame from the environment, if supported. Different modes can be used for different output styles, for example some environments support `rgb_array` which returns numpy arrays of the screen for visualizations or turning it into a video.
-
-`env.close()`: Closes the rendering window.
-
-`env.step(action, observe=True)`: Has the selected agent take a turn, and selects the next agent. If `observe=True`,  `observation, reward, done, info` are returned for the selected agent. Control then shifts to next agent. In environments that support it, use `actions=None` to step through parts of the environment if desired. The observation returned is the observation from the agent which will take the next turn.
-
+`close()`: Closes the rendering window.
 
 ## Observation Wrapper
 
