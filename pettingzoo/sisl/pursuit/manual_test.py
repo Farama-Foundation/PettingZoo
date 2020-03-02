@@ -67,11 +67,13 @@ def manual_control(**kwargs):
             break
         # actions should be a dict of numpy arrays
         action_dict = dict(zip(env.agents, _actions))
-    
-        observation, rewards, done_dict, info = env.step(action_dict)
-        done = any(list(done_dict.values()))
-        total_reward += sum(rewards.values())
-        print("step reward = ", sum(rewards.values()))
+        for a in _actions:
+            reward, d, info = env.last_cycle()
+            obs = env.step(a)
+            if d:
+                done = True
+            total_reward += reward
+        print("step reward = ", total_reward)
         if done:
             print("Total reward", total_reward, done)
     

@@ -1,5 +1,5 @@
 import numpy as np
-from .multi_walker import env as _env
+from .multiwalker import env as _env
 import time
 
 n_walkers = 3
@@ -17,12 +17,14 @@ while not done:
     time.sleep(0.04)
 
     action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
-    action_dict = dict(zip(env.agents, action_list))
 
-    observation, rewards, done_dict, info = env.step(action_dict)
-    done = any(list(done_dict.values()))
-    total_reward += sum(rewards.values())
-    print("step reward", sum(rewards.values()))
+    for a in action_list:
+        r, d, i = env.last_cycle()
+        observation = env.step(a)
+        if d:
+            done = True
+        total_reward += r
+    print("step reward", sum(total_reward))
     if done:
         print("Total reward", total_reward, "done", done)
 

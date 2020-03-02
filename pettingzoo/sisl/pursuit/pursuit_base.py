@@ -51,7 +51,8 @@ class Pursuit():
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
         self.num_agents = self.n_pursuers
-        self.agents = list(range(self.num_agents))
+        #self.agents = list(range(self.num_agents))
+        self.latest_reward_state = [0 for _ in range(self.num_agents)]
 
         self.obs_range = kwargs.pop('obs_range', 7)  # can see 7 grids around them by default
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
@@ -207,12 +208,83 @@ class Pursuit():
         else:
             return self.collect_obs(self.evader_layer, self.evaders_gone)
 
-    def step(self, actions):
-        """
-            Step the system forward. Actions is an iterable of action indecies.
-        """
-        rewards = self.reward()
+    # def step(self, actions):
+    #     """
+    #         Step the system forward. Actions is an iterable of action indecies.
+    #     """
+    #     rewards = self.reward()
 
+    #     if self.train_pursuit:
+    #         agent_layer = self.pursuer_layer
+    #         opponent_layer = self.evader_layer
+    #         opponent_controller = self.evader_controller
+    #         agent_controller = self.pursuer_controller
+    #         gone_flags = self.pursuers_gone
+    #     else:
+    #         agent_layer = self.evader_layer
+    #         opponent_layer = self.pursuer_layer
+    #         opponent_controller = self.pursuer_controller
+    #         agent_controller = self.evader_controller
+    #         gone_flags = self.evaders_gone
+
+    #     # move allies
+    #     #  # For random trials
+    #     #  for i in range(agent_layer.n_agents()):
+    #     #      # controller input should be an observation, but doesn't matter right now
+    #     #      action = agent_controller.act(self.model_state)
+    #     #      agent_layer.move_agent(i, action)
+    #     if isinstance(actions, list) or isinstance(actions, np.ndarray):
+    #         # move all agents
+    #         for i, a in enumerate(actions):
+    #             agent_layer.move_agent(i, a)
+    #     else:
+    #         # ravel it up
+    #         act_idxs = np.unravel_index(actions, self.act_dims)
+    #         for i, a in enumerate(act_idxs):
+    #             agent_layer.move_agent(i, a)
+
+    #     # # move opponents
+    #     # for i in range(opponent_layer.n_agents()):
+    #     #     # controller input should be an observation, but doesn't matter right now
+    #     #     action = opponent_controller.act(self.model_state)
+    #     #     opponent_layer.move_agent(i, action)
+
+    #     # model state always has form: map, purusers, opponents, current agent id
+    #     self.model_state[0] = self.map_matrix
+    #     self.model_state[1] = self.pursuer_layer.get_state_matrix()
+    #     self.model_state[2] = self.evader_layer.get_state_matrix()
+
+    #     # remove agents that are caught
+    #     ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
+
+    #     # move opponents after computing the results of the action
+    #     # model state always has form: map, purusers, opponents, current agent id
+    #     self.model_state[0] = self.map_matrix
+    #     self.model_state[1] = self.pursuer_layer.get_state_matrix()
+    #     self.model_state[2] = self.evader_layer.get_state_matrix()
+
+    #     # move opponents
+    #     for i in range(opponent_layer.n_agents()):
+    #         # controller input should be an observation, but doesn't matter right now
+    #         action = opponent_controller.act(self.model_state)
+    #         opponent_layer.move_agent(i, action)
+
+    #     obslist = self.collect_obs(agent_layer, gone_flags)
+
+    #     # add caught rewards
+    #     rewards += self.term_pursuit * pursuers_who_remove
+    #     # urgency reward to speed up catching
+    #     rewards += self.urgency_reward
+
+    #     done = self.is_terminal
+    #     done_list = [done] * self.n_pursuers
+
+    #     if self.reward_mech == 'global':
+    #         return obslist, [rewards.mean()] * self.n_pursuers, done_list, {'removed': ev_remove}
+
+    #     return obslist, rewards, done_list, []  # info: {'removed': ev_remove}
+
+    def step(self, action, agent_id):
         if self.train_pursuit:
             agent_layer = self.pursuer_layer
             opponent_layer = self.evader_layer
@@ -226,62 +298,40 @@ class Pursuit():
             agent_controller = self.evader_controller
             gone_flags = self.evaders_gone
 
-        # move allies
-        #  # For random trials
-        #  for i in range(agent_layer.n_agents()):
-        #      # controller input should be an observation, but doesn't matter right now
-        #      action = agent_controller.act(self.model_state)
-        #      agent_layer.move_agent(i, action)
-        if isinstance(actions, list) or isinstance(actions, np.ndarray):
-            # move all agents
-            for i, a in enumerate(actions):
-                agent_layer.move_agent(i, a)
-        else:
-            # ravel it up
-            act_idxs = np.unravel_index(actions, self.act_dims)
-            for i, a in enumerate(act_idxs):
-                agent_layer.move_agent(i, a)
+        self.latest_reward_state = self.reward()
 
-        # # move opponents
-        # for i in range(opponent_layer.n_agents()):
-        #     # controller input should be an observation, but doesn't matter right now
-        #     action = opponent_controller.act(self.model_state)
-        #     opponent_layer.move_agent(i, action)
+        # actual action application
+        agent_layer.move_agent(agent_id, action)
 
-        # model state always has form: map, purusers, opponents, current agent id
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
-        # remove agents that are caught
+
         ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
 
-        # move opponents after computing the results of the action
-        # model state always has form: map, purusers, opponents, current agent id
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
-
-        # move opponents
+        
         for i in range(opponent_layer.n_agents()):
             # controller input should be an observation, but doesn't matter right now
-            action = opponent_controller.act(self.model_state)
-            opponent_layer.move_agent(i, action)
+            a = opponent_controller.act(self.model_state)
+            opponent_layer.move_agent(i, a)
 
         obslist = self.collect_obs(agent_layer, gone_flags)
+        obs = obslist[(agent_id+1)%self.num_agents]
 
-        # add caught rewards
-        rewards += self.term_pursuit * pursuers_who_remove
-        # urgency reward to speed up catching
-        rewards += self.urgency_reward
+        
+        self.latest_reward_state += self.term_pursuit * pursuers_who_remove
+        self.latest_reward_state += self.urgency_reward
 
+        return obs
+
+    def last_cycle(self, id):
         done = self.is_terminal
-        done_list = [done] * self.n_pursuers
-
-        if self.reward_mech == 'global':
-            return obslist, [rewards.mean()] * self.n_pursuers, done_list, {'removed': ev_remove}
-
-        return obslist, rewards, done_list, []  # info: {'removed': ev_remove}
+        info = None
+        return self.latest_reward_state[id], done, info
 
     def update_curriculum(self, itr):
         self.constraint_window += self.curriculum_constrain_rate  # 0 to 1 in 500 iterations
