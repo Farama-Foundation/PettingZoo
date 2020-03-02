@@ -113,7 +113,13 @@ Operations are applied in the order of arguments to the wrapper function.
 
 ## Partially Observable Markov Games API
 
-We also include an alternative API and wrapper to handle partially observable Markov games only. Markov games are games which alternate between the environment stepping and all agents stepping at once, and exclude chess for instance. Important existing multi-agent code bases, like RLlib, are built around this API. This API assumes the number of agents cannot be changed. Using it looks like this:
+We also include an alternative API and wrapper which can only handle Markov games (of any observability).
+
+Markov games alternate between the environment stepping and all agents stepping simultaneously, and exclude chess for instance. This API assumes the number of agents cannot be changed. This API includes is own base class (`pettingzoo.MarkovEnv`), and so games could be made to comply only with it, though none in this library do this.
+
+This is primarily included for compatibility with many existing MARL code bases (notably RLlib). However, making environments which comply to this API only can allow for a little more parallelization. When working with tens thousands of agents, this may be important.
+
+Using it looks like this:
 
 ```
 from petttingzoo.utils import markov_game
@@ -141,8 +147,6 @@ The differences from the AEC environment API are as follows:
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n-1:[nth agent's observation]}
 actions = {0:[first agent's action], 1:[second agent's action] ... n-1:[nth agent's action]}
 ```
-
-No environments included in PettingZoo are around this API. Supporting this API alone allows for small performance optimizations by through parallelization. The cumulative effect of these may prove useful when working with environments with tens of thousands of agents or more. This API uses a different env class as well- `MarkovEnv` instead of `AECEnv`.
 
 
 ## Other Utils
