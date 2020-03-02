@@ -139,7 +139,7 @@ The differences from the AEC environment API are as follows:
 
 * Reset and step also do not include their additional flags.
 
-* `dones` also has an `__all__` entry, which is set to be 
+* `dones` also has an `__all__` entry, which when set to true stops the environment from recieving actions in full.
 
 *The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
 
