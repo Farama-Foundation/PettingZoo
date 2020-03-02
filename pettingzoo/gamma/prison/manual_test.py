@@ -29,7 +29,6 @@ def manual_control(**kwargs):
         test_done = False
         for i in env.agents:
             action = actions[i]
-            print(env.agent_selection)
             obs, reward, done, info = env.step(action)
             if done:
                 test_done = True
@@ -38,4 +37,6 @@ def manual_control(**kwargs):
         if test_done:
             break
 
+if __name__ == "__main__":
+    manual_control()
 

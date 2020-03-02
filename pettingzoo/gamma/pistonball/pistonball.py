@@ -10,7 +10,7 @@ import math
 import numpy as np
 from skimage import measure
 import gym
-from pettingzoo import AECEnvc
+from pettingzoo.utils import AECEnv
 
 _image_library = {}
 
@@ -22,7 +22,7 @@ def get_image(path):
     return image
 
 
-class env(AECEnvc):
+class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
