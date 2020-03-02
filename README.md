@@ -129,10 +129,11 @@ This can combined with the observation wrapper in the order `markov_game(wrapper
 
 The differences from the AEC environment API are as follows:
 
-*`self.agent_order`, `self.agent_selection` and `self.observe(agent)` are not included.
-
+*`agent_order`, `agent_selection` and `observe(agent)` are not included.
 
 * Reset and step also do not include their additional flags.
+
+* `dones` also has an `__all__` entry, which is set to be 
 
 *The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
 
@@ -216,14 +217,20 @@ class env(pettingzoo.AECEnv):
 
     def step(self, action, observe=True):
         # Do game stuff
-        # Switch selection to next agents (Ana nth)
-        return self.observe(self.agent_selection)
+        # Switch selection to next agents (Ananth)
+        if observe:
+            return self.observe(self.agent_selection)
+        else:
+            return
 
     # last_cycle is added as a part of the AECEnv class, don't write it yourself
 
     def reset(self, observe=True):
         # reset environment
-        return self.observe(agent_order[0]) 
+        if observe:
+            return self.observe(agent_order[0])
+        else:
+            return
 
     def render(self, mode='human'): # not all environments will support rendering
         ...
