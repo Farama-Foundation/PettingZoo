@@ -1,9 +1,10 @@
 from .pursuit_base import Pursuit as _env
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo.utils import AECEnv
 import numpy as np
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -13,6 +14,8 @@ class env(MultiAgentEnv):
 
         self.num_agents = self.env.num_agents
         self.agents = list(range(self.num_agents))
+        self.agent_order = self.agents[:]
+        self.agent_selection = 0
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -28,7 +31,7 @@ class env(MultiAgentEnv):
     def reset(self):
         obs = self.env.reset()
         self.steps = 0
-        return self.convert_to_dict(obs)
+        return obs[0]
 
     def close(self):
         self.env.close()
@@ -36,31 +39,23 @@ class env(MultiAgentEnv):
     def render(self):
         self.env.render()
 
-    def step(self, action_dict):
-        # unpack actions
-        action_list = np.array([4 for _ in range(self.num_agents)])
+    def step(self, action, observe=True):
+        if action == None or action == np.NaN:
+            action = 4
+        elif not self.action_spaces[self.agent_selection].contains(action):
+            raise Exception('Action for agent {} must be in Discrete({}). \
+                                It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection].n, action))
+        obs = self.env.step(action, self.agent_selection)
 
-        for agent_id in self.agents:
-            if np.isnan(action_dict[agent_id]):
-                action_dict[agent_id] = 4
-            elif not self.action_spaces[agent_id].contains(action_dict[agent_id]):
-                raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(agent_id, self.action_spaces[agent_id].n, action_dict[agent_id]))
-            action_list[agent_id] = action_dict[agent_id]
-
-        observation, reward, done, info = self.env.step(action_list)
-
-        if self.steps >= 500:
-            done = [True]*self.num_agents
-
-        observation_dict = self.convert_to_dict(observation)
-        reward_dict = self.convert_to_dict(reward)
-        info_dict = self.convert_to_dict(info)
-        done_dict = self.convert_to_dict(done)
-        done_dict["__all__"] = done[0]
-
+        self.agent_selection = (self.agent_selection + 1) % self.num_agents
         self.steps += 1
 
-        return observation_dict, reward_dict, done_dict, info_dict
+        return obs
+
+    def last_cycle(self):
+        r, d, i = self.env.last_cycle(self.agent_selection)
+        if self.steps >= 500:
+            d = True
+        return r, d, i
 
 from .manual_test import manual_control

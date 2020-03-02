@@ -17,14 +17,17 @@ while not done:
     time.sleep(0.03)
 
     action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
-    action_dict = dict(zip(env.agents, action_list))
-
-    observation, rewards, done_dict, info = env.step(action_dict)
-    done = any(list(done_dict.values()))
-    total_reward += sum(rewards.values())
-    print("step reward", sum(rewards.values()))
+    
+    for a in action_list:
+        reward, d, inf = env.last_cycle()
+        obs =  env.step(a)
+        if d:
+            done = True
+        total_reward += reward
+    print("step reward ", total_reward)
     if done:
-        print("Total reward", total_reward, "done", done)
+        print("Total reward ", total_reward)
+    
 
 # end = time.time()
 # print("FPS = ", 100/(end-start))
