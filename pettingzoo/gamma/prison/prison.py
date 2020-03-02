@@ -148,7 +148,7 @@ class env(AECEnv):
             p.position = (x + random.randint(-20,20), y)
 
         if observe:
-            return self.observe(0)
+            return self.observe(1)
         
 
     def step(self, action):
@@ -173,7 +173,7 @@ class env(AECEnv):
         done = self.done_val
         info = {}
 
-        return observation, reward, done, info
+        return observation
 
     def render(self):
         pygame.display.flip()

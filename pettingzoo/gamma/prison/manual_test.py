@@ -29,9 +29,7 @@ def manual_control(**kwargs):
         test_done = False
         for i in env.agents:
             action = actions[i]
-            obs, reward, done, info = env.step(action)
-            if done:
-                test_done = True
+            obs = env.step(action)
         env.render()
 
         if test_done:
