@@ -194,7 +194,7 @@ class BallSprite(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
-class CooperativePong(pettingzoo.AECEnv):
+class CooperativePong(pettingzoo.utils.AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -372,7 +372,7 @@ class CooperativePong(pettingzoo.AECEnv):
         plt.savefig(fname)
 
 
-class env(MultiAgentEnv):
+class env(pettingzoo.utils.AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
