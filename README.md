@@ -51,7 +51,7 @@ The commonly used methods are:
 
 `agent_order` is a list of the order agents take turns in. The 0th element acts first and so on. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
 
-`last_cycle` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't gaurunteed to be fully known until right before an agent's next turn.
+`last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't gaurunteed to be fully known until right before an agent's next turn.
 
 `agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argunment above).
 
