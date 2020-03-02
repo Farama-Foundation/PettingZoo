@@ -11,7 +11,7 @@ from .src.weapons import Arrow, Sword
 import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
-from pettingzoo import AECEnv
+from pettingzoo.utils import AECEnv
 from gym.spaces import Box, Discrete
 
 

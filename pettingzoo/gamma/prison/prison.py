@@ -167,11 +167,11 @@ class env(MultiAgentEnv):
         if (self.num_frames >= 500):
             self.done_val = True
 
+        self.agent_selection = (self.agent_selection + 1) % self.num_agents
         observation = self.observe(self.agent_selection)
         done = self.done_val
         info = {}
 
-        self.agent_selection = (self.agent_selection + 1) % self.num_agents
         return observation, reward, done, info
 
     def render(self):
