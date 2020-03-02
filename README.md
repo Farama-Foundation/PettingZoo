@@ -51,16 +51,16 @@ The commonly used methods are:
 
 `agent_order` is a list of the order agents take turns in. The 0th element acts first and so on. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
 
-`last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't gaurunteed to be fully known until right before an agent's next turn.
+`last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
-`agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argunment above).
+`agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argument above).
 
 `reset(observe=True)` is the same as in Gym- it resets the environment (and set's it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
 `step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent in `env.agent_order`, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
 
 ## Advanced Environment API
-When working in multi-agent learning, there are a of fantastically wierd cases and needs. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functions are also needed to implement by the high level functions above anyways.
+When working in multi-agent learning, there are many fantastically weird cases. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functionality is also needed to implement by the high level functions above, so implementing them is just a matter of code factoring.
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
