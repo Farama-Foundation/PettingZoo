@@ -49,7 +49,7 @@ while True:
 
 The commonly used methods are:
 
-`agent_order` is a list of the order agents take turns in. The 0th element acts first and so on. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
+`agent_order` is a list of agent names in the order they act. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
 
 `last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
@@ -184,6 +184,53 @@ For more detailed documentation about all the different environments, and a lead
 
 If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
 
+# Creating Custom Environments
+Creating a custom environment with PettingZoo should roughly look like the following:
+
+```
+import pettingzoo
+from gym import spaces
+
+
+class env(pettingzoo.AECEnv):
+    metadata = {'render.modes': ['human']} # only add if environment supports rendering
+
+    def __init__(self, arg1, arg2, ...):
+        super(env, self).__init__()
+
+        agents = [0, 1 ... n] # agent names
+        agent_order = # list of agent names in the order they act in a cycle. Usuallly this will be the same as the agents list.
+        observation_spaces = # dict of observation spaces for each agent, from gym.spaces
+        action_spaces = # dict of action spaces for each agent, from gym.spaces
+        rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
+        dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
+        infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
+
+        # agent selection stuff (Ananth)
+
+        # Initialize game stuff
+
+    def observe(self, agent):
+        # return observation of an agent
+        return observation
+
+    def step(self, action, observe=True):
+        # Do game stuff
+        # Switch selection to next agents (Ana nth)
+        return self.observe(self.agent_selection)
+
+    # last_cycle is added as a part of the AECEnv class, don't write it yourself
+
+    def reset(self, observe=True):
+        # reset environment
+        return self.observe(agent_order[0]) 
+
+    def render(self, mode='human'): # not all environments will support rendering
+        ...
+
+    def close (self): # not all environments will support rendering
+        ...
+```
 
 ## Development Stuff:
 
