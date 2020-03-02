@@ -1,4 +1,5 @@
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo.utils import AECEnv
 import pygame
 import os
 import random
@@ -27,7 +28,7 @@ class Prisoner:
         self.last_touch = -1  # to track last touched wall
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
 
     def __init__(self, continuous=False, vector_observation=True):
         # super(env, self).__init__()
