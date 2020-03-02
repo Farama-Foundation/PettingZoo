@@ -30,6 +30,6 @@ class markov_game(MarkovEnv):
         for agent in self.agents:
             self.observations[agent] = self.AECEnv.observe(agent)
 
-        dones = sel.AECenv.dones
+        dones = self.AECenv.dones
         dones['__all__'] = all(dones.values())
         return self.observations, self.AECEnv.rewards, dones, self.AECEnv.infos
