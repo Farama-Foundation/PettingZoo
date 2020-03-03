@@ -1,8 +1,9 @@
 from pettingzoo.utils import AECEnv
 import pygame
 import os
+import numpy as np
 import random
-import gym  
+from gym import spaces
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
@@ -57,6 +58,14 @@ class env(AECEnv):
         self.continuous = continuous
         self.vector_obs = vector_observation
 
+        self.action_space_dict = {}
+        if continuous:
+            for a in self.agents:
+                self.action_space_dict[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
+        else:
+            for a in self.agents:
+                self.action_space_dict[a] = spaces.Box(low=-1, high=1, shape=(1,))
+
         # self.options = pymunk.pygame_util.DrawOptions(self.screen)
         # self.options.shape_outline_color = (50, 50, 50, 5)
         # self.options.shape_static_color = (100, 100, 100, 10)
@@ -80,6 +89,8 @@ class env(AECEnv):
             sprite = (sprite + 1) % len(self.sprite_list)
 
         self.screen.blit(self.background, (0, 0))
+        self.render()
+        self.render()
 
     def create_walls(self):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
@@ -92,6 +103,12 @@ class env(AECEnv):
 
     def create_prisoner(self, x, y, l, r, u):
         return Prisoner((x, y), l, r - self.prisoner_sprite_x, u)
+
+    def action_spaces(self):
+        return self.action_space_dict
+
+    def reward(self):
+        return dict(zip(self.agents, self.last_rewards))
 
     # returns reward of hitting both sides of room, 0 if not
     def move_prisoner(self, prisoner_id, movement):
@@ -173,7 +190,7 @@ class env(AECEnv):
         
         self.last_rewards[self.agent_selection] = reward
         self.clock.tick(15)
-        self.draw()
+        #self.draw()
 
         self.num_frames += 1
         if (self.num_frames >= 500):
@@ -191,6 +208,7 @@ class env(AECEnv):
         return r, d, i
 
     def render(self):
+        self.draw()
         pygame.display.flip()
 
 from .manual_test import manual_control
