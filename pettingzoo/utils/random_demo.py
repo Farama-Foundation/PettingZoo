@@ -9,10 +9,11 @@ def random_demo(env, render=True):
     # env = _env(n_pursuers=n_pursuers)
     env.reset()
     
-    done = False
     total_reward = 0
     observations = {}
     initial_iteration = {agent: True for agent in env.agents}
+    dones = {agent: False for agent in env.agents}
+    done = all(dones.values())
     
     # start = time.time()
     while not done:
@@ -25,13 +26,14 @@ def random_demo(env, render=True):
             agent = env.agent_selection
 
             if not initial_iteration[agent]:
-                total_reward += env.rewards[agent]
-                print("step reward for agent {} is {}".format(agent, env.rewards[agent]))
+                reward, dones[agent], _ = env.last_cycle()
+                total_reward += reward
+                print("step reward for agent {} is {}".format(agent, reward))
             initial_iteration[agent] = False
             action = env.action_spaces[agent].sample()
             env.step(action, observe=False)
-        print(" d", env.dones)
-        done = all(env.dones.values())
+        print(" d", dones)
+        done = all(dones.values())
         if done:
             print("Total reward", total_reward, "done", done)
         # # collect observations
