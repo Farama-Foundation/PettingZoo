@@ -2,7 +2,6 @@ from .prison import env as _env
 import pygame
 import numpy as np
 
-
 def manual_control(**kwargs):
     env = _env(**kwargs)
     x = 0
@@ -30,17 +29,17 @@ def manual_control(**kwargs):
 
         actions = dict(zip(env.agents, agent_actions))
         test_done = False
-        if num_actions > 0:
-            for i in env.agents:
-                reward, done, info = env.last_cycle()
-                if done:
-                    test_done = True
-                action = actions[i]
-                obs = env.step(action)
+        for i in env.agents:
+            reward, done, info = env.last_cycle()
+            if done:
+                test_done = True
+            action = actions[i]
+            obs = env.step(action)
         env.render()
 
         if test_done:
             break
+    env.close()
 
 if __name__ == "__main__":
     manual_control()
