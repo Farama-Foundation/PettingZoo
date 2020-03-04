@@ -1,6 +1,5 @@
 from .waterworld_base import MAWaterWorld as _env
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
-from pettingzoo.utils import AECEnv
+from pettingzoo.utils import AECEnv,agent_selector
 import numpy as np
 
 
@@ -14,6 +13,8 @@ class env(AECEnv):
 
         self.num_agents = self.env.num_agents
         self.agents = list(range(self.num_agents))
+        self.agent_order = self.agents[:]
+        self.agent_selector_obj = agent_selector(self.agent_order)
         self.agent_selection = 0
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -21,20 +22,30 @@ class env(AECEnv):
         self.steps = 0
         self.display_wait = 0.03
 
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+
         self.reset()
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
+    def reset(self, observe=True):
         observation = self.env.reset()
+        self.agent_selection = 0
         self.steps = 0
-        return observation
+        self.agent_selector_obj.reinit(self.agent_order)
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        if observe:
+            return observation
 
     def close(self):
         self.env.close()
 
-    def render(self):
+    def render(self, mode="human"):
         self.env.render()
 
     # def step(self, action_dict):
@@ -64,22 +75,28 @@ class env(AECEnv):
 
     #     return observation_dict, reward_dict, done_dict, info_dict
 
-    def last_cycle(self):
-        r,d,i = self.env.last_cycle(self.agent_selection)
-        if self.steps >= 500:
-            d = True
-        return r,d,i
-
-    def step(self, action, observation = True):
+    def step(self, action, observe = True):
+        self.agent_selection = self.agent_selector_obj.select()
         if any(action) == None or any(action) == np.NaN:
             action = [0 for _ in action]
         elif not self.action_spaces[self.agent_selection].contains(action):
             raise Exception('Action for agent {} must be in {}. \
                                  It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection], action))
 
-        obs= self.env.step(action, self.agent_selection)
+        self.env.step(action, self.agent_selection)
+        self.rewards = dict(zip(self.agents,self.env.last_rewards))
+
+        if self.steps >= 500:
+            self.dones = dict(zip(self.agents, [True for _ in self.agents]))
+        else:
+            self.dones = dict(zip(self.agents,self.env.last_dones))
+
+        #AGENT SELECT
         
         self.steps += 1
 
-        self.agent_selection = (self.agent_selection + 1) % self.num_agents
-        return obs
+        return self.observe(self.agent_selection+1)
+
+    def observe(self, agent):
+        agent = agent % self.num_agents
+        return self.env.observe(agent)

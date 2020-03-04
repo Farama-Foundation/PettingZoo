@@ -44,8 +44,7 @@ class env(AECEnv):
         self.env.close()
 
     def render(self, mode="human"):
-        if mode=="lidar":
-            self.env.render()
+        self.env.render()
 
     def observe(self, agent):
         agent = agent % self.num_agents
@@ -90,7 +89,10 @@ class env(AECEnv):
         self.rewards = self.env.get_last_rewards()
         self.dones = self.env.get_last_dones()
         self.observations = self.env.get_last_obs()
+
+        if self.steps >= 500:
+            self.dones = dict(zip(self.agents, [True for _ in self.agents]))
         
 
         self.steps += 1
-        return self.observation(self.agent_selection+1)
+        return self.observe(self.agent_selection+1)

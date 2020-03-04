@@ -28,8 +28,8 @@ def random_demo(env, render=True):
         # # collect observations
         # for agent in env.agents:
         #     observations[agent] = env.observe(agent)
-        rewards = env.env.rewards
-        dones = env.env.dones
+        rewards = env.rewards
+        dones = env.dones
 
         done = all(dones.values())
         total_reward += sum(rewards.values())
