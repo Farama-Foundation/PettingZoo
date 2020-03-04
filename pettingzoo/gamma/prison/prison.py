@@ -1,4 +1,4 @@
-from pettingzoo.utils import AECEnv
+from pettingzoo.utils import AECEnv, agent_selector
 import pygame
 import os
 import numpy as np
@@ -26,10 +26,29 @@ class Prisoner:
         self.window = w
         self.first_touch = -1  # rewarded on touching bound != first_touch
         self.last_touch = -1  # to track last touched wall
-        self.sprite = None
+        self.still_sprite = None
+        self.left_sprite = None
+        self.right_sprite = None
+        self.state = 0
 
     def set_sprite(self, s):
-        self.sprite = get_image(s)
+        self.still_sprite = get_image(s+"_still.png")
+        self.left_sprite = get_image(s+"_left.png")
+        self.right_sprite = get_image(s+"_right.png")
+
+    def set_state(self, st):
+        self.state = st
+    
+    def get_sprite(self):
+        if self.state == 0:
+            return self.still_sprite
+        elif self.state == 1:
+            return self.right_sprite
+        elif self.state == -1:
+            return self.left_sprite
+        else:
+            print("INVALID STATE",self.state)
+            return self.still_sprite
 
 
 class env(AECEnv):
@@ -38,10 +57,13 @@ class env(AECEnv):
         # super(env, self).__init__()
         self.num_agents = 8
         self.agents = list(range(0, self.num_agents))
-        self.agent_order = self.agents
+        self.agent_order = self.agents[:]
+        self.agent_selector_obj = agent_selector(self.agent_order)
         self.agent_selection = 0
-        self.sprite_list = ["sprites/alien_cropped.png", "sprites/drone_cropped.png", "sprites/glowy_cropped.png", "sprites/reptile_cropped.png", "sprites/ufo_cropped.png"]
-        self.last_rewards = [0 for _ in self.agents]
+        self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo"]
+        self.rewards = dict(zip(self.agents,[0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -65,6 +87,15 @@ class env(AECEnv):
         else:
             for a in self.agents:
                 self.action_space_dict[a] = spaces.Box(low=-1, high=1, shape=(1,))
+
+        self.observation_space_dict = {}
+        self.last_observation = {}
+        for a in self.agents:
+            self.last_observation[a] = None
+            if vector_observation:
+                self.observation_space_dict[a] = spaces.Box(low=-300, high=300, shape=(2,))
+            else:
+                self.observation_space_dict[a] = spaces.Box(low=0, high=255, shape=(300,100,3))
 
         # self.options = pymunk.pygame_util.DrawOptions(self.screen)
         # self.options.shape_outline_color = (50, 50, 50, 5)
@@ -107,6 +138,9 @@ class env(AECEnv):
     def action_spaces(self):
         return self.action_space_dict
 
+    def observation_spaces(self):
+        return self.observation_space_dict
+
     def reward(self):
         return dict(zip(self.agents, self.last_rewards))
 
@@ -139,18 +173,21 @@ class env(AECEnv):
     def convert_coord_to_prisoner_id(self, c):
         return self.prisoner_mapping[c]
 
+    def close(self):
+        pygame.display.quit()
+
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         for k in self.walls:
             pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect(k))
 
         for p in self.prisoners:
-            self.screen.blit(p.sprite, p.position)
+            self.screen.blit(p.get_sprite(), p.position)
 
         # self.space.debug_draw(self.options)
 
     def observe(self, agent):
-        
+        agent = agent % self.num_agents
         if self.vector_obs:
             
             p = self.prisoners[agent]
@@ -158,7 +195,7 @@ class env(AECEnv):
             obs = (x-p.left_bound,p.right_bound - x)
             return obs
         else:
-            capture = pygame.surfarray.pixels3d(self.screen)
+            capture = pygame.surfarray.array3d(self.screen)
             p = self.prisoners[agent]
             x1, y1, x2, y2 = p.window
             sub_screen = capture[x1:x2,y1:y2, :]
@@ -180,34 +217,38 @@ class env(AECEnv):
 
     def step(self, action):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
-
+        self.agent_selection = self.agent_selector_obj.select()
         # if not continuous, input must be normalized
         reward = 0
         if action != None:
             if action != 0 and not self.continuous:
                 action = action/abs(action)
             reward = self.move_prisoner(self.agent_selection, action)
+        else:
+            print("Error, received null action")
+            action = 0
+
+        #set the sprite state to action normalized
+        if action != 0:
+            self.prisoners[self.agent_selection].set_state(action/abs(action))
+        else:
+            self.prisoners[self.agent_selection].set_state(0)
         
-        self.last_rewards[self.agent_selection] = reward
+        self.rewards[self.agent_selection] = reward
         self.clock.tick(15)
         #self.draw()
 
         self.num_frames += 1
         if (self.num_frames >= 500):
             self.done_val = True
+            for d in self.dones:
+                self.dones[d] = True
 
-        self.agent_selection = (self.agent_selection + 1) % self.num_agents
-        observation = self.observe(self.agent_selection)
+        observation = self.observe(self.agent_selection + 1)
 
         return observation
 
-    def last_cycle(self):
-        r = self.last_rewards[self.agent_selection]
-        d = self.done_val
-        i = None
-        return r, d, i
-
-    def render(self):
+    def render(self, mode='human'):
         self.draw()
         pygame.display.flip()
 
