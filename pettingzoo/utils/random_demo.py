@@ -1,7 +1,7 @@
 import numpy as np
 import time
 
-def random_demo(env):
+def random_demo(env, render=True):
     '''
     Runs an env object with random actions.
     '''
@@ -16,7 +16,8 @@ def random_demo(env):
     # start = time.time()
     while not done:
         # game should run at 15 FPS when rendering
-        env.render()
+        if not render:
+            env.render()
         time.sleep(env.display_wait)
     
         for _ in env.agents:
@@ -38,6 +39,7 @@ def random_demo(env):
     
     # end = time.time()
     # print("FPS = ", 100/(end-start))
-    env.render()
-    time.sleep(2)
+    if not render:
+        env.render()
+        time.sleep(2)
     env.close()
