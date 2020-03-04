@@ -12,6 +12,12 @@ class agent_selector():
     def select(self):
         self._current_agent = (self._current_agent + 1) % len(self.agent_order)
         return self.agent_order[self._current_agent - 1]
+
+    def is_last(self):
+        '''
+        Does not work as expected if you change the order
+        '''
+        return self._current_agent == self.agent_order[-1]
     
     # def peek_next_agent(self):
     #     return self.agent_order[self._current_agent]
