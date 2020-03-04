@@ -12,7 +12,7 @@ done = False
 total_reward = 0
 
 # start = time.time()
-random_demo(env, render=True)
+random_demo(env, render=False)
 
 # end = time.time()
 # print("FPS = ", 100/(end-start))
