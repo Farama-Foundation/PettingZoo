@@ -18,7 +18,7 @@ def random_demo(env, render=True):
         # game should run at 15 FPS when rendering
         if not render:
             env.render()
-        time.sleep(env.display_wait)
+            time.sleep(env.display_wait)
     
         for _ in env.agents:
             agent = env.agent_selection
