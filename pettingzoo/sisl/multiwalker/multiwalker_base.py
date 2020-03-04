@@ -355,7 +355,7 @@ class MultiWalkerEnv():
             walker._reset()
             self.drawlist += walker.legs
             self.drawlist += [walker.hull]
-        
+        self.scroll_subroutine()
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
