@@ -16,7 +16,7 @@ def random_demo(env, render=True):
     # start = time.time()
     while not done:
         # game should run at 15 FPS when rendering
-        if not render:
+        if render:
             env.render()
             time.sleep(env.display_wait)
     
@@ -39,7 +39,7 @@ def random_demo(env, render=True):
     
     # end = time.time()
     # print("FPS = ", 100/(end-start))
-    if not render:
+    if render:
         env.render()
         time.sleep(2)
     env.close()
