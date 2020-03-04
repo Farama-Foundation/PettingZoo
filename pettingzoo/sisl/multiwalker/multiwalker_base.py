@@ -265,6 +265,7 @@ class MultiWalkerEnv():
         self.setup()
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
+        self.last_obs = [None for _ in range(self.n_walkers)]
 
     def get_param_values(self):
         return self.__dict__
@@ -357,6 +358,7 @@ class MultiWalkerEnv():
         
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
+        self.last_obs = [None for _ in range(self.n_walkers)]
 
         return self.walkers[0].get_observation()
 
@@ -490,28 +492,29 @@ class MultiWalkerEnv():
 
         return rewards, done
 
-    def step(self, action, agent_id):
+    def step(self, action, agent_id, is_last):
         #action is array of size 4
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
 
         self.world.Step(1.0/FPS, 6*30, 2*30)
-        obs = self.walkers[(agent_id+1)%self.num_agents].get_observation()
 
-        rewards, dones = self.scroll_subroutine()
-        self.last_rewards = rewards
-        self.last_dones[agent_id] = dones
+        if is_last:
+            rewards, dones = self.scroll_subroutine()
+            self.last_rewards = rewards
+            self.last_dones[agent_id] = dones
 
-        return obs
+        return get_last_obs()[(agent_id+1)%self.n_walkers]
 
-    def last_cycle(self, agent_id):
-        r = 0
-        if self.reward_mech == 'local':
-            r = self.last_rewards[agent_id]
-        else:
-            r = self.last_rewards.mean()
-        d = self.last_dones[agent_id]
-        return r, d, None
+    def get_last_rewards(self):
+        return dict(zip(list(range(self.n_walkers)), self.last_rewards))
+
+    def get_last_dones(self):
+        return dict(zip(list(range(self.n_walkers)), self.last_dones))
+
+    def get_last_obs(self):
+        return dict(zip(list(range(self.n_walkers)), [walker.get_observation() for walker in self.walkers]))
+
 
     def render(self, mode='human', close=False):
         if close:

@@ -1,6 +1,5 @@
 from .multiwalker_base import MultiWalkerEnv as _env
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
-from pettingzoo.utils import AECEnv
+from pettingzoo.utils import AECEnv, agent_selector
 import numpy as np
 
 
@@ -16,27 +15,41 @@ class env(AECEnv):
         self.agents = list(range(self.num_agents))
         self.agent_selection = 0
         self.agent_order = self.agents[:]
+        self._agent_selector_object = agent_selector(self.agent_order)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.04
 
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.observations = self.env.get_last_obs()
+
         self.reset()
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
+    def reset(self, observe=True):
         observation = self.env.reset()
         self.steps = 0
-        return self.convert_to_dict(observation)
+        self.agent_selection = 0
+        self._agent_selector_object.reinit(self.agent_order)
+        if observe:
+            return observation
 
     def close(self):
         self.env.close()
 
-    def render(self):
-        self.env.render()
+    def render(self, mode="human"):
+        if mode=="lidar":
+            self.env.render()
+
+    def observe(self, agent):
+        agent = agent % self.num_agents
+        return self.observations[agent]
 
     # def step(self, action_dict):
     #     # unpack actions
@@ -66,21 +79,18 @@ class env(AECEnv):
     #     return observation_dict, reward_dict, done_dict, info_dict
 
     def step(self, action, observe=True):
+        self.agent_selection = self._agent_selector_object.select()
         action = np.array(action, dtype=np.float32)
         if any(np.isnan(action)):
             action = [0 for _ in action]
         elif not self.action_spaces[self.agent_selection].contains(action):
             raise Exception('Action for agent {} must be in {}. It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection], action))
 
-        obs= self.env.step(action, self.agent_selection)
+        self.env.step(action, self.agent_selection, self._agent_selector_object.is_last())
+        self.rewards = self.env.get_last_rewards()
+        self.dones = self.env.get_last_dones()
+        self.observations = self.env.get_last_obs()
         
 
-        self.agent_selection = (self.agent_selection + 1) % self.num_agents
         self.steps += 1
-        return obs
-
-    def last_cycle(self):
-        r, d, i = self.env.last_cycle(self.agent_selection)
-        if self.steps >= 500:
-            d = True
-        return r,d, i
+        return self.observation(self.agent_selection+1)
