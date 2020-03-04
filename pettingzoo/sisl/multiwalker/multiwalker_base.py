@@ -501,10 +501,13 @@ class MultiWalkerEnv():
 
         if is_last:
             rewards, dones = self.scroll_subroutine()
-            self.last_rewards = rewards
-            self.last_dones[agent_id] = dones
+            if self.reward_mech == 'local':
+                self.last_rewards = rewards
+            else:
+                self.last_rewards = [rewards.mean() for _ in range(self.n_walkers)]
+            self.last_dones = dict(zip(list(range(self.n_walkers)), [dones for _ in range(self.n_walkers)]))
 
-        return get_last_obs()[(agent_id+1)%self.n_walkers]
+        return self.get_last_obs()[(agent_id+1)%self.n_walkers]
 
     def get_last_rewards(self):
         return dict(zip(list(range(self.n_walkers)), self.last_rewards))

@@ -94,7 +94,9 @@ class MAWaterWorld():
         self.food_reward = food_reward
         self.control_penalty = control_penalty
         self.encounter_reward = encounter_reward
-        self.last_rewards = np.zeros(self.n_pursuers)
+        self.last_rewards = [0 for _ in range(self.n_pursuers)]
+        self.last_dones = [False for _ in range(self.n_pursuers)]
+        self.last_obs = [None for _ in range(self.n_pursuers)]
 
         self.n_obstacles = 1
         self._reward_mech = reward_mech
@@ -180,6 +182,8 @@ class MAWaterWorld():
         sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
         obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
         self.last_rewards = rewards
+        self.last_dones = [False for _ in range(self.n_pursuers)]
+        self.last_obs = obs_list
 
         return obs_list[0]
 
@@ -663,16 +667,16 @@ class MAWaterWorld():
 
         sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
         obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
+        self.last_obs = obs_list
         self.last_rewards = rewards
+        self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1
-        return obs_list[(agent_id+1)%len(self.agents)]
-
-    def last_cycle(self, agent_id):
-        r = self.last_rewards[agent_id]
-        done = self.is_terminal
-        info = None
-        return r, done, info
+        return self.observe(agent_id+1)
+    
+    def observe(self, agent):
+        agent = agent % self.num_agents
+        return self.last_obs[agent]
 
     def render(self, screen_size=800, rate=10, mode='human'):
         self.renderOn = True

@@ -53,6 +53,8 @@ class Pursuit():
         self.num_agents = self.n_pursuers
         #self.agents = list(range(self.num_agents))
         self.latest_reward_state = [0 for _ in range(self.num_agents)]
+        self.latest_done_state = [False for _ in range(self.num_agents)]
+        self.latest_obs = [None for _ in range(self.num_agents)]
 
         self.obs_range = kwargs.pop('obs_range', 7)  # can see 7 grids around them by default
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
@@ -200,6 +202,10 @@ class Pursuit():
                                                  randinit=True, constraints=constraints)
         self.evader_layer = AgentLayer(self.xs, self.ys, self.evaders)
 
+        self.latest_reward_state = [0 for _ in range(self.num_agents)]
+        self.latest_done_state = [False for _ in range(self.num_agents)]
+        self.latest_obs = [None for _ in range(self.num_agents)]
+
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
@@ -284,7 +290,7 @@ class Pursuit():
 
     #     return obslist, rewards, done_list, []  # info: {'removed': ev_remove}
 
-    def step(self, action, agent_id):
+    def step(self, action, agent_id, is_last):
         if self.train_pursuit:
             agent_layer = self.pursuer_layer
             opponent_layer = self.evader_layer
@@ -314,12 +320,14 @@ class Pursuit():
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
         
-        for i in range(opponent_layer.n_agents()):
-            # controller input should be an observation, but doesn't matter right now
-            a = opponent_controller.act(self.model_state)
-            opponent_layer.move_agent(i, a)
+        if is_last:
+            for i in range(opponent_layer.n_agents()): 
+                # controller input should be an observation, but doesn't matter right now
+                a = opponent_controller.act(self.model_state)
+                opponent_layer.move_agent(i, a)
 
         obslist = self.collect_obs(agent_layer, gone_flags)
+        self.latest_obs = obslist
         obs = obslist[(agent_id+1)%self.num_agents]
 
         
@@ -327,11 +335,6 @@ class Pursuit():
         self.latest_reward_state += self.urgency_reward
 
         return obs
-
-    def last_cycle(self, id):
-        done = self.is_terminal
-        info = None
-        return self.latest_reward_state[id], done, info
 
     def update_curriculum(self, itr):
         self.constraint_window += self.curriculum_constrain_rate  # 0 to 1 in 500 iterations
