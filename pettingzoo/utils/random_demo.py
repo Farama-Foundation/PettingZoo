@@ -3,7 +3,7 @@ import time
 
 def random_demo(env):
     '''
-    Runs an env with default parameters. Uses random actions.
+    Runs an env object with random actions.
     '''
 
     # env = _env(n_pursuers=n_pursuers)
@@ -11,6 +11,7 @@ def random_demo(env):
     
     done = False
     total_reward = 0
+    observations = {}
     
     # start = time.time()
     while not done:
@@ -18,11 +19,18 @@ def random_demo(env):
         env.render()
         time.sleep(env.display_wait)
     
-        action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
-        action_dict = dict(zip(env.agents, action_list))
-    
-        observation, rewards, done_dict, info = env.step(action_dict)
-        done = any(list(done_dict.values()))
+        for _ in env.agents:
+            agent = env.agent_selection
+            action = env.action_spaces[agent].sample()
+            env.step(action, observe=False)
+
+        # # collect observations
+        # for agent in env.agents:
+        #     observations[agent] = env.observe(agent)
+        rewards = env.env.rewards
+        dones = env.env.dones
+
+        done = all(dones.values())
         total_reward += sum(rewards.values())
         print("step reward", sum(rewards.values()))
         if done:
