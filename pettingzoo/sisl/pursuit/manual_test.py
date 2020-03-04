@@ -10,8 +10,8 @@ def manual_control(**kwargs):
     n_pursuers = 2
     
     # obs_range should be odd 3, 5, 7, etc
-    env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
-    #env = _env(**kwargs)  # freeze_evaders = True
+    # env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
+    env = _env(**kwargs)  # freeze_evaders = True
     env.reset()
     
     done = False
