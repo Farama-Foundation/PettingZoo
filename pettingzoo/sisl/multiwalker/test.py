@@ -1,5 +1,6 @@
 import numpy as np
 from .multiwalker import env as _env
+from pettingzoo.utils import random_demo
 import time
 
 n_walkers = 3
@@ -11,28 +12,10 @@ done = False
 total_reward = 0
 
 # start = time.time()
-while not done:
-    # game should run at 15 FPS when rendering
-    env.render()
-    time.sleep(0.04)
-
-    action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
-
-    for a in action_list:
-        r, d, i = env.last_cycle()
-        observation = env.step(a)
-        if d:
-            done = True
-        total_reward += r
-    print("step reward", sum(total_reward))
-    if done:
-        print("Total reward", total_reward, "done", done)
+random_demo(env)
 
 # end = time.time()
 # print("FPS = ", 100/(end-start))
-env.render()
-time.sleep(2)
-env.close()
 
 #  # for random trials
 #  num_trials = 1000
