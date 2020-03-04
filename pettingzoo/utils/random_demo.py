@@ -25,14 +25,14 @@ def random_demo(env, render=True):
         for _ in env.agents:
             agent = env.agent_selection
 
-            if not initial_iteration[agent]:
-                reward, dones[agent], _ = env.last_cycle()
-                total_reward += reward
-                print("step reward for agent {} is {}".format(agent, reward))
-            initial_iteration[agent] = False
-            action = env.action_spaces[agent].sample()
-            env.step(action, observe=False)
-        print(" d", dones)
+            if not dones[agent]:
+                if not initial_iteration[agent]:
+                    reward, dones[agent], _ = env.last_cycle()
+                    total_reward += reward
+                    print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
+                initial_iteration[agent] = False
+                action = env.action_spaces[agent].sample()
+                env.step(action, observe=False)
         done = all(dones.values())
         if done:
             print("Total reward", total_reward, "done", done)
