@@ -12,6 +12,7 @@ def random_demo(env, render=True):
     done = False
     total_reward = 0
     observations = {}
+    initial_iteration = {agent: True for agent in env.agents}
     
     # start = time.time()
     while not done:
@@ -24,18 +25,16 @@ def random_demo(env, render=True):
             agent = env.agent_selection
             action = env.action_spaces[agent].sample()
             env.step(action, observe=False)
-
+            if not initial_iteration[agent]:
+                total_reward += env.rewards[agent]
+                print("step reward for agent {} is {}".format(agent, env.rewards[agent]))
+            initial_iteration[agent] = False
+        done = all(env.dones.values())
+        if done:
+            print("Total reward", total_reward, "done", done)
         # # collect observations
         # for agent in env.agents:
         #     observations[agent] = env.observe(agent)
-        rewards = env.rewards
-        dones = env.dones
-
-        done = all(dones.values())
-        total_reward += sum(rewards.values())
-        print("step reward", sum(rewards.values()))
-        if done:
-            print("Total reward", total_reward, "done", done)
     
     # end = time.time()
     # print("FPS = ", 100/(end-start))
