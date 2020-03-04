@@ -178,6 +178,7 @@ For viewable games that can't be played by humans, you easily can get an impress
 from pettingzoo.utils import random_demo
 random_demo(env)
 ```
+To run games (without rendering) with random input actions, use `random_demo(env, render=False)`.
 
 
 ## OS Support
