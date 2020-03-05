@@ -1,9 +1,10 @@
-
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
-import os
-import random
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+from pettingzoo.utils import AECEnv, agent_selector
 import pygame
+import os
+import numpy as np
+import random
+from gym import spaces
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 def get_image(path):
@@ -25,19 +26,50 @@ class Prisoner:
         self.window = w
         self.first_touch = -1  # rewarded on touching bound != first_touch
         self.last_touch = -1  # to track last touched wall
+        self.still_sprite = None
+        self.left_sprite = None
+        self.right_sprite = None
+        self.state = 0
+
+    def set_sprite(self, s):
+        self.still_sprite = get_image(s+"_still.png")
+        self.left_sprite = get_image(s+"_left.png")
+        self.right_sprite = get_image(s+"_right.png")
+
+    def set_state(self, st):
+        self.state = st
+    
+    def get_sprite(self):
+        if self.state == 0:
+            return self.still_sprite
+        elif self.state == 1:
+            return self.right_sprite
+        elif self.state == -1:
+            return self.left_sprite
+        else:
+            print("INVALID STATE",self.state)
+            return self.still_sprite
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
 
     def __init__(self, continuous=False, vector_observation=True):
         # super(env, self).__init__()
         self.num_agents = 8
-        self.agent_list = list(range(0, self.num_agents))
+        self.agents = list(range(0, self.num_agents))
+        self.agent_order = self.agents[:]
+        self.agent_selector_obj = agent_selector(self.agent_order)
+        self.agent_selection = 0
+        self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo"]
+        self.rewards = dict(zip(self.agents,[0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
 
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((750, 650))
         self.num_frames = 0
+        self.done_val = False
 
         self.background = get_image('background.png')
         self.prisoner_sprite = get_image('prisoner.png')
@@ -47,6 +79,23 @@ class env(MultiAgentEnv):
         self.velocity = 8
         self.continuous = continuous
         self.vector_obs = vector_observation
+
+        self.action_space_dict = {}
+        if continuous:
+            for a in self.agents:
+                self.action_space_dict[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
+        else:
+            for a in self.agents:
+                self.action_space_dict[a] = spaces.Box(low=-1, high=1, shape=(1,))
+
+        self.observation_space_dict = {}
+        self.last_observation = {}
+        for a in self.agents:
+            self.last_observation[a] = None
+            if vector_observation:
+                self.observation_space_dict[a] = spaces.Box(low=-300, high=300, shape=(2,))
+            else:
+                self.observation_space_dict[a] = spaces.Box(low=0, high=255, shape=(300,100,3))
 
         # self.options = pymunk.pygame_util.DrawOptions(self.screen)
         # self.options.shape_outline_color = (50, 50, 50, 5)
@@ -65,7 +114,14 @@ class env(MultiAgentEnv):
             self.prisoners.append(self.create_prisoner(
                 x + random.randint(-20, 20), y, l, r, u))
 
+        sprite = 0
+        for p in self.prisoners:
+            p.set_sprite(self.sprite_list[sprite])
+            sprite = (sprite + 1) % len(self.sprite_list)
+
         self.screen.blit(self.background, (0, 0))
+        self.render()
+        self.render()
 
     def create_walls(self):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
@@ -78,6 +134,15 @@ class env(MultiAgentEnv):
 
     def create_prisoner(self, x, y, l, r, u):
         return Prisoner((x, y), l, r - self.prisoner_sprite_x, u)
+
+    def action_spaces(self):
+        return self.action_space_dict
+
+    def observation_spaces(self):
+        return self.observation_space_dict
+
+    def reward(self):
+        return dict(zip(self.agents, self.last_rewards))
 
     # returns reward of hitting both sides of room, 0 if not
     def move_prisoner(self, prisoner_id, movement):
@@ -108,60 +173,84 @@ class env(MultiAgentEnv):
     def convert_coord_to_prisoner_id(self, c):
         return self.prisoner_mapping[c]
 
+    def close(self):
+        pygame.display.quit()
+
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         for k in self.walls:
             pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect(k))
 
         for p in self.prisoners:
-            self.screen.blit(self.prisoner_sprite, p.position)
+            self.screen.blit(p.get_sprite(), p.position)
 
         # self.space.debug_draw(self.options)
 
-    def observe(self):
-        observations = {}
+    def observe(self, agent):
+        agent = agent % self.num_agents
         if self.vector_obs:
-            for i in self.agent_list:
-                p = self.prisoners[i]
-                x = p.position[0]
-                obs = (x-p.left_bound,
-                       p.right_bound - x)
-                observations[i] = obs
+            
+            p = self.prisoners[agent]
+            x = p.position[0]
+            obs = (x-p.left_bound,p.right_bound - x)
+            return obs
         else:
-            capture = pygame.surfarray.pixels3d(self.screen)
-            print(capture.shape)
-            for i in self.agent_list:
-                p = self.prisoners[i]
-                x1, y1, x2, y2 = p.window
-                sub_screen = capture[x1:x2,
-                                     y1:y2, :]
-                observations[i] = sub_screen
-        return observations
+            capture = pygame.surfarray.array3d(self.screen)
+            p = self.prisoners[agent]
+            x1, y1, x2, y2 = p.window
+            sub_screen = capture[x1:x2,y1:y2, :]
+            return sub_screen
 
-    def step(self, actions):
+    def reset(self, observe=True):
+        self.num_frames = 0
+        self.done_val = False
+        prisoner_spawn_locs = [(200, 150-self.prisoner_sprite_y, 50, 350, (50, 50, 350, 150)), (550, 150-self.prisoner_sprite_y, 400, 700, (400, 50, 700, 150)), (200, 300-self.prisoner_sprite_y, 50, 350, (50, 200, 350, 300)),(550, 300-self.prisoner_sprite_y, 400, 700, (400, 200, 700, 300)), (200, 450-self.prisoner_sprite_y, 50, 350, (50, 350, 350, 450)), (550, 450-self.prisoner_sprite_y, 400, 700, (400, 350, 700, 450)), (200, 600-self.prisoner_sprite_y, 50, 350, (50, 500, 350, 600)), (550, 600-self.prisoner_sprite_y, 400, 700, (400, 500, 700, 600))]
+        self.agent_selection = 0
+        self.agent_selector_obj.reinit(self.agent_order)
+        for i in self.agents:
+            p = self.prisoners[i]
+            x, y, l, r, u = prisoner_spawn_locs[i]
+            p.position = (x + random.randint(-20,20), y)
+        self.last_rewards = [0 for _ in self.agents]
+        if observe:
+            return self.observe(0)
+        
+
+    def step(self, action):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
-        reward_list = []
-        action_list = list(actions.values())
-        for i in range(0, 8):
+        self.agent_selection = self.agent_selector_obj.next()
+        # if not continuous, input must be normalized
+        reward = 0
+        if action != None:
+            if action != 0 and not self.continuous:
+                action = action/abs(action)
+            reward = self.move_prisoner(self.agent_selection, action)
+        else:
+            print("Error, received null action")
+            action = 0
 
-            # if not continuous, input must be normalized
-            if action_list[i] != 0 and not self.continuous:
-                action_list[i] = action_list[i]/abs(action_list[i])
-            r = self.move_prisoner(i, action_list[i])
-            reward_list.append(r)
+        #set the sprite state to action normalized
+        if action != 0:
+            self.prisoners[self.agent_selection].set_state(action/abs(action))
+        else:
+            self.prisoners[self.agent_selection].set_state(0)
+        
+        self.rewards[self.agent_selection] = reward
         self.clock.tick(15)
-        self.draw()
+        #self.draw()
 
         self.num_frames += 1
-        done_val = False
         if (self.num_frames >= 500):
-            done_val = True
+            self.done_val = True
+            for d in self.dones:
+                self.dones[d] = True
 
-        rewards = dict(zip(self.agent_list, reward_list))
-        observation = self.observe()
-        done = dict(((i, done_val) for i in self.agent_list))
-        info = {}
-        return observation, rewards, done, info
+        observation = self.observe(self.agent_selection + 1)
 
-    def render(self):
+        return observation
+
+    def render(self, mode='human'):
+        self.draw()
         pygame.display.flip()
+
+from .manual_test import manual_control

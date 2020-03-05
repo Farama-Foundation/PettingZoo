@@ -11,7 +11,7 @@ from .src.weapons import Arrow, Sword
 import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo.utils import AECEnv
 from gym.spaces import Box, Discrete
 
 
@@ -22,7 +22,7 @@ def get_image(path):
     return image
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
     def __init__(self, num_archers=2, num_knights=2):
         # Game Constants
         self.ZOMBIE_SPAWN = 20

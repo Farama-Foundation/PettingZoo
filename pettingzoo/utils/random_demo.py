@@ -1,35 +1,48 @@
 import numpy as np
 import time
 
-def random_demo(env):
+def random_demo(env, render=True):
     '''
-    Runs an env with default parameters. Uses random actions.
+    Runs an env object with random actions.
     '''
 
     # env = _env(n_pursuers=n_pursuers)
     env.reset()
     
-    done = False
     total_reward = 0
+    observations = {}
+    initial_iteration = {agent: True for agent in env.agents}
+    dones = {agent: False for agent in env.agents}
+    done = all(dones.values())
     
     # start = time.time()
     while not done:
         # game should run at 15 FPS when rendering
-        env.render()
-        time.sleep(env.display_wait)
+        if render:
+            env.render()
+            time.sleep(env.display_wait)
     
-        action_list = np.array([env.action_spaces[i].sample() for i in range(env.num_agents)])
-        action_dict = dict(zip(env.agents, action_list))
-    
-        observation, rewards, done_dict, info = env.step(action_dict)
-        done = any(list(done_dict.values()))
-        total_reward += sum(rewards.values())
-        print("step reward", sum(rewards.values()))
+        for _ in env.agents:
+            agent = env.agent_selection
+
+            if not dones[agent]:
+                if not initial_iteration[agent]:
+                    reward, dones[agent], _ = env.last_cycle()
+                    total_reward += reward
+                    print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
+                initial_iteration[agent] = False
+                action = env.action_spaces[agent].sample()
+                env.step(action, observe=False)
+        done = all(dones.values())
         if done:
             print("Total reward", total_reward, "done", done)
+        # # collect observations
+        # for agent in env.agents:
+        #     observations[agent] = env.observe(agent)
     
     # end = time.time()
     # print("FPS = ", 100/(end-start))
-    env.render()
-    time.sleep(2)
+    if render:
+        env.render()
+        time.sleep(2)
     env.close()

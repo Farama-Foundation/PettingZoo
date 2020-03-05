@@ -1,9 +1,9 @@
 from .pursuit_base import Pursuit as _env
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo.utils import AECEnv, agent_selector
 import numpy as np
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -13,6 +13,9 @@ class env(MultiAgentEnv):
 
         self.num_agents = self.env.num_agents
         self.agents = list(range(self.num_agents))
+        self.agent_order = self.agents[:]
+        self.agent_selector_obj = agent_selector(self.agent_order)
+        self.agent_selection = 0
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -20,47 +23,47 @@ class env(MultiAgentEnv):
         self.steps = 0
         self.display_wait = 0.0
 
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+
         self.reset()
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
+    def reset(self, observe=True):
         obs = self.env.reset()
         self.steps = 0
-        return self.convert_to_dict(obs)
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.agent_selector_obj.reinit(self.agent_order)
+        if observe:
+            return obs[0]
 
     def close(self):
         self.env.close()
 
-    def render(self):
+    def render(self, mode="human"):
         self.env.render()
 
-    def step(self, action_dict):
-        # unpack actions
-        action_list = np.array([4 for _ in range(self.num_agents)])
-
-        for agent_id in self.agents:
-            if np.isnan(action_dict[agent_id]):
-                action_dict[agent_id] = 4
-            elif not self.action_spaces[agent_id].contains(action_dict[agent_id]):
-                raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(agent_id, self.action_spaces[agent_id].n, action_dict[agent_id]))
-            action_list[agent_id] = action_dict[agent_id]
-
-        observation, reward, done, info = self.env.step(action_list)
-
-        if self.steps >= 500:
-            done = [True]*self.num_agents
-
-        observation_dict = self.convert_to_dict(observation)
-        reward_dict = self.convert_to_dict(reward)
-        info_dict = self.convert_to_dict(info)
-        done_dict = self.convert_to_dict(done)
-        done_dict["__all__"] = done[0]
+    def step(self, action, observe=True):
+        self.agent_selection = self.agent_selector_obj.next()
+        if action == None or action == np.NaN:
+            action = 4
+        elif not self.action_spaces[self.agent_selection].contains(action):
+            raise Exception('Action for agent {} must be in Discrete({}). \
+                                It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection].n, action))
+        obs = self.env.step(action, self.agent_selection, self.agent_selector_obj.is_last())
 
         self.steps += 1
 
-        return observation_dict, reward_dict, done_dict, info_dict
+        return self.observe(self.agent_selection+1)
+
+    def observe(self, agent):
+        agent = agent % self.num_agents
+        return self.env.latest_obs[agent]
+
 
 from .manual_test import manual_control

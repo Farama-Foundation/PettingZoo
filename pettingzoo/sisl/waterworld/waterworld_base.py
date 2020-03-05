@@ -94,6 +94,9 @@ class MAWaterWorld():
         self.food_reward = food_reward
         self.control_penalty = control_penalty
         self.encounter_reward = encounter_reward
+        self.last_rewards = [0 for _ in range(self.n_pursuers)]
+        self.last_dones = [False for _ in range(self.n_pursuers)]
+        self.last_obs = [None for _ in range(self.n_pursuers)]
 
         self.n_obstacles = 1
         self._reward_mech = reward_mech
@@ -175,7 +178,14 @@ class MAWaterWorld():
             poison.set_position(self._respawn(poison.position, poison._radius))
             poison.set_velocity((self.np_random.rand(2) - 0.5) * self.ev_speed)
 
-        return self.step(np.zeros((self.n_pursuers, 2)))[0]
+        rewards = np.zeros(self.n_pursuers)
+        sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
+        obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
+        self.last_rewards = rewards
+        self.last_dones = [False for _ in range(self.n_pursuers)]
+        self.last_obs = obs_list
+
+        return obs_list[0]
 
     @property
     def is_terminal(self):
@@ -223,26 +233,227 @@ class MAWaterWorld():
 
         return sensed_objspeedfeatures_Np_K
 
-    def step(self, action_Np2):
-        action_Np2 = np.asarray(action_Np2)
-        action_Np_2 = action_Np2.reshape((self.n_pursuers, 2))
-        # Players
-        actions_Np_2 = action_Np_2 * self.action_scale
+    # def step(self, action_Np2):
+    #     action_Np2 = np.asarray(action_Np2)
+    #     action_Np_2 = action_Np2.reshape((self.n_pursuers, 2))
+    #     # Players
+    #     actions_Np_2 = action_Np_2 * self.action_scale
 
-        rewards = np.zeros((self.n_pursuers,))
-        assert action_Np_2.shape == (self.n_pursuers, 2)
+    #     rewards = np.zeros((self.n_pursuers,))
+    #     assert action_Np_2.shape == (self.n_pursuers, 2)
 
-        for npu, pursuer in enumerate(self._pursuers):
-            pursuer.set_velocity(pursuer.velocity + actions_Np_2[npu])
-            pursuer.set_position(pursuer.position + pursuer.velocity)
+    #     for npu, pursuer in enumerate(self._pursuers):
+    #         pursuer.set_velocity(pursuer.velocity + actions_Np_2[npu])
+    #         pursuer.set_position(pursuer.position + pursuer.velocity)
 
-        # Penalize large actions
-        if self.reward_mech == 'global':
-            rewards += self.control_penalty * (actions_Np_2**2).sum()
-        else:
-            rewards += self.control_penalty * (actions_Np_2**2).sum(axis=1)
+    #     # Penalize large actions
+    #     if self.reward_mech == 'global':
+    #         rewards += self.control_penalty * (actions_Np_2**2).sum()
+    #     else:
+    #         rewards += self.control_penalty * (actions_Np_2**2).sum(axis=1)
 
-        # Players stop on hitting a wall
+    #     # Players stop on hitting a wall
+    #     for npu, pursuer in enumerate(self._pursuers):
+    #         clippedx_2 = np.clip(pursuer.position, 0, 1)
+    #         vel_2 = pursuer.velocity
+    #         vel_2[pursuer.position != clippedx_2] = 0
+    #         pursuer.set_velocity(vel_2)
+    #         pursuer.set_position(clippedx_2)
+
+    #     obstacle_coll_Np = np.zeros(self.n_pursuers)
+    #     # Particles rebound on hitting an obstacle
+    #     for npu, pursuer in enumerate(self._pursuers):
+    #         distfromobst_No = ssd.cdist(np.expand_dims(pursuer.position, 0), self.obstaclesx_No_2)
+    #         is_colliding_No = distfromobst_No <= pursuer._radius + self.obstacle_radius
+    #         obstacle_coll_Np[npu] = is_colliding_No.sum()
+    #         if obstacle_coll_Np[npu] > 0:
+    #             pursuer.set_velocity(-1 / 2 * pursuer.velocity)
+
+    #     obstacle_coll_Ne = np.zeros(self.n_evaders)
+    #     for nev, evader in enumerate(self._evaders):
+    #         distfromobst_No = ssd.cdist(np.expand_dims(evader.position, 0), self.obstaclesx_No_2)
+    #         is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
+    #         obstacle_coll_Ne[nev] = is_colliding_No.sum()
+    #         if obstacle_coll_Ne[nev] > 0:
+    #             evader.set_velocity(-1 / 2 * evader.velocity)
+
+    #     obstacle_coll_Npo = np.zeros(self.n_poison)
+    #     for npo, poison in enumerate(self._poisons):
+    #         distfromobst_No = ssd.cdist(np.expand_dims(poison.position, 0), self.obstaclesx_No_2)
+    #         is_colliding_No = distfromobst_No <= poison._radius + self.obstacle_radius
+    #         obstacle_coll_Npo[npo] = is_colliding_No.sum()
+    #         if obstacle_coll_Npo[npo] > 0:
+    #             poison.set_velocity(-1 * poison.velocity)
+
+    #     # Find collisions
+    #     pursuersx_Np_2 = np.array([pursuer.position for pursuer in self._pursuers])
+    #     evadersx_Ne_2 = np.array([evader.position for evader in self._evaders])
+    #     poisonx_Npo_2 = np.array([poison.position for poison in self._poisons])
+
+    #     # Evaders
+    #     evdists_Np_Ne = ssd.cdist(pursuersx_Np_2, evadersx_Ne_2)
+    #     is_colliding_ev_Np_Ne = evdists_Np_Ne <= np.asarray([
+    #         pursuer._radius + evader._radius for pursuer in self._pursuers
+    #         for evader in self._evaders
+    #     ]).reshape(self.n_pursuers, self.n_evaders)
+
+    #     # num_collisions depends on how many needed to catch an evader
+    #     ev_caught, which_pursuer_caught_ev = self._caught(is_colliding_ev_Np_Ne, self.n_coop)
+
+    #     # Poisons
+    #     podists_Np_Npo = ssd.cdist(pursuersx_Np_2, poisonx_Npo_2)
+    #     is_colliding_po_Np_Npo = podists_Np_Npo <= np.asarray([
+    #         pursuer._radius + poison._radius for pursuer in self._pursuers
+    #         for poison in self._poisons
+    #     ]).reshape(self.n_pursuers, self.n_poison)
+    #     po_caught, which_pursuer_caught_po = self._caught(is_colliding_po_Np_Npo, 1)
+
+    #     # Find sensed objects
+    #     # Obstacles
+    #     sensorvals_Np_K_No = np.array(
+    #         [pursuer.sensed(self.obstaclesx_No_2) for pursuer in self._pursuers])
+
+    #     # Evaders
+    #     sensorvals_Np_K_Ne = np.array([pursuer.sensed(evadersx_Ne_2) for pursuer in self._pursuers])
+
+    #     # Poison
+    #     sensorvals_Np_K_Npo = np.array(
+    #         [pursuer.sensed(poisonx_Npo_2) for pursuer in self._pursuers])
+
+    #     # Allies
+    #     sensorvals_Np_K_Np = np.array(
+    #         [pursuer.sensed(pursuersx_Np_2, same=True) for pursuer in self._pursuers])
+
+    #     # dist features
+    #     closest_ob_idx_Np_K = np.argmin(sensorvals_Np_K_No, axis=2)
+    #     closest_ob_dist_Np_K = self._closest_dist(closest_ob_idx_Np_K, sensorvals_Np_K_No)
+    #     sensedmask_ob_Np_K = np.isfinite(closest_ob_dist_Np_K)
+    #     sensed_obdistfeatures_Np_K = np.zeros((self.n_pursuers, self.n_sensors))
+    #     sensed_obdistfeatures_Np_K[sensedmask_ob_Np_K] = closest_ob_dist_Np_K[sensedmask_ob_Np_K]
+    #     # Evaders
+    #     closest_ev_idx_Np_K = np.argmin(sensorvals_Np_K_Ne, axis=2)
+    #     closest_ev_dist_Np_K = self._closest_dist(closest_ev_idx_Np_K, sensorvals_Np_K_Ne)
+    #     sensedmask_ev_Np_K = np.isfinite(closest_ev_dist_Np_K)
+    #     sensed_evdistfeatures_Np_K = np.zeros((self.n_pursuers, self.n_sensors))
+    #     sensed_evdistfeatures_Np_K[sensedmask_ev_Np_K] = closest_ev_dist_Np_K[sensedmask_ev_Np_K]
+    #     # Poison
+    #     closest_po_idx_Np_K = np.argmin(sensorvals_Np_K_Npo, axis=2)
+    #     closest_po_dist_Np_K = self._closest_dist(closest_po_idx_Np_K, sensorvals_Np_K_Npo)
+    #     sensedmask_po_Np_K = np.isfinite(closest_po_dist_Np_K)
+    #     sensed_podistfeatures_Np_K = np.zeros((self.n_pursuers, self.n_sensors))
+    #     sensed_podistfeatures_Np_K[sensedmask_po_Np_K] = closest_po_dist_Np_K[sensedmask_po_Np_K]
+    #     # Allies
+    #     closest_pu_idx_Np_K = np.argmin(sensorvals_Np_K_Np, axis=2)
+    #     closest_pu_dist_Np_K = self._closest_dist(closest_pu_idx_Np_K, sensorvals_Np_K_Np)
+    #     sensedmask_pu_Np_K = np.isfinite(closest_pu_dist_Np_K)
+    #     sensed_pudistfeatures_Np_K = np.zeros((self.n_pursuers, self.n_sensors))
+    #     sensed_pudistfeatures_Np_K[sensedmask_pu_Np_K] = closest_pu_dist_Np_K[sensedmask_pu_Np_K]
+
+    #     # speed features
+    #     pursuersv_Np_2 = np.array([pursuer.velocity for pursuer in self._pursuers])
+    #     evadersv_Ne_2 = np.array([evader.velocity for evader in self._evaders])
+    #     poisonv_Npo_2 = np.array([poison.velocity for poison in self._poisons])
+
+    #     # Evaders
+
+    #     sensed_evspeedfeatures_Np_K = self._extract_speed_features(evadersv_Ne_2,
+    #                                                                closest_ev_idx_Np_K,
+    #                                                                sensedmask_ev_Np_K)
+    #     # Poison
+    #     sensed_pospeedfeatures_Np_K = self._extract_speed_features(poisonv_Npo_2,
+    #                                                                closest_po_idx_Np_K,
+    #                                                                sensedmask_po_Np_K)
+    #     # Allies
+    #     sensed_puspeedfeatures_Np_K = self._extract_speed_features(pursuersv_Np_2,
+    #                                                                closest_pu_idx_Np_K,
+    #                                                                sensedmask_pu_Np_K)
+
+    #     # Process collisions
+    #     # If object collided with required number of players, reset its position and velocity
+    #     # Effectively the same as removing it and adding it back
+    #     if ev_caught.size:
+    #         for evcaught in ev_caught:
+    #             self._evaders[evcaught].set_position(self.np_random.rand(2))
+    #             self._evaders[evcaught].set_position(
+    #                 self._respawn(self._evaders[evcaught].position, self._evaders[evcaught]
+    #                               ._radius))
+    #             self._evaders[evcaught].set_velocity(
+    #                 (self.np_random.rand(2,) - 0.5) * self.ev_speed)
+
+    #     if po_caught.size:
+    #         for pocaught in po_caught:
+    #             self._poisons[pocaught].set_position(self.np_random.rand(2))
+    #             self._poisons[pocaught].set_position(
+    #                 self._respawn(self._poisons[pocaught].position, self._poisons[pocaught]
+    #                               ._radius))
+    #             self._poisons[pocaught].set_velocity(
+    #                 (self.np_random.rand(2,) - 0.5) * self.poison_speed)
+
+    #     ev_encounters, which_pursuer_encounterd_ev = self._caught(is_colliding_ev_Np_Ne, 1)
+    #     # Update reward based on these collisions
+    #     if self.reward_mech == 'global':
+    #         rewards += (
+    #             (len(ev_caught) * self.food_reward) + (len(po_caught) * self.poison_reward) +
+    #             (len(ev_encounters) * self.encounter_reward))
+    #     else:
+    #         rewards[which_pursuer_caught_ev] += self.food_reward
+    #         rewards[which_pursuer_caught_po] += self.poison_reward
+    #         rewards[which_pursuer_encounterd_ev] += self.encounter_reward
+
+    #     # Add features together
+    #     if self._speed_features:
+    #         sensorfeatures_Np_K_O = np.c_[sensed_obdistfeatures_Np_K, sensed_evdistfeatures_Np_K,
+    #                                       sensed_evspeedfeatures_Np_K, sensed_podistfeatures_Np_K,
+    #                                       sensed_pospeedfeatures_Np_K, sensed_pudistfeatures_Np_K,
+    #                                       sensed_puspeedfeatures_Np_K]
+    #     else:
+    #         sensorfeatures_Np_K_O = np.c_[sensed_obdistfeatures_Np_K, sensed_evdistfeatures_Np_K,
+    #                                       sensed_podistfeatures_Np_K, sensed_pudistfeatures_Np_K]
+
+    #     for evader in self._evaders:
+    #         # Move objects
+    #         evader.set_position(evader.position + evader.velocity)
+    #         # Bounce object if it hits a wall
+    #         if all(evader.position != np.clip(evader.position, 0, 1)):
+    #             evader.set_velocity(-1 * evader.velocity)
+
+    #     for poison in self._poisons:
+    #         # Move objects
+    #         poison.set_position(poison.position + poison.velocity)
+    #         # Bounce object if it hits a wall
+    #         if all(poison.position != np.clip(poison.position, 0, 1)):
+    #             poison.set_velocity(-1 * poison.velocity)
+
+    #     obslist = []
+    #     for inp in range(self.n_pursuers):
+    #         if self._addid:
+    #             obslist.append(
+    #                 np.concatenate([
+    #                     sensorfeatures_Np_K_O[inp, ...].ravel(), [
+    #                         float((is_colliding_ev_Np_Ne[inp, :]).sum() > 0), float((
+    #                             is_colliding_po_Np_Npo[inp, :]).sum() > 0)
+    #                     ], [inp + 1]
+    #                 ]))
+    #         else:
+    #             obslist.append(
+    #                 np.concatenate([
+    #                     sensorfeatures_Np_K_O[inp, ...].ravel(), [
+    #                         float((is_colliding_ev_Np_Ne[inp, :]).sum() > 0), float((
+    #                             is_colliding_po_Np_Npo[inp, :]).sum() > 0)
+    #                     ]
+    #                 ]))
+
+    #     assert all([
+    #         obs.shape == agent.observation_space.shape for obs, agent in zip(obslist, self.agents)
+    #     ])
+    #     self._timesteps += 1
+    #     done = self.is_terminal
+    #     # info = dict(evcatches=len(ev_caught), pocatches=len(po_caught))
+    #     info = {}
+    #     return obslist, rewards, [done] * self.n_pursuers, [info] * self.n_pursuers
+
+    def collision_handling_subroutine(self, rewards):
+                # Players stop on hitting a wall
         for npu, pursuer in enumerate(self._pursuers):
             clippedx_2 = np.clip(pursuer.position, 0, 1)
             vel_2 = pursuer.velocity
@@ -414,33 +625,58 @@ class MAWaterWorld():
             if all(poison.position != np.clip(poison.position, 0, 1)):
                 poison.set_velocity(-1 * poison.velocity)
 
+        return sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards
+
+    def observe_list(self, sensor_feature, is_colliding_ev, is_colliding_po):
         obslist = []
         for inp in range(self.n_pursuers):
             if self._addid:
                 obslist.append(
                     np.concatenate([
-                        sensorfeatures_Np_K_O[inp, ...].ravel(), [
-                            float((is_colliding_ev_Np_Ne[inp, :]).sum() > 0), float((
-                                is_colliding_po_Np_Npo[inp, :]).sum() > 0)
+                        sensor_feature[inp, ...].ravel(), [
+                            float((is_colliding_ev[inp, :]).sum() > 0), float((
+                                is_colliding_po[inp, :]).sum() > 0)
                         ], [inp + 1]
                     ]))
             else:
                 obslist.append(
                     np.concatenate([
-                        sensorfeatures_Np_K_O[inp, ...].ravel(), [
-                            float((is_colliding_ev_Np_Ne[inp, :]).sum() > 0), float((
-                                is_colliding_po_Np_Npo[inp, :]).sum() > 0)
+                        sensor_feature[inp, ...].ravel(), [
+                            float((is_colliding_ev[inp, :]).sum() > 0), float((
+                                is_colliding_po[inp, :]).sum() > 0)
                         ]
                     ]))
+        return obslist
 
-        assert all([
-            obs.shape == agent.observation_space.shape for obs, agent in zip(obslist, self.agents)
-        ])
+    def step(self, action, agent_id):
+        action = np.asarray(action)
+        action = action.reshape(2)
+
+        action = action * self.action_scale
+
+        rewards = np.zeros((self.n_pursuers,))
+
+        p = self._pursuers[agent_id]
+        p.set_velocity(p.velocity + action)
+        p.set_position(p.position + p.velocity)
+
+        if self.reward_mech == 'global':
+            rewards[agent_id] += self.control_penalty * (action**2).sum()
+        else:
+            rewards[agent_id] += self.control_penalty * (action**2).sum()
+
+        sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
+        obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
+        self.last_obs = obs_list
+        self.last_rewards = rewards
+        self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
+
         self._timesteps += 1
-        done = self.is_terminal
-        # info = dict(evcatches=len(ev_caught), pocatches=len(po_caught))
-        info = {}
-        return obslist, rewards, [done] * self.n_pursuers, [info] * self.n_pursuers
+        return self.observe(agent_id+1)
+    
+    def observe(self, agent):
+        agent = agent % self.num_agents
+        return self.last_obs[agent]
 
     def render(self, screen_size=800, rate=10, mode='human'):
         self.renderOn = True
