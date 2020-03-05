@@ -263,6 +263,9 @@ class MultiWalkerEnv():
         self.terminate_on_fall = terminate_on_fall
         self.one_hot = one_hot
         self.setup()
+        self.last_rewards = [0 for _ in range(self.n_walkers)]
+        self.last_dones = [False for _ in range(self.n_walkers)]
+        self.last_obs = [None for _ in range(self.n_walkers)]
 
     def get_param_values(self):
         return self.__dict__
@@ -352,19 +355,85 @@ class MultiWalkerEnv():
             walker._reset()
             self.drawlist += walker.legs
             self.drawlist += [walker.hull]
+        self.scroll_subroutine()
+        self.last_rewards = [0 for _ in range(self.n_walkers)]
+        self.last_dones = [False for _ in range(self.n_walkers)]
+        self.last_obs = [None for _ in range(self.n_walkers)]
 
-        return self.step(np.array([0, 0, 0, 0] * self.n_walkers))[0]
+        return self.walkers[0].get_observation()
 
-    def step(self, actions):
-        act_vec = np.reshape(actions, (self.n_walkers, 4))
-        assert len(act_vec) == self.n_walkers
-        for i in range(self.n_walkers):
-            self.walkers[i].apply_action(act_vec[i])
+    # def step(self, actions):
+    #     act_vec = np.reshape(actions, (self.n_walkers, 4))
+    #     assert len(act_vec) == self.n_walkers
+    #     for i in range(self.n_walkers):
+    #         self.walkers[i].apply_action(act_vec[i])
 
-        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
+    #     self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
 
-        obs = [walker.get_observation() for walker in self.walkers]
+    #     obs = [walker.get_observation() for walker in self.walkers]
 
+    #     xpos = np.zeros(self.n_walkers)
+    #     obs = []
+    #     done = False
+    #     rewards = np.zeros(self.n_walkers)
+
+    #     for i in range(self.n_walkers):
+    #         pos = self.walkers[i].hull.position
+    #         x, y = pos.x, pos.y
+    #         xpos[i] = x
+
+    #         wobs = self.walkers[i].get_observation()
+    #         nobs = []
+    #         for j in [i - 1, i + 1]:
+    #             # if no neighbor (for edge walkers)
+    #             if j < 0 or j == self.n_walkers:
+    #                 nobs.append(0.0)
+    #                 nobs.append(0.0)
+    #             else:
+    #                 xm = (self.walkers[j].hull.position.x - x) / self.package_length
+    #                 ym = (self.walkers[j].hull.position.y - y) / self.package_length
+    #                 nobs.append(np.random.normal(xm, self.position_noise))
+    #                 nobs.append(np.random.normal(ym, self.position_noise))
+    #         xd = (self.package.position.x - x) / self.package_length
+    #         yd = (self.package.position.y - y) / self.package_length
+    #         nobs.append(np.random.normal(xd, self.position_noise))
+    #         nobs.append(np.random.normal(yd, self.position_noise))
+    #         nobs.append(np.random.normal(self.package.angle, self.angle_noise))
+    #         # ID
+    #         if self.one_hot:
+    #             nobs.extend(np.eye(MAX_AGENTS)[i])
+    #         else:
+    #             nobs.append(float(i) / self.n_walkers)
+    #         obs.append(np.array(wobs + nobs))
+
+    #         # shaping = 130 * pos[0] / SCALE
+    #         shaping = 0.0
+    #         shaping -= 5.0 * abs(wobs[0])
+    #         rewards[i] = shaping - self.prev_shaping[i]
+    #         self.prev_shaping[i] = shaping
+
+    #     package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
+    #     rewards += (package_shaping - self.prev_package_shaping)
+    #     self.prev_package_shaping = package_shaping
+
+    #     self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
+
+    #     done = False
+    #     if self.game_over or pos[0] < 0:
+    #         rewards += self.drop_reward
+    #         done = True
+    #     if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
+    #         done = True
+    #     rewards += self.fall_reward * self.fallen_walkers
+    #     if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
+    #         done = True
+
+    #     if self.reward_mech == 'local':
+    #         return obs, rewards, [done] * self.n_walkers, {}
+    #     return obs, [rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
+
+
+    def scroll_subroutine(self):
         xpos = np.zeros(self.n_walkers)
         obs = []
         done = False
@@ -410,7 +479,7 @@ class MultiWalkerEnv():
         self.prev_package_shaping = package_shaping
 
         self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
-
+        
         done = False
         if self.game_over or pos[0] < 0:
             rewards += self.drop_reward
@@ -421,9 +490,36 @@ class MultiWalkerEnv():
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
             done = True
 
-        if self.reward_mech == 'local':
-            return obs, rewards, [done] * self.n_walkers, {}
-        return obs, [rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
+        return rewards, done
+
+    def step(self, action, agent_id, is_last):
+        #action is array of size 4
+        action = action.reshape(4)
+        self.walkers[agent_id].apply_action(action)
+        obs = [walker.get_observation() for walker in self.walkers]
+        self.world.Step(1.0/FPS, 6*30, 2*30)
+        if is_last:
+            rewards, done = self.scroll_subroutine()
+            if self.reward_mech == 'local':
+                self.last_rewards = rewards
+            else:
+                self.last_rewards = [rewards.mean() for _ in range(self.n_walkers)]
+            self.last_dones = dict(zip(list(range(self.n_walkers)), [done for _ in range(self.n_walkers)]))
+
+        
+
+    def get_last_rewards(self):
+        return dict(zip(list(range(self.n_walkers)), self.last_rewards))
+
+    def get_last_dones(self):
+        return self.last_dones
+
+    def get_last_obs(self):
+        return dict(zip(list(range(self.n_walkers)), [walker.get_observation() for walker in self.walkers]))
+
+    def observe(self, agent):
+        return self.walkers[agent].get_observation()
+
 
     def render(self, mode='human', close=False):
         if close:

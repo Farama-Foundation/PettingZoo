@@ -6,8 +6,7 @@ from skimage import measure
 import gym
 import matplotlib.pyplot as plt
 from .cake_paddle import CakePaddle
-
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+import pettingzoo
 
 KERNEL_WINDOW_LENGTH = 10
 
@@ -195,7 +194,7 @@ class BallSprite(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
-class CooperativePong(gym.Env):
+class CooperativePong(pettingzoo.utils.AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -373,7 +372,7 @@ class CooperativePong(gym.Env):
         plt.savefig(fname)
 
 
-class env(MultiAgentEnv):
+class env(pettingzoo.utils.AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
