@@ -194,26 +194,28 @@ If you'd like to be listed on the leader board for your environment, please subm
 Creating a custom environment with PettingZoo should roughly look like the following:
 
 ```
-import pettingzoo
+from pettingzoo.env import AECEnv
+from pettingzoo.utils import agent_selector
 from gym import spaces
 
 
-class env(pettingzoo.AECEnv):
+class env(AECEnv):
     metadata = {'render.modes': ['human']} # only add if environment supports rendering
 
     def __init__(self, arg1, arg2, ...):
         super(env, self).__init__()
 
-        agents = [0, 1 ... n] # agent names
-        agent_order = # list of agent names in the order they act in a cycle. Usuallly this will be the same as the agents list.
-        observation_spaces = # dict of observation spaces for each agent, from gym.spaces
-        action_spaces = # dict of action spaces for each agent, from gym.spaces
-        rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
-        dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
-        infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
+        self.agents = [0, 1 ... n] # agent names
+        self.agent_order = # list of agent names in the order they act in a cycle. Usually this will be the same as the agents list.
+        self.observation_spaces = # dict of observation spaces for each agent, from gym.spaces
+        self.action_spaces = # dict of action spaces for each agent, from gym.spaces
+        self.rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
+        self.dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
+        self.infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
 
-        # agent selection stuff (Ananth)
-
+        # agent selection stuff
+        self._agent_selector = agent_selector(self.agent_order)
+        
         # Initialize game stuff
 
     def observe(self, agent):
@@ -221,8 +223,11 @@ class env(pettingzoo.AECEnv):
         return observation
 
     def step(self, action, observe=True):
-        # Do game stuff
-        # Switch selection to next agents (Ananth)
+        # Do game stuff on the selected agent
+        
+        # Switch selection to next agents
+        self.agent_selection = self._agent_selector.select()
+        
         if observe:
             return self.observe(self.agent_selection)
         else:
@@ -232,6 +237,10 @@ class env(pettingzoo.AECEnv):
 
     def reset(self, observe=True):
         # reset environment
+
+        # selects the first agent
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.select()
         if observe:
             return self.observe(agent_order[0])
         else:
@@ -240,7 +249,7 @@ class env(pettingzoo.AECEnv):
     def render(self, mode='human'): # not all environments will support rendering
         ...
 
-    def close (self): # not all environments will support rendering
+    def close(self):
         ...
 ```
 
