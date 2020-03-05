@@ -226,7 +226,7 @@ class env(AECEnv):
         # Do game stuff on the selected agent
         
         # Switch selection to next agents
-        self.agent_selection = self._agent_selector.select()
+        self.agent_selection = self._agent_selector.next()
         
         if observe:
             return self.observe(self.agent_selection)
@@ -240,7 +240,7 @@ class env(AECEnv):
 
         # selects the first agent
         self._agent_selector.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector.select()
+        self.agent_selection = self._agent_selector.next()
         if observe:
             return self.observe(self.agent_selection)
         else:
