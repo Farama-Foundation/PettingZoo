@@ -76,7 +76,7 @@ class env(AECEnv):
     #     return observation_dict, reward_dict, done_dict, info_dict
 
     def step(self, action, observe = True):
-        self.agent_selection = self.agent_selector_obj.select()
+        self.agent_selection = self.agent_selector_obj.next()
         if any(action) == None or any(action) == np.NaN:
             action = [0 for _ in action]
         elif not self.action_spaces[self.agent_selection].contains(action):

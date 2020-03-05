@@ -9,7 +9,7 @@ class agent_selector():
         self.agent_order = agent_order
         self._current_agent = 0
 
-    def select(self):
+    def next(self):
         self._current_agent = (self._current_agent + 1) % len(self.agent_order)
         return self.agent_order[self._current_agent - 1]
 
