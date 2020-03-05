@@ -242,7 +242,7 @@ class env(AECEnv):
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.select()
         if observe:
-            return self.observe(agent_order[0])
+            return self.observe(self.agent_selection)
         else:
             return
 
