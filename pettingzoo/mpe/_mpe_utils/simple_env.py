@@ -1,10 +1,10 @@
 import gym
 from gym import spaces
 import numpy as np
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo.utils.env import AECEnv
 
 
-class SimpleEnv(MultiAgentEnv):
+class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -33,7 +33,7 @@ class SimpleEnv(MultiAgentEnv):
             self.action_spaces[aidx] = spaces.Discrete(space_dim)
             self.observation_spaces[aidx] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = dict()
+        self.rewards = {i:0 for i in range(self.num_agents)}
         self.dones = {i:False for i in range(self.num_agents)}
         self.infos = {i:{} for i in range(self.num_agents)}
 
@@ -85,6 +85,8 @@ class SimpleEnv(MultiAgentEnv):
             self._set_action(scenario_action, agent, self.action_spaces[i])
 
         self.world.step()
+        for i, agent in enumerate(self.world.agents):
+            self.rewards[i] = self.scenario.reward(agent,self.world)
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -119,6 +121,14 @@ class SimpleEnv(MultiAgentEnv):
         # make sure we used all elements of action
         assert len(action) == 0
 
+    # def last_cycle(self):
+    #     current_agent = self.world.agents[self.agent_selection]
+    #
+    #     reward_observation = self.scenario.observation(current_agent,self.world)
+    #     reward = self.rewards[self.agent_selection]
+    #     done = False # this is in fact correct, these games never technically end
+    #     info = {}
+    #     return reward,done,info
 
     def step(self,action,observe=True):
         current_idx = self.agent_selection
@@ -127,18 +137,13 @@ class SimpleEnv(MultiAgentEnv):
 
         self.current_actions[current_idx] = action
 
-        reward_observation = self.scenario.observation(current_agent,self.world)
-        reward = self.scenario.reward(current_agent,self.world)
-        done = False
-        info = {}
-
         if next_idx == 0:
             self._execute_world_step()
 
         next_agent = self.world.agents[next_idx]
         next_observation = self.scenario.observation(next_agent,self.world)
 
-        return reward_observation,next_observation,reward,done,info
+        return next_observation
 
     def render(self,mode='human'):
         from . import rendering
