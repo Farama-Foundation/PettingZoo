@@ -264,15 +264,15 @@ The following environments should be done:
 
 The following environments are done but require porting:
 
-* gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port) (Mario)
-* gamma/pistonball (needs AEC API port) (needs wrapper API port) (Mario)
-* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port) (Ananth)
-* sisl/* (needs AEC API port) (needs wrapper API port) (Mario)
+* gamma/knights_archers_zombies (Mario)
+* gamma/pistonball (Mario)
+* gamma/cooperative_pong (Ananth)
 * classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
-The following games are under active development:
+The following environments are under active development:
 
-* gamma/prospector (Mario)
+* sisl/* (API compliant, just game bug fixes) (Mario)
+* gamma/prospector (Yashas)
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/checkers (Tianchen)
