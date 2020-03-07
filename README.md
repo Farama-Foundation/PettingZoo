@@ -42,7 +42,7 @@ Environments can be interacted with in a manner very similar to Gym:
 observation = env.reset()
 while True:
     for _ in env.agent_order:
-        reward, done, info = env.last_cycle() 
+        reward, done, info = env.last_cycle()
         action = policy(observation)
         observation = env.step(action)
 ```
@@ -72,7 +72,7 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like: 
+`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
@@ -86,17 +86,19 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `close()`: Closes the rendering window.
 
-## Observation Wrapper
+## Observation/Action Wrapper
 
 We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env, color_reduction=None, down_scale=(x_scale, y_scale), reshape=None,
-range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
+range_scale=(obs_min, obs_max), new_dtype=None, continuous_actions=False, frame_stacking=1)
 ```
 
 *Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being turned off.
+
+*Continuous actions* discrete action spaces are converted to a 1d Box action space of size *n*. This space is treated as a vector of logits, and the softmax distribution of the inputs is sampled to get a discrete value. Currently supports both Discrete and MultiDiscrete action spaces.
 
 *Color reduction* removes color information from game outputs to easier processing with neural networks. An argument of `None` does nothing. An argument of 'full' does a full greyscaling of the observation. Arguments of 'R','G' or'B' just the corresponding R, G or B color channel from observation, as a dramatically more computationally efficient and generally adequate method of greyscaling games. This is only available for graphical games with 3D outputs.
 
@@ -158,12 +160,12 @@ from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments. 
+Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments.
 
 
 ## Demos
 
-Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered. 
+Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered.
 
 Of the games that can be played, many can be played by humans, and functionality to do so is included.
 
@@ -215,7 +217,7 @@ class env(AECEnv):
 
         # agent selection stuff
         self._agent_selector = agent_selector(self.agent_order)
-        
+
         # Initialize game stuff
 
     def observe(self, agent):
@@ -224,10 +226,10 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         # Do game stuff on the selected agent
-        
+
         # Switch selection to next agents
         self.agent_selection = self._agent_selector.next()
-        
+
         if observe:
             return self.observe(self.agent_selection)
         else:
