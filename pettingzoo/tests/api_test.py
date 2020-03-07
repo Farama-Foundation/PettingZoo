@@ -22,7 +22,7 @@ def test_obervation(observation, observation_0):
             warnings.warn("Observations are different shapes")
         if len(observation.shape) != len(observation_0.shape):
             warnings.warn("Observations have different number of deminsions")
-        if (observation.dtype > np.dtype('float64')) and (observation.dtype > np.dtype('int64')) and (observation.dtype != np.dtype('uint64')):
+        if not np.can_cast(observation.dtype,np.dtype("float64")):
             warnings.warn("Observation numpy array is not a numeric dtype")
     else:
         warnings.warn("Observation is not NumPy array")
