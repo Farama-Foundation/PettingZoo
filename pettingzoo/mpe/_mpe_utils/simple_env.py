@@ -1,4 +1,3 @@
-import gym
 from gym import spaces
 import numpy as np
 from pettingzoo.utils.env import AECEnv
@@ -8,7 +7,7 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self,scenario):
+    def __init__(self, scenario):
         super(SimpleEnv, self).__init__()
 
         self.scenario = scenario
@@ -24,7 +23,7 @@ class SimpleEnv(AECEnv):
         self.observation_spaces = dict()
         for aidx, agent in enumerate(self.world.agents):
             space_dim = 1
-            if  agent.movable:
+            if agent.movable:
                 space_dim *= self.world.dim_p * 2 + 1
             if not agent.silent:
                 space_dim *= self.world.dim_c
@@ -33,41 +32,41 @@ class SimpleEnv(AECEnv):
             self.action_spaces[aidx] = spaces.Discrete(space_dim)
             self.observation_spaces[aidx] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = {i:0 for i in range(self.num_agents)}
-        self.dones = {i:False for i in range(self.num_agents)}
-        self.infos = {i:{} for i in range(self.num_agents)}
+        self.rewards = {i: 0 for i in range(self.num_agents)}
+        self.dones = {i: False for i in range(self.num_agents)}
+        self.infos = {i: {} for i in range(self.num_agents)}
 
         self.steps = 0
         self.display_wait = 0.04
 
         self.agent_selection = 0
-        self.current_actions = [None]*self.num_agents
+        self.current_actions = [None] * self.num_agents
 
-        self.viewers = [None]*self.num_agents
+        self.viewers = [None] * self.num_agents
 
         self.reset()
 
-    def observe(self,agent):
-        return self.scenario.observation(agent,self.world)
+    def observe(self, agent):
+        return self.scenario.observation(agent, self.world)
 
-    def convert_to_dict(self,l):
+    def convert_to_dict(self, l):
         return dict(enumerate(l))
 
-    def reset(self,observe=True):
+    def reset(self, observe=True):
         self.scenario.reset_world(self.world)
 
         self._reset_render()
         obs_n = []
         for agent in self.world.agents:
-            obs_n.append(self.scenario.observation(agent,self.world))
+            obs_n.append(self.scenario.observation(agent, self.world))
 
         self.agent_selection = 0
         self.steps = 0
 
-        self.current_actions = [None]*self.num_agents
+        self.current_actions = [None] * self.num_agents
 
         # observation for first actor
-        return obs_n[0]#self.convert_to_dict(obs_n)
+        return obs_n[0]  # self.convert_to_dict(obs_n)
 
     def _execute_world_step(self):
         self.agents = self.world.policy_agents
@@ -76,7 +75,7 @@ class SimpleEnv(AECEnv):
             action = self.current_actions[i]
             scenario_action = []
             if agent.movable:
-                mdim =  (self.world.dim_p*2+1)
+                mdim = self.world.dim_p * 2 + 1
                 scenario_action.append(action % mdim)
                 action //= mdim
             if not agent.silent:
@@ -86,7 +85,7 @@ class SimpleEnv(AECEnv):
 
         self.world.step()
         for i, agent in enumerate(self.world.agents):
-            self.rewards[i] = self.scenario.reward(agent,self.world)
+            self.rewards[i] = self.scenario.reward(agent, self.world)
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -130,9 +129,8 @@ class SimpleEnv(AECEnv):
     #     info = {}
     #     return reward,done,info
 
-    def step(self,action,observe=True):
+    def step(self, action, observe=True):
         current_idx = self.agent_selection
-        current_agent = self.world.agents[current_idx]
         self.agent_selection = next_idx = (self.agent_selection + 1) % self.num_agents
 
         self.current_actions[current_idx] = action
@@ -141,11 +139,11 @@ class SimpleEnv(AECEnv):
             self._execute_world_step()
 
         next_agent = self.world.agents[next_idx]
-        next_observation = self.scenario.observation(next_agent,self.world)
+        next_observation = self.scenario.observation(next_agent, self.world)
 
         return next_observation
 
-    def render(self,mode='human'):
+    def render(self, mode='human'):
         from . import rendering
         if mode == 'human':
             alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -172,7 +170,7 @@ class SimpleEnv(AECEnv):
         if self.render_geoms is None:
             # import rendering only if we need it (and don't import for headless machines)
             # from gym.envs.classic_control import rendering
-            #from multiagent._mpe_utils import rendering
+            # from multiagent._mpe_utils import rendering
             self.render_geoms = []
             self.render_geoms_xform = []
             for entity in self.world.entities:
@@ -196,9 +194,8 @@ class SimpleEnv(AECEnv):
         for i in range(len(self.viewers)):
             # update bounds to center around agent
             cam_range = 1
-            #pos = np.zeros(self.world.dim_p)
             pos = self.world.agents[i].state.p_pos
-            self.viewers[i].set_bounds(pos[0]-cam_range, pos[0]+cam_range, pos[1]-cam_range, pos[1]+cam_range)
+            self.viewers[i].set_bounds(pos[0] - cam_range, pos[0] + cam_range, pos[1] - cam_range, pos[1] + cam_range)
             # update geometry positions
             for e, entity in enumerate(self.world.entities):
                 self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
