@@ -6,8 +6,8 @@ adversary to goal. Adversary is rewarded for its distance to the goal.
 
 
 import numpy as np
-from . import World, Agent, Landmark
-from . import BaseScenario
+from .._mpe_utils.core import World, Agent, Landmark
+from .._mpe_utils.scenario import BaseScenario
 
 
 class CryptoAgent(Agent):
