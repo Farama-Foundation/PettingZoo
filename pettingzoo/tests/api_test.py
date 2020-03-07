@@ -155,3 +155,4 @@ def api_test(env, render=False, manual_control=False):
     # check for env metadata
     # agent selection stuff
     # look at my PR to SB and what they actually used
+    # pass mode argument to render (variable, default human)
