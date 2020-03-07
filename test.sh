@@ -22,7 +22,7 @@ python3 -m pettingzoo.tests.ci_test mpe/simple_adversary
 python3 -m pettingzoo.tests.ci_test mpe/simple_crypto
 python3 -m pettingzoo.tests.ci_test mpe/simple_push
 python3 -m pettingzoo.tests.ci_test mpe/simple_reference
-python3 -m pettingzoo.tests.ci_test mpe/simple_speak_listener
+python3 -m pettingzoo.tests.ci_test mpe/simple_speaker_listener
 python3 -m pettingzoo.tests.ci_test mpe/simple_spread
 python3 -m pettingzoo.tests.ci_test mpe/simple_tag
 python3 -m pettingzoo.tests.ci_test mpe/simple_world_comm
