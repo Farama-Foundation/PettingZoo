@@ -253,4 +253,4 @@ class env(AECEnv):
         self.draw()
         pygame.display.flip()
 
-from .manual_test import manual_control
+from .manual_control import manual_control
