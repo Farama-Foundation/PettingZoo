@@ -259,8 +259,9 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
-* gamma/prison
+* gamma/prison (sprite work ongoing)
 * mpe/*
+* classic/* (for rlcard based environments)
 
 The following environments are done but require porting:
 
@@ -276,23 +277,19 @@ The following environments are under active development:
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/checkers (Tianchen)
-* classic/mahjong (rlcard) (Luis)
-* classic/texasholdem (rlcard) (Luis)
-* classic/texasholdem_nolimit (rlcard) (Luis)
-* classic/uno (rlcard) (Luis)
 * class/chess (Ben)
 * classic/tictactoe (Praveen)
 * classic/connect_four (Praveen)
+* classic/backgammon (Luis)
 
 Development has not yet started on the following games:
+
 * magent/*
-* classic/backgammon
-* atari/*
+* atari/* (based on ALE-Py)
 * robotics/*
 
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
-
 
 Requirements are being kept below until we get the requirements.txt issues fixed
 
