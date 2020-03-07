@@ -47,7 +47,7 @@ class SimpleEnv(AECEnv):
         self.reset()
 
     def observe(self, agent):
-        return self.scenario.observation(agent, self.world)
+        return self.scenario.observation(self.world.agents[agent], self.world)
 
     def convert_to_dict(self, l):
         return dict(enumerate(l))
@@ -56,20 +56,20 @@ class SimpleEnv(AECEnv):
         self.scenario.reset_world(self.world)
 
         self._reset_render()
-        obs_n = []
-        for agent in self.world.agents:
-            obs_n.append(self.scenario.observation(agent, self.world))
 
         self.agent_selection = 0
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
 
-        # observation for first actor
-        return obs_n[0]  # self.convert_to_dict(obs_n)
+        if observe:
+            agent = self.world.agents[0]
+            return self.scenario.observation(agent, self.world)
+        else:
+            return
 
     def _execute_world_step(self):
-        self.agents = self.world.policy_agents
+        # self.agents = self.world.policy_agents
         # set action for each agent
         for i, agent in enumerate(self.world.agents):
             action = self.current_actions[i]
@@ -139,8 +139,10 @@ class SimpleEnv(AECEnv):
             self._execute_world_step()
 
         next_agent = self.world.agents[next_idx]
-        next_observation = self.scenario.observation(next_agent, self.world)
-
+        if observe:
+            next_observation = self.scenario.observation(next_agent, self.world)
+        else:
+            next_observation = None
         return next_observation
 
     def render(self, mode='human'):
