@@ -1,3 +1,4 @@
+"""
 from checkers.game import Checkers
 from checkers.agents.alpha_beta import MinimaxPlayer
 
@@ -18,3 +19,4 @@ def test_opposing_duo():
     black_player = MinimaxPlayer('black', search_depth=2)
     from_sq, to_sq = black_player.next_move(ch.board, ch.last_moved_piece)
     assert to_sq == 19, 'Should move to the edge for safety.'
+"""
