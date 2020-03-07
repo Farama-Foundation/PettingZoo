@@ -22,7 +22,7 @@ def test_obervation(observation, observation_0):
             warnings.warn("Observations are different shapes")
         if len(observation.shape) != len(observation_0.shape):
             warnings.warn("Observations have different number of deminsions")
-        if not np.can_cast(observation.dtype,np.dtype("float64")):
+        if not np.can_cast(observation.dtype, np.dtype("float64")):
             warnings.warn("Observation numpy array is not a numeric dtype")
     else:
         warnings.warn("Observation is not NumPy array")
@@ -65,7 +65,7 @@ def test_observation_action_spaces(env, agent_0):
                 warnings.warn("Agent's maxmimum observation space value is infinity. This is probably too high")
             if np.any(np.equal(env.observation_spaces[agent].low, env.observation_spaces[agent].high)):
                 assert False, "Agent's maximum and minimum observation space values are equal"
-            if np.any(np.greater(env.observation_spaces[agent].low , env.observation_spaces[agent].high)):
+            if np.any(np.greater(env.observation_spaces[agent].low, env.observation_spaces[agent].high)):
                 assert False, "Agent's mimum observation space value is greater than it's maximum"
 
 
@@ -147,7 +147,7 @@ def api_test(env, render=False, manual_control=False):
 
     test_observe(env, observation_0)
 
-    #test_render(env)
+    # test_render(env)
 
     test_manual_control(env)
 
