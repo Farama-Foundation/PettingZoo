@@ -194,7 +194,7 @@ If you'd like to be listed on the leader board for your environment, please subm
 Creating a custom environment with PettingZoo should roughly look like the following:
 
 ```
-from pettingzoo.env import AECEnv
+from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
 
