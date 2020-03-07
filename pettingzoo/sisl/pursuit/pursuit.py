@@ -66,4 +66,4 @@ class env(AECEnv):
         return self.env.latest_obs[agent]
 
 
-from .manual_test import manual_control
+from .manual_control import manual_control
