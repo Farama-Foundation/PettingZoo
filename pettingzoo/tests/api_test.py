@@ -116,7 +116,7 @@ def test_manual_control(env):
     pass
 
 
-def api_test(env, render, manual_control):
+def api_test(env, render=False, manual_control=False):
     if manual_control:
         assert render, "Rendering must be enabled to test manual control"
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
