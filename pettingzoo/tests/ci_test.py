@@ -75,91 +75,91 @@ if sys.argv[1] == 'classic/uno':
 
 # gamma
 
-if sys.argv[1] == 'cooperative_pong':
+if sys.argv[1] == 'gamma/cooperative_pong':
     from pettingzoo.gamma import cooperative_pong
     cooperative_pong = cooperative_pong.env()
     api_test.api_test(cooperative_pong, render=True, manual_control=True)
 
-if sys.argv[1] == 'knights_archers_zombies':
+if sys.argv[1] == 'gamma/knights_archers_zombies':
     from pettingzoo.gamma import knights_archers_zombies
     knights_archers_zombies = knights_archers_zombies.env()
     api_test.api_test(knights_archers_zombies, render=True, manual_control=True)
 
-if sys.argv[1] == 'pistonball':
+if sys.argv[1] == 'gamma/pistonball':
     from pettingzoo.gamma import pistonball
     pistonball = pistonball.env()
     api_test.api_test(pistonball, render=True, manual_control=True)
 
-if sys.argv[1] == 'prison':
+if sys.argv[1] == 'gamma/prison':
     from pettingzoo.gamma import prison
     prison = prison.env()
     api_test.api_test(prison, render=True, manual_control=True)
 
-if sys.argv[1] == 'prospector':
+if sys.argv[1] == 'gamma/prospector':
     from pettingzoo.gamma import prospector
     prospector = prospector.env()
     api_test.api_test(prospector, render=True, manual_control=True)
 
 # mpe
 
-if sys.argv[1] == 'simple':
+if sys.argv[1] == 'mpe/simple':
     from pettingzoo.mpe import simple
     simple = simple.env()
     api_test.api_test(simple, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_adversary':
+if sys.argv[1] == 'mpe/simple_adversary':
     from pettingzoo.mpe import simple_adversary
     simple_adversary = simple_adversary.env()
     api_test.api_test(simple_adversary, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_crypto':
+if sys.argv[1] == 'mpe/simple_crypto':
     from pettingzoo.mpe import simple_crypto
     simple_crypto = simple_crypto.env()
     api_test.api_test(simple_crypto, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_push':
+if sys.argv[1] == 'mpe/simple_push':
     from pettingzoo.mpe import simple_push
     simple_push = simple_push.env()
     api_test.api_test(simple_push, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_reference':
+if sys.argv[1] == 'mpe/simple_reference':
     from pettingzoo.mpe import simple_reference
     simple_reference = simple_reference.env()
     api_test.api_test(simple_reference, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_speak_listener':
+if sys.argv[1] == 'mpe/simple_speak_listener':
     from pettingzoo.mpe import simple_speak_listener
     simple_speak_listener = simple_speak_listener.env()
     api_test.api_test(simple_speak_listener, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_spread':
+if sys.argv[1] == 'mpe/simple_spread':
     from pettingzoo.mpe import simple_spread
     simple_spread = simple_spread.env()
     api_test.api_test(simple_spread, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_tag':
+if sys.argv[1] == 'mpe/simple_tag':
     from pettingzoo.mpe import simple_tag
     simple_tag = simple_tag.env()
     api_test.api_test(simple_tag, render=True, manual_control=False)
 
-if sys.argv[1] == 'simple_world_comm':
+if sys.argv[1] == 'mpe/simple_world_comm':
     from pettingzoo.mpe import simple_world_comm
     simple_world_comm = simple_world_comm.env()
     api_test.api_test(simple_world_comm, render=True, manual_control=False)
 
 # sisl
 
-if sys.argv[1] == 'multiwalker':
+if sys.argv[1] == 'sisl/multiwalker':
     from pettingzoo.sisl import multiwalker
     multiwalker = multiwalker.env()
     api_test.api_test(multiwalker, render=True, manual_control=False)
 
-if sys.argv[1] == 'pursuit':
+if sys.argv[1] == 'sisl/pursuit':
     from pettingzoo.sisl import pursuit
     pursuit = pursuit.env()
     api_test.api_test(pursuit, render=True, manual_control=False)
 
-if sys.argv[1] == 'waterworld':
+if sys.argv[1] == 'sisl/waterworld':
     from pettingzoo.sisl import waterworld
     waterworld = waterworld.env()
     api_test.api_test(waterworld, render=True, manual_control=False)
