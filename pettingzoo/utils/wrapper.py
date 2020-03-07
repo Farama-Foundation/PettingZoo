@@ -145,9 +145,9 @@ class wrapper(AECEnv):
             for agent in self.agents:
                 act_space = self.orig_action_spaces[agent]
                 if isinstance(act_space, spaces.Discrete):
-                    new_act_space = spaces.Box(low=0, high=1, shape=(act_space.n,))
+                    new_act_space = spaces.Box(low=-10, high=10, shape=(act_space.n,))
                 elif isinstance(act_space, spaces.MultiDiscrete):
-                    new_act_space = spaces.Box(low=0, high=1, shape=(np.sum(act_space.nvec),))
+                    new_act_space = spaces.Box(low=-10, high=10, shape=(np.sum(act_space.nvec),))
                 elif isinstance(act_space, spaces.Box):
                     new_act_space = act_space
                 else:
@@ -169,6 +169,7 @@ class wrapper(AECEnv):
                 return e_x / e_x.sum()
 
             def sample_softmax(vec):
+                vec = vec.astype(np.float64)
                 return np.argmax(np.random.multinomial(1, softmax(vec)))
 
             if isinstance(act_space, spaces.Discrete):
