@@ -9,6 +9,7 @@ import numpy as np
 from . import World, Agent, Landmark
 from . import BaseScenario
 
+
 class CryptoAgent(Agent):
     def __init__(self):
         super(CryptoAgent, self).__init__()

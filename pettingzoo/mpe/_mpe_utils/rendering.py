@@ -6,10 +6,6 @@ import os
 import six
 import sys
 
-if "Apple" in sys.version:
-    if 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:
-        os.environ['DYLD_FALLBACK_LIBRARY_PATH'] += ':/usr/lib'
-
 from gym import error
 
 try:
@@ -20,12 +16,17 @@ except ImportError:
 try:
     from pyglet.gl import glEnable, glHint, glLineWidth, glBlendFunc, glBegin, glPushMatrix, glTranslatef, glClearColor, glRotatef, glScalef, glPopMatrix, glColor4f, glLineStipple, glDisable, glVertex3f, glEnd, glVertex2f
 except ImportError:
-    raise ImportError("Error occured while running `from pyglet.gl import ...`" +
-                      "HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'")
+    raise ImportError("""Error occured while running `from pyglet.gl import ...`
+            HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'""")
 
 from pyglet.gl import GL_BLEND, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_NICEST, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_LINE_STIPPLE, GL_POINTS, GL_QUADS, GL_LINE_LOOP, GL_POLYGON, GL_TRIANGLES, GL_LINE_STRIP, GL_LINES
 import math
 import numpy as np
+
+if "Apple" in sys.version:
+    if 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:
+        os.environ['DYLD_FALLBACK_LIBRARY_PATH'] += ':/usr/lib'
+
 
 RAD2DEG = 57.29577951308232
 
@@ -73,10 +74,10 @@ class Viewer(object):
 
     def set_bounds(self, left, right, bottom, top):
         assert right > left and top > bottom
-        scalex = self.width/(right-left)
-        scaley = self.height/(top-bottom)
+        scalex = self.width / (right - left)
+        scaley = self.height / (top - bottom)
         self.transform = Transform(
-            translation=(-left*scalex, -bottom*scaley),
+            translation=(-left * scalex, -bottom * scaley),
             scale=(scalex, scaley))
 
     def add_geom(self, geom):
@@ -274,8 +275,8 @@ class FilledPolygon(Geom):
 def make_circle(radius=10, res=30, filled=True):
     points = []
     for i in range(res):
-        ang = 2*math.pi*i / res
-        points.append((math.cos(ang)*radius, math.sin(ang)*radius))
+        ang = 2 * math.pi * i / res
+        points.append((math.cos(ang) * radius, math.sin(ang) * radius))
     if filled:
         return FilledPolygon(points)
     else:
@@ -294,10 +295,10 @@ def make_polyline(v):
 
 
 def make_capsule(length, width):
-    l, r, t, b = 0, length, width/2, -width/2
+    l, r, t, b = 0, length, width / 2, -width / 2
     box = make_polygon([(l, b), (l, t), (r, t), (r, b)])
-    circ0 = make_circle(width/2)
-    circ1 = make_circle(width/2)
+    circ0 = make_circle(width / 2)
+    circ1 = make_circle(width / 2)
     circ1.add_attr(Transform(translation=(length, 0)))
     geom = Compound([box, circ0, circ1])
     return geom
@@ -358,7 +359,7 @@ class Image(Geom):
         self.flip = False
 
     def render1(self):
-        self.img.blit(-self.width/2, -self.height/2, width=self.width, height=self.height)
+        self.img.blit(-self.width / 2, -self.height / 2, width=self.width, height=self.height)
 
 
 class SimpleImageViewer(object):
