@@ -135,13 +135,13 @@ This can combined with the observation wrapper in the order `markov_game(wrapper
 
 The differences from the AEC environment API are as follows:
 
-*`agent_order`, `agent_selection` and `observe(agent)` are not included.
+* `agent_order`, `agent_selection` and `observe(agent)` are not included.
 
 * Reset and step also do not include their additional flags.
 
 * `dones` also has an `__all__` entry, which when set to true stops the environment from recieving actions in full.
 
-*The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
+* The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n-1:[nth agent's observation]}
