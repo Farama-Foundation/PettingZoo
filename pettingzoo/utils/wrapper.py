@@ -1,8 +1,9 @@
 import numpy as np
+import copy
 from gym.spaces import Box
+from gym import spaces
 from warnings import warn
 from skimage import measure
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from .env import AECEnv
 
 from .frame_stack import stack_obs_space, stack_reset_obs, stack_obs
@@ -12,8 +13,8 @@ OBS_RESHAPE_LIST = ["expand", "flatten"]
 
 
 class wrapper(AECEnv):
-    
-    def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, frame_stacking=1):
+
+    def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, continuous_actions=False, frame_stacking=1):
         '''
         Creates a wrapper around `env`.
 
@@ -31,6 +32,8 @@ class wrapper(AECEnv):
             new_obs = obs/(max_obs-min_obs) - min_obs. The default is None.
         new_dtype : type or dict, optional
             New dtype for observations. The default is None.
+        continuous_actions : bool, optional
+            If the action space is discrete, make a one-hot continuous vector. The default is False.
         frame_stacking : int, optional
             No. of observation frames to stack.. The default is 1.
 
@@ -46,25 +49,33 @@ class wrapper(AECEnv):
         self.reshape = reshape
         self.range_scale = range_scale
         self.new_dtype = new_dtype
+        self.continuous_actions = continuous_actions
         self.frame_stacking = frame_stacking
-        
+
         self.agents = self.env.agents
+        self.agent_selection = self.env.agent_selection
         self.num_agents = len(self.agents)
         self.observation_spaces = self.env.observation_spaces
-        self.action_spaces = self.env.action_spaces
-        
+        self.action_spaces = copy.copy(self.env.action_spaces)
+        self.orig_action_spaces = self.env.action_spaces
+
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
+
         self.agent_order = self.env.agent_order
-        
+
         if self.frame_stacking > 1:
             self.stack_of_frames = {}
-        
+
         self._check_wrapper_params()
-        
+
+        self.modify_action_space()
         if self._check_box_space():
             self.modify_observation_space()
         else:
             warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
-        
+
     def _check_wrapper_params(self):
         '''
         Checks if valid parameters are passed to wrapper object.
@@ -77,7 +88,7 @@ class wrapper(AECEnv):
         if self.color_reduction is not None:
             assert isinstance(self.color_reduction, str) or isinstance(self.color_reduction, dict), "color_reduction must be str or dict. It is {}".format(self.color_reduction)
             if isinstance(self.color_reduction, str):
-                self.color_reduction = dict(zip(self.agents, [self.color_reduction for _ in enumerate(self.agents)]))            
+                self.color_reduction = dict(zip(self.agents, [self.color_reduction for _ in enumerate(self.agents)]))
             if isinstance(self.color_reduction, dict):
                 for agent in self.agents:
                     assert agent in self.color_reduction.keys(), "Agent id {} is not a key of color_reduction {}".format(agent, self.color_reduction)
@@ -96,7 +107,7 @@ class wrapper(AECEnv):
 
         if self.reshape is not None:
             assert self.reshape in OBS_RESHAPE_LIST, "reshape must be in {}".format(OBS_RESHAPE_LIST)
-        
+
         if self.range_scale is not None:
             assert isinstance(self.range_scale, tuple) or isinstance(self.range_scale, dict) or isinstance(self.range_scale, str), "range_scale must be tuple or dict. It is {}".format(self.range_scale)
             if isinstance(self.range_scale, tuple):
@@ -107,12 +118,13 @@ class wrapper(AECEnv):
                     assert len(self.range_scale[agent]) == 2, "Length of range_scale for agent {} is not 2.".format(agent)
                     assert self.range_scale[agent][0] <= self.range_scale[agent][1], "range_scale: for agent {}, low is greater than high".format(agent)
 
-        assert isinstance(self.frame_stacking, int) and self.frame_stacking >= 1, "frame_stacking should be int and at least 1. It is {}".format(self.frame_stacking)                    
+        assert isinstance(self.frame_stacking, int) and self.frame_stacking >= 1, "frame_stacking should be int and at least 1. It is {}".format(self.frame_stacking)
+        assert isinstance(self.continuous_actions, bool), "continuous_actions is not a bool"
 
         if self.new_dtype is not None:
             assert isinstance(self.new_dtype, type) or isinstance(self.new_dtype, dict), "new_dtype must be type or dict. It is {}".format(self.new_dtype)
             if isinstance(self.new_dtype, type):
-                self.new_dtype = dict(zip(self.agents, [self.new_dtype for _ in enumerate(self.agents)]))            
+                self.new_dtype = dict(zip(self.agents, [self.new_dtype for _ in enumerate(self.agents)]))
             if isinstance(self.new_dtype, dict):
                 for agent in self.agents:
                     assert agent in self.new_dtype.keys(), "Agent id {} is not a key of new_dtype {}".format(agent, self.new_dtype)
@@ -127,7 +139,56 @@ class wrapper(AECEnv):
         True if all obs spaces are gym.spaces.Box.
         '''
         return all([isinstance(obs_space, Box) for obs_space in self.observation_spaces.values()])
-        
+
+    def modify_action_space(self):
+        if self.continuous_actions:
+            for agent in self.agents:
+                act_space = self.orig_action_spaces[agent]
+                if isinstance(act_space, spaces.Discrete):
+                    new_act_space = spaces.Box(low=-10, high=10, shape=(act_space.n,))
+                elif isinstance(act_space, spaces.MultiDiscrete):
+                    new_act_space = spaces.Box(low=-10, high=10, shape=(np.sum(act_space.nvec),))
+                elif isinstance(act_space, spaces.Box):
+                    new_act_space = act_space
+                else:
+                    assert False, "space {} is not supported by the continuous_actions option of the wrapper".format(act_space)
+
+                self.action_spaces[agent] = new_act_space
+            print("Mod action space: continuous_actions", self.action_spaces)
+
+    def modify_action(self, agent, action):
+        new_action = action
+        if self.continuous_actions:
+            act_space = self.orig_action_spaces[agent]
+            warped_act_space = self.action_spaces[agent]
+            action = np.asarray(action)
+            assert warped_act_space.contains(action), "received invalid action"
+
+            def softmax(x):
+                e_x = np.exp(x - np.max(x))
+                return e_x / e_x.sum()
+
+            def sample_softmax(vec):
+                vec = vec.astype(np.float64)
+                return np.argmax(np.random.multinomial(1, softmax(vec)))
+
+            if isinstance(act_space, spaces.Discrete):
+                new_action = sample_softmax(action)
+            elif isinstance(act_space, spaces.MultiDiscrete):
+                new_action = []
+                sidx = 0
+                for size in act_space.nvec:
+                    samp = sample_softmax(action[sidx:(sidx + size)])
+                    new_action.append(samp)
+                    sidx = sidx + size
+                new_action = np.asarray(new_action, dtype=np.int64)
+            elif isinstance(act_space, spaces.Box):
+                new_action = action
+            else:
+                assert False, "space {} is not supported by the continuous_actions option of the wrapper".format(act_space)
+
+        return new_action
+
     def modify_observation_space(self):
         # reduce color channels to 1
         if self.color_reduction is not None:
@@ -149,7 +210,7 @@ class wrapper(AECEnv):
                     high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
             print("Mod obs space: color_reduction", self.observation_spaces)
-        
+
         # downscale (image, typically)
         if self.down_scale is not None:
             for agent in self.agents:
@@ -157,12 +218,12 @@ class wrapper(AECEnv):
                 dtype = obs_space.dtype
                 down_scale = self.down_scale[agent]
                 shape = obs_space.shape
-                new_shape = tuple([int(shape[i]/down_scale[i]) for i in range(len(shape))])
+                new_shape = tuple([int(shape[i] / down_scale[i]) for i in range(len(shape))])
                 low = obs_space.low.flatten()[:np.product(new_shape)].reshape(new_shape)
                 high = obs_space.high.flatten()[:np.product(new_shape)].reshape(new_shape)
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
             print("Mod obs space: down_scale", self.observation_spaces)
-        
+
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
             for agent in self.agents:
@@ -179,7 +240,7 @@ class wrapper(AECEnv):
                     high = obs_space.high.flatten()
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
             print("Mod obs space: reshape", self.observation_spaces)
-        
+
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
             for agent in self.agents:
@@ -190,8 +251,8 @@ class wrapper(AECEnv):
                 else:
                     dtype = obs_space.dtype
                 min_obs, max_obs = range_scale
-                low = np.subtract(np.divide(obs_space.low, max_obs-min_obs, dtype=dtype), min_obs)
-                high = np.subtract(np.divide(obs_space.high, max_obs-min_obs, dtype=dtype), min_obs)
+                low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
+                high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
             print("Mod obs space: range_scale", self.observation_spaces)
         elif self.new_dtype is not None:
@@ -201,7 +262,7 @@ class wrapper(AECEnv):
                 high = obs_space.high
                 self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
             print("Mod obs space: new_dtype", self.observation_spaces)
-            
+
         if self.frame_stacking > 1:
             self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
             print("Mod obs space: frame_stacking", self.observation_spaces)
@@ -218,14 +279,14 @@ class wrapper(AECEnv):
             if color_reduction == 'B':
                 obs = obs[:, :, 2]
             if color_reduction == 'full':
-                obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)              
-        
+                obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)
+
         # downscale (image, typically)
         if self.down_scale is not None:
             down_scale = self.down_scale[agent]
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
             obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
-        
+
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
             reshape = self.reshape
@@ -236,7 +297,7 @@ class wrapper(AECEnv):
             elif reshape is OBS_RESHAPE_LIST[1]:
                 # flatten
                 obs = obs.flatten()
-        
+
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
             range_scale = self.range_scale[agent]
@@ -245,7 +306,7 @@ class wrapper(AECEnv):
             else:
                 dtype = obs.dtype
             min_obs, max_obs = range_scale
-            obs = np.divide(np.subtract(obs, min_obs), max_obs-min_obs, dtype=dtype)
+            obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
         elif self.new_dtype is not None:
             dtype = self.new_dtype[agent]
             obs = obs.astype(dtype)
@@ -261,10 +322,10 @@ class wrapper(AECEnv):
 
     def close(self):
         self.env.close()
-    
+
     def render(self, mode='human'):
         self.env.render(mode)
-        
+
     def reset(self, observe=True):
         if observe:
             obs = self.env.reset(observe=True)
@@ -278,14 +339,21 @@ class wrapper(AECEnv):
         obs = self.env.observe(agent)
         observation = self.modify_observation(agent, obs, is_reset=False)
         return observation
-    
-    def step(self, action, observe=True):
-        if observe:
-            obs, reward, done, info = self.env.step(action, observe=True)
 
-            agent = self.env.agent_selection
-            observation = self.modify_observation(agent, obs, is_reset=False)
-            return observation, reward, done, info
+    def step(self, action, observe=True):
+        agent = self.env.agent_selection
+        action = self.modify_action(agent, action)
+        if observe:
+            next_obs = self.env.step(action, observe=True)
+
+            observation = self.modify_observation(agent, next_obs, is_reset=False)
         else:
             self.env.step(action, observe=False)
+            observation = None
 
+        self.agent_selection = self.env.agent_selection
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
+
+        return observation
