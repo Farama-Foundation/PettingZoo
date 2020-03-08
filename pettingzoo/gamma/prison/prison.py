@@ -218,7 +218,7 @@ class env(AECEnv):
 
     def step(self, action):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
-        self.agent_selection = self.agent_selector_obj.select()
+        self.agent_selection = self.agent_selector_obj.next()
         # if not continuous, input must be normalized
         reward = 0
         if action != None:
@@ -253,4 +253,4 @@ class env(AECEnv):
         self.draw()
         pygame.display.flip()
 
-from .manual_test import manual_control
+from .manual_control import manual_control
