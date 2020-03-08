@@ -212,6 +212,6 @@ class SimpleEnv(AECEnv):
         self.render_geoms_xform = None
 
     def close(self):
-        if self.viewers[0] is not None:
-            self.viewer
+        for viewer in self.viewers:
+            viewer.close()
         self._reset_render()
