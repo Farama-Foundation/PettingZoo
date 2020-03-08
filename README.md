@@ -261,37 +261,33 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
+* gamma/cooperative_pong
 * gamma/prison (sprite work ongoing)
 * mpe/*
-* gamma/cooperative_pong
-
-The following environments are done but require porting:
-
-* gamma/knights_archers_zombies (Mario)
-* gamma/pistonball (Mario)
-* classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
 The following environments are under active development:
 
-* classic/* (for rlcard based environments) (Luis)
-* sisl/* (API compliant, just game bug fixes) (Mario)
-* gamma/prospector (Yashas)
-* classic/go (Sharry)
-* classic/rock_paper_scissors_lizard_spock (Sharry)
+* classic/* (rlcard) (Luis)
+* classic/backgammon (Luis)
 * classic/checkers (Tianchen)
 * class/chess (Ben)
-* classic/tictactoe (Praveen)
 * classic/connect_four (Praveen)
-* classic/backgammon (Luis)
+* classic/go (Sharry)
+* classic/rock_paper_scissors (Sharry)
+* classic/rock_paper_scissors_lizard_spock (Sharry)
+* classic/tictactoe (Praveen)
+* gamma/knights_archers_zombies (Mario)
+* gamma/pistonball (Mario)
+* gamma/prospector (Yashas)
+ sisl/* (Mario)
 
 Development has not yet started on the following games:
 
+* atari/* (based on ALE-Py)
 * classic/hanabi (https://github.com/deepmind/hanabi-learning-environment)
 * magent/*
-* atari/* (based on ALE-Py)
 * robotics/*
 * ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
-
 
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
