@@ -1,3 +1,4 @@
+from .utils import save_image_observation
 from .env import AECEnv, MarkovEnv
 from .random_demo import random_demo
 from .wrapper import wrapper

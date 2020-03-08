@@ -263,17 +263,17 @@ The following environments should be done:
 
 * gamma/prison (sprite work ongoing)
 * mpe/*
-* classic/* (for rlcard based environments)
+* gamma/cooperative_pong
 
 The following environments are done but require porting:
 
 * gamma/knights_archers_zombies (Mario)
 * gamma/pistonball (Mario)
-* gamma/cooperative_pong (Ananth)
 * classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
 The following environments are under active development:
 
+* classic/* (for rlcard based environments) (Luis)
 * sisl/* (API compliant, just game bug fixes) (Mario)
 * gamma/prospector (Yashas)
 * classic/go (Sharry)

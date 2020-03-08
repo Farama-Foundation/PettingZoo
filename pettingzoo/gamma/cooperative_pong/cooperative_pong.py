@@ -6,9 +6,12 @@ from skimage import measure
 import gym
 import matplotlib.pyplot as plt
 from .cake_paddle import CakePaddle
-import pettingzoo
 
-KERNEL_WINDOW_LENGTH = 10
+# from ray.rllib.env.multi_agent_env import MultiAgentEnv
+
+from copy import deepcopy
+
+KERNEL_WINDOW_LENGTH = 1
 
 def get_image(path):
     image = pygame.image.load(path)
@@ -194,12 +197,12 @@ class BallSprite(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
-class CooperativePong(pettingzoo.utils.AECEnv):
+class CooperativePong(gym.Env):
 
     metadata = {'render.modes': ['human']}
 
     # ball_speed = [3,3], p1_speed = 3, p2_speed = 3
-    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0, flatten_obs=True):
+    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -211,14 +214,11 @@ class CooperativePong(pettingzoo.utils.AECEnv):
         self.area = self.screen.get_rect()
 
         # define action and observation spaces
-        self.flatten_obs = flatten_obs
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
-        if self.flatten_obs:
-            flattened_shape = get_flat_shape(self.s_width, self.s_height)
-            self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(flattened_shape,), dtype=np.float32) for _ in range(self.num_agents)]
-        else:
-            original_shape = original_obs_shape(self.s_width, self.s_height)
-            self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
+        original_shape = original_obs_shape(self.s_width, self.s_height)
+        original_color_shape = (original_shape[0], original_shape[1], 3)
+        # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
+        self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
 
         self.clock = pygame.time.Clock()
 
@@ -236,10 +236,12 @@ class CooperativePong(pettingzoo.utils.AECEnv):
 
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
-
+        
         self.reset()
 
     def reset(self):
+        # does not return observations
+
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
@@ -259,8 +261,12 @@ class CooperativePong(pettingzoo.utils.AECEnv):
         self.score = 0
         self.num_frames = 0
 
+        self.agents = list(range(self.num_agents))
+        self.rewards = dict(zip(self.agents, [0.0]*len(self.agents)))
+        self.dones = dict(zip(self.agents, [False]*len(self.agents)))
+        self.infos = dict(zip(self.agents, [{}]*len(self.agents)))
+
         self.draw()
-        return self.observe()
 
     def close(self):
         if self.renderOn:
@@ -271,36 +277,38 @@ class CooperativePong(pettingzoo.utils.AECEnv):
         self.screen = pygame.display.set_mode(self.screen.get_size())
         self.renderOn = True
 
-    def render(self):
+    def render(self, mode='human'):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
         pygame.display.flip()
 
-    def observe(self):
+    def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
-        observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
+        if agent == 0:
+            return observation[:, :int(observation.shape[1]/2), :]
+        elif agent == 1:
+            return observation[:, int(observation.shape[1]/2):, :]
 
-        mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
+        # observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
 
-        # Fixed: Uses mean
-        observation = measure.block_reduce(observation, block_size=(KERNEL_WINDOW_LENGTH, KERNEL_WINDOW_LENGTH), func=mean)
+        # mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
 
-        height, width = observation.shape
+        # # Fixed: Uses mean
+        # observation = measure.block_reduce(observation, block_size=(KERNEL_WINDOW_LENGTH, KERNEL_WINDOW_LENGTH), func=mean)
 
-        # partition the entire screen into 2 halves for observing the state
-        obs = [observation[:, 0:int(width/2)], observation[:, int(width/2):]]
-        # exapnd dims to 3
-        observation = []
-        for i in obs:
-            if self.flatten_obs:
-                unscaled_obs = np.expand_dims(i, axis=2).flatten()
-            else:
-                unscaled_obs = np.expand_dims(i, axis=2)
-            observation.append(np.divide(unscaled_obs, 255, dtype=np.float32))
-        return observation
+        # height, width = observation.shape
+
+        # # partition the entire screen into 2 halves for observing the state
+        # obs = [observation[:, 0:int(width/2)], observation[:, int(width/2):]]
+        # # exapnd dims to 3
+        # observation = []
+        # for i in obs:
+        #     unscaled_obs = np.expand_dims(i, axis=2)
+        #     observation.append(np.divide(unscaled_obs, 255, dtype=np.float32))
+        # return observation
 
     def draw(self):
         # draw background
@@ -311,68 +319,78 @@ class CooperativePong(pettingzoo.utils.AECEnv):
         self.p2.draw(self.screen)
         self.ball.draw(self.screen)
 
-    def step(self, actions):
-        # returns a list of observations, list of rewards, list of dones, list of info.
-        # Size of each list = num_agents
+    def step(self, action, agent):
+        '''
+        Does not return anything
+        '''
 
-        # update p1, p2
-        # actions[i]: 0: do nothing,
-        # actions[i]: 1: p[i] move up, 2: p[i] move down
-        self.p1.update(self.area, actions[0])
-        self.p2.update(self.area, actions[1])
-        # update ball position
-        # self.done = self.ball.update(self.area, self.p1.rect, self.p2.rect)
-        self.done = self.ball.update2(self.area, self.p1, self.p2)
-
+        # update p1, p2 accordingly
+        # action: 0: do nothing,
+        # action: 1: p[i] move up, 2: p[i] move down
+        if agent == 0:
+            self.p1.update(self.area, action)
+        elif agent == 1:
+            self.p2.update(self.area, action)
+            
+            # do the rest if not done
+            if not self.done:
+                # update ball position
+                self.done = self.ball.update2(self.area, self.p1, self.p2)
+    
+                # do the miscellaneous stuff after the last agent has moved
+                # reward is the length of time ball is in play
+                reward = 0
+                # ball is out-of-bounds
+                if self.done:
+                    reward = -100
+                    self.score += reward
+                if not self.done:
+                    self.num_frames += 1
+                    # scaling reward so that the max reward is 100
+                    reward = 1/9
+                    self.score += reward
+                    if self.num_frames == 900:
+                        self.done = True
+                        print("score = {}, frames = {}".format(self.score, self.num_frames))
+    
+                # let the clock tick
+                if self.renderOn:
+                    self.clock.tick(15)
+                else:
+                    self.clock.tick()
+    
+                for ag in self.agents:
+                    self.rewards[ag] = reward/self.num_agents
+                    self.dones[ag] = self.done
+                    self.infos[ag] = {}
+        
         self.draw()
 
-        observation = self.observe()
+        # return reward[agent], done[agent], info[agent]
 
-        # reward is the length of time ball is in play
-        reward = 0
-        # ball is out-of-bounds
-        if self.done:
-            reward = -100
-            self.score += reward
-        if not self.done:
-            self.num_frames += 1
-            # scaling reward so that the max reward is 100
-            reward = 1/9
-            self.score += reward
-            if self.num_frames == 900:
-                self.done = True
-                print("score = {}, frames = {}".format(self.score, self.num_frames))
+    # def plot_obs(self, observation, fname):
+    #     # shrink observation dims
+    #     shape = original_obs_shape(self.s_width, self.s_height)
+    #     for i in range(len(observation)):
+    #         observation[i] = observation[i].reshape(shape)
+    #         observation[i] = np.squeeze(observation[i])
+    #     fig = plt.figure()
+    #     # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
+    #     ax1 = fig.add_subplot(121)
+    #     ax2 = fig.add_subplot(122)
+    #     ax1.imshow(observation[0], cmap=plt.cm.gray)
+    #     ax2.imshow(observation[1], cmap=plt.cm.gray)
+    #     ax1.set_title("Observation[0]")
+    #     ax2.set_title("Observation[1]")
+    #     plt.savefig(fname)
 
-        # let the clock tick
-        if self.renderOn:
-            self.clock.tick(15)
-        else:
-            self.clock.tick()
-
-        reward = [reward/self.num_agents] * self.num_agents
-        done = [self.done] * self.num_agents
-        info = [{}] * self.num_agents
-
-        return observation, reward, done, info
-
-    def plot_obs(self, observation, fname):
-        # shrink observation dims
-        shape = original_obs_shape(self.s_width, self.s_height)
-        for i in range(len(observation)):
-            observation[i] = observation[i].reshape(shape)
-            observation[i] = np.squeeze(observation[i])
-        fig = plt.figure()
-        # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
-        ax1 = fig.add_subplot(121)
-        ax2 = fig.add_subplot(122)
-        ax1.imshow(observation[0], cmap=plt.cm.gray)
-        ax2.imshow(observation[1], cmap=plt.cm.gray)
-        ax1.set_title("Observation[0]")
-        ax2.set_title("Observation[1]")
-        plt.savefig(fname)
-
-
-class env(pettingzoo.utils.AECEnv):
+from pettingzoo.utils.env import AECEnv
+from pettingzoo.utils.agent_selector import agent_selector
+"""
+Use it with max downsampling kernel: (10, 10)
+"""
+class env(AECEnv):
+# class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
@@ -380,47 +398,64 @@ class env(pettingzoo.utils.AECEnv):
         self.env = CooperativePong(**kwargs)
 
         self.num_agents = 2
-        self.agents = list(range(self.num_agents))
+        self.agents = self.env.agents
+        self.agent_order = self.agents[:]
+        self._agent_selector = agent_selector(self.agent_order)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        # dicts
+        self.observations = {}
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
 
         self.score = self.env.score
         self.display_wait = 0.0
 
         self.reset()
 
-    def convert_to_dict(self, list_of_list):
-        return dict(zip(self.agents, list_of_list))
+    # def convert_to_dict(self, list_of_list):
+    #     return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
-        obs = self.env.reset()
-        return self.convert_to_dict(obs)
+    def reset(self, observe=True):
+        self.env.reset()
+        if observe:
+            self.agent_selection = self._agent_selector.next()
+            return self.observe(self.agent_selection)
+
+    def observe(self, agent):
+        obs = self.env.observe(agent)
+        return obs
 
     def close(self):
         self.env.close()
 
-    def render(self):
-        self.env.render()
+    def render(self, mode='human'):
+        self.env.render(mode)
+        
+    def last_cycle(self):
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos    
+        return super().last_cycle()
 
-    def step(self, actions):
-        for agent_id in self.agents:
-            if np.isnan(actions[agent_id]):
-                actions[agent_id] = 0
-            elif not self.action_spaces[agent_id].contains(actions[agent_id]):
-                raise Exception('Action for agent {} must be in Discrete({}).'
-                                'It is currently {}'.format(agent_id, self.action_spaces[agent_id].n, actions[agent_id]))
+    def step(self, action, observe=True):
+        agent = self.agent_selection
+        if np.isnan(action):
+            action = 0
+        elif not self.action_spaces[agent].contains(action):
+            raise Exception('Action for agent {} must be in Discrete({}).'
+                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
 
-        observation, reward, done, info = self.env.step(actions)
-
-        observation_dict = self.convert_to_dict(observation)
-        reward_dict = self.convert_to_dict(reward)
-        info_dict = self.convert_to_dict(info)
-        done_dict = self.convert_to_dict(done)
-        done_dict["__all__"] = done[0]
+        self.env.step(action, agent)
+        # select next agent and observe
+        self.agent_selection = self._agent_selector.next()
 
         self.score = self.env.score
-
-        return observation_dict, reward_dict, done_dict, info_dict
+        
+        if observe:
+            observation = self.observe(self.agent_selection)
+            return observation
 
 from .manual_control import manual_control
