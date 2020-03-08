@@ -42,7 +42,7 @@ class wrapper(AECEnv):
         None.
 
         '''
-        super(wrapper, self).__init__()
+        super().__init__()
         self.env = env
         self.color_reduction = color_reduction
         self.down_scale = down_scale
@@ -66,7 +66,8 @@ class wrapper(AECEnv):
         self.agent_order = self.env.agent_order
 
         if self.frame_stacking > 1:
-            self.stack_of_frames = {}
+            self.stack_of_frames = {agent : None for agent in self.agents}
+            self.pre_fs_ndim = {agent : None for agent in self.agents}
 
         self._check_wrapper_params()
 
@@ -145,9 +146,9 @@ class wrapper(AECEnv):
             for agent in self.agents:
                 act_space = self.orig_action_spaces[agent]
                 if isinstance(act_space, spaces.Discrete):
-                    new_act_space = spaces.Box(low=-10, high=10, shape=(act_space.n,))
+                    new_act_space = spaces.Box(low=-np.inf, high=np.inf, shape=(act_space.n,))
                 elif isinstance(act_space, spaces.MultiDiscrete):
-                    new_act_space = spaces.Box(low=-10, high=10, shape=(np.sum(act_space.nvec),))
+                    new_act_space = spaces.Box(low=-np.inf, high=np.inf, shape=(np.sum(act_space.nvec),))
                 elif isinstance(act_space, spaces.Box):
                     new_act_space = act_space
                 else:
@@ -264,6 +265,7 @@ class wrapper(AECEnv):
             print("Mod obs space: new_dtype", self.observation_spaces)
 
         if self.frame_stacking > 1:
+            self.pre_fs_ndim = {agent: self.observation_spaces[agent].low.ndim for agent in self.agents}
             self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
             print("Mod obs space: frame_stacking", self.observation_spaces)
 
@@ -313,11 +315,8 @@ class wrapper(AECEnv):
 
         # frame_stacking
         if self.frame_stacking > 1:
-            if is_reset:
-                self.stack_of_frames = stack_reset_obs(obs, self.frame_stacking)
-            else:
-                stack_obs(self.stack_of_frames, obs)
-            obs = self.stack_of_frames
+            stack_obs(self.stack_of_frames, agent, obs, self.frame_stacking)
+            obs = self.stack_of_frames[agent]
         return obs
 
     def close(self):
