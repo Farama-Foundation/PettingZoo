@@ -290,6 +290,8 @@ Development has not yet started on the following games:
 * magent/*
 * atari/* (based on ALE-Py)
 * robotics/*
+* ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
+
 
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
