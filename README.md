@@ -42,7 +42,7 @@ Environments can be interacted with in a manner very similar to Gym:
 observation = env.reset()
 while True:
     for _ in env.agent_order:
-        reward, done, info = env.last_cycle() 
+        reward, done, info = env.last_cycle()
         action = policy(observation)
         observation = env.step(action)
 ```
@@ -72,7 +72,7 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like: 
+`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
@@ -86,17 +86,19 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `close()`: Closes the rendering window.
 
-## Observation Wrapper
+## Observation/Action Wrapper
 
 We include popular preprocessing methods out of the box:
 
 ```
 from pettingzoo.utils import wrapper
 env = wrapper(env, color_reduction=None, down_scale=(x_scale, y_scale), reshape=None,
-range_scale=(obs_min, obs_max), new_dtype=None, frame_stacking=1)
+range_scale=(obs_min, obs_max), new_dtype=None, continuous_actions=False, frame_stacking=1)
 ```
 
 *Frame stacking* stacks the 4 most recent frames on "top of" each other. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. For games via observed via graphical outputs (a 2D or 3D array), the arrays are stacked to be taller 3D arrays. Frame stacking is used to let policies get a sense of time from the environments. The argument to frame stacking controls how many frames back are stacked. At the start of the game, frames that don't yet exist are filled with 0s. An argument of 1 is analogous to being turned off.
+
+*Continuous actions* discrete action spaces are converted to a 1d Box action space of size *n*. This space is treated as a vector of logits, and the softmax distribution of the inputs is sampled to get a discrete value. Currently supports both Discrete and MultiDiscrete action spaces.
 
 *Color reduction* removes color information from game outputs to easier processing with neural networks. An argument of `None` does nothing. An argument of 'full' does a full greyscaling of the observation. Arguments of 'R','G' or'B' just the corresponding R, G or B color channel from observation, as a dramatically more computationally efficient and generally adequate method of greyscaling games. This is only available for graphical games with 3D outputs.
 
@@ -135,13 +137,13 @@ This can combined with the observation wrapper in the order `markov_game(wrapper
 
 The differences from the AEC environment API are as follows:
 
-*`agent_order`, `agent_selection` and `observe(agent)` are not included.
+* `agent_order`, `agent_selection` and `observe(agent)` are not included.
 
 * Reset and step also do not include their additional flags.
 
 * `dones` also has an `__all__` entry, which when set to true stops the environment from recieving actions in full.
 
-*The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
+* The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
 
 ```
 observations = {0:[first agent's observation], 1:[second agent's observation] ... n-1:[nth agent's observation]}
@@ -158,12 +160,12 @@ from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments. 
+Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments.
 
 
 ## Demos
 
-Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered. 
+Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered.
 
 Of the games that can be played, many can be played by humans, and functionality to do so is included.
 
@@ -194,25 +196,27 @@ If you'd like to be listed on the leader board for your environment, please subm
 Creating a custom environment with PettingZoo should roughly look like the following:
 
 ```
-import pettingzoo
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 from gym import spaces
 
 
-class env(pettingzoo.AECEnv):
+class env(AECEnv):
     metadata = {'render.modes': ['human']} # only add if environment supports rendering
 
     def __init__(self, arg1, arg2, ...):
         super(env, self).__init__()
 
-        agents = [0, 1 ... n] # agent names
-        agent_order = # list of agent names in the order they act in a cycle. Usuallly this will be the same as the agents list.
-        observation_spaces = # dict of observation spaces for each agent, from gym.spaces
-        action_spaces = # dict of action spaces for each agent, from gym.spaces
-        rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
-        dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
-        infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
+        self.agents = [0, 1 ... n] # agent names
+        self.agent_order = # list of agent names in the order they act in a cycle. Usually this will be the same as the agents list.
+        self.observation_spaces = # dict of observation spaces for each agent, from gym.spaces
+        self.action_spaces = # dict of action spaces for each agent, from gym.spaces
+        self.rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
+        self.dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
+        self.infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
 
-        # agent selection stuff (Ananth)
+        # agent selection stuff
+        self._agent_selector = agent_selector(self.agent_order)
 
         # Initialize game stuff
 
@@ -221,8 +225,11 @@ class env(pettingzoo.AECEnv):
         return observation
 
     def step(self, action, observe=True):
-        # Do game stuff
-        # Switch selection to next agents (Ananth)
+        # Do game stuff on the selected agent
+
+        # Switch selection to next agents
+        self.agent_selection = self._agent_selector.next()
+
         if observe:
             return self.observe(self.agent_selection)
         else:
@@ -232,15 +239,19 @@ class env(pettingzoo.AECEnv):
 
     def reset(self, observe=True):
         # reset environment
+
+        # selects the first agent
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         if observe:
-            return self.observe(agent_order[0])
+            return self.observe(self.agent_selection)
         else:
             return
 
     def render(self, mode='human'): # not all environments will support rendering
         ...
 
-    def close (self): # not all environments will support rendering
+    def close(self):
         ...
 ```
 
@@ -250,40 +261,40 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
-* gamma/prison
+* gamma/prison (sprite work ongoing)
 * mpe/*
+* classic/* (for rlcard based environments)
 
 The following environments are done but require porting:
 
-* gamma/knights_archers_zombies (needs AEC API port) (needs wrapper API port) (Mario)
-* gamma/pistonball (needs AEC API port) (needs wrapper API port) (Mario)
-* gamma/cooperative_pong (needs AEC API port) (needs wrapper API port) (Ananth)
-* sisl/* (needs AEC API port) (needs wrapper API port) (Mario)
+* gamma/knights_archers_zombies (Mario)
+* gamma/pistonball (Mario)
+* gamma/cooperative_pong (Ananth)
 * classic/rock_paper_scissors (needs AEC API port) (Sharry)
 
-The following games are under active development:
+The following environments are under active development:
 
-* gamma/prospector (Mario)
+* sisl/* (API compliant, just game bug fixes) (Mario)
+* gamma/prospector (Yashas)
 * classic/go (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/checkers (Tianchen)
-* classic/mahjong (rlcard) (Luis)
-* classic/texasholdem (rlcard) (Luis)
-* classic/texasholdem_nolimit (rlcard) (Luis)
-* classic/uno (rlcard) (Luis)
 * class/chess (Ben)
 * classic/tictactoe (Praveen)
 * classic/connect_four (Praveen)
+* classic/backgammon (Luis)
 
 Development has not yet started on the following games:
+
+* classic/hanabi (https://github.com/deepmind/hanabi-learning-environment)
 * magent/*
-* classic/backgammon
-* atari/*
+* atari/* (based on ALE-Py)
 * robotics/*
+* ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
+
 
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
-
 
 Requirements are being kept below until we get the requirements.txt issues fixed
 
@@ -296,4 +307,5 @@ matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
+rlcard
 ```

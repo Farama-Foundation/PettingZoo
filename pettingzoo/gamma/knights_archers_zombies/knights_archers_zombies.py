@@ -573,4 +573,4 @@ class env(AECEnv):
 
         return self.observe()
 
-from .manual_test import manual_control
+from .manual_control import manual_control
