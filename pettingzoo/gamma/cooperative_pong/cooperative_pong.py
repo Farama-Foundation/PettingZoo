@@ -262,9 +262,8 @@ class CooperativePong(gym.Env):
         self.num_frames = 0
 
         self.agents = list(range(self.num_agents))
-        self.rewards = dict(zip(self.agents, [0]*len(self.agents)))
+        self.rewards = dict(zip(self.agents, [0.0]*len(self.agents)))
         self.dones = dict(zip(self.agents, [False]*len(self.agents)))
-        self.dones['__all__'] = all(self.dones.values())
         self.infos = dict(zip(self.agents, [{}]*len(self.agents)))
 
         self.draw()
