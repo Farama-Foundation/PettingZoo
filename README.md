@@ -286,6 +286,7 @@ The following environments are under active development:
 
 Development has not yet started on the following games:
 
+* classic/hanabi (https://github.com/deepmind/hanabi-learning-environment)
 * magent/*
 * atari/* (based on ALE-Py)
 * robotics/*
