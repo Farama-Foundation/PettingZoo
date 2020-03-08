@@ -334,6 +334,11 @@ class Pursuit():
         self.latest_reward_state += self.term_pursuit * pursuers_who_remove
         self.latest_reward_state += self.urgency_reward
 
+        if self.reward_mech == 'global' and is_last:
+            meanVal = self.latest_reward_state.mean()
+            self.latest_reward_state = [meanVal for _ in range(len(self.latest_reward_state))]
+                
+
         return obs
 
     def update_curriculum(self, itr):
@@ -483,11 +488,11 @@ class Pursuit():
             self.model_state[0:3, xlo:xhi, ylo:yhi]) / self.layer_norm
         self.local_obs[agent_idx, 3, self.obs_range // 2, self.obs_range // 2] = float(
             agent_idx) / self.n_agents()
-        if self.flatten:
-            o = self.local_obs[agent_idx][0:3].flatten()
-            if self.include_id:
-                o = np.append(o, float(agent_idx) / self.n_agents())
-            return o
+        # if self.flatten:
+        #     o = self.local_obs[agent_idx][0:3].flatten()
+        #     if self.include_id:
+        #         o = np.append(o, float(agent_idx) / self.n_agents())
+        #     return o
         # reshape output from (C, H, W) to (H, W, C)
         # return self.local_obs[agent_idx]
         return np.rollaxis(self.local_obs[agent_idx], 0, 3)
