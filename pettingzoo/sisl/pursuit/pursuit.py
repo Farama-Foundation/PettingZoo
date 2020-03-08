@@ -56,7 +56,10 @@ class env(AECEnv):
             raise Exception('Action for agent {} must be in Discrete({}). \
                                 It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection].n, action))
         obs = self.env.step(action, self.agent_selection, self.agent_selector_obj.is_last())
-
+        for k in self.dones:
+            self.dones[k] = self.env.is_terminal
+        for k in range(self.num_agents):
+            self.rewards[k] = self.env.latest_reward_state[k]
         self.steps += 1
 
         return self.observe(self.agent_selection+1)
