@@ -24,6 +24,10 @@ def test_obervation(observation, observation_0):
             warnings.warn("Observations have different number of deminsions")
         if not np.can_cast(observation.dtype, np.dtype("float64")):
             warnings.warn("Observation numpy array is not a numeric dtype")
+        if np.array_equal(observation, np.zeros(observation.shape)):
+            warnings.warn("Observation numpy array is all zeros.")
+        if not np.all(observation >= 0):
+            warnings.warn("Observation contains negative numbers. This is bad in many environments.")
     else:
         warnings.warn("Observation is not NumPy array")
 
@@ -69,21 +73,25 @@ def test_observation_action_spaces(env, agent_0):
                 assert False, "Agent's mimum observation space value is greater than it's maximum"
 
 
-def test_rewards(env, agent_0):
+def test_reward(reward):
+    if not ((isinstance(reward, int) or isinstance(reward, float)) and not isinstance(reward, np.ndarray)):
+        warnings.warn("Reward should be int, float, or NumPy array")
+    if isinstance(reward, np.ndarray):
+        if isinstance(reward, np.ndarray) and not reward.shape == (1,):
+            assert False, "Rewards can only be one number"
+        if np.isinf(reward):
+            assert False, "Reward must be finite"
+        if np.isnan(reward):
+            assert False, "Rewards cannot be NaN"
+        if not np.can_cast(reward.dtype, np.dtype("float64")):
+            assert False, "Reward NumPy array is not a numeric dtype"
+
+
+def test_rewards_dones(env, agent_0):
     for agent in env.agents:
         assert isinstance(env.dones[agent], bool), "Agent's values in dones must be True or False"
-
-        if not ((isinstance(env.rewards[agent], int) or isinstance(env.rewards[agent], float)) and not isinstance(env.rewards[agent], np.ndarray)):
-            warnings.warn("Reward should be int, float, or numpy array")
-        if isinstance(env.rewards[agent], np.ndarray):
-            if isinstance(env.rewards[agent], np.ndarray) and not env.rewards[agent].shape == (1,):
-                assert False, "Rewards can only be one number"
-            if np.isinf(env.rewards[agent]):
-                assert False, "Reward must be finite"
-            if np.isnan(env.rewards[agent]):
-                assert False, "Rewards cannot be NaN"
-
         assert isinstance(env.rewards[agent], env.rewards[agent_0].__class__), "Rewards for each agent must be of the same class"
+        test_reward(env.rewards[agent])
 
 
 def play_test(env, observation_0):
@@ -95,8 +103,15 @@ def play_test(env, observation_0):
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
 
+    reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
         action = env.action_spaces[agent].sample()
+        reward, done, info = env.last_cycle()
+        assert isinstance(done, bool), "last_cycle done is not True or False"
+        assert reward == env.rewards[agent], "last_cycle reward and rewards[agent] do not match"
+        assert done == env.dones[agent], "last_cycle done and rewards[done] do not match"
+        assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
+        test_reward(reward)
         observation = env.step(action, observe=False)
         assert observation is None, "step(observe=False) must not return anything"
 
@@ -108,10 +123,14 @@ def test_observe(env, observation_0):
 
 
 def test_render(env):
-    for agent in env.agent_order:
-        env.step(observe=False)
-        env.render()
-    env.close()
+    render_modes = env.metadata.get('render.modes')
+    assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
+    for mode in render_modes:
+        for agent in env.agent_order:
+            action = env.action_spaces[agent].sample()
+            env.step(action, observe=False)
+            env.render(mode=mode)
+        env.close()
 
 
 def test_manual_control(env):
@@ -143,18 +162,10 @@ def api_test(env, render=False, manual_control=False):
 
     assert len(env.rewards) == len(env.dones) == len(env.infos) == len(env.agents), "rewards, dones, infos and agents must have the same length"
 
-    test_rewards(env, agent_0)
+    test_rewards_dones(env, agent_0)
 
     test_observe(env, observation_0)
 
-    # test_render(env)
+    test_render(env)
 
     test_manual_control(env)
-
-    # does env state get pass as an argument?
-    # last cycle test to make sure we didn't fuck up
-    # manual control test?
-    # check for env metadata
-    # agent selection stuff
-    # look at my PR to SB and what they actually used
-    # pass mode argument to render (variable, default human)
