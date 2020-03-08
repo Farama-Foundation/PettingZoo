@@ -334,6 +334,11 @@ class Pursuit():
         self.latest_reward_state += self.term_pursuit * pursuers_who_remove
         self.latest_reward_state += self.urgency_reward
 
+        if self.reward_mech == 'global' and is_last:
+            meanVal = self.latest_reward_state.mean()
+            self.latest_reward_state = [meanVal for _ in range(len(self.latest_reward_state))]
+                
+
         return obs
 
     def update_curriculum(self, itr):
