@@ -62,6 +62,7 @@ def manual_control(**kwargs):
     # start = time.time()
     # for _ in range(100):
     while not done:
+        num_frames += 1
         env.render()
         if _quit_loop[0]:
             break
@@ -73,7 +74,7 @@ def manual_control(**kwargs):
             if d:
                 done = True
             total_reward += reward
-        print("step reward = ", total_reward)
+        print("step reward = ", total_reward, " f: ", num_frames, " d: ", d)
         if done:
             print("Total reward", total_reward, done)
     
