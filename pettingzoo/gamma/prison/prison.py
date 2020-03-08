@@ -64,6 +64,7 @@ class env(AECEnv):
         self.rewards = dict(zip(self.agents,[0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.metadata = {'render.modes': ['human']} 
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -80,22 +81,22 @@ class env(AECEnv):
         self.continuous = continuous
         self.vector_obs = vector_observation
 
-        self.action_space_dict = {}
+        self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_space_dict[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
         else:
             for a in self.agents:
-                self.action_space_dict[a] = spaces.Box(low=-1, high=1, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,))
 
-        self.observation_space_dict = {}
+        self.observation_spaces= {}
         self.last_observation = {}
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_space_dict[a] = spaces.Box(low=-300, high=300, shape=(2,))
+                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(2,))
             else:
-                self.observation_space_dict[a] = spaces.Box(low=0, high=255, shape=(300,100,3))
+                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(300,100,3))
 
         # self.options = pymunk.pygame_util.DrawOptions(self.screen)
         # self.options.shape_outline_color = (50, 50, 50, 5)
@@ -105,8 +106,14 @@ class env(AECEnv):
         self.create_walls()
 
         self.prisoners = []
-        prisoner_spawn_locs = [(200, 150-self.prisoner_sprite_y, 50, 350, (50, 50, 350, 150)), (550, 150-self.prisoner_sprite_y, 400, 700, (400, 50, 700, 150)), (200, 300-self.prisoner_sprite_y, 50, 350, (50, 200, 350, 300)),
-                               (550, 300-self.prisoner_sprite_y, 400, 700, (400, 200, 700, 300)), (200, 450-self.prisoner_sprite_y, 50, 350, (50, 350, 350, 450)), (550, 450-self.prisoner_sprite_y, 400, 700, (400, 350, 700, 450)), (200, 600-self.prisoner_sprite_y, 50, 350, (50, 500, 350, 600)), (550, 600-self.prisoner_sprite_y, 400, 700, (400, 500, 700, 600))]
+        prisoner_spawn_locs = [(200, 150-self.prisoner_sprite_y, 50, 350, (50, 50, 350, 150)), 
+                                (550, 150-self.prisoner_sprite_y, 400, 700, (400, 50, 700, 150)), 
+                                (200, 300-self.prisoner_sprite_y, 50, 350, (50, 200, 350, 300)),
+                               (550, 300-self.prisoner_sprite_y, 400, 700, (400, 200, 700, 300)), 
+                               (200, 450-self.prisoner_sprite_y, 50, 350, (50, 350, 350, 450)), 
+                               (550, 450-self.prisoner_sprite_y, 400, 700, (400, 350, 700, 450)), 
+                               (200, 600-self.prisoner_sprite_y, 50, 350, (50, 500, 350, 600)), 
+                               (550, 600-self.prisoner_sprite_y, 400, 700, (400, 500, 700, 600))]
         self.prisoner_mapping = {(0, 0): 0, (1, 0): 1, (0, 1): 2,
                                  (1, 1): 3, (0, 2): 4, (1, 2): 5, (0, 3): 6, (1, 3): 7}
         for p in prisoner_spawn_locs:
@@ -135,18 +142,14 @@ class env(AECEnv):
     def create_prisoner(self, x, y, l, r, u):
         return Prisoner((x, y), l, r - self.prisoner_sprite_x, u)
 
-    def action_spaces(self):
-        return self.action_space_dict
-
-    def observation_spaces(self):
-        return self.observation_space_dict
-
     def reward(self):
         return dict(zip(self.agents, self.last_rewards))
 
     # returns reward of hitting both sides of room, 0 if not
     def move_prisoner(self, prisoner_id, movement):
         prisoner = self.prisoners[prisoner_id]
+        if not np.isscalar(movement):
+            movement = movement[0]
         if self.continuous:
             prisoner.position = (
                 prisoner.position[0] + movement, prisoner.position[1])
@@ -187,55 +190,55 @@ class env(AECEnv):
         # self.space.debug_draw(self.options)
 
     def observe(self, agent):
-        agent = agent % self.num_agents
         if self.vector_obs:
             
             p = self.prisoners[agent]
             x = p.position[0]
-            obs = (x-p.left_bound,p.right_bound - x)
+            obs = np.array([x-p.left_bound,p.right_bound - x])
             return obs
         else:
             capture = pygame.surfarray.array3d(self.screen)
             p = self.prisoners[agent]
             x1, y1, x2, y2 = p.window
-            sub_screen = capture[x1:x2,y1:y2, :]
+            sub_screen = np.array(capture[x1:x2,y1:y2, :])
+            print(sub_screen.shape)
             return sub_screen
 
     def reset(self, observe=True):
         self.num_frames = 0
         self.done_val = False
         prisoner_spawn_locs = [(200, 150-self.prisoner_sprite_y, 50, 350, (50, 50, 350, 150)), (550, 150-self.prisoner_sprite_y, 400, 700, (400, 50, 700, 150)), (200, 300-self.prisoner_sprite_y, 50, 350, (50, 200, 350, 300)),(550, 300-self.prisoner_sprite_y, 400, 700, (400, 200, 700, 300)), (200, 450-self.prisoner_sprite_y, 50, 350, (50, 350, 350, 450)), (550, 450-self.prisoner_sprite_y, 400, 700, (400, 350, 700, 450)), (200, 600-self.prisoner_sprite_y, 50, 350, (50, 500, 350, 600)), (550, 600-self.prisoner_sprite_y, 400, 700, (400, 500, 700, 600))]
-        self.agent_selection = 0
         self.agent_selector_obj.reinit(self.agent_order)
+        self.agent_selection = self.agent_selector_obj.next()
         for i in self.agents:
             p = self.prisoners[i]
             x, y, l, r, u = prisoner_spawn_locs[i]
             p.position = (x + random.randint(-20,20), y)
         self.last_rewards = [0 for _ in self.agents]
         if observe:
-            return self.observe(0)
+            return self.observe(self.agent_selection)
         
 
-    def step(self, action):
+    def step(self, action, observe=True):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
-        self.agent_selection = self.agent_selector_obj.next()
+        agent = self.agent_selection
         # if not continuous, input must be normalized
         reward = 0
         if action != None:
             if action != 0 and not self.continuous:
                 action = action/abs(action)
-            reward = self.move_prisoner(self.agent_selection, action)
+            reward = self.move_prisoner(agent, action)
         else:
             print("Error, received null action")
             action = 0
 
         #set the sprite state to action normalized
         if action != 0:
-            self.prisoners[self.agent_selection].set_state(action/abs(action))
+            self.prisoners[agent].set_state(action/abs(action))
         else:
-            self.prisoners[self.agent_selection].set_state(0)
+            self.prisoners[agent].set_state(0)
         
-        self.rewards[self.agent_selection] = reward
+        self.rewards[agent] = reward
         self.clock.tick(15)
         #self.draw()
 
@@ -245,9 +248,11 @@ class env(AECEnv):
             for d in self.dones:
                 self.dones[d] = True
 
-        observation = self.observe(self.agent_selection + 1)
+        self.agent_selection = self.agent_selector_obj.next()
+        observation = self.observe(self.agent_selection)
 
-        return observation
+        if observe:
+            return observation
 
     def render(self, mode='human'):
         self.draw()
