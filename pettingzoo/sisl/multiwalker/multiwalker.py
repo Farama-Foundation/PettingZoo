@@ -41,7 +41,7 @@ class env(AECEnv):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [None for _ in self.agents]))
         if observe:
-            return observation
+            return self.env.observe(0)
 
     def close(self):
         self.env.close()
@@ -96,4 +96,5 @@ class env(AECEnv):
         
 
         self.steps += 1
-        return self.observe(self.agent_selection)
+        if observe:
+            return self.observe(self.agent_selection)
