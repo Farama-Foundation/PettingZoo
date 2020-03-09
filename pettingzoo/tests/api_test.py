@@ -106,10 +106,10 @@ def play_test(env, observation_0):
     reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
         action = env.action_spaces[agent].sample()
-        reward, done, info = env.last_cycle()
-        assert isinstance(done, bool), "last_cycle done is not True or False"
-        assert reward == env.rewards[agent], "last_cycle reward and rewards[agent] do not match"
-        assert done == env.dones[agent], "last_cycle done and rewards[done] do not match"
+        reward, done, info = env.last()
+        assert isinstance(done, bool), "last done is not True or False"
+        assert reward == env.rewards[agent], "last reward and rewards[agent] do not match"
+        assert done == env.dones[agent], "last done and rewards[done] do not match"
         assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
         test_reward(reward)
         observation = env.step(action, observe=False)

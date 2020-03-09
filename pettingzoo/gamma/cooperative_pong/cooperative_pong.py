@@ -4,14 +4,11 @@ import pygame
 import numpy as np
 from skimage import measure
 import gym
-import matplotlib.pyplot as plt
 from .cake_paddle import CakePaddle
 
-# from ray.rllib.env.multi_agent_env import MultiAgentEnv
-
-from copy import deepcopy
 
 KERNEL_WINDOW_LENGTH = 1
+
 
 def get_image(path):
     image = pygame.image.load(path)
@@ -236,7 +233,7 @@ class CooperativePong(gym.Env):
 
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
-        
+
         self.reset()
 
     def reset(self):
@@ -331,12 +328,12 @@ class CooperativePong(gym.Env):
             self.p1.update(self.area, action)
         elif agent == 1:
             self.p2.update(self.area, action)
-            
+
             # do the rest if not done
             if not self.done:
                 # update ball position
                 self.done = self.ball.update2(self.area, self.p1, self.p2)
-    
+
                 # do the miscellaneous stuff after the last agent has moved
                 # reward is the length of time ball is in play
                 reward = 0
@@ -352,45 +349,27 @@ class CooperativePong(gym.Env):
                     if self.num_frames == 900:
                         self.done = True
                         print("score = {}, frames = {}".format(self.score, self.num_frames))
-    
+
                 # let the clock tick
                 if self.renderOn:
                     self.clock.tick(15)
                 else:
                     self.clock.tick()
-    
+
                 for ag in self.agents:
                     self.rewards[ag] = reward/self.num_agents
                     self.dones[ag] = self.done
                     self.infos[ag] = {}
-        
+
         self.draw()
 
-        # return reward[agent], done[agent], info[agent]
-
-    # def plot_obs(self, observation, fname):
-    #     # shrink observation dims
-    #     shape = original_obs_shape(self.s_width, self.s_height)
-    #     for i in range(len(observation)):
-    #         observation[i] = observation[i].reshape(shape)
-    #         observation[i] = np.squeeze(observation[i])
-    #     fig = plt.figure()
-    #     # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
-    #     ax1 = fig.add_subplot(121)
-    #     ax2 = fig.add_subplot(122)
-    #     ax1.imshow(observation[0], cmap=plt.cm.gray)
-    #     ax2.imshow(observation[1], cmap=plt.cm.gray)
-    #     ax1.set_title("Observation[0]")
-    #     ax2.set_title("Observation[1]")
-    #     plt.savefig(fname)
 
 from pettingzoo.utils.env import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
-"""
-Use it with max downsampling kernel: (10, 10)
-"""
+
+
 class env(AECEnv):
-# class env(MultiAgentEnv):
+    # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
@@ -433,11 +412,11 @@ class env(AECEnv):
 
     def render(self, mode='human'):
         self.env.render(mode)
-        
+
     def last_cycle(self):
         self.rewards = self.env.rewards
         self.dones = self.env.dones
-        self.infos = self.env.infos    
+        self.infos = self.env.infos
         return super().last_cycle()
 
     def step(self, action, observe=True):
@@ -453,9 +432,10 @@ class env(AECEnv):
         self.agent_selection = self._agent_selector.next()
 
         self.score = self.env.score
-        
+
         if observe:
             observation = self.observe(self.agent_selection)
             return observation
+
 
 from .manual_control import manual_control
