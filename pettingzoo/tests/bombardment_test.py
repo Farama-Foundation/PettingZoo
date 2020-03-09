@@ -2,7 +2,7 @@ from .api_test import test_obervation
 
 
 def bombardment_test(env):
-    cycles = 1000
+    cycles = 10000
 
     prev_observe = env.reset()
     observation_0 = prev_observe.copy()
@@ -15,4 +15,4 @@ def bombardment_test(env):
             prev_observe = next_observe
         if all(env.dones.values()):
             prev_observe = env.reset()
-    print("Passed ablation test")
+    print("Passed bombardment test")
