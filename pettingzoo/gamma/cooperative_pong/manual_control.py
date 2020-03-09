@@ -4,6 +4,7 @@ import pygame
 from pettingzoo.utils import save_image_observation
 from pettingzoo.utils import wrapper
 
+
 def manual_control(**kwargs):
     env = _env(**kwargs)
     env = wrapper(env, color_reduction='B', down_scale=(10, 10), range_scale=(0, 255), new_dtype=np.float32, frame_stacking=4)
@@ -15,19 +16,18 @@ def manual_control(**kwargs):
         agent = env.agent_selection
         save_image_observation(obs, frame_stacking=env.frame_stacking, pre_fs_ndim=env.pre_fs_ndim[agent], reverse_colors=False)
     exit()
-    
+
     quit_loop = 0
 
-    # Fixed: Key held down will generate multiple events
     pygame.key.set_repeat(20, 0)
-    
+
     total_reward = 0
     initial_iteration = {agent: True for agent in env.agents}
     dones = {agent: False for agent in env.agents}
     done = all(dones.values())
-    
+
     while not done:
-    
+
         action_dict = {agent: 0 for agent in env.agents}  # do nothing
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -55,12 +55,12 @@ def manual_control(**kwargs):
                     action_dict[1] = 2
         if quit_loop:
             break
-    
+
         for _ in env.agents:
             agent = env.agent_selection
             if not dones[agent]:
                 if not initial_iteration[agent]:
-                    reward, dones[agent], _ = env.last_cycle()
+                    reward, dones[agent], _ = env.last()
                     total_reward += reward
                     print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
                 initial_iteration[agent] = False
@@ -73,11 +73,11 @@ def manual_control(**kwargs):
         pygame.event.pump()
         # env.plot_obs(observation, "obs")
         # break
-    
+
     # assert (total_reward == env.env.score), "Final score = {} and reward = {} are not the same".format(total_reward, env.env.score)
     print("Final reward is {0:.2f}".format(total_reward))
     # Uncomment next line to print FPS at which the game runs
     # print("fps = ", env.env.clock.get_fps())
-    
+
     # pygame.time.wait(3000)
     env.close()

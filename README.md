@@ -42,7 +42,7 @@ Environments can be interacted with in a manner very similar to Gym:
 observation = env.reset()
 while True:
     for _ in env.agent_order:
-        reward, done, info = env.last_cycle()
+        reward, done, info = env.last()
         action = policy(observation)
         observation = env.step(action)
 ```
@@ -51,7 +51,7 @@ The commonly used methods are:
 
 `agent_order` is a list of agent names in the order they act. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
 
-`last_cycle()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
+`last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
 `agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argument above).
 
@@ -68,15 +68,15 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last_cycle`. This looks like:
+`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last`. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last_cycle`. This looks like:
+`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, by name. This is called by `last_cycle`. This looks like:
+`infos`: A dict of info for each agent, by name. This is called by `last`. This looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
@@ -235,7 +235,7 @@ class env(AECEnv):
         else:
             return
 
-    # last_cycle is added as a part of the AECEnv class, don't write it yourself
+    # last is added as a part of the AECEnv class, don't write it yourself
 
     def reset(self, observe=True):
         # reset environment

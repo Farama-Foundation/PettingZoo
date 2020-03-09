@@ -120,7 +120,7 @@ class SimpleEnv(AECEnv):
         # make sure we used all elements of action
         assert len(action) == 0
 
-    # def last_cycle(self):
+    # def last(self):
     #     current_agent = self.world.agents[self.agent_selection]
     #
     #     reward_observation = self.scenario.observation(current_agent,self.world)
