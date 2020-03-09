@@ -2,18 +2,19 @@ import numpy as np
 from .pursuit import env as _env
 import time
 
+
 def manual_control(**kwargs):
     xs = 5
     ys = 5
     obs_range = 3
     n_evaders = 1
     n_pursuers = 2
-    
+
     # obs_range should be odd 3, 5, 7, etc
-    env = _env(n_pursuers = n_pursuers, n_evaders = n_evaders, xs = xs, ys = ys, obs_range = obs_range)
-    #env = _env(**kwargs)  # freeze_evaders = True
+    env = _env(n_pursuers=n_pursuers, n_evaders=n_evaders, xs = xs, ys = ys, obs_range = obs_range)
+
     env.reset()
-    
+
     done = False
     
     global _quit_loop, _actions, _agent_id
@@ -59,8 +60,7 @@ def manual_control(**kwargs):
     done = False
     num_frames = 0
     total_reward = 0
-    # start = time.time()
-    # for _ in range(100):
+
     while not done:
         num_frames += 1
         env.render()
@@ -69,7 +69,7 @@ def manual_control(**kwargs):
         # actions should be a dict of numpy arrays
         action_dict = dict(zip(env.agents, _actions))
         for a in _actions:
-            reward, d, info = env.last_cycle()
+            reward, d, info = env.last()
             obs = env.step(a)
             if d:
                 done = True
@@ -80,32 +80,7 @@ def manual_control(**kwargs):
     
         _actions = np.array([4]*env.num_agents)
     
-    # end = time.time()
-    # print("FPS = ", 100/(end-start))
+
     env.render()
     time.sleep(2)
     env.close()
-    
-    #  # for random trials
-    #  num_trials = 1000
-    #  total_reward = [0.0]*num_trials
-    #  for i in range(num_trials):
-    #      env.reset()
-    #      done = False
-    #      while not done:
-    #          if _quit_loop[0]:
-    #              break
-    #          # actions should be a dict of numpy arrays
-    #          action_dict = dict(zip(env.agents, _actions))
-    #
-    #          observation, rewards, done_dict, info = env.step(action_dict)
-    #          done = any(list(done_dict.values()))
-    #          total_reward[i] += sum(rewards.values())
-    #          # print("step reward = ", sum(rewards.values()))
-    #          if done:
-    #              print("Total reward of iter ", i, total_reward[i], done)
-    #
-    #          _actions = np.array([4]*env.num_agents)
-    #
-    #  print("Average over all trials = ", sum(total_reward)/num_trials)
-    #  env.close()
