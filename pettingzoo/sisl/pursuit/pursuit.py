@@ -39,8 +39,9 @@ class env(AECEnv):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [None for _ in self.agents]))
         self.agent_selector_obj.reinit(self.agent_order)
+        self.agent_selection = self.agent_selector_obj.next()
         if observe:
-            return obs[0]
+            return self.observe(0)
 
     def close(self):
         self.env.close()
@@ -49,24 +50,28 @@ class env(AECEnv):
         self.env.render()
 
     def step(self, action, observe=True):
-        self.agent_selection = self.agent_selector_obj.next()
+        if not np.isscalar(action):
+            action = action[0]
+
+        agent = self.agent_selection
         if action == None or action == np.NaN:
             action = 4
-        elif not self.action_spaces[self.agent_selection].contains(action):
+        elif not self.action_spaces[agent].contains(action):
             raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(self.agent_selection, self.action_spaces[self.agent_selection].n, action))
-        obs = self.env.step(action, self.agent_selection, self.agent_selector_obj.is_last())
+                                It is currently {}'.format(agent, self.action_spaces[agent].n, action))
+        obs = self.env.step(action, agent, self.agent_selector_obj.is_last())
         for k in self.dones:
             self.dones[k] = self.env.is_terminal
         for k in range(self.num_agents):
             self.rewards[k] = self.env.latest_reward_state[k]
         self.steps += 1
-
-        return self.observe(self.agent_selection+1)
+        self.agent_selection = self.agent_selector_obj.next()
+        if observe:
+            return self.observe(self.agent_selection)
 
     def observe(self, agent):
-        agent = agent % self.num_agents
-        return self.env.latest_obs[agent]
+        o = np.array(self.env.safely_observe(agent))
+        return o
 
 
 from .manual_control import manual_control

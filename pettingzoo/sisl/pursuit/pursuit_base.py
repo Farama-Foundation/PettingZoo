@@ -60,12 +60,9 @@ class Pursuit():
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
 
-        self.flatten = kwargs.pop('flatten', True)
 
-        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
-                                                  flatten=self.flatten)
-        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range,
-                                                 flatten=self.flatten)
+        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range)
+        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range)
 
         self.pursuer_layer = kwargs.pop('ally_layer', AgentLayer(xs, ys, self.pursuers))
         self.evader_layer = kwargs.pop('opponent_layer', AgentLayer(xs, ys, self.evaders))
@@ -113,10 +110,8 @@ class Pursuit():
                 self.low = np.append(self.low, 0.0)
                 self.high = np.append(self.high, 1.0)
             self.action_space = [spaces.Discrete(n_act_purs) for _ in range(self.n_pursuers)]
-            if self.flatten:
-                self.observation_space = [spaces.Box(self.low, self.high) for _ in range(self.n_pursuers)]
-            else:
-                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf, shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_pursuers)]
+
+            self.observation_space = [spaces.Box(low=0, high=255, shape=(4, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
             self.local_obs = np.zeros(
                 (self.n_pursuers, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
@@ -127,10 +122,7 @@ class Pursuit():
                 np.append(self.low, 0.0)
                 np.append(self.high, 1.0)
             self.action_space = [spaces.Discrete(n_act_ev) for _ in range(self.n_evaders)]
-            if self.flatten:
-                self.observation_space = [spaces.Box(self.low, self.high) for _ in range(self.n_evaders)]
-            else:
-                self.observation_space = [spaces.Box(low=-np.inf, high=np.inf, shape=(4, self.obs_range, self.obs_range)) for _ in range(self.n_evaders)]
+            self.observation_space = [spaces.Box(low=0, high=255, shape=(4, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
             self.local_obs = np.zeros(
                 (self.n_evaders, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]
@@ -209,10 +201,7 @@ class Pursuit():
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
-        if self.train_pursuit:
-            return self.collect_obs(self.pursuer_layer, self.pursuers_gone)
-        else:
-            return self.collect_obs(self.evader_layer, self.evaders_gone)
+        return self.safely_observe(0)
 
     # def step(self, actions):
     #     """
@@ -326,7 +315,7 @@ class Pursuit():
                 a = opponent_controller.act(self.model_state)
                 opponent_layer.move_agent(i, a)
 
-        obslist = self.collect_obs(agent_layer, gone_flags)
+        obslist = self.collect_obs(agent_layer)
         self.latest_obs = obslist
         obs = obslist[(agent_id+1)%self.num_agents]
 
@@ -465,7 +454,19 @@ class Pursuit():
     def n_agents(self):
         return self.pursuer_layer.n_agents()
 
-    def collect_obs(self, agent_layer, gone_flags):
+    def safely_observe(self, i):
+        if self.train_pursuit:
+            agent_layer = self.pursuer_layer
+        else:
+            agent_layer = self.evader_layer
+        obs = self.collect_obs(agent_layer)
+        return obs[i]
+
+    def collect_obs(self, agent_layer):
+        if self.train_pursuit:
+            gone_flags = self.pursuers_gone
+        else:
+            gone_flags = self.evaders_gone
         obs = []
         nage = 0
         for i in range(self.n_agents()):
@@ -494,8 +495,8 @@ class Pursuit():
         #         o = np.append(o, float(agent_idx) / self.n_agents())
         #     return o
         # reshape output from (C, H, W) to (H, W, C)
-        # return self.local_obs[agent_idx]
-        return np.rollaxis(self.local_obs[agent_idx], 0, 3)
+        return self.local_obs[agent_idx]
+        #return np.rollaxis(self.local_obs[agent_idx], 0, 3)
 
     def obs_clip(self, x, y):
         xld = x - self.obs_offset
