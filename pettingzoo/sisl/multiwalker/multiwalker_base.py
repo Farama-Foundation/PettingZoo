@@ -355,12 +355,12 @@ class MultiWalkerEnv():
             walker._reset()
             self.drawlist += walker.legs
             self.drawlist += [walker.hull]
-        self.scroll_subroutine()
+        r,d,o = self.scroll_subroutine()
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
-        self.last_obs = [None for _ in range(self.n_walkers)]
+        self.last_obs = o
 
-        return self.walkers[0].get_observation()
+        return self.observe(0)
 
     # def step(self, actions):
     #     act_vec = np.reshape(actions, (self.n_walkers, 4))
@@ -490,7 +490,7 @@ class MultiWalkerEnv():
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
             done = True
 
-        return rewards, done
+        return rewards, done, obs
 
     def step(self, action, agent_id, is_last):
         #action is array of size 4
@@ -499,7 +499,8 @@ class MultiWalkerEnv():
         obs = [walker.get_observation() for walker in self.walkers]
         self.world.Step(1.0/FPS, 6*30, 2*30)
         if is_last:
-            rewards, done = self.scroll_subroutine()
+            rewards, done, mod_obs = self.scroll_subroutine()
+            self.last_obs[agent_id] = mod_obs[agent_id]
             if self.reward_mech == 'local':
                 self.last_rewards = rewards
             else:
@@ -518,7 +519,9 @@ class MultiWalkerEnv():
         return dict(zip(list(range(self.n_walkers)), [walker.get_observation() for walker in self.walkers]))
 
     def observe(self, agent):
-        return self.walkers[agent].get_observation()
+        o = self.last_obs[agent]
+        o = np.array(o)
+        return o
 
 
     def render(self, mode='human', close=False):
