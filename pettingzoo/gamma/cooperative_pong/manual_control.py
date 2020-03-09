@@ -10,13 +10,6 @@ def manual_control(**kwargs):
     env = wrapper(env, color_reduction='B', down_scale=(10, 10), range_scale=(0, 255), new_dtype=np.float32, frame_stacking=4)
     env.reset(observe=True)
 
-    # Use save_observation to save a dictionary of observations
-    for i in range(2):
-        obs = env.step(0)
-        agent = env.agent_selection
-        save_image_observation(obs, frame_stacking=env.frame_stacking, pre_fs_ndim=env.pre_fs_ndim[agent], reverse_colors=False)
-    exit()
-
     quit_loop = 0
 
     pygame.key.set_repeat(20, 0)
