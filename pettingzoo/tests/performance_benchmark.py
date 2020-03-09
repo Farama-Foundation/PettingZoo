@@ -15,7 +15,7 @@ def performance_benchmark(env):
             turn += 1
         cycles += 1
         if time.time() - start > 60:
-            end = time/time()
+            end = time.time()
             break
         if all(env.dones.values()):
             _ = env.reset()
