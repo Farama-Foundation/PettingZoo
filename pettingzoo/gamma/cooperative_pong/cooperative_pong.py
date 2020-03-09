@@ -1,11 +1,12 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
 import numpy as np
-from skimage import measure
 import gym
 from .cake_paddle import CakePaddle
-
+from .manual_control import manual_control
+from pettingzoo.utils.env import AECEnv
+from pettingzoo.utils.agent_selector import agent_selector
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+import pygame
 
 KERNEL_WINDOW_LENGTH = 1
 
@@ -16,15 +17,15 @@ def get_image(path):
 
 
 def deg_to_rad(deg):
-    return deg*np.pi/180
+    return deg * np.pi / 180
 
 
 def get_flat_shape(width, height):
-    return int(width * height/(2*KERNEL_WINDOW_LENGTH*KERNEL_WINDOW_LENGTH))
+    return int(width * height / (2 * KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
 
 
 def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height/KERNEL_WINDOW_LENGTH), int(screen_width/(2*KERNEL_WINDOW_LENGTH)), 1)
+    return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (2 * KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle():
@@ -43,8 +44,7 @@ def get_valid_angle():
     d2 = deg_to_rad(0 + hor_deg_range)
 
     angle = 0
-    while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or
-           (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
+    while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
         angle = 2 * np.pi * np.random.rand()
 
     return angle
@@ -52,7 +52,7 @@ def get_valid_angle():
 
 def get_small_random_value():
     # generates a small random value between [0, 1/100)
-    return (1/100) * np.random.rand()
+    return (1 / 100) * np.random.rand()
 
 
 class PaddleSprite(pygame.sprite.Sprite):
@@ -134,7 +134,7 @@ class BallSprite(pygame.sprite.Sprite):
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed_val = speed
-        self.speed = [int(self.speed_val*np.cos(np.pi/4)), int(self.speed_val*np.sin(np.pi/4))]
+        self.speed = [int(self.speed_val * np.cos(np.pi / 4)), int(self.speed_val * np.sin(np.pi / 4))]
         self.bounce_randomness = bounce_randomness
         self.done = False
         self.hit = False
@@ -244,7 +244,7 @@ class CooperativePong(gym.Env):
         # set the direction to an angle between [0, 2*np.pi)
         angle = get_valid_angle()
         # angle = deg_to_rad(89)
-        self.ball.speed = [int(self.ball.speed_val*np.cos(angle)), int(self.ball.speed_val*np.sin(angle))]
+        self.ball.speed = [int(self.ball.speed_val * np.cos(angle)), int(self.ball.speed_val * np.sin(angle))]
 
         self.p1.rect.midleft = self.area.midleft
         self.p2.rect.midright = self.area.midright
@@ -259,9 +259,9 @@ class CooperativePong(gym.Env):
         self.num_frames = 0
 
         self.agents = list(range(self.num_agents))
-        self.rewards = dict(zip(self.agents, [0.0]*len(self.agents)))
-        self.dones = dict(zip(self.agents, [False]*len(self.agents)))
-        self.infos = dict(zip(self.agents, [{}]*len(self.agents)))
+        self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
+        self.dones = dict(zip(self.agents, [False] * len(self.agents)))
+        self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
 
         self.draw()
 
@@ -285,27 +285,9 @@ class CooperativePong(gym.Env):
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
         if agent == 0:
-            return observation[:, :int(observation.shape[1]/2), :]
+            return observation[:, :int(observation.shape[1] / 2), :]
         elif agent == 1:
-            return observation[:, int(observation.shape[1]/2):, :]
-
-        # observation = observation[:, :, 2]  # take blue channel only instead of doing full greyscale
-
-        # mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-
-        # # Fixed: Uses mean
-        # observation = measure.block_reduce(observation, block_size=(KERNEL_WINDOW_LENGTH, KERNEL_WINDOW_LENGTH), func=mean)
-
-        # height, width = observation.shape
-
-        # # partition the entire screen into 2 halves for observing the state
-        # obs = [observation[:, 0:int(width/2)], observation[:, int(width/2):]]
-        # # exapnd dims to 3
-        # observation = []
-        # for i in obs:
-        #     unscaled_obs = np.expand_dims(i, axis=2)
-        #     observation.append(np.divide(unscaled_obs, 255, dtype=np.float32))
-        # return observation
+            return observation[:, int(observation.shape[1] / 2):, :]
 
     def draw(self):
         # draw background
@@ -344,7 +326,7 @@ class CooperativePong(gym.Env):
                 if not self.done:
                     self.num_frames += 1
                     # scaling reward so that the max reward is 100
-                    reward = 1/9
+                    reward = 1 / 9
                     self.score += reward
                     if self.num_frames == 900:
                         self.done = True
@@ -357,15 +339,11 @@ class CooperativePong(gym.Env):
                     self.clock.tick()
 
                 for ag in self.agents:
-                    self.rewards[ag] = reward/self.num_agents
+                    self.rewards[ag] = reward / self.num_agents
                     self.dones[ag] = self.done
                     self.infos[ag] = {}
 
         self.draw()
-
-
-from pettingzoo.utils.env import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 class env(AECEnv):
@@ -413,12 +391,6 @@ class env(AECEnv):
     def render(self, mode='human'):
         self.env.render(mode)
 
-    def last_cycle(self):
-        self.rewards = self.env.rewards
-        self.dones = self.env.dones
-        self.infos = self.env.infos
-        return super().last_cycle()
-
     def step(self, action, observe=True):
         agent = self.agent_selection
         if np.isnan(action):
@@ -436,6 +408,3 @@ class env(AECEnv):
         if observe:
             observation = self.observe(self.agent_selection)
             return observation
-
-
-from .manual_control import manual_control
