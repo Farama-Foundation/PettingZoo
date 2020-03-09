@@ -169,3 +169,5 @@ def api_test(env, render=False, manual_control=False):
     test_render(env)
 
     test_manual_control(env)
+
+    print("Passes API Tests")  # You only get here if you don't fail
