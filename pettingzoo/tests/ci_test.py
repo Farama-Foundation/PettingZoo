@@ -1,4 +1,6 @@
 import pettingzoo.tests.api_test as api_test
+import pettingzoo.tests.bomdardment_test as bomdardment_test
+import pettingzoo.tests.performance_benchmark as performance_benchmark
 import sys
 
 # classic
@@ -8,90 +10,120 @@ if sys.argv[1] == 'classic/backgammon':
     from pettingzoo.classic import backgammon
     backgammon = backgammon.env()
     api_test.api_test(backgammon)
+    bomdardment_test.bombardment_test('classic/backgammon')
+    performance_benchmark.performance_benchmark('classic/backgammon')
 
 if sys.argv[1] == 'classic/checkers':
     print('classic/checkers')
     from pettingzoo.classic import checkers
     checkers = checkers.env()
     api_test.api_test(checkers)
+    bomdardment_test.bombardment_test('classic/checkers')
+    performance_benchmark.performance_benchmark('classic/checkers')
 
 if sys.argv[1] == 'classic/chess':
     print('classic/chess')
     from pettingzoo.classic import chess
     chesd = chess.env()
     api_test.api_test(chess)
+    bomdardment_test.bombardment_test('classic/chess')
+    performance_benchmark.performance_benchmark('classic/chess')
 
 if sys.argv[1] == 'classic/connect_four':
     print('classic/connect_four')
     from pettingzoo.classic import connect_four
     connect_four = connect_four.env()
     api_test.api_test(connect_four)
+    bomdardment_test.bombardment_test('classic/connect_four')
+    performance_benchmark.performance_benchmark('classic/connect_four')
 
 if sys.argv[1] == 'classic/dou_dizhu':
     from pettingzoo.classic import dou_dizhu
     dou_dizhu = dou_dizhu.env()
     api_test.api_test(dou_dizhu)
     print('classic/dou_dizhu')
+    bomdardment_test.bombardment_test('classic/dou_dizhu')
+    performance_benchmark.performance_benchmark('classic/dou_dizhu')
 
 if sys.argv[1] == 'classic/go':
     print('classic/go')
     from pettingzoo.classic import go
     go = go.env()
     api_test.api_test(go)
+    bomdardment_test.bombardment_test('classic/go')
+    performance_benchmark.performance_benchmark('classic/go')
 
 if sys.argv[1] == 'classic/hanabi':
     print('classic/hanabi')
     from pettingzoo.classic import hanabi
     hanabi = hanabi.env()
     api_test.api_test(hanabi)
+    bomdardment_test.bombardment_test('classic/hanabi')
+    performance_benchmark.performance_benchmark('classic/hanabi')
 
 if sys.argv[1] == 'classic/leduc_holdem':
     print('classic/leduc_holdem')
     from pettingzoo.classic import leduc_holdem
     leduc_holdem = leduc_holdem.env()
     api_test.api_test(leduc_holdem)
+    bomdardment_test.bombardment_test('classic/leduc_holdem')
+    performance_benchmark.performance_benchmark('classic/leduc_holdem')
 
 if sys.argv[1] == 'classic/mahjong':
     print('classic/mahjong')
     from pettingzoo.classic import mahjong
     mahjong = mahjong.env()
     api_test.api_test(mahjong)
+    bomdardment_test.bombardment_test('classic/mahjong')
+    performance_benchmark.performance_benchmark('classic/mahjong')
 
 if sys.argv[1] == 'classic/rps':
     print('classic/rps')
     from pettingzoo.classic import rps
     rps = rps.env()
     api_test.api_test(rps)
+    bomdardment_test.bombardment_test('classic/rps')
+    performance_benchmark.performance_benchmark('classic/rps')
 
 if sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')
     from pettingzoo.classic import rpsls
     rpsls = rpsls.env()
     api_test.api_test(rpsls)
+    bomdardment_test.bombardment_test('classic/rpsls')
+    performance_benchmark.performance_benchmark('classic/rpsls')
 
 if sys.argv[1] == 'classic/texas_holdem':
     print('classic/texas_holdem')
     from pettingzoo.classic import texas_holdem
     texas_holdem = texas_holdem.env()
     api_test.api_test(texas_holdem)
+    bomdardment_test.bombardment_test('classic/texas_holdem')
+    performance_benchmark.performance_benchmark('classic/texas_holdem')
 
 if sys.argv[1] == 'classic/texas_holdem_no_limit':
     print('classic/texas_holdem_no_limit')
     from pettingzoo.classic import texas_holdem_no_limit
     texas_holdem_no_limit = texas_holdem_no_limit.env()
     api_test.api_test(texas_holdem_no_limit)
+    bomdardment_test.bombardment_test('classic/texas_holdem_no_limit')
+    performance_benchmark.performance_benchmark('classic/texas_holdem_no_limit')
 
 if sys.argv[1] == 'classic/tic_tac_toe':
     print('classic/tic_tac_toe')
     from pettingzoo.gamma import tic_tac_toe
     tic_tac_toe = tic_tac_toe.env()
     api_test.api_test(tic_tac_toe)
+    bomdardment_test.bombardment_test('classic/tic_tac_toe')
+    performance_benchmark.performance_benchmark('classic/tic_tac_toe')
 
 if sys.argv[1] == 'classic/uno':
     print('classic/uno')
     from pettingzoo.classic import uno
     uno = uno.env()
     api_test.api_test(uno)
+    bomdardment_test.bombardment_test('classic/uno')
+    performance_benchmark.performance_benchmark('classic/uno')
 
 # gamma
 
@@ -100,30 +132,40 @@ if sys.argv[1] == 'gamma/cooperative_pong':
     from pettingzoo.gamma import cooperative_pong
     cooperative_pong = cooperative_pong.env()
     api_test.api_test(cooperative_pong, render=True, manual_control=True)
+    bomdardment_test.bombardment_test('gamma/cooperative_pong')
+    performance_benchmark.performance_benchmark('gamma/cooperative_pong')
 
 if sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')
     from pettingzoo.gamma import knights_archers_zombies
     knights_archers_zombies = knights_archers_zombies.env()
     api_test.api_test(knights_archers_zombies, render=True, manual_control=True)
+    bomdardment_test.bombardment_test('gamma/knights_archers_zombies')
+    performance_benchmark.performance_benchmark('gamma/knights_archers_zombies')
 
 if sys.argv[1] == 'gamma/pistonball':
     print('gamma/pistonball')
     from pettingzoo.gamma import pistonball
     pistonball = pistonball.env()
     api_test.api_test(pistonball, render=True, manual_control=True)
+    bomdardment_test.bombardment_test('gamma/pistonball')
+    performance_benchmark.performance_benchmark('gamma/pistonball')
 
 if sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
     from pettingzoo.gamma import prison
     prison = prison.env()
     api_test.api_test(prison, render=True, manual_control=True)
+    bomdardment_test.bombardment_test('gamma/prison')
+    performance_benchmark.performance_benchmark('gamma/prison')
 
 if sys.argv[1] == 'gamma/prospector':
     print('gamma/prospector')
     from pettingzoo.gamma import prospector
     prospector = prospector.env()
     api_test.api_test(prospector, render=True, manual_control=True)
+    bomdardment_test.bombardment_test('gamma/prospector')
+    performance_benchmark.performance_benchmark('gamma/prospector')
 
 # mpe
 
@@ -132,54 +174,72 @@ if sys.argv[1] == 'mpe/simple':
     from pettingzoo.mpe import simple
     simple = simple.env()
     api_test.api_test(simple, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple')
+    performance_benchmark.performance_benchmark('mpe/simple')
 
 if sys.argv[1] == 'mpe/simple_adversary':
     print('mpe/simple_adversary')
     from pettingzoo.mpe import simple_adversary
     simple_adversary = simple_adversary.env()
     api_test.api_test(simple_adversary, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_adversary')
+    performance_benchmark.performance_benchmark('mpe/simple_adversary')
 
 if sys.argv[1] == 'mpe/simple_crypto':
     print('mpe/simple_crypto')
     from pettingzoo.mpe import simple_crypto
     simple_crypto = simple_crypto.env()
     api_test.api_test(simple_crypto, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_crypto')
+    performance_benchmark.performance_benchmark('mpe/simple_crypto')
 
 if sys.argv[1] == 'mpe/simple_push':
     print('mpe/simple_push')
     from pettingzoo.mpe import simple_push
     simple_push = simple_push.env()
     api_test.api_test(simple_push, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_push')
+    performance_benchmark.performance_benchmark('mpe/simple_push')
 
 if sys.argv[1] == 'mpe/simple_reference':
     print('mpe/simple_reference')
     from pettingzoo.mpe import simple_reference
     simple_reference = simple_reference.env()
     api_test.api_test(simple_reference, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_reference')
+    performance_benchmark.performance_benchmark('mpe/simple_reference')
 
 if sys.argv[1] == 'mpe/simple_speak_listener':
     print('mpe/simple_speak_listener')
     from pettingzoo.mpe import simple_speak_listener
     simple_speak_listener = simple_speak_listener.env()
     api_test.api_test(simple_speak_listener, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_speak_listener')
+    performance_benchmark.performance_benchmark('mpe/simple_speak_listener')
 
 if sys.argv[1] == 'mpe/simple_spread':
     print('mpe/simple_spread')
     from pettingzoo.mpe import simple_spread
     simple_spread = simple_spread.env()
     api_test.api_test(simple_spread, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_spread')
+    performance_benchmark.performance_benchmark('mpe/simple_spread')
 
 if sys.argv[1] == 'mpe/simple_tag':
     print('mpe/simple_tag')
     from pettingzoo.mpe import simple_tag
     simple_tag = simple_tag.env()
     api_test.api_test(simple_tag, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_tag')
+    performance_benchmark.performance_benchmark('mpe/simple_tag')
 
 if sys.argv[1] == 'mpe/simple_world_comm':
     print('mpe/simple_world_comm')
     from pettingzoo.mpe import simple_world_comm
     simple_world_comm = simple_world_comm.env()
     api_test.api_test(simple_world_comm, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('mpe/simple_world_comm')
+    performance_benchmark.performance_benchmark('mpe/simple_world_comm')
 
 # sisl
 
@@ -188,15 +248,21 @@ if sys.argv[1] == 'sisl/multiwalker':
     from pettingzoo.sisl import multiwalker
     multiwalker = multiwalker.env()
     api_test.api_test(multiwalker, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('sisl/multiwalker')
+    performance_benchmark.performance_benchmark('sisl/multiwalker')
 
 if sys.argv[1] == 'sisl/pursuit':
     print('sisl/pursuit')
     from pettingzoo.sisl import pursuit
     pursuit = pursuit.env()
     api_test.api_test(pursuit, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('sisl/pursuit')
+    performance_benchmark.performance_benchmark('sisl/pursuit')
 
 if sys.argv[1] == 'sisl/waterworld':
     print('sisl/waterworld')
     from pettingzoo.sisl import waterworld
     waterworld = waterworld.env()
     api_test.api_test(waterworld, render=True, manual_control=False)
+    bomdardment_test.bombardment_test('sisl/waterworld')
+    performance_benchmark.performance_benchmark('sisl/waterworld')

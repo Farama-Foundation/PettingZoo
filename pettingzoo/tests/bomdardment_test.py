@@ -1,7 +1,7 @@
 from .api_test import test_obervation
 
 
-def ablation(env):
+def bombardment_test(env):
     cycles = 1000
 
     prev_observe = env.reset()
