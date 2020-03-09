@@ -130,10 +130,12 @@ if sys.argv[1] == 'classic/uno':
 if sys.argv[1] == 'gamma/cooperative_pong':
     print('gamma/cooperative_pong')
     from pettingzoo.gamma import cooperative_pong
-    cooperative_pong = cooperative_pong.env()
-    api_test.api_test(cooperative_pong, render=True, manual_control=True)
-    bombardment_test.bombardment_test(cooperative_pong)
-    performance_benchmark.performance_benchmark(cooperative_pong)
+    _env = cooperative_pong.env()
+    api_test.api_test(_env, render=True, manual_control=True)
+    _env = cooperative_pong.env()
+    bombardment_test.bombardment_test(_env)
+    _env = cooperative_pong.env()
+    performance_benchmark.performance_benchmark(_env)
 
 if sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')

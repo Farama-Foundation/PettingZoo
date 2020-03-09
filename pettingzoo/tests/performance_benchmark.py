@@ -1,7 +1,7 @@
 import time
 
 
-def peformance_benchmark(env):
+def performance_benchmark(env):
     cycles = 0
     turn = 0
     _ = env.reset()
