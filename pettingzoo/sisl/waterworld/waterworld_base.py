@@ -481,7 +481,7 @@ class MAWaterWorld():
             is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
             obstacle_coll_Ne[nev] = is_colliding_No.sum()
             if obstacle_coll_Ne[nev] > 0:
-                evader.set_velocity(-1 / 2 * evader.velocity)
+                evader.set_velocity(-1 * evader.velocity)
                 velocity_scale = evader._radius + self.obstacle_radius - ssd.euclidean(evader.position, self.obstaclesx_No_2)
                 pos_diff = evader.position - self.obstaclesx_No_2[0]
                 evader.set_position(evader.position + velocity_scale*pos_diff)
