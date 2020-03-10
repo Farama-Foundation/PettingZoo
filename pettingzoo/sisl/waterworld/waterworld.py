@@ -33,14 +33,14 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         observation = self.env.reset()
-        self.agent_selection = 0
         self.steps = 0
         self.agent_selector_obj.reinit(self.agent_order)
+        self.agent_selection = self.agent_selector_obj.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [None for _ in self.agents]))
         if observe:
-            return observation
+            return self.observe(0)
 
     def close(self):
         self.env.close()
