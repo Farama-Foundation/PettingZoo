@@ -2,6 +2,7 @@ import time
 
 
 def performance_benchmark(env):
+    print("Starting performance benchmark")
     cycles = 0
     turn = 0
     _ = env.reset()
@@ -26,3 +27,4 @@ def performance_benchmark(env):
     cycles_per_time = cycles / length
     print(str(turns_per_time) + " turns per second")
     print(str(cycles_per_time) + " cycles per second")
+    print("Finished performance benchmark")
