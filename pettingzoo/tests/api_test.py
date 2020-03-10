@@ -136,7 +136,6 @@ def test_render(env):
             action = env.action_spaces[agent].sample()
             env.step(action, observe=False)
             env.render(mode=mode)
-        env.close()
 
 
 def test_manual_control(env):
@@ -176,4 +175,5 @@ def api_test(env, render=False, manual_control=False):
 
     test_manual_control(env)
 
+    env.close()
     print("Passes API Tests")  # You only get here if you don't fail
