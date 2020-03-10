@@ -121,6 +121,8 @@ class MAWaterWorld():
 
         self.renderOn = False
 
+        self.cycle_time = 0.5
+
     def close(self):
         if self.renderOn:
             import cv2
@@ -181,7 +183,7 @@ class MAWaterWorld():
         rewards = np.zeros(self.n_pursuers)
         sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
         obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
-        self.last_rewards = rewards
+        self.last_rewards = [0 for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
         self.last_obs = obs_list
 
@@ -469,6 +471,9 @@ class MAWaterWorld():
             obstacle_coll_Np[npu] = is_colliding_No.sum()
             if obstacle_coll_Np[npu] > 0:
                 pursuer.set_velocity(-1 / 2 * pursuer.velocity)
+                velocity_scale = pursuer._radius + self.obstacle_radius - ssd.euclidean(pursuer.position, self.obstaclesx_No_2)
+                pos_diff = pursuer.position - self.obstaclesx_No_2[0]
+                pursuer.set_position(pursuer.position + velocity_scale*pos_diff)
 
         obstacle_coll_Ne = np.zeros(self.n_evaders)
         for nev, evader in enumerate(self._evaders):
@@ -477,6 +482,9 @@ class MAWaterWorld():
             obstacle_coll_Ne[nev] = is_colliding_No.sum()
             if obstacle_coll_Ne[nev] > 0:
                 evader.set_velocity(-1 / 2 * evader.velocity)
+                velocity_scale = evader._radius + self.obstacle_radius - ssd.euclidean(evader.position, self.obstaclesx_No_2)
+                pos_diff = evader.position - self.obstaclesx_No_2[0]
+                evader.set_position(evader.position + velocity_scale*pos_diff)
 
         obstacle_coll_Npo = np.zeros(self.n_poison)
         for npo, poison in enumerate(self._poisons):
@@ -485,6 +493,9 @@ class MAWaterWorld():
             obstacle_coll_Npo[npo] = is_colliding_No.sum()
             if obstacle_coll_Npo[npo] > 0:
                 poison.set_velocity(-1 * poison.velocity)
+                velocity_scale = poison._radius + self.obstacle_radius - ssd.euclidean(poison.position, self.obstaclesx_No_2)
+                pos_diff = poison.position - self.obstaclesx_No_2[0]
+                poison.set_position(poison.position + velocity_scale*pos_diff)
 
         # Find collisions
         pursuersx_Np_2 = np.array([pursuer.position for pursuer in self._pursuers])
@@ -613,14 +624,14 @@ class MAWaterWorld():
 
         for evader in self._evaders:
             # Move objects
-            evader.set_position(evader.position + evader.velocity)
+            evader.set_position(evader.position + self.cycle_time*evader.velocity)
             # Bounce object if it hits a wall
             if all(evader.position != np.clip(evader.position, 0, 1)):
                 evader.set_velocity(-1 * evader.velocity)
 
         for poison in self._poisons:
             # Move objects
-            poison.set_position(poison.position + poison.velocity)
+            poison.set_position(poison.position + self.cycle_time*poison.velocity)
             # Bounce object if it hits a wall
             if all(poison.position != np.clip(poison.position, 0, 1)):
                 poison.set_velocity(-1 * poison.velocity)
@@ -658,7 +669,7 @@ class MAWaterWorld():
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
-        p.set_position(p.position + p.velocity)
+        p.set_position(p.position + self.cycle_time*p.velocity)
 
         if self.reward_mech == 'global':
             rewards[agent_id] += self.control_penalty * (action**2).sum()
@@ -668,15 +679,14 @@ class MAWaterWorld():
         sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards = self.collision_handling_subroutine(rewards)
         obs_list = self.observe_list(sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
         self.last_obs = obs_list
-        self.last_rewards = rewards
+        self.last_rewards[agent_id] = rewards[agent_id]
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1
-        return self.observe(agent_id+1)
+        return self.observe(agent_id)
     
     def observe(self, agent):
-        agent = agent % self.num_agents
-        return self.last_obs[agent]
+        return np.array(self.last_obs[agent])
 
     def render(self, screen_size=800, rate=10, mode='human'):
         self.renderOn = True
