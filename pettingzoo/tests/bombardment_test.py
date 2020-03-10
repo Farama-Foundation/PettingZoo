@@ -2,6 +2,7 @@ from .api_test import test_obervation
 
 
 def bombardment_test(env):
+    print("Starting bombardment test")
     cycles = 10000
 
     prev_observe = env.reset()
