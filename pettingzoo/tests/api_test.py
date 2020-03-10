@@ -176,5 +176,8 @@ def api_test(env, render=False, manual_control=False):
 
     test_manual_control(env)
 
+    #env.close()
+    print("Passed API test")  # You only get here if you don't fail
+    import time
+    time.sleep(5)
     env.close()
-    print("Passes API test")  # You only get here if you don't fail
