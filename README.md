@@ -112,45 +112,6 @@ range_scale=(obs_min, obs_max), new_dtype=None, continuous_actions=False, frame_
 
 Operations are applied in the order of arguments to the wrapper function.
 
-
-## Partially Observable Markov Games API
-
-We also include an alternative API and wrapper which can only handle Markov games (of any observability).
-
-Markov games alternate between the environment stepping and all agents stepping simultaneously, and exclude chess for instance. This API assumes the number of agents cannot be changed. This API includes is own base class (`pettingzoo.MarkovEnv`), and so games could be made to comply only with it, though none in this library do this.
-
-This is primarily included for compatibility with many existing MARL code bases (notably RLlib). However, making environments which comply to this API only can allow for a little more parallelization. When working with tens thousands of agents, this may be important.
-
-Using it looks like this:
-
-```
-from petttingzoo.utils import markov_game
-env = markov_game(env)
-observations = env.reset()
-while True:
-    actions = policy(actions)
-    # add env.render() here if you want to watch the game playing and the game supports it
-    observations, rewards, dones, info = env.step(actions)
-```
-
-This can combined with the observation wrapper in the order `markov_game(wrapper(env))`.
-
-The differences from the AEC environment API are as follows:
-
-* `agent_order`, `agent_selection` and `observe(agent)` are not included.
-
-* Reset and step also do not include their additional flags.
-
-* `dones` also has an `__all__` entry, which when set to true stops the environment from recieving actions in full.
-
-* The `observations` and `actions` properties are added, which look very similar to `rewards`, etc.:
-
-```
-observations = {0:[first agent's observation], 1:[second agent's observation] ... n-1:[nth agent's observation]}
-actions = {0:[first agent's action], 1:[second agent's action] ... n-1:[nth agent's action]}
-```
-
-
 ## Other Utils
 
 Additionally, we have a basic test to check for environment compliance, if you've made your own custom environment with PettingZoo and want to get a good guess about whether or not you did it right.
