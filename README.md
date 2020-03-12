@@ -261,31 +261,35 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 
 The following environments should be done:
 
+* classic/chess
 * gamma/cooperative_pong
-* gamma/prison (sprite work ongoing)
+* gamma/prison (sprite work ongoing- Mario)
 * mpe/*
+* sisl/pursuit
 
 The following environments are under active development:
 
 * classic/* (rlcard) (Luis)
-* classic/backgammon (Luis)
+* classic/backgammon (Kumar)
 * classic/checkers (Tianchen)
-* class/chess (Ben)
 * classic/connect_four (Praveen)
 * classic/go (Sharry)
+* classic/hanabi (Luis)
 * classic/rock_paper_scissors (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/tictactoe (Praveen)
 * gamma/knights_archers_zombies (Mario)
 * gamma/pistonball (Mario)
 * gamma/prospector (Yashas)
- sisl/* (Mario)
+* magent/* (David)
+* sisl/multiwalker (Mario/Ananth)
+* sisl/waterworld (Mario)
+
+Heterogenous agent handling (Kai)
 
 Development has not yet started on the following games:
 
-* atari/* (based on ALE-Py)
-* classic/hanabi (https://github.com/deepmind/hanabi-learning-environment)
-* magent/*
+* atari/* (based on ALE-Py) (ALE backport being done by Ben)
 * robotics/*
 * ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
 
