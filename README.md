@@ -153,7 +153,9 @@ For more detailed documentation about all the different environments, and a lead
 
 If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
 
-# Creating Custom Environments
+# Development Notes
+
+## Creating Custom Environments
 Creating a custom environment with PettingZoo should roughly look like the following:
 
 ```
@@ -216,7 +218,7 @@ class env(AECEnv):
         ...
 ```
 
-## Development Stuff:
+## Other things
 
 All environment code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
