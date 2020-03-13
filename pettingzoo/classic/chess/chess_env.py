@@ -63,7 +63,7 @@ class env(AECEnv):
         old_legal_moves = self.infos[current_idx]['legal_moves']
 
         if action not in old_legal_moves:
-            warnings.warn("Bad chess move made. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
+            warnings.warn("Bad chess move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
             player_loses_val = -1 if current_idx == 0 else 1
             self.set_game_result(player_loses_val)
         else:
