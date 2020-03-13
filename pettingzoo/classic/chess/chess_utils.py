@@ -1,5 +1,6 @@
 import chess
 import numpy as np
+from .all_moves import all_moves
 
 
 def bitboard_to_ndarray(bitboard):
@@ -74,6 +75,11 @@ def get_knight_dir(diff):
     assert False, "bad knight move inputted"
 
 
+def is_knight_move(diff):
+    dx, dy = diff
+    return abs(dx) + abs(dy) == 3 and 1 <= abs(dx) <= 2
+
+
 def get_pawn_promotion_move(diff):
     dx, dy = diff
     assert dy == 1
@@ -90,7 +96,7 @@ def move_to_coord(move):
     return square_to_coord(move.from_square)
 
 
-def get_move_plane(move, source_piece):
+def get_move_plane(move):
     source = move.from_square
     dest = move.to_square
     difference = diff(square_to_coord(source), square_to_coord(dest))
@@ -101,7 +107,7 @@ def get_move_plane(move, source_piece):
     KNIGHT_OFFSET = QUEEN_MOVES
     UNDER_OFFSET = KNIGHT_OFFSET + KNIGHT_MOVES
 
-    if source_piece == chess.KNIGHT:
+    if is_knight_move(difference):
         return KNIGHT_OFFSET + get_knight_dir(difference)
     else:
         if move.promotion is not None and move.promotion != chess.QUEEN:
@@ -110,7 +116,36 @@ def get_move_plane(move, source_piece):
             return QUEEN_OFFSET + get_queen_plane(difference)
 
 
-def sample_action(orig_board, action):
+moves_to_actions = {}
+actions_to_moves = {}
+
+
+def action_to_move(action, player):
+    base_move = chess.Move.from_uci(actions_to_moves[action])
+    if player:
+        return mirror_move(base_move)
+    else:
+        return base_move
+
+
+def make_move_mapping():
+    TOTAL = 73
+    for uci_move in all_moves:
+        move = chess.Move.from_uci(uci_move)
+        source = move.from_square
+
+        coord = square_to_coord(source)
+        panel = get_move_plane(move)
+        cur_action = (coord[0] * 8 + coord[1]) * TOTAL + panel
+
+        moves_to_actions[uci_move] = cur_action
+        actions_to_moves[cur_action] = uci_move
+
+
+make_move_mapping()
+
+
+def legal_moves(orig_board):
     '''
     action space is a 8x8x73 dimentional array
     Each of the 8×8
@@ -122,32 +157,16 @@ def sample_action(orig_board, action):
     rook respectively. Other pawn moves or captures from the seventh rank are promoted to a
     queen
     '''
-    TOTAL = 73
-    if not orig_board.turn:
+    if orig_board.turn == chess.BLACK:  # white is 1, black is 0
         board = orig_board.mirror()
     else:
         board = orig_board
-    moves_mask = np.zeros([8, 8, TOTAL])
 
-    coord_to_move = {}
+    legal_moves = []
     for move in board.legal_moves:
-        source = move.from_square
+        legal_moves.append(moves_to_actions[move.uci()])
 
-        coord = square_to_coord(source)
-        piece = (board.piece_at(source)).piece_type
-        panel = get_move_plane(move, piece)
-        panel_coord = (coord[0], coord[1], panel)
-        moves_mask[panel_coord] = 1
-        coord_to_move[panel_coord] = move
-
-    assert np.sum(moves_mask) > 0
-
-    e_x = moves_mask * np.exp(action - np.max(action))
-    legal_moves_probs = e_x / e_x.sum()
-    sample = np.argmax(np.random.multinomial(1, legal_moves_probs.flatten()))
-    sample = (sample // (TOTAL * 8), (sample // TOTAL) % 8, sample % (TOTAL))
-
-    return coord_to_move[sample]
+    return legal_moves
 
 
 def get_observation(orig_board, player):
