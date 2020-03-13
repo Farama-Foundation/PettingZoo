@@ -109,6 +109,7 @@ def play_test(env, observation_0):
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
 
+    env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
         action = env.action_spaces[agent].sample()
@@ -172,9 +173,11 @@ def api_test(env, render=False, manual_control=False):
 
     test_observe(env, observation_0)
 
-    test_render(env)
+    if render:
+        test_render(env)
 
-    test_manual_control(env)
+    if manual_control:
+        test_manual_control(env)
 
     env.close()
 

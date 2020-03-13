@@ -16,6 +16,7 @@ class env(AECEnv):
         self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
         self.dones = self.convert_to_dict([False for _ in range(self.num_agents)])
         self.env.extract_state = self.extract_state
+        self.infos = self.convert_to_dict(['' for _ in range(self.num_agents)])
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
@@ -39,12 +40,13 @@ class env(AECEnv):
     def step(self, action, observe=True):
         obs, next_player_id = self.env.step(action)
         self.agent_selection = next_player_id
+        self.agent_order = [next_player_id, 0 if next_player_id==1 else 1]
         self.dones = self.convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
         self.valid_action_space = obs['legal_actions']
         if self.env.is_over():
             self.rewards = self.convert_to_dict(self.env.get_payoffs())
         else:
-            self.rewards = self.convert_to_dict([0, 0])
+            self.rewards = self.convert_to_dict(np.array([0.0, 0.0]))
         if observe:
             return obs['obs']
         else:
@@ -55,7 +57,7 @@ class env(AECEnv):
         self.agent_selection = player_id
         self.agent_order = [player_id, 0 if player_id==1 else 1]
         self.valid_action_space = obs['legal_actions']
-        self.rewards = self.convert_to_dict([0, 0])
+        self.rewards = self.convert_to_dict(np.array([0.0, 0.0]))
         if observe:
             return obs['obs']
         else:

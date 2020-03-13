@@ -1,6 +1,7 @@
 from pettingzoo.utils import AECEnv
 from gym import spaces
 import rlcard
+import numpy as np
 
 class env(AECEnv):
 
@@ -10,9 +11,13 @@ class env(AECEnv):
         self.num_agents = 2
         self.agents = list(range(self.num_agents))
         self.reset()
-        self.observation_spaces = dict(zip(self.agents, [spaces.MultiDiscrete(54*[2]) for _ in range(self.num_agents)]))
+        # self.observation_spaces = dict(zip(self.agents, [spaces.MultiDiscrete(54*[2]) for _ in range(self.num_agents)]))
+        max_obs_space_array = np.ones(52,)
+        np.append(max_obs_space_array,[np.Inf,np.Inf])
+        self.observation_spaces = dict(zip(self.agents, [spaces.Box(np.array(54,),max_obs_space_array) for _ in range(self.num_agents)]))
         self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
         self.dones = self.convert_to_dict([False for _ in range(self.num_agents)])
+        self.infos = self.convert_to_dict(['' for _ in range(self.num_agents)])
     
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
@@ -32,7 +37,7 @@ class env(AECEnv):
         if self.env.is_over():
             self.rewards = self.convert_to_dict(self.env.get_payoffs())
         else:
-            self.rewards = self.convert_to_dict([0, 0])
+            self.rewards = self.convert_to_dict(np.array([0.0, 0.0]))
         if observe:
             return obs['obs']
         else:
@@ -43,7 +48,7 @@ class env(AECEnv):
         self.agent_selection = player_id
         self.agent_order = [player_id, 0 if player_id==1 else 1]
         self.valid_action_space = obs['legal_actions']
-        self.rewards = self.convert_to_dict([0, 0])
+        self.rewards = self.convert_to_dict(np.array([0.0, 0.0]))
         if observe:
             return obs['obs']
         else:
