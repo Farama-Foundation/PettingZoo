@@ -79,6 +79,7 @@ class env(AECEnv):
             else:
                 self.infos[current_idx] = {'legal_moves': []}
                 self.infos[next_agent] = {'legal_moves': chess_utils.legal_moves(self.board)}
+                assert len(self.infos[next_agent]['legal_moves'])
 
         if observe:
             next_observation = self.observe(next_agent)

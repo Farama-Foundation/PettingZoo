@@ -1,6 +1,5 @@
 import chess
 import numpy as np
-from .all_moves import all_moves
 
 
 def bitboard_to_ndarray(bitboard):
@@ -128,21 +127,17 @@ def action_to_move(action, player):
         return base_move
 
 
-def make_move_mapping():
+def make_move_mapping(uci_move):
     TOTAL = 73
-    for uci_move in all_moves:
-        move = chess.Move.from_uci(uci_move)
-        source = move.from_square
+    move = chess.Move.from_uci(uci_move)
+    source = move.from_square
 
-        coord = square_to_coord(source)
-        panel = get_move_plane(move)
-        cur_action = (coord[0] * 8 + coord[1]) * TOTAL + panel
+    coord = square_to_coord(source)
+    panel = get_move_plane(move)
+    cur_action = (coord[0] * 8 + coord[1]) * TOTAL + panel
 
-        moves_to_actions[uci_move] = cur_action
-        actions_to_moves[cur_action] = uci_move
-
-
-make_move_mapping()
+    moves_to_actions[uci_move] = cur_action
+    actions_to_moves[cur_action] = uci_move
 
 
 def legal_moves(orig_board):
@@ -164,7 +159,12 @@ def legal_moves(orig_board):
 
     legal_moves = []
     for move in board.legal_moves:
-        legal_moves.append(moves_to_actions[move.uci()])
+        uci_move = move.uci()
+        if uci_move in moves_to_actions:
+            legal_moves.append(moves_to_actions[move.uci()])
+        else:
+            make_move_mapping(uci_move)
+            legal_moves.append(moves_to_actions[move.uci()])
 
     return legal_moves
 
