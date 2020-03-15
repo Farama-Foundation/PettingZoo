@@ -228,6 +228,7 @@ The following environments should be done:
 * gamma/cooperative_pong
 * gamma/prison (sprite work ongoing- Mario)
 * mpe/*
+* sisl/waterworld
 * sisl/pursuit
 
 The following environments are under active development:
@@ -246,7 +247,7 @@ The following environments are under active development:
 * gamma/prospector (Yashas)
 * magent/* (David)
 * sisl/multiwalker (Mario/Ananth)
-* sisl/waterworld (Mario)
+
 
 Heterogenous agent handling (Kai)
 
