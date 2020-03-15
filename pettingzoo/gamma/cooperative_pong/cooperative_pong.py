@@ -268,6 +268,7 @@ class CooperativePong(gym.Env):
 
     def close(self):
         if self.renderOn:
+            pygame.event.pump()
             pygame.display.quit()
             self.renderOn = False
 
