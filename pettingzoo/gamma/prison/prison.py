@@ -63,10 +63,11 @@ class env(AECEnv):
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo"]
         self.rewards = dict(zip(self.agents,[0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.metadata = {'render.modes': ['human']} 
 
         pygame.init()
+        pygame.display.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((750, 650))
         self.num_frames = 0
@@ -177,7 +178,9 @@ class env(AECEnv):
         return self.prisoner_mapping[c]
 
     def close(self):
+        pygame.event.pump()
         pygame.display.quit()
+        pygame.quit()
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
