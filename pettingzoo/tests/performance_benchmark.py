@@ -1,7 +1,9 @@
 import time
+import random
 
 
 def performance_benchmark(env):
+    print("Starting performance benchmark")
     cycles = 0
     turn = 0
     _ = env.reset()
@@ -10,15 +12,19 @@ def performance_benchmark(env):
 
     while True:
         for agent in env.agent_order:  # step through every agent once with observe=True
-            action = env.action_spaces[agent].sample()
+            if 'legal_moves' in env.infos[agent]:
+                action = random.choice(env.infos[agent]['legal_moves'])
+            else:
+                action = env.action_spaces[agent].sample()
             _ = env.step(action)
             turn += 1
+            if all(env.dones.values()):
+                _ = env.reset()
+                break
         cycles += 1
         if time.time() - start > 60:
             end = time.time()
             break
-        if all(env.dones.values()):
-            _ = env.reset()
 
     length = end - start
 
@@ -26,3 +32,4 @@ def performance_benchmark(env):
     cycles_per_time = cycles / length
     print(str(turns_per_time) + " turns per second")
     print(str(cycles_per_time) + " cycles per second")
+    print("Finished performance benchmark")

@@ -109,6 +109,7 @@ def play_test(env, observation_0):
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
 
+    env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
         action = env.action_spaces[agent].sample()
@@ -136,7 +137,6 @@ def test_render(env):
             action = env.action_spaces[agent].sample()
             env.step(action, observe=False)
             env.render(mode=mode)
-        env.close()
 
 
 def test_manual_control(env):
@@ -144,6 +144,7 @@ def test_manual_control(env):
 
 
 def api_test(env, render=False, manual_control=False):
+    print("Starting API test")
     if manual_control:
         assert render, "Rendering must be enabled to test manual control"
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
@@ -172,8 +173,12 @@ def api_test(env, render=False, manual_control=False):
 
     test_observe(env, observation_0)
 
-    test_render(env)
+    if render:
+        test_render(env)
 
-    test_manual_control(env)
+    if manual_control:
+        test_manual_control(env)
 
-    print("Passes API Tests")  # You only get here if you don't fail
+    env.close()
+
+    print("Passed API test")  # You only get here if you don't fail
