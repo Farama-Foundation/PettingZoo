@@ -24,7 +24,7 @@ if sys.argv[1] == 'classic/checkers':
 if sys.argv[1] == 'classic/chess':
     print('classic/chess')
     from pettingzoo.classic import chess
-    chesd = chess.env()
+    chess = chess.env()
     api_test.api_test(chess)
     bombardment_test.bombardment_test(chess)
     performance_benchmark.performance_benchmark(chess)
