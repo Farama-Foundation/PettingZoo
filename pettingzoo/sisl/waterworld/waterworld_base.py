@@ -126,6 +126,7 @@ class MAWaterWorld():
         if self.renderOn:
             import cv2
             cv2.destroyAllWindows()
+            cv2.waitKey(1)
 
     @property
     def reward_mech(self):
@@ -713,8 +714,10 @@ class MAWaterWorld():
         return np.array(self.last_obs[agent])
 
     def render(self, screen_size=900, rate=10, mode='human'):
-        self.renderOn = True
         import cv2
+        if not self.renderOn:
+            self.renderOn = True
+            cv2.startWindowThread()
         img = np.empty((screen_size, screen_size, 3), dtype=np.uint8)
         img[...] = 255
         # Obstacles
