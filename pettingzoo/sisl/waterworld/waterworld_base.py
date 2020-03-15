@@ -2,7 +2,6 @@ import numpy as np
 import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
-
 from .. import Agent
 
 
@@ -470,10 +469,17 @@ class MAWaterWorld():
             is_colliding_No = distfromobst_No <= pursuer._radius + self.obstacle_radius
             obstacle_coll_Np[npu] = is_colliding_No.sum()
             if obstacle_coll_Np[npu] > 0:
-                pursuer.set_velocity(-1 / 2 * pursuer.velocity)
                 velocity_scale = pursuer._radius + self.obstacle_radius - ssd.euclidean(pursuer.position, self.obstaclesx_No_2)
                 pos_diff = pursuer.position - self.obstaclesx_No_2[0]
                 pursuer.set_position(pursuer.position + velocity_scale*pos_diff)
+                
+                collision_normal = pursuer.position - self.obstaclesx_No_2[0]
+                # project current velocity onto collision normal
+                current_vel = pursuer.velocity
+                proj_vel = (np.dot(current_vel, collision_normal)/np.dot(collision_normal, collision_normal))*collision_normal
+                perp_vel = current_vel - proj_vel
+                total_vel = perp_vel - proj_vel
+                pursuer.set_velocity(total_vel)
 
         obstacle_coll_Ne = np.zeros(self.n_evaders)
         for nev, evader in enumerate(self._evaders):
@@ -481,10 +487,17 @@ class MAWaterWorld():
             is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
             obstacle_coll_Ne[nev] = is_colliding_No.sum()
             if obstacle_coll_Ne[nev] > 0:
-                evader.set_velocity(-1 * evader.velocity)
                 velocity_scale = evader._radius + self.obstacle_radius - ssd.euclidean(evader.position, self.obstaclesx_No_2)
                 pos_diff = evader.position - self.obstaclesx_No_2[0]
                 evader.set_position(evader.position + velocity_scale*pos_diff)
+
+                collision_normal = evader.position - self.obstaclesx_No_2[0]
+                # project current velocity onto collision normal
+                current_vel = evader.velocity
+                proj_vel = (np.dot(current_vel, collision_normal)/np.dot(collision_normal, collision_normal))*collision_normal
+                perp_vel = current_vel - proj_vel
+                total_vel = perp_vel - proj_vel
+                evader.set_velocity(total_vel)
 
         obstacle_coll_Npo = np.zeros(self.n_poison)
         for npo, poison in enumerate(self._poisons):
@@ -492,10 +505,17 @@ class MAWaterWorld():
             is_colliding_No = distfromobst_No <= poison._radius + self.obstacle_radius
             obstacle_coll_Npo[npo] = is_colliding_No.sum()
             if obstacle_coll_Npo[npo] > 0:
-                poison.set_velocity(-1 * poison.velocity)
                 velocity_scale = poison._radius + self.obstacle_radius - ssd.euclidean(poison.position, self.obstaclesx_No_2)
                 pos_diff = poison.position - self.obstaclesx_No_2[0]
                 poison.set_position(poison.position + velocity_scale*pos_diff)
+
+                collision_normal = poison.position - self.obstaclesx_No_2[0]
+                # project current velocity onto collision normal
+                current_vel = poison.velocity
+                proj_vel = (np.dot(current_vel, collision_normal)/np.dot(collision_normal, collision_normal))*collision_normal
+                perp_vel = current_vel - proj_vel
+                total_vel = perp_vel - proj_vel
+                poison.set_velocity(total_vel)
 
         # Find collisions
         pursuersx_Np_2 = np.array([pursuer.position for pursuer in self._pursuers])
@@ -622,20 +642,6 @@ class MAWaterWorld():
             sensorfeatures_Np_K_O = np.c_[sensed_obdistfeatures_Np_K, sensed_evdistfeatures_Np_K,
                                           sensed_podistfeatures_Np_K, sensed_pudistfeatures_Np_K]
 
-        for evader in self._evaders:
-            # Move objects
-            evader.set_position(evader.position + self.cycle_time*evader.velocity)
-            # Bounce object if it hits a wall
-            if all(evader.position != np.clip(evader.position, 0, 1)):
-                evader.set_velocity(-1 * evader.velocity)
-
-        for poison in self._poisons:
-            # Move objects
-            poison.set_position(poison.position + self.cycle_time*poison.velocity)
-            # Bounce object if it hits a wall
-            if all(poison.position != np.clip(poison.position, 0, 1)):
-                poison.set_velocity(-1 * poison.velocity)
-
         return sensorfeatures_Np_K_O,is_colliding_ev_Np_Ne,is_colliding_po_Np_Npo,rewards
 
     def observe_list(self, sensor_feature, is_colliding_ev, is_colliding_po):
@@ -671,6 +677,24 @@ class MAWaterWorld():
         p.set_velocity(p.velocity + action)
         p.set_position(p.position + self.cycle_time*p.velocity)
 
+        for evader in self._evaders:
+            # Move objects
+            evader.set_position(evader.position + self.cycle_time*evader.velocity)
+            # Bounce object if it hits a wall
+            for i in range(len(evader.position)):
+                if evader.position[i] >= 1 or evader.position[i] <= 0:
+                    evader.position[i] = np.clip(evader.position[i], 0, 1)
+                    evader.velocity[i] = -1*evader.velocity[i]
+
+        for poison in self._poisons:
+            # Move objects
+            poison.set_position(poison.position + self.cycle_time*poison.velocity)
+            # Bounce object if it hits a wall
+            for i in range(len(poison.position)):
+                if poison.position[i] >= 1 or poison.position[i] <= 0:
+                    poison.position[i] = np.clip(poison.position[i], 0, 1)
+                    poison.velocity[i] = -1 * poison.velocity[i]
+
         if self.reward_mech == 'global':
             rewards[agent_id] += self.control_penalty * (action**2).sum()
         else:
@@ -688,7 +712,7 @@ class MAWaterWorld():
     def observe(self, agent):
         return np.array(self.last_obs[agent])
 
-    def render(self, screen_size=800, rate=10, mode='human'):
+    def render(self, screen_size=900, rate=10, mode='human'):
         self.renderOn = True
         import cv2
         img = np.empty((screen_size, screen_size, 3), dtype=np.uint8)
