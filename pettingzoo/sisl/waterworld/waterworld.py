@@ -1,5 +1,6 @@
 from .waterworld_base import MAWaterWorld as _env
-from pettingzoo.utils import AECEnv,agent_selector
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 import numpy as np
 
 
