@@ -6,7 +6,7 @@ import numpy as np
 from checkers.game import Checkers
 from checkers.agents import Player
 
-from pettingzoo.utils import AECEnv
+from pettingzoo import AECEnv
 #from ray.rllib.env.multi_agent_env import MultiAgentEnvfrom ray import tune
 #from ray.rllib.agents.pg.pg import PGTrainer
 #from ray.rllib.agents.pg.pg_tf_policy import PGTFPolicy
