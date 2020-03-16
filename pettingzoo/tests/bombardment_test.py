@@ -4,7 +4,7 @@ import random
 
 def bombardment_test(env):
     print("Starting bombardment test")
-    cycles = 100
+    cycles = 10000
 
     prev_observe = env.reset()
     observation_0 = prev_observe.copy()
