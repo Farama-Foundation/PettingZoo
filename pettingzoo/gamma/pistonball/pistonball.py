@@ -10,7 +10,7 @@ import math
 import numpy as np
 from skimage import measure
 import gym
-from pettingzoo.utils import AECEnv
+from pettingzoo import AECEnv
 
 _image_library = {}
 
