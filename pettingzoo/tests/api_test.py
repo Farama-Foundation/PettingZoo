@@ -133,10 +133,11 @@ def test_render(env):
     render_modes = env.metadata.get('render.modes')
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
     for mode in render_modes:
-        for agent in env.agent_order:
-            action = env.action_spaces[agent].sample()
-            env.step(action, observe=False)
-            env.render(mode=mode)
+        for _ in range(10):
+            for agent in env.agent_order:
+                action = env.action_spaces[agent].sample()
+                env.step(action, observe=False)
+                env.render(mode=mode)
 
 
 def test_manual_control(env):
