@@ -11,7 +11,7 @@ lizard = 3
 spock = 4
 
 
-class rockpaperscissorsEnv(MultiAgentEnv):
+class env(MultiAgentEnv):
     """Two-player environment for rock paper scissors lizard spock.
     The observation is simply the last opponent action."""
 
@@ -27,6 +27,14 @@ class rockpaperscissorsEnv(MultiAgentEnv):
         self.last_obs = None
         self.agent1_obs = None
         self.num_moves = 0
+
+    def last(self):
+        agent = self.agent_selection
+        rew = self.last_reward[agent]
+        done = self.last_done[agent]
+        info = {}
+        self.agent_selection = (self.agent_selection + 1) % self.num_agents
+        return rew, done, info
 
     def reset(self):
         self.last_obs = (0, 0)
