@@ -234,11 +234,8 @@ The following environments should be done:
 The following environments are under active development:
 
 * classic/* (rlcard) (Luis)
-* classic/backgammon (Kai)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
-* classic/go (Sharry)
-* classic/hanabi (Luis)
 * classic/rock_paper_scissors (Sharry)
 * classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/tictactoe (Praveen)
@@ -251,6 +248,9 @@ Heterogenous agent handling (Kai)
 
 Development has not yet started on the following games:
 
+* classic/hanabi
+* classic/go
+* classic/backgammon
 * atari/* (based on ALE-Py) (ALE backport being done by Ben)
 * robotics/*
 * ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
