@@ -1,6 +1,6 @@
 import gym
 from gym.spaces import Discrete
-# from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
 # Game originally from RLlib: https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py
 
@@ -9,8 +9,8 @@ paper = 1
 scissors = 2
 
 
-# class rockpaperscissorsEnv(MultiAgentEnv):
-class rockpaperscissorsEnv():
+class rockpaperscissorsEnv(MultiAgentEnv):
+# class rockpaperscissorsEnv():
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
@@ -85,16 +85,16 @@ class rockpaperscissorsEnv():
 
 
 
-env = rockpaperscissorsEnv()
-observation = env.reset()
-print(observation)
-done = False
-while not done:
-    i = 1
-    for _ in env.agent_order:
-        reward, done, info = env.last()
-        print(reward, done)
-        # action = policy(observation)
-        action = i
-        i = (i+1) % 3
-        observation = env.step(action)
+# env = rockpaperscissorsEnv()
+# observation = env.reset()
+# print(observation)
+# done = False
+# while not done:
+#     i = 1
+#     for _ in env.agent_order:
+#         reward, done, info = env.last()
+#         print(reward, done)
+#         # action = policy(observation)
+#         action = i
+#         i = (i+1) % 3
+#         observation = env.step(action)
