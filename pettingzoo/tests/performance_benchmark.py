@@ -11,6 +11,7 @@ def performance_benchmark(env):
     end = 0
 
     while True:
+        cycles += 1
         for agent in env.agent_order:  # step through every agent once with observe=True
             if 'legal_moves' in env.infos[agent]:
                 action = random.choice(env.infos[agent]['legal_moves'])
@@ -21,7 +22,6 @@ def performance_benchmark(env):
             if all(env.dones.values()):
                 _ = env.reset()
                 break
-        cycles += 1
         if time.time() - start > 60:
             end = time.time()
             break
