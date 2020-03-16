@@ -1,6 +1,6 @@
 from . import chess_utils
 import chess
-from pettingzoo.utils import AECEnv
+from pettingzoo import AECEnv
 from gym import spaces
 import numpy as np
 import warnings
