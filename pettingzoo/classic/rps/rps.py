@@ -9,7 +9,7 @@ paper = 1
 scissors = 2
 
 
-class rockpaperscissorsEnv(MultiAgentEnv):
+class env(MultiAgentEnv):
 # class rockpaperscissorsEnv():
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""

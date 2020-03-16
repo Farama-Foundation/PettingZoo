@@ -1,13 +1,13 @@
 # python3 -m pettingzoo.tests.ci_test classic/backgammon
 # python3 -m pettingzoo.tests.ci_test classic/checkers
-python3 -m pettingzoo.tests.ci_test classic/chess
+# python3 -m pettingzoo.tests.ci_test classic/chess
 # python3 -m pettingzoo.tests.ci_test classic/connect_four
 # python3 -m pettingzoo.tests.ci_test classic/dou_dizhu
 # python3 -m pettingzoo.tests.ci_test classic/go
 # python3 -m pettingzoo.tests.ci_test classic/hanabi
 # python3 -m pettingzoo.tests.ci_test classic/leduc_holdem
 # python3 -m pettingzoo.tests.ci_test classic/mahjong
-# python3 -m pettingzoo.tests.ci_test classic/rps
+python3 -m pettingzoo.tests.ci_test classic/rps
 # python3 -m pettingzoo.tests.ci_test classic/rpsls
 # python3 -m pettingzoo.tests.ci_test classic/texas_holdem
 # python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit
