@@ -2,7 +2,7 @@ import os
 import numpy as np
 import gym
 from .cake_paddle import CakePaddle
-from pettingzoo.utils.env import AECEnv
+from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
