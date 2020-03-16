@@ -229,12 +229,12 @@ The following environments should be done:
 * gamma/prison (sprite work ongoing- Mario)
 * mpe/*
 * sisl/waterworld
-* sisl/pursuit
+* sisl/*
 
 The following environments are under active development:
 
 * classic/* (rlcard) (Luis)
-* classic/backgammon (Kumar)
+* classic/backgammon (Kai)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
 * classic/go (Sharry)
@@ -246,8 +246,6 @@ The following environments are under active development:
 * gamma/pistonball (Mario)
 * gamma/prospector (Yashas)
 * magent/* (David)
-* sisl/multiwalker (Mario/Ananth)
-
 
 Heterogenous agent handling (Kai)
 
