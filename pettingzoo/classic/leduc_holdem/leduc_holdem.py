@@ -1,4 +1,4 @@
-from pettingzoo.utils import AECEnv
+from pettingzoo import AECEnv
 from gym import spaces
 import rlcard
 import numpy as np
