@@ -1,4 +1,5 @@
-from pettingzoo.utils import AECEnv, agent_selector
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 from gym import spaces
 import numpy as np
 
