@@ -1,5 +1,6 @@
 import gym
 from gym.spaces import Discrete
+import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 
@@ -53,6 +54,12 @@ class env(AECEnv):
             return self.observations[0]
 
     def step(self, action, observe=True):
+        agent = self.agent_selection
+        if np.isnan(action):
+            action = 0
+        elif not self.action_spaces[agent].contains(action):
+            raise Exception('Action for agent {} must be in Discrete({}).'
+                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
         self.observations[self.agent_selection] = action
 
         # collect reward if it is the last agent to act
