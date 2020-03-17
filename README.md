@@ -225,8 +225,14 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 The following environments should be done:
 
 * classic/chess
+* classic/dou_dizhu
+* classic/leduc_holdem
 * classic/rock_paper_scissors
 * classic/rock_paper_scissors_lizard_spock
+* classic/mahjong
+* classic/texas_holdem
+* classic/texas_holdem_no_limit
+* classic/uno
 * gamma/cooperative_pong
 * gamma/prison (sprite work ongoing- Mario)
 * mpe/*
@@ -234,7 +240,7 @@ The following environments should be done:
 
 The following environments are under active development:
 
-* classic/* (rlcard) (Luis)
+* classic/gin_rummy (Luis) (waiting on RLCard fix)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
 * classic/tictactoe (Praveen)
