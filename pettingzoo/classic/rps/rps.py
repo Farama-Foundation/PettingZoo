@@ -10,7 +10,7 @@ scissors = 2
 
 
 class env(MultiAgentEnv):
-# class rockpaperscissorsEnv():
+# class env():
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
@@ -84,17 +84,17 @@ class env(MultiAgentEnv):
         return self.last_obs, self.last_reward, self.last_done, {}
 
 
-
-# env = rockpaperscissorsEnv()
+# for my test 
+# env = env()
 # observation = env.reset()
 # print(observation)
 # done = False
+# from random import randint
 # while not done:
-#     i = 1
 #     for _ in env.agent_order:
 #         reward, done, info = env.last()
+#         print(observation)
 #         print(reward, done)
 #         # action = policy(observation)
-#         action = i
-#         i = (i+1) % 3
+#         action = randint(0, 2)
 #         observation = env.step(action)
