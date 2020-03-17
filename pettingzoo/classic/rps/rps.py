@@ -1,12 +1,14 @@
 import gym
 from gym.spaces import Discrete
 from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 
 # Game originally from RLlib: https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py
 
 rock = 0
 paper = 1
 scissors = 2
+NUM_ITERS = 100
 
 
 class env(AECEnv):
@@ -14,53 +16,48 @@ class env(AECEnv):
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
+    metadata = {'render.modes': ['human']}
+
     def __init__(self):
         self.num_agents = 2
+        self.agents = list(range(0, self.num_agents))
         self.agent_order = list(range(0, self.num_agents))
-        self.agent_selection = 1
 
-        self.action_space = Discrete(3)
-        self.observation_space = Discrete(3)
-        self.player1 = 0
-        self.player2 = 1
-        self.last_obs = None
-        self.agent1_obs = None
+        self.action_spaces = {agent: Discrete(3) for agent in self.agents}
+        self.observation_spaces = {agent: Discrete(3) for agent in self.agents}
+
+        self.display_wait = 0.0
+        self.reinit()
+
+    def reinit(self):
+        self._agent_selector = agent_selector(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
+        self.rewards = {agent: 0 for agent in self.agents}
+        self.dones = {agent: False for agent in self.agents}
+        self.infos = {agent: {} for agent in self.agents}
+        self.observations = {agent: 0 for agent in self.agents}
         self.num_moves = 0
 
-    def last(self):
-        agent = self.agent_selection
-        rew = self.last_reward[agent]
-        done = self.last_done[agent]
-        info = {}
-        self.agent_selection = (self.agent_selection + 1) % self.num_agents
-        return rew, done, info
+    def render(self, mode="human"):
+        print("Current state: Agent1: {} , Agent2: {}".format(self.observations[0], self.observations[1]))
 
-    def reset(self):
-        self.last_obs = (0, 0)
-        self.num_moves = 0
-        self.last_reward = {self.player1: 0,
-                            self.player2: 0
-                            }
-        self.last_done = {self.player1: False,
-                          self.player2: False}
-        return {
-            self.player1: self.last_obs[1],
-            self.player2: self.last_obs[0],
-        }
+    def observe(self, agent):
+        return self.observations[agent]
 
-    def step(self, action):
-        if self.agent_selection == 0: # first agent take action
-            move1 = action 
-            self.agent1_obs = move1
-        else: # secound agent take action
-            move1 = self.agent1_obs
-            move2 = action 
-            self.last_obs = (move1, move2)
-            obs = {
-                self.player1: self.last_obs[1],
-                self.player2: self.last_obs[0],
-            }
-            r1, r2 = {
+    def close(self):
+        pass
+
+    def reset(self, observe=True):
+        self.reinit()
+        if observe:
+            return self.observations[0]
+
+    def step(self, action, observe=True):
+        self.observations[self.agent_selection] = action
+
+        # collect reward if it is the last agent to act
+        if self._agent_selector.is_last():
+            self.rewards[0], self.rewards[1] = {
                 (rock, rock): (0, 0),
                 (rock, paper): (-1, 1),
                 (rock, scissors): (1, -1),
@@ -70,31 +67,11 @@ class env(AECEnv):
                 (scissors, rock): (-1, 1),
                 (scissors, paper): (1, -1),
                 (scissors, scissors): (0, 0),
-            }[move1, move2]
-            rew = {
-                self.player1: r1,
-                self.player2: r2,
-            }
-            self.last_reward = rew 
+            }[(self.observations[0], self.observations[1])]
+
             self.num_moves += 1
-            self.last_done = {
-                self.player1: self.num_moves >= 10,
-                self.player2: self.num_moves >= 10,
-            }
-        return self.last_obs, self.last_reward, self.last_done, {}
+            self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
 
-
-# for my test 
-# env = env()
-# observation = env.reset()
-# print(observation)
-# done = False
-# from random import randint
-# while not done:
-#     for _ in env.agent_order:
-#         reward, done, info = env.last()
-#         print(observation)
-#         print(reward, done)
-#         # action = policy(observation)
-#         action = randint(0, 2)
-#         observation = env.step(action)
+        self.agent_selection = self._agent_selector.next()
+        if observe:
+            return self.observations[self.agent_selection]
