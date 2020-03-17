@@ -7,7 +7,7 @@ class env(AECEnv):
 
     def __init__(self,**kwargs):
         super(env, self).__init__()
-        self.env = rlcard.make('leduc-holdem',**kwargs)
+        self.env = rlcard.make('gin-rummy',**kwargs)
         self.num_agents = 2
         self.agents = list(range(self.num_agents))
         self.dones = self.convert_to_dict([False for _ in range(self.num_agents)])
@@ -15,7 +15,7 @@ class env(AECEnv):
 
         self.reset()
 
-        self.observation_spaces = dict(zip(self.agents, [spaces.Box(low=0.0, high=1.0, shape=(34,)) for _ in range(self.num_agents)]))
+        self.observation_spaces = dict(zip(self.agents, [spaces.Box(low=0.0, high=1.0, shape=(5,52), dtype=np.float32) for _ in range(self.num_agents)]))
         self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
 
     def convert_to_dict(self, list_of_list):
@@ -26,11 +26,14 @@ class env(AECEnv):
 
     def observe(self, agent):
         obs = self.env.get_state(agent)
-        return obs['obs']   
+        return obs['obs']
 
     def step(self, action, observe=True):
         obs, next_player_id = self.env.step(action)
+        self.prev_player = self.agent_selection
         self.agent_selection = next_player_id
+        if self.agent_selection == self.prev_player:
+            self.agent_order.insert(0,self.agent_order.pop(-1))
         self.dones = self.convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
         self.infos[next_player_id]['legal_moves'] = obs['legal_actions']
         if self.env.is_over():
@@ -52,4 +55,3 @@ class env(AECEnv):
             return obs['obs']
         else:
             return
-
