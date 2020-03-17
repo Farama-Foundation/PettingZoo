@@ -13,7 +13,6 @@ NUM_ITERS = 100
 
 
 class env(AECEnv):
-# class env():
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
