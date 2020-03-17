@@ -225,10 +225,11 @@ All environment code should be compliant with flake8 --ignore E501,E731,E741. We
 The following environments should be done:
 
 * classic/chess
+* classic/rock_paper_scissors
+* classic/rock_paper_scissors_lizard_spock
 * gamma/cooperative_pong
 * gamma/prison (sprite work ongoing- Mario)
 * mpe/*
-* sisl/waterworld
 * sisl/*
 
 The following environments are under active development:
@@ -236,8 +237,6 @@ The following environments are under active development:
 * classic/* (rlcard) (Luis)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
-* classic/rock_paper_scissors (Sharry)
-* classic/rock_paper_scissors_lizard_spock (Sharry)
 * classic/tictactoe (Praveen)
 * gamma/knights_archers_zombies (Mario)
 * gamma/pistonball (Mario)
