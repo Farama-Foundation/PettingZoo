@@ -66,6 +66,7 @@ class env(AECEnv):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.metadata = {'render.modes': ['human']} 
+        self.rendering = False
 
         pygame.init()
         pygame.display.init()
@@ -243,7 +244,10 @@ class env(AECEnv):
             self.prisoners[agent].set_state(0)
         
         self.rewards[agent] = reward
-        self.clock.tick(15)
+        if self.rendering:
+            self.clock.tick(15)
+        else:
+            self.clock.tick()
         #self.draw()
 
         self.num_frames += 1
@@ -259,6 +263,7 @@ class env(AECEnv):
             return observation
 
     def render(self, mode='human'):
+        self.rendering = True
         self.draw()
         pygame.display.flip()
 
