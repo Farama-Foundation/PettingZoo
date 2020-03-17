@@ -1,6 +1,6 @@
 import gym
 from gym.spaces import Discrete
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
+from pettingzoo import AECEnv
 
 # Game originally from RLlib: https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py
 
@@ -9,7 +9,7 @@ paper = 1
 scissors = 2
 
 
-class env(MultiAgentEnv):
+class env(AECEnv):
 # class env():
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
