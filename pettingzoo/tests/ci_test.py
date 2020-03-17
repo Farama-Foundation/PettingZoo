@@ -102,7 +102,7 @@ if sys.argv[1] == 'classic/rps':
     _env = rps.env()
     bombardment_test.bombardment_test(_env)
     _env = rps.env()
-    performance_benchmark.performance_benchmark('classic/_env')
+    performance_benchmark.performance_benchmark(_env)
 
 if sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')

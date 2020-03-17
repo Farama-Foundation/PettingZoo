@@ -1,5 +1,6 @@
 from .api_test import test_obervation
 import random
+from copy import copy
 
 
 def bombardment_test(env):
@@ -7,7 +8,7 @@ def bombardment_test(env):
     cycles = 10000
 
     prev_observe = env.reset()
-    observation_0 = prev_observe.copy()
+    observation_0 = copy(prev_observe)
     for _ in range(cycles):
         for agent in env.agent_order:  # step through every agent once with observe=True
             if 'legal_moves' in env.infos[agent]:
