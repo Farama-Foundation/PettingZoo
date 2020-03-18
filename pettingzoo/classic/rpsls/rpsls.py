@@ -42,8 +42,8 @@ class env(AECEnv):
         print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[0]], MOVES[self.state[1]]))
 
     def observe(self, agent):
-        # observation of one agent is the state of the other
-        return self.state[1 - agent]
+        # observation of one agent is the previous state of the other
+        return self.observations[agent]
 
     def close(self):
         pass
@@ -98,6 +98,10 @@ class env(AECEnv):
 
             self.num_moves += 1
             self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
+
+            # observe the current state
+            for i in self.agents:
+                self.observations[i] = self.state[1-i]
 
         self.agent_selection = self._agent_selector.next()
         if observe:
