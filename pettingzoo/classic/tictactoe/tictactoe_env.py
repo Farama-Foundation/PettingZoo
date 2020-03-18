@@ -76,13 +76,15 @@ class env(AECEnv):
                     pass
                 elif winner == 1:
                     # agent 0 won
-                    pass 
+                    self.rewards[0] += 100
+                    self.rewards[1] -= 100
                 else:
                     # agent 1 won
-                    pass
+                    self.rewards[1] += 100
+                    self.rewards[0] -= 100
         else:
             # invalid move, some sort of negative reward
-            pass
+            self.rewards[self.agent_selection] = -10
 
         # Switch selection to next agents
         self.agent_selection = self._agent_selector.next()
