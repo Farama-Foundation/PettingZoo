@@ -274,5 +274,5 @@ matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
-rlcard
+rlcard >= 0.1.11
 ```
