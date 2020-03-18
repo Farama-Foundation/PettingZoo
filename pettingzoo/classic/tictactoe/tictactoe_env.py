@@ -115,14 +115,4 @@ class env(AECEnv):
     def close(self):
         pass
 
-# todo -- this case should be a win
-# Board: [0, 0, 1, 0, 0, 0, 0, 0, 0]
-# Winner: 0
-# Board: [0, 2, 1, 0, 0, 0, 0, 0, 0]
-# Winner: 0
-# Board: [0, 2, 1, 0, 1, 0, 0, 0, 0]
-# Winner: 0
-# Board: [2, 2, 1, 0, 1, 0, 0, 0, 0]
-# Winner: 0
-# Board: [2, 2, 1, 0, 1, 0, 1, 0, 0]
-# Winner: 0
+# todo -- rename Box class in tictactoe_utils
