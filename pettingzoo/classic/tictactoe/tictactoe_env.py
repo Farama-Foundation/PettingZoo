@@ -111,7 +111,7 @@ class env(AECEnv):
         else:
             return
 
-    def render(self, mode='human'): # not all environments will support rendering
+    def render(self, mode='human'):
         print("Board: " + str([box.state for box in board.boxes]))
 
     def close(self):
