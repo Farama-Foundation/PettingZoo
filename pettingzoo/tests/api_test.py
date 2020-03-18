@@ -2,7 +2,7 @@ import pettingzoo
 import warnings
 import numpy as np
 import gym
-
+import random
 
 def test_obervation(observation, observation_0):
     if isinstance(observation, np.ndarray):
@@ -103,7 +103,10 @@ def test_rewards_dones(env, agent_0):
 def play_test(env, observation_0):
     prev_observe = env.reset()
     for agent in env.agent_order:  # step through every agent once with observe=True
-        action = env.action_spaces[agent].sample()
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
@@ -112,7 +115,10 @@ def play_test(env, observation_0):
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
-        action = env.action_spaces[agent].sample()
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
         reward, done, info = env.last()
         assert isinstance(done, bool), "last done is not True or False"
         assert reward == env.rewards[agent], "last reward and rewards[agent] do not match"
