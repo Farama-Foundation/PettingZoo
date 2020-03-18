@@ -1,8 +1,9 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
+from .manual_control import manual_control
 
-from tictactoe_utils import Board
+from .tictactoe_utils import Board
 
 class env(AECEnv):
     metadata = {'render.modes': ['human']} # only add if environment supports rendering
@@ -26,6 +27,8 @@ class env(AECEnv):
         self.infos = {i: {'legal_moves': []} for i in range(self.num_agents)}
 
         self.agent_selection = 0
+
+        self.display_wait = 0.0
 
         self.reset()
 
@@ -110,7 +113,7 @@ class env(AECEnv):
             return
 
     def render(self, mode='human'):
-        print("Board: " + str([square.state for square in board.squares]))
+        print("Board: " + str([square.state for square in self.board.squares]))
 
     def close(self):
         pass
