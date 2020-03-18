@@ -99,8 +99,7 @@ class env(AECEnv):
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': []} for i in range(self.num_agents)}
-        self.infos[self.agent_selection]['legal_moves'] = chess_utils.legal_moves(self.board)
+        self.infos = {i: {'legal_moves': [1] * 9} for i in range(self.num_agents)}
 
         # selects the first agent
         self._agent_selector.reinit(self.agent_order)
@@ -115,3 +114,15 @@ class env(AECEnv):
 
     def close(self):
         pass
+
+# todo -- this case should be a win
+# Board: [0, 0, 1, 0, 0, 0, 0, 0, 0]
+# Winner: 0
+# Board: [0, 2, 1, 0, 0, 0, 0, 0, 0]
+# Winner: 0
+# Board: [0, 2, 1, 0, 1, 0, 0, 0, 0]
+# Winner: 0
+# Board: [2, 2, 1, 0, 1, 0, 0, 0, 0]
+# Winner: 0
+# Board: [2, 2, 1, 0, 1, 0, 1, 0, 0]
+# Winner: 0
