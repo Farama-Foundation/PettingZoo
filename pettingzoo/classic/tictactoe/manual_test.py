@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import QUIT, MOUSEBUTTONUP
 
-from tictactoe_utils import Board
+from .tictactoe_utils import Board
 
 pygame.init()
 clock = pygame.time.Clock()
