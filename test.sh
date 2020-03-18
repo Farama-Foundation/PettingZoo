@@ -3,6 +3,7 @@
 python3 -m pettingzoo.tests.ci_test classic/chess
 # python3 -m pettingzoo.tests.ci_test classic/connect_four
 python3 -m pettingzoo.tests.ci_test classic/dou_dizhu
+# python3 -m pettingzoo.tests.ci_test classic/gin_rummy
 # python3 -m pettingzoo.tests.ci_test classic/go
 # python3 -m pettingzoo.tests.ci_test classic/hanabi
 python3 -m pettingzoo.tests.ci_test classic/leduc_holdem
