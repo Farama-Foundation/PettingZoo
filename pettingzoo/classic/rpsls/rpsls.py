@@ -8,7 +8,8 @@ paper = 1
 scissors = 2
 lizard = 3
 spock = 4
-MOVES = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK"]
+none = 5
+MOVES = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK", "None"]
 NUM_ITERS = 100
 
 
@@ -24,7 +25,7 @@ class env(AECEnv):
         self.agent_order = list(range(0, self.num_agents))
 
         self.action_spaces = {agent: Discrete(5) for agent in self.agents}
-        self.observation_spaces = {agent: Discrete(5) for agent in self.agents}
+        self.observation_spaces = {agent: Discrete(6) for agent in self.agents}
 
         self.display_wait = 0.0
         self.reinit()
@@ -35,8 +36,8 @@ class env(AECEnv):
         self.rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
-        self.state = {agent: 0 for agent in self.agents}
-        self.observations = {agent: 0 for agent in self.agents}
+        self.state = {}
+        self.observations = {agent: none for agent in self.agents}
         self.num_moves = 0
 
     def render(self, mode="human"):
@@ -103,6 +104,9 @@ class env(AECEnv):
             # observe the current state
             for i in self.agents:
                 self.observations[i] = self.state[1-i]
+                self.state[1-i] = none
+        else:
+            self.state[1-agent] = none
 
         self.agent_selection = self._agent_selector.next()
         if observe:
