@@ -50,11 +50,6 @@ class env(AECEnv):
     def step(self, action, observe=True):
         # check if input action is a valid move
         if(self.board.boxes[action] == 0):
-            # board stores state of current player
-            # board.turn == 1 -> agent 0's turn
-            # board.turn == 2 -> agent 1's turn
-            self.dones[self.board.turn - 1] = True
-
             # play turn
             self.board.play_turn(self.board.boxes[action])
 
@@ -82,6 +77,10 @@ class env(AECEnv):
                     # agent 1 won
                     self.rewards[1] += 100
                     self.rewards[0] -= 100
+            
+                # once either play wins or there is a draw, game over both players are done
+                self.dones = {i: True for i in range(self.num_agents)}
+
         else:
             # invalid move, some sort of negative reward
             self.rewards[self.agent_selection] = -10
