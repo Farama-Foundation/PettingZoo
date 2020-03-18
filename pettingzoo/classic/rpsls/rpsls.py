@@ -36,6 +36,7 @@ class env(AECEnv):
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: 0 for agent in self.agents}
+        self.observations = {agent: 0 for agent in self.agents}
         self.num_moves = 0
 
     def render(self, mode="human"):
