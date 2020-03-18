@@ -15,7 +15,8 @@ while True:
         elif event.type == MOUSEBUTTONUP:
             x, y = event.pos
             board.process_click(x, y)
-            print([box.state for box in board.boxes])
+            print("Board: " + str([box.state for box in board.boxes]))
+            print("Winner: " + str(board.check_for_winner()))
 
     pygame.display.update()
     clock.tick(30)
