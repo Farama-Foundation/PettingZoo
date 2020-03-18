@@ -1,6 +1,7 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
+from .manual_control import manual_control
 
 from .tictactoe_utils import Board
 
