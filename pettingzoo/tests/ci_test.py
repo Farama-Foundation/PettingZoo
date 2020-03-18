@@ -144,14 +144,14 @@ if sys.argv[1] == 'classic/texas_holdem_no_limit':
     _env = texas_holdem_no_limit.env()
     performance_benchmark.performance_benchmark(_env)
 
-if sys.argv[1] == 'classic/tic_tac_toe':
-    print('classic/tic_tac_toe')
-    from pettingzoo.gamma import tic_tac_toe
-    _env = tic_tac_toe.env()
+if sys.argv[1] == 'classic/tictactoe':
+    print('classic/tictactoe')
+    from pettingzoo.classic import tictactoe
+    _env = tictactoe.env()
     api_test.api_test(_env)
-    _env = tic_tac_toe.env()
+    _env = tictactoe.env()
     bombardment_test.bombardment_test(_env)
-    _env = tic_tac_toe.env()
+    _env = tictactoe.env()
     performance_benchmark.performance_benchmark(_env)
 
 if sys.argv[1] == 'classic/uno':
