@@ -54,6 +54,16 @@ if sys.argv[1] == 'classic/dou_dizhu':
     _env = dou_dizhu.env()
     performance_benchmark.performance_benchmark(_env)
 
+if sys.argv[1] == 'classic/gin_rummy':
+    print('classic/gin_rummy')
+    from pettingzoo.classic import gin_rummy
+    _env = gin_rummy.env()
+    api_test.api_test(_env)
+    _env = gin_rummy.env()
+    bombardment_test.bombardment_test(_env)
+    _env = gin_rummy.env()
+    performance_benchmark.performance_benchmark(_env)
+
 if sys.argv[1] == 'classic/go':
     print('classic/go')
     from pettingzoo.classic import go

@@ -10,9 +10,7 @@ class env(AECEnv):
         self.env = rlcard.make('gin-rummy',**kwargs)
         self.num_agents = 2
         self.agents = list(range(self.num_agents))
-        self.dones = self.convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self.convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-
+        
         self.reset()
 
         self.observation_spaces = dict(zip(self.agents, [spaces.Box(low=0.0, high=1.0, shape=(5,52), dtype=np.float32) for _ in range(self.num_agents)]))
@@ -49,8 +47,10 @@ class env(AECEnv):
         obs, player_id = self.env.init_game()
         self.agent_selection = player_id
         self.agent_order = [player_id, 0 if player_id==1 else 1]
-        self.infos[player_id]['legal_moves'] = obs['legal_actions']
         self.rewards = self.convert_to_dict(np.array([0.0, 0.0]))
+        self.dones = self.convert_to_dict([False for _ in range(self.num_agents)])
+        self.infos = self.convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
+        self.infos[player_id]['legal_moves'] = obs['legal_actions']
         if observe:
             return obs['obs']
         else:
