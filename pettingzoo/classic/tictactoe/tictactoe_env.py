@@ -50,8 +50,17 @@ class env(AECEnv):
     def step(self, action, observe=True):
         # check if input action is a valid move
         if(self.board.boxes[action] == 0):
+            # board stores state of current player
+            # board.turn == 1 -> agent 0's turn
+            # board.turn == 2 -> agent 1's turn
+            self.dones[self.board.turn - 1] = True
+
             # play turn
             self.board.play_turn(self.board.boxes[action])
+
+            # update infos
+            # ie list of size 9 where 1 represents valid move, 0 is invalid move.
+            self.infos[self.agent_selection] = [1 if not i else 0 for i in self.board.boxes]
 
             # check if game over
             game_over = all(box.state in [1, 2] for box in self.boxes)
@@ -63,6 +72,7 @@ class env(AECEnv):
 
             if game_over:
                 if winner == 0:
+                    # tie
                     pass
                 elif winner == 1:
                     # agent 0 won
@@ -82,11 +92,14 @@ class env(AECEnv):
         else:
             return
 
-    # last is added as a part of the AECEnv class, don't write it yourself
-
     def reset(self, observe=True):
         # reset environment
         self.board = Board()
+
+        self.rewards = {i: 0 for i in range(self.num_agents)}
+        self.dones = {i: False for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': []} for i in range(self.num_agents)}
+        self.infos[self.agent_selection]['legal_moves'] = chess_utils.legal_moves(self.board)
 
         # selects the first agent
         self._agent_selector.reinit(self.agent_order)
@@ -97,7 +110,7 @@ class env(AECEnv):
             return
 
     def render(self, mode='human'): # not all environments will support rendering
-        pass
+        print("Board: " + str([box.state for box in board.boxes]))
 
     def close(self):
         pass
