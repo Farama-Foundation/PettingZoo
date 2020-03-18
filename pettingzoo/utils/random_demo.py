@@ -1,4 +1,5 @@
 import time
+import random
 
 
 def random_demo(env, render=True):
@@ -31,7 +32,11 @@ def random_demo(env, render=True):
                     total_reward += reward
                     print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
                 initial_iteration[agent] = False
-                action = env.action_spaces[agent].sample()
+
+                if 'legal_moves' in env.infos[agent]:
+                    action = random.choice(env.infos[agent]['legal_moves'])
+                else:
+                    action = env.action_spaces[agent].sample()
                 env.step(action, observe=False)
         done = all(dones.values())
         if done:
