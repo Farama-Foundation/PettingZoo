@@ -1,6 +1,7 @@
 import numpy as np
 from .pursuit import env as _env
 import time
+import pygame
 
 
 def manual_control(**kwargs):
@@ -22,40 +23,6 @@ def manual_control(**kwargs):
     _actions = np.array([4]*env.num_agents)
     _agent_id = np.array([0])
     
-    # ------ controlling pursuers ------ 
-    import matplotlib.pyplot as plt
-    fig, ax = plt.subplots()
-    
-    def on_key(event):
-        # print('you pressed', event.key)
-        if event.key == "escape":
-            _quit_loop[0] = 1
-            # break
-        if event.key == "backspace":
-            env.reset()
-        if event.key == "j":
-            # pressing 'j' moves the focus of control to the next agent
-            # control rolls over to the first agent
-            _agent_id[0] = (_agent_id[0] + 1) % env.num_agents
-        if event.key == "k":
-            # pressing 'k' moves the focus of control to the previous agent
-            # control rolls over to the lastagent
-            _agent_id[0] = (_agent_id[0] - 1) % env.num_agents
-        if event.key == "left":
-            # p1: left
-            _actions[_agent_id[0]] = 0
-        if event.key == "right":
-            # p1: right
-            _actions[_agent_id[0]] = 1
-        if event.key == "up":
-            # p1: up
-            _actions[_agent_id[0]] = 3
-        if event.key == "down":
-            # p1: down
-            _actions[_agent_id[0]] = 2
-    
-    cid = fig.canvas.mpl_connect('key_press_event', on_key)
-    # ------ controlling pursuers ------ 
     
     done = False
     num_frames = 0
@@ -66,6 +33,33 @@ def manual_control(**kwargs):
         env.render()
         if _quit_loop[0]:
             break
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_j:
+                    # pressing 'j' moves the focus of control to the next agent
+                    # control rolls over to the first agent
+                    _agent_id[0] = (_agent_id[0] + 1) % env.num_agents
+                elif event.key == pygame.K_k:
+                    # pressing 'k' moves the focus of control to the previous agent
+                    # control rolls over to the lastagent
+                    _agent_id[0] = (_agent_id[0] - 1) % env.num_agents
+                elif event.key == pygame.K_UP:
+                    # p1: up
+                    _actions[_agent_id[0]] = 3
+                elif event.key == pygame.K_DOWN:
+                    # p1: down
+                    _actions[_agent_id[0]] = 2
+                elif event.key == pygame.K_LEFT:
+                     # p1: left
+                    _actions[_agent_id[0]] = 0
+                elif event.key == pygame.K_RIGHT:
+                    # p1: right
+                    _actions[_agent_id[0]] = 1
+                elif event.key == pygame.K_BACKSPACE:
+                    env.reset()
+                elif event.key == pygame.K_ESCAPE:
+                    _quit_loop[0] = 1
+                    # break
         # actions should be a dict of numpy arrays
         action_dict = dict(zip(env.agents, _actions))
         for a in _actions:
