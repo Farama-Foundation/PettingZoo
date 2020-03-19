@@ -3,10 +3,15 @@ import pygame.math
 from pygame.locals import *
 import pygame.font
 
+import pymunk as pm
+from pymunk.pygame_util import to_pygame
+from pymunk import Vec2d
+
+import math
 import os
 from random import random, uniform
 
-from pettingzoo.utils import AECEnv
+# from pettingzoo.utils import AECEnv
 
 SCREEN_SIZE = (1002, 699) # Looks weird, but is the size of the background image
 RED = (255, 0, 0)
@@ -23,11 +28,16 @@ BASE_VECTOR = pygame.Vector2(1, 0)
 
 MOVE_SPEED = 10
 
+ROTATION_SPEED = math.pi / 12
+
 def load_image(path: list) -> pygame.Surface: # All images stored in data/
     img = pygame.image.load(os.path.join('data', *path))
     img = img.convert_alpha()
-
     return img
+
+def convert_coords(coords):
+    """Convert chipmunk coordinates to pygame coordinates."""
+    return Vec2d(coords[0], -coords[1] + 600)
 
 class Gold:
     def __init__(self):
@@ -56,9 +66,10 @@ class Gold:
 
 
 class Prospector:
-    def __init__(self):
+    def __init__(self, space):
         self.x = uniform(50, SCREEN_SIZE[0] - 50)
         self.y = uniform(200, 400)
+        self.vertices = [(0, 0), (self.x, 0), (self.x, self.y), (0, self.y)]
 
         self.surf = load_image(['agent1.jpg'])
         self.surf_orig = self.surf.copy()
@@ -67,11 +78,19 @@ class Prospector:
         self.surf_rect.x = self.x
         self.surf_rect.y = self.y
 
-        # Currently unused, would need for rotation
+        # Direction that the sprite is currently facing in 
         self.direc = pygame.Vector2()
         self.direc.xy = 1, 0
 
         self.nugget = None
+
+        ## Pymunk Stuff ----------------------------------
+        self.body = pm.Body()
+        self.shape = pm.Poly(self.body, self.vertices)
+        self.body.position = self.x, self.y
+
+        self.space = space
+        self.space.add(self.body, self.shape)
 
     def update(self, keys, water):
         # forward = 0
@@ -105,16 +124,20 @@ class Prospector:
             theta = 15
 
         self.direc.rotate_ip(theta)
-
         angle = self.direc.angle_to(BASE_VECTOR)
-        
         center = self.surf_rect.center
 
         self.surf = pygame.transform.rotate(self.surf_orig, angle)
 
         self.surf_rect = self.surf.get_rect(center=center)
-
         self.surf_rect.move_ip(x, y)
+
+        # Pymunk updates
+        self.body.velocity += (x, -y)
+
+        self.body.angle += ROTATION_SPEED
+        self.body.angular_velocity = 0
+
         # self.surf = pygame.transform.rotate(self.surf, theta)
         # new_rect = self.surf.get_rect()
         # self.surf_rect = pygame.Rect(*self.surf_rect.topleft, *new_rect.size)
@@ -200,15 +223,32 @@ class Chest:
 
 
 class Water:
-    def __init__(self):
+    def __init__(self, space):
         self.tag = 'water'
         self.rect = pygame.Rect(0, SCREEN_SIZE[1] - 96, 1002, 96)
+
+        ## Pymunk stuff ----------------------------------
+        vertices = [(0, 0), (100, 0), (100, -100), (0, -100)]
+
+        self.body = pm.Body(body_type=pm.Body.STATIC)
+        self.body.position = (0, SCREEN_SIZE[1] - 96)
+
+        self.shape = pm.Poly(None, vertices, radius=2)
+        self.shape.firction = 1.0
+
+        self.space = space
+        self.space.add(self.body, self.shape)
 
 class Game:
     def __init__(self):
         # Pygame setup
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption("Prospector")
+
+        # Pymunk setup
+        self.space = pm.Space()
+        self.space.gravity = Vec2d(0., 0.)
+        self.space.damping = 0
 
         # Used for making movement framerate-independent.
         self.clock = pygame.time.Clock()
@@ -218,10 +258,10 @@ class Game:
         self.background = load_image(['background.jpg'])
         self.background_rect = self.background.get_rect()
 
-        self.water = Water()
+        self.water = Water(self.space)
 
         # Prospectors
-        self.prospec_1 = Prospector()
+        self.prospec_1 = Prospector(self.space)
 
         # Fonts setup
         default = pygame.font.get_default_font()
@@ -233,7 +273,7 @@ class Game:
         self.chests.append(Chest(143 * 3, 0, 2, font))
         self.chests.append(Chest(143 * 5, 0, 3, font))
 
-        # Gold token initialization
+        
 
     def run(self):
         running = True
@@ -243,6 +283,8 @@ class Game:
                     running = False
                 if event.type == KEYDOWN and event.key == K_p:
                     print(self.chests[0], self.chests[1], self.chests[2])
+
+            self.space.step(1/60)
 
             time_delta = self.clock.tick(self.framerate)
             keys = pygame.key.get_pressed()
@@ -255,7 +297,14 @@ class Game:
             # Drawing ---------------------------------------------
             self.screen.blit(self.background, self.background_rect)
 
+
             self.prospec_1.draw(self.screen)
+            shape = self.prospec_1
+            ps = [convert_coords(ps.rotated(shape.body.angle) + shape.body.position)
+                  for pos in shape.get_vertices()]
+            ps.append([ps[0]])
+
+            pygame.draw.lines(self.screen, (255, 255, 255), False, ps, 2)
 
             for c in self.chests:
                 c.draw(self.screen)
@@ -267,10 +316,15 @@ def main():
     pygame.font.init()
     pygame.init()
     game = Game()
-    game.run()
+    # game.run()
 
 
 if __name__ == "__main__":
     main()
 
 
+
+# class env(AECEnv):
+#     def __init__(self):
+#         pass
+    
