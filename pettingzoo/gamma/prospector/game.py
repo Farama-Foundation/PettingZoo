@@ -6,7 +6,7 @@ import pygame.font
 import os
 from random import random, uniform
 
-SCREEN_SIZE = (1002, 699) # Looks weird, but is the size of the background image
+SCREEN_SIZE = (1002, 699)  # Looks weird, but is the size of the background image
 RED = (255, 0, 0)
 CHEST_COLOR_1 = (185, 115, 34)
 CHEST_COLOR_2 = (3, 252, 252)
@@ -21,17 +21,19 @@ BASE_VECTOR = pygame.Vector2(1, 0)
 
 MOVE_SPEED = 10
 
-def load_image(path: list) -> pygame.Surface: # All images stored in data/
-    img = pygame.image.load(os.path.join('data', *path))
+
+def load_image(path: list) -> pygame.Surface:  # All images stored in data/
+    img = pygame.image.load(os.path.join("data", *path))
     img = img.convert_alpha()
 
     return img
 
+
 class Gold:
     def __init__(self):
-        self.tag = 'gold'
+        self.tag = "gold"
 
-        self.surf = load_image(['gold', '6.png'])
+        self.surf = load_image(["gold", "6.png"])
         self.surf_rect = self.surf.get_rect()
 
         self.active = True
@@ -41,7 +43,7 @@ class Gold:
         if self.active:
             self.surf_rect.x = x + 10
             self.surf_rect.y = y + 9
-    
+
     def draw(self, screen: pygame.Surface):
         if self.active:
             screen.blit(self.surf, self.surf_rect)
@@ -52,13 +54,12 @@ class Gold:
         self.surf_rect.y = 0
 
 
-
 class Prospector:
     def __init__(self):
         self.x = uniform(50, SCREEN_SIZE[0] - 50)
         self.y = uniform(200, 400)
 
-        self.surf = load_image(['agent1.jpg'])
+        self.surf = load_image(["agent1.jpg"])
         self.surf_orig = self.surf.copy()
         self.surf_rect = self.surf.get_rect()
 
@@ -77,7 +78,7 @@ class Prospector:
         #     forward = MOVE_SPEED
         # elif keys[K_DOWN]:
         #     forward = -MOVE_SPEED
-        
+
         # if keys[K_LEFT]:
         #     self.vel = self.vel.rotate_ip(15)
         # elif keys[K_RIGHT]:
@@ -89,7 +90,7 @@ class Prospector:
             y = -MOVE_SPEED
         elif keys[K_s]:
             y = MOVE_SPEED
-        
+
         if keys[K_a]:
             x = -MOVE_SPEED
         elif keys[K_d]:
@@ -105,7 +106,7 @@ class Prospector:
         self.direc.rotate_ip(theta)
 
         angle = self.direc.angle_to(BASE_VECTOR)
-        
+
         center = self.surf_rect.center
 
         self.surf = pygame.transform.rotate(self.surf_orig, angle)
@@ -119,7 +120,7 @@ class Prospector:
 
         print(self.surf_rect.size)
 
-        # Check for collisions ------ 
+        # Check for collisions ------
         # NO NEED (water generates nuggets)
         # if self.nugget is None:
         #     # If we are colliding with a gold nugget, set it to us
@@ -135,7 +136,7 @@ class Prospector:
         #             c.score()
         #             self.nugget.deactivate()
         #             self.nugget = None
-                    
+
         #             break
 
         # Water collision ----------------------------
@@ -143,8 +144,6 @@ class Prospector:
             if self.surf_rect.colliderect(water.rect):
                 self.nugget = Gold()
 
-
-        
         # Correct movement to fit in bounds of screen ------------
         if self.surf_rect.x < 0:
             self.surf_rect.x = 0
@@ -153,9 +152,14 @@ class Prospector:
 
         if self.surf_rect.y < CHEST_SIZE[1]:
             self.surf_rect.y = CHEST_SIZE[1]
-        elif self.surf_rect.y > (SCREEN_SIZE[1] - self.surf_rect.height) - water.rect.height:
-            self.surf_rect.y = (SCREEN_SIZE[1] - self.surf_rect.height) - water.rect.height
-        
+        elif (
+            self.surf_rect.y
+            > (SCREEN_SIZE[1] - self.surf_rect.height) - water.rect.height
+        ):
+            self.surf_rect.y = (
+                SCREEN_SIZE[1] - self.surf_rect.height
+            ) - water.rect.height
+
         # Update gold nugget position if we have one
         if self.nugget is not None:
             self.nugget.update(*self.surf_rect.topleft)
@@ -166,6 +170,7 @@ class Prospector:
         screen.blit(self.surf, self.surf_rect)
         if self.nugget is not None:
             self.nugget.draw(screen)
+
 
 class Chest:
     def __init__(self, x, y, num, font):
@@ -194,13 +199,14 @@ class Chest:
         self.text = self.font.render(str(self.count), True, WHITE)
 
     def __str__(self):
-        return f'Chest {self.num}: {self.count}'
+        return f"Chest {self.num}: {self.count}"
 
 
 class Water:
     def __init__(self):
-        self.tag = 'water'
+        self.tag = "water"
         self.rect = pygame.Rect(0, SCREEN_SIZE[1] - 96, 1002, 96)
+
 
 class Game:
     def __init__(self):
@@ -213,7 +219,7 @@ class Game:
         self.framerate = 60
 
         # Background stuff
-        self.background = load_image(['background.jpg'])
+        self.background = load_image(["background.jpg"])
         self.background_rect = self.background.get_rect()
 
         self.water = Water()
