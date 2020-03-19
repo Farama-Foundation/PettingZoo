@@ -1,5 +1,6 @@
 from .waterworld_base import MAWaterWorld as _env
-from pettingzoo.utils import AECEnv,agent_selector
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 import numpy as np
 
 
@@ -24,7 +25,7 @@ class env(AECEnv):
 
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
 
         self.reset()
 
@@ -33,14 +34,14 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         observation = self.env.reset()
-        self.agent_selection = 0
         self.steps = 0
         self.agent_selector_obj.reinit(self.agent_order)
+        self.agent_selection = self.agent_selector_obj.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         if observe:
-            return observation
+            return self.observe(0)
 
     def close(self):
         self.env.close()
@@ -76,27 +77,28 @@ class env(AECEnv):
     #     return observation_dict, reward_dict, done_dict, info_dict
 
     def step(self, action, observe = True):
-        self.agent_selection = self.agent_selector_obj.next()
+        agent = self.agent_selection
         if any(action) == None or any(action) == np.NaN:
             action = [0 for _ in action]
         elif not self.action_spaces[agent].contains(action):
             raise Exception('Action for agent {} must be in {}. \
-                                 It is currently {}'.format(agent, self.action_spaces[sagent], action))
+                                 It is currently {}'.format(agent, self.action_spaces[agent], action))
 
         self.env.step(action, agent)
-        self.rewards = dict(zip(self.agents,self.env.last_rewards))
+        self.rewards[agent] = self.env.last_rewards[agent]
 
-        if self.steps >= 500:
+        if self.steps >= 1000:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
         else:
             self.dones = dict(zip(self.agents,self.env.last_dones))
-        self.agent_selection = self.agent_selector_object.select()
+        self.agent_selection = self.agent_selector_obj.next()
 
         #AGENT SELECT
         
         self.steps += 1
-
-        return self.observe(self.agent_selection)
+        
+        if observe:
+            return self.observe(self.agent_selection)
 
     def observe(self, agent):
         agent = agent % self.num_agents

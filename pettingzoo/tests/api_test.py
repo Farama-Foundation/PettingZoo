@@ -2,7 +2,7 @@ import pettingzoo
 import warnings
 import numpy as np
 import gym
-
+import random
 
 def test_obervation(observation, observation_0):
     if isinstance(observation, np.ndarray):
@@ -103,15 +103,22 @@ def test_rewards_dones(env, agent_0):
 def play_test(env, observation_0):
     prev_observe = env.reset()
     for agent in env.agent_order:  # step through every agent once with observe=True
-        action = env.action_spaces[agent].sample()
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
 
+    env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
     for agent in env.agent_order:  # step through every agent once with observe=False
-        action = env.action_spaces[agent].sample()
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
         reward, done, info = env.last()
         assert isinstance(done, bool), "last done is not True or False"
         assert reward == env.rewards[agent], "last reward and rewards[agent] do not match"
@@ -132,11 +139,17 @@ def test_render(env):
     render_modes = env.metadata.get('render.modes')
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
     for mode in render_modes:
-        for agent in env.agent_order:
-            action = env.action_spaces[agent].sample()
-            env.step(action, observe=False)
-            env.render(mode=mode)
-        env.close()
+        for _ in range(10):
+            for agent in env.agent_order:
+                if 'legal_moves' in env.infos[agent]:
+                    action = random.choice(env.infos[agent]['legal_moves'])
+                else:
+                    action = env.action_spaces[agent].sample()
+                env.step(action, observe=False)
+                env.render(mode=mode)
+                if all(env.dones.values()):
+                    env.reset()
+                    break
 
 
 def test_manual_control(env):
@@ -144,6 +157,7 @@ def test_manual_control(env):
 
 
 def api_test(env, render=False, manual_control=False):
+    print("Starting API test")
     if manual_control:
         assert render, "Rendering must be enabled to test manual control"
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
@@ -172,8 +186,12 @@ def api_test(env, render=False, manual_control=False):
 
     test_observe(env, observation_0)
 
-    test_render(env)
+    if render:
+        test_render(env)
 
-    test_manual_control(env)
+    if manual_control:
+        test_manual_control(env)
 
-    print("Passes API Tests")  # You only get here if you don't fail
+    env.close()
+
+    print("Passed API test")  # You only get here if you don't fail

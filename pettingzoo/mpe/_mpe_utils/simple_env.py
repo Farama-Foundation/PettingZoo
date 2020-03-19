@@ -1,6 +1,6 @@
 from gym import spaces
 import numpy as np
-from pettingzoo.utils.env import AECEnv
+from pettingzoo import AECEnv
 
 
 class SimpleEnv(AECEnv):

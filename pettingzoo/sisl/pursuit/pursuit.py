@@ -1,5 +1,6 @@
 from .pursuit_base import Pursuit as _env
-from pettingzoo.utils import AECEnv, agent_selector
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 import numpy as np
 
 
@@ -23,9 +24,9 @@ class env(AECEnv):
         self.steps = 0
         self.display_wait = 0.0
 
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = dict(zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
 
         self.reset()
 
@@ -35,9 +36,9 @@ class env(AECEnv):
     def reset(self, observe=True):
         obs = self.env.reset()
         self.steps = 0
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = dict(zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.agent_selector_obj.reinit(self.agent_order)
         self.agent_selection = self.agent_selector_obj.next()
         if observe:

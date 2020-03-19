@@ -352,31 +352,47 @@ class Checkers:
         self._turn = turn
         self._last_moved_piece = last_moved_piece
 
+class Player(object):
+    '''An abstract player.'''
 
-if __name__ == '__main__':
-    ch = Checkers(empty_corner=True)
-    ch.print_empty_board()
-    state = ch.save_state()
-    assert ch.sq2pos(31) == (7, 6)
-    assert ch.pos2sq(7, 6) == 31
-    print(ch.flat_board())
-    ch._board['white']['kings'].add(13)
-    ch.print_board()
-    print(ch.neighbors)
-    print(ch.available_simple_moves('black', 'men', 8))
-    print(ch.available_jumps('black', 'men', 8))
-    print(ch.legal_moves())
-    print(ch.move(8, 17))
-    ch.print_board()
-    ch.restore_state(state)
+    def __init__(self, color, seed=None):
+        assert color in Checkers.all_players, '`color` must be in %r.' % Checkers.all_players
 
-    # Play a quick game
-    ply = 0
-    winner = None
-    while winner is None:
-        # Select a legal move for the current player
-        move = ch.legal_moves()[0]
-        board, turn, last_moved_piece, moves, winner = ch.move(*move, skip_check=True)
-        ch.print_board()
-        print(ply, turn, last_moved_piece, winner)
-        ply += 1
+        # Which side is being played
+        self.color = color
+        # Internal simulator for rollouts
+        self.simulator = Checkers()
+        # Fixing the random state for easy replications
+        self.random = np.random.RandomState(seed=seed)
+
+    def next_move(self, board, last_moved_piece):
+        raise NotImplementedError
+
+
+# if __name__ == '__main__':
+#     ch = Checkers(empty_corner=True)
+#     ch.print_empty_board()
+#     state = ch.save_state()
+#     assert ch.sq2pos(31) == (7, 6)
+#     assert ch.pos2sq(7, 6) == 31
+#     print(ch.flat_board())
+#     ch._board['white']['kings'].add(13)
+#     ch.print_board()
+#     print(ch.neighbors)
+#     print(ch.available_simple_moves('black', 'men', 8))
+#     print(ch.available_jumps('black', 'men', 8))
+#     print(ch.legal_moves())
+#     print(ch.move(8, 17))
+#     ch.print_board()
+#     ch.restore_state(state)
+
+#     # Play a quick game
+#     ply = 0
+#     winner = None
+#     while winner is None:
+#         # Select a legal move for the current player
+#         move = ch.legal_moves()[0]
+#         board, turn, last_moved_piece, moves, winner = ch.move(*move, skip_check=True)
+#         ch.print_board()
+#         print(ply, turn, last_moved_piece, winner)
+#         ply += 1

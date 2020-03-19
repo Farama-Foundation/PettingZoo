@@ -2,7 +2,7 @@ import os
 import numpy as np
 import gym
 from .cake_paddle import CakePaddle
-from pettingzoo.utils.env import AECEnv
+from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -232,8 +232,14 @@ class CooperativePong(gym.Env):
 
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
+        self.reinit()
 
-        self.reset()
+    def reinit(self):
+        self.agents = list(range(self.num_agents))
+        self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
+        self.dones = dict(zip(self.agents, [False] * len(self.agents)))
+        self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
+        self.score = 0
 
     def reset(self):
         # does not return observations
@@ -254,18 +260,15 @@ class CooperativePong(gym.Env):
 
         self.done = False
 
-        self.score = 0
         self.num_frames = 0
 
-        self.agents = list(range(self.num_agents))
-        self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
-        self.dones = dict(zip(self.agents, [False] * len(self.agents)))
-        self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
+        self.reinit()
 
         self.draw()
 
     def close(self):
         if self.renderOn:
+            pygame.event.pump()
             pygame.display.quit()
             self.renderOn = False
 
@@ -357,6 +360,7 @@ class env(AECEnv):
         self.agents = self.env.agents
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
+        self.agent_selection = self._agent_selector.reset()
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
@@ -369,15 +373,13 @@ class env(AECEnv):
         self.score = self.env.score
         self.display_wait = 0.0
 
-        self.reset()
-
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
 
     def reset(self, observe=True):
         self.env.reset()
+        self.agent_selection = self._agent_selector.reset()
         if observe:
-            self.agent_selection = self._agent_selector.next()
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
@@ -401,6 +403,9 @@ class env(AECEnv):
         self.env.step(action, agent)
         # select next agent and observe
         self.agent_selection = self._agent_selector.next()
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
 
         self.score = self.env.score
 
