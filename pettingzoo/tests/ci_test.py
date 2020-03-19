@@ -48,7 +48,7 @@ if sys.argv[1] == 'classic/connect_four':
 if sys.argv[1] == 'classic/dou_dizhu':
     from pettingzoo.classic import dou_dizhu
     _env = dou_dizhu.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = dou_dizhu.env()
     bombardment_test.bombardment_test(_env)
     _env = dou_dizhu.env()
@@ -58,7 +58,7 @@ if sys.argv[1] == 'classic/gin_rummy':
     print('classic/gin_rummy')
     from pettingzoo.classic import gin_rummy
     _env = gin_rummy.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = gin_rummy.env()
     bombardment_test.bombardment_test(_env)
     _env = gin_rummy.env()
@@ -88,7 +88,7 @@ if sys.argv[1] == 'classic/leduc_holdem':
     print('classic/leduc_holdem')
     from pettingzoo.classic import leduc_holdem
     _env = leduc_holdem.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = leduc_holdem.env()
     bombardment_test.bombardment_test(_env)
     _env = leduc_holdem.env()
@@ -98,7 +98,7 @@ if sys.argv[1] == 'classic/mahjong':
     print('classic/mahjong')
     from pettingzoo.classic import mahjong
     _env = mahjong.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = mahjong.env()
     bombardment_test.bombardment_test(_env)
     _env = mahjong.env()
@@ -128,7 +128,7 @@ if sys.argv[1] == 'classic/texas_holdem':
     print('classic/texas_holdem')
     from pettingzoo.classic import texas_holdem
     _env = texas_holdem.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = texas_holdem.env()
     bombardment_test.bombardment_test(_env)
     _env = texas_holdem.env()
@@ -138,7 +138,7 @@ if sys.argv[1] == 'classic/texas_holdem_no_limit':
     print('classic/texas_holdem_no_limit')
     from pettingzoo.classic import texas_holdem_no_limit
     _env = texas_holdem_no_limit.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = texas_holdem_no_limit.env()
     bombardment_test.bombardment_test(_env)
     _env = texas_holdem_no_limit.env()
@@ -158,7 +158,7 @@ if sys.argv[1] == 'classic/uno':
     print('classic/uno')
     from pettingzoo.classic import uno
     _env = uno.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = uno.env()
     bombardment_test.bombardment_test(_env)
     _env = uno.env()
