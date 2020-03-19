@@ -10,6 +10,11 @@ def random_demo(env, render=True):
     # env = _env(n_pursuers=n_pursuers)
     env.reset()
 
+    if hasattr(env, 'display_wait'):
+        display_wait = env.display_wait
+    else:
+        display_wait = 0.0
+
     total_reward = 0
     observations = {}
     initial_iteration = {agent: True for agent in env.agents}
@@ -21,7 +26,7 @@ def random_demo(env, render=True):
         # game should run at 15 FPS when rendering
         if render:
             env.render()
-            time.sleep(env.display_wait)
+            time.sleep(display_wait)
 
         for _ in env.agents:
             agent = env.agent_selection
