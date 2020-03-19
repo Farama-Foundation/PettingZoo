@@ -235,7 +235,7 @@ class BipedalWalker(Agent):
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
         idx = MAX_AGENTS if self.one_hot else 1
-        return spaces.Box(low=-np.inf, high=np.inf, shape=(24 + 4 + 3 + idx,))
+        return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3 + idx,))
 
     @property
     def action_space(self):
@@ -263,6 +263,7 @@ class MultiWalkerEnv():
         self.terminate_on_fall = terminate_on_fall
         self.one_hot = one_hot
         self.setup()
+        self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
@@ -505,15 +506,15 @@ class MultiWalkerEnv():
                 self.last_rewards = rewards
             else:
                 self.last_rewards = [rewards.mean() for _ in range(self.n_walkers)]
-            self.last_dones = dict(zip(list(range(self.n_walkers)), [done for _ in range(self.n_walkers)]))
+            self.last_dones = [done for _ in range(self.n_walkers)]
 
         
 
     def get_last_rewards(self):
-        return dict(zip(list(range(self.n_walkers)), self.last_rewards))
+        return dict(zip(list(range(self.n_walkers)), map(lambda r: np.float64(r), self.last_rewards)))
 
     def get_last_dones(self):
-        return self.last_dones
+        return dict(zip(self.agent_list, self.last_dones))
 
     def get_last_obs(self):
         return dict(zip(list(range(self.n_walkers)), [walker.get_observation() for walker in self.walkers]))

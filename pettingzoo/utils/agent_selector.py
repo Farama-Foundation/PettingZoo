@@ -8,16 +8,22 @@ class agent_selector():
     def reinit(self, agent_order):
         self.agent_order = agent_order
         self._current_agent = 0
+        self.selected_agent = 0
+
+    def reset(self):
+        self.reinit(self.agent_order)
+        return self.next()
 
     def next(self):
         self._current_agent = (self._current_agent + 1) % len(self.agent_order)
-        return self.agent_order[self._current_agent - 1]
+        self.selected_agent = self.agent_order[self._current_agent - 1]
+        return self.selected_agent
 
     def is_last(self):
         '''
         Does not work as expected if you change the order
         '''
-        return self._current_agent == self.agent_order[-1]
+        return self.selected_agent == self.agent_order[-1]
     
     # def peek_next_agent(self):
     #     return self.agent_order[self._current_agent]

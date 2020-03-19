@@ -1,4 +1,5 @@
-from pettingzoo.utils import AECEnv, agent_selector
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 import pygame
 import os
 import numpy as np
@@ -63,10 +64,12 @@ class env(AECEnv):
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo"]
         self.rewards = dict(zip(self.agents,[0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [None for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.metadata = {'render.modes': ['human']} 
+        self.rendering = False
 
         pygame.init()
+        pygame.display.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((750, 650))
         self.num_frames = 0
@@ -177,7 +180,9 @@ class env(AECEnv):
         return self.prisoner_mapping[c]
 
     def close(self):
+        pygame.event.pump()
         pygame.display.quit()
+        pygame.quit()
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -239,7 +244,10 @@ class env(AECEnv):
             self.prisoners[agent].set_state(0)
         
         self.rewards[agent] = reward
-        self.clock.tick(15)
+        if self.rendering:
+            self.clock.tick(15)
+        else:
+            self.clock.tick()
         #self.draw()
 
         self.num_frames += 1
@@ -255,6 +263,7 @@ class env(AECEnv):
             return observation
 
     def render(self, mode='human'):
+        self.rendering = True
         self.draw()
         pygame.display.flip()
 
