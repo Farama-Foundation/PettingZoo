@@ -1,6 +1,6 @@
-## Gamma Enviroments
+## Gamma Environments
 
-| Environment             | Observations | Actions    | Agents  | Manual Control | Action Size | Observation Size | Num States |
+| Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
 |-------------------------|--------------|------------|---------|----------------|-------------|------------------|------------|
 | Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?           | ?                | ?          |
 | Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?           | ?                | ?          |
@@ -15,7 +15,7 @@
 
 ### Cooperative Pong
 
-| Observations | Actions  | Agents | Manual Control | Action Size | Observation Size | Num States |
+| Observations | Actions  | Agents | Manual Control | Action Shape | Observation Shape | Num States |
 |--------------|----------|--------|----------------|-------------|------------------|------------|
 | Graphical    | Discrete | 2      | Yes            | ?           | ?                | ?          |
 
@@ -43,7 +43,7 @@ Leaderboard:
 
 ### Knights Archers Zombies ('KAZ')
 
-| Observations | Actions  | Agents  | Manual Control | Action Size | Observation Size | Num States |
+| Observations | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
 |--------------|----------|---------|----------------|-------------|------------------|------------|
 | Graphical    | Discrete | 4 (+/-) | Yes            | ?           | ?                | ?          |
 
@@ -71,7 +71,7 @@ Leaderboard:
 
 ### Pistonball
 
-| Observations | Actions | Agents | Manual Control | Action Size | Observation Size | Num States |
+| Observations | Actions | Agents | Manual Control | Action Shape | Observation Shape | Num States |
 |--------------|---------|--------|----------------|-------------|------------------|------------|
 | Graphical    | Either  | 20     | Yes            | ?           | ?                | ?          |
 
@@ -106,7 +106,7 @@ Continuous Leaderboard:
 
 ### Prison
 
-| Observations | Actions | Agents | Manual Control | Action Size | Observation Size | Num States |
+| Observations | Actions | Agents | Manual Control | Action Shape | Observation Shape | Num States |
 |--------------|---------|--------|----------------|-------------|------------------|------------|
 | Either       | Either  | 8      | Yes            | ?           | ?                | ?          |
 
@@ -140,7 +140,7 @@ Continuous Leaderboard:
 
 ### Prospector
 
-| Observations | Actions    | Agents  | Manual Control | Action Size | Observation Size | Num States |
+| Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
 |--------------|------------|---------|----------------|-------------|------------------|------------|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?           | ?                | ?          |
 
@@ -162,4 +162,3 @@ Leaderboard:
 | Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|-------------|-------|------|
 | x                    | x      | x           | x     | x    |
-
