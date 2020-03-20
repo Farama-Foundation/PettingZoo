@@ -24,7 +24,7 @@ Add argument handling for cooperative pong, pistonball, KAZ
 `pettingzoo.sisl`
 
 | Environment             | Observations | Actions    | Agents | Manual Control | Action Size | Observation Size |
-|-------------------------|--------------|------------|--------|----------------|---------------------------------
+|-------------------------|--------------|------------|--------|----------------|-------------|-------------------
 | Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            | ? | ? |
 | Knights Archers Zombies |  Graphical   | Discrete   | 4 (+/-)| Yes            | ? | ? |
 | Pistonball              | Graphical    |   Either   |   20   | Yes            | ? | ? |
