@@ -250,7 +250,7 @@ Add Gupta et al and DDPG paper results too
 |--------------|------------|--------|----------------|
 | Graphical    |   Either   | 8 (+/-)| No             |
 
-`pettingzoo.sisl.pursuit`
+`from pettingzoo.sisl import pursuit`
 
 *image*
 
