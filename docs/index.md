@@ -267,28 +267,42 @@ train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
 opponent_layer=AgentLayer(xs, ys, n_evaders))
 ```
 
-*about arguments*
-
+```
 xs, ys: World size
+
 reward_mech: local or global reward mechanism
+
 n_evaders: number of evaders
+
 n_pursuers:  number of pursuers
+
 obs_range: radius of agent observation view
+
 n_catch: number pursuers required to surround an evader
+
 random_opponents: whether to randomize number of evaders on reset
+
 max_opponents: maximum number of random evaders on reset
+
 freeze_evaders: toggles if evaders can move or not
+
 catchr: reward for 'tagging' a single evader
+
 caughtr: reward for getting 'tagged' by a pursuer
+
 term_pursuit: reward for pursuer who catches an evader
+
 urgency_reward: reward added in each step
+
 surround: toggles whether surround is required to remove an evader
+
 constraint_window: window in which agents can randomly spawn
+
 train_pursuit: flag indicating if we are simulating pursuers or evaders
+
 ally_layer: initial pursuers in world
+
 opponent_layer: initial evader in world
-
-
 
 
 Leaderboard:
