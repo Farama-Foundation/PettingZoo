@@ -17,9 +17,10 @@ Note to us: add max_frames=900 to all the games
 
 ### Cooperative Pong
 
-| Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
-|--------------|------------|--------|----------------|-|-|-|
-| Graphical    | Discrete   |   2    | Yes            |?|?|?|
+| Observations | Actions  | Agents | Manual Control | Action Size | Observation Size | Num States |
+|--------------|----------|--------|----------------|-------------|------------------|------------|
+| Graphical    | Discrete | 2      | Yes            | ?           | ?                | ?          |
+
 
 `from pettingzoo.gamma import cooperative_pong`
 
@@ -38,15 +39,15 @@ right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
 
 Leaderboard:
 
-| Average Total Reward | Method | Institution  | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+| Average Total Reward | Method | Institution | Paper | Code |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 ### Knights Archers Zombies ('KAZ')
 
-| Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
-|--------------|------------|--------|----------------|-|-|-|
-|  Graphical   | Discrete   | 4 (+/-)| Yes            |?|?|?|
+| Observations | Actions  | Agents  | Manual Control | Action Size | Observation Size | Num States |
+|--------------|----------|---------|----------------|-------------|------------------|------------|
+| Graphical    | Discrete | 4 (+/-) | Yes            | ?           | ?                | ?          |
 
 `from pettingzoo.gamma import knights_archers_zombies`
 
@@ -66,14 +67,14 @@ killable_knights=True, killable_archers=True, line_death=True, max_frames=900)
 Leaderboard:
 
 | Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 ### Pistonball
 
-| Environment             | Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
-|-------------------------|--------------|------------|--------|----------------|-|-|-|
-| Pistonball              | Graphical    |   Either   |   20   | Yes            |?|?|?|
+| Observations | Actions | Agents | Manual Control | Action Size | Observation Size | Num States |
+|--------------|---------|--------|----------------|-------------|------------------|------------|
+| Graphical    | Either  | 20     | Yes            | ?           | ?                | ?          |
 
 `from pettingzoo.gamma import pistonball`
 
@@ -93,21 +94,22 @@ ball.elasticity=1.5, max_frames=900)
 
 Discrete Leaderboard:
 
-| Average Total Reward | Method | Institution  | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+| Average Total Reward | Method | Institution | Paper | Code |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 Continuous Leaderboard:
 
-| Average Total Reward | Method | Institution  | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+| Average Total Reward | Method | Institution | Paper | Code |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 ### Prison
 
-| Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
-|--------------|------------|--------|----------------|-|-|-|
-| Either       |   Either   |   8    | Yes            |?|?|?|
+| Observations | Actions | Agents | Manual Control | Action Size | Observation Size | Num States |
+|--------------|---------|--------|----------------|-------------|------------------|------------|
+| Either       | Either  | 8      | Yes            | ?           | ?                | ?          |
+
 
 `from pettingzoo.gamma import prison`
 
@@ -125,21 +127,21 @@ max_frames=900)
 
 Discrete Leaderboard:
 
-| Average Total Reward | Method | Institution  | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+| Average Total Reward | Method | Institution | Paper | Code |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 Continuous Leaderboard:
 
-| Average Total Reward | Method | Institution  | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+| Average Total Reward | Method | Institution | Paper | Code |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
 
 ### Prospector
 
-| Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
-|--------------|------------|--------|----------------|-|-|-|
-|    Graphical | Continuous | 7 (+/-)| Yes            |?|?|?|
+| Observations | Actions    | Agents  | Manual Control | Action Size | Observation Size | Num States |
+|--------------|------------|---------|----------------|-------------|------------------|------------|
+| Graphical    | Continuous | 7 (+/-) | Yes            | ?           | ?                | ?          |
 
 `from pettingzoo.gamma import prospector`
 
@@ -156,5 +158,6 @@ There are a handful of bank chests at the top of the screen. The panner agents c
 Leaderboard:
 
 | Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
+|----------------------|--------|-------------|-------|------|
+| x                    | x      | x           | x     | x    |
+
