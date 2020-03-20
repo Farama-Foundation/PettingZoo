@@ -1,12 +1,13 @@
 ## Gamma Environments
 
 | Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|-------------------------|--------------|------------|---------|----------------|-------------|------------------|------------|
-| Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?           | ?                | ?          |
-| Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?           | ?                | ?          |
-| Pistonball              | Graphical    | Either     | 20      | Yes            | ?           | ?                | ?          |
-| Prison                  | Either       | Either     | 8       | Yes            | ?           | ?                | ?          |
-| Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?           | ?                | ?          |
+|-------------------------|--------------|------------|---------|----------------|--------------|-------------------|------------|
+| Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?            | ?                 | ?          |
+| Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?            | ?                 | ?          |
+| Pistonball              | Graphical    | Either     | 20      | Yes            | ?            | ?                 | ?          |
+| Prison                  | Either       | Either     | 8       | Yes            | ?            | ?                 | ?          |
+| Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |
+
 
 `pip install pettingzoo[gamma]`
 
@@ -16,8 +17,8 @@
 ### Cooperative Pong
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|----------|--------|----------------|-------------|------------------|------------|
-| Graphical    | Discrete | 2      | Yes            | ?           | ?                | ?          |
+|--------------|----------|--------|----------------|--------------|-------------------|------------|
+| Graphical    | Discrete | 2      | Yes            | ?            | ?                 | ?          |
 
 `from pettingzoo.gamma import cooperative_pong`
 
@@ -44,8 +45,8 @@ Leaderboard:
 ### Knights Archers Zombies ('KAZ')
 
 | Observations | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|----------|---------|----------------|-------------|------------------|------------|
-| Graphical    | Discrete | 4 (+/-) | Yes            | ?           | ?                | ?          |
+|--------------|----------|---------|----------------|--------------|-------------------|------------|
+| Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?                 | ?          |
 
 `from pettingzoo.gamma import knights_archers_zombies`
 
@@ -72,8 +73,8 @@ Leaderboard:
 ### Pistonball
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|---------|--------|----------------|-------------|------------------|------------|
-| Graphical    | Either  | 20     | Yes            | ?           | ?                | ?          |
+|--------------|---------|--------|----------------|--------------|-------------------|------------|
+| Graphical    | Either  | 20     | Yes            | ?            | ?                 | ?          |
 
 `from pettingzoo.gamma import pistonball`
 
@@ -141,8 +142,8 @@ Continuous Leaderboard:
 ### Prospector
 
 | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|------------|---------|----------------|-------------|------------------|------------|
-| Graphical    | Continuous | 7 (+/-) | Yes            | ?           | ?                | ?          |
+|--------------|------------|---------|----------------|--------------|-------------------|------------|
+| Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |
 
 `from pettingzoo.gamma import prospector`
 
