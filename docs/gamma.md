@@ -6,7 +6,7 @@
 | Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?           | ?                | ?          |
 | Pistonball              | Graphical    | Either     | 20      | Yes            | ?           | ?                | ?          |
 | Prison                  | Either       | Either     | 8       | Yes            | ?           | ?                | ?          |
-| Prospector              | Graphical    | Continuous | 4 (+/-) | Yes            | ?           | ?                | ?          |
+| Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?           | ?                | ?          |
 
 `pip install pettingzoo[gamma]`
 
