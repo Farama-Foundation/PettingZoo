@@ -8,19 +8,16 @@
 | Prison                  | Either       | Either     | 8       | Yes            | ?           | ?                | ?          |
 | Prospector              | Graphical    | Continuous | 4 (+/-) | Yes            | ?           | ?                | ?          |
 
-
 `pip install pettingzoo[gamma]`
 
 *General notes on environments*
 
-Note to us: add max_frames=900 to all the games
 
 ### Cooperative Pong
 
 | Observations | Actions  | Agents | Manual Control | Action Size | Observation Size | Num States |
 |--------------|----------|--------|----------------|-------------|------------------|------------|
 | Graphical    | Discrete | 2      | Yes            | ?           | ?                | ?          |
-
 
 `from pettingzoo.gamma import cooperative_pong`
 
@@ -42,6 +39,7 @@ Leaderboard:
 | Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|-------------|-------|------|
 | x                    | x      | x           | x     | x    |
+
 
 ### Knights Archers Zombies ('KAZ')
 
@@ -69,6 +67,7 @@ Leaderboard:
 | Average Total Reward | Method | Institution | Paper | Code |
 |----------------------|--------|-------------|-------|------|
 | x                    | x      | x           | x     | x    |
+
 
 ### Pistonball
 
@@ -104,6 +103,7 @@ Continuous Leaderboard:
 |----------------------|--------|-------------|-------|------|
 | x                    | x      | x           | x     | x    |
 
+
 ### Prison
 
 | Observations | Actions | Agents | Manual Control | Action Size | Observation Size | Num States |
@@ -137,6 +137,7 @@ Continuous Leaderboard:
 |----------------------|--------|-------------|-------|------|
 | x                    | x      | x           | x     | x    |
 
+
 ### Prospector
 
 | Observations | Actions    | Agents  | Manual Control | Action Size | Observation Size | Num States |
@@ -154,6 +155,7 @@ This game is inspired by gold panning in the American "wild west" movies. There'
 There are a handful of bank chests at the top of the screen. The panner agents can hand their held gold nugget to the 2 "manager" agents, to get a reward. The manager agents can't rotate, and the panner agents must give the nuggets (which are held in the front of their body) to the front (always pointing upwards) of the managers. The managers then get the gold, and can deposit it into the chests to recieve a reward. They take a 2 element vector of continuous values (the first for forward/backward, the second for left/right movement). They can only hold 1 nugget at a time.
 
 *arguments and about arguments*
+(mention max_frames=900)
 
 Leaderboard:
 
