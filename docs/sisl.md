@@ -1,13 +1,15 @@
 
 ## SISL Enviroments
 
-`pettingzoo.sisl`
-
 | Environment             | Observations | Actions    | Agents | Manual Control |
 |-------------------------|--------------|------------|--------|----------------|
 | Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |
 | Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |
 | Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
+
+*General Discussion*
+
+Note to us: make 500 frame stopping as argument in all envs
 
 Please additionally cite 
 
