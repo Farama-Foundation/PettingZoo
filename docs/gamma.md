@@ -12,6 +12,8 @@
 
 *General notes on environments*
 
+Note to us: add max_frames=900 to all the games
+
 ### Cooperative Pong
 
 | Observations | Actions    | Agents | Manual Control | Action Size | Observation Size | Num States |
