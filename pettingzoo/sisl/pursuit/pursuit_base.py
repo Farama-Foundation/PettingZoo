@@ -253,11 +253,6 @@ class Pursuit():
                 a = opponent_controller.act(self.model_state)
                 opponent_layer.move_agent(i, a)
 
-        obslist = self.collect_obs(agent_layer)
-        self.latest_obs = obslist
-        obs = obslist[(agent_id+1)%self.num_agents]
-
-        
         self.latest_reward_state += self.term_pursuit * pursuers_who_remove
         self.latest_reward_state += self.urgency_reward
 
@@ -269,8 +264,6 @@ class Pursuit():
             self.clock.tick(10)
         else:
             self.clock.tick()
-
-        return obs
 
     def draw_model_state(self):
         # -1 is building pixel flag
