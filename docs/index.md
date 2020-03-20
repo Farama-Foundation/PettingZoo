@@ -173,7 +173,6 @@ Leaderboard:
 
 | Environment             | Observations | Actions    | Agents | Manual Control |
 |-------------------------|--------------|------------|--------|----------------|
-| Multiant                | ?            | Continuous |   ?    | No             |
 | Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |
 | Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |
 | Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
@@ -190,30 +189,6 @@ Please additionally cite
   organization={Springer}
 }
 ```
-
-### Multiant
-
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-| ?            | Continuous |   ?    | No             |
-
-`pettingzoo.sisl.multiant`
-
-*image*
-
-*blurb*
-
-*arguments*
-
-*about arguments*
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | x      | x            |   x   |   x  |
-
-Add Gupta et al and DDPG paper results too
 
 ### Multiwalker
 
