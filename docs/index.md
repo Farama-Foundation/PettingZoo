@@ -265,9 +265,7 @@ freeze_evaders=False, catchr=0.01, caughtr=-0.01, term_pursuit=5.0,
 urgency_reward=0.0, include_id=True, surround=True, constraint_window=1.0,
 train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
 opponent_layer=AgentLayer(xs, ys, n_evaders))
-```
 
-```
 xs, ys: World size
 
 reward_mech: local or global reward mechanism
@@ -303,7 +301,7 @@ train_pursuit: flag indicating if we are simulating pursuers or evaders
 ally_layer: initial pursuers in world
 
 opponent_layer: initial evader in world
-
+```
 
 Leaderboard:
 
