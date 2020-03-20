@@ -1,7 +1,5 @@
 ## Gamma Enviroments
 
-`pettingzoo.sisl`
-
 | Environment             | Observations | Actions    | Agents | Manual Control | Action Size | Observation Size |
 |-------------------------|--------------|------------|--------|----------------|-------------|-------------------
 | Cooperative Pong        | Graphical    | Discrete   |   2    | Yes            | ? | ? |
