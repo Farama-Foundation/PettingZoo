@@ -268,39 +268,39 @@ opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 xs, ys: World size
 
-reward_mech: local or global reward mechanism
+reward_mech: Local or global reward mechanism
 
-n_evaders: number of evaders
+n_evaders: Number of evaders
 
-n_pursuers:  number of pursuers
+n_pursuers: Number of pursuers
 
-obs_range: radius of agent observation view
+obs_range: Radius of agent observation view
 
-n_catch: number pursuers required to surround an evader
+n_catch: Number pursuers required to surround an evader
 
-random_opponents: whether to randomize number of evaders on reset
+random_opponents: Whether to randomize number of evaders on reset
 
-max_opponents: maximum number of random evaders on reset
+max_opponents: Maximum number of random evaders on reset
 
-freeze_evaders: toggles if evaders can move or not
+freeze_evaders: Toggles if evaders can move or not
 
-catchr: reward for 'tagging' a single evader
+catchr: Reward for 'tagging' a single evader
 
-caughtr: reward for getting 'tagged' by a pursuer
+caughtr: Reward for getting 'tagged' by a pursuer
 
-term_pursuit: reward for pursuer who catches an evader
+term_pursuit: Reward for pursuer who catches an evader
 
-urgency_reward: reward added in each step
+urgency_reward: Reward added in each step
 
-surround: toggles whether surround is required to remove an evader
+surround: Toggles whether surround is required to remove an evader
 
-constraint_window: window in which agents can randomly spawn
+constraint_window: Window in which agents can randomly spawn
 
-train_pursuit: flag indicating if we are simulating pursuers or evaders
+train_pursuit: Flag indicating if we are simulating pursuers or evaders
 
-ally_layer: initial pursuers in world
+ally_layer: Initial pursuers in world
 
-opponent_layer: initial evader in world
+opponent_layer: Initial evader in world
 ```
 
 Leaderboard:
