@@ -1,11 +1,11 @@
 
 ## SISL Enviroments
 
-| Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|-------------------------|--------------|------------|---------|----------------|--------------|-------------------|------------|
-| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             | ?            | ?                 | ?          |
-| Pursuit                 | Graphical    |   Either     | 8 (+/-)| Yes             | ?            | ?                 | ?          |
-| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             | ?            | ?                 | ?          |
+| Environment             | Observations | Actions    | Agents | Manual Control | Action Shape | Observation Shape | Num States |
+|-------------------------|--------------|------------|--------|----------------|-|-|-|
+| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |?|?|?|
+| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |?|?|?|
+| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |?|?|?|
 
 `pip install pettingzoo[sisl]`
 
@@ -34,7 +34,7 @@ Please additionally cite
 
 *image*
 
-A package is placed on top of (by default) 3 pairs of robot legs which you control. The robots must learn to move the package as far as possible to the right. Each walker gets a reward of 1 for moving the package forward, and a reward of -100 for dropping the package. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 32 element vector, containing simulated noisy lidar data about the environment and information about neighboring walkers.
+A package is placed on top of (by default) 3 pairs of robot legs which you control. The robots must learn to move the package as far as possible to the right. Each walker gets a reward of 1 for moving the package forward, and a reward of -100 for dropping the package. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 32 element vector, containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment runs for 500 frames by default.
 
 Arguments:
 
@@ -131,7 +131,7 @@ Leaderboard:
 
 *image*
 
-By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames.
+By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default.
 
 ```
 waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
