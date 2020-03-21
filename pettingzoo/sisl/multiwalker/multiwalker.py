@@ -19,11 +19,13 @@ class env(AECEnv):
         self._agent_selector_object = agent_selector(self.agent_order)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(
+            zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.04
 
-        self.rewards = dict(zip(self.agents, [np.float64(0) for _ in self.agents]))
+        self.rewards = dict(
+            zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.observations = self.env.get_last_obs()
@@ -38,7 +40,8 @@ class env(AECEnv):
         self.steps = 0
         self._agent_selector_object.reinit(self.agent_order)
         self.agent_selection = self._agent_selector_object.next()
-        self.rewards = dict(zip(self.agents, [np.float64(0) for _ in self.agents]))
+        self.rewards = dict(
+            zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         if observe:
@@ -85,16 +88,16 @@ class env(AECEnv):
         if any(np.isnan(action)):
             action = [0 for _ in action]
         elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in {}. It is currently {}'.format(agent, self.action_spaces[agent], action))
+            raise Exception('Action for agent {} must be in {}. It is currently {}'.format(
+                agent, self.action_spaces[agent], action))
 
         self.env.step(action, agent, self._agent_selector_object.is_last())
         self.rewards = self.env.get_last_rewards()
         self.dones = self.env.get_last_dones()
         self.agent_selection = self._agent_selector_object.next()
 
-        if self.steps >= 500:
+        if self.env.frames >= self.env.max_frames:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
-        
 
         self.steps += 1
         if observe:
