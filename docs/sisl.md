@@ -1,15 +1,15 @@
 
 ## SISL Enviroments
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |
-| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |
-| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
+| Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+|-------------------------|--------------|------------|---------|----------------|--------------|-------------------|------------|
+| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             | ?            | ?                 | ?          |
+| Pursuit                 | Graphical    |   Either     | 8 (+/-)| Yes             | ?            | ?                 | ?          |
+| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             | ?            | ?                 | ?          |
 
-*General Discussion*
+`pip install pettingzoo[sisl]`
 
-Note to us: make 500 frame stopping as argument in all envs
+*General notes on environments*
 
 Please additionally cite 
 
@@ -30,7 +30,7 @@ Please additionally cite
 |--------------|------------|--------|----------------|
 |  Vector      | Discrete   | 3 (+/-)| No             |
 
-`pettingzoo.sisl.multiwalker`
+`from pettingzoo.sisl import multiwalker`
 
 *image*
 
@@ -68,12 +68,14 @@ By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid
 Arguments:
 
 ```
-pursuit.env(xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
+pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
 obs_range=7, layer_norm=10, n_catch=2, random_opponents=False, max_opponents=10,
 freeze_evaders=False, catchr=0.01, caughtr=-0.01, term_pursuit=5.0,
 urgency_reward=0.0, include_id=True, surround=True, constraint_window=1.0,
 train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
 opponent_layer=AgentLayer(xs, ys, n_evaders))
+
+max_frames: how many frames to end the game after
 
 xs, ys: World size
 
@@ -125,7 +127,7 @@ Leaderboard:
 |--------------|------------|--------|----------------|
 |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
 
-`pettingzoo.sisl.waterworld`
+`from pettingzoo.sisl import waterworld`
 
 *image*
 
