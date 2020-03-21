@@ -1,11 +1,11 @@
 
 ## SISL Enviroments
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |
-| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |
-| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |
+| Environment             | Observations | Actions    | Agents | Manual Control | Action Shape | Observation Shape | Num States |
+|-------------------------|--------------|------------|--------|----------------|-|-|-|
+| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |?|?|?|
+| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |?|?|?|
+| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |?|?|?|
 
 *General Discussion*
 
