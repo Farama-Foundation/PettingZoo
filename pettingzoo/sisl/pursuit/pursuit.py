@@ -79,3 +79,6 @@ class env(AECEnv):
     def observe(self, agent):
         o = np.array(self.env.safely_observe(agent))
         return o
+
+
+from .manual_control import manual_control
