@@ -1,5 +1,6 @@
 import time
 import random
+import pygame
 
 
 def random_demo(env, render=True):
@@ -30,12 +31,13 @@ def random_demo(env, render=True):
 
         # for _ in env.agents:
         agent = env.agent_selection
-
+        pygame.event.get()
         if not dones[agent]:
             if not initial_iteration[agent]:
                 reward, dones[agent], _ = env.last()
                 total_reward += reward
-                print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
+                print("step reward for agent {} is {} done: {}".format(
+                    agent, reward, dones[agent]))
             initial_iteration[agent] = False
 
             if 'legal_moves' in env.infos[agent]:
