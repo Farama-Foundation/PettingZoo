@@ -58,7 +58,7 @@ class env(AECEnv):
             raise Exception('Action for agent {} must be in {}. \
                                  It is currently {}'.format(agent, self.action_spaces[agent], action))
 
-        self.env.step(action, agent)
+        self.env.step(action, agent, self.agent_selector_obj.is_last())
         self.rewards[agent] = self.env.last_rewards[agent]
 
         if self.env.frames >= self.env.max_frames:
