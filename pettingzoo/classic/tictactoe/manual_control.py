@@ -1,8 +1,8 @@
-import pygame, sys
+import pygame
 from pygame.locals import QUIT, MOUSEBUTTONUP
 
 from .board import Board
-from .tictactoe_utils import Board as BoardUI
+from .board_ui import Board as BoardUI
 
 
 def manual_control(**kwargs):
@@ -20,14 +20,29 @@ def manual_control(**kwargs):
     while not done:
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                done = True
             elif event.type == MOUSEBUTTONUP:
                 x, y = event.pos
+                action, square = board_ui.get_square_at_pixel(x, y)
 
-                board_ui.process_click(x, y, env.agent_selection)
-                print("Board: " + str([square.state for square in board.squares]))
-                print("Winner: " + str(board.check_for_winner()))
+                # check if its a valid action
+                if env.board.squares[action] == 0:
+                    if env.agent_selection == 0:
+                        square.mark_x()
+                    else:
+                        square.mark_o()
+
+                    obs = env.step(action)
+                    done = all(env.dones.values())
+
+                    if done:
+                        winner = env.board.check_for_winner()
+                        board_ui.display_game_over(winner)
+                        break
+                else:
+                    print("Invalid move")
+
+                    
     
         pygame.display.update()
         clock.tick(30)
