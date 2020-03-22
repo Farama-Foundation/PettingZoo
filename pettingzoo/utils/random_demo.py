@@ -31,7 +31,6 @@ def random_demo(env, render=True):
 
         # for _ in env.agents:
         agent = env.agent_selection
-        pygame.event.get()
         if not dones[agent]:
             if not initial_iteration[agent]:
                 reward, dones[agent], _ = env.last()
