@@ -9,7 +9,7 @@ if sys.argv[1] == 'classic/backgammon':
     print('classic/backgammon')
     from pettingzoo.classic import backgammon
     _env = backgammon.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = backgammon.env()
     bombardment_test.bombardment_test(_env)
     _env = backgammon.env()
@@ -19,7 +19,7 @@ if sys.argv[1] == 'classic/checkers':
     print('classic/checkers')
     from pettingzoo.classic import checkers
     _env = checkers.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = checkers.env()
     bombardment_test.bombardment_test(_env)
     _env = checkers.env()
@@ -29,7 +29,7 @@ if sys.argv[1] == 'classic/chess':
     print('classic/chess')
     from pettingzoo.classic import chess
     _env = chess.env()
-    api_test.api_test(_env, render=True)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = chess.env()
     bombardment_test.bombardment_test(_env)
     _env = chess.env()
@@ -39,7 +39,7 @@ if sys.argv[1] == 'classic/connect_four':
     print('classic/connect_four')
     from pettingzoo.classic import connect_four
     _env = connect_four.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = connect_four.env()
     bombardment_test.bombardment_test(_env)
     _env = connect_four.env()
@@ -69,7 +69,7 @@ if sys.argv[1] == 'classic/go':
     print('classic/go')
     from pettingzoo.classic import go
     _env = go.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = go.env()
     bombardment_test.bombardment_test(_env)
     _env = go.env()
@@ -79,7 +79,7 @@ if sys.argv[1] == 'classic/hanabi':
     print('classic/hanabi')
     from pettingzoo.classic import hanabi
     _env = hanabi.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = hanabi.env()
     bombardment_test.bombardment_test(_env)
     _env = hanabi.env()
@@ -109,7 +109,7 @@ if sys.argv[1] == 'classic/rps':
     print('classic/rps')
     from pettingzoo.classic import rps
     _env = rps.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = rps.env()
     bombardment_test.bombardment_test(_env)
     _env = rps.env()
@@ -119,7 +119,7 @@ if sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')
     from pettingzoo.classic import rpsls
     _env = rpsls.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = rpsls.env()
     bombardment_test.bombardment_test(_env)
     _env = rpsls.env()
@@ -149,7 +149,7 @@ if sys.argv[1] == 'classic/tictactoe':
     print('classic/tictactoe')
     from pettingzoo.classic import tictactoe
     _env = tictactoe.env()
-    api_test.api_test(_env)
+    api_test.api_test(_env, render=True, manual_control=False)
     _env = tictactoe.env()
     bombardment_test.bombardment_test(_env)
     _env = tictactoe.env()
