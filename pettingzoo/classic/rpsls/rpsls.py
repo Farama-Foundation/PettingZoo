@@ -110,4 +110,4 @@ class env(AECEnv):
 
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return np.array([self.observe(self.agent_selection)])
+            return self.observe(self.agent_selection)
