@@ -45,13 +45,14 @@ class env(AECEnv):
             obs = False
         else:
             obs, next_player_id = self.env.step(action)
-            if not self.env.is_over():
+            if self.env.is_over():
+                self.rewards = self._convert_to_dict(self.env.get_payoffs())
+                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+            else:
                 self.agent_order = [next_player_id, 0 if next_player_id==1 else 1]
                 self.infos[next_player_id]['legal_moves'] = obs['legal_actions']
                 self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
                 self._agent_selector.reinit(self.agent_order)
-            else:
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
         self.agent_selection = self._agent_selector.next()
         if observe:
             return obs['obs'] if obs else None
