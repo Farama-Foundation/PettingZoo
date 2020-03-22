@@ -234,7 +234,7 @@ The following environments should be done:
 * classic/texas_holdem_no_limit
 * classic/uno
 * gamma/cooperative_pong
-* gamma/prison (sprite work ongoing- Mario)
+* gamma/prison
 * mpe/*
 * sisl/*
 
@@ -274,5 +274,5 @@ matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
-rlcard >= 0.1.11
+rlcard >= 0.1.12
 ```
