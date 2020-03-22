@@ -55,32 +55,6 @@ class env(AECEnv):
 
     def observe(self, agent):
         return self.env.observe(agent)
-    # def step(self, action_dict):
-    #     # unpack actions
-    #     actions = [0.0 for _ in range(len(action_dict))]
-
-    #     for agent_id in self.agents:
-    #         if any(np.isnan(action_dict[agent_id])):
-    #             action_dict[agent_id] = [0 for _ in action_dict[agent_id]]
-    #         elif not self.action_spaces[agent_id].contains(action_dict[agent_id]):
-    #             raise Exception('Action for agent {} must be in {}. \
-    #                             It is currently {}'.format(agent_id, self.action_spaces[agent_id], action_dict[agent_id]))
-    #         actions[agent_id] = action_dict[agent_id]
-
-    #     observation, reward, done, info = self.env.step(actions)
-
-    #     if self.steps >= 500:
-    #         done = [True]*self.num_agents
-
-    #     observation_dict = self.convert_to_dict(observation)
-    #     reward_dict = self.convert_to_dict(reward)
-    #     info_dict = self.convert_to_dict(info)
-    #     done_dict = self.convert_to_dict(done)
-    #     done_dict["__all__"] = done[0]
-
-    #     self.steps += 1
-
-    #     return observation_dict, reward_dict, done_dict, info_dict
 
     def step(self, action, observe=True):
         agent = self.agent_selection
