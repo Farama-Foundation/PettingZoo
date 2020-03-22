@@ -1,11 +1,12 @@
 
 ## SISL Enviroments
 
-| Environment             | Observations | Actions    | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|-------------------------|--------------|------------|--------|----------------|-|-|-|
-| Multiwalker             |  Vector (viewable)  | Discrete   | 3 (+/-)| No             |?|?|?|
-| Pursuit                 | Graphical    |   Either     | 8 (+/-)| No             |?|?|?|
-| Waterworld              |     Vector (viewable)   |   Either     | 3 (+/-)| No             |?|?|?|
+| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+|-------------|-------------------|----------|---------|----------------|--------------|-------------------|------------|
+| Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | ?            | ?                 | ?          |
+| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | ?            | ?                 | ?          |
+| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | ?            | ?                 | ?          |
+
 
 `pip install pettingzoo[sisl]`
 
@@ -26,46 +27,43 @@ Please additionally cite
 
 ### Multiwalker
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-|  Vector      | Discrete   | 3 (+/-)| No             |
+| Observations | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+|--------------|----------|---------|----------------|--------------|-------------------|------------|
+| Vector       | Discrete | 3 (+/-) | No             | ?            | ?                 | ?          |
 
 `from pettingzoo.sisl import multiwalker`
 
-*image*
+*gif*
+
+*AEC diagram*
 
 A package is placed on top of (by default) 3 pairs of robot legs which you control. The robots must learn to move the package as far as possible to the right. Each walker gets a reward of 1 for moving the package forward, and a reward of -100 for dropping the package. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 32 element vector, containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment runs for 500 frames by default.
 
-Arguments:
-
-
-```
-Refactor game to take arguments
-```
+*Arguments*
 
 *about arguments*
 
 Leaderboard:
 
 | Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | PPO    | UMD          |       |      |
+|----------------------|--------|-------------|-------|------|
+| x                    | PPO    | UMD         |       |      |
 
 Add Gupta et al and DDPG paper results too
 
 ### Pursuit
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-| Graphical    |   Either   | 8 (+/-)| No             |
+| Observations | Actions | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+|--------------|---------|---------|----------------|--------------|-------------------|------------|
+| Graphical    | Either  | 8 (+/-) | No             | ?            | ?                 | ?          |
 
 `from pettingzoo.sisl import pursuit`
 
-*image*
+*gif*
+
+*AEC diagram*
 
 By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default.
-
-Arguments:
 
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
@@ -117,19 +115,20 @@ opponent_layer: Initial evader in world
 Leaderboard:
 
 | Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | PPO    | UMD          |       |      |
-
+|----------------------|--------|-------------|-------|------|
+| x                    | PPO    | UMD         |       |      |
 
 ### Waterworld
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-|     Vector (viewable)   |   Either     | 3 (+/-)| No             |
+| Observations      | Actions | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+|-------------------|---------|---------|----------------|--------------|-------------------|------------|
+| Vector (viewable) | Either  | 3 (+/-) | No             | ?            | ?                 | ?          |
 
 `from pettingzoo.sisl import waterworld`
 
-*image*
+*gif*
+
+*AEC diagram*
 
 By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default.
 
@@ -146,7 +145,7 @@ reward_mech='local', addid=True, speed_features=True)
 Leaderboard:
 
 | Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|--------------|-------|------|
-|  x                   | PPO    | UMD          |       |      |
+|----------------------|--------|-------------|-------|------|
+| x                    | PPO    | UMD         |       |      |
 
 Add Gupta et al and DDPG paper results too
