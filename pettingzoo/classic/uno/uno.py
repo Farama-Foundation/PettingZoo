@@ -39,6 +39,7 @@ class env(AECEnv):
         if self.env.is_over():
             self.rewards = self._convert_to_dict(self.env.get_payoffs())
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+            obs = False
         else:
             obs, next_player_id = self.env.step(action)
             if not self.env.is_over():
