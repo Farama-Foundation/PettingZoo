@@ -43,12 +43,7 @@ class env(AECEnv):
     def observe(self, agent):
         # return observation of an agent
         s = np.array(self.board.squares)
-
-        r1 = [0,3,6]
-        r2 = [1,4,7]
-        r3 = [2,5,8]
-
-        return [s[r1],s[r2],s[r3]]
+        return s.reshape(3,3)
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
