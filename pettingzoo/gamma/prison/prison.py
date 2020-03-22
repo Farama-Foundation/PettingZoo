@@ -268,6 +268,7 @@ class env(AECEnv):
         self.agent_selection = self.agent_selector_obj.next()
         observation = self.observe(self.agent_selection)
 
+        pygame.event.pump()
         if observe:
             return observation
 
