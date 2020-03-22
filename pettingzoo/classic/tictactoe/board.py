@@ -22,7 +22,7 @@ class Board(object):
         if agent == 0:
             self.squares[pos] = 0
         elif agent == 1:
-            self.squares[pos] = 0
+            self.squares[pos] = 1
         return
     
     def calculate_winners(self):
