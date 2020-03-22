@@ -18,7 +18,6 @@ class env(AECEnv):
         self.agents = list(range(self.num_agents))
 
         self.agent_order = list(self.agents)
-        self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {i: spaces.Discrete(9) for i in range(2)}
         self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(3,3), dtype=np.int8) for i in range(2)}
@@ -62,7 +61,7 @@ class env(AECEnv):
                 if winner == -1:
                     # tie
                     pass
-                elif winner == 0:
+                elif winner == 1:
                     # agent 0 won
                     self.rewards[0] += 100
                     self.rewards[1] -= 100
@@ -79,7 +78,7 @@ class env(AECEnv):
             self.rewards[self.agent_selection] += -10
 
         # Switch selection to next agents
-        self.agent_selection = self._agent_selector.next()
+        self.agent_selection = 1 if (self.agent_selection == 0) else 0
 
         if observe:
             return self.observe(self.agent_selection)
@@ -95,8 +94,7 @@ class env(AECEnv):
         self.infos = {i: {'legal_moves': list(range(0,9))} for i in range(self.num_agents)}
 
         # selects the first agent
-        self._agent_selector.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector.next()
+        self.agent_selection = 0
         if observe:
             return self.observe(self.agent_selection)
         else:

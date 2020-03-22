@@ -76,7 +76,7 @@ class Board(object):
     #     _, square = self.get_square_at_pixel(x, y)
     #     if player == 0:
     #         square.mark_x()
-    #     elif:
+    #     elif player == 1:
     #         square.mark_o()
     #     else:
     #         print("invalid player, must be either 0 or 1")
