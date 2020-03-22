@@ -1,13 +1,18 @@
 import itertools
 
-# decouple pygame stuff from board logic
 class Board(object):
     def __init__(self):
-        # empty -- -1
-        # player 0 -- 0
-        # player 1 -- 1
-        self.squares = [-1] * 9
-        self.player = 0
+        # internally self.board.squares holds a flat representation of tic tac toe board
+        # where an empty board is [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        # where indexes are column wise order
+        # 0 3 6
+        # 1 4 7
+        # 2 5 8
+
+        # empty -- 0
+        # player 0 -- 1
+        # player 1 -- 2
+        self.squares = [0] * 9
 
         # precommute possible winning combinations
         self.calculate_winners()
@@ -17,12 +22,12 @@ class Board(object):
     
     def play_turn(self, agent, pos):
         # if spot is empty
-        if self.squares[pos] != -1:
+        if self.squares[pos] != 0:
             return
         if agent == 0:
-            self.squares[pos] = 0
-        elif agent == 1:
             self.squares[pos] = 1
+        elif agent == 1:
+            self.squares[pos] = 2
         return
     
     def calculate_winners(self):
@@ -51,9 +56,9 @@ class Board(object):
             states = []
             for index in combination:
                 states.append(self.squares[index])
-            if all(x == 0 for x in states):
-                winner = 0
             if all(x == 1 for x in states):
+                winner = 0
+            if all(x == 2 for x in states):
                 winner = 1
         return winner
     
