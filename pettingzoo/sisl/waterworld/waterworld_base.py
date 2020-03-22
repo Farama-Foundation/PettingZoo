@@ -3,6 +3,7 @@ import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
 from .. import Agent
+import cv2
 
 
 class Archea(Agent):
@@ -123,12 +124,11 @@ class MAWaterWorld():
 
         self.renderOn = False
 
-        self.cycle_time = 0.5
+        self.cycle_time = 0.8
         self.frames = 0
 
     def close(self):
         if self.renderOn:
-            import cv2
             cv2.destroyAllWindows()
             cv2.waitKey(1)
 
@@ -189,7 +189,7 @@ class MAWaterWorld():
 
         rewards = np.zeros(self.n_pursuers)
         sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
-            rewards)
+            rewards, False)
         obs_list = self.observe_list(
             sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
         self.last_rewards = [0 for _ in range(self.n_pursuers)]
@@ -246,7 +246,7 @@ class MAWaterWorld():
 
         return sensed_objspeedfeatures_Np_K
 
-    def collision_handling_subroutine(self, rewards):
+    def collision_handling_subroutine(self, rewards, is_last):
                 # Players stop on hitting a wall
         for npu, pursuer in enumerate(self._pursuers):
             clippedx_2 = np.clip(pursuer.position, 0, 1)
@@ -267,58 +267,63 @@ class MAWaterWorld():
                     ssd.euclidean(pursuer.position, self.obstaclesx_No_2)
                 pos_diff = pursuer.position - self.obstaclesx_No_2[0]
                 pursuer.set_position(pursuer.position +
-                                     velocity_scale*pos_diff)
+                                     velocity_scale * pos_diff)
 
                 collision_normal = pursuer.position - self.obstaclesx_No_2[0]
                 # project current velocity onto collision normal
                 current_vel = pursuer.velocity
                 proj_vel = (np.dot(current_vel, collision_normal) /
-                            np.dot(collision_normal, collision_normal))*collision_normal
+                            np.dot(collision_normal, collision_normal)) * collision_normal
                 perp_vel = current_vel - proj_vel
                 total_vel = perp_vel - proj_vel
                 pursuer.set_velocity(total_vel)
 
-        obstacle_coll_Ne = np.zeros(self.n_evaders)
-        for nev, evader in enumerate(self._evaders):
-            distfromobst_No = ssd.cdist(np.expand_dims(
-                evader.position, 0), self.obstaclesx_No_2)
-            is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
-            obstacle_coll_Ne[nev] = is_colliding_No.sum()
-            if obstacle_coll_Ne[nev] > 0:
-                velocity_scale = evader._radius + self.obstacle_radius - \
-                    ssd.euclidean(evader.position, self.obstaclesx_No_2)
-                pos_diff = evader.position - self.obstaclesx_No_2[0]
-                evader.set_position(evader.position + velocity_scale*pos_diff)
+        if is_last:
+            obstacle_coll_Ne = np.zeros(self.n_evaders)
+            for nev, evader in enumerate(self._evaders):
+                distfromobst_No = ssd.cdist(np.expand_dims(
+                    evader.position, 0), self.obstaclesx_No_2)
+                is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
+                obstacle_coll_Ne[nev] = is_colliding_No.sum()
+                if obstacle_coll_Ne[nev] > 0:
+                    velocity_scale = evader._radius + self.obstacle_radius - \
+                        ssd.euclidean(evader.position, self.obstaclesx_No_2)
+                    pos_diff = evader.position - self.obstaclesx_No_2[0]
+                    evader.set_position(
+                        evader.position + velocity_scale * pos_diff)
 
-                collision_normal = evader.position - self.obstaclesx_No_2[0]
-                # project current velocity onto collision normal
-                current_vel = evader.velocity
-                proj_vel = (np.dot(current_vel, collision_normal) /
-                            np.dot(collision_normal, collision_normal))*collision_normal
-                perp_vel = current_vel - proj_vel
-                total_vel = perp_vel - proj_vel
-                evader.set_velocity(total_vel)
+                    collision_normal = evader.position - \
+                        self.obstaclesx_No_2[0]
+                    # project current velocity onto collision normal
+                    current_vel = evader.velocity
+                    proj_vel = (np.dot(current_vel, collision_normal) /
+                                np.dot(collision_normal, collision_normal)) * collision_normal
+                    perp_vel = current_vel - proj_vel
+                    total_vel = perp_vel - proj_vel
+                    evader.set_velocity(total_vel)
 
-        obstacle_coll_Npo = np.zeros(self.n_poison)
-        for npo, poison in enumerate(self._poisons):
-            distfromobst_No = ssd.cdist(np.expand_dims(
-                poison.position, 0), self.obstaclesx_No_2)
-            is_colliding_No = distfromobst_No <= poison._radius + self.obstacle_radius
-            obstacle_coll_Npo[npo] = is_colliding_No.sum()
-            if obstacle_coll_Npo[npo] > 0:
-                velocity_scale = poison._radius + self.obstacle_radius - \
-                    ssd.euclidean(poison.position, self.obstaclesx_No_2)
-                pos_diff = poison.position - self.obstaclesx_No_2[0]
-                poison.set_position(poison.position + velocity_scale*pos_diff)
+            obstacle_coll_Npo = np.zeros(self.n_poison)
+            for npo, poison in enumerate(self._poisons):
+                distfromobst_No = ssd.cdist(np.expand_dims(
+                    poison.position, 0), self.obstaclesx_No_2)
+                is_colliding_No = distfromobst_No <= poison._radius + self.obstacle_radius
+                obstacle_coll_Npo[npo] = is_colliding_No.sum()
+                if obstacle_coll_Npo[npo] > 0:
+                    velocity_scale = poison._radius + self.obstacle_radius - \
+                        ssd.euclidean(poison.position, self.obstaclesx_No_2)
+                    pos_diff = poison.position - self.obstaclesx_No_2[0]
+                    poison.set_position(
+                        poison.position + velocity_scale * pos_diff)
 
-                collision_normal = poison.position - self.obstaclesx_No_2[0]
-                # project current velocity onto collision normal
-                current_vel = poison.velocity
-                proj_vel = (np.dot(current_vel, collision_normal) /
-                            np.dot(collision_normal, collision_normal))*collision_normal
-                perp_vel = current_vel - proj_vel
-                total_vel = perp_vel - proj_vel
-                poison.set_velocity(total_vel)
+                    collision_normal = poison.position - \
+                        self.obstaclesx_No_2[0]
+                    # project current velocity onto collision normal
+                    current_vel = poison.velocity
+                    proj_vel = (np.dot(current_vel, collision_normal) /
+                                np.dot(collision_normal, collision_normal)) * collision_normal
+                    perp_vel = current_vel - proj_vel
+                    total_vel = perp_vel - proj_vel
+                    poison.set_velocity(total_vel)
 
         # Find collisions
         pursuersx_Np_2 = np.array(
@@ -482,7 +487,8 @@ class MAWaterWorld():
                     ]))
         return obslist
 
-    def step(self, action, agent_id):
+    def step(self, action, agent_id, is_last):
+
         action = np.asarray(action)
         action = action.reshape(2)
 
@@ -492,39 +498,41 @@ class MAWaterWorld():
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
-        p.set_position(p.position + self.cycle_time*p.velocity)
+        p.set_position(p.position + self.cycle_time * p.velocity)
 
-        for evader in self._evaders:
-            # Move objects
-            evader.set_position(
-                evader.position + self.cycle_time*evader.velocity)
-            # Bounce object if it hits a wall
-            for i in range(len(evader.position)):
-                if evader.position[i] >= 1 or evader.position[i] <= 0:
-                    evader.position[i] = np.clip(evader.position[i], 0, 1)
-                    evader.velocity[i] = -1*evader.velocity[i]
+        if is_last:
+            for evader in self._evaders:
+                # Move objects
+                evader.set_position(
+                    evader.position + self.cycle_time * evader.velocity)
+                # Bounce object if it hits a wall
+                for i in range(len(evader.position)):
+                    if evader.position[i] >= 1 or evader.position[i] <= 0:
+                        evader.position[i] = np.clip(evader.position[i], 0, 1)
+                        evader.velocity[i] = -1 * evader.velocity[i]
 
-        for poison in self._poisons:
-            # Move objects
-            poison.set_position(
-                poison.position + self.cycle_time*poison.velocity)
-            # Bounce object if it hits a wall
-            for i in range(len(poison.position)):
-                if poison.position[i] >= 1 or poison.position[i] <= 0:
-                    poison.position[i] = np.clip(poison.position[i], 0, 1)
-                    poison.velocity[i] = -1 * poison.velocity[i]
+            for poison in self._poisons:
+                # Move objects
+                poison.set_position(
+                    poison.position + self.cycle_time * poison.velocity)
+                # Bounce object if it hits a wall
+                for i in range(len(poison.position)):
+                    if poison.position[i] >= 1 or poison.position[i] <= 0:
+                        poison.position[i] = np.clip(poison.position[i], 0, 1)
+                        poison.velocity[i] = -1 * poison.velocity[i]
 
         if self.reward_mech == 'global':
             rewards[agent_id] += self.control_penalty * (action**2).sum()
         else:
             rewards[agent_id] += self.control_penalty * (action**2).sum()
 
-        sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
-            rewards)
-        obs_list = self.observe_list(
-            sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
-        self.last_obs = obs_list
-        self.last_rewards[agent_id] = rewards[agent_id]
+        if is_last:
+            sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
+                rewards, is_last)
+            obs_list = self.observe_list(
+                sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
+            self.last_obs = obs_list
+            self.last_rewards[agent_id] = rewards[agent_id]
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1
@@ -534,8 +542,7 @@ class MAWaterWorld():
     def observe(self, agent):
         return np.array(self.last_obs[agent])
 
-    def render(self, screen_size=900, rate=10, mode='human'):
-        import cv2
+    def render(self, screen_size=900, rate=5, mode='human'):
         if not self.renderOn:
             self.renderOn = True
             cv2.startWindowThread()
