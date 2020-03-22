@@ -46,6 +46,7 @@ if sys.argv[1] == 'classic/connect_four':
     performance_benchmark.performance_benchmark(_env)
 
 if sys.argv[1] == 'classic/dou_dizhu':
+    print(classic/dou_dizhu')
     from pettingzoo.classic import dou_dizhu
     _env = dou_dizhu.env()
     api_test.api_test(_env, render=True, manual_control=False)
