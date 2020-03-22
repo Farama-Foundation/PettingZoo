@@ -21,7 +21,7 @@ class env(AECEnv):
         self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {i: spaces.Discrete(9) for i in range(2)}
-        self.observation_spaces = {i: spaces.Box(low=-1.0, high=1.0, shape=(1, 9), dtype=np.int16) for i in range(2)}
+        self.observation_spaces = {i: spaces.Box(low=-1.0, high=1.0, shape=(9,), dtype=np.int16) for i in range(2)}
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
@@ -29,11 +29,8 @@ class env(AECEnv):
 
         self.agent_selection = 0
 
-        # not sure what this is
-        self.display_wait = 0.0
-
     # returns a flat representation of tic tac toe board
-    # empty board [1, -1, -1, -1, 0, -1, 1, -1, -1]
+    # empty board [1, -1, -1, -1, -1, -1, 1, -1, -1]
     # where indexes are column wise order
     # 0 3 6
     # 1 4 7
@@ -46,7 +43,7 @@ class env(AECEnv):
     # agent 1 = 1
     def observe(self, agent):
         # return observation of an agent
-        return [self.board.squares]
+        return self.board.squares
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
