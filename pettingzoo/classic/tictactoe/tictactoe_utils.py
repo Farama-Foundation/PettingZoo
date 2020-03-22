@@ -29,7 +29,7 @@ class Square(object):
         return str(state)
 
 class Board(object):
-    turn = 1
+    # turn = 1
     
     def __init__(self, grid_size=3, square_size=100, border=50, line_width=10):
         self.grid_size = grid_size
@@ -46,7 +46,6 @@ class Board(object):
         self.surface.fill(WHITE)
         self.draw_lines()
         self.initialize_squares()
-        self.calculate_winners()
     
     def draw_lines(self):
         for i in range(1, self.grid_size):
@@ -70,62 +69,66 @@ class Board(object):
     def get_square_at_pixel(self, x, y):
         for index, square in enumerate(self.squares):
             if square.rect.collidepoint(x, y):
-                return square
+                return (index, square)
         return None
     
-    def process_click(self, x, y):
-        square = self.get_square_at_pixel(x, y)
-        if square is not None and not self.game_over:
-            self.play_turn(square)
-            self.check_game_over()
+    # def process_click(self, x, y, player):
+    #     _, square = self.get_square_at_pixel(x, y)
+    #     if player == 0:
+    #         square.mark_x()
+    #     elif:
+    #         square.mark_o()
+    #     else:
+    #         print("invalid player, must be either 0 or 1")
+    #     return
+
+    # def play_turn(self, square):
+    #     if square.state != 0:
+    #         return
+    #     if self.turn == 1:
+    #         square.mark_x()
+    #         square.state = 1
+    #         self.turn = 2
+    #     elif self.turn == 2:
+    #         square.mark_o()
+    #         square.state = 2
+    #         self.turn = 1
+    #     return
     
-    def play_turn(self, square):
-        if square.state != 0:
-            return
-        if self.turn == 1:
-            square.mark_x()
-            square.state = 1
-            self.turn = 2
-        elif self.turn == 2:
-            square.mark_o()
-            square.state = 2
-            self.turn = 1
-        return
-    
-    def calculate_winners(self):
-        self.winning_combinations = []
-        indices = [x for x in range(0, self.grid_size * self.grid_size)]
+    # def calculate_winners(self):
+    #     self.winning_combinations = []
+    #     indices = [x for x in range(0, self.grid_size * self.grid_size)]
         
-        # Vertical combinations
-        self.winning_combinations += ([tuple(indices[i:i+self.grid_size]) for i in range(0, len(indices), self.grid_size)])
+    #     # Vertical combinations
+    #     self.winning_combinations += ([tuple(indices[i:i+self.grid_size]) for i in range(0, len(indices), self.grid_size)])
         
-        # Horizontal combinations
-        self.winning_combinations += [tuple([indices[x] for x in range(y, len(indices), self.grid_size)]) for y in range(0, self.grid_size)]
+    #     # Horizontal combinations
+    #     self.winning_combinations += [tuple([indices[x] for x in range(y, len(indices), self.grid_size)]) for y in range(0, self.grid_size)]
         
-        # Diagonal combinations
-        self.winning_combinations.append(tuple(x for x in range(0, len(indices), self.grid_size + 1)))
-        self.winning_combinations.append(tuple(x for x in range(self.grid_size - 1, len(indices) - 1, self.grid_size - 1)))
+    #     # Diagonal combinations
+    #     self.winning_combinations.append(tuple(x for x in range(0, len(indices), self.grid_size + 1)))
+    #     self.winning_combinations.append(tuple(x for x in range(self.grid_size - 1, len(indices) - 1, self.grid_size - 1)))
     
-    def check_for_winner(self):
-        winner = 0
-        for combination in self.winning_combinations:
-            states = []
-            for index in combination:
-                states.append(self.squares[index].state)
-            if all(x == 1 for x in states):
-                winner = 1
-            if all(x == 2 for x in states):
-                winner = 2
-        return winner
+    # def check_for_winner(self):
+    #     winner = 0
+    #     for combination in self.winning_combinations:
+    #         states = []
+    #         for index in combination:
+    #             states.append(self.squares[index].state)
+    #         if all(x == 1 for x in states):
+    #             winner = 1
+    #         if all(x == 2 for x in states):
+    #             winner = 2
+    #     return winner
     
-    def check_game_over(self):
-        winner = self.check_for_winner()
-        if winner:
-            self.game_over = True
-        elif all(square.state in [1, 2] for square in self.squares):
-            self.game_over = True
-        if self.game_over:
-            self.display_game_over(winner)
+    # def check_game_over(self):
+    #     winner = self.check_for_winner()
+    #     if winner:
+    #         self.game_over = True
+    #     elif all(square.state in [1, 2] for square in self.squares):
+    #         self.game_over = True
+    #     if self.game_over:
+    #         self.display_game_over(winner)
     
     def display_game_over(self, winner):
         surface_size = self.surface.get_height()

@@ -19,9 +19,9 @@ class Board(object):
         # if spot is empty
         if self.squares[pos] != -1:
             return
-        if self.agent == 0:
+        if agent == 0:
             self.squares[pos] = 0
-        elif self.agent == 1:
+        elif agent == 1:
             self.squares[pos] = 0
         return
     

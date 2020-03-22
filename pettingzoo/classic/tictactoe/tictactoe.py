@@ -1,6 +1,8 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
+import numpy as np
+
 from .manual_control import manual_control
 
 from .board import Board
@@ -44,7 +46,7 @@ class env(AECEnv):
     # agent 1 = 1
     def observe(self, agent):
         # return observation of an agent
-        return self.board.squares
+        return np.asarray(self.board.squares)
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
@@ -54,8 +56,8 @@ class env(AECEnv):
             self.board.play_turn(self.agent_selection, self.board.squares[action])
 
             # update infos
-            # ie list of size 9 where 1 represents valid move, 0 is invalid move.
-            self.infos[self.agent_selection]['legal_moves'] = [1 if i == -1 else 0 for i in self.board.squares]
+            # list of valid actions (indexes in board)
+            self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == -1]
 
             if self.board.check_game_over():
                 winner = self.board.check_for_winner()
