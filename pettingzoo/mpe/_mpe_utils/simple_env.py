@@ -32,7 +32,7 @@ class SimpleEnv(AECEnv):
             self.action_spaces[aidx] = spaces.Discrete(space_dim)
             self.observation_spaces[aidx] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = {i: 0 for i in range(self.num_agents)}
+        self.rewards = {i: 0. for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
         self.infos = {i: {} for i in range(self.num_agents)}
 
@@ -85,7 +85,7 @@ class SimpleEnv(AECEnv):
 
         self.world.step()
         for i, agent in enumerate(self.world.agents):
-            self.rewards[i] = self.scenario.reward(agent, self.world)
+            self.rewards[i] = float(self.scenario.reward(agent, self.world))
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -120,15 +120,6 @@ class SimpleEnv(AECEnv):
         # make sure we used all elements of action
         assert len(action) == 0
 
-    # def last(self):
-    #     current_agent = self.world.agents[self.agent_selection]
-    #
-    #     reward_observation = self.scenario.observation(current_agent,self.world)
-    #     reward = self.rewards[self.agent_selection]
-    #     done = False # this is in fact correct, these games never technically end
-    #     info = {}
-    #     return reward,done,info
-
     def step(self, action, observe=True):
         current_idx = self.agent_selection
         self.agent_selection = next_idx = (self.agent_selection + 1) % self.num_agents
@@ -150,16 +141,17 @@ class SimpleEnv(AECEnv):
         if mode == 'human':
             alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             message = ''
-            for agent in self.world.agents:
-                for other in self.world.agents:
-                    if other is agent:
-                        continue
-                    if np.all(other.state.c == 0):
-                        word = '_'
-                    else:
-                        word = alphabet[np.argmax(other.state.c)]
-                    message += (other.name + ' to ' + agent.name + ': ' + word + '   ')
-            print(message)
+            # for agent in self.world.agents:
+            for other in self.world.agents:
+                if other.silent:
+                    continue
+                if np.all(other.state.c == 0):
+                    word = '_'
+                else:
+                    word = alphabet[np.argmax(other.state.c)]
+                message += (other.name + ' sends ' + word + '   ')
+            if message:
+                print(message)
 
         for i in range(len(self.viewers)):
             # create viewers (if necessary)
@@ -213,5 +205,6 @@ class SimpleEnv(AECEnv):
 
     def close(self):
         for viewer in self.viewers:
-            viewer.close()
+            if viewer is not None:
+                viewer.close()
         self._reset_render()
