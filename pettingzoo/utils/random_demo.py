@@ -1,6 +1,5 @@
 import time
 import random
-import pygame
 
 
 def random_demo(env, render=True):
