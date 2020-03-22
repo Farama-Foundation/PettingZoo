@@ -51,7 +51,6 @@ class env(AECEnv):
         if(self.board.squares[action] == 0):
             # play turn
             self.board.play_turn(self.agent_selection, action)
-            print("Board after play_turn: " + str(self.board.squares))
 
             # update infos
             # list of valid actions (indexes in board)
