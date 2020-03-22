@@ -8,7 +8,7 @@ from .manual_control import manual_control
 from .board import Board
 
 class env(AECEnv):
-    metadata = {'render.modes': ['human']} # only add if environment supports rendering
+    metadata = {'render.modes': ['human', 'ansi']}
 
     def __init__(self):
         super(env, self).__init__()
