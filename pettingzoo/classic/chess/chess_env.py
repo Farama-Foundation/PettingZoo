@@ -21,7 +21,7 @@ class env(AECEnv):
         self.agent_order = list(self.agents)
 
         self.action_spaces = {i: spaces.Discrete(8 * 8 * 73) for i in range(2)}
-        self.observation_spaces = {i: spaces.Box(low=-np.inf, high=+np.inf, shape=(8, 8, 20), dtype=np.float32) for i in range(2)}
+        self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for i in range(2)}
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
@@ -88,7 +88,7 @@ class env(AECEnv):
         return next_observation
 
     def render(self, mode='human'):
-        print(self.board.board_fen())
+        print(self.board.fen())
 
     def close(self):
         pass

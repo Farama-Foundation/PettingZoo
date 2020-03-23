@@ -82,10 +82,9 @@ class ContactDetector(contactListener):
 class BipedalWalker(Agent):
 
     def __init__(self, world, init_x=TERRAIN_STEP * TERRAIN_STARTPAD / 2,
-                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2, one_hot=False):
+                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2):
         self.world = world
         self._n_walkers = n_walkers
-        self.one_hot = one_hot
         self.hull = None
         self.init_x = init_x
         self.init_y = init_y
@@ -113,7 +112,8 @@ class BipedalWalker(Agent):
         self.hull = self.world.CreateDynamicBody(
             position=(init_x, init_y),
             fixtures=fixtureDef(
-                shape=polygonShape(vertices=[(x / SCALE, y / SCALE) for x, y in HULL_POLY]),
+                shape=polygonShape(
+                    vertices=[(x / SCALE, y / SCALE) for x, y in HULL_POLY]),
                 density=5.0,
                 friction=0.1,
                 categoryBits=0x002,
@@ -189,13 +189,17 @@ class BipedalWalker(Agent):
     def apply_action(self, action):
 
         self.joints[0].motorSpeed = float(SPEED_HIP * np.sign(action[0]))
-        self.joints[0].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1))
+        self.joints[0].maxMotorTorque = float(
+            MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1))
         self.joints[1].motorSpeed = float(SPEED_KNEE * np.sign(action[1]))
-        self.joints[1].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1))
+        self.joints[1].maxMotorTorque = float(
+            MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1))
         self.joints[2].motorSpeed = float(SPEED_HIP * np.sign(action[2]))
-        self.joints[2].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1))
+        self.joints[2].maxMotorTorque = float(
+            MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1))
         self.joints[3].motorSpeed = float(SPEED_KNEE * np.sign(action[3]))
-        self.joints[3].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1))
+        self.joints[3].maxMotorTorque = float(
+            MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1))
 
     def get_observation(self):
         pos = self.hull.position
@@ -206,15 +210,19 @@ class BipedalWalker(Agent):
             self.lidar[i].p1 = pos
             self.lidar[i].p2 = (pos[0] + math.sin(1.5 * i / 10.0) * LIDAR_RANGE,
                                 pos[1] - math.cos(1.5 * i / 10.0) * LIDAR_RANGE)
-            self.world.RayCast(self.lidar[i], self.lidar[i].p1, self.lidar[i].p2)
+            self.world.RayCast(
+                self.lidar[i], self.lidar[i].p1, self.lidar[i].p2)
 
         state = [
-            self.hull.angle,  # Normal angles up to 0.5 here, but sure more is possible.
+            # Normal angles up to 0.5 here, but sure more is possible.
+            self.hull.angle,
             2.0 * self.hull.angularVelocity / FPS,
-            0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,  # Normalized to get -1..1 range
+            # Normalized to get -1..1 range
+            0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,
             0.3 * vel.y * (VIEWPORT_H / SCALE) / FPS,
             self.joints[0].
-            angle,  # This will give 1.1 on high up, but it's still OK (and there should be spikes on hiting the ground, that's normal too)
+            # This will give 1.1 on high up, but it's still OK (and there should be spikes on hiting the ground, that's normal too)
+            angle,
             self.joints[0].speed / SPEED_HIP,
             self.joints[1].angle + 1.0,
             self.joints[1].speed / SPEED_KNEE,
@@ -234,7 +242,7 @@ class BipedalWalker(Agent):
     @property
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
-        idx = MAX_AGENTS if self.one_hot else 1
+        idx = 1
         return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3 + idx,))
 
     @property
@@ -244,14 +252,25 @@ class BipedalWalker(Agent):
 
 class MultiWalkerEnv():
 
-    metadata = {'render.modes': ['human', 'rgb_array'], 'video.frames_per_second': FPS}
+    metadata = {'render.modes': [
+        'human', 'rgb_array'], 'video.frames_per_second': FPS}
 
     hardcore = False
 
     def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
-                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
-                 one_hot=False):
+                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
+        """
+            n_walkers: number of bipedal walkers in environment
+            position_noise: noise applied to agent positional sensor observations
+            angle_noise: noise applied to agent rotational sensor observations
+            reward_mech: whether all agents are rewarded equal amounts or singular agent is rewarded
+            forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
+            fall_reward: reward applied when an agent falls down
+            drop_reward: reward applied for each fallen walker in environment
+            terminate_on_fall: toggles whether agent is done if it falls down
+            max_frames: after max_frames steps all agents will return done
+        """
 
         self.n_walkers = n_walkers
         self.position_noise = position_noise
@@ -261,12 +280,13 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
-        self.one_hot = one_hot
         self.setup()
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
+        self.max_frames = max_frames
+        self.frames = 0
 
     def get_param_values(self):
         return self.__dict__
@@ -284,11 +304,13 @@ class MultiWalkerEnv():
             init_x + WALKER_SEPERATION * i * TERRAIN_STEP for i in range(self.n_walkers)
         ]
         self.walkers = [
-            BipedalWalker(self.world, init_x=sx, init_y=init_y, one_hot=self.one_hot)
+            BipedalWalker(self.world, init_x=sx,
+                          init_y=init_y)
             for sx in self.start_x
         ]
         self.num_agents = len(self.walkers)
-        self.observation_space = [agent.observation_space for agent in self.walkers]
+        self.observation_space = [
+            agent.observation_space for agent in self.walkers]
         self.action_space = [agent.action_space for agent in self.walkers]
 
         self.package_scale = self.n_walkers / 1.75
@@ -356,83 +378,13 @@ class MultiWalkerEnv():
             walker._reset()
             self.drawlist += walker.legs
             self.drawlist += [walker.hull]
-        r,d,o = self.scroll_subroutine()
+        r, d, o = self.scroll_subroutine()
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = o
+        self.frames = 0
 
         return self.observe(0)
-
-    # def step(self, actions):
-    #     act_vec = np.reshape(actions, (self.n_walkers, 4))
-    #     assert len(act_vec) == self.n_walkers
-    #     for i in range(self.n_walkers):
-    #         self.walkers[i].apply_action(act_vec[i])
-
-    #     self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
-
-    #     obs = [walker.get_observation() for walker in self.walkers]
-
-    #     xpos = np.zeros(self.n_walkers)
-    #     obs = []
-    #     done = False
-    #     rewards = np.zeros(self.n_walkers)
-
-    #     for i in range(self.n_walkers):
-    #         pos = self.walkers[i].hull.position
-    #         x, y = pos.x, pos.y
-    #         xpos[i] = x
-
-    #         wobs = self.walkers[i].get_observation()
-    #         nobs = []
-    #         for j in [i - 1, i + 1]:
-    #             # if no neighbor (for edge walkers)
-    #             if j < 0 or j == self.n_walkers:
-    #                 nobs.append(0.0)
-    #                 nobs.append(0.0)
-    #             else:
-    #                 xm = (self.walkers[j].hull.position.x - x) / self.package_length
-    #                 ym = (self.walkers[j].hull.position.y - y) / self.package_length
-    #                 nobs.append(np.random.normal(xm, self.position_noise))
-    #                 nobs.append(np.random.normal(ym, self.position_noise))
-    #         xd = (self.package.position.x - x) / self.package_length
-    #         yd = (self.package.position.y - y) / self.package_length
-    #         nobs.append(np.random.normal(xd, self.position_noise))
-    #         nobs.append(np.random.normal(yd, self.position_noise))
-    #         nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-    #         # ID
-    #         if self.one_hot:
-    #             nobs.extend(np.eye(MAX_AGENTS)[i])
-    #         else:
-    #             nobs.append(float(i) / self.n_walkers)
-    #         obs.append(np.array(wobs + nobs))
-
-    #         # shaping = 130 * pos[0] / SCALE
-    #         shaping = 0.0
-    #         shaping -= 5.0 * abs(wobs[0])
-    #         rewards[i] = shaping - self.prev_shaping[i]
-    #         self.prev_shaping[i] = shaping
-
-    #     package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
-    #     rewards += (package_shaping - self.prev_package_shaping)
-    #     self.prev_package_shaping = package_shaping
-
-    #     self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
-
-    #     done = False
-    #     if self.game_over or pos[0] < 0:
-    #         rewards += self.drop_reward
-    #         done = True
-    #     if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
-    #         done = True
-    #     rewards += self.fall_reward * self.fallen_walkers
-    #     if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
-    #         done = True
-
-    #     if self.reward_mech == 'local':
-    #         return obs, rewards, [done] * self.n_walkers, {}
-    #     return obs, [rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
-
 
     def scroll_subroutine(self):
         xpos = np.zeros(self.n_walkers)
@@ -453,8 +405,10 @@ class MultiWalkerEnv():
                     nobs.append(0.0)
                     nobs.append(0.0)
                 else:
-                    xm = (self.walkers[j].hull.position.x - x) / self.package_length
-                    ym = (self.walkers[j].hull.position.y - y) / self.package_length
+                    xm = (self.walkers[j].hull.position.x -
+                          x) / self.package_length
+                    ym = (self.walkers[j].hull.position.y -
+                          y) / self.package_length
                     nobs.append(np.random.normal(xm, self.position_noise))
                     nobs.append(np.random.normal(ym, self.position_noise))
             xd = (self.package.position.x - x) / self.package_length
@@ -462,11 +416,7 @@ class MultiWalkerEnv():
             nobs.append(np.random.normal(xd, self.position_noise))
             nobs.append(np.random.normal(yd, self.position_noise))
             nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-            # ID
-            if self.one_hot:
-                nobs.extend(np.eye(MAX_AGENTS)[i])
-            else:
-                nobs.append(float(i) / self.n_walkers)
+            nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
@@ -479,8 +429,9 @@ class MultiWalkerEnv():
         rewards += (package_shaping - self.prev_package_shaping)
         self.prev_package_shaping = package_shaping
 
-        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
-        
+        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * \
+            WALKER_SEPERATION * TERRAIN_STEP
+
         done = False
         if self.game_over or pos[0] < 0:
             rewards += self.drop_reward
@@ -494,21 +445,21 @@ class MultiWalkerEnv():
         return rewards, done, obs
 
     def step(self, action, agent_id, is_last):
-        #action is array of size 4
+        # action is array of size 4
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
         obs = [walker.get_observation() for walker in self.walkers]
-        self.world.Step(1.0/FPS, 6*30, 2*30)
+        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
+        self.frames = self.frames + 1
         if is_last:
             rewards, done, mod_obs = self.scroll_subroutine()
             self.last_obs[agent_id] = mod_obs[agent_id]
             if self.reward_mech == 'local':
                 self.last_rewards = rewards
             else:
-                self.last_rewards = [rewards.mean() for _ in range(self.n_walkers)]
+                self.last_rewards = [rewards.mean()
+                                     for _ in range(self.n_walkers)]
             self.last_dones = [done for _ in range(self.n_walkers)]
-
-        
 
     def get_last_rewards(self):
         return dict(zip(list(range(self.n_walkers)), map(lambda r: np.float64(r), self.last_rewards)))
@@ -523,7 +474,6 @@ class MultiWalkerEnv():
         o = self.last_obs[agent]
         o = np.array(o)
         return o
-
 
     def render(self, mode='human', close=False):
         if close:
@@ -553,7 +503,8 @@ class MultiWalkerEnv():
                 continue
             if x1 > self.scroll / 2 + VIEWPORT_W / SCALE * self.package_scale:
                 continue
-            self.viewer.draw_polygon([(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1))
+            self.viewer.draw_polygon(
+                [(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1))
         for poly, color in self.terrain_poly:
             if poly[1][0] < self.scroll:
                 continue
@@ -567,27 +518,32 @@ class MultiWalkerEnv():
             if i < 2 * len(walker.lidar):
                 l = walker.lidar[i] if i < len(walker.lidar) else walker.lidar[len(walker.lidar)
                                                                                - i - 1]
-                self.viewer.draw_polyline([l.p1, l.p2], color=(1, 0, 0), linewidth=1)
+                self.viewer.draw_polyline(
+                    [l.p1, l.p2], color=(1, 0, 0), linewidth=1)
 
         for obj in self.drawlist:
             for f in obj.fixtures:
                 trans = f.body.transform
                 if type(f.shape) is circleShape:
                     t = rendering.Transform(translation=trans * f.shape.pos)
-                    self.viewer.draw_circle(f.shape.radius, 30, color=obj.color1).add_attr(t)
+                    self.viewer.draw_circle(
+                        f.shape.radius, 30, color=obj.color1).add_attr(t)
                     self.viewer.draw_circle(f.shape.radius, 30, color=obj.color2, filled=False,
                                             linewidth=2).add_attr(t)
                 else:
                     path = [trans * v for v in f.shape.vertices]
                     self.viewer.draw_polygon(path, color=obj.color1)
                     path.append(path[0])
-                    self.viewer.draw_polyline(path, color=obj.color2, linewidth=2)
+                    self.viewer.draw_polyline(
+                        path, color=obj.color2, linewidth=2)
 
         flagy1 = TERRAIN_HEIGHT
         flagy2 = flagy1 + 50 / SCALE
         x = TERRAIN_STEP * 3
-        self.viewer.draw_polyline([(x, flagy1), (x, flagy2)], color=(0, 0, 0), linewidth=2)
-        f = [(x, flagy2), (x, flagy2 - 10 / SCALE), (x + 25 / SCALE, flagy2 - 5 / SCALE)]
+        self.viewer.draw_polyline(
+            [(x, flagy1), (x, flagy2)], color=(0, 0, 0), linewidth=2)
+        f = [(x, flagy2), (x, flagy2 - 10 / SCALE),
+             (x + 25 / SCALE, flagy2 - 5 / SCALE)]
         self.viewer.draw_polygon(f, color=(0.9, 0.2, 0))
         self.viewer.draw_polyline(f + [f[0]], color=(0, 0, 0), linewidth=2)
 
@@ -644,7 +600,7 @@ class MultiWalkerEnv():
                 self.terrain.append(t)
                 t = self.world.CreateStaticBody(fixtures=fixtureDef(shape=polygonShape(
                     vertices=[(p[0] + TERRAIN_STEP * counter, p[1]) for p in poly]),
-                                                                    friction=FRICTION))
+                    friction=FRICTION))
                 t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
                 self.terrain.append(t)
                 counter += 2
@@ -699,7 +655,8 @@ class MultiWalkerEnv():
             self.terrain_y.append(y)
             counter -= 1
             if counter == 0:
-                counter = self.np_random.randint(TERRAIN_GRASS / 2, TERRAIN_GRASS)
+                counter = self.np_random.randint(
+                    TERRAIN_GRASS / 2, TERRAIN_GRASS)
                 if state == GRASS and hardcore:
                     state = self.np_random.randint(1, _STATES_)
                     oneshot = True
@@ -732,7 +689,7 @@ class MultiWalkerEnv():
             y = VIEWPORT_H / SCALE * 3 / 4
             poly = [(x + 15 * TERRAIN_STEP * math.sin(3.14 * 2 * a / 5) + self.np_random.uniform(
                 0, 5 * TERRAIN_STEP), y + 5 * TERRAIN_STEP * math.cos(3.14 * 2 * a / 5) +
-                     self.np_random.uniform(0, 5 * TERRAIN_STEP)) for a in range(5)]
+                self.np_random.uniform(0, 5 * TERRAIN_STEP)) for a in range(5)]
             x1 = min([p[0] for p in poly])
             x2 = max([p[0] for p in poly])
             self.cloud_poly.append((poly, x1, x2))
