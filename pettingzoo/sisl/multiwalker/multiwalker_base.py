@@ -82,10 +82,9 @@ class ContactDetector(contactListener):
 class BipedalWalker(Agent):
 
     def __init__(self, world, init_x=TERRAIN_STEP * TERRAIN_STARTPAD / 2,
-                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2, one_hot=False):
+                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2):
         self.world = world
         self._n_walkers = n_walkers
-        self.one_hot = one_hot
         self.hull = None
         self.init_x = init_x
         self.init_y = init_y
@@ -243,7 +242,7 @@ class BipedalWalker(Agent):
     @property
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
-        idx = MAX_AGENTS if self.one_hot else 1
+        idx = 1
         return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3 + idx,))
 
     @property
@@ -259,9 +258,19 @@ class MultiWalkerEnv():
     hardcore = False
 
     def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
-                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
-                 one_hot=False, max_frames=500):
+                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
+        """
+            n_walkers: number of bipedal walkers in environment
+            position_noise: noise applied to agent positional sensor observations
+            angle_noise: noise applied to agent rotational sensor observations
+            reward_mech: whether all agents are rewarded equal amounts or singular agent is rewarded
+            forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
+            fall_reward: reward applied when an agent falls down
+            drop_reward: reward applied for each fallen walker in environment
+            terminate_on_fall: toggles whether agent is done if it falls down
+            max_frames: after max_frames steps all agents will return done
+        """
 
         self.n_walkers = n_walkers
         self.position_noise = position_noise
@@ -271,7 +280,6 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
-        self.one_hot = one_hot
         self.setup()
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
@@ -297,7 +305,7 @@ class MultiWalkerEnv():
         ]
         self.walkers = [
             BipedalWalker(self.world, init_x=sx,
-                          init_y=init_y, one_hot=self.one_hot)
+                          init_y=init_y)
             for sx in self.start_x
         ]
         self.num_agents = len(self.walkers)
@@ -378,76 +386,6 @@ class MultiWalkerEnv():
 
         return self.observe(0)
 
-    # def step(self, actions):
-    #     act_vec = np.reshape(actions, (self.n_walkers, 4))
-    #     assert len(act_vec) == self.n_walkers
-    #     for i in range(self.n_walkers):
-    #         self.walkers[i].apply_action(act_vec[i])
-
-    #     self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
-
-    #     obs = [walker.get_observation() for walker in self.walkers]
-
-    #     xpos = np.zeros(self.n_walkers)
-    #     obs = []
-    #     done = False
-    #     rewards = np.zeros(self.n_walkers)
-
-    #     for i in range(self.n_walkers):
-    #         pos = self.walkers[i].hull.position
-    #         x, y = pos.x, pos.y
-    #         xpos[i] = x
-
-    #         wobs = self.walkers[i].get_observation()
-    #         nobs = []
-    #         for j in [i - 1, i + 1]:
-    #             # if no neighbor (for edge walkers)
-    #             if j < 0 or j == self.n_walkers:
-    #                 nobs.append(0.0)
-    #                 nobs.append(0.0)
-    #             else:
-    #                 xm = (self.walkers[j].hull.position.x - x) / self.package_length
-    #                 ym = (self.walkers[j].hull.position.y - y) / self.package_length
-    #                 nobs.append(np.random.normal(xm, self.position_noise))
-    #                 nobs.append(np.random.normal(ym, self.position_noise))
-    #         xd = (self.package.position.x - x) / self.package_length
-    #         yd = (self.package.position.y - y) / self.package_length
-    #         nobs.append(np.random.normal(xd, self.position_noise))
-    #         nobs.append(np.random.normal(yd, self.position_noise))
-    #         nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-    #         # ID
-    #         if self.one_hot:
-    #             nobs.extend(np.eye(MAX_AGENTS)[i])
-    #         else:
-    #             nobs.append(float(i) / self.n_walkers)
-    #         obs.append(np.array(wobs + nobs))
-
-    #         # shaping = 130 * pos[0] / SCALE
-    #         shaping = 0.0
-    #         shaping -= 5.0 * abs(wobs[0])
-    #         rewards[i] = shaping - self.prev_shaping[i]
-    #         self.prev_shaping[i] = shaping
-
-    #     package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
-    #     rewards += (package_shaping - self.prev_package_shaping)
-    #     self.prev_package_shaping = package_shaping
-
-    #     self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
-
-    #     done = False
-    #     if self.game_over or pos[0] < 0:
-    #         rewards += self.drop_reward
-    #         done = True
-    #     if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
-    #         done = True
-    #     rewards += self.fall_reward * self.fallen_walkers
-    #     if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
-    #         done = True
-
-    #     if self.reward_mech == 'local':
-    #         return obs, rewards, [done] * self.n_walkers, {}
-    #     return obs, [rewards.mean()] * self.n_walkers, [done] * self.n_walkers, {}
-
     def scroll_subroutine(self):
         xpos = np.zeros(self.n_walkers)
         obs = []
@@ -478,11 +416,7 @@ class MultiWalkerEnv():
             nobs.append(np.random.normal(xd, self.position_noise))
             nobs.append(np.random.normal(yd, self.position_noise))
             nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-            # ID
-            if self.one_hot:
-                nobs.extend(np.eye(MAX_AGENTS)[i])
-            else:
-                nobs.append(float(i) / self.n_walkers)
+            nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
@@ -515,7 +449,7 @@ class MultiWalkerEnv():
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
         obs = [walker.get_observation() for walker in self.walkers]
-        self.world.Step(1.0/FPS, 6*30, 2*30)
+        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
         self.frames = self.frames + 1
         if is_last:
             rewards, done, mod_obs = self.scroll_subroutine()

@@ -112,8 +112,6 @@ class Pursuit():
 
         self.urgency_reward = kwargs.pop('urgency_reward', 0.0)
 
-        self.include_id = kwargs.pop('include_id', False)
-
         self.ally_actions = np.zeros(n_act_purs, dtype=np.int32)
         self.opponent_actions = np.zeros(n_act_ev, dtype=np.int32)
 
@@ -122,41 +120,24 @@ class Pursuit():
         if self.train_pursuit:
             self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
             self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            if self.include_id:
-                self.low = np.append(self.low, 0.0)
-                self.high = np.append(self.high, 1.0)
             self.action_space = [spaces.Discrete(
                 n_act_purs) for _ in range(self.n_pursuers)]
 
-            if self.include_id:
-                self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                    4, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
-                self.local_obs = np.zeros(
-                    (self.n_pursuers, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
-            else:
-                self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                    3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
-                self.local_obs = np.zeros(
-                    (self.n_pursuers, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+            self.observation_space = [spaces.Box(low=0, high=255, shape=(
+                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
+            self.local_obs = np.zeros(
+                (self.n_pursuers, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
         else:
             self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
             self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            if self.include_id:
-                np.append(self.low, 0.0)
-                np.append(self.high, 1.0)
             self.action_space = [spaces.Discrete(
                 n_act_ev) for _ in range(self.n_evaders)]
-            if self.include_id:
-                self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                    4, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
-                self.local_obs = np.zeros(
-                    (self.n_evaders, 4, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
-            else:
-                self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                    3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
-                self.local_obs = np.zeros(
-                    (self.n_evaders, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+
+            self.observation_space = [spaces.Box(low=0, high=255, shape=(
+                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
+            self.local_obs = np.zeros(
+                (self.n_evaders, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]
         self.pursuers_gone = np.array([False for i in range(self.n_pursuers)])
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
@@ -454,9 +435,6 @@ class Pursuit():
 
         self.local_obs[agent_idx, 0:3, xolo:xohi, yolo:yohi] = np.abs(
             self.model_state[0:3, xlo:xhi, ylo:yhi]) / self.layer_norm
-        if self.include_id:
-            self.local_obs[agent_idx, 3, self.obs_range // 2, self.obs_range // 2] = float(
-                agent_idx) / self.n_agents()
         return self.local_obs[agent_idx]
 
     def obs_clip(self, x, y):

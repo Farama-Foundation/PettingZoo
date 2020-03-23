@@ -24,7 +24,8 @@ class env(AECEnv):
         self.steps = 0
         self.display_wait = 0.03
 
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = dict(
+            zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
 
@@ -38,7 +39,8 @@ class env(AECEnv):
         self.steps = 0
         self.agent_selector_obj.reinit(self.agent_order)
         self.agent_selection = self.agent_selector_obj.next()
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.rewards = dict(
+            zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         if observe:
