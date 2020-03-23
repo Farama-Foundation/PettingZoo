@@ -12,7 +12,7 @@ python3 -m pettingzoo.tests.ci_test classic/rps
 python3 -m pettingzoo.tests.ci_test classic/rpsls
 python3 -m pettingzoo.tests.ci_test classic/texas_holdem
 python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit
-# python3 -m pettingzoo.tests.ci_test classic/tictactoe
+python3 -m pettingzoo.tests.ci_test classic/tictactoe
 python3 -m pettingzoo.tests.ci_test classic/uno
 python3 -m pettingzoo.tests.ci_test gamma/cooperative_pong
 # python3 -m pettingzoo.tests.ci_test gamma/knights_archers_zombies
