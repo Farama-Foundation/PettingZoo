@@ -141,3 +141,7 @@ class Board(object):
         rect = text.get_rect()
         rect.center = (surface_size / 2, surface_size / 2)
         self.surface.blit(text, rect)
+
+    def close(self):
+        pygame.event.pump()
+        pygame.display.quit()
