@@ -59,6 +59,7 @@ The commonly used methods are:
 
 `step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent in `env.agent_order`, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
 
+
 ## Advanced Environment API
 When working in multi-agent learning, there are many fantastically weird cases. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functionality is also needed to implement by the high level functions above, so implementing them is just a matter of code factoring.
 
@@ -86,6 +87,7 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `close()`: Closes the rendering window.
 
+
 ## Observation/Action Wrapper
 
 We include popular preprocessing methods out of the box:
@@ -111,6 +113,7 @@ range_scale=(obs_min, obs_max), new_dtype=None, continuous_actions=False, frame_
 *New dtypes* turn your observations into a certain dtype when output from the wrapper. This is helpful because, for instance, most graphical games output tensors of `uint8` dtype, while most neural networks require `float32`.
 
 Operations are applied in the order of arguments to the wrapper function.
+
 
 ## Other Utils
 
@@ -232,6 +235,7 @@ The following environments should be done:
 * classic/mahjong
 * classic/texas_holdem
 * classic/texas_holdem_no_limit
+* classic/tictactoe
 * classic/uno
 * gamma/cooperative_pong
 * gamma/prison
@@ -243,7 +247,6 @@ The following environments are under active development:
 * classic/gin_rummy (Luis) (waiting on RLCard fix)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
-* classic/tictactoe (Praveen)
 * gamma/knights_archers_zombies (Mario)
 * gamma/pistonball (Mario)
 * gamma/prospector (Yashas)
