@@ -46,3 +46,6 @@ def manual_control(**kwargs):
     
         pygame.display.update()
         clock.tick(30)
+
+    pygame.time.wait(2000)
+    board_ui.close()
