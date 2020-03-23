@@ -4,16 +4,17 @@ from gym import spaces
 import rlcard
 import numpy as np
 
+
 class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         super(env, self).__init__()
-        self.env = rlcard.make('doudizhu',**kwargs)
+        self.env = rlcard.make('doudizhu', **kwargs)
         self.num_agents = 3
         self.agents = list(range(self.num_agents))
-        
+
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0, 0.0]))
         self.observation_spaces = dict(zip(self.agents, [spaces.Box(low=0.0, high=1.0, shape=(6, 5, 15), dtype=np.bool) for _ in range(self.num_agents)]))
         self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
@@ -26,7 +27,7 @@ class env(AECEnv):
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.infos[player_id]['legal_moves'] = obs['legal_actions']
-        
+
     def _convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
@@ -66,5 +67,5 @@ class env(AECEnv):
             print(state['current_hand'])
         print('\n=========== Last 3 Actions ===========')
         for action in state['trace'][:-4:-1]:
-            print('Player {}: {}'.format(action[0],action[1]))
+            print('Player {}: {}'.format(action[0], action[1]))
         print('\n')
