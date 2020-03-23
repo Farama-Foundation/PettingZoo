@@ -345,6 +345,7 @@ class CooperativePong(gym.Env):
                     self.dones[ag] = self.done
                     self.infos[ag] = {}
 
+        pygame.event.pump()
         self.draw()
 
 
