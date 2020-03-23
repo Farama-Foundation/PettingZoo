@@ -8,7 +8,7 @@ import cv2
 
 class Archea(Agent):
 
-    def __init__(self, idx, radius, n_sensors, sensor_range, addid=True, speed_features=True):
+    def __init__(self, idx, radius, n_sensors, sensor_range, speed_features=True):
         self._idx = idx
         self._radius = radius
         self._n_sensors = n_sensors
@@ -19,8 +19,6 @@ class Archea(Agent):
             self._sensor_obscoord += 3
         self._obscoord_from_sensors = self._n_sensors * self._sensor_obscoord
         self._obs_dim = self._obscoord_from_sensors + 2  # + 1  #2 for type, 1 for id
-        if addid:
-            self._obs_dim += 1
 
         self._position = None
         self._velocity = None
@@ -77,7 +75,28 @@ class MAWaterWorld():
                  obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
-                 reward_mech='local', addid=True, speed_features=True, max_frames=500, **kwargs):
+                 reward_mech='local', speed_features=True, max_frames=500, **kwargs):
+        """
+            n_pursuers: number of pursuing archea
+            n_evaders: number of evaading archea
+            n_coop: number of agent collisions needed to mark as caught
+            n_poison: number of poison objects
+            radius: pursuer archea radius
+            obstacle_radius: radius of obstacle object
+            obstacle_loc: coordinate of obstacle object
+            ev_speed: evading archea speed
+            poison_speed: speed of poison object
+            n_sensors: number of sensor dendrites on all archea
+            sensor_range: length of sensor dendrite on all archea
+            action_scale: scaling factor applied to all input actions
+            poison_reward: reward for pursuer consuming a poison object
+            food_reward: reward for pursuers consuming an evading archea
+            encounter_reward: reward for a pursuer colliding with an evading archea
+            control_penalty: reward added to pursuer in each step
+            reward_mech: controls whether all pursuers are rewarded for food being consumed, or single pursuer
+            speed_features: toggles whether archea sensors detect speed of other objects
+            max_frames: number of frames before environment automatically ends
+        """
         self.n_pursuers = n_pursuers
         self.n_evaders = n_evaders
         self.n_coop = n_coop
@@ -94,18 +113,17 @@ class MAWaterWorld():
         self.food_reward = food_reward
         self.control_penalty = control_penalty
         self.encounter_reward = encounter_reward
-        self.last_rewards = [0 for _ in range(self.n_pursuers)]
+        self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
         self.last_obs = [None for _ in range(self.n_pursuers)]
 
         self.n_obstacles = 1
         self._reward_mech = reward_mech
-        self._addid = addid
         self._speed_features = speed_features
         self.max_frames = max_frames
         self.seed()
         self._pursuers = [
-            Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu], addid=self._addid,
+            Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu],
                    speed_features=self._speed_features) for npu in range(self.n_pursuers)
         ]
         self._evaders = [
@@ -126,6 +144,7 @@ class MAWaterWorld():
 
         self.cycle_time = 0.8
         self.frames = 0
+        self.reset()
 
     def close(self):
         if self.renderOn:
@@ -189,10 +208,10 @@ class MAWaterWorld():
 
         rewards = np.zeros(self.n_pursuers)
         sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
-            rewards, False)
+            rewards, True)
         obs_list = self.observe_list(
             sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
-        self.last_rewards = [0 for _ in range(self.n_pursuers)]
+        self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
         self.last_obs = obs_list
 
@@ -469,22 +488,13 @@ class MAWaterWorld():
     def observe_list(self, sensor_feature, is_colliding_ev, is_colliding_po):
         obslist = []
         for inp in range(self.n_pursuers):
-            if self._addid:
-                obslist.append(
-                    np.concatenate([
-                        sensor_feature[inp, ...].ravel(), [
-                            float((is_colliding_ev[inp, :]).sum() > 0), float((
-                                is_colliding_po[inp, :]).sum() > 0)
-                        ], [inp + 1]
-                    ]))
-            else:
-                obslist.append(
-                    np.concatenate([
-                        sensor_feature[inp, ...].ravel(), [
-                            float((is_colliding_ev[inp, :]).sum() > 0), float((
-                                is_colliding_po[inp, :]).sum() > 0)
-                        ]
-                    ]))
+            obslist.append(
+                np.concatenate([
+                    sensor_feature[inp, ...].ravel(), [
+                        float((is_colliding_ev[inp, :]).sum() > 0), float((
+                            is_colliding_po[inp, :]).sum() > 0)
+                    ]
+                ]))
         return obslist
 
     def step(self, action, agent_id, is_last):
