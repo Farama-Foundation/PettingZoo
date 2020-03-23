@@ -57,20 +57,21 @@ class Board(object):
             for index in combination:
                 states.append(self.squares[index])
             if all(x == 1 for x in states):
-                winner = 0
-            if all(x == 2 for x in states):
                 winner = 1
+            if all(x == 2 for x in states):
+                winner = 2
         return winner
     
     def check_game_over(self):
-        game_over = False
         winner = self.check_for_winner()
 
-        if winner in [0,1]: # check if someone won
-            game_over = True
-        elif all(square in [0, 1] for square in self.squares): # check for tie
-            game_over = True
-        return game_over
+        if winner == -1 and all(square in [1, 2] for square in self.squares):
+            # tie
+            return True
+        elif winner in [1,2]:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return str(self.squares)
