@@ -1,4 +1,3 @@
-
 ## SISL Enviroments
 
 | Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
