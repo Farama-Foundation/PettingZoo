@@ -54,7 +54,9 @@ class env(AECEnv):
 
             # update infos
             # list of valid actions (indexes in board)
+            next_agent = 1 if (self.agent_selection == 0) else 0
             self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
+            self.infos[next_agent]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
             if self.board.check_game_over():
                 winner = self.board.check_for_winner()
@@ -81,7 +83,7 @@ class env(AECEnv):
             warnings.warn("Bad tictactoe move made, game terminating with current player losing. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
         # Switch selection to next agents
-        self.agent_selection = 1 if (self.agent_selection == 0) else 0
+        self.agent_selection = next_agent
 
         if observe:
             return self.observe(self.agent_selection)
