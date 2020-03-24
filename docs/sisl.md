@@ -3,8 +3,8 @@
 | Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
 |-------------|-------------------|----------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
 | Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)                                  | (-5.3, 5.3)        | ?          |
-| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | Discrete(5)   | (3, obs_range, obs_range)             | (0,255)            | xs*ys      |
-| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ((4 + 3*speed_features)*n_sensors+2,) | (-10,10)           | ?          |
+| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)                             | (0,255)            | xs*ys      |
+| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)                                | (-10,10)           | ?          |
 
 
 `pip install pettingzoo[sisl]`
@@ -80,7 +80,7 @@ Add Gupta et al and DDPG paper results too
 
 | Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape         | Observation Values | Num States |
 |--------------|---------|---------|----------------|--------------|---------------|---------------------------|--------------------|------------|
-| Graphical    | Either  | 8 (+/-) | No             | (1,)         | Discrete(5)   | (3, obs_range, obs_range) | (0,255)            | xs*ys      |
+| Graphical    | Either  | 8 (+/-) | No             | (1,)         | [0,4]         | (3, obs_range, obs_range) | (0,255)            | xs*ys      |
 
 
 `from pettingzoo.sisl import pursuit`
