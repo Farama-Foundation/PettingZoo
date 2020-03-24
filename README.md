@@ -223,8 +223,6 @@ class env(AECEnv):
 
 ## Other things
 
-All environment code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
-
 The following environments should be done:
 
 * classic/chess
