@@ -28,6 +28,56 @@
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
+`from pettingzoo.classic import backgammon`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+
+### Checkers
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import backgammon`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+
+### Chess
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import backgammon`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
 ### Rock Paper Scissors
 
 | Observations | Actions    | Agents | Manual Control |
