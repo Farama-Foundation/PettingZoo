@@ -306,6 +306,7 @@ class wrapper(AECEnv):
             if self.new_dtype is not None:
                 dtype = self.new_dtype[agent]
             else:
+                warnings.warn("Trying to scale observation, but a new dtype is not given. This will likely result in an error from np.divide")
                 dtype = obs.dtype
             min_obs, max_obs = range_scale
             obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
