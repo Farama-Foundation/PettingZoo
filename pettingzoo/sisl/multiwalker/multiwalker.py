@@ -36,7 +36,7 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, observe=True):
-        observation = self.env.reset()
+        self.env.reset()
         self.steps = 0
         self._agent_selector_object.reinit(self.agent_order)
         self.agent_selection = self._agent_selector_object.next()

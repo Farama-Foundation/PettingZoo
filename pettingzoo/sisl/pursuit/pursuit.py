@@ -36,7 +36,6 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, observe=True):
-        obs = self.env.reset()
         self.steps = 0
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
@@ -58,12 +57,12 @@ class env(AECEnv):
             action = action[0]
 
         agent = self.agent_selection
-        if action == None or action == np.NaN:
+        if action is None or action == np.NaN:
             action = 4
         elif not self.action_spaces[agent].contains(action):
             raise Exception('Action for agent {} must be in Discrete({}). \
                                 It is currently {}'.format(agent, self.action_spaces[agent].n, action))
-        obs = self.env.step(action, agent, self.agent_selector_obj.is_last())
+        self.env.step(action, agent, self.agent_selector_obj.is_last())
         for k in self.dones:
             if self.env.frames >= self.env.max_frames:
                 self.dones[k] = True

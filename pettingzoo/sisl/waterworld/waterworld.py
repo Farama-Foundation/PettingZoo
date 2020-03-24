@@ -35,7 +35,6 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, observe=True):
-        observation = self.env.reset()
         self.steps = 0
         self.agent_selector_obj.reinit(self.agent_order)
         self.agent_selection = self.agent_selector_obj.next()
@@ -54,7 +53,7 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if any(action) == None or any(action) == np.NaN:
+        if any(action) is None or any(action) == np.NaN:
             action = [0 for _ in action]
         elif not self.action_spaces[agent].contains(action):
             raise Exception('Action for agent {} must be in {}. \

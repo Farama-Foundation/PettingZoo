@@ -61,7 +61,7 @@ class Pursuit():
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
         self.num_agents = self.n_pursuers
-        #self.agents = list(range(self.num_agents))
+
         self.latest_reward_state = [0 for _ in range(self.num_agents)]
         self.latest_done_state = [False for _ in range(self.num_agents)]
         self.latest_obs = [None for _ in range(self.num_agents)]
@@ -193,10 +193,10 @@ class Pursuit():
 
         x_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
         y_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = int(self.xs * x_window_start), int(self.xs *
-                                                      (x_window_start + self.constraint_window))
-        ylb, yub = int(self.ys * y_window_start), int(self.ys *
-                                                      (y_window_start + self.constraint_window))
+        xlb, xub = int(self.xs * x_window_start),
+        int(self.xs * (x_window_start + self.constraint_window))
+        ylb, yub = int(self.ys * y_window_start),
+        int(self.ys * (y_window_start + self.constraint_window))
         constraints = [[xlb, xub], [ylb, yub]]
 
         self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
