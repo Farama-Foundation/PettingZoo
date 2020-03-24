@@ -71,13 +71,13 @@ def add_rectangle(input_map, xc, yc, xl, yl):
     xcc, ycc = int(round(xs * xc)), int(round(ys * yc))
     xll, yll = int(round(xs * xl)), int(round(ys * yl))
     if xll <= 1:
-        x_lbound, x_upbound = xcc, xcc+1
+        x_lbound, x_upbound = xcc, xcc + 1
     else:
-        x_lbound, x_upbound = xcc - xll/2, xcc + xll/2
+        x_lbound, x_upbound = xcc - xll / 2, xcc + xll / 2
     if yll <= 1:
-        y_lbound, y_upbound = ycc, ycc+1
+        y_lbound, y_upbound = ycc, ycc + 1
     else:
-        y_lbound, y_upbound = ycc - yll/2, ycc + yll/2
+        y_lbound, y_upbound = ycc - yll / 2, ycc + yll / 2
 
     # assert x_lbound >= 0 and x_upbound < xs, "Invalid rectangel config, x out of bounds"
     # assert y_lbound >= 0 and y_upbound < ys, "Invalid rectangel config, y out of bounds"
@@ -101,10 +101,10 @@ def resize(scale, old_mats):
 def simple_soccer_map(xs=6, ys=9):
     assert xs % 2 == 0, "xs must be even"
     smap = np.zeros((xs, ys), dtype=np.int32)
-    smap[0:xs/2-1, 0] = -1
-    smap[xs/2+1:xs, 0] = -1
-    smap[0:xs/2-1, ys-1] = -1
-    smap[xs/2+1:xs, ys-1] = -1
+    smap[0:xs / 2 - 1, 0] = -1
+    smap[xs / 2 + 1:xs, 0] = -1
+    smap[0:xs / 2 - 1, ys - 1] = -1
+    smap[xs / 2 + 1:xs, ys - 1] = -1
     return smap
 
 

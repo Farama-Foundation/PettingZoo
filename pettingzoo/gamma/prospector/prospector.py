@@ -4,11 +4,12 @@ import os
 import random
 import gym
 import numpy as np
+
 # Define some colors
 
 PLAYER_SPEED = 30.0
 PLAYER_ROT_SPEED = 20.0
-PLAYER_IMG = 'manBlue_gun.png'
+PLAYER_IMG = "manBlue_gun.png"
 PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 TILESIZE = 2
 
@@ -25,7 +26,7 @@ def get_image(path):
     global _image_library
     image = _image_library.get(path)
     if image is None:
-        canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
+        canonicalized_path = path.replace("/", os.sep).replace("\\", os.sep)
         image = pygame.image.load(canonicalized_path)
         _image_library[path] = image
     return image
@@ -33,7 +34,7 @@ def get_image(path):
 
 def get_small_random_value():
     # generates a small random value between [0, 1/100)
-    return (1/100) * np.random.rand()
+    return (1 / 100) * np.random.rand()
 
 
 class Block(pygame.sprite.Sprite):
@@ -41,6 +42,7 @@ class Block(pygame.sprite.Sprite):
     This class represents the ball.
     It derives from the "Sprite" class in Pygame.
     """
+
     def __init__(self, color=(250, 250, 0), width=20, height=20):
         """ Constructor. Pass in the color of the block,
         and its size. """
@@ -65,12 +67,12 @@ class Block(pygame.sprite.Sprite):
         # print(self.rect.y, self.rect.x)
 
     def update(self, pos, corner):
-        '''
+        """
         rect corner numbers
         1-----2
         |     |
         4-----3
-        '''
+        """
         self.rect.bottomright = (pos.x, pos.y)
 
 
@@ -78,20 +80,24 @@ class agent1(pygame.sprite.Sprite):
     """
     This class represents the ball
     """
+
     def __init__(self, _screen_width, x, y, speed=20):
         """ Constructor. Pass in the color of the block,
         and its x and y position. """
         # Call the parent class (Sprite) constructor
         super().__init__()
 
-        self.image = get_image('agent1.jpg')
-        self.base_image = get_image('agent1.jpg')
+        self.image = get_image("agent1.jpg")
+        self.base_image = get_image("agent1.jpg")
         self.screen_width = _screen_width
         self.rect = self.image.get_rect()
         self.dim = self.rect.size
 
         self.speed_val = speed
-        self.vel = vec(int(self.speed_val*np.cos(np.pi/4)), int(self.speed_val*np.sin(np.pi/4)))
+        self.vel = vec(
+            int(self.speed_val * np.cos(np.pi / 4)),
+            int(self.speed_val * np.sin(np.pi / 4)),
+        )
         self.rot = 0
         self.bounce_randomness = 1
         self.pos = vec(x, y) * TILESIZE
@@ -102,17 +108,17 @@ class agent1(pygame.sprite.Sprite):
         self.vel = vec(0, 0)
         keys = pygame.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            print('Left')
+            print("Left")
             self.rot_speed = PLAYER_ROT_SPEED
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.rot_speed = -PLAYER_ROT_SPEED
-            print('Right')
+            print("Right")
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel = vec(PLAYER_SPEED, 0).rotate(-self.rot)
-            print('Up')
+            print("Up")
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel = vec(-PLAYER_SPEED / 2, 0).rotate(-self.rot)
-            print('down')
+            print("down")
 
     def reset_pos(self):
         self.rect.y = random.randrange(350, 600)
@@ -165,7 +171,7 @@ class agent1(pygame.sprite.Sprite):
             for y in range(self.rect.bottomleft[0], self.rect.midleft[0]):
                 if rect.collidepoint(self.rect.bottomleft[1], y):
                     self.collision[2] = True
-            print('collision:', self.collision)
+            print("collision:", self.collision)
             return self.collision.index(True)
 
     def rotate(self, angle):
@@ -201,9 +207,13 @@ class agent1(pygame.sprite.Sprite):
                 r_val = get_small_random_value()
 
             # ball in left half of screen
-            is_collision, self.rect, self.vel = p1.process_collision(self.rect, dx, dy, self.vel)
+            is_collision, self.rect, self.vel = p1.process_collision(
+                self.rect, dx, dy, self.vel
+            )
             if is_collision:
-                self.vel = vec(0, 0)  # self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
+                self.vel = vec(
+                    0, 0
+                )  # self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
 
         return False
 
@@ -228,13 +238,16 @@ class agent2(pygame.sprite.Sprite):
     """
     This class represents the triangle
     """
+
     def __init__(self, _screen_width, speed=5):
         """ Constructor. Pass in the color of the block,
         and its x and y position. """
         # Call the parent class (Sprite) constructor
         super().__init__()
 
-        self.image = get_image('agent2.jpg')  # pygame.draw.polygon(screen, BLACK, [[0, 0], [0, 50], [50, 0]], 5)#
+        self.image = get_image(
+            "agent2.jpg"
+        )  # pygame.draw.polygon(screen, BLACK, [[0, 0], [0, 50], [50, 0]], 5)#
         self.screen_width = _screen_width
         self.rect = self.image.get_rect()
         self.dim = self.rect.size
@@ -242,7 +255,10 @@ class agent2(pygame.sprite.Sprite):
         self.mode = True
 
         self.speed_val = speed
-        self.vel = vec(int(self.speed_val*np.cos(np.pi/4)), int(self.speed_val*np.sin(np.pi/4)))
+        self.vel = vec(
+            int(self.speed_val * np.cos(np.pi / 4)),
+            int(self.speed_val * np.sin(np.pi / 4)),
+        )
         self.hit = False
         self.bounce_randomness = 1
 
@@ -312,15 +328,18 @@ class agent2(pygame.sprite.Sprite):
                 r_val = get_small_random_value()
 
             # ball in left half of screen
-            is_collision, self.rect, self.vel = p1.process_collision(self.rect, dx, dy, self.vel)
+            is_collision, self.rect, self.vel = p1.process_collision(
+                self.rect, dx, dy, self.vel
+            )
             if is_collision:
-                self.vel = vec(0, 0)  # self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
+                self.vel = vec(
+                    0, 0
+                )  # self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
 
         return False
 
 
 class env(gym.Env):
-
     def __init__(self):
         super(env, self).__init__()
         global agent2, agent1
@@ -329,7 +348,7 @@ class env(gym.Env):
         # Set the width and height of the screen [width, height]
         size = (1002, 699)
         self.screen = pygame.display.set_mode(size)
-        background = get_image('background.jpg')
+        background = get_image("background.jpg")
         pygame.display.set_caption("My Game")
         self.screen.blit(background, (0, 0))
         self.area = self.screen.get_rect()

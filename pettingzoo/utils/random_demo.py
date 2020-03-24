@@ -10,6 +10,11 @@ def random_demo(env, render=True):
     # env = _env(n_pursuers=n_pursuers)
     env.reset()
 
+    if hasattr(env, 'display_wait'):
+        display_wait = env.display_wait
+    else:
+        display_wait = 0.0
+
     total_reward = 0
     observations = {}
     initial_iteration = {agent: True for agent in env.agents}
@@ -21,23 +26,23 @@ def random_demo(env, render=True):
         # game should run at 15 FPS when rendering
         if render:
             env.render()
-            time.sleep(env.display_wait)
+            time.sleep(display_wait)
 
-        for _ in env.agents:
-            agent = env.agent_selection
+        # for _ in env.agents:
+        agent = env.agent_selection
+        if not dones[agent]:
+            if not initial_iteration[agent]:
+                reward, dones[agent], _ = env.last()
+                total_reward += reward
+                print("step reward for agent {} is {} done: {}".format(
+                    agent, reward, dones[agent]))
+            initial_iteration[agent] = False
 
-            if not dones[agent]:
-                if not initial_iteration[agent]:
-                    reward, dones[agent], _ = env.last()
-                    total_reward += reward
-                    print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
-                initial_iteration[agent] = False
-
-                if 'legal_moves' in env.infos[agent]:
-                    action = random.choice(env.infos[agent]['legal_moves'])
-                else:
-                    action = env.action_spaces[agent].sample()
-                env.step(action, observe=False)
+            if 'legal_moves' in env.infos[agent]:
+                action = random.choice(env.infos[agent]['legal_moves'])
+            else:
+                action = env.action_spaces[agent].sample()
+            env.step(action, observe=False)
         done = all(dones.values())
         if done:
             print("Total reward", total_reward, "done", done)
