@@ -141,7 +141,7 @@ Continuous Leaderboard:
 
 ### Prospector
 
-| Observations | Actions    | Agents  | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+| Observations | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|------------|---------|----------------|--------------|-------------------|------------|-|-|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |?|?|
 
