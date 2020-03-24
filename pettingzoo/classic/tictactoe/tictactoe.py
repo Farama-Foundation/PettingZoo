@@ -7,6 +7,7 @@ from .manual_control import manual_control
 
 from .board import Board
 
+
 class env(AECEnv):
     metadata = {'render.modes': ['human', 'ansi']}
 
@@ -20,14 +21,13 @@ class env(AECEnv):
         self.agent_order = list(self.agents)
 
         self.action_spaces = {i: spaces.Discrete(9) for i in range(2)}
-        self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(3,3), dtype=np.int8) for i in range(2)}
+        self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(3, 3), dtype=np.int8) for i in range(2)}
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0,9))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in range(self.num_agents)}
 
         self.agent_selection = 0
-
 
     # Key
     # ----
@@ -42,7 +42,7 @@ class env(AECEnv):
     def observe(self, agent):
         # return observation of an agent
         s = np.array(self.board.squares)
-        return s.reshape(3,3).T
+        return s.reshape(3, 3).T
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
@@ -69,7 +69,7 @@ class env(AECEnv):
                     # agent 1 won
                     self.rewards[1] += 100
                     self.rewards[0] -= 100
-            
+
                 # once either play wins or there is a draw, game over, both players are done
                 self.dones = {i: True for i in range(self.num_agents)}
 
@@ -91,7 +91,7 @@ class env(AECEnv):
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0,9))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in range(self.num_agents)}
 
         # selects the first agent
         self.agent_selection = 0
@@ -100,7 +100,7 @@ class env(AECEnv):
         else:
             return
 
-    def render(self, mode='human'):        
+    def render(self, mode='human'):
         if mode == 'ansi':
             def getSymbol(input):
                 if input == 0:
@@ -112,17 +112,17 @@ class env(AECEnv):
 
             board = list(map(getSymbol, self.board.squares))
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[0]}  " +  "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
-            print("_"*5 + "|" + "_"*5 + "|" + "_"*5)
+            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+            print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
+            print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[1]}  " +  "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
-            print("_"*5 + "|" + "_"*5 + "|" + "_"*5)
+            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+            print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
+            print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[2]}  " +  "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
+            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+            print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
+            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
 
     def close(self):
         pass
