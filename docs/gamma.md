@@ -1,12 +1,12 @@
 ## Gamma Environments
 
-| Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
+| Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
 |-------------------------|--------------|------------|---------|----------------|--------------|-------------------|------------|
-| Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?            | ?                 | ?          |
-| Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?            | ?                 | ?          |
-| Pistonball              | Graphical    | Either     | 20      | Yes            | ?            | ?                 | ?          |
-| Prison                  | Either       | Either     | 8       | Yes            | ?            | ?                 | ?          |
-| Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |
+| Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?            | ?                 | ?          | ? | ? |
+| Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?            | ?                 | ?          | ? | ? |
+| Pistonball              | Graphical    | Either     | 20      | Yes            | ?            | ?                 | ?          | ? | ? |
+| Prison                  | Either       | Either     | 8       | Yes            | ?            | ?                 | ?          | ? | ? |
+| Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          | ? | ? |
 
 
 `pip install pettingzoo[gamma]`
