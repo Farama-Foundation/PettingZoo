@@ -1,23 +1,44 @@
 ## MPE environments
 
-| Environment             | Observations | Actions  | Agents | Manual Control |
-|-------------------------|--------------|----------|--------|----------------|
-| simple                  | Vector       | Discrete | 1      | No             |
-| simple_adversary        | Vector       | Discrete | 3      | No             |
-| simple_crypto           | Vector       | Discrete | 2      | No             |
-| simple_push             | Vector       | Discrete | 2      | No             |
-| simple_reference        | Vector       | Discrete | 2      | No             |
-| simple_speaker_listener | Vector       | Discrete | 2      | No             |
-| simple_spread           | Vector       | Discrete | 3      | No             |
-| simple_tag              | Vector       | Discrete | 4      | No             |
-| simple_world_comm       | Vector       | Discrete | 6      | No             |
+| Environment             | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|-------------------------|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| simple                  | Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
+| simple_adversary        | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent max (10) | (-inf,inf)         | ?          |
+| simple_crypto           | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent max (8)  | (-inf,inf)         | ?          |
+| simple_push             | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent max (19) | (-inf,inf)         | ?          |
+| simple_reference        | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
+| simple_speaker_listener | Vector       | Discrete | 2      | No             | agent dependent max(5) | agent dependent  | agent dependent max (11) | (-inf,inf)         | ?          |
+| simple_spread           | Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
+| simple_tag              | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent max (16) | (-inf,inf)         | ?          |
+| simple_world_comm       | Vector       | Discrete | 6      | No             | agent dependent max(20) | agent dependent | agent dependent max (34) | (-inf,inf)         | ?          |
 
+
+`pip install pettingzoo[mpe]`
+
+*General notes on environments*
+
+Please additionally cite
+
+```
+@article{lowe2017multi,
+  title={Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments},
+  author={Lowe, Ryan and Wu, Yi and Tamar, Aviv and Harb, Jean and Abbeel, Pieter and Mordatch, Igor},
+  journal={Neural Information Processing Systems (NIPS)},
+  year={2017}
+}
+@article{mordatch2017emergence,
+  title={Emergence of Grounded Compositional Language in Multi-Agent Populations},
+  author={Mordatch, Igor and Abbeel, Pieter},
+  journal={arXiv preprint arXiv:1703.04908},
+  year={2017}
+}
+```
 
 ### Simple
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 1      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple`
 
@@ -29,9 +50,9 @@ Single agent sees landmark position, rewarded based on how close it gets to land
 
 ### Simple Adversary
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 3      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent max (10) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_adversary`
 
@@ -44,9 +65,9 @@ Single agent sees landmark position, rewarded based on how close it gets to land
 
 ### Simple Crypto
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 3      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent max (8)  | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_crypto`
 
@@ -59,9 +80,9 @@ Two good agents (alice and bob), one adversary (eve). Alice must sent a private 
 
 ### Simple Push
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 2      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_push`
 
@@ -74,9 +95,9 @@ Two good agents (alice and bob), one adversary (eve). Alice must sent a private 
 
 ### Simple Reference
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 2      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_reference`
 
@@ -88,9 +109,9 @@ Two good agents (alice and bob), one adversary (eve). Alice must sent a private 
 
 ### Simple Speaker Listener
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 2      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 2      | No             | agent dependent | agent dependent max(5)  | agent dependent max (11) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_speaker_listener`
 
@@ -102,9 +123,9 @@ Same as simple_reference, except one agent is the ‘speaker’ (gray) that does
 
 ### Simple Spread
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 3      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_spread`
 
@@ -117,9 +138,9 @@ N agents, N landmarks. Agents are rewarded based on how far any agent is from ea
 
 ### Simple Tag
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 4      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent max (16) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_tag`
 
@@ -132,9 +153,9 @@ Predator-prey environment. Good agents (green) are faster and want to avoid bein
 
 ### Simple World Comm
 
-| Observations | Actions  | Agents | Manual Control |
-|--------------|----------|--------|----------------|
-| Vector       | Discrete | 6      |  No            |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
+| Vector       | Discrete | 6      | No             | agent dependent | agent dependent max(20) | agent dependent max (34) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_world_comm`
 

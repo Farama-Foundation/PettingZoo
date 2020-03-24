@@ -312,7 +312,7 @@ env = wrapper(env, frame_stacking=HISTORY_LEN)
 
 The chess action space is discrete, but it is also compatible with AlphaZero's policy space. In particular, it is a 8×8×73 = 4672 discrete space that corresponds to a 8×8 image with 73 channels.
 
-Description copied from AlphaZero paper (note that directions are not necessarily in the order specified).
+Description copied from AlphaZero paper (note that compass directions are not necessarily in the order specified).
 
 >> action space is a 8x8x73 dimensional array.
 Each of the 8×8
