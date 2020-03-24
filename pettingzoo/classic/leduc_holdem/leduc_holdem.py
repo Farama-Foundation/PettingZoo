@@ -50,9 +50,11 @@ class env(AECEnv):
             if self.env.is_over():
                 self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
                 self.rewards = self._convert_to_dict(self.env.get_payoffs())
+                self._last_obs = obs['obs']
+                self.infos[next_player_id]['legal_moves'] = [0]
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return obs['obs'] if obs else None
+            return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()
@@ -75,5 +77,5 @@ class env(AECEnv):
             print_card(state['hand'])
             print("\nPlayer {}'s Chips: {}".format(player, state['my_chips']))
         print('\n================= Public Cards =================')
-        print_card(state['public_card']) if state['public_card'] != None else print('No public cards.')
+        print_card(state['public_card']) if state['public_card'] is not None else print('No public cards.')
         print('\n')
