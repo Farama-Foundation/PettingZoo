@@ -197,8 +197,8 @@ class MAWaterWorld():
         for evader in self._evaders:
             evader.set_position(self.np_random.rand(2))
             evader.set_position(self._respawn(evader.position, evader._radius))
-            evader.set_velocity((self.np_random.rand(2) - 0.5)
-                                * self.ev_speed)  # TODO policies
+            evader.set_velocity(
+                (self.np_random.rand(2) - 0.5) * self.ev_speed)  # TODO policies
 
         # Initialize poisons
         for poison in self._poisons:
@@ -266,7 +266,7 @@ class MAWaterWorld():
         return sensed_objspeedfeatures_Np_K
 
     def collision_handling_subroutine(self, rewards, is_last):
-                # Players stop on hitting a wall
+        # Players stop on hitting a wall
         for npu, pursuer in enumerate(self._pursuers):
             clippedx_2 = np.clip(pursuer.position, 0, 1)
             vel_2 = pursuer.velocity
@@ -285,14 +285,15 @@ class MAWaterWorld():
                 velocity_scale = pursuer._radius + self.obstacle_radius - \
                     ssd.euclidean(pursuer.position, self.obstaclesx_No_2)
                 pos_diff = pursuer.position - self.obstaclesx_No_2[0]
-                pursuer.set_position(pursuer.position +
-                                     velocity_scale * pos_diff)
+                new_pos = pursuer.position + velocity_scale * pos_diff
+                pursuer.set_position(new_pos)
 
                 collision_normal = pursuer.position - self.obstaclesx_No_2[0]
                 # project current velocity onto collision normal
                 current_vel = pursuer.velocity
-                proj_vel = (np.dot(current_vel, collision_normal) /
-                            np.dot(collision_normal, collision_normal)) * collision_normal
+                proj_numer = np.dot(current_vel, collision_normal)
+                cllsn_mag = np.dot(collision_normal, collision_normal)
+                proj_vel = (proj_numer / cllsn_mag) * collision_normal
                 perp_vel = current_vel - proj_vel
                 total_vel = perp_vel - proj_vel
                 pursuer.set_velocity(total_vel)
@@ -315,8 +316,9 @@ class MAWaterWorld():
                         self.obstaclesx_No_2[0]
                     # project current velocity onto collision normal
                     current_vel = evader.velocity
-                    proj_vel = (np.dot(current_vel, collision_normal) /
-                                np.dot(collision_normal, collision_normal)) * collision_normal
+                    proj_numer = np.dot(current_vel, collision_normal)
+                    cllsn_mag = np.dot(collision_normal, collision_normal)
+                    proj_vel = (proj_numer / cllsn_mag) * collision_normal
                     perp_vel = current_vel - proj_vel
                     total_vel = perp_vel - proj_vel
                     evader.set_velocity(total_vel)
@@ -338,8 +340,9 @@ class MAWaterWorld():
                         self.obstaclesx_No_2[0]
                     # project current velocity onto collision normal
                     current_vel = poison.velocity
-                    proj_vel = (np.dot(current_vel, collision_normal) /
-                                np.dot(collision_normal, collision_normal)) * collision_normal
+                    proj_numer = np.dot(current_vel, collision_normal)
+                    cllsn_mag = np.dot(collision_normal, collision_normal)
+                    proj_vel = (proj_numer / cllsn_mag) * collision_normal
                     perp_vel = current_vel - proj_vel
                     total_vel = perp_vel - proj_vel
                     poison.set_velocity(total_vel)
@@ -466,8 +469,7 @@ class MAWaterWorld():
         # Update reward based on these collisions
         if self.reward_mech == 'global':
             rewards += (
-                (len(ev_caught) * self.food_reward) + (len(po_caught) * self.poison_reward) +
-                (len(ev_encounters) * self.encounter_reward))
+                (len(ev_caught) * self.food_reward) + (len(po_caught) * self.poison_reward) + (len(ev_encounters) * self.encounter_reward))
         else:
             rewards[which_pursuer_caught_ev] += self.food_reward
             rewards[which_pursuer_caught_po] += self.poison_reward
@@ -571,8 +573,7 @@ class MAWaterWorld():
                 color = (0, 0, 0)
                 cv2.line(img,
                          tuple((pursuer.position * screen_size).astype(int)),
-                         tuple(((pursuer.position + pursuer._sensor_range * pursuer.sensors[k]) *
-                                screen_size).astype(int)), color, 1, lineType=cv2.CV_32S)
+                         tuple(((pursuer.position + pursuer._sensor_range * pursuer.sensors[k]) * screen_size).astype(int)), color, 1, lineType=cv2.CV_32S)
                 cv2.circle(img,
                            tuple((pursuer.position * screen_size).astype(int)),
                            int(pursuer._radius * screen_size), (255, 0, 0), -1, lineType=cv2.CV_32S)
