@@ -5,16 +5,17 @@ import rlcard
 from rlcard.utils.utils import print_card
 import numpy as np
 
+
 class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         super(env, self).__init__()
-        self.env = rlcard.make('leduc-holdem',**kwargs)
+        self.env = rlcard.make('leduc-holdem', **kwargs)
         self.num_agents = 2
         self.agents = list(range(self.num_agents))
-        
+
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
@@ -22,12 +23,12 @@ class env(AECEnv):
         self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
 
         obs, player_id = self.env.init_game()
-        
-        self.agent_order = [player_id, 0 if player_id==1 else 1]
+
+        self.agent_order = [player_id, 0 if player_id == 1 else 1]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.infos[player_id]['legal_moves'] = obs['legal_actions']
-        
+
     def _convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
@@ -36,7 +37,7 @@ class env(AECEnv):
 
     def observe(self, agent):
         obs = self.env.get_state(agent)
-        return obs['obs']   
+        return obs['obs']
 
     def step(self, action, observe=True):
         if self.env.is_over():
@@ -55,7 +56,7 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()
-        self.agent_order = [player_id, 0 if player_id==1 else 1]
+        self.agent_order = [player_id, 0 if player_id == 1 else 1]
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
@@ -72,7 +73,7 @@ class env(AECEnv):
             state = self.env.game.get_state(player)
             print("\n=============== Player {}'s Hand ===============".format(player))
             print_card(state['hand'])
-            print("\nPlayer {}'s Chips: {}".format(player,state['my_chips']))
+            print("\nPlayer {}'s Chips: {}".format(player, state['my_chips']))
         print('\n================= Public Cards =================')
         print_card(state['public_card']) if state['public_card'] != None else print('No public cards.')
         print('\n')
