@@ -47,7 +47,7 @@
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import backgammon`
+`from pettingzoo.classic import checkers`
 
 *gif*
 
@@ -59,14 +59,103 @@
 
 *About env arguments*
 
-
 ### Chess
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import backgammon`
+`from pettingzoo.classic import chess`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Dou Dizhu
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import dou_dizhu`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Gin Rummy
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import gin_rummy`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Go
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import go`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Leduc Hold'em
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import leduc_holdem`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Mahjong
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import mahjong`
 
 *gif*
 
@@ -80,34 +169,113 @@
 
 ### Rock Paper Scissors
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-| Vector            | Discrete |   2    | No             |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs.rps`
+`from pettingzoo.classic import rps`
 
-*blurb*
+*gif*
 
-*arguments*
+*AEC Diagram*
 
-*about arguments*
+*Blurb
 
+*Env arguments*
+
+*About env arguments*
 
 ### Rock Paper Scissors Lizard Spock
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-|  Vector      | Discrete   | 2 | No             |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs.rpsls`
+`from pettingzoo.classic import rpsls`
 
-*blurb*
+*gif*
 
-*arguments*
+*AEC Diagram*
 
-*about arguments*
+*Blurb
 
-### Chess
+*Env arguments*
+
+*About env arguments*
+
+### Texas Hold'em
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import texas_holdem`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Texas Hold'em No Limit
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import texas_holdem_no_limit`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Tic Tac Toe
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import tictactoe`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Unu
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import uno`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb
+
+*Env arguments*
+
+*About env arguments*
+
+### Ben's Old Chess
 
 | Observations | Actions    | Agents | Manual Control |
 |--------------|------------|--------|----------------|
