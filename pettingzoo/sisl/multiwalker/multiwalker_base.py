@@ -241,9 +241,8 @@ class BipedalWalker(Agent):
 
     @property
     def observation_space(self):
-        # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
-        idx = 1
-        return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3 + idx,))
+        # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package
+        return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3,))
 
     @property
     def action_space(self):
@@ -416,7 +415,6 @@ class MultiWalkerEnv():
             nobs.append(np.random.normal(xd, self.position_noise))
             nobs.append(np.random.normal(yd, self.position_noise))
             nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-            nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
