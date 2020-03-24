@@ -54,10 +54,12 @@ class env(AECEnv):
             # valid move
             self.board[action] = self.agent_selection + 1
 
+            next_agent = 1 if (self.agent_selection == 0) else 0
+
             # update infos with valid moves
             self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board)) if self.board[i] == 0]
+            self.infos[next_agent]['legal_moves'] = [i for i in range(len(self.board)) if self.board[i] == 0]
 
-            next_agent = 1 if (self.agent_selection == 0) else 0
             winner = self.check_for_winner()
 
             # check if tie
