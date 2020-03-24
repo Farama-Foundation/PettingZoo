@@ -2,6 +2,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
 import numpy as np
+import warnings
 
 from .manual_control import manual_control
 
@@ -77,7 +78,7 @@ class env(AECEnv):
             # invalid move, end game
             self.rewards[self.agent_selection] -= 1
             self.dones = {i: True for i in range(self.num_agents)}
-            print(f"Agent {self.agent_selection} made an invalid move, check env.infos['legal_moves'] for a list of valid actions")
+            warnings.warn("Bad tictactoe move made, game terminating with current player losing. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
         # Switch selection to next agents
         self.agent_selection = 1 if (self.agent_selection == 0) else 0
