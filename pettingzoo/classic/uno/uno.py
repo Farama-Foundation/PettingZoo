@@ -46,6 +46,7 @@ class env(AECEnv):
             if self.env.is_over():
                 self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
                 self.rewards = self._convert_to_dict(self.env.get_payoffs())
+                self._last_obs = obs['obs']
             else:
                 self.prev_player = self.agent_selection
                 if next_player_id == self.prev_player:
@@ -56,7 +57,7 @@ class env(AECEnv):
                 self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return obs['obs'] if obs else None
+            return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()
