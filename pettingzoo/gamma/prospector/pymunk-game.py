@@ -7,9 +7,11 @@ import math
 import os
 from enum import IntEnum, auto
 import itertools as it
+from random import randint
 
 
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = (1280, 720)
+BACKGROUND_COLOR = (217, 151, 106)
 
 WALL_WIDTH = 100
 
@@ -19,6 +21,8 @@ PLAYER_SPRITE_RADIUS = 16.5
 
 PLAYER_SPEED = 150
 BANKER_SPEED = 100
+BANKER_HANDOFF_TOLERANCE = math.pi / 4
+TWO_PI = math.pi * 2.0
 
 def load_image(path: list) -> pg.Surface: # All images stored in data/
     img = pg.image.load(os.path.join('data', *path))
@@ -33,6 +37,22 @@ def flipy(point):
 def invert_y(points):
     return [(x, -y) for x, y in points]
 
+def rand_pos(sprite):
+    x = randint(50, SCREEN_WIDTH - 50)
+    if sprite == 'banker':
+        return x, randint(150, 300)
+    elif sprite == 'prospector':
+        return x, randint(350, SCREEN_HEIGHT - (WATER_HEIGHT + 30))
+
+
+def normalize_angle(angle):
+    if angle > (math.pi):
+        return angle - TWO_PI
+    elif angle < 0.:
+        return angle + TWO_PI
+    return angle
+
+
 class CollisionTypes(IntEnum):
     PROSPECTOR = auto()
     BOUNDARY = auto()
@@ -43,9 +63,14 @@ class CollisionTypes(IntEnum):
 
 
 class Prospector(pg.sprite.Sprite):
-    def __init__(self, pos, space, mass=1):
-        super().__init__()
-        self.image = load_image(['prospec.png'])
+    def __init__(self, pos, space, *sprite_groups):
+        super().__init__(sprite_groups)
+        # self.image = load_image(['prospec.png'])
+        self.image = load_image(['prospector-pickaxe.png'])
+        self.image = pg.transform.scale(
+            self.image, 
+            (int(PLAYER_SPRITE_RADIUS * 2), int(PLAYER_SPRITE_RADIUS * 2))
+        )
 
         self.rect = self.image.get_rect()
         self.orig_image = self.image
@@ -53,10 +78,11 @@ class Prospector(pg.sprite.Sprite):
         # Create the physics body and shape of this object.
         # moment = pm.moment_for_poly(mass, vertices)
 
-        moment = pm.moment_for_circle(mass, 0, self.rect.width / 2)
+        moment = pm.moment_for_circle(1, 0, self.rect.width / 2)
 
-        self.body = pm.Body(mass, moment)
+        self.body = pm.Body(1, moment)
         self.body.nugget = None
+        self.body.sprite_type = 'prospector'
         # self.shape = pm.Poly(self.body, vertices, radius=3)
 
         self.shape = pm.Circle(self.body, PLAYER_SPRITE_RADIUS)
@@ -120,9 +146,9 @@ class Prospector(pg.sprite.Sprite):
 
 
 class Banker(pg.sprite.Sprite):
-    def __init__(self, pos, space, *sprite_groups):
+    def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        self.image = load_image(['banker.png'])
+        self.image = load_image(['bankers', '%s.png' % num])
 
         self.rect = self.image.get_rect()
         self.orig_image = self.image
@@ -134,6 +160,7 @@ class Banker(pg.sprite.Sprite):
 
         self.body = pm.Body(1, moment)
         self.body.nugget = None
+        self.body.sprite_type = 'banker'
         self.body.nugget_offset = None
         # self.shape = pm.Poly(self.body, vertices, radius=3)
 
@@ -146,33 +173,38 @@ class Banker(pg.sprite.Sprite):
         self.space.add(self.body, self.shape)
 
     def update(self, delta, keys):
-        x = y = 0
+        # print(self.body.angle)
+        # self.body.angle = math.pi / 2
+        y = 0
+        move = 0
+        if any(keys[key] for key in (K_UP, K_DOWN, K_RIGHT, K_LEFT)):
+            move = 1
+
         if keys[K_UP]:
             # self.body.apply_force_at_local_point(Vec2d(0, 624), Vec2d(0, 0))
             # self.body.apply_impulse_at_local_point(Vec2d(0, 50))
             # self.body.velocity += (0, 15)
             # self.body.velocity = Vec2d(0, 1).rotated(self.body.angle) * BANKER_SPEED
-            y = 1
+            self.body.angle = 0
         elif keys[K_DOWN]:
             # self.body.apply_force_at_local_point(Vec2d(0, -514), Vec2d(0, 0))
             # self.body.apply_impulse_at_local_point(Vec2d(0, -50))
             # self.body.velocity = Vec2d(0, -1).rotated(self.body.angle) * BANKER_SPEED
-            y = -1
-
-        if keys[K_RIGHT]:
+            self.body.angle = math.pi
+        elif keys[K_RIGHT]:
             # self.body.apply_impulse_at_local_point(Vec2d(50, 0))
             # self.body.velocity = Vec2d(1, 0).rotated(self.body.angle) * BANKER_SPEED
-            x = 1
+            self.body.angle = -math.pi / 2
         elif keys[K_LEFT]:
             # self.body.apply_impulse_at_local_point(Vec2d(-50, 0))
             # self.body.velocity = Vec2d(-1, 0).rotated(self.body.angle) * BANKER_SPEED
-            x = -1
+            # self.body.angle = math.pi / 2
+            self.body.angle = math.pi / 2
 
-        if x != 0 and y != 0:
-            self.body.velocity = (Vec2d(x, y).rotated(self.body.angle) * 
-                                             (BANKER_SPEED / math.sqrt(2)))
-        else:
-            self.body.velocity = Vec2d(x, y).rotated(self.body.angle) * BANKER_SPEED
+        self.body.velocity = Vec2d(0, move).rotated(self.body.angle) * BANKER_SPEED
+        
+        # else:
+        #     self.body.velocity = Vec2d(x, y).rotated(self.body.angle) * BANKER_SPEED
 
         # Rotate the image of the sprite.
         self.rect.center = flipy(self.body.position)
@@ -185,7 +217,9 @@ class Banker(pg.sprite.Sprite):
         curr_vel = self.body.velocity
 
         if self.body.nugget != None:
-            self.body.nugget.update(self.body.position, self.body.nugget_offset, True)
+            # self.body.nugget.update(self.body.position, self.body.nugget_offset, True)
+            corrected = normalize_angle(self.body.angle + (math.pi / 2))
+            self.body.nugget.update(self.body.position, corrected, True)
 
         self.body.velocity = curr_vel
 
@@ -194,14 +228,24 @@ class Boundary(pg.sprite.Sprite):
     def __init__(self, w_type, pos, verts, space, *sprite_groups):
         super().__init__(sprite_groups)
 
+        # if w_type == 'top':
+        #     self.image = load_image(['horiz-wall.png'])
+        #     self.rect = self.image.get_rect(topleft=(0, pos[1] - WALL_WIDTH // 2))
+        # elif w_type == 'right':
+        #     self.image = load_image(['vert-wall.png'])
+        #     self.rect = self.image.get_rect(topleft=(pos[0] + WALL_WIDTH // 2, 0))
+        # elif w_type == 'left':
+        #     self.image = load_image(['vert-wall.png'])
+        #     self.rect = self.image.get_rect(topleft=(pos[0] - WALL_WIDTH // 2, 0))
+
         if w_type == 'top':
-            self.image = load_image(['horiz-wall.png'])
+            self.image = load_image(['horiz-fence.png'])
             self.rect = self.image.get_rect(topleft=(0, pos[1] - WALL_WIDTH // 2))
         elif w_type == 'right':
-            self.image = load_image(['vert-wall.png'])
+            self.image = load_image(['vert-fence.png'])
             self.rect = self.image.get_rect(topleft=(pos[0] + WALL_WIDTH // 2, 0))
         elif w_type == 'left':
-            self.image = load_image(['vert-wall.png'])
+            self.image = load_image(['vert-fence.png'])
             self.rect = self.image.get_rect(topleft=(pos[0] - WALL_WIDTH // 2, 0))
 
         self.body = pm.Body(body_type=pm.Body.STATIC)
@@ -241,7 +285,7 @@ class Chest(pg.sprite.Sprite):
     def __init__(self, pos, verts, space, *sprite_groups):
         super().__init__(sprite_groups)
 
-        self.image = load_image(['chest.png'])
+        self.image = load_image(['bank.png'])
         self.rect = self.image.get_rect(topleft=pos)
 
         self.body = pm.Body(body_type=pm.Body.STATIC)
@@ -313,7 +357,6 @@ class Game:
         self.done = False
         self.screen = pg.display.set_mode(SCREEN_SIZE)
         self.clock = pg.time.Clock()
-        self.bg_color = pg.Color(100, 100, 100)
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
@@ -323,8 +366,13 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.gold = []
 
-        self.player = Prospector((1000, 500), self.space)
-        self.all_sprites.add(self.player)
+        prospec_info = [rand_pos('prospector') for _ in range(3)]
+        self.prospectors = []
+        for pos in prospec_info:
+            self.prospectors.append(Prospector(pos, self.space, self.all_sprites))
+
+        # self.player = Prospector((1000, 500), self.space)
+        # self.all_sprites.add(self.player)
         # Position-vertices tuples for the walls.
         # vertices = [
         #     ([80, 120], ((0, 0), (100, 0), (70, 100), (0, 100))),
@@ -333,13 +381,15 @@ class Game:
         #     ([760, 10], ((0, 0), (30, 0), (30, 420), (0, 400))),
         # ]
 
-        banker_pos = (
-            ((184 * 1) + 34, 250), ((184 * 3) + 34, 250), ((184 * 5) + 34, 250)
+        # banker_pos = (
+        #     (1, ((184 * 1) + 34, 250)), (2, ((184 * 3) + 34, 250)), (3, ((184 * 5) + 34, 250))
+        # )
+        banker_info = (
+            (1, rand_pos('banker')), (2, rand_pos('banker')), (3, rand_pos('banker'))
         )
         self.bankers = []
-        for pos in banker_pos:
-            self.bankers.append(Banker(pos, self.space, self.all_sprites))
-
+        for num, pos in banker_info:
+            self.bankers.append(Banker(pos, self.space, num, self.all_sprites))
 
         vertical_vertices = (
             (0, 0),
@@ -368,8 +418,8 @@ class Game:
         chest_verts = (
             (0, 0),
             (184, 0),
-            (184, 100),
-            (0, 100),
+            (184, 85),
+            (0, 85),
         )
 
         chest_info = [
@@ -382,19 +432,19 @@ class Game:
         for pos, verts in chest_info:
             self.chests.append(Chest(pos, verts, self.space, self.all_sprites))
 
-        water_info = {
-            'pos' : (0, SCREEN_HEIGHT - WATER_HEIGHT), 
-            'verts': ((0, 0), (SCREEN_WIDTH, 0), (SCREEN_WIDTH, WATER_HEIGHT), (0, WATER_HEIGHT))
-        }
-
-        Water(water_info['pos'], water_info['verts'], self.space, self.all_sprites)
-
 
         for w_type, pos, verts in boundaries:
             if w_type != 'bottom':
                 Boundary(w_type, pos, verts, self.space, self.all_sprites)
             else:
                 Boundary(w_type, pos, verts, self.space)
+
+        water_info = {
+            'pos' : (0, SCREEN_HEIGHT - WATER_HEIGHT), 
+            'verts': ((0, 0), (SCREEN_WIDTH, 0), (SCREEN_WIDTH, WATER_HEIGHT), (0, WATER_HEIGHT))
+        }
+
+        Water(water_info['pos'], water_info['verts'], self.space, self.all_sprites)
 
         # for pos, verts in vertices:
         #     Wall(pos, verts, self.space, 1, self.all_sprites)
@@ -434,14 +484,31 @@ class Game:
                 if g.id == gold.id:
                     gold_class = g
 
-            # prospec = gold.body.prospec
-            gold_class.parent_body.nugget = None
+            if gold_class.parent_body.sprite_type == 'prospector':
 
-            normal = arbiter.contact_point_set.normal
+                banker_body = banker.body
 
-            gold_class.parent_body = banker.body
-            banker.body.nugget = gold_class
-            banker.body.nugget_offset = normal.angle
+                normal = arbiter.contact_point_set.normal
+                
+                corrected = normalize_angle(banker_body.angle + (math.pi / 2))
+
+                # print('Banker body angle:', banker_body.angle)
+                # print('Corrected:', corrected)
+
+                # if (banker_body.angle - BANKER_HANDOFF_TOLERANCE <= normal.angle <=
+                #     banker_body.angle + BANKER_HANDOFF_TOLERANCE):
+                if (corrected - BANKER_HANDOFF_TOLERANCE <= normal.angle <=
+                    corrected + BANKER_HANDOFF_TOLERANCE):
+                    # print(True)
+
+                    # prospec = gold.body.prospec
+                    gold_class.parent_body.nugget = None
+
+                    # print(normal.angle)
+
+                    gold_class.parent_body = banker_body
+                    banker_body.nugget = gold_class
+                    banker_body.nugget_offset = normal.angle
 
             return True
 
@@ -454,24 +521,26 @@ class Game:
         def gold_score_handler(arbiter, space, data):
             gold, chest = arbiter.shapes[0], arbiter.shapes[1]
 
-            chest.body.score += 1
-
-            self.space.remove(gold, gold.body)
-
             gold_class = None
             for g in self.gold:
                 if g.id == gold.id:
                     gold_class = g
 
-            gold_class.parent_body.nugget = None
+            if gold_class.parent_body.sprite_type == 'banker':
 
-            total_score = ', '.join(['Chest %d: %d' % (i, c.body.score) 
-                                     for i, c in enumerate(self.chests)])
+                chest.body.score += 1
 
-            print(total_score)
+                self.space.remove(gold, gold.body)
 
-            self.gold.remove(gold_class)
-            self.all_sprites.remove(gold_class)
+                gold_class.parent_body.nugget = None
+
+                total_score = ', '.join(['Chest %d: %d' % (i, c.body.score) 
+                                        for i, c in enumerate(self.chests)])
+
+                # print(total_score)
+
+                self.gold.remove(gold_class)
+                self.all_sprites.remove(gold_class)
 
             return False
 
@@ -482,9 +551,9 @@ class Game:
         gold_score.begin = gold_score_handler
 
 
-        self.player.filter = pm.ShapeFilter(
-            categories=0b1, mask=pm.ShapeFilter.ALL_MASKS ^ 0b1
-        )
+        # self.player.filter = pm.ShapeFilter(
+        #     categories=0b1, mask=pm.ShapeFilter.ALL_MASKS ^ 0b1
+        # )
 
 
     def run(self):
@@ -501,11 +570,15 @@ class Game:
             self.draw()
 
     def draw(self):
-        self.screen.fill(self.bg_color)
+        self.screen.fill(BACKGROUND_COLOR)
         self.all_sprites.draw(self.screen)
 
-        if self.player.body.nugget is not None:
-            self.player.body.nugget.draw(self.screen)
+        for p in self.prospectors:
+            if p.body.nugget is not None:
+                p.body.nugget.draw(self.screen)
+
+        # if self.player.body.nugget is not None:
+        #     self.player.body.nugget.draw(self.screen)
 
         for b in self.bankers:
             if b.body.nugget is not None:

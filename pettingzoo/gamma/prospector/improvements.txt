@@ -19,3 +19,8 @@ make actual sprites for banker and prospector
 banker speed a little slower
 
 4 prospectors, 3 bankers
+
+- sprite change direction (sprite actually faces down)
+- walking on a beach/desert
+- walls of the game look wild-west (fences)
+- have the banker only accept gold from one side

@@ -81,9 +81,9 @@ class env(AECEnv):
 
             # observe the current state
             for i in self.agents:
-                self.observations[i] = self.state[1-i]
+                self.observations[i] = self.state[1 - i]
         else:
-            self.state[1-agent] = none
+            self.state[1 - agent] = none
 
         self.agent_selection = self._agent_selector.next()
         if observe:
