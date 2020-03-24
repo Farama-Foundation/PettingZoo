@@ -47,8 +47,6 @@ forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=Tr
 max_frames=500)
 ```
 
-*about arguments*
-
 ```
 n_walkers: number of bipedal walker agents in environment
 
@@ -103,7 +101,6 @@ opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 ```
 
-*about arguments*
 ```
 max_frames: after max_frames steps all agents will return done
 
@@ -171,8 +168,6 @@ poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
 poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
 reward_mech='local', speed_features=True, max_frames=500)
 ```
-
-*about arguments*
 
 ```
 n_pursuers: number of pursuing archea
