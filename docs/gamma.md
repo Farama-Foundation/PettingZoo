@@ -16,9 +16,9 @@
 
 ### Cooperative Pong
 
-| Observations | Actions  | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|----------|--------|----------------|--------------|-------------------|------------|
-| Graphical    | Discrete | 2      | Yes            | ?            | ?                 | ?          |
+| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|--------|----------------|--------------|-------------------|------------|-|-|
+| Graphical    | Discrete | 2      | Yes            | ?            | ?                 | ?          |?|?|
 
 `from pettingzoo.gamma import cooperative_pong`
 
@@ -44,9 +44,9 @@ Leaderboard:
 
 ### Knights Archers Zombies ('KAZ')
 
-| Observations | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|----------|---------|----------------|--------------|-------------------|------------|
-| Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?                 | ?          |
+| Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|-------------------|------------|-|-|
+| Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?                 | ?          |?|?|
 
 `from pettingzoo.gamma import knights_archers_zombies`
 
@@ -72,9 +72,9 @@ Leaderboard:
 
 ### Pistonball
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|---------|--------|----------------|--------------|-------------------|------------|
-| Graphical    | Either  | 20     | Yes            | ?            | ?                 | ?          |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|---------|--------|----------------|--------------|-------------------|------------|-|-|
+| Graphical    | Either  | 20     | Yes            | ?            | ?                 | ?          |?|?|
 
 `from pettingzoo.gamma import pistonball`
 
@@ -107,9 +107,9 @@ Continuous Leaderboard:
 
 ### Prison
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|---------|--------|----------------|-------------|------------------|------------|
-| Either       | Either  | 8      | Yes            | ?           | ?                | ?          |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|---------|--------|----------------|-------------|------------------|------------|-|-|
+| Either       | Either  | 8      | Yes            | ?           | ?                | ?          |?|?|
 
 
 `from pettingzoo.gamma import prison`
@@ -141,9 +141,9 @@ Continuous Leaderboard:
 
 ### Prospector
 
-| Observations | Actions    | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|------------|---------|----------------|--------------|-------------------|------------|
-| Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |
+| Observations | Actions    | Agents  | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|------------|---------|----------------|--------------|-------------------|------------|-|-|
+| Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?                 | ?          |?|?|
 
 `from pettingzoo.gamma import prospector`
 
