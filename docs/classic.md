@@ -22,6 +22,12 @@
 
 *General notes on environments*
 
+### Backgammon
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
 ### Rock Paper Scissors
 
 | Observations | Actions    | Agents | Manual Control |
