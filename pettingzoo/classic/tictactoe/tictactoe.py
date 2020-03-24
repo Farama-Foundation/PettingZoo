@@ -10,7 +10,7 @@ from .board import Board
 
 
 class env(AECEnv):
-    metadata = {'render.modes': ['human', 'ansi']}
+    metadata = {'render.modes': ['human']}
 
     def __init__(self):
         super(env, self).__init__()
@@ -104,34 +104,27 @@ class env(AECEnv):
             return
 
     def render(self, mode='human'):
-        if mode == 'ansi':
-            def getSymbol(input):
-                if input == 0:
-                    return '-'
-                elif input == 1:
-                    return 'X'
-                else:
-                    return 'O'
+        def getSymbol(input):
+            if input == 0:
+                return '-'
+            elif input == 1:
+                return 'X'
+            else:
+                return 'O'
 
-            board = list(map(getSymbol, self.board.squares))
+        board = list(map(getSymbol, self.board.squares))
 
-            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-            print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
-            print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-            print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
-            print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-            print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
-            print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
 
     def close(self):
         pass
-
-# import pettingzoo as pz
-# env = pz.classic.tictactoe.env()
-
-# import pettingzoo as pz
-# env = pz.classic.tictactoe.manual_control()
