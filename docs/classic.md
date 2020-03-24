@@ -34,7 +34,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -53,7 +53,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -71,7 +71,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -89,7 +89,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -107,7 +107,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -125,7 +125,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -143,7 +143,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -161,7 +161,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -179,7 +179,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -197,7 +197,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -215,7 +215,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -233,7 +233,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -251,7 +251,7 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
@@ -269,13 +269,13 @@
 
 *AEC Diagram*
 
-*Blurb
+*Blurb*
 
 *Env arguments*
 
 *About env arguments*
 
-### Ben's Old Chess
+### Ben's Old Chess Documentation
 
 | Observations | Actions    | Agents | Manual Control |
 |--------------|------------|--------|----------------|
