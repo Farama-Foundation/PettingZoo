@@ -27,9 +27,12 @@ Please additionally cite
 
 ### Multiwalker
 
-| Observations | Actions  | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|----------|---------|----------------|--------------|-------------------|------------|
-| Vector       | Discrete | 3 (+/-) | No             | ?            | ?                 | ?          |
+| Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
+
+
+
 
 `from pettingzoo.sisl import multiwalker`
 
@@ -78,9 +81,10 @@ Add Gupta et al and DDPG paper results too
 
 ### Pursuit
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Observation Shape | Num States |
-|--------------|---------|---------|----------------|--------------|-------------------|------------|
-| Graphical    | Either  | 8 (+/-) | No             | ?            | ?                 | ?          |
+| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape         | Observation Values | Num States |
+|--------------|---------|---------|----------------|--------------|---------------|---------------------------|--------------------|------------|
+| Graphical    | Either  | 8 (+/-) | No             | (1,)         | Discrete(5)   | (3, obs_range, obs_range) | (0,255)            | ?          |
+
 
 `from pettingzoo.sisl import pursuit`
 
