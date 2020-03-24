@@ -1,14 +1,26 @@
-Fix these:
+## Clasic Environments
 
-## Other Enviroments
+| Environment                      | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------------------------------|--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Backgammon                       | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Checkers                         | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Chess                            | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Connect Four                     | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Dou Dizhu                        | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Gin Rummy                        | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Go                               | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Leduc Hold'em                    | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Mahjong                          | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Rock Paper Scissors              | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Rock Paper Scissors Lizard Spock | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Texas Hold'em                    | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Texas Hold'em No Limit           | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Tic Tac Toe                      | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Uno                              | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs`
+`pip install pettingzoo[classic]`
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Rock Paper Scissors                | Vector            | Discrete |   2    | No             |
-| Rock Paper Scissors Lizard Spock     |  Vector      | Discrete   | 2 | No             |
-| Chess     |  Graphical      | Discrete[*](#chess-action-space)   | 2 | No             |
+*General notes on environments*
 
 ### Rock Paper Scissors
 
