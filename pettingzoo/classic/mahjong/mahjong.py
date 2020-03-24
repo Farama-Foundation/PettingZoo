@@ -63,11 +63,12 @@ class env(AECEnv):
             if self.env.is_over():
                 self.infos[next_player_id]['legal_moves'] = [0]
                 self.dones = self._convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
+                self._last_obs = obs['obs']
             else:
                 self.infos[next_player_id]['legal_moves'] = obs['legal_actions']
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return obs['obs'] if obs else None
+            return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()

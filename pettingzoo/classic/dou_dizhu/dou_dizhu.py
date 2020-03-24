@@ -37,16 +37,21 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         if self.env.is_over():
+            self.rewards = self._convert_to_dict(self.env.get_payoffs())
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             obs = False
         else:
             obs, next_player_id = self.env.step(action)
-            self.dones = self._convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
-            self.infos[next_player_id]['legal_moves'] = obs['legal_actions'] if not self.env.is_over() else [0]
-        self.rewards = self._convert_to_dict(self.env.get_payoffs())
+            if self.env.is_over():
+                self.rewards = self._convert_to_dict(self.env.get_payoffs())
+                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+                self.infos[next_player_id]['legal_moves'] = [0]
+                self._last_obs = obs['obs']
+            else:
+                self.infos[next_player_id]['legal_moves'] = obs['legal_actions']
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return obs['obs'] if obs else None
+            return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()
