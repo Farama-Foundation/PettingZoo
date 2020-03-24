@@ -250,7 +250,8 @@ class wrapper(AECEnv):
                 if self.new_dtype is not None:
                     dtype = self.new_dtype[agent]
                 else:
-                    dtype = obs_space.dtype
+                    warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+                    dtype = np.float32
                 min_obs, max_obs = range_scale
                 low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
                 high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
@@ -306,8 +307,8 @@ class wrapper(AECEnv):
             if self.new_dtype is not None:
                 dtype = self.new_dtype[agent]
             else:
-                warnings.warn("Trying to scale observation, but a new dtype is not given. This will likely result in an error from np.divide")
-                dtype = obs.dtype
+                warnings.warn("Trying to scale observation, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+                dtype = np.float32
             min_obs, max_obs = range_scale
             obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
         elif self.new_dtype is not None:
