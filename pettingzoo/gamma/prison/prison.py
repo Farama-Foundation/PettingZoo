@@ -6,6 +6,14 @@ import numpy as np
 import random
 from gym import spaces
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+                
+# env = agent_selection([10,20,30,40])
+# for i in range(10):
+#     print("curr", env.agent_select)
+#     # print("next", env.peek_next_agent())
+#     if i == 4:
+#         env.reinit([11,21,31,41])
+
 
 def get_image(path):
     from os import path as os_path
@@ -121,7 +129,7 @@ class env(AECEnv):
         self.walls = []
         self.create_walls()
 
-        self.prisoners = []
+        self.prisoners = {}
         prisoner_spawn_locs = [(200, 150-40, 50, 350, (50, 50, 350, 150)), 
                                 (550, 150-40, 400, 700, (400, 50, 700, 150)), 
                                 (200, 300-46, 50, 350, (50, 200, 350, 300)),
@@ -132,15 +140,16 @@ class env(AECEnv):
                                (550, 600-53, 400, 700, (400, 500, 700, 600))]
         self.prisoner_mapping = {(0, 0): 0, (1, 0): 1, (0, 1): 2,
                                  (1, 1): 3, (0, 2): 4, (1, 2): 5, (0, 3): 6, (1, 3): 7}
+        p_count = 0
         for p in prisoner_spawn_locs:	
-	            x, y, l, r, u = p	
-	            self.prisoners[p_count] = self.create_prisoner(	
-	                x + random.randint(-20, 20), y, l, r, u)	
-	            p_count += 1
+            x, y, l, r, u = p	
+            self.prisoners[p_count] = self.create_prisoner(
+                x + random.randint(-20, 20), y, l, r, u)	
+            p_count += 1
 
         sprite = 0
         for p in self.prisoners:
-            p.set_sprite(self.sprite_list[sprite])
+            self.prisoners[p].set_sprite(self.sprite_list[sprite])
             sprite = (sprite + 1) % len(self.sprite_list)
 
         self.frames = 0	
@@ -202,9 +211,9 @@ class env(AECEnv):
 
     def draw(self):
         dynamic_background = get_image('blit_background.png')
-        self.screen.blit(dynamic_background, (50,111)) 
+        self.screen.blit(dynamic_background, (0,0)) 
         for p in self.prisoners:
-            self.screen.blit(p.get_sprite(), p.position)
+            self.screen.blit(self.prisoners[p].get_sprite(), self.prisoners[p].position)
 
         # self.space.debug_draw(self.options)
 
@@ -227,7 +236,14 @@ class env(AECEnv):
         self.num_frames = 0
         self.done_val = False
 
-        prisoner_spawn_locs = [(200, 150-40, 50, 350, (50, 50, 350, 150)), (550, 150-40, 400, 700, (400, 50, 700, 150)), (200, 300-46, 50, 350, (50, 200, 350, 300)),(550, 300-48, 400, 700, (400, 200, 700, 300)), (200, 450-32, 50, 350, (50, 350, 350, 450)), (550, 450-54, 400, 700, (400, 350, 700, 450)), (200, 600-48, 50, 350, (50, 500, 350, 600)), (550, 600-53, 400, 700, (400, 500, 700, 600))]
+        prisoner_spawn_locs = [(200, 150-40, 50, 350, (50, 50, 350, 150)), 
+                                (550, 150-40, 400, 700, (400, 50, 700, 150)), 
+                                (200, 300-46, 50, 350, (50, 200, 350, 300)),
+                               (550, 300-48, 400, 700, (400, 200, 700, 300)), 
+                               (200, 450-32, 50, 350, (50, 350, 350, 450)), 
+                               (550, 450-54, 400, 700, (400, 350, 700, 450)), 
+                               (200, 600-48, 50, 350, (50, 500, 350, 600)), 
+                               (550, 600-53, 400, 700, (400, 500, 700, 600))]
         self.agent_selector_obj.reinit(self.agent_order)
         self.agent_selection = self.agent_selector_obj.next()
         for i in self.agents:
@@ -283,6 +299,7 @@ class env(AECEnv):
         if not self.rendering:	
             pygame.display.init()	
             self.screen = pygame.display.set_mode((750, 650))
+            self.screen.blit(self.background, (0, 0))
         self.rendering = True
         self.draw()
         pygame.display.flip()
