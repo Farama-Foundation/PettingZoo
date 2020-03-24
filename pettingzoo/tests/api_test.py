@@ -141,9 +141,15 @@ def test_render(env):
     for mode in render_modes:
         for _ in range(10):
             for agent in env.agent_order:
-                action = env.action_spaces[agent].sample()
+                if 'legal_moves' in env.infos[agent]:
+                    action = random.choice(env.infos[agent]['legal_moves'])
+                else:
+                    action = env.action_spaces[agent].sample()
                 env.step(action, observe=False)
                 env.render(mode=mode)
+                if all(env.dones.values()):
+                    env.reset()
+                    break
 
 
 def test_manual_control(env):

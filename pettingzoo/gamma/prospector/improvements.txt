@@ -1,0 +1,26 @@
+
+when the prospector touches the blue at the bottom, they get a nugget (icon966.png)
+
+prospector rotates and moves forward/backward
+
+prospector can move in between chests (in the red space)
+
+banker moves with translations, up/down/left/right
+
+prospector moves up/down/left/right and rotates
+
+prospector moves with continuous actions (vector of f/b, l/r, rotation c/cc)
+same for banker
+
+make actual sprites for banker and prospector
+
+15 fps, cap at 900 frames (60 seconds), no limit on number of gold
+
+banker speed a little slower
+
+4 prospectors, 3 bankers
+
+- sprite change direction (sprite actually faces down)
+- walking on a beach/desert
+- walls of the game look wild-west (fences)
+- have the banker only accept gold from one side
