@@ -63,19 +63,21 @@ class env(AECEnv):
                     pass
                 elif winner == 1:
                     # agent 0 won
-                    self.rewards[0] += 100
-                    self.rewards[1] -= 100
+                    self.rewards[0] += 1
+                    self.rewards[1] -= 1
                 else:
                     # agent 1 won
-                    self.rewards[1] += 100
-                    self.rewards[0] -= 100
+                    self.rewards[1] += 1
+                    self.rewards[0] -= 1
 
                 # once either play wins or there is a draw, game over, both players are done
                 self.dones = {i: True for i in range(self.num_agents)}
 
         else:
-            # invalid move, some sort of negative reward
-            self.rewards[self.agent_selection] += -10
+            # invalid move, end game
+            self.rewards[self.agent_selection] -= 1
+            self.dones = {i: True for i in range(self.num_agents)}
+            print(f"Agent {self.agent_selection} made an invalid move, check env.infos['legal_moves'] for a list of valid actions")
 
         # Switch selection to next agents
         self.agent_selection = 1 if (self.agent_selection == 0) else 0
