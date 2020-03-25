@@ -10,8 +10,8 @@ if sys.argv[2] == 'True':
 if sys.argv[3] == 'True':
     manual_control = True
 if sys.argv[4] == 'True':
-    bombardment == True
-if sys.argv[5] == 'True:
+    bombardment = True
+if sys.argv[5] == 'True':
     performance = True
 
 if sys.argv[1] == 'classic/backgammon':
