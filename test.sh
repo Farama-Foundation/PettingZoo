@@ -1,9 +1,9 @@
 # Classic
 
-render=True
+render=False
 manual_control=True
-bombardment=True
-performance=True
+bombardment=False
+performance=False
 
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401
 # python3 -m pettingzoo.tests.ci_test classic/backgammon $render $manual_control $bombardment $performance
@@ -48,3 +48,9 @@ flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401
 python3 -m pettingzoo.tests.ci_test sisl/multiwalker  $render $manual_control $bombardment $performance
 python3 -m pettingzoo.tests.ci_test sisl/pursuit $render $manual_control $bombardment $performance
 python3 -m pettingzoo.tests.ci_test sisl/waterworld $render $manual_control $bombardment $performance
+
+# Utils
+flake8 pettingzoo/utils --ignore E501,E731,E741,E402,F401
+
+# Tests
+flake8 pettingzoo/tests --ignore E501,E731,E741,E402,F401

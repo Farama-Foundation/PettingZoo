@@ -2,7 +2,7 @@ import numpy as np
 import copy
 from gym.spaces import Box
 from gym import spaces
-from warnings import warn
+import warnings
 from skimage import measure
 from .env import AECEnv
 
@@ -66,8 +66,8 @@ class wrapper(AECEnv):
         self.agent_order = self.env.agent_order
 
         if self.frame_stacking > 1:
-            self.stack_of_frames = {agent : None for agent in self.agents}
-            self.pre_fs_ndim = {agent : None for agent in self.agents}
+            self.stack_of_frames = {agent: None for agent in self.agents}
+            self.pre_fs_ndim = {agent: None for agent in self.agents}
 
         self._check_wrapper_params()
 
@@ -75,7 +75,7 @@ class wrapper(AECEnv):
         if self._check_box_space():
             self.modify_observation_space()
         else:
-            warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
+            warnings.warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
 
     def _check_wrapper_params(self):
         '''
@@ -96,7 +96,7 @@ class wrapper(AECEnv):
                     assert self.color_reduction[agent] in COLOR_RED_LIST, "color_reduction must be in {}".format(COLOR_RED_LIST)
                     assert len(self.observation_spaces[agent].low.shape) == 3, "To apply color_reduction, length of shape of obs space of the agent should be 3. It is {}".format(len(self.observation_spaces[agent].low.shape))
                     if self.color_reduction[agent] == "full":
-                        warn("You have chosen true grayscaling. It might be too slow. Choose a specific channel for better performance")
+                        warnings.warn("You have chosen true grayscaling. It might be too slow. Choose a specific channel for better performance")
 
         if self.down_scale is not None:
             assert isinstance(self.down_scale, tuple) or isinstance(self.down_scale, dict), "down_scale must be tuple or dict. It is {}".format(self.down_scale)
