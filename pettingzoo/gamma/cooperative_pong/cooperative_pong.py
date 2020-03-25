@@ -2,6 +2,7 @@ import os
 import numpy as np
 import gym
 from .cake_paddle import CakePaddle
+from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
@@ -412,6 +413,3 @@ class env(AECEnv):
         if observe:
             observation = self.observe(self.agent_selection)
             return observation
-
-
-from .manual_control import manual_control
