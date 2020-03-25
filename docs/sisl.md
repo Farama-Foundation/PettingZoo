@@ -1,11 +1,10 @@
 ## SISL Enviroments
 
-| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
-|-------------|-------------------|----------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
-| Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)                                  | (-5.3, 5.3)        | ?          |
-| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)                             | (0,255)            | ?      |
-| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)                                | (-10,10)           | ?          |
-
+| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|-------------|-------------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
+| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
+| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
 
 `pip install pettingzoo[sisl]`
 
@@ -29,8 +28,6 @@ Please additionally cite
 | Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
-
-
 
 
 `from pettingzoo.sisl import multiwalker`
@@ -80,8 +77,7 @@ Add Gupta et al and DDPG paper results too
 
 | Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Either  | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            |  ?    |
-
+| Graphical    | Either  | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
 
 `from pettingzoo.sisl import pursuit`
 
@@ -149,9 +145,10 @@ Leaderboard:
 
 ### Waterworld
 
-| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
-|-------------------|---------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
-| Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | ((4 + 3*speed_features)*n_sensors+2,) | (-10,10)           | ?          |
+| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|-------------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
+
 
 `from pettingzoo.sisl import waterworld`
 
@@ -159,7 +156,7 @@ Leaderboard:
 
 *AEC diagram*
 
-By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default.
+By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default. Observation shape takes the full form of ((4 + 3*speed_features)*n_sensors+2,).
 
 ```
 waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
