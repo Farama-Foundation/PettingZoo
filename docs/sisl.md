@@ -3,7 +3,7 @@
 | Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
 |-------------|-------------------|----------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
 | Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)                                  | (-5.3, 5.3)        | ?          |
-| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)                             | (0,255)            | xs*ys      |
+| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)                             | (0,255)            | ?      |
 | Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)                                | (-10,10)           | ?          |
 
 
@@ -78,9 +78,9 @@ Add Gupta et al and DDPG paper results too
 
 ### Pursuit
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape         | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|---------------------------|--------------------|------------|
-| Graphical    | Either  | 8 (+/-) | No             | (1,)         | [0,4]         | (3, obs_range, obs_range) | (0,255)            | xs*ys      |
+| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Graphical    | Either  | 8 (+/-) | No             | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            |  ?    |
 
 
 `from pettingzoo.sisl import pursuit`
@@ -89,7 +89,7 @@ Add Gupta et al and DDPG paper results too
 
 *AEC diagram*
 
-By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default.
+By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default. Observation shape takes the full form of `(3, obs_range, obs_range)`.
 
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
