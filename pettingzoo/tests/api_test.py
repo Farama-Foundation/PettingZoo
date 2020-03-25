@@ -162,8 +162,6 @@ def test_manual_control(env):
 
 def api_test(env, render=False, manual_control=False):
     print("Starting API test")
-    if manual_control:
-        assert render, "Rendering must be enabled to test manual control"
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
     observation = env.reset(observe=False)
