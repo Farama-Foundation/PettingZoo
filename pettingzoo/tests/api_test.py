@@ -111,6 +111,8 @@ def play_test(env, observation_0):
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
+        if not isinstance(env.infos[agent], dict):
+            warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
@@ -120,9 +122,10 @@ def play_test(env, observation_0):
         else:
             action = env.action_spaces[agent].sample()
         reward, done, info = env.last()
-        assert isinstance(done, bool), "last done is not True or False"
-        assert reward == env.rewards[agent], "last reward and rewards[agent] do not match"
-        assert done == env.dones[agent], "last done and rewards[done] do not match"
+        assert isinstance(done, bool), "Done from last is not True or False"
+        assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
+        assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
+        assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
         assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
         test_reward(reward)
         observation = env.step(action, observe=False)
