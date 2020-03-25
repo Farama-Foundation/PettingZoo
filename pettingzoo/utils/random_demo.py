@@ -16,7 +16,6 @@ def random_demo(env, render=True):
         display_wait = 0.0
 
     total_reward = 0
-    observations = {}
     initial_iteration = {agent: True for agent in env.agents}
     dones = {agent: False for agent in env.agents}
     done = all(dones.values())
