@@ -4,6 +4,7 @@ import numpy as np
 import gym
 import random
 
+
 def test_obervation(observation, observation_0):
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():
