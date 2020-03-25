@@ -59,18 +59,8 @@ def manual_control(**kwargs):
                 initial_iteration[agent] = False
                 env.step(action_dict[agent], observe=False)
         done = all(dones.values())
-        if done:
-            print("Total reward", total_reward, "done", done)
 
         env.render()
         pygame.event.pump()
-        # env.plot_obs(observation, "obs")
-        # break
 
-    # assert (total_reward == env.env.score), "Final score = {} and reward = {} are not the same".format(total_reward, env.env.score)
-    print("Final reward is {0:.2f}".format(total_reward))
-    # Uncomment next line to print FPS at which the game runs
-    # print("fps = ", env.env.clock.get_fps())
-
-    # pygame.time.wait(3000)
     env.close()
