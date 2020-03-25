@@ -5,12 +5,16 @@ import sys
 
 # classic
 
+render = False
 if sys.argv[2] == 'True':
     render = True
+manual_control = False
 if sys.argv[3] == 'True':
     manual_control = True
+bombardment = False
 if sys.argv[4] == 'True':
     bombardment = True
+performance = False
 if sys.argv[5] == 'True':
     performance = True
 
