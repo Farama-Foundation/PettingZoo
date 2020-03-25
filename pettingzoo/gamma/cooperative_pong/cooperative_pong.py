@@ -332,7 +332,6 @@ class CooperativePong(gym.Env):
                     self.score += reward
                     if self.num_frames == 900:
                         self.done = True
-                        print("score = {}, frames = {}".format(self.score, self.num_frames))
 
                 # let the clock tick
                 if self.renderOn:
