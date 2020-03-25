@@ -30,7 +30,7 @@ def save_image_observation(observation, frame_stacking=1, pre_fs_ndim=None, reve
     observation_dict = observation
     if not isinstance(observation, dict):
         observation_dict = {0: observation}
-    
+
     for key in observation_dict.keys():
         # check if file already exists
         while isfile("obs_{}_{}.png".format(i, key)):
@@ -46,8 +46,8 @@ def save_image_observation(observation, frame_stacking=1, pre_fs_ndim=None, reve
             if pre_fs_ndim == 2:
                 image = image[-1]
             elif pre_fs_ndim == 3:
-                third_dim = int(image.shape[-1]/frame_stacking)
+                third_dim = int(image.shape[-1] / frame_stacking)
                 image = image[:, :, -third_dim:]
         if reverse_colors:
-            image = np.array([[1-col for col in row] for row in image], dtype=np.float32)
+            image = np.array([[1 - col for col in row] for row in image], dtype=np.float32)
         plt.imsave("obs_{}_{}.png".format(i, key), image, cmap=plt.cm.gray)
