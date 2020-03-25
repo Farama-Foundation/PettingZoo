@@ -414,4 +414,5 @@ class env(AECEnv):
             observation = self.observe(self.agent_selection)
             return observation
 
+
 from .manual_control import manual_control
