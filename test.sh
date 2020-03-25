@@ -3,7 +3,7 @@
 render = True
 manual_control = True
 bombardment = True
-performance= True
+performance = True
 
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401
 # python3 -m pettingzoo.tests.ci_test classic/backgammon $render $manual_control $bombardment $performance
