@@ -6,7 +6,7 @@ import warnings
 from skimage import measure
 from .env import AECEnv
 
-from .frame_stack import stack_obs_space, stack_reset_obs, stack_obs
+from .frame_stack import stack_obs_space, stack_obs
 
 COLOR_RED_LIST = ["full", 'R', 'G', 'B']
 OBS_RESHAPE_LIST = ["expand", "flatten"]
@@ -54,7 +54,6 @@ class wrapper(AECEnv):
 
         self.agents = self.env.agents
         self.agent_selection = self.env.agent_selection
-        self.num_agents = len(self.agents)
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = copy.copy(self.env.action_spaces)
         self.orig_action_spaces = self.env.action_spaces
