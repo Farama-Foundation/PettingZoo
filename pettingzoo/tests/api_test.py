@@ -3,6 +3,7 @@ import warnings
 import numpy as np
 import gym
 import random
+import re
 
 
 def test_obervation(observation, observation_0):
@@ -45,8 +46,12 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_spaces[agent], gym.spaces.Box) or isinstance(env.action_spaces[agent], gym.spaces.Discrete)):
             warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
-        if (not isinstance(agent, int)) and agent != 'env':
-            warnings.warn("Agent's are recommended to have integer names")
+        if (not isinstance(agent, str)) and agent != 'env':
+            warnings.warn("Agent's are recommended to have numbered string names, like player_0")
+        """
+        if isinstance(agent, str) and not # regex for ending in _<integers>:
+            warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
+        """
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
             warnings.warn("The class of observation spaces is different between two agents")
         if not isinstance(env.action_spaces[agent], env.action_spaces[agent_0].__class__):
