@@ -5,6 +5,7 @@ import os
 import numpy as np
 import random
 from gym import spaces
+from .manual_control import manual_control
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
@@ -288,6 +289,3 @@ class env(AECEnv):
         self.rendering = True
         self.draw()
         pygame.display.flip()
-
-
-from .manual_control import manual_control

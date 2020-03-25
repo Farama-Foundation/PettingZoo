@@ -1,9 +1,9 @@
-from .knights_archers_zombies import env as _env
 import time
 import pygame
 
 
 def manual_control(**kwargs):
+    from .knights_archers_zombies import env as _env
     env = _env(**kwargs)
     done = False
 

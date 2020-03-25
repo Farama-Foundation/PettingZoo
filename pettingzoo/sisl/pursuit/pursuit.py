@@ -1,4 +1,5 @@
 from .pursuit_base import Pursuit as _env
+from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
@@ -78,6 +79,3 @@ class env(AECEnv):
     def observe(self, agent):
         o = np.array(self.env.safely_observe(agent))
         return o
-
-
-from .manual_control import manual_control
