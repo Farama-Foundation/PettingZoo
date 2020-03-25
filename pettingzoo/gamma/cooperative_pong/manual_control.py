@@ -55,7 +55,6 @@ def manual_control(**kwargs):
                 if not initial_iteration[agent]:
                     reward, dones[agent], _ = env.last()
                     total_reward += reward
-                    print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
                 initial_iteration[agent] = False
                 env.step(action_dict[agent], observe=False)
         done = all(dones.values())
