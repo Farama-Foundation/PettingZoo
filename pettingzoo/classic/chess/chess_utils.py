@@ -2,12 +2,14 @@ import chess
 import numpy as np
 
 
-def bitboard_to_ndarray(bitboard):
-    return np.array(bitboard.tolist(), dtype=np.float32).reshape([8, 8])
-
-
 def boards_to_ndarray(boards):
-    return np.transpose(np.stack([bitboard_to_ndarray(r) for r in boards]), [1, 2, 0])
+    arr64 = np.array(boards,dtype=np.uint64)
+    arr8 = arr64.view(dtype=np.uint8)
+    bits = np.unpackbits(arr8)
+    floats = bits.astype(np.float32)
+    boardstack = floats.reshape([len(boards),8,8])
+    boardimage = np.transpose(boardstack, [1, 2, 0])
+    return boardimage
 
 
 def square_to_coord(s):

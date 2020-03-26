@@ -1,11 +1,11 @@
 import numpy as np
-from .cooperative_pong import env as _env
 import pygame
 from pettingzoo.utils import save_image_observation
 from pettingzoo.utils import wrapper
 
 
 def manual_control(**kwargs):
+    from .cooperative_pong import env as _env
     env = _env(**kwargs)
     env = wrapper(env, color_reduction='B', down_scale=(10, 10), range_scale=(0, 255), new_dtype=np.float32, frame_stacking=4)
     env.reset(observe=True)
@@ -36,16 +36,16 @@ def manual_control(**kwargs):
                     total_reward = 0
                 if event.key == pygame.K_w:
                     # player1.moveup()
-                    action_dict[0] = 1
+                    action_dict[env.agents[0]] = 1
                 if event.key == pygame.K_s:
                     # player1.movedown()
-                    action_dict[0] = 2
+                    action_dict[env.agents[0]] = 2
                 if event.key == pygame.K_UP:
                     # player2.moveup()
-                    action_dict[1] = 1
+                    action_dict[env.agents[1]] = 1
                 if event.key == pygame.K_DOWN:
                     # player2.movedown()
-                    action_dict[1] = 2
+                    action_dict[env.agents[1]] = 2
         if quit_loop:
             break
 

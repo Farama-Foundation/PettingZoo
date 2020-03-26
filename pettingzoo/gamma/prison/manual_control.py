@@ -1,9 +1,9 @@
-from .prison import env as _env
 import pygame
 import numpy as np
 
 
 def manual_control(**kwargs):
+    from .prison import env as _env
     env = _env(**kwargs)
     x = 0
     y = 0
