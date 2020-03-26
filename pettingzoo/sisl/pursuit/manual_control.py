@@ -67,9 +67,6 @@ def manual_control(**kwargs):
             if d:
                 done = True
             total_reward += reward
-        print("step reward = ", total_reward, " f: ", num_frames, " d: ", d)
-        if done:
-            print("Total reward", total_reward, done)
 
         _actions = np.array([4] * env.num_agents)
 
