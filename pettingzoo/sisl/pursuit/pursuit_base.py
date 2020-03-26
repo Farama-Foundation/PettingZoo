@@ -236,7 +236,7 @@ class Pursuit():
 
         if is_last:
             ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
-
+            
             for i in range(opponent_layer.n_agents()):
                 # controller input should be an observation, but doesn't matter right now
                 a = opponent_controller.act(self.model_state)
@@ -319,12 +319,11 @@ class Pursuit():
             self.screen = pygame.display.set_mode(
                 (self.pixel_scale * self.ys, self.pixel_scale * self.xs))
         self.renderOn = True
-
         self.draw_model_state()
         if self.train_pursuit:
             self.draw_pursuers_observations()
         else:
-            self.draw_evaders()
+            self.draw_evaders_observations()
         self.draw_evaders()
         self.draw_pursuers()
 
