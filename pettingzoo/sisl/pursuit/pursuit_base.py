@@ -182,7 +182,6 @@ class Pursuit():
         return self.__dict__
 
     def reset(self):
-        # print "Check:", self.n_evaders, self.n_pursuers, self.catchr
         self.pursuers_gone.fill(False)
         self.evaders_gone.fill(False)
         if self.random_opponents:
@@ -319,12 +318,11 @@ class Pursuit():
             self.screen = pygame.display.set_mode(
                 (self.pixel_scale * self.ys, self.pixel_scale * self.xs))
         self.renderOn = True
-
         self.draw_model_state()
         if self.train_pursuit:
             self.draw_pursuers_observations()
         else:
-            self.draw_evaders()
+            self.draw_evaders_observations()
         self.draw_evaders()
         self.draw_pursuers()
 
@@ -347,12 +345,8 @@ class Pursuit():
             temp_name = join(file_path, "temp_" + str(i + 1) + ".png")
             self.save_image(temp_name)
             removed += info['removed']
-            if verbose:
-                print(r, info)
             if done:
                 break
-        if verbose:
-            print("Total removed:", removed)
         # use ffmpeg to create .pngs to .mp4 movie
         ffmpeg_cmd = "ffmpeg -framerate " + str(rate) + " -i " + join(
             file_path, "temp_%d.png") + " -c:v libx264 -pix_fmt yuv420p " + file_name

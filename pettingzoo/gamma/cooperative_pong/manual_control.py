@@ -1,11 +1,11 @@
 import numpy as np
-from .cooperative_pong import env as _env
 import pygame
 from pettingzoo.utils import save_image_observation
 from pettingzoo.utils import wrapper
 
 
 def manual_control(**kwargs):
+    from .cooperative_pong import env as _env
     env = _env(**kwargs)
     env = wrapper(env, color_reduction='B', down_scale=(10, 10), range_scale=(0, 255), new_dtype=np.float32, frame_stacking=4)
     env.reset(observe=True)
@@ -36,16 +36,16 @@ def manual_control(**kwargs):
                     total_reward = 0
                 if event.key == pygame.K_w:
                     # player1.moveup()
-                    action_dict[0] = 1
+                    action_dict[env.agents[0]] = 1
                 if event.key == pygame.K_s:
                     # player1.movedown()
-                    action_dict[0] = 2
+                    action_dict[env.agents[0]] = 2
                 if event.key == pygame.K_UP:
                     # player2.moveup()
-                    action_dict[1] = 1
+                    action_dict[env.agents[1]] = 1
                 if event.key == pygame.K_DOWN:
                     # player2.movedown()
-                    action_dict[1] = 2
+                    action_dict[env.agents[1]] = 2
         if quit_loop:
             break
 
@@ -55,22 +55,11 @@ def manual_control(**kwargs):
                 if not initial_iteration[agent]:
                     reward, dones[agent], _ = env.last()
                     total_reward += reward
-                    print("step reward for agent {} is {} done: {}".format(agent, reward, dones[agent]))
                 initial_iteration[agent] = False
                 env.step(action_dict[agent], observe=False)
         done = all(dones.values())
-        if done:
-            print("Total reward", total_reward, "done", done)
 
         env.render()
         pygame.event.pump()
-        # env.plot_obs(observation, "obs")
-        # break
 
-    # assert (total_reward == env.env.score), "Final score = {} and reward = {} are not the same".format(total_reward, env.env.score)
-    print("Final reward is {0:.2f}".format(total_reward))
-    # Uncomment next line to print FPS at which the game runs
-    # print("fps = ", env.env.clock.get_fps())
-
-    # pygame.time.wait(3000)
     env.close()
