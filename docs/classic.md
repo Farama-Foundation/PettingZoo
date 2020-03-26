@@ -22,6 +22,8 @@
 
 *General notes on environments*
 
+*Discuss legal moves info key*
+
 ### Backgammon
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |

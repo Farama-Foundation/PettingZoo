@@ -1,9 +1,6 @@
-'''
-Frame stacking for heterogeneous observation spaces. Each agent can have a different Box observation space.
-'''
-
 import numpy as np
 from gym.spaces import Box
+
 
 def stack_obs_space(obs_space_dict, stack_size):
     '''
@@ -32,6 +29,7 @@ def stack_obs_space(obs_space_dict, stack_size):
         new_obs_space_dict[agent_id] = Box(low=low, high=high, dtype=dtype)
     return new_obs_space_dict
 
+
 def stack_reset_obs(obs, stack_size):
     '''
     Input: 1 agent's observation only.
@@ -43,8 +41,9 @@ def stack_reset_obs(obs, stack_size):
     # stack 2-D frames
     elif obs.ndim == 2:
         new_shape = (stack_size, 1, 1)
-    frame_stack =  np.tile(obs, new_shape)
+    frame_stack = np.tile(obs, new_shape)
     return frame_stack
+
 
 def stack_obs(frame_stack, agent, obs, stack_size):
     '''
@@ -60,7 +59,7 @@ def stack_obs(frame_stack, agent, obs, stack_size):
         frame_stack[agent] = stack_reset_obs(obs, stack_size)
     obs_shape = obs.shape
     agent_fs = frame_stack[agent]
-    
+
     if len(obs_shape) == 1:
         agent_fs[:-obs_shape[-1]] = agent_fs[obs_shape[-1]:]
         agent_fs[-obs_shape[-1]:] = obs
@@ -70,4 +69,3 @@ def stack_obs(frame_stack, agent, obs, stack_size):
     elif len(obs_shape) == 3:
         agent_fs[:, :, :-obs_shape[-1]] = agent_fs[:, :, obs_shape[-1]:]
         agent_fs[:, :, -obs_shape[-1]:] = obs
-    

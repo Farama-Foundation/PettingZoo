@@ -8,6 +8,7 @@ import pygame.gfxdraw
 from .src.players import Knight, Archer
 from .src.zombie import Zombie
 from .src.weapons import Arrow, Sword
+from .manual_control import manual_control
 import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
@@ -572,5 +573,3 @@ class env(AECEnv):
             self.agents.append(i)
 
         return self.observe()
-
-from .manual_control import manual_control

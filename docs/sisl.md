@@ -1,11 +1,10 @@
 ## SISL Enviroments
 
-| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
-|-------------|-------------------|----------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
-| Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)                                  | (-5.3, 5.3)        | ?          |
-| Pursuit     | Graphical         | Either   | 8 (+/-) | No             | (1,)         | Discrete(5)   | (3, obs_range, obs_range)             | (0,255)            | xs*ys      |
-| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ((4 + 3*speed_features)*n_sensors+2,) | (-10,10)           | ?          |
-
+| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|-------------|-------------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Multiwalker | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
+| Pursuit     | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
+| Waterworld  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
 
 `pip install pettingzoo[sisl]`
 
@@ -29,8 +28,6 @@ Please additionally cite
 | Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
-
-
 
 
 `from pettingzoo.sisl import multiwalker`
@@ -78,10 +75,9 @@ Add Gupta et al and DDPG paper results too
 
 ### Pursuit
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape         | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|---------------------------|--------------------|------------|
-| Graphical    | Either  | 8 (+/-) | No             | (1,)         | Discrete(5)   | (3, obs_range, obs_range) | (0,255)            | xs*ys      |
-
+| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Graphical    | Either  | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
 
 `from pettingzoo.sisl import pursuit`
 
@@ -89,7 +85,7 @@ Add Gupta et al and DDPG paper results too
 
 *AEC diagram*
 
-By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default.
+By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default. Observation shape takes the full form of `(3, obs_range, obs_range)`.
 
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
@@ -149,9 +145,10 @@ Leaderboard:
 
 ### Waterworld
 
-| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape                     | Observation Values | Num States |
-|-------------------|---------|---------|----------------|--------------|---------------|---------------------------------------|--------------------|------------|
-| Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | ((4 + 3*speed_features)*n_sensors+2,) | (-10,10)           | ?          |
+| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|-------------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
+
 
 `from pettingzoo.sisl import waterworld`
 
@@ -159,7 +156,7 @@ Leaderboard:
 
 *AEC diagram*
 
-By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default.
+By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default. Observation shape takes the full form of ((4 + 3*speed_features)*n_sensors+2,).
 
 ```
 waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
