@@ -54,3 +54,5 @@ flake8 pettingzoo/utils --ignore E501,E731,E741,E402,F401
 
 # Tests
 flake8 pettingzoo/tests --ignore E501,E731,E741,E402,F401
+
+./pettingzoo/tests/print_test.sh
