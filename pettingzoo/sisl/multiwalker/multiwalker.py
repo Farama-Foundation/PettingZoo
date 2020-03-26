@@ -17,7 +17,7 @@ class env(AECEnv):
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_selection = 0
         self.agent_order = self.agents[:]
-        self._agent_selector_object = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agent_order)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(
@@ -39,8 +39,8 @@ class env(AECEnv):
     def reset(self, observe=True):
         self.env.reset()
         self.steps = 0
-        self._agent_selector_object.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector_object.next()
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
@@ -66,12 +66,12 @@ class env(AECEnv):
             raise Exception('Action for agent {} must be in {}. It is currently {}'.format(
                 agent, self.action_spaces[agent], action))
 
-        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector_object.is_last())
+        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for r in self.rewards:
             self.rewards[r] = self.env.get_last_rewards()[self.agent_name_mapping[r]]
         for d in self.dones:
             self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[r]]
-        self.agent_selection = self._agent_selector_object.next()
+        self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_frames:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
