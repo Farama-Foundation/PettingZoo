@@ -182,7 +182,6 @@ class Pursuit():
         return self.__dict__
 
     def reset(self):
-        # print "Check:", self.n_evaders, self.n_pursuers, self.catchr
         self.pursuers_gone.fill(False)
         self.evaders_gone.fill(False)
         if self.random_opponents:
@@ -236,7 +235,7 @@ class Pursuit():
 
         if is_last:
             ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
-            
+
             for i in range(opponent_layer.n_agents()):
                 # controller input should be an observation, but doesn't matter right now
                 a = opponent_controller.act(self.model_state)
@@ -346,12 +345,8 @@ class Pursuit():
             temp_name = join(file_path, "temp_" + str(i + 1) + ".png")
             self.save_image(temp_name)
             removed += info['removed']
-            if verbose:
-                print(r, info)
             if done:
                 break
-        if verbose:
-            print("Total removed:", removed)
         # use ffmpeg to create .pngs to .mp4 movie
         ffmpeg_cmd = "ffmpeg -framerate " + str(rate) + " -i " + join(
             file_path, "temp_%d.png") + " -c:v libx264 -pix_fmt yuv420p " + file_name

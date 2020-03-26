@@ -13,7 +13,8 @@ class env(AECEnv):
         self.env = _env(*args, **kwargs)
 
         self.num_agents = self.env.num_agents
-        self.agents = list(range(self.num_agents))
+        self.agents = ["pursuer_" + str(r) for r in range(self.num_agents)]
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
         self.agent_selector_obj = agent_selector(self.agent_order)
         self.agent_selection = 0
@@ -27,7 +28,7 @@ class env(AECEnv):
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.reset()
 
@@ -41,9 +42,9 @@ class env(AECEnv):
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         if observe:
-            return self.observe(0)
+            return self.observe(self.agent_selection)
 
     def close(self):
         self.env.close()
@@ -59,8 +60,9 @@ class env(AECEnv):
             raise Exception('Action for agent {} must be in {}. \
                                  It is currently {}'.format(agent, self.action_spaces[agent], action))
 
-        self.env.step(action, agent, self.agent_selector_obj.is_last())
-        self.rewards[agent] = self.env.last_rewards[agent]
+        self.env.step(action, self.agent_name_mapping[agent], self.agent_selector_obj.is_last())
+        for r in self.rewards:
+            self.rewards[r] = self.env.last_rewards[self.agent_name_mapping[r]]
 
         if self.env.frames >= self.env.max_frames:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
@@ -76,5 +78,4 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
-        agent = agent % self.num_agents
-        return self.env.observe(agent)
+        return self.env.observe(self.agent_name_mapping[agent])
