@@ -14,14 +14,15 @@ class SimpleEnv(AECEnv):
         self.world = self.scenario.make_world()
 
         self.num_agents = len(self.world.agents)
-        self.agents = list(range(self.num_agents))
+        self.agents = [agent.name for agent in self.world.agents]
+        self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self.agent_order = list(self.agents)
 
         # set spaces
         self.action_spaces = dict()
         self.observation_spaces = dict()
-        for aidx, agent in enumerate(self.world.agents):
+        for agent in self.world.agents:
             space_dim = 1
             if agent.movable:
                 space_dim *= self.world.dim_p * 2 + 1
@@ -29,17 +30,17 @@ class SimpleEnv(AECEnv):
                 space_dim *= self.world.dim_c
 
             obs_dim = len(self.scenario.observation(agent, self.world))
-            self.action_spaces[aidx] = spaces.Discrete(space_dim)
-            self.observation_spaces[aidx] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
+            self.action_spaces[agent.name] = spaces.Discrete(space_dim)
+            self.observation_spaces[agent.name] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = {i: 0. for i in range(self.num_agents)}
-        self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {} for i in range(self.num_agents)}
+        self.rewards = {name: 0. for name in self.agents}
+        self.dones = {name: False for name in self.agents}
+        self.infos = {name: {} for name in self.agents}
 
         self.steps = 0
         self.display_wait = 0.04
 
-        self.agent_selection = 0
+        self.agent_selection = self.agent_order[0]
         self.current_actions = [None] * self.num_agents
 
         self.viewers = [None] * self.num_agents
@@ -47,17 +48,14 @@ class SimpleEnv(AECEnv):
         self.reset()
 
     def observe(self, agent):
-        return self.scenario.observation(self.world.agents[agent], self.world)
-
-    def convert_to_dict(self, l):
-        return dict(enumerate(l))
+        return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
         self.scenario.reset_world(self.world)
 
         self._reset_render()
 
-        self.agent_selection = 0
+        self.agent_selection = self.agent_order[0]
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
@@ -69,7 +67,6 @@ class SimpleEnv(AECEnv):
             return
 
     def _execute_world_step(self):
-        # self.agents = self.world.policy_agents
         # set action for each agent
         for i, agent in enumerate(self.world.agents):
             action = self.current_actions[i]
@@ -81,11 +78,11 @@ class SimpleEnv(AECEnv):
             if not agent.silent:
                 scenario_action.append(action)
 
-            self._set_action(scenario_action, agent, self.action_spaces[i])
+            self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
-        for i, agent in enumerate(self.world.agents):
-            self.rewards[i] = float(self.scenario.reward(agent, self.world))
+        for agent in self.world.agents:
+            self.rewards[agent.name] = float(self.scenario.reward(agent, self.world))
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -121,8 +118,9 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
-        current_idx = self.agent_selection
-        self.agent_selection = next_idx = (self.agent_selection + 1) % self.num_agents
+        current_idx = self._index_map[self.agent_selection]
+        next_idx = (current_idx + 1) % self.num_agents
+        self.agent_selection = self.agent_order[next_idx]
 
         self.current_actions[current_idx] = action
 
