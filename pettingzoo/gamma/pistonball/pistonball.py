@@ -32,7 +32,7 @@ class env(AECEnv):
         self.num_agents = 20
         self.agents = list(range(self.num_agents))
         self.agent_order = self.agents[:]
-        self.agent_selector_obj = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
         self.continuous = continuous
         if self.continuous:
@@ -184,8 +184,8 @@ class env(AECEnv):
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
-        self.agent_selector_obj.reinit(self.agent_order)
-        self.agent_selection = self.agent_selector_obj.next()
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
 
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
@@ -271,7 +271,7 @@ class env(AECEnv):
         else:
             self.clock.tick()
 
-        if self.agent_selector_obj.is_last():
+        if self._agent_selector.is_last():
             total_reward = [(global_reward / self.num_agents) * self.global_reward_weight] * self.num_agents  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
@@ -288,7 +288,7 @@ class env(AECEnv):
             self.recentPistons = set()
 
         self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
-        self.agent_selection = self.agent_selector_obj.next()
+        self.agent_selection = self._agent_selector.next()
         pygame.event.pump()
         if observe:
             return self.observe(self.agent_selection)
