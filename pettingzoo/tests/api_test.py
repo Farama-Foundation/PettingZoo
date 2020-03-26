@@ -48,7 +48,7 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if (not isinstance(agent, str)) and agent != 'env':
             warnings.warn("Agent's are recommended to have numbered string names, like player_0")
-        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent): #  regex for ending in _<integers>:
+        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integers>
             warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
             warnings.warn("The class of observation spaces is different between two agents")
