@@ -14,7 +14,7 @@ class env(AECEnv):
         self.env = _env(*args, **kwargs)
 
         self.num_agents = self.env.num_agents
-        self.agents = ["pursuer_"+str(a) for a in range(self.num_agents)]
+        self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
         self.agent_selector_obj = agent_selector(self.agent_order)
