@@ -28,9 +28,11 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [CryptoAgent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent %d' % i
-            agent.collide = False
             agent.adversary = True if i < num_adversaries else False
+            base_name = "adversary" if agent.adversary else "agent"
+            base_index = i if i < num_adversaries else i - num_adversaries
+            agent.name = '{}_{}'.format(base_name, base_index)
+            agent.collide = False
             agent.speaker = True if i == 2 else False
             agent.movable = False
         # add landmarks

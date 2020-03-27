@@ -2,11 +2,11 @@ import numpy as np
 import copy
 from gym.spaces import Box
 from gym import spaces
-from warnings import warn
+import warnings
 from skimage import measure
 from .env import AECEnv
 
-from .frame_stack import stack_obs_space, stack_reset_obs, stack_obs
+from .frame_stack import stack_obs_space, stack_obs
 
 COLOR_RED_LIST = ["full", 'R', 'G', 'B']
 OBS_RESHAPE_LIST = ["expand", "flatten"]
@@ -54,7 +54,6 @@ class wrapper(AECEnv):
 
         self.agents = self.env.agents
         self.agent_selection = self.env.agent_selection
-        self.num_agents = len(self.agents)
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = copy.copy(self.env.action_spaces)
         self.orig_action_spaces = self.env.action_spaces
@@ -66,8 +65,8 @@ class wrapper(AECEnv):
         self.agent_order = self.env.agent_order
 
         if self.frame_stacking > 1:
-            self.stack_of_frames = {agent : None for agent in self.agents}
-            self.pre_fs_ndim = {agent : None for agent in self.agents}
+            self.stack_of_frames = {agent: None for agent in self.agents}
+            self.pre_fs_ndim = {agent: None for agent in self.agents}
 
         self._check_wrapper_params()
 
@@ -75,7 +74,7 @@ class wrapper(AECEnv):
         if self._check_box_space():
             self.modify_observation_space()
         else:
-            warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
+            warnings.warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
 
     def _check_wrapper_params(self):
         '''
@@ -96,7 +95,7 @@ class wrapper(AECEnv):
                     assert self.color_reduction[agent] in COLOR_RED_LIST, "color_reduction must be in {}".format(COLOR_RED_LIST)
                     assert len(self.observation_spaces[agent].low.shape) == 3, "To apply color_reduction, length of shape of obs space of the agent should be 3. It is {}".format(len(self.observation_spaces[agent].low.shape))
                     if self.color_reduction[agent] == "full":
-                        warn("You have chosen true grayscaling. It might be too slow. Choose a specific channel for better performance")
+                        warnings.warn("You have chosen true grayscaling. It might be too slow. Choose a specific channel for better performance")
 
         if self.down_scale is not None:
             assert isinstance(self.down_scale, tuple) or isinstance(self.down_scale, dict), "down_scale must be tuple or dict. It is {}".format(self.down_scale)
@@ -250,7 +249,8 @@ class wrapper(AECEnv):
                 if self.new_dtype is not None:
                     dtype = self.new_dtype[agent]
                 else:
-                    dtype = obs_space.dtype
+                    warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+                    dtype = np.float32
                 min_obs, max_obs = range_scale
                 low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
                 high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
@@ -306,7 +306,8 @@ class wrapper(AECEnv):
             if self.new_dtype is not None:
                 dtype = self.new_dtype[agent]
             else:
-                dtype = obs.dtype
+                warnings.warn("Trying to scale observation, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+                dtype = np.float32
             min_obs, max_obs = range_scale
             obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
         elif self.new_dtype is not None:

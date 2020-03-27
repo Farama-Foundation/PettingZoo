@@ -77,9 +77,9 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, by name. This is called by `last`. This looks like:
+`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
 
-`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
+`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`.
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
@@ -222,8 +222,6 @@ class env(AECEnv):
 ```
 
 ## Other things
-
-All environment code should be compliant with flake8 --ignore E501,E731,E741. We're open to adding more exceptions at this time if needed.
 
 The following environments should be done:
 

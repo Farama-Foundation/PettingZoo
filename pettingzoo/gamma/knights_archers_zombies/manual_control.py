@@ -1,9 +1,9 @@
-from .knights_archers_zombies import env as _env
 import time
 import pygame
 
 
 def manual_control(**kwargs):
+    from .knights_archers_zombies import env as _env
     env = _env(**kwargs)
     done = False
 
@@ -58,13 +58,3 @@ def manual_control(**kwargs):
     end_time = time.time()
     total_time = end_time - start_time
     env.close()
-    print('Total time:', total_time)
-    print('FPS:', frame_count / (total_time))
-    print('============')
-    """
-    for key in env.timer_dict:
-        print('** {} **'.format(key))
-        print('Avg seconds per frame: {}'.format(env.timer_dict[key] / frame_count))
-        print('Percentage of runtime: {}%'.format((env.timer_dict[key] / total_time) * 100))
-        print()
-    """

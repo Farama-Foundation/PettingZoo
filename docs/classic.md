@@ -1,45 +1,287 @@
-Fix these:
+## Clasic Environments
 
-## Other Enviroments
+| Environment                      | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------------------------------|--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Backgammon                       | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Checkers                         | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Chess                            | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Connect Four                     | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Dou Dizhu                        | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Gin Rummy                        | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Go                               | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Leduc Hold'em                    | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Mahjong                          | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Rock Paper Scissors              | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Rock Paper Scissors Lizard Spock | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Texas Hold'em                    | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Texas Hold'em No Limit           | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Tic Tac Toe                      | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Uno                              | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs`
+`pip install pettingzoo[classic]`
 
-| Environment             | Observations | Actions    | Agents | Manual Control |
-|-------------------------|--------------|------------|--------|----------------|
-| Rock Paper Scissors                | Vector            | Discrete |   2    | No             |
-| Rock Paper Scissors Lizard Spock     |  Vector      | Discrete   | 2 | No             |
-| Chess     |  Graphical      | Discrete[*](#chess-action-space)   | 2 | No             |
+*General notes on environments*
+
+*Discuss legal moves info key*
+
+### Backgammon
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import backgammon`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+
+### Checkers
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import checkers`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Chess
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import chess`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Dou Dizhu
+
+| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | Discrete | 3      | No             | (1)          | [0, 308]      | (6, 5, 15)        | [0,1]              | ?          |
+
+`from pettingzoo.classic import dou_dizhu`
+
+*gif*
+
+*AEC Diagram*
+
+Dou Dizhu, or Fighting the Landlord, is a shedding game involving 3 players and a deck of cards plus 2 jokers with suits being irrelevant. Heuristically, one player is designated the "Landlord" and the others become the "Peasants". The objective of the game is to be the first one to have no cards left. If the first person to have no cards left is part of the "Peasant" team, then all members of the "Peasant" team receive a reward (+1). If the "Landlord" wins, then only the "Landlord" receives a reward (+1). 
+
+The "Landlord" plays first by putting down a combination of cards. The next player, may pass or put down a higher combination of cards that beat the previous play. There are many legal combinations of cards, which you can check in [Wikipedia](https://en.wikipedia.org/wiki/Dou_dizhu).
+
+Dou Dizhu depends on [RLCard](http://rlcard.org/) and you can refer to its documentation for additional details. 
+
+*Env arguments*
+
+*About env arguments*
+
+### Gin Rummy
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import gin_rummy`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Go
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import go`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Leduc Hold'em
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import leduc_holdem`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Mahjong
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import mahjong`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
 
 ### Rock Paper Scissors
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-| Vector            | Discrete |   2    | No             |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs.rps`
+`from pettingzoo.classic import rps`
 
-*blurb*
+*gif*
 
-*arguments*
+*AEC Diagram*
 
-*about arguments*
+*Blurb*
 
+*Env arguments*
+
+*About env arguments*
 
 ### Rock Paper Scissors Lizard Spock
 
-| Observations | Actions    | Agents | Manual Control |
-|--------------|------------|--------|----------------|
-|  Vector      | Discrete   | 2 | No             |
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`pettingzoo.other_envs.rpsls`
+`from pettingzoo.classic import rpsls`
 
-*blurb*
+*gif*
 
-*arguments*
+*AEC Diagram*
 
-*about arguments*
+*Blurb*
 
-### Chess
+*Env arguments*
+
+*About env arguments*
+
+### Texas Hold'em
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import texas_holdem`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Texas Hold'em No Limit
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import texas_holdem_no_limit`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Tic Tac Toe
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import tictactoe`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Uno
+
+| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+
+`from pettingzoo.classic import uno`
+
+*gif*
+
+*AEC Diagram*
+
+*Blurb*
+
+*Env arguments*
+
+*About env arguments*
+
+### Ben's Old Chess Documentation
 
 | Observations | Actions    | Agents | Manual Control |
 |--------------|------------|--------|----------------|

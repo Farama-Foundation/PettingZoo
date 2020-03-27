@@ -2,12 +2,14 @@ import chess
 import numpy as np
 
 
-def bitboard_to_ndarray(bitboard):
-    return np.array(bitboard.tolist(), dtype=np.float32).reshape([8, 8])
-
-
 def boards_to_ndarray(boards):
-    return np.transpose(np.stack([bitboard_to_ndarray(r) for r in boards]), [1, 2, 0])
+    arr64 = np.array(boards, dtype=np.uint64)
+    arr8 = arr64.view(dtype=np.uint8)
+    bits = np.unpackbits(arr8)
+    floats = bits.astype(np.float32)
+    boardstack = floats.reshape([len(boards), 8, 8])
+    boardimage = np.transpose(boardstack, [1, 2, 0])
+    return boardimage
 
 
 def square_to_coord(s):
@@ -27,7 +29,7 @@ def sign(v):
 
 
 def mirror_move(move):
-    return chess.Move(chess.square_mirror(move.from_square), chess.square_mirror(move.to_square))
+    return chess.Move(chess.square_mirror(move.from_square), chess.square_mirror(move.to_square), promotion=move.promotion)
 
 
 def result_to_int(result_str):
@@ -45,6 +47,7 @@ def get_queen_dir(diff):
     dx, dy = diff
     assert dx == 0 or dy == 0 or abs(dx) == abs(dy)
     magnitude = max(abs(dx), abs(dy)) - 1
+
     assert magnitude < 8 and magnitude >= 0
     counter = 0
     for x in range(-1, 1 + 1):
@@ -58,8 +61,9 @@ def get_queen_dir(diff):
 
 
 def get_queen_plane(diff):
+    NUM_COUNTERS = 8
     mag, counter = get_queen_dir(diff)
-    return mag * counter
+    return mag * NUM_COUNTERS + counter
 
 
 def get_knight_dir(diff):
@@ -119,12 +123,16 @@ moves_to_actions = {}
 actions_to_moves = {}
 
 
-def action_to_move(action, player):
+def action_to_move(board, action, player):
     base_move = chess.Move.from_uci(actions_to_moves[action])
-    if player:
-        return mirror_move(base_move)
-    else:
-        return base_move
+
+    base_coord = square_to_coord(base_move.from_square)
+    mirr_move = mirror_move(base_move) if player else base_move
+    if mirr_move.promotion == chess.QUEEN:
+        mirr_move.promotion = None
+    if mirr_move.promotion is None and str(board.piece_at(mirr_move.from_square)).lower() == 'p' and base_coord[1] == 6:
+        mirr_move.promotion = chess.QUEEN
+    return mirr_move
 
 
 def make_move_mapping(uci_move):
@@ -179,7 +187,7 @@ def get_observation(orig_board, player):
     if player:
         board = board.mirror()
     else:
-        board = board.copy()
+        board = board
 
     all_squares = chess.SquareSet(chess.BB_ALL)
     HISTORY_LEN = 1

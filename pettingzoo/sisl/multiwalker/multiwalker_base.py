@@ -241,9 +241,8 @@ class BipedalWalker(Agent):
 
     @property
     def observation_space(self):
-        # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package, 1 ID
-        idx = 1
-        return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3 + idx,))
+        # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package
+        return spaces.Box(low=-LIDAR_RANGE, high=LIDAR_RANGE, shape=(24 + 4 + 3,))
 
     @property
     def action_space(self):
@@ -405,10 +404,8 @@ class MultiWalkerEnv():
                     nobs.append(0.0)
                     nobs.append(0.0)
                 else:
-                    xm = (self.walkers[j].hull.position.x -
-                          x) / self.package_length
-                    ym = (self.walkers[j].hull.position.y -
-                          y) / self.package_length
+                    xm = (self.walkers[j].hull.position.x - x) / self.package_length
+                    ym = (self.walkers[j].hull.position.y - y) / self.package_length
                     nobs.append(np.random.normal(xm, self.position_noise))
                     nobs.append(np.random.normal(ym, self.position_noise))
             xd = (self.package.position.x - x) / self.package_length
@@ -416,7 +413,6 @@ class MultiWalkerEnv():
             nobs.append(np.random.normal(xd, self.position_noise))
             nobs.append(np.random.normal(yd, self.position_noise))
             nobs.append(np.random.normal(self.package.angle, self.angle_noise))
-            nobs.append(float(i) / self.n_walkers)
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
@@ -448,7 +444,6 @@ class MultiWalkerEnv():
         # action is array of size 4
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
-        obs = [walker.get_observation() for walker in self.walkers]
         self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
         self.frames = self.frames + 1
         if is_last:
@@ -516,8 +511,7 @@ class MultiWalkerEnv():
         i = self.lidar_render
         for walker in self.walkers:
             if i < 2 * len(walker.lidar):
-                l = walker.lidar[i] if i < len(walker.lidar) else walker.lidar[len(walker.lidar)
-                                                                               - i - 1]
+                l = walker.lidar[i] if i < len(walker.lidar) else walker.lidar[len(walker.lidar) - i - 1]
                 self.viewer.draw_polyline(
                     [l.p1, l.p2], color=(1, 0, 0), linewidth=1)
 
@@ -688,8 +682,7 @@ class MultiWalkerEnv():
             x = self.np_random.uniform(0, self.terrain_length) * TERRAIN_STEP
             y = VIEWPORT_H / SCALE * 3 / 4
             poly = [(x + 15 * TERRAIN_STEP * math.sin(3.14 * 2 * a / 5) + self.np_random.uniform(
-                0, 5 * TERRAIN_STEP), y + 5 * TERRAIN_STEP * math.cos(3.14 * 2 * a / 5) +
-                self.np_random.uniform(0, 5 * TERRAIN_STEP)) for a in range(5)]
+                0, 5 * TERRAIN_STEP), y + 5 * TERRAIN_STEP * math.cos(3.14 * 2 * a / 5) + self.np_random.uniform(0, 5 * TERRAIN_STEP)) for a in range(5)]
             x1 = min([p[0] for p in poly])
             x2 = max([p[0] for p in poly])
             self.cloud_poly.append((poly, x1, x2))
