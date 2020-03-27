@@ -16,7 +16,7 @@ class env(AECEnv):
         self.agents = ["pursuer_" + str(r) for r in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
-        self.agent_selector_obj = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -37,8 +37,8 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         self.steps = 0
-        self.agent_selector_obj.reinit(self.agent_order)
-        self.agent_selection = self.agent_selector_obj.next()
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
@@ -60,7 +60,7 @@ class env(AECEnv):
             raise Exception('Action for agent {} must be in {}. \
                                  It is currently {}'.format(agent, self.action_spaces[agent], action))
 
-        self.env.step(action, self.agent_name_mapping[agent], self.agent_selector_obj.is_last())
+        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for r in self.rewards:
             self.rewards[r] = self.env.last_rewards[self.agent_name_mapping[r]]
 
@@ -68,7 +68,7 @@ class env(AECEnv):
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
         else:
             self.dones = dict(zip(self.agents, self.env.last_dones))
-        self.agent_selection = self.agent_selector_obj.next()
+        self.agent_selection = self._agent_selector.next()
 
         # AGENT SELECT
 

@@ -77,7 +77,7 @@ class env(AECEnv):
         self.num_agents = 8
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
         self.agent_order = self.agents[:]
-        self.agent_selector_obj = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
@@ -229,8 +229,8 @@ class env(AECEnv):
                                (550, 450 - 54, 400, 700, (400, 350, 700, 450)),
                                (200, 600 - 48, 50, 350, (50, 500, 350, 600)),
                                (550, 600 - 53, 400, 700, (400, 500, 700, 600))]
-        self.agent_selector_obj.reinit(self.agent_order)
-        self.agent_selection = self.agent_selector_obj.next()
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         p_count = 0
         for i in self.agents:
             p = self.prisoners[i]
@@ -275,7 +275,7 @@ class env(AECEnv):
 
         pygame.event.pump()
 
-        self.agent_selection = self.agent_selector_obj.next()
+        self.agent_selection = self._agent_selector.next()
         observation = self.observe(self.agent_selection)
 
         if observe:
