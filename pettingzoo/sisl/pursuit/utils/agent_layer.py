@@ -7,7 +7,6 @@ import numpy as np
 
 class AgentLayer():
     def __init__(self, xs, ys, allies, seed=1):
-
         """
         xs: x size of map
         ys: y size of map
@@ -65,9 +64,9 @@ class AgentLayer():
         return gs
 
     def get_state(self):
-        pos = np.zeros(2*len(self.allies))
+        pos = np.zeros(2 * len(self.allies))
         idx = 0
         for ally in self.allies:
-            pos[idx:(idx+2)] = ally.get_state()
+            pos[idx:(idx + 2)] = ally.get_state()
             idx += 2
         return pos

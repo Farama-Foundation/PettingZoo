@@ -16,7 +16,7 @@ def manual_control(**kwargs):
     board_ui = BoardUI()
 
     done = all(env.dones.values())
-    
+
     while not done:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -32,7 +32,7 @@ def manual_control(**kwargs):
                     else:
                         square.mark_o()
 
-                    obs = env.step(action)
+                    env.step(action)
                     done = all(env.dones.values())
 
                     if done:
@@ -42,8 +42,6 @@ def manual_control(**kwargs):
                 else:
                     print("Invalid move")
 
-                    
-    
         pygame.display.update()
         clock.tick(30)
 

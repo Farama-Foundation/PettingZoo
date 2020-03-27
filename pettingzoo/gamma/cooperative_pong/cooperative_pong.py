@@ -2,6 +2,7 @@ import os
 import numpy as np
 import gym
 from .cake_paddle import CakePaddle
+from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
@@ -235,7 +236,7 @@ class CooperativePong(gym.Env):
         self.reinit()
 
     def reinit(self):
-        self.agents = list(range(self.num_agents))
+        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.dones = dict(zip(self.agents, [False] * len(self.agents)))
         self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
@@ -286,9 +287,9 @@ class CooperativePong(gym.Env):
         observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
-        if agent == 0:
+        if agent == self.agents[0]:
             return observation[:, :int(observation.shape[1] / 2), :]
-        elif agent == 1:
+        elif agent == self.agents[1]:
             return observation[:, int(observation.shape[1] / 2):, :]
 
     def draw(self):
@@ -308,9 +309,9 @@ class CooperativePong(gym.Env):
         # update p1, p2 accordingly
         # action: 0: do nothing,
         # action: 1: p[i] move up, 2: p[i] move down
-        if agent == 0:
+        if agent == self.agents[0]:
             self.p1.update(self.area, action)
-        elif agent == 1:
+        elif agent == self.agents[1]:
             self.p2.update(self.area, action)
 
             # do the rest if not done
@@ -332,7 +333,6 @@ class CooperativePong(gym.Env):
                     self.score += reward
                     if self.num_frames == 900:
                         self.done = True
-                        print("score = {}, frames = {}".format(self.score, self.num_frames))
 
                 # let the clock tick
                 if self.renderOn:
@@ -357,7 +357,6 @@ class env(AECEnv):
         super(env, self).__init__()
         self.env = CooperativePong(**kwargs)
 
-        self.num_agents = 2
         self.agents = self.env.agents
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
@@ -413,5 +412,3 @@ class env(AECEnv):
         if observe:
             observation = self.observe(self.agent_selection)
             return observation
-
-from .manual_control import manual_control

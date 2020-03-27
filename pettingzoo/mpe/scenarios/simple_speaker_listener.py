@@ -13,7 +13,7 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(2)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent %d' % i
+            agent.name = "speaker_0" if i == 1 else "listener_0"
             agent.collide = False
             agent.size = 0.075
         # speaker

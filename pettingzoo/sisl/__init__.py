@@ -1,8 +1,3 @@
-import numpy as np
-import time
-import scipy
-
-
 class Agent(object):
 
     def __new__(cls, *args, **kwargs):
@@ -21,6 +16,6 @@ class Agent(object):
         return '<{} instance>'.format(type(self).__name__)
 
 
-from .pursuit import pursuit 
+from .pursuit import pursuit
 from .waterworld import waterworld
 from .multiwalker import multiwalker

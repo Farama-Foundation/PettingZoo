@@ -1,10 +1,10 @@
 import numpy as np
-from .pursuit import env as _env
 import time
 import pygame
 
 
 def manual_control(**kwargs):
+    from .pursuit import env as _env
     xs = 5
     ys = 5
     obs_range = 3
@@ -12,18 +12,18 @@ def manual_control(**kwargs):
     n_pursuers = 2
 
     # obs_range should be odd 3, 5, 7, etc
-    env = _env(n_pursuers=n_pursuers, n_evaders=n_evaders, xs = xs, ys = ys, obs_range = obs_range)
+    env = _env(n_pursuers=n_pursuers, n_evaders=n_evaders,
+               xs=xs, ys=ys, obs_range=obs_range)
 
     env.reset()
 
     done = False
-    
+
     global _quit_loop, _actions, _agent_id
     _quit_loop = np.array([0])
-    _actions = np.array([4]*env.num_agents)
+    _actions = np.array([4] * env.num_agents)
     _agent_id = np.array([0])
-    
-    
+
     done = False
     num_frames = 0
     total_reward = 0
@@ -50,7 +50,7 @@ def manual_control(**kwargs):
                     # p1: down
                     _actions[_agent_id[0]] = 2
                 elif event.key == pygame.K_LEFT:
-                     # p1: left
+                    # p1: left
                     _actions[_agent_id[0]] = 0
                 elif event.key == pygame.K_RIGHT:
                     # p1: right
@@ -61,19 +61,14 @@ def manual_control(**kwargs):
                     _quit_loop[0] = 1
                     # break
         # actions should be a dict of numpy arrays
-        action_dict = dict(zip(env.agents, _actions))
         for a in _actions:
             reward, d, info = env.last()
-            obs = env.step(a)
+            env.step(a)
             if d:
                 done = True
             total_reward += reward
-        print("step reward = ", total_reward, " f: ", num_frames, " d: ", d)
-        if done:
-            print("Total reward", total_reward, done)
-    
-        _actions = np.array([4]*env.num_agents)
-    
+
+        _actions = np.array([4] * env.num_agents)
 
     env.render()
     time.sleep(2)

@@ -3,6 +3,8 @@ import warnings
 import numpy as np
 import gym
 import random
+import re
+
 
 def test_obervation(observation, observation_0):
     if isinstance(observation, np.ndarray):
@@ -44,8 +46,10 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_spaces[agent], gym.spaces.Box) or isinstance(env.action_spaces[agent], gym.spaces.Discrete)):
             warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
-        if (not isinstance(agent, int)) and agent != 'env':
-            warnings.warn("Agent's are recommended to have integer names")
+        if (not isinstance(agent, str)) and agent != 'env':
+            warnings.warn("Agent's are recommended to have numbered string names, like player_0")
+        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integers>
+            warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
             warnings.warn("The class of observation spaces is different between two agents")
         if not isinstance(env.action_spaces[agent], env.action_spaces[agent_0].__class__):
@@ -111,6 +115,8 @@ def play_test(env, observation_0):
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
+        if not isinstance(env.infos[agent], dict):
+            warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
@@ -120,9 +126,10 @@ def play_test(env, observation_0):
         else:
             action = env.action_spaces[agent].sample()
         reward, done, info = env.last()
-        assert isinstance(done, bool), "last done is not True or False"
-        assert reward == env.rewards[agent], "last reward and rewards[agent] do not match"
-        assert done == env.dones[agent], "last done and rewards[done] do not match"
+        assert isinstance(done, bool), "Done from last is not True or False"
+        assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
+        assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
+        assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
         assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
         test_reward(reward)
         observation = env.step(action, observe=False)
@@ -158,8 +165,6 @@ def test_manual_control(env):
 
 def api_test(env, render=False, manual_control=False):
     print("Starting API test")
-    if manual_control:
-        assert render, "Rendering must be enabled to test manual control"
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
     observation = env.reset(observe=False)

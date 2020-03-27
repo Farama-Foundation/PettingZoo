@@ -2,13 +2,15 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym import spaces
 import numpy as np
+import warnings
 
 from .manual_control import manual_control
 
 from .board import Board
 
+
 class env(AECEnv):
-    metadata = {'render.modes': ['human', 'ansi']}
+    metadata = {'render.modes': ['human']}
 
     def __init__(self):
         super(env, self).__init__()
@@ -20,14 +22,13 @@ class env(AECEnv):
         self.agent_order = list(self.agents)
 
         self.action_spaces = {i: spaces.Discrete(9) for i in range(2)}
-        self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(3,3), dtype=np.int8) for i in range(2)}
+        self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(3, 3), dtype=np.int8) for i in range(2)}
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0,9))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in range(self.num_agents)}
 
         self.agent_selection = 0
-
 
     # Key
     # ----
@@ -42,7 +43,7 @@ class env(AECEnv):
     def observe(self, agent):
         # return observation of an agent
         s = np.array(self.board.squares)
-        return s.reshape(3,3).T
+        return s.reshape(3, 3).T
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
@@ -53,7 +54,9 @@ class env(AECEnv):
 
             # update infos
             # list of valid actions (indexes in board)
+            next_agent = 1 if (self.agent_selection == 0) else 0
             self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
+            self.infos[next_agent]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
             if self.board.check_game_over():
                 winner = self.board.check_for_winner()
@@ -63,22 +66,24 @@ class env(AECEnv):
                     pass
                 elif winner == 1:
                     # agent 0 won
-                    self.rewards[0] += 100
-                    self.rewards[1] -= 100
+                    self.rewards[0] += 1
+                    self.rewards[1] -= 1
                 else:
                     # agent 1 won
-                    self.rewards[1] += 100
-                    self.rewards[0] -= 100
-            
+                    self.rewards[1] += 1
+                    self.rewards[0] -= 1
+
                 # once either play wins or there is a draw, game over, both players are done
                 self.dones = {i: True for i in range(self.num_agents)}
 
         else:
-            # invalid move, some sort of negative reward
-            self.rewards[self.agent_selection] += -10
+            # invalid move, end game
+            self.rewards[self.agent_selection] -= 1
+            self.dones = {i: True for i in range(self.num_agents)}
+            warnings.warn("Bad tictactoe move made, game terminating with current player losing. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
         # Switch selection to next agents
-        self.agent_selection = 1 if (self.agent_selection == 0) else 0
+        self.agent_selection = next_agent
 
         if observe:
             return self.observe(self.agent_selection)
@@ -91,7 +96,7 @@ class env(AECEnv):
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0,9))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in range(self.num_agents)}
 
         # selects the first agent
         self.agent_selection = 0
@@ -100,35 +105,28 @@ class env(AECEnv):
         else:
             return
 
-    def render(self, mode='human'):        
-        if mode == 'ansi':
-            def getSymbol(input):
-                if input == 0:
-                    return '-'
-                elif input == 1:
-                    return 'X'
-                else:
-                    return 'O'
+    def render(self, mode='human'):
+        def getSymbol(input):
+            if input == 0:
+                return '-'
+            elif input == 1:
+                return 'X'
+            else:
+                return 'O'
 
-            board = list(map(getSymbol, self.board.squares))
+        board = list(map(getSymbol, self.board.squares))
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[0]}  " +  "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
-            print("_"*5 + "|" + "_"*5 + "|" + "_"*5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[1]}  " +  "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
-            print("_"*5 + "|" + "_"*5 + "|" + "_"*5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
-            print(f"  {board[2]}  " +  "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
-            print(" "* 5 + "|" + " "*5 + "|" + " "*5)
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
 
     def close(self):
         pass
-
-# import pettingzoo as pz
-# env = pz.classic.tictactoe.env()
-
-# import pettingzoo as pz
-# env = pz.classic.tictactoe.manual_control()

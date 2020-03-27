@@ -61,7 +61,7 @@ class Pursuit():
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
         self.num_agents = self.n_pursuers
-        #self.agents = list(range(self.num_agents))
+
         self.latest_reward_state = [0 for _ in range(self.num_agents)]
         self.latest_done_state = [False for _ in range(self.num_agents)]
         self.latest_obs = [None for _ in range(self.num_agents)]
@@ -156,6 +156,7 @@ class Pursuit():
         pygame.init()
         self.clock = pygame.time.Clock()
         self.frames = 0
+        self.reset()
 
     def close(self):
         pygame.event.pump()
@@ -182,7 +183,6 @@ class Pursuit():
         return self.__dict__
 
     def reset(self):
-        # print "Check:", self.n_evaders, self.n_pursuers, self.catchr
         self.pursuers_gone.fill(False)
         self.evaders_gone.fill(False)
         if self.random_opponents:
@@ -193,10 +193,8 @@ class Pursuit():
 
         x_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
         y_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = int(self.xs * x_window_start), int(self.xs *
-                                                      (x_window_start + self.constraint_window))
-        ylb, yub = int(self.ys * y_window_start), int(self.ys *
-                                                      (y_window_start + self.constraint_window))
+        xlb, xub = int(self.xs * x_window_start), int(self.xs * (x_window_start + self.constraint_window))
+        ylb, yub = int(self.ys * y_window_start), int(self.ys * (y_window_start + self.constraint_window))
         constraints = [[xlb, xub], [ylb, yub]]
 
         self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
@@ -291,7 +289,7 @@ class Pursuit():
             center = (self.pixel_scale * x + self.pixel_scale / 2,
                       self.pixel_scale * y + self.pixel_scale / 2)
             col = (255, 0, 0)
-            pygame.draw.circle(self.screen, col, center, self.pixel_scale / 3)
+            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
     def draw_evaders_observations(self):
         for i in range(self.evader_layer.n_agents()):
@@ -317,14 +315,13 @@ class Pursuit():
         if not self.renderOn:
             pygame.display.init()
             self.screen = pygame.display.set_mode(
-                (self.pixel_scale * self.ys, self.pixel_scale * self.xs))
+                (self.pixel_scale * self.xs, self.pixel_scale * self.ys))
         self.renderOn = True
-
         self.draw_model_state()
         if self.train_pursuit:
             self.draw_pursuers_observations()
         else:
-            self.draw_evaders()
+            self.draw_evaders_observations()
         self.draw_evaders()
         self.draw_pursuers()
 
@@ -347,12 +344,8 @@ class Pursuit():
             temp_name = join(file_path, "temp_" + str(i + 1) + ".png")
             self.save_image(temp_name)
             removed += info['removed']
-            if verbose:
-                print(r, info)
             if done:
                 break
-        if verbose:
-            print("Total removed:", removed)
         # use ffmpeg to create .pngs to .mp4 movie
         ffmpeg_cmd = "ffmpeg -framerate " + str(rate) + " -i " + join(
             file_path, "temp_%d.png") + " -c:v libx264 -pix_fmt yuv420p " + file_name
