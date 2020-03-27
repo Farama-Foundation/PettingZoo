@@ -52,7 +52,7 @@ class env(AECEnv):
             return
 
     def set_game_result(self, result_val):
-        for i,name in enumerate(self.agents):
+        for i, name in enumerate(self.agents):
             self.dones[name] = True
             result_coef = 1 if i == 0 else -1
             self.rewards[name] = result_val * result_coef
@@ -71,18 +71,27 @@ class env(AECEnv):
             self.set_game_result(player_loses_val)
             self.rewards[next_agent] = 0
         else:
-            chosen_move = chess_utils.action_to_move(action, current_index)
-
+            chosen_move = chess_utils.action_to_move(self.board, action, current_index)
+            assert chosen_move in self.board.legal_moves
             self.board.push(chosen_move)
 
+            next_legal_moves = chess_utils.legal_moves(self.board)
+
+            is_stale_or_checkmate = not any(next_legal_moves)
+
             # claim draw is set to be true to allign with normal tournament rules
-            if self.board.is_game_over(claim_draw=True):
+            is_repetition = self.board.is_repetition(3)
+            is_50_move_rule = self.board.can_claim_fifty_moves()
+            is_claimable_draw = is_repetition or is_50_move_rule
+            game_over = is_claimable_draw or is_stale_or_checkmate
+
+            if game_over:
                 result = self.board.result(claim_draw=True)
                 result_val = chess_utils.result_to_int(result)
                 self.set_game_result(result_val)
             else:
                 self.infos[current_agent] = {'legal_moves': []}
-                self.infos[next_agent] = {'legal_moves': chess_utils.legal_moves(self.board)}
+                self.infos[next_agent] = {'legal_moves': next_legal_moves}
                 assert len(self.infos[next_agent]['legal_moves'])
 
         if observe:
