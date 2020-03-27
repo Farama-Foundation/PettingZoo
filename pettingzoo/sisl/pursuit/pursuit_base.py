@@ -156,6 +156,7 @@ class Pursuit():
         pygame.init()
         self.clock = pygame.time.Clock()
         self.frames = 0
+        self.reset()
 
     def close(self):
         pygame.event.pump()
@@ -192,10 +193,8 @@ class Pursuit():
 
         x_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
         y_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = int(self.xs * x_window_start),
-        int(self.xs * (x_window_start + self.constraint_window))
-        ylb, yub = int(self.ys * y_window_start),
-        int(self.ys * (y_window_start + self.constraint_window))
+        xlb, xub = int(self.xs * x_window_start), int(self.xs * (x_window_start + self.constraint_window))
+        ylb, yub = int(self.ys * y_window_start), int(self.ys * (y_window_start + self.constraint_window))
         constraints = [[xlb, xub], [ylb, yub]]
 
         self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
@@ -290,7 +289,7 @@ class Pursuit():
             center = (self.pixel_scale * x + self.pixel_scale / 2,
                       self.pixel_scale * y + self.pixel_scale / 2)
             col = (255, 0, 0)
-            pygame.draw.circle(self.screen, col, center, self.pixel_scale / 3)
+            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
     def draw_evaders_observations(self):
         for i in range(self.evader_layer.n_agents()):
@@ -316,7 +315,7 @@ class Pursuit():
         if not self.renderOn:
             pygame.display.init()
             self.screen = pygame.display.set_mode(
-                (self.pixel_scale * self.ys, self.pixel_scale * self.xs))
+                (self.pixel_scale * self.xs, self.pixel_scale * self.ys))
         self.renderOn = True
         self.draw_model_state()
         if self.train_pursuit:
