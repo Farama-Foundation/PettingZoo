@@ -102,9 +102,9 @@ class env(AECEnv):
         self.reset()
 
     def observe(self, agent):
-        observation = pygame.surfarray.array3d(self.screen)
+        observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        cropped = observation[i * 10:30 + i * 10, 257:457, :]
+        cropped = np.array(observation[i * 10:30 + i * 10, 257:457, :])
         return cropped
 
     def enable_render(self):
