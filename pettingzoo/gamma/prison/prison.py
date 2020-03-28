@@ -192,8 +192,9 @@ class env(AECEnv):
         return self.prisoner_mapping[c]
 
     def close(self):
-        pygame.event.pump()
-        pygame.display.quit()
+        if self.rendering:
+            pygame.event.pump()
+            pygame.display.quit()
         pygame.quit()
 
     def draw(self):
@@ -201,8 +202,6 @@ class env(AECEnv):
         self.screen.blit(dynamic_background, (0, 0))
         for p in self.prisoners:
             self.screen.blit(self.prisoners[p].get_sprite(), self.prisoners[p].position)
-
-        # self.space.debug_draw(self.options)
 
     def observe(self, agent):
         if self.vector_obs:
@@ -240,6 +239,9 @@ class env(AECEnv):
         self.last_rewards = [0 for _ in self.agents]
         self.frames = 0
         self.rendering = False
+        self.screen = pygame.Surface((750, 650))
+        self.screen.blit(self.background, (0, 0))
+        self.rendering = False
         if observe:
             return self.observe(self.agent_selection)
 
@@ -273,7 +275,9 @@ class env(AECEnv):
             for d in self.dones:
                 self.dones[d] = True
 
-        pygame.event.pump()
+        self.draw()
+        if self.rendering:
+            pygame.event.pump()
 
         self.agent_selection = self._agent_selector.next()
         observation = self.observe(self.agent_selection)
@@ -287,5 +291,4 @@ class env(AECEnv):
             self.screen = pygame.display.set_mode((750, 650))
             self.screen.blit(self.background, (0, 0))
         self.rendering = True
-        self.draw()
         pygame.display.flip()
