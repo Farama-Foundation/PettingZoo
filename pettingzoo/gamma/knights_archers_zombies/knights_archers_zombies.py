@@ -108,12 +108,12 @@ class env(AECEnv):
         self.agent_name_mapping = {}
         a_count = 0
         for i in range(num_archers):
-            a_name = "archer_"+str(i)
+            a_name = "archer_" + str(i)
             self.agents.append(a_name)
             self.agent_name_mapping[a_name] = a_count
             a_count += 1
         for i in range(num_knights):
-            k_name = "knight_"+str(i)
+            k_name = "knight_" + str(i)
             self.agents.append(k_name)
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
@@ -125,7 +125,7 @@ class env(AECEnv):
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
-        # self.reset()
+        self.reinit()
 
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
@@ -237,14 +237,12 @@ class env(AECEnv):
 
     # Stab the Sword
     def sword_stab(self, sword_list, all_sprites):
-        try:
-            for sword in sword_list:
-                sword_active = sword.update()
-                if not sword_active:  # remove the sprite
-                    sword_list.remove(sword)
-                    all_sprites.remove(sword)
-        except:
-            pass
+        for sword in sword_list:
+            sword_active = sword.update()
+            if not sword_active:  # remove the sprite
+                sword_list.remove(sword)
+                all_sprites.remove(sword)
+
         return sword_list, all_sprites
 
     # Spawning Zombies at Random Location at every 100 iterations
@@ -450,7 +448,7 @@ class env(AECEnv):
             for arrow in arrows_to_delete:
                 self.arrow_list.remove(arrow)
                 self.all_sprites.remove(arrow)
-            
+
             self.WINDOW.fill((66, 40, 53))
             self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
             self.WINDOW.blit(self.right_wall, self.right_wall_rect)
@@ -466,10 +464,10 @@ class env(AECEnv):
                 self.clock.tick()
 
             self.check_game_end()
-        
+            self.frames += 1
+
         self.agent_selection = self._agent_selector.next()
         self.rewards[agent] = agent_name.score
-        self.frames += 1
         self.dones[agent] = not self.run or self.frames >= self.max_frames
         if observe:
             return self.observe(self.agent_selection)
@@ -530,7 +528,7 @@ class env(AECEnv):
         if self.frame_count > 900:
             self.run = False
 
-    def reset(self, observe=True):
+    def reinit(self):
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
         self.knight_dict = {}
@@ -579,12 +577,12 @@ class env(AECEnv):
         self.agent_name_mapping = {}
         a_count = 0
         for i in range(self.num_archers):
-            a_name = "archer_"+str(i)
+            a_name = "archer_" + str(i)
             self.agents.append(a_name)
             self.agent_name_mapping[a_name] = a_count
             a_count += 1
         for i in range(self.num_knights):
-            k_name = "knight_"+str(i)
+            k_name = "knight_" + str(i)
             self.agents.append(k_name)
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
@@ -597,5 +595,8 @@ class env(AECEnv):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.frames = 0
+
+    def reset(self, observe=True):
+        self.reinit()
         if observe:
             return self.observe(self.agent_selection)

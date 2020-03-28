@@ -80,8 +80,8 @@ class Sword(pygame.sprite.Sprite):
 
                 angle = math.radians(self.knight.angle + 90 + self.speed * self.phase)
                 self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += (math.cos(angle) * (self.rect.width/2)) + (math.cos(angle) * (self.knight.rect.width/2))
-                self.rect.y -= (math.sin(angle) * (self.rect.height/2)) + (math.sin(angle) * (self.knight.rect.height/2))
+                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
+                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
             else:
                 self.phase = self.MAX_PHASE
                 self.active = False
