@@ -12,6 +12,7 @@ from skimage import measure
 import gym
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from .manual_control import manual_control
 
 _image_library = {}
 
@@ -30,7 +31,7 @@ class env(AECEnv):
     def __init__(self, max_frames=500, continuous=False):
         super(env, self).__init__()
         self.num_agents = 20
-        self.agents = ["piston_"+str(r) for r in range(self.num_agents)]
+        self.agents = ["piston_" + str(r) for r in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
@@ -280,6 +281,3 @@ class env(AECEnv):
         pygame.event.pump()
         if observe:
             return self.observe(self.agent_selection)
-
-from .manual_control import manual_control
-
