@@ -8,8 +8,6 @@ def manual_control(**kwargs):
     done = False
 
     cur_agent = 0
-
-    start_time = time.time()
     frame_count = 0
     # frame_limit = 500
     quit_game = 0
@@ -51,10 +49,9 @@ def manual_control(**kwargs):
         if quit_game:
             break
 
-        observations, reward_dict, done_dict, info = env.step(actions)
+        for a in actions:
+            env.step(a)
         env.render()
-        done = done_dict['__all__']
+        done = any(env.dones.values())
 
-    end_time = time.time()
-    total_time = end_time - start_time
     env.close()
