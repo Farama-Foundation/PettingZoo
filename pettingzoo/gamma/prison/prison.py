@@ -210,7 +210,7 @@ class env(AECEnv):
             obs = np.array([x - p.left_bound, p.right_bound - x])
             return obs
         else:
-            capture = pygame.surfarray.array3d(self.screen)
+            capture = pygame.surfarray.pixels3d(self.screen)
             p = self.prisoners[agent]
             x1, y1, x2, y2 = p.window
             sub_screen = np.array(capture[x1:x2, y1:y2, :])
