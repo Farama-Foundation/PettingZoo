@@ -28,7 +28,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, num_archers=2, num_knights=2, max_frames=500):
+    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=500):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
@@ -37,6 +37,7 @@ class env(AECEnv):
         self.HEIGHT = 720
         self.max_frames = 500
         self.frames = 0
+        self.pad_observation = pad_observation
 
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -350,15 +351,38 @@ class env(AECEnv):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            observation = np.zeros((40, 40, 3))
+            cropped = np.zeros((40, 40, 3))
         else:
-            min_x = agent_position[1] - 20
-            max_x = agent_position[1] + 20
-            min_y = agent_position[0] - 20
-            max_y = agent_position[0] + 20
-            observation = np.array(screen[min_y:max_y, min_x:max_x, :])
+            min_x = agent_position[0] - 20
+            max_x = agent_position[0] + 20
+            min_y = agent_position[1] - 20
+            max_y = agent_position[1] + 20
+            lower_y_bound = max(min_y, 0)
+            upper_y_bound = min(max_y, self.HEIGHT)
+            lower_x_bound = max(min_x, 0)
+            upper_x_bound = min(max_x, self.WIDTH)
+            cropped = np.array(screen)
+            cropped = cropped[lower_x_bound:upper_x_bound, :, :]
+            cropped = cropped[:, lower_y_bound:upper_y_bound, :]
+            if self.pad_observation:
+                # Add blackness to the left side of the window
+                if min_x < 0:
+                    pad = np.zeros((abs(min_x), cropped.shape[1], 3))
+                    cropped = np.hstack((pad, cropped))
+                # Add blackness to the right side of the window
+                if max_x > self.WIDTH:
+                    pad = np.zeros(((max_x - self.WIDTH), cropped.shape[1], 3))
+                    cropped = np.hstack((cropped, pad))
+                # Add blackness to the top side of the window
+                if min_y < 0:
+                    pad = np.zeros((cropped.shape[0], abs(min_y), 3))
+                    cropped = np.vstack((pad, cropped))
+                # Add blackness to the bottom side of the window
+                if max_y > self.HEIGHT:
+                    pad = np.zeros((cropped.shape[0], (max_y - self.HEIGHT), 3))
+                    cropped = np.vstack((cropped, pad))
 
-        return observation
+        return cropped
 
     def step(self, action, observe=True):
         agent = self.agent_selection
