@@ -124,7 +124,7 @@ class env(AECEnv):
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
-        self.reset()
+        # self.reset()
 
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
@@ -343,7 +343,7 @@ class env(AECEnv):
         return run
 
     def observe(self, agent):
-        observation = pygame.surfarray.pixels3d(self.WINDOW)
+        screen = pygame.surfarray.pixels3d(self.WINDOW)
 
         i = self.agent_name_mapping[agent]
         agent_obj = self.agent_list[i]
@@ -356,9 +356,8 @@ class env(AECEnv):
             max_x = agent_position[1] + 20
             min_y = agent_position[0] - 20
             max_y = agent_position[0] + 20
-            cropped = observation[min_y:max_y, min_x:max_x]
+            observation = np.array(screen[min_y:max_y, min_x:max_x, :])
 
-            return cropped
         return observation
 
     def step(self, action, observe=True):
@@ -379,7 +378,7 @@ class env(AECEnv):
 
                 # Reset Environment
                 if event.key == pygame.K_BACKSPACE:
-                    self.reset()
+                    self.reset(observe=False)
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
         sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
         # Knight
@@ -428,7 +427,6 @@ class env(AECEnv):
                 self.arrow_list.remove(arrow)
                 self.all_sprites.remove(arrow)
             
-            self.WINDOW.unlock()
             self.WINDOW.fill((66, 40, 53))
             self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
             self.WINDOW.blit(self.right_wall, self.right_wall_rect)
