@@ -189,135 +189,177 @@ class wrapper(AECEnv):
 
         return new_action
 
+    def _color_reduction_obs_space(self):
+        for agent in self.agents:
+            obs_space = self.observation_spaces[agent]
+            dtype = obs_space.dtype
+            color_reduction = self.color_reduction[agent]
+            if color_reduction == 'R':
+                low = obs_space.low[:, :, 0]
+                high = obs_space.high[:, :, 0]
+            if color_reduction == 'G':
+                low = obs_space.low[:, :, 1]
+                high = obs_space.high[:, :, 1]
+            if color_reduction == 'B':
+                low = obs_space.low[:, :, 2]
+                high = obs_space.high[:, :, 2]
+            if color_reduction == 'full':
+                low = np.average(obs_space.low, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
+                high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
+            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+        print("Mod obs space: color_reduction", self.observation_spaces)
+
+    def _down_scale_obs_space(self):
+        for agent in self.agents:
+            obs_space = self.observation_spaces[agent]
+            dtype = obs_space.dtype
+            down_scale = self.down_scale[agent]
+            shape = obs_space.shape
+            new_shape = tuple([int(shape[i] / down_scale[i]) for i in range(len(shape))])
+            low = obs_space.low.flatten()[:np.product(new_shape)].reshape(new_shape)
+            high = obs_space.high.flatten()[:np.product(new_shape)].reshape(new_shape)
+            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+        print("Mod obs space: down_scale", self.observation_spaces)
+
+    def _reshape_obs_space(self):
+        for agent in self.agents:
+            obs_space = self.observation_spaces[agent]
+            reshape = self.reshape
+            dtype = obs_space.dtype
+            if reshape is OBS_RESHAPE_LIST[0]:
+                # expand dim by 1
+                low = np.expand_dims(obs_space.low, axis=-1)
+                high = np.expand_dims(obs_space.high, axis=-1)
+            elif reshape is OBS_RESHAPE_LIST[1]:
+                # flatten
+                low = obs_space.low.flatten()
+                high = obs_space.high.flatten()
+            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+        print("Mod obs space: reshape", self.observation_spaces)
+
+    def _range_scale_obs_space(self):
+        for agent in self.agents:
+            obs_space = self.observation_spaces[agent]
+            range_scale = self.range_scale[agent]
+            if self.new_dtype is not None:
+                dtype = self.new_dtype[agent]
+            else:
+                warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+                dtype = np.float32
+            min_obs, max_obs = range_scale
+            low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
+            high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
+            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+        print("Mod obs space: range_scale", self.observation_spaces)
+
+    def _new_dtype_obs_space(self):
+        for agent in self.agents:
+            obs_space = self.observation_spaces[agent]
+            dtype = self.new_dtype[agent]
+            low = obs_space.low
+            high = obs_space.high
+            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+        print("Mod obs space: new_dtype", self.observation_spaces)
+
+    def _frame_stacking_obs_space(self):
+        self.pre_fs_ndim = {agent: self.observation_spaces[agent].low.ndim for agent in self.agents}
+        self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
+        print("Mod obs space: frame_stacking", self.observation_spaces)
+
     def modify_observation_space(self):
         # reduce color channels to 1
         if self.color_reduction is not None:
-            for agent in self.agents:
-                obs_space = self.observation_spaces[agent]
-                dtype = obs_space.dtype
-                color_reduction = self.color_reduction[agent]
-                if color_reduction == 'R':
-                    low = obs_space.low[:, :, 0]
-                    high = obs_space.high[:, :, 0]
-                if color_reduction == 'G':
-                    low = obs_space.low[:, :, 1]
-                    high = obs_space.high[:, :, 1]
-                if color_reduction == 'B':
-                    low = obs_space.low[:, :, 2]
-                    high = obs_space.high[:, :, 2]
-                if color_reduction == 'full':
-                    low = np.average(obs_space.low, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
-                    high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
-                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: color_reduction", self.observation_spaces)
+            self._color_reduction_obs_space()
 
         # downscale (image, typically)
         if self.down_scale is not None:
-            for agent in self.agents:
-                obs_space = self.observation_spaces[agent]
-                dtype = obs_space.dtype
-                down_scale = self.down_scale[agent]
-                shape = obs_space.shape
-                new_shape = tuple([int(shape[i] / down_scale[i]) for i in range(len(shape))])
-                low = obs_space.low.flatten()[:np.product(new_shape)].reshape(new_shape)
-                high = obs_space.high.flatten()[:np.product(new_shape)].reshape(new_shape)
-                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: down_scale", self.observation_spaces)
+            self._down_scale_obs_space()
 
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-            for agent in self.agents:
-                obs_space = self.observation_spaces[agent]
-                reshape = self.reshape
-                dtype = obs_space.dtype
-                if reshape is OBS_RESHAPE_LIST[0]:
-                    # expand dim by 1
-                    low = np.expand_dims(obs_space.low, axis=-1)
-                    high = np.expand_dims(obs_space.high, axis=-1)
-                elif reshape is OBS_RESHAPE_LIST[1]:
-                    # flatten
-                    low = obs_space.low.flatten()
-                    high = obs_space.high.flatten()
-                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: reshape", self.observation_spaces)
+            self._reshape_obs_space()
 
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-            for agent in self.agents:
-                obs_space = self.observation_spaces[agent]
-                range_scale = self.range_scale[agent]
-                if self.new_dtype is not None:
-                    dtype = self.new_dtype[agent]
-                else:
-                    warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
-                    dtype = np.float32
-                min_obs, max_obs = range_scale
-                low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
-                high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
-                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: range_scale", self.observation_spaces)
+            self._range_scale_obs_space()
         elif self.new_dtype is not None:
-            for agent in self.agents:
-                dtype = self.new_dtype[agent]
-                low = obs_space.low
-                high = obs_space.high
-                self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
-            print("Mod obs space: new_dtype", self.observation_spaces)
+            self._new_dtype_obs_space()
 
         if self.frame_stacking > 1:
-            self.pre_fs_ndim = {agent: self.observation_spaces[agent].low.ndim for agent in self.agents}
-            self.observation_spaces = stack_obs_space(self.observation_spaces, self.frame_stacking)
-            print("Mod obs space: frame_stacking", self.observation_spaces)
+            self._frame_stacking_obs_space()
+
+    def _color_reduction_obs(self, obs, agent):
+        color_reduction = self.color_reduction[agent]
+        if color_reduction == 'R':
+            obs = obs[:, :, 0]
+        if color_reduction == 'G':
+            obs = obs[:, :, 1]
+        if color_reduction == 'B':
+            obs = obs[:, :, 2]
+        if color_reduction == 'full':
+            obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)
+        return obs
+
+    def _down_scale_obs(self, obs, agent):
+        down_scale = self.down_scale[agent]
+        mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
+        obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
+        return obs
+
+    def _reshape_obs(self, obs, agent):
+        reshape = self.reshape
+        if reshape is OBS_RESHAPE_LIST[0]:
+            # expand dim by 1
+            obs = np.expand_dims(obs, axis=-1)
+        elif reshape is OBS_RESHAPE_LIST[1]:
+            # flatten
+            obs = obs.flatten()
+        return obs
+
+    def _range_scale_obs(self, obs, agent):
+        range_scale = self.range_scale[agent]
+        if self.new_dtype is not None:
+            dtype = self.new_dtype[agent]
+        else:
+            warnings.warn("Trying to scale observation, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
+            dtype = np.float32
+        min_obs, max_obs = range_scale
+        obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
+        return obs
+
+    def _new_dtype_obs(self, obs, agent):
+        dtype = self.new_dtype[agent]
+        obs = obs.astype(dtype)
+        return obs
+
+    def _frame_stacking_obs(self, obs, agent):
+        stack_obs(self.stack_of_frames, agent, obs, self.frame_stacking)
+        obs = self.stack_of_frames[agent]
+        return obs
 
     def modify_observation(self, agent, observation, is_reset=False):
         obs = observation
         # reduce color channels to 1
         if self.color_reduction is not None:
-            color_reduction = self.color_reduction[agent]
-            if color_reduction == 'R':
-                obs = obs[:, :, 0]
-            if color_reduction == 'G':
-                obs = obs[:, :, 1]
-            if color_reduction == 'B':
-                obs = obs[:, :, 2]
-            if color_reduction == 'full':
-                obs = np.average(obs, weights=[0.299, 0.587, 0.114], axis=2).astype(obs.dtype)
+            obs = self._color_reduction_obs(obs, agent)
 
         # downscale (image, typically)
         if self.down_scale is not None:
-            down_scale = self.down_scale[agent]
-            mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-            obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
+            obs = self._down_scale_obs(obs, agent)
 
         # expand dimensions by 1 or flatten the array
         if self.reshape is not None:
-            reshape = self.reshape
-            dtype = obs.dtype
-            if reshape is OBS_RESHAPE_LIST[0]:
-                # expand dim by 1
-                obs = np.expand_dims(obs, axis=-1)
-            elif reshape is OBS_RESHAPE_LIST[1]:
-                # flatten
-                obs = obs.flatten()
+            obs = self._reshape_obs(obs, agent)
 
         # scale observation value (to [0,1], typically) and change observation_space dtype
         if self.range_scale is not None:
-            range_scale = self.range_scale[agent]
-            if self.new_dtype is not None:
-                dtype = self.new_dtype[agent]
-            else:
-                warnings.warn("Trying to scale observation, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
-                dtype = np.float32
-            min_obs, max_obs = range_scale
-            obs = np.divide(np.subtract(obs, min_obs), max_obs - min_obs, dtype=dtype)
+            obs = self._range_scale_obs(obs, agent)
         elif self.new_dtype is not None:
-            dtype = self.new_dtype[agent]
-            obs = obs.astype(dtype)
+            obs = self._new_dtype_obs(obs, agent)
 
         # frame_stacking
         if self.frame_stacking > 1:
-            stack_obs(self.stack_of_frames, agent, obs, self.frame_stacking)
-            obs = self.stack_of_frames[agent]
+            obs = self._frame_stacking_obs(obs, agent)
         return obs
 
     def close(self):
