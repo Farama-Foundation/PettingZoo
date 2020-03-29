@@ -31,9 +31,9 @@ class Zombie(pygame.sprite.Sprite):
             # Bringing the Zombies back on the Screen
             else:
                 if self.rect.x <= 15:
-                    self.rect.x += 2*ZOMBIE_X_SPEED
+                    self.rect.x += 2 * ZOMBIE_X_SPEED
                 elif self.rect.x >= 1265:
-                    self.rect.x -= 2*ZOMBIE_X_SPEED
+                    self.rect.x -= 2 * ZOMBIE_X_SPEED
 
         # Clamp to stay inside the screen
         self.rect.x = max(min(self.rect.x, WIDTH - 100), 100)

@@ -14,27 +14,33 @@ class env(AECEnv):
         super(env, self).__init__()
         self.env = rlcard.make('limit-holdem', **kwargs)
         self.num_agents = 2
-        self.agents = list(range(self.num_agents))
+        self.agents = ['player_0', 'player_1']
 
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.observation_spaces = dict(zip(self.agents, [spaces.Box(low=0.0, high=1.0, shape=(72,), dtype=np.bool) for _ in range(self.num_agents)]))
-        self.action_spaces = dict(zip(self.agents, [spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)]))
+        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(72,), dtype=np.bool) for _ in range(self.num_agents)])
+        self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
         obs, player_id = self.env.init_game()
 
         self._last_obs = obs['obs']
-        self.agent_order = [player_id, 0 if player_id == 1 else 1]
+        self.agent_order = [self._int_to_name(agent) for agent in [player_id, 0 if player_id == 1 else 1]]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
-        self.infos[player_id]['legal_moves'] = obs['legal_actions']
+        self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
+
+    def _int_to_name(self, ind):
+        return self.agents[ind]
+
+    def _name_to_int(self, name):
+        return self.agents.index(name)
 
     def _convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
     def observe(self, agent):
-        obs = self.env.get_state(agent)
+        obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs']
 
     def step(self, action, observe=True):
@@ -51,26 +57,26 @@ class env(AECEnv):
                 self.agent_selection = self._agent_selector.next()
                 return self._last_obs
             obs, next_player_id = self.env.step(action)
+            self._last_obs = obs['obs']
             if self.env.is_over():
                 self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
                 self.rewards = self._convert_to_dict(self.env.get_payoffs())
-                self.infos[next_player_id]['legal_moves'] = [0]
-                self._last_obs = obs['obs']
+                self.infos[self._int_to_name(next_player_id)]['legal_moves'] = [2]
             else:
-                self.infos[next_player_id]['legal_moves'] = obs['legal_actions']
+                self.infos[self._int_to_name(next_player_id)]['legal_moves'] = obs['legal_actions']
         self.agent_selection = self._agent_selector.next()
         if observe:
             return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
         obs, player_id = self.env.init_game()
-        self.agent_order = [player_id, 0 if player_id == 1 else 1]
+        self.agent_order = [self._int_to_name(agent) for agent in [player_id, 0 if player_id == 1 else 1]]
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[player_id]['legal_moves'] = obs['legal_actions']
+        self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
         self._last_obs = obs['obs']
         if observe:
             return obs['obs']
@@ -79,10 +85,10 @@ class env(AECEnv):
 
     def render(self, mode='human'):
         for player in self.agents:
-            state = self.env.game.get_state(player)
-            print("\n=============== Player {}'s Hand ===============".format(player))
+            state = self.env.game.get_state(self._name_to_int(player))
+            print("\n=============== {}'s Hand ===============".format(player))
             print_card(state['hand'])
-            print("\nPlayer {}'s Chips: {}".format(player, state['my_chips']))
+            print("\n{}'s Chips: {}".format(player, state['my_chips']))
         print('\n================= Public Cards =================')
         print_card(state['public_cards']) if state['public_cards'] else print('No public cards.')
         print('\n')
