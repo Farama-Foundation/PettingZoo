@@ -249,7 +249,7 @@ Dou Dizhu depends on [RLCard](http://rlcard.org/) and you can refer to its docum
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| ?            | Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
 
 `from pettingzoo.classic import tictactoe`
 
@@ -257,11 +257,7 @@ Dou Dizhu depends on [RLCard](http://rlcard.org/) and you can refer to its docum
 
 *AEC Diagram*
 
-*Blurb*
-
-*Env arguments*
-
-*About env arguments*
+Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal row is the winner. If played properly by both players, the game will always end in a draw. Check out [Wikipedia](https://en.wikipedia.org/wiki/Tic-tac-toe) for more information.
 
 ### Uno
 
