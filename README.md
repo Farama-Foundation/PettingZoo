@@ -11,7 +11,6 @@ PettingZoo includes the following sets of games:
 * gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
 * magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* robotics: A collection of 3D multi-agent robot environments, simulated with MuJoCo
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
 To install a set of games, use `pip3 install pettingzoo[atari]` (or whichever set of games you want).
@@ -236,30 +235,26 @@ The following environments should be done:
 * classic/tictactoe
 * classic/uno
 * gamma/cooperative_pong
+* gamma/knights_archers_zombies
+* gamma/pistonball
 * gamma/prison
 * mpe/*
 * sisl/*
 
 The following environments are under active development:
 
-* classic/gin_rummy (Luis) (waiting on RLCard fix)
+* atari/* (Ben)
+* classic/backgammon (Praveen)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
-* gamma/knights_archers_zombies (Mario)
-* gamma/pistonball (Mario)
+* classic/go (Luis)
+* classic/gin_rummy (Luis) (waiting on RLCard fix)
 * gamma/prospector (Yashas)
-* magent/* (David)
-
-Heterogenous agent handling (Kai)
+* magent/* (David and Mario)
 
 Development has not yet started on the following games:
 
 * classic/hanabi
-* classic/go
-* classic/backgammon
-* atari/* (based on ALE-Py) (ALE backport being done by Ben)
-* robotics/*
-* ssd/* (https://github.com/eugenevinitsky/sequential_social_dilemma_games) (?)
 
 Future wrapper work:
 "action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
