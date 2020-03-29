@@ -13,6 +13,7 @@ import numpy as np
 from skimage import measure
 import matplotlib.pyplot as plt
 from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 from gym.spaces import Box, Discrete
 
 
@@ -24,13 +25,19 @@ def get_image(path):
 
 
 class env(AECEnv):
-    def __init__(self, num_archers=2, num_knights=2):
+
+    metadata = {'render.modes': ['human']}
+
+    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=500):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
         self.FPS = 15
         self.WIDTH = 1280
         self.HEIGHT = 720
+        self.max_frames = 500
+        self.frames = 0
+        self.pad_observation = pad_observation
 
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -98,12 +105,27 @@ class env(AECEnv):
             if i != num_knights - 1:
                 self.knight_player_num += 1
 
-        for i in range(num_archers + num_knights):
-            self.agents.append(i)
+        self.agent_name_mapping = {}
+        a_count = 0
+        for i in range(num_archers):
+            a_name = "archer_" + str(i)
+            self.agents.append(a_name)
+            self.agent_name_mapping[a_name] = a_count
+            a_count += 1
+        for i in range(num_knights):
+            k_name = "knight_" + str(i)
+            self.agents.append(k_name)
+            self.agent_name_mapping[k_name] = a_count
+            a_count += 1
 
-        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=1, shape=(40, 40), dtype=np.float32) for _ in enumerate(self.agents)]))
+        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(40, 40, 3), dtype=np.float32) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
+
+        self.agent_order = self.agents[:]
+        self._agent_selector = agent_selector(self.agent_order)
+        self.agent_selection = 0
+        self.reinit()
 
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
@@ -215,14 +237,12 @@ class env(AECEnv):
 
     # Stab the Sword
     def sword_stab(self, sword_list, all_sprites):
-        try:
-            for sword in sword_list:
-                sword_active = sword.update()
-                if not sword_active:  # remove the sprite
-                    sword_list.remove(sword)
-                    all_sprites.remove(sword)
-        except:
-            pass
+        for sword in sword_list:
+            sword_active = sword.update()
+            if not sword_active:  # remove the sprite
+                sword_list.remove(sword)
+                all_sprites.remove(sword)
+
         return sword_list, all_sprites
 
     # Spawning Zombies at Random Location at every 100 iterations
@@ -321,54 +341,49 @@ class env(AECEnv):
             run = False
         return run
 
-    def observe(self):
-        observation = pygame.surfarray.pixels3d(self.WINDOW)
-        observation = np.rot90(observation, k=3)
-        observation = np.fliplr(observation)
-        observation = observation[:, :, 0]  # take red channel only instead of doing full greyscale
+    def observe(self, agent):
+        screen = pygame.surfarray.pixels3d(self.WINDOW)
 
-        agent_positions = []
-        for agent in self.agent_list:
-            agent_positions.append([agent.rect.y, agent.rect.x])  # y first because the 2d array is row-major
+        i = self.agent_name_mapping[agent]
+        agent_obj = self.agent_list[i]
+        agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
-        observations = {}
-        for i in range(len(self.agent_list)):
-            if not self.agent_list[i].alive:
-                observations[self.agents[i]] = np.zeros(2704)
-            else:
-                min_x = agent_positions[i][1] - (32 * 8)
-                max_x = agent_positions[i][1] + (32 * 8)
-                min_y = agent_positions[i][0] - (32 * 8)
-                max_y = agent_positions[i][0] + (32 * 8)
-                cropped = observation[max(min_y, 0):min(max_y, self.HEIGHT), max(min_x, 0):min(max_x, self.WIDTH)]
-
+        if not agent_obj.alive:
+            cropped = np.zeros((40, 40, 3))
+        else:
+            min_x = agent_position[0] - 20
+            max_x = agent_position[0] + 20
+            min_y = agent_position[1] - 20
+            max_y = agent_position[1] + 20
+            lower_y_bound = max(min_y, 0)
+            upper_y_bound = min(max_y, self.HEIGHT)
+            lower_x_bound = max(min_x, 0)
+            upper_x_bound = min(max_x, self.WIDTH)
+            cropped = np.array(screen)
+            cropped = cropped[lower_x_bound:upper_x_bound, :, :]
+            cropped = cropped[:, lower_y_bound:upper_y_bound, :]
+            if self.pad_observation:
                 # Add blackness to the left side of the window
                 if min_x < 0:
-                    pad = np.zeros((abs(min_x)) * cropped.shape[0]).reshape(cropped.shape[0], abs(min_x))
+                    pad = np.zeros((abs(min_x), cropped.shape[1], 3))
                     cropped = np.hstack((pad, cropped))
                 # Add blackness to the right side of the window
                 if max_x > self.WIDTH:
-                    pad = np.zeros((max_x - self.WIDTH) * cropped.shape[0]).reshape(cropped.shape[0], max_x - self.WIDTH)
+                    pad = np.zeros(((max_x - self.WIDTH), cropped.shape[1], 3))
                     cropped = np.hstack((cropped, pad))
                 # Add blackness to the top side of the window
                 if min_y < 0:
-                    pad = np.zeros(abs(min_y) * cropped.shape[1]).reshape(abs(min_y), cropped.shape[1])
+                    pad = np.zeros((cropped.shape[0], abs(min_y), 3))
                     cropped = np.vstack((pad, cropped))
                 # Add blackness to the bottom side of the window
                 if max_y > self.HEIGHT:
-                    pad = np.zeros((max_y - self.HEIGHT) * cropped.shape[1]).reshape(max_y - self.HEIGHT, cropped.shape[1])
+                    pad = np.zeros((cropped.shape[0], (max_y - self.HEIGHT), 3))
                     cropped = np.vstack((cropped, pad))
 
-                mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
-                cropped = measure.block_reduce(cropped, block_size=(10, 10), func=mean)  # scale to 40x40 FIXME: This is not scaling it to 40x40. There was some bug with the image downscaling and Justin told me (Niall) to just push it with the bug and he would figure it out. this scale to (10, 10) was a suggest Justin wanted me to try before he told me to push it with the bug. If you want it to be 40x40, change the (10, 10) to (13, 13)
+        return cropped
 
-                unscaled_obs = np.expand_dims(cropped, axis=2).flatten()
-                observations[self.agents[i]] = np.divide(unscaled_obs, 255, dtype=np.float32)
-
-        return observations
-
-    # Advance game state by 1 timestep
-    def step(self, actions):
+    def step(self, action, observe=True):
+        agent = self.agent_selection
         # Controls the Spawn Rate of Weapons
         self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
@@ -385,88 +400,77 @@ class env(AECEnv):
 
                 # Reset Environment
                 if event.key == pygame.K_BACKSPACE:
-                    self.reset()
+                    self.reset(observe=False)
+        agent_name = self.agent_list[self.agent_name_mapping[agent]]
+        sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
+        # Knight
+        self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
+        # Archer
+        self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
+        # Spawn Weapons
+        sw = self.spawnWeapons(action, self.agent_name_mapping[agent], self.agent_list, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
+        # Sword
+        self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
+        # Arrow
+        self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+        agent_name.update(action)
 
-        # Handle agent control
-        for i, agent in enumerate(self.agent_list):
-            # Spawn Players
-            sp = self.spawnPlayers(actions[i], self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
-            # Knight
-            self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
-            # Archer
-            self.archer_player_num, self.archer_list, self.all_sprites, self.archer_dict = sp.spawnArcher()
+        if self._agent_selector.is_last():
+            # Spawning Zombies at Random Location at every 100 iterations
+            self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
 
-            # Spawn Weapons
-            sw = self.spawnWeapons(actions[i], i, self.agent_list, self.sword_spawn_rate, self.arrow_spawn_rate, self.knight_killed, self.archer_killed, self.knight_dict, self.archer_dict, self.knight_list, self.archer_list, self.knight_player_num, self.archer_player_num, self.all_sprites, self.sword_dict, self.arrow_dict, self.sword_list, self.arrow_list)
-            # Sword
-            self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
-            # Arrow
-            self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+            # Stab the Sword
+            self.sword_list, self.all_sprites = self.sword_stab(self.sword_list, self.all_sprites)
 
-            agent.update(actions[i])
+            # Zombie Kills the Arrow
+            self.zombie_list, self.arrow_list, self.all_sprites, self.score = self.zombie_arrow(self.zombie_list, self.arrow_list, self.all_sprites, self.score)
 
-        # Spawning Zombies at Random Location at every 100 iterations
-        self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
+            # Zombie Kills the Sword
+            self.zombie_list, self.sword_list, self.all_sprites, self.score = self.zombie_sword(self.zombie_list, self.sword_list, self.all_sprites, self.score)
 
-        # Stab the Sword
-        self.sword_list, self.all_sprites = self.sword_stab(self.sword_list, self.all_sprites)
+            # Zombie Kills the Archer
+            self.zombie_archer(self.zombie_list, self.archer_list, self.all_sprites, self.archer_killed)
 
-        # Zombie Kills the Arrow
-        self.zombie_list, self.arrow_list, self.all_sprites, self.score = self.zombie_arrow(self.zombie_list, self.arrow_list, self.all_sprites, self.score)
+            # Zombie Kills the Knight
+            self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed = self.zombie_knight(self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed)
 
-        # Zombie Kills the Sword
-        self.zombie_list, self.sword_list, self.all_sprites, self.score = self.zombie_sword(self.zombie_list, self.sword_list, self.all_sprites, self.score)
+            # Kill the Sword when Knight dies
+            self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
 
-        # Zombie Kills the Archer
-        self.zombie_archer(self.zombie_list, self.archer_list, self.all_sprites, self.archer_killed)
+            for zombie in self.zombie_list:
+                zombie.update()
+            arrows_to_delete = []
 
-        # Zombie Kills the Knight
-        self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed = self.zombie_knight(self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed)
+            for arrow in self.arrow_list:
+                arrow.update()
+                if not arrow.is_active():
+                    arrows_to_delete.append(arrow)
+            for arrow in arrows_to_delete:
+                self.arrow_list.remove(arrow)
+                self.all_sprites.remove(arrow)
 
-        # Kill the Sword when Knight dies
-        self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
+            self.WINDOW.fill((66, 40, 53))
+            self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
+            self.WINDOW.blit(self.right_wall, self.right_wall_rect)
+            self.WINDOW.blit(self.floor_patch1, (500, 500))
+            self.WINDOW.blit(self.floor_patch2, (900, 30))
+            self.WINDOW.blit(self.floor_patch3, (150, 430))
+            self.WINDOW.blit(self.floor_patch4, (300, 50))
+            self.WINDOW.blit(self.floor_patch1, (1000, 250))
+            self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
+            if self.render_on:
+                self.clock.tick(self.FPS)                # FPS
+            else:
+                self.clock.tick()
 
-        # Call the update() method on sprites
-        for zombie in self.zombie_list:
-            zombie.update()
-        arrows_to_delete = []
+            self.check_game_end()
+            self.frames += 1
 
-        for arrow in self.arrow_list:
-            arrow.update()
-            if not arrow.is_active():
-                arrows_to_delete.append(arrow)
-        # delete arrows so they don't get rendered
-        for arrow in arrows_to_delete:
-            self.arrow_list.remove(arrow)
-            self.all_sprites.remove(arrow)
-
-        self.WINDOW.fill((66, 40, 53))
-        self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
-        self.WINDOW.blit(self.right_wall, self.right_wall_rect)
-        self.WINDOW.blit(self.floor_patch1, (500, 500))
-        self.WINDOW.blit(self.floor_patch2, (900, 30))
-        self.WINDOW.blit(self.floor_patch3, (150, 430))
-        self.WINDOW.blit(self.floor_patch4, (300, 50))
-        self.WINDOW.blit(self.floor_patch1, (1000, 250))
-        self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
-        # pygame.display.update()
-        # pygame.display.flip()                    # update screen
-        if self.render_on:
-            self.clock.tick(self.FPS)                # FPS
-        else:
-            self.clock.tick()
-
-        self.check_game_end()
-
-        reward_dict = dict(zip(self.agents, [agent.score for agent in self.agent_list]))
-
-        agent_done = [agent.is_done() for agent in self.agent_list]
-        done_dict = dict(zip(self.agents, agent_done))
-        done_dict['__all__'] = not self.run
-
-        observation = self.observe()
-
-        return observation, reward_dict, done_dict, {}
+        self.agent_selection = self._agent_selector.next()
+        self.rewards[agent] = agent_name.score
+        self.dones[agent] = not self.run or self.frames >= self.max_frames
+        if observe:
+            return self.observe(self.agent_selection)
 
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
@@ -474,7 +478,7 @@ class env(AECEnv):
         self.render_on = True
         self.reset()
 
-    def render(self):
+    def render(self, mode="human"):
         if not self.render_on:
             # sets self.render_on to true and initializes display
             self.enable_render()
@@ -484,6 +488,7 @@ class env(AECEnv):
         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.render_on = False
+        pygame.event.pump()
         pygame.display.quit()
 
     def plot_obs(self, observation, fname):
@@ -523,7 +528,7 @@ class env(AECEnv):
         if self.frame_count > 900:
             self.run = False
 
-    def reset(self):
+    def reinit(self):
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
         self.knight_dict = {}
@@ -569,7 +574,29 @@ class env(AECEnv):
             if i != self.num_knights - 1:
                 self.knight_player_num += 1
 
-        for i in range(self.num_archers + self.num_knights):
-            self.agents.append(i)
+        self.agent_name_mapping = {}
+        a_count = 0
+        for i in range(self.num_archers):
+            a_name = "archer_" + str(i)
+            self.agents.append(a_name)
+            self.agent_name_mapping[a_name] = a_count
+            a_count += 1
+        for i in range(self.num_knights):
+            k_name = "knight_" + str(i)
+            self.agents.append(k_name)
+            self.agent_name_mapping[k_name] = a_count
+            a_count += 1
 
-        return self.observe()
+        self.agent_order = self.agents[:]
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
+
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
+        self.frames = 0
+
+    def reset(self, observe=True):
+        self.reinit()
+        if observe:
+            return self.observe(self.agent_selection)

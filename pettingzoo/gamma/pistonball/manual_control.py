@@ -1,10 +1,10 @@
-from .pistonball import env as _env
 import time
 import numpy as np
 import pygame
 
-def manual_control(**kwargs):
 
+def manual_control(**kwargs):
+    from .pistonball import env as _env
 
     # flatten_obs is True by default
     env = _env(**kwargs)
@@ -13,7 +13,6 @@ def manual_control(**kwargs):
     # save_observation(obs_dict, reverse_colors=False)
     # exit()
     i = 19
-    totalReward = 0
     start = time.time()
     done = False
     quit_game = 0
@@ -30,7 +29,6 @@ def manual_control(**kwargs):
                     # Backspace to reset
                     env.reset()
                     i = 19
-                    totalReward = 0
                 if event.key == pygame.K_a and time.time() - start > .1:
                     i = (i - 1) if (i != 0) else i
                     start = time.time()
@@ -45,16 +43,11 @@ def manual_control(**kwargs):
         if quit_game:
             break
         # actions should be a dict of numpy arrays
-        action_dict = dict(zip(env.agents, action_list))
+        for a in action_list:
+            env.step(a)
 
-        observations, reward_dict, done_dict, info = env.step(action_dict)
-        # save_observation(observations)
-        # exit()
         env.render()
-        totalReward += sum(reward_dict.values())
-        done = any(done_dict.values())
-
-    print("Total final reward is ", totalReward)
+        done = any(env.dones.values())
     # Uncomment next line to print FPS at which the game runs
     # print("fps = ", env.clock.get_fps())
     env.close()
