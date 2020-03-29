@@ -62,13 +62,15 @@ class env(AECEnv):
 
             winner = self.check_for_winner()
 
-            # check if tie
-            if all(x in [1, 2] for x in self.board):
-                # once either play wins or there is a draw, game over, both players are done
-                self.dones = {i: True for i in range(self.num_agents)}
-            elif winner:
+            # check if there is a winner
+            if winner:
                 self.rewards[self.agent_selection] += 1
                 self.rewards[next_agent] -= 1
+                self.dones = {i: True for i in range(self.num_agents)}
+            # check if there is a tie
+            elif all(x in [1, 2] for x in self.board):
+                print("tie")
+                # once either play wins or there is a draw, game over, both players are done
                 self.dones = {i: True for i in range(self.num_agents)}
             else:
                 # no winner yet
@@ -79,6 +81,11 @@ class env(AECEnv):
             self.rewards[self.agent_selection] -= 1
             self.dones = {i: True for i in range(self.num_agents)}
             warnings.warn("Bad connect four move made, game terminating with current player losing. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
+
+        if observe:
+            return self.observe(self.agent_selection)
+        else:
+            return
 
     def reset(self, observe=True):
         # reset environment
@@ -108,7 +115,7 @@ class env(AECEnv):
         return 0
 
 # import pettingzoo as pz
-# env = pz.classic.connect4.env()
+# env = pz.classic.connect_four.env()
 
 # import pettingzoo as pz
-# env = pz.classic.connect4.manual_control()
+# env = pz.classic.connect_four.manual_control()
