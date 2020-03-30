@@ -20,11 +20,11 @@
 
 `pip install pettingzoo[classic]`
 
-Classic environments represent implementations of popular turn based human games, and are mostly competative. The classic environments have a few differences from others in this library:
+Classic environments represent implementations of popular turn based human games, and are mostly competitive. The classic environments have a few differences from others in this library:
 
 * No classic environments currently take any environment arguments
 * All classic environments are rendered solely via printing to terminal
-* Many classic environments make use of <Ben talk about env.info[agent][legal_moves] here>
+* Many classic environments have illegal moves in the action space that, if taken, will end the game as a loss for the player who made the illegal move, and assign zero reward for every other player. If there are any illegal moves in that game, then there is a list of legal moves in the "legal_moves" entry in the info dictionary (e.g. `env.infos[agent]['legal_moves']`). Note that this list is only well defined right before the agent's takes its step.
 * Reward for most environments only happens at the end of the games once an agent wins or looses, with a reward of 1 for winning and -1 for loosing.
 
 
@@ -79,12 +79,12 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 
 Like AlphaZero, the observation space is an 8x8 image representing the board. It has 20 channels representing:
 
-* Each piece type and player combination. So there is a specific channel that represents your knights. If your knight is in that location, that spot is a 1, otherwise, 0.
-* Castling rights
-* En-passant possibilities are represented by the pawn being on first row instead of the 4th (from the player who moved the pawn's perspective)
-* Whether you are black or white
-* Whether position has been seen before (2-fold repetition)
-* A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+* First 4 channels: Castling rights:
+* Next channel: Is black or white
+* Next channel: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+* Next channel: all ones to help neural network find board edges in padded convolutions
+* Next 12 channels: Each piece type and player combination. So there is a specific channel that represents your knights. If your knight is in that location, that spot is a 1, otherwise, 0. En-passant possibilities are represented by the pawn being on first row instead of the 4th (from the player who moved the pawn's perspective)
+* Finally, a channel representing whether position has been seen before (is a 2-fold repetition)
 
 Like AlphaZero, the board is always oriented towards the current agent (your king starts on the first row). So the two players are looking at mirror images of the board, not the same board.
 
