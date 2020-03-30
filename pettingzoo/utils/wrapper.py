@@ -337,7 +337,7 @@ class wrapper(AECEnv):
         obs = self.stack_of_frames[agent]
         return obs
 
-    def modify_observation(self, agent, observation, is_reset=False):
+    def modify_observation(self, agent, observation):
         obs = observation
         # reduce color channels to 1
         if self.color_reduction is not None:
@@ -372,14 +372,14 @@ class wrapper(AECEnv):
         if observe:
             obs = self.env.reset(observe=True)
             agent = self.env.agent_selection
-            observation = self.modify_observation(agent, obs, is_reset=True)
+            observation = self.modify_observation(agent, obs)
             return observation
         else:
             self.env.reset(observe=False)
 
     def observe(self, agent):
         obs = self.env.observe(agent)
-        observation = self.modify_observation(agent, obs, is_reset=False)
+        observation = self.modify_observation(agent, obs)
         return observation
 
     def step(self, action, observe=True):
@@ -388,7 +388,7 @@ class wrapper(AECEnv):
         if observe:
             next_obs = self.env.step(action, observe=True)
 
-            observation = self.modify_observation(agent, next_obs, is_reset=False)
+            observation = self.modify_observation(agent, next_obs)
         else:
             self.env.step(action, observe=False)
             observation = None
