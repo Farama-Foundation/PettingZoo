@@ -7,11 +7,12 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario):
+    def __init__(self, scenario, world, max_frames):
         super(SimpleEnv, self).__init__()
 
+        self.max_frames = max_frames
         self.scenario = scenario
-        self.world = self.scenario.make_world()
+        self.world = world
 
         self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
@@ -67,6 +68,7 @@ class SimpleEnv(AECEnv):
             return
 
     def _execute_world_step(self):
+        self.steps += 1
         # set action for each agent
         for i, agent in enumerate(self.world.agents):
             action = self.current_actions[i]
@@ -126,6 +128,9 @@ class SimpleEnv(AECEnv):
 
         if next_idx == 0:
             self._execute_world_step()
+            if self.steps > self.max_frames:
+                for a in self.agents:
+                    self.dones[a] = True
 
         next_agent = self.world.agents[next_idx]
         if observe:

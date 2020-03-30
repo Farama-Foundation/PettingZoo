@@ -106,6 +106,10 @@ queen.
 
 We instead flatten this into 8×8×73 = 4672 discrete action space.
 
+#### Rewards
+
+Rewards are zero until the end of a game. If there is a decisive outcome then the score is +1 for a the winning player, -1 for the losing player. If there is a draw, then both player receive zero reward. Like all classical games, if an illegal move is played, then the player who made the illegal move receives -1 reward, and the other player receives 0 reward (this can be avoided by only choosing moves in the `"legal_moves"` entry in the info dictionary).
+
 ### Dou Dizhu
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
