@@ -25,6 +25,7 @@ Classic environments represent implementations of popular turn based human games
 * No classic environments currently take any environment arguments
 * All classic environments are rendered solely via printing to terminal
 * Many classic environments make use of <Ben talk about env.info[agent][legal_moves] here>
+* Reward for most environments only happens at the end of the games once an agent wins or looses, with a reward of 1 for winning and -1 for loosing.
 
 
 ### Backgammon
