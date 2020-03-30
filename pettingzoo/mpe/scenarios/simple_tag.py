@@ -4,14 +4,14 @@ from .._mpe_utils.scenario import BaseScenario
 
 
 class Scenario(BaseScenario):
-    def make_world(self):
+    def make_world(self, num_good=1, num_adversaries=3, num_obstacles=2):
         world = World()
         # set any world properties first
         world.dim_c = 2
-        num_good_agents = 1
-        num_adversaries = 3
+        num_good_agents = num_good
+        num_adversaries = num_adversaries
         num_agents = num_adversaries + num_good_agents
-        num_landmarks = 2
+        num_landmarks = num_obstacles
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
