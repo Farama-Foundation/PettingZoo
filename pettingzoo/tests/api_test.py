@@ -159,11 +159,33 @@ def test_render(env):
                     break
 
 
-def test_manual_control(env):
-    pass
+def inp_handler(name):
+    from pynput.keyboard import Key, Controller as KeyboardController
+    import time
+
+    keyboard = KeyboardController()
+    time.sleep(0.1)
+    for i in ['w', 'a', 's', 'd', Key.left, Key.right, Key.up, Key.down, Key.esc]:
+        keyboard.press(i)
+        time.sleep(0.1)
+        keyboard.release(i)
 
 
-def api_test(env, render=False, manual_control=False):
+def test_manual_control(manual_control):
+    import threading
+    manual_in_thread = threading.Thread(target=inp_handler, args=(1,))
+
+    manual_in_thread.start()
+
+    try:
+        manual_control()
+    except Exception:
+        raise Exception("manual_control() has crashed. Please fix it.")
+
+    manual_in_thread.join()
+
+
+def api_test(env, render=False, manual_control=None):
     print("Starting API test")
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
@@ -194,9 +216,9 @@ def api_test(env, render=False, manual_control=False):
     if render:
         test_render(env)
 
-    if manual_control:
-        test_manual_control(env)
-
-    env.close()
+    if manual_control is not None:
+        test_manual_control(manual_control)
+    else:
+        env.close()
 
     print("Passed API test")  # You only get here if you don't fail
