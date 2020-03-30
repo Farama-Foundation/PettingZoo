@@ -64,6 +64,10 @@ In this environment, a single agent sees landmark position, and is rewarded base
 
 `pettingzoo.mpe.simple_adversary`
 
+*gif*
+
+*AEC diagram*
+
 In this environment, there is 1 adversary (red), N good agents (green), N landmarks (usually N=2). All agents observe the position of landmarks and other agents. One landmark is the ‘target landmark’ (colored green). Good agents rewarded based on how close one of them is to the target landmark, but negatively rewarded if the adversary is close to target landmark. The adversary is rewarded based on how close it is to the target, but it doesn’t know which landmark is the target landmark. This means good agents have to learn to ‘split up’ and cover all landmarks to deceive the adversary.
 
 
