@@ -101,10 +101,7 @@ class env(AECEnv):
         return next_observation
 
     def render(self, mode='human'):
-        if mode == "human":
-            print(self.board)
-        elif mode == "ascii":
-            return self.board.fen()
+        print(self.board)
 
     def close(self):
         pass
