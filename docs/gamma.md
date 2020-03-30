@@ -8,11 +8,9 @@
 | Prison                  | Either       | Either     | 8       | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Prospector              | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-
-
 `pip install pettingzoo[gamma]`
 
-*General notes on environments*
+All Gamma environments were created by us, using PyGame.
 
 
 ### Cooperative Pong
@@ -116,13 +114,13 @@ Continuous Leaderboard:
 
 *AEC diagram*
 
-*blurb*
+In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task, this is an environment primarily intended for debugging purposes- it's multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible, it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of it's cell instead of the normal graphical output.
 
 Arguments:
 
 ```
 prison.env(graphical_output=True, discrete_input=True, syncronized_start=False,
-max_frames=900)
+identical_aliens=False, max_frames=900)
 ```
 
 *about arguments*
