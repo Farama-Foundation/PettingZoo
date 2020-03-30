@@ -64,7 +64,7 @@ Classic environments represent implementations of popular turn based human games
 
 | Observations | Actions  | Agents | Manual Control | Action Shape                           | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|----------------------------------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4672)[*](#chess-action-space) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
+| Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 
 `pettingzoo.classic.chess`
 
@@ -72,13 +72,11 @@ Classic environments represent implementations of popular turn based human games
 
 *AEC Diagram*
 
-Chess is the game studied by AI researches for the longest time, with research dating back to the late 40s. However, it was only solved successfully by machine learning methods by AlphaZero Chess in 2016.
-
-This environment's observation and action space are designed to be very similar to AlphaZero chess's observation and action space, however, there are some slight differences.
+Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 
 #### Observation Space
 
-Like AlphaZero, the observation space is an 8x8 image representing the board. It has a number of with channels representing:
+Like AlphaZero, the observation space is an 8x8 image representing the board. It has 20 channels representing:
 
 * Each piece type and player combination. So there is a specific channel that represents your knights. If your knight is in that location, that spot is a 1, otherwise, 0.
 * Castling rights
@@ -93,7 +91,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 #### Action Space
 
-From the AlphaChessZero paper:
+From the AlphaZero chess paper:
 
 >> [In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
 Each of the 8×8
@@ -105,7 +103,7 @@ underpromotions for pawn moves or captures in two possible diagonals, to knight,
 rook respectively. Other pawn moves or captures from the seventh rank are promoted to a
 queen.
 
-We instead have a 8×8×73 = 4672 discrete space, that otherwise functions identically to this.
+We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 ### Dou Dizhu
 
