@@ -17,8 +17,9 @@
 
 *General notes on environments*
 
-Please additionally cite
+Please additionally cite:
 
+Environments in this repo:
 ```
 @article{lowe2017multi,
   title={Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments},
@@ -26,6 +27,9 @@ Please additionally cite
   journal={Neural Information Processing Systems (NIPS)},
   year={2017}
 }
+```
+Original particle world environment:
+```
 @article{mordatch2017emergence,
   title={Emergence of Grounded Compositional Language in Multi-Agent Populations},
   author={Mordatch, Igor and Abbeel, Pieter},
