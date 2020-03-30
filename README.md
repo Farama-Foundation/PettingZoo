@@ -226,6 +226,7 @@ The following environments should be done:
 
 * classic/chess
 * classic/dou_dizhu
+* classic/gin_rummy
 * classic/leduc_holdem
 * classic/rock_paper_scissors
 * classic/rock_paper_scissors_lizard_spock
@@ -247,7 +248,6 @@ The following environments are under active development:
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
 * classic/go (Luis)
-* classic/gin_rummy (Luis) (waiting on RLCard fix)
 * gamma/prospector (Yashas)
 * magent/* (David and Mario)
 
@@ -271,5 +271,5 @@ matplotlib>=3.1.2
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
-rlcard >= 0.1.12
+rlcard >= 0.1.13
 ```
