@@ -105,11 +105,11 @@ This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent i
 
 `pettingzoo.mpe import simple_reference`
 
-This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get to their target landmark, which is known only by the other agents. The reward is collective, so agents have to learn to communicate the goal of the other agent, and navigate to their landmark. Both agents are simultaneous speakers and listeners.
-
 *gif*
 
 *AEC diagram*
+
+This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get to their target landmark, which is known only by the other agents. The reward is collective, so agents have to learn to communicate the goal of the other agent, and navigate to their landmark. Both agents are simultaneous speakers and listeners.
 
 
 ### Simple Speaker Listener
@@ -119,6 +119,10 @@ This environment has 2 agents and 3 landmarks of different colors. Each agent wa
 | Vector       | Discrete | 2      | No             | agent dependent | agent dependent max(5)  | agent dependent max (11) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_speaker_listener`
+
+*gif*
+
+*AEC diagram*
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 
