@@ -244,7 +244,6 @@ The following environments should be done:
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/backgammon (Praveen)
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
 * classic/go (Luis)
@@ -254,6 +253,7 @@ The following environments are under active development:
 
 Development has not yet started on the following games:
 
+* classic/backgammon
 * classic/hanabi
 
 Future wrapper work:
