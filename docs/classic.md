@@ -7,7 +7,7 @@
 | Chess                            | Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 | Connect Four                     | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]               | ?          |
-| Gin Rummy                        | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
+| Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]               | ?          |
 | Go                               | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, Inf]               | ?          |
 | Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]                 | ?          |
@@ -157,9 +157,9 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 ### Gin Rummy
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
+|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
+| Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | ?          |
 
 `from pettingzoo.classic import gin_rummy`
 
@@ -167,7 +167,42 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 *AEC Diagram*
 
-*Blurb*
+Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit. 
+
+Gin Rummy depends on [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#gin-rummy) and you can refer to its documentation for additional details.
+
+#### Observation Space
+
+The observation space is (5, 52) with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered from Ace of spades to King of spades, Ace of hearts to King of hearts, Ace of diamonds to King of diamonds, followed by the Ace of clubs to King of clubs.
+
+The observation and action space descriptions are taken from RLCard.
+
+| Plane |              Feature                                                       |
+| :---: | -------------------------------------------------------------------------- |
+| 0     | the cards in current player's hand                                         |
+| 1     | the top card of the discard pile                                           |
+| 2     | the dead cards: cards in discard pile (excluding the top card)             |
+| 3     | opponent known cards: cards picked up from discard pile, but not discarded |
+| 4     | the unknown cards: cards in stockpile or in opponent hand (but not known)  |
+
+#### Action Space
+
+There are 110 actions in Gin Rummy.
+
+| Action ID     |     Action                 |
+| :-----------: | -------------------------- |
+| 0             | score_player_0_action      |
+| 1             | score_player_1_action      |
+| 2             | draw_card_action           |
+| 3             | pick_up_discard_action     |
+| 4             | declare_dead_hand_action   |
+| 5             | gin_action                 |
+| 6 - 57        | discard_action             |
+| 58 - 109      | knock_action               |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos`, are updated after each step.
 
 ### Go
 
