@@ -148,7 +148,7 @@ To run games (without rendering) with random input actions, use `random_demo(env
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on Linux. We will accept PRs related to windows, but do not officially support it. We're open to help adding macOS CI and proper Windows support/CI.
+We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help proper Windows support/CI.
 
 ## Further Documentation
 For more detailed documentation about all the different environments, and a leader board for each, go to [website].
@@ -248,13 +248,13 @@ The following environments are under active development:
 * classic/checkers (Tianchen)
 * classic/connect_four (Praveen)
 * classic/go (Luis)
+* classic/hanabi (Clemens)
 * gamma/prospector (Yashas)
 * magent/* (David and Mario)
 
 Development has not yet started on the following games:
 
 * classic/backgammon
-* classic/hanabi
 * classic/shogi (python-shogi)
 
 Future wrapper work:
