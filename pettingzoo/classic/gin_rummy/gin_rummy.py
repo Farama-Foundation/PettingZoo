@@ -91,5 +91,5 @@ class env(AECEnv):
             print_card([c.__str__()[::-1] for c in state])
         state = self.env.game.get_state(0)
         print("\n==== Top Discarded Card ====")
-        print_card([c.__str__()[::-1] for c in state['top_discard']] if state else [])
+        print_card([c.__str__() for c in state['top_discard']] if state else [])
         print('\n')
