@@ -179,7 +179,7 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit. 
 
-Gin Rummy depends on [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#gin-rummy) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
@@ -246,7 +246,7 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and six cards in total (Jack, Queen, and King). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.   
 
-Leduc Hold'em depends on [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
@@ -274,7 +274,7 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 Mahjong is a tile-based game with 4 players and 136 tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
 
-Mahjong depends on [RLCard](http://rlcard.org/games.html) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
@@ -345,9 +345,9 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 *AEC Diagram*
 
-Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1.
+Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.
 
-Texas Hold'em depends on [RLCard](http://rlcard.org/games.html) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
@@ -386,7 +386,7 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of raise or the number of raises.
 
-Texas Hold'em No Limit depends on [RLCard](http://rlcard.org/games.html) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
@@ -437,7 +437,7 @@ Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take 
 
 Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is determined as the first player with no cards left. In order to get rid of a card, a player must match either the color and number of the card on top of the discard pile. If the player does not have a card to discard, then it will take a card from the Draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild Draw Four, Skip, Reverse).
 
-Uno depends on [RLCard](http://rlcard.org/games.html) and you can refer to its documentation for additional details.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
