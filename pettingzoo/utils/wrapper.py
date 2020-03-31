@@ -247,8 +247,14 @@ class wrapper(AECEnv):
                 warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
                 dtype = np.float32
             min_obs, max_obs = range_scale
-            low = np.subtract(np.divide(obs_space.low, max_obs - min_obs, dtype=dtype), min_obs)
-            high = np.subtract(np.divide(obs_space.high, max_obs - min_obs, dtype=dtype), min_obs)
+            if min_obs != 0:
+                low = np.subtract(np.divide(obs_space.low, min_obs, dtype=dtype), 1)
+            else:
+                low = obs_space.low
+            if max_obs != 0:
+                high = np.divide(obs_space.high, max_obs, dtype=dtype)
+            else:
+                high = obs_space.high
             self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: range_scale", self.observation_spaces)
 
