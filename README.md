@@ -6,8 +6,8 @@ PettingZoo is Python library for conducting research in multi-agent reinforcemen
 
 PettingZoo includes the following sets of games:
 
-* atari: Multi-player Atari 2600 games (both cooperative and competative)
-* classic: Classical, nongraphical, competative games (i.e. chess, Texas hold 'em, and go)
+* atari: Multi-player Atari 2600 games (both cooperative and competitive)
+* classic: Classical, nongraphical, competitive games (i.e. chess, Texas hold 'em, and go)
 * gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
 * magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
@@ -82,10 +82,14 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
-`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes, such as `rgb_array` (which returns numpy arrays of the screen).
+`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes.
 
 `close()`: Closes the rendering window.
 
+
+## Environment Documentation
+
+Full documentation of each environment is available [here].
 
 ## Other Utils
 
@@ -125,6 +129,8 @@ from pettingzoo.gamma import prison
 pistonball.manual_control([environment specs])
 ```
 
+Look at [the documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
+
 ### Random Demo
 
 For all renderable games games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
@@ -139,10 +145,10 @@ random_demo(env)
 
 We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
 
-## Further Documentation
-For more detailed documentation about all the different environments, and a leader board for each, go to [website].
 
-If you'd like to be listed on the leader board for your environment, please submit a pull request. Only pull requests that link to code for reproducibility will be accepted. You must also use the default environment parameters.
+## Leaderboards
+Our cooperative games have leaderboards for best total (summed over all agents) score. If you'd like to be listed on the leader board, please submit a pull request. Only pull requests that link to code for reproducibility and use environment arguments in the spirit of the competition will be accepted.
+
 
 # Development Notes
 
