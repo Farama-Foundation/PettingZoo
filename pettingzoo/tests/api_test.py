@@ -4,6 +4,7 @@ import numpy as np
 import gym
 import random
 import re
+import skimage
 
 
 def test_obervation(observation, observation_0):
@@ -136,10 +137,12 @@ def play_test(env, observation_0):
         assert observation is None, "step(observe=False) must not return anything"
 
 
-def test_observe(env, observation_0):
+def test_observe(env, observation_0, save_obs):
     for agent in env.agent_order:
         observation = env.observe(agent)
         test_obervation(observation, observation_0)
+        if save_obs:
+            skimage.io.imsave(str(agent)+'.png', observation)
 
 
 def test_render(env):
@@ -185,7 +188,7 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
-def api_test(env, render=False, manual_control=None, save_obs=True):
+def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
@@ -194,6 +197,14 @@ def api_test(env, render=False, manual_control=None, save_obs=True):
 
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
+
+    if save_obs:
+        for agent in env.agents:
+            assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
+            assert env.observation_spaces[agent].low == 0 and env.observation_spaces[agent].high == 255, "Observations must be 0 to 255 to save as image"
+            assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
+            if len(env.observation_spaces[agent].shape) == 3:
+                assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
 
     assert isinstance(env.agent_order, list), "agent_order must be a list"
 
@@ -211,7 +222,7 @@ def api_test(env, render=False, manual_control=None, save_obs=True):
 
     test_rewards_dones(env, agent_0)
 
-    test_observe(env, observation_0)
+    test_observe(env, observation_0, save_obs=save_obs)
 
     if render:
         test_render(env)
