@@ -229,6 +229,3 @@ Development has not yet started on the following games:
 
 * classic/backgammon
 * classic/shogi (python-shogi)
-
-Future wrapper work:
-"action_cropping and obs_padding implement the techniques described in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning* to standardized heterogeneous action spaces."
