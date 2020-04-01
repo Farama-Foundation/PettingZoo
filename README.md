@@ -89,9 +89,6 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 ## Other Utils
 
-Additionally, we include many three tests to use with PettingZoo environments, which we use for internal testing:
-
-
 ### API Test
 
 ```
