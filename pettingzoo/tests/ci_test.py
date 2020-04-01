@@ -18,7 +18,7 @@ if sys.argv[4] == 'True':
 performance = False
 if sys.argv[5] == 'True':
     performance = True
-if sys.argv[5] == 'True':
+if sys.argv[6] == 'True':
     save_obs = True
 
 if sys.argv[1] == 'classic/backgammon':
