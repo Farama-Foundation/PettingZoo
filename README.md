@@ -15,7 +15,7 @@ PettingZoo includes the following sets of games:
 
 To install a set of games, use `pip3 install pettingzoo[atari]` (or whichever set of games you want).
 
-We support Python 3.6, 3.7 and 3.8.
+We support Python 3.5, 3.6, 3.7 and 3.8
 
 
 ## Initializing Environments
