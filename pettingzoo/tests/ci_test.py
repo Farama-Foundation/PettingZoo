@@ -223,7 +223,7 @@ if sys.argv[1] == 'gamma/cooperative_pong':
     _env = cooperative_pong.env()
     if manual_control:
         _manual_control = cooperative_pong.manual_control
-    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=False)
+    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=True)
     if bombardment:
         _env = cooperative_pong.env()
         bombardment_test.bombardment_test(_env)
@@ -235,7 +235,7 @@ if sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')
     from pettingzoo.gamma import knights_archers_zombies
     _env = knights_archers_zombies.env()
-    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=False)
+    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=True)
     if bombardment:
         _env = knights_archers_zombies.env()
         bombardment_test.bombardment_test(_env)
@@ -247,7 +247,7 @@ if sys.argv[1] == 'gamma/pistonball':
     print('gamma/pistonball')
     from pettingzoo.gamma import pistonball
     _env = pistonball.env()
-    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=False)
+    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=True)
     if bombardment:
         _env = pistonball.env()
         bombardment_test.bombardment_test(_env)
@@ -259,7 +259,7 @@ if sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
     from pettingzoo.gamma import prison
     _env = prison.env()
-    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=False)
+    api_test.api_test(_env, render=render, manual_control=manual_control, save_obs=True)
     if bombardment:
         _env = prison.env()
         bombardment_test.bombardment_test(_env)
@@ -271,7 +271,7 @@ if sys.argv[1] == 'gamma/prospector':
     print('gamma/prospector')
     from pettingzoo.gamma import prospector
     _env = prospector.env()
-    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=False)
+    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=True)
     if bombardment:
         _env = prospector.env()
         bombardment_test.bombardment_test(_env)
