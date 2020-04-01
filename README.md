@@ -126,10 +126,10 @@ Often, you want to be able to play before trying to learn it to get a better fee
 
 ```
 from pettingzoo.gamma import prison
-pistonball.manual_control([environment specs])
+prison.manual_control([environment specs])
 ```
 
-Look at [the documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
+Look at the [documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
 
 ### Random Demo
 
