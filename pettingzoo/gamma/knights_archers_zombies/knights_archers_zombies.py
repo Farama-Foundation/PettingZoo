@@ -600,3 +600,6 @@ class env(AECEnv):
         self.reinit()
         if observe:
             return self.observe(self.agent_selection)
+
+# The original code for this game, that was added by Justin Terry, was
+# created by Dipam Patel in a different repository (hence the git history)
