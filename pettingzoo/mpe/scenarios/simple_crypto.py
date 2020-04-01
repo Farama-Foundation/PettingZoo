@@ -60,6 +60,7 @@ class Scenario(BaseScenario):
             landmark.color = color
         # set goal landmark
         goal = np.random.choice(world.landmarks)
+
         world.agents[1].color = goal.color
         world.agents[2].key = np.random.choice(world.landmarks).color
 
