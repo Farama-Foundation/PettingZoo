@@ -185,7 +185,7 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
-def api_test(env, render=False, manual_control=None):
+def api_test(env, render=False, manual_control=None, save_obs=True):
     print("Starting API test")
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
