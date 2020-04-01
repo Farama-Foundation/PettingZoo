@@ -137,7 +137,7 @@ random_demo(env)
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help proper Windows support/CI.
+We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
 
 ## Further Documentation
 For more detailed documentation about all the different environments, and a leader board for each, go to [website].
