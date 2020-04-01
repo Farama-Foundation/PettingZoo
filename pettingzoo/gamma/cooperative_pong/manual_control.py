@@ -1,8 +1,5 @@
 import numpy as np
 import pygame
-from pettingzoo.utils import save_image_observation
-from pettingzoo.utils import wrapper
-
 
 def manual_control(**kwargs):
     from .cooperative_pong import env as _env
