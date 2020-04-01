@@ -3,9 +3,8 @@ import random
 from copy import copy
 
 
-def bombardment_test(env):
+def bombardment_test(env, cycles=10000):
     print("Starting bombardment test")
-    cycles = 100
 
     prev_observe = env.reset()
     observation_0 = copy(prev_observe)
