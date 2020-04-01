@@ -120,7 +120,7 @@ Arguments:
 
 ```
 prison.env(graphical_output=True, discrete_input=True, syncronized_start=False,
-identical_aliens=False, max_frames=900)
+identical_aliens=False, max_frames=900, random_aliens=False)
 ```
 
 *about arguments*
