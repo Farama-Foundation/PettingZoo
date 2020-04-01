@@ -179,7 +179,7 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit. 
 
-Our implementation wraps [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 #### Observation Space
 
