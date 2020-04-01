@@ -209,27 +209,7 @@ class env(AECEnv):
         ...
 ```
 
-## Other things
-
-The following environments should be done:
-
-* classic/chess
-* classic/dou_dizhu
-* classic/gin_rummy
-* classic/leduc_holdem
-* classic/rock_paper_scissors
-* classic/rock_paper_scissors_lizard_spock
-* classic/mahjong
-* classic/texas_holdem
-* classic/texas_holdem_no_limit
-* classic/tictactoe
-* classic/uno
-* gamma/cooperative_pong
-* gamma/knights_archers_zombies
-* gamma/pistonball
-* gamma/prison
-* mpe/*
-* sisl/*
+## Incomplete Environments
 
 The following environments are under active development:
 
@@ -241,7 +221,7 @@ The following environments are under active development:
 * gamma/prospector (Yashas)
 * magent/* (David and Mario)
 
-Development has not yet started on the following games:
+Development has not yet started on:
 
 * classic/backgammon
 * classic/shogi (python-shogi)
