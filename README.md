@@ -89,34 +89,58 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 ## Other Utils
 
-Additionally, we have a basic test to check for environment compliance, if you've made your own custom environment with PettingZoo and want to get a good guess about whether or not you did it right.
+Additionally, we include many three tests to use with PettingZoo environments, which we use for internal testing:
+
+
+### API Test
+
+```
+import pettingzoo.tests.api_test as api_test
+api_test.api_test(env, render=True, manual_control=True, save_obs=True)
+```
+
+This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set save_obs=True to save observations from the directory to the command is run in as .png files. This is very helpful for debugging graphical environments.
+
+### Bombardment Test
+
+```
+import pettingzoo.tests.bombardment_test as bombardment_test
+bombardment_test.bombardment_test(env, cycles=10000)
+```
+
+This randomly plays through the environment `cycles` times, to test for stability.
+
+### Performance Test
+
+```
+import pettingzoo.tests.performance_benchmark as performance_benchmark
+performance_benchmark.performance_benchmark(env)
+```
+
+This randomly acts through the environment for 60 seconds to benchmark it.
 
 ```
 from pettingzoo.utils import children
 children(env, save_image_observations=False)
 ```
 
-Set `save_image_observations=True` if you want to save all of the observations of the first 2 steps of environment to disk as .png files, in the directory in which you run this command. This is very helpful in debugging graphical environments.
+### Manual Control
 
-
-## Demos
-
-Often, you want to be able to play a game or watch it play to get an impression of how it works before trying to learn it. Only games with a graphical output, or certain vector output games with a visualization added, can be rendered.
-
-Of the games that can be played, many can be played by humans, and functionality to do so is included.
+Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```
-from pettingzoo.gamma import pistonball
+from pettingzoo.gamma import prison
 pistonball.manual_control([environment specs])
 ```
 
-For viewable games that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions, via:
+### Random Demo
+
+For all renderable games games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
 
 ```
 from pettingzoo.utils import random_demo
 random_demo(env)
 ```
-To run games (without rendering) with random input actions, use `random_demo(env, render=False)`.
 
 
 ## OS Support
