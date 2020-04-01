@@ -91,7 +91,7 @@ When working in multi-agent learning, there are many fantastically weird cases. 
 
 Full documentation of each environment is available [here].
 
-## Other Utils
+## Utils
 
 ### API Test
 
