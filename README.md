@@ -117,12 +117,7 @@ import pettingzoo.tests.performance_benchmark as performance_benchmark
 performance_benchmark.performance_benchmark(env)
 ```
 
-This randomly acts through the environment for 60 seconds to benchmark it.
-
-```
-from pettingzoo.utils import children
-children(env, save_image_observations=False)
-```
+This randomly steps through the environment for 60 seconds to benchmark it's performance.
 
 ### Manual Control
 
