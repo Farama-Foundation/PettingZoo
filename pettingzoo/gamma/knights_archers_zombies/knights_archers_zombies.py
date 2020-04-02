@@ -603,3 +603,7 @@ class env(AECEnv):
 
 # The original code for this game, that was added by Justin Terry, was
 # created by Dipam Patel in a different repository (hence the git history)
+
+# Game art puchased from https://finalbossblues.itch.io/time-fantasy-monsters
+
+# and https://finalbossblues.itch.io/icons
