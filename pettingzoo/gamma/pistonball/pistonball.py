@@ -281,3 +281,5 @@ class env(AECEnv):
         pygame.event.pump()
         if observe:
             return self.observe(self.agent_selection)
+
+# Game art created by Justin Terry
