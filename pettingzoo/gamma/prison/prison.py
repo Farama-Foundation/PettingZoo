@@ -293,6 +293,6 @@ class env(AECEnv):
         self.rendering = True
         pygame.display.flip()
 
-# Sprites purchased from https://nebelstern.itch.io/futura-seven
-# Or commissioned from https://www.fiverr.com/jeimansutrisman
+# Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven
+# Tank and bunny sprites commissioned from https://www.fiverr.com/jeimansutrisman
 # Art other than sprites created by Niall Williams
