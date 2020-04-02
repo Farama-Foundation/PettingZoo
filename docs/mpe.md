@@ -19,7 +19,7 @@ Multi Particle Environments (MPE) are a set of communication oriented environmen
 
 These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-particle-envs) codebase, with several minor fixes, mostly related to the action space and reward of certain environments.
 
-# Types of Environments
+### Types of Environments
 
 The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adverserial- a "good" agent being rewarded means an "adversery" agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
 
