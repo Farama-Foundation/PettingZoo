@@ -1,4 +1,8 @@
-## Creating Custom Environments
+# Development Documentation
+
+So you've decided you want to create your own PettingZoo environment. Congratulations! Here are two pieces of documentation that are hopefully helpful:
+
+## Template Environment
 Creating a custom environment with PettingZoo should roughly look like the following:
 
 ```
@@ -63,9 +67,9 @@ class env(AECEnv):
 
 ## Agent selector 
 
-File location: `PettingZoo/pettingzoo/utils/agent_selector.py`
+`from pettingzoo.utils.agent_selector import agent_selector`
 
-*Description:* Use an agent selector object (along with the agent_order list in your environment) to cycle through the agents so that the next agent can be selected at each step, using `next()` method.
+The agent selector class (along with the agent_order list in your environment) provides all the functionality that you should need to cycle through different agents in your environment without having to write it yourself. It's not part of the official API, but we highly encourage you to use it.
 
 ### Methods
 
