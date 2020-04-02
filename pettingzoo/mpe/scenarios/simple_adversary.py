@@ -5,11 +5,11 @@ from .._mpe_utils.scenario import BaseScenario
 
 class Scenario(BaseScenario):
 
-    def make_world(self):
+    def make_world(self, N=2):
         world = World()
         # set any world properties first
         world.dim_c = 2
-        num_agents = 3
+        num_agents = N + 1
         world.num_agents = num_agents
         num_adversaries = 1
         num_landmarks = num_agents - 1
@@ -112,7 +112,7 @@ class Scenario(BaseScenario):
         # Rewarded based on proximity to the goal landmark
         shaped_reward = True
         if shaped_reward:  # distance-based reward
-            return -np.sum(np.square(agent.state.p_pos - agent.goal_a.state.p_pos))
+            return -np.sqrt(np.sum(np.square(agent.state.p_pos - agent.goal_a.state.p_pos)))
         else:  # proximity-based reward (binary)
             adv_rew = 0
             if np.sqrt(np.sum(np.square(agent.state.p_pos - agent.goal_a.state.p_pos))) < 2 * agent.goal_a.size:
