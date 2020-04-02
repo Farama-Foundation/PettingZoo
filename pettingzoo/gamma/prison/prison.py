@@ -292,3 +292,7 @@ class env(AECEnv):
             self.screen.blit(self.background, (0, 0))
         self.rendering = True
         pygame.display.flip()
+
+# Sprites purchased from https://nebelstern.itch.io/futura-seven
+# Or commissioned from https://www.fiverr.com/jeimansutrisman
+# Art other than sprites created by Niall Williams
