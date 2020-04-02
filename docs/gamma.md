@@ -53,6 +53,15 @@ Leaderboard:
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. An agent gets a reward when it kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 1600-element vector (40x40 grid around the agent).
 
+Manual Control:
+
+Move the archer using the 'W', 'A', 'S' and 'D' keys. Shoot the Arrow using 'F' key. Rotate the archer using 'Q' and 'E' keys.
+Press 'X' key to spawn a new archer.
+
+Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' key. Rotate the knight using 'U' and 'O' keys.
+Press 'M' key to spawn a new knight.
+
+
 ```
 knights_archers_zombies.env(spawn_rate=?, knights=2, archers=2, 
 killable_knights=True, killable_archers=True, line_death=True, max_frames=900)
@@ -79,7 +88,7 @@ Leaderboard:
 
 *AEC diagram*
 
-*blurb*
+This is a simple cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty pistons (pistons move vertically only). Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* control how far the selected piston moves in the vertical direction.
 
 ```
 pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
