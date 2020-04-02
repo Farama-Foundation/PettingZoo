@@ -15,16 +15,35 @@
 
 `pip install pettingzoo[mpe]`
 
-Multi Particle Environment(MPE) is a flexible particle based environment where agents can (sometimes) move, communicate, push each other around, and interact with fixed landmarks. The code is taken from the [OpenAI MPE](https://github.com/openai/multiagent-particle-envs) project with some minor changes, such as changing the action space from MultiDiscrete to Discrete, and some minor fixes for the reward code.
+Multi Particle Environments (MPE) are a set of communication oriented particle based environment where agents can (sometimes) move, communicate, push each other around, and interact with fixed landmarks.
 
-The observation space is a vector space composed of the agent's position and velocity, the other agent's position (relative to the agent) and velocity, the landmarks  (relative to the agent), the landmark's and agent's types, and the communication it receives from other agents.
-If the agent cannot see or observe the communication of another agent, then this observation is omitted from the vector entirely, which is what results in the varying size observation space.
+These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-particle-envs) codebase, with several minor fixes, mostly related to the action space and reward of certain environments.
 
-The action space is a discrete action space which represents all the combinations of the movements and communications an agent can perform. Agents that can move can choose between 5 different moves, (the 4 cardinal directions and not moving at all). The agents that can communicate choose between some number of choices (environment-dependent) varying between 2 and 10, and broadcast this message to all agents which can hear it. The fact that the action space varies between agents within environments represents the fact that some agents can move or communicate while others cannot.
+These environments have several key concepts:
 
-MPE does not have a natural termination condition, so the environments are terminated after a number of steps defined by the `max_frames` environment parameter which every environment has. The default number of frames until termination is 500.
+* Adversary: 
 
-MPE rendering opens up a window for each agent, where each agent is centered in their window, and the other agents are positioned relative to the centered agent. Note that since the screen is fixed size, and the agents can travel in unbounded area, they can wander outside the scope of that screen. Also note that the render method returns the pixel map of the render, so you can easily build video of the images.
+* Good agent: 
+
+* Landmark: 
+
+* Visibility: 
+
+* Communication: 
+
+* Color: 
+
+The observation space of an agent is a vector generally composed of the agent's position and velocity, other agent's relative position and velocity, the landmarks relative poistions, the landmark's and agent's types, and  communications it received from other agents.
+
+If an agent_1 cannot see or observe the communication of agent_b, then agent_b is not included in agent_a's observation space, resulting in varying observation space sizes in certain environments.
+
+The action space is a discrete action space representing the combinations of the movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions and do nothing. Agents that can communicate choose between 2 and 10 environment dependent options, and the message is broadcast all agents which can hear it.
+
+Environments are terminated after a number of cycles defined by the `max_frames` environment parameter, which defaults to 500.
+
+Rendering works by opening a graphical window of the environment surrounding each agent, with the agent at the center. Note that agents can move outside the scope of that screen, and that the render also method returns the pixel map of the rendered area. <Ben talk about the terminal printing in in render>
+
+<I stopped reading here, I need to eat dinner>
 
 Some of the environments are adversarial, so one agent being rewarded means another is being punished (though necessarily in a perfectly zero-sum way). In particular simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm have this feature. In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
 
