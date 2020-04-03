@@ -56,6 +56,7 @@ class Viewer(object):
         self.window.on_close = self.window_closed_by_user
         self.geoms = []
         self.onetime_geoms = []
+        self.text_lines = []
         self.transform = Transform()
 
         glEnable(GL_BLEND)
@@ -96,7 +97,10 @@ class Viewer(object):
             geom.render()
         for geom in self.onetime_geoms:
             geom.render()
+        for geom in self.text_lines:
+            geom.render()
         self.transform.disable()
+
         arr = None
         if return_rgb_array:
             buffer = pyglet.image.get_buffer_manager().get_color_buffer()
@@ -247,6 +251,29 @@ class Point(Geom):
         glVertex3f(0.0, 0.0, 0.0)
         glEnd()
 
+class TextLine:
+    def __init__(self, window, idx):
+        self.idx = idx
+        self.window = window
+        self.set_text('hello world')
+
+    def render(self):
+        self.label.draw()
+
+    def set_text(self,text):
+        #document = pyglet.text.decode_text('Hello, world.')
+        #layout = pyglet.text.layout.TextLayout(document, 200, 30)
+        assert pyglet.font.have_font('Lato'), "font not supported"
+        #times = pyglet.font.load('Lato', 16)
+        #font_name = document.get_style("Lato", 0)
+
+        self.label = pyglet.text.Label(text,
+                                  font_name='Lato',
+                                  color=(0,0,0,255),
+                                  font_size=1,#,x=0.1,y=0.2)
+                                  x=0.1, y=0.2)#self.window.height-self.idx*40-10)#,
+
+        self.label.draw()
 
 class FilledPolygon(Geom):
     def __init__(self, v):
