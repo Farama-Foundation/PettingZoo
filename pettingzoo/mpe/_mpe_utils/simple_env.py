@@ -56,6 +56,10 @@ class SimpleEnv(AECEnv):
 
         self._reset_render()
 
+        self.rewards = {name: 0. for name in self.agents}
+        self.dones = {name: False for name in self.agents}
+        self.infos = {name: {} for name in self.agents}
+
         self.agent_selection = self.agent_order[0]
         self.steps = 0
 
