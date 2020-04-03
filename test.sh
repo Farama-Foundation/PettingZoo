@@ -1,9 +1,9 @@
 # Classic
 
-render=False
-manual_control=False
-bombardment=False
-performance=False
+render=True
+manual_control=True
+bombardment=True
+performance=True
 save_obs=True
 
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401

@@ -13,7 +13,7 @@ class env(AECEnv):
         super(env, self).__init__()
         self.env = rlcard.make('doudizhu', **kwargs)
         self.num_agents = 3
-        self.agents = ['landlord', 'peasant_0', 'peasant_1']
+        self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
 
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0, 0.0]))
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(6, 5, 15), dtype=np.bool) for _ in range(self.num_agents)])

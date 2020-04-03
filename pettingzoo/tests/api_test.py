@@ -193,9 +193,12 @@ def test_agent_selector(env):
             agent_selection = _agent_selector.next()
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
         else:
+            previous_agent_selection_index = agent_order.index(agent_selection)
             agent_order = copy(env.agent_order)
             _agent_selector.reinit(agent_order)
-            agent_selection = _agent_selector.next()
+            skips = (previous_agent_selection_index + 1) % len(env.agents)
+            for _ in range(skips + 1):
+                agent_selection = _agent_selector.next()
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
@@ -263,6 +266,9 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observe(env, observation_0, save_obs=save_obs)
 
     test_agent_selector(env_agent_sel)
+
+    if hasattr(env, "num_agents"):
+        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
 
     if render:
         test_render(env)

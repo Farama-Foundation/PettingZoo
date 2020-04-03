@@ -20,6 +20,8 @@ All Gamma environments were created by us, using PyGame.
 
 `from pettingzoo.gamma import cooperative_pong`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -46,6 +48,8 @@ Leaderboard:
 | Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
 `from pettingzoo.gamma import knights_archers_zombies`
+
+`agents= `
 
 *gif*
 
@@ -81,8 +85,9 @@ Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Either  | 20     | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-
 `from pettingzoo.gamma import pistonball`
+
+`agents= `
 
 *gif*
 
@@ -119,6 +124,8 @@ Continuous Leaderboard:
 
 `from pettingzoo.gamma import prison`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -152,8 +159,9 @@ Continuous Leaderboard:
 |--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-
 `from pettingzoo.gamma import prospector`
+
+`agents= `
 
 *gif*
 
