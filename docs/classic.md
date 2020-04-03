@@ -116,6 +116,10 @@ queen.
 
 We instead flatten this into 8×8×73 = 4672 discrete action space.
 
+#### Rewards
+
+Rewards are zero until the end of a game. If there is a decisive outcome then the score is +1 for a the winning player, -1 for the losing player. If there is a draw, then both player receive zero reward. Like all classical games, if an illegal move is played, then the player who made the illegal move receives -1 reward, and the other player receives 0 reward (this can be avoided by only choosing moves in the `"legal_moves"` entry in the info dictionary).
+
 ### Dou Dizhu
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
@@ -140,7 +144,7 @@ The *Observation Space* is encoded in 6 planes with 5x15 entries each. For each 
 
 #### Action Space
 
-As described by [RLCard](http://rlcard.org/games.html#dou-dizhu), the size of the action space of Dou Dizhu is 33,676, which is too large for learning algorithms. Therefore, RLCard decided to abstract the action space into 309 actions as shown below.
+The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below:
 
 | Action Type      | Number of Actions | Number of Actions after Abstraction | Action ID         |
 | ---------------- | :---------------: | :---------------------------------: | :---------------: | 
@@ -226,9 +230,9 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 #### Rewards
 
-According to RLCard, the reward is calculated by the terminal state of the game. Note that the reward is different from that of the standard game. A player who gins is awarded 1 point. A player who knocks is awarded 0.2 points. The losing player is punished by the negative of their deadwood count.
+At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.2 points, and the losing player recieves a reward equal to  -1 * their deadwood count.
 
-If the hand is declared dead, both players are punished by the negative of their deadwood count.
+If the hand is declared dead, both players recieve a reward equal to  -1 * their deadwood count.
 
 ### Go
 
