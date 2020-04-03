@@ -7,6 +7,7 @@ import gym
 import random
 import re
 import skimage
+import os
 
 
 def test_obervation(observation, observation_0):
@@ -140,11 +141,16 @@ def play_test(env, observation_0):
 
 
 def test_observe(env, observation_0, save_obs):
+    if save_obs:
+        save_obs_folder = "saved_observations/{}".format(env.__module__)
+        os.makedirs(save_obs_folder,exist_ok=True)
+
     for agent in env.agent_order:
         observation = env.observe(agent)
         test_obervation(observation, observation_0)
         if save_obs:
-            skimage.io.imsave(str(agent) + '.png', observation)
+            fname = os.path.join(save_obs_folder,str(agent) + '.png')
+            skimage.io.imsave(fname, observation)
 
 
 def test_render(env):
@@ -242,7 +248,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     if save_obs:
         for agent in env.agents:
             assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
-            assert env.observation_spaces[agent].low == 0 and env.observation_spaces[agent].high == 255, "Observations must be 0 to 255 to save as image"
+            assert np.all(np.equal(env.observation_spaces[agent].low, 0)) and np.all(np.equal(env.observation_spaces[agent].high, 255)), "Observations must be 0 to 255 to save as image"
             assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
             if len(env.observation_spaces[agent].shape) == 3:
                 assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
