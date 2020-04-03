@@ -205,7 +205,7 @@ class SimpleEnv(AECEnv):
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         cam_range = np.max(np.abs(np.array(all_poses))) + 1
-        self.viewer.set_bounds(- cam_range, cam_range, - cam_range, + cam_range)
+        self.viewer.set_max_size(cam_range)
         # update geometry positions
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)

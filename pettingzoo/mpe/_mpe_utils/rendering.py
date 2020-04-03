@@ -58,6 +58,7 @@ class Viewer(object):
         self.onetime_geoms = []
         self.text_lines = []
         self.transform = Transform()
+        self.max_size = 1
 
         glEnable(GL_BLEND)
         # glEnable(GL_MULTISAMPLE)
@@ -73,7 +74,12 @@ class Viewer(object):
     def window_closed_by_user(self):
         self.close()
 
-    def set_bounds(self, left, right, bottom, top):
+    def set_max_size(self, current_size):
+        max_size = self.max_size = max(current_size,self.max_size)
+        left = -max_size
+        right = max_size
+        bottom = -max_size
+        top = max_size
         assert right > left and top > bottom
         scalex = self.width / (right - left)
         scaley = self.height / (top - bottom)
@@ -99,7 +105,7 @@ class Viewer(object):
         for geom in self.onetime_geoms:
             geom.render()
         self.transform.disable()
-        
+
         pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
         pyglet.gl.glLoadIdentity()
         gluOrtho2D(0, self.window.width, 0, self.window.height)
