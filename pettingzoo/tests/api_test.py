@@ -267,6 +267,9 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     test_agent_selector(env_agent_sel)
 
+    if hasattr(env, "num_agents"):
+        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
+
     if render:
         test_render(env)
 
