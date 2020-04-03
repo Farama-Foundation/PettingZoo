@@ -83,6 +83,8 @@ Please cite one or both of these if you use these environments in your research.
 
 `pettingzoo.mpe.simple`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -105,6 +107,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent max (10) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_adversary`
+
+`agents= `
 
 *gif*
 
@@ -132,6 +136,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_crypto`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -155,6 +161,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_push`
+
+`agents= `
 
 *gif*
 
@@ -180,6 +188,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_reference`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -203,6 +213,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_speaker_listener`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
@@ -225,6 +237,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_spread`
+
+`agents= `
 
 *gif*
 
@@ -252,6 +266,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_tag`
 
+`agents= `
 
 *gif*
 
@@ -295,11 +310,13 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_world_comm`
 
+`agents= `
+
 *gif*
 
 *AEC diagram*
 
-This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are ‘forests’ that hide agents inside from being seen, and there is a ‘leader adversary' that can see the agents at all times and can communicate with the other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.
+This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are 'forests' that hide agents inside from being seen, and there is a ‘leader adversary' that can see the agents at all times and can communicate with the other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.
 
 In particular, the good agents reward, is -5 for every collision with an adversary, -2*bound by the `bound` function described in simple_tag, +2 for every collision with a food, and -0.05*minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1*minimum distance to a good agent.
 
@@ -308,7 +325,7 @@ Note that when the forests prevent an agent from being seen, the observation of 
 Note that changing the environment parameters to add or remove agents will change the observation space of every agent, for example, adding a forest will increase the number of landmarks each agent sees, increasing the dimension of the observation space of the agents by 2.
 
 ```
-simple_world_comm.env(num_good_agents=2, num_adversaries=4, num_obstacles=1,
+simple_world_comm.env(it=2, num_adversaries=4, num_obstacles=1,
                 num_food=2, num_forests=2, max_frames=500)
 ```
 

@@ -46,6 +46,8 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 
 `from pettingzoo.classic import backgammon`
 
+`agents= `
+
 *gif*
 
 *AEC Diagram*
@@ -60,6 +62,8 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
 `from pettingzoo.classic import checkers`
+
+`agents= `
 
 *gif*
 
@@ -84,6 +88,8 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 | Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 
 `pettingzoo.classic.chess`
+
+`agents= `
 
 *gif*
 
@@ -128,6 +134,12 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 | :----: | ----- |
 | +1     | -1    |
 
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
+
 ### Dou Dizhu
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
@@ -135,6 +147,8 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | ?          |
 
 `from pettingzoo.classic import dou_dizhu`
+
+`agents= `
 
 *gif*
 
@@ -175,15 +189,16 @@ The raw size of the action space of Dou Dizhu is 33,676. Because of this, our im
 
 For example, you would use action `0` to play a single "3" card or action `30` to play a trio of "5". 
 
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
-
 #### Rewards
 
 | Winner | Loser |
 | :----: | ----- |
 | +1     | 0     |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
 
 ### Gin Rummy
 
@@ -192,6 +207,8 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | ?          |
 
 `from pettingzoo.classic import gin_rummy`
+
+`agents= `
 
 *gif*
 
@@ -238,6 +255,11 @@ At the end of the game, a player who gins is awarded 1 point, a player who knock
 
 If the hand is declared dead, both players recieve a reward equal to  -1 * their deadwood count.
 
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
+
 ### Go
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
@@ -245,6 +267,8 @@ If the hand is declared dead, both players recieve a reward equal to  -1 * their
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
 `from pettingzoo.classic import go`
+
+`agents= `
 
 *gif*
 
@@ -264,6 +288,8 @@ If the hand is declared dead, both players recieve a reward equal to  -1 * their
 
 `from pettingzoo.classic import leduc_holdem`
 
+`agents= `
+
 *gif*
 
 *AEC Diagram*
@@ -280,15 +306,16 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", and `3` for "Check".
 
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
-
 #### Rewards
 
 | Winner        | Loser         |
 | :-----------: | ------------- |
 | +raised chips | -raised chips |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
 
 ### Mahjong
 
@@ -297,6 +324,8 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 | Vector       | Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | ?          |
 
 `from pettingzoo.classic import mahjong`
+
+`agents= `
 
 *gif*
 
@@ -333,15 +362,16 @@ The action space, as described by RLCard, is
 
 For example, you would use action `34` to pong or action `37` to stand. 
 
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
-
 #### Rewards
 
 | Winner | Loser |
 | :----: | ----- |
 | +1     | -1    |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
 
 ### Rock Paper Scissors
 
@@ -350,6 +380,8 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
 `from pettingzoo.classic import rps`
+
+`agents= `
 
 *gif*
 
@@ -373,6 +405,8 @@ If the game ends in a draw, both players will recieve a reward of 0.
 
 `from pettingzoo.classic import rpsls`
 
+`agents= `
+
 *gif*
 
 *AEC Diagram*
@@ -395,6 +429,8 @@ If the game ends in a draw, both players will recieve a reward of 0.
 | Graphical    | Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]           | ?          |
 
 `from pettingzoo.classic import texas_holdem`
+
+`agents= `
 
 *gif*
 
@@ -423,15 +459,16 @@ The observation space is a vector of 72 boolean integers. The first 52 entries d
 
 The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", and `3` for "Check".
 
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
-
 #### Rewards
 
 | Winner          | Loser           |
 | :-------------: | --------------- |
 | +raised chips/2 | -raised chips/2 |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
 
 ### Texas Hold'em No Limit
 
@@ -440,6 +477,8 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | ?          |
 
 `from pettingzoo.classic import texas_holdem_no_limit`
+
+`agents= `
 
 *gif*
 
@@ -464,17 +503,18 @@ The observation space is similar to Texas Hold'em. The first 52 entries represen
 
 #### Action Space
 
-The action space is encoded as `0` for "Call", `1` for "Fold", `2` for "Checl", and `3` to `102` for "Raise Amount" from 1 to 100.
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
+The action space is encoded as `0` for "Call", `1` for "Fold", `2` for "Check", and `3` to `102` for "Raise Amount" from 1 to 100.
 
 #### Rewards
 
 | Winner          | Loser           |
 | :-------------: | --------------- |
 | +raised chips/2 | -raised chips/2 |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
 
 ### Tic Tac Toe
 
@@ -483,6 +523,8 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 | ?            | Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
 
 `from pettingzoo.classic import tictactoe`
+
+`agents= `
 
 *gif*
 
@@ -500,7 +542,7 @@ Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take 
 | :----: | ----- |
 | +1     | -1    |
 
-If the game ends in a draw, both players will recieve a reward of 0.
+If the game ends in a draw, both players will receive a reward of 0.
 
 ### Uno
 
@@ -509,6 +551,8 @@ If the game ends in a draw, both players will recieve a reward of 0.
 | Vector       | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | ?          |
 
 `from pettingzoo.classic import uno`
+
+`agents= `
 
 *gif*
 
@@ -558,12 +602,13 @@ The action space is as described by RLCards.
 
 For example, you would use action `6` to put down a red "6" card or action `60` to draw a card. 
 
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
-
 #### Rewards
 
 | Winner | Loser |
 | :----: | ----- |
 | +1     | -1    |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+
