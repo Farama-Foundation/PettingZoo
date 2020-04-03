@@ -14,7 +14,7 @@
 | Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]                 | ?          |
-| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, Inf]               | ?          |
+| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]               | ?          |
 | Tic Tac Toe                      | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]                 | ?          |
 
@@ -116,10 +116,6 @@ queen.
 
 We instead flatten this into 8×8×73 = 4672 discrete action space.
 
-#### Rewards
-
-Rewards are zero until the end of a game. If there is a decisive outcome then the score is +1 for a the winning player, -1 for the losing player. If there is a draw, then both player receive zero reward. Like all classical games, if an illegal move is played, then the player who made the illegal move receives -1 reward, and the other player receives 0 reward (this can be avoided by only choosing moves in the `"legal_moves"` entry in the info dictionary).
-
 ### Dou Dizhu
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
@@ -146,7 +142,7 @@ The *Observation Space* is encoded in 6 planes with 5x15 entries each. For each 
 
 As described by [RLCard](http://rlcard.org/games.html#dou-dizhu), the size of the action space of Dou Dizhu is 33,676, which is too large for learning algorithms. Therefore, RLCard decided to abstract the action space into 309 actions as shown below.
 
-| Type             | Number of Actions | Number of Actions after Abstraction | Action ID         |
+| Action Type      | Number of Actions | Number of Actions after Abstraction | Action ID         |
 | ---------------- | :---------------: | :---------------------------------: | :---------------: | 
 | Solo             |        15         |        15                           | 0-14              |
 | pair             |        13         |        13                           | 15-27             |
@@ -165,9 +161,17 @@ As described by [RLCard](http://rlcard.org/games.html#dou-dizhu), the size of th
 | Pass             |         1         |         1                           | 308               |
 | Total            |       33676       |        309                          |                   |
 
+For example, you would use action `0` to play a single "3" card or action `30` to play a trio of "5". 
+
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | 0     |
 
 ### Gin Rummy
 
@@ -214,9 +218,17 @@ There are 110 actions in Gin Rummy.
 | 6 - 57        | discard_action             |
 | 58 - 109      | knock_action               |
 
+For example, you would use action `2` to draw a card or action `3` to pick up a discarded card. 
+
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
+
+#### Rewards
+
+According to RLCard, the reward is calculated by the terminal state of the game. Note that the reward is different from that of the standard game. A player who gins is awarded 1 point. A player who knocks is awarded 0.2 points. The losing player is punished by the negative of their deadwood count.
+
+If the hand is declared dead, both players are punished by the negative of their deadwood count.
 
 ### Go
 
@@ -264,6 +276,12 @@ The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", 
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
 
+#### Rewards
+
+| Winner        | Loser         |
+| :-----------: | ------------- |
+| +raised chips | -raised chips |
+
 ### Mahjong
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
@@ -305,9 +323,17 @@ The action space, as described by RLCard, is
 | 36          | Gong                        |
 | 37          | Stand                       |
 
+For example, you would use action `34` to pong or action `37` to stand. 
+
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
 
 ### Rock Paper Scissors
 
@@ -376,11 +402,17 @@ The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", 
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
 
+#### Rewards
+
+| Winner          | Loser           |
+| :-------------: | --------------- |
+| +raised chips/2 | -raised chips/2 |
+
 ### Texas Hold'em No Limit
 
-| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(103)  | Discrete(103)   | (54,)             | [0, Inf]           | ?          |
+| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
+| Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | ?          |
 
 `from pettingzoo.classic import texas_holdem_no_limit`
 
@@ -402,8 +434,8 @@ The observation space is similar to Texas Hold'em. The first 52 entries represen
 | 13~25   | Heart A ~ Heart K           | [0, 1]   |
 | 26~38   | Diamond A ~ Diamond K       | [0, 1]   |
 | 39~51   | Club A ~ Club K             | [0, 1]   |
-| 52      | Number of Chips of player 1 | [0, Inf] |
-| 53      | Number of Chips of player 2 | [0, Inf] |
+| 52      | Number of Chips of player 1 | [0, 100] |
+| 53      | Number of Chips of player 2 | [0, 100] |
 
 #### Action Space
 
@@ -412,6 +444,12 @@ The action space is encoded as `0` for "Call", `1` for "Fold", `2` for "Checl", 
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
+
+#### Rewards
+
+| Winner          | Loser           |
+| :-------------: | --------------- |
+| +raised chips/2 | -raised chips/2 |
 
 ### Tic Tac Toe
 
@@ -481,6 +519,14 @@ The action space is as described by RLCards.
 | 59        |        yellow wild and draw 4 card         |
 | 60        |                    draw                    |
 
+For example, you would use action `6` to put down a red "6" card or action `60` to draw a card. 
+
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos`, are updated after each step.
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
