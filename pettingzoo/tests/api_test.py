@@ -197,7 +197,7 @@ def test_agent_selector(env):
             agent_order = copy(env.agent_order)
             _agent_selector.reinit(agent_order)
             skips = (previous_agent_selection_index + 1) % len(env.agents)
-            for _ in range(skips+1):
+            for _ in range(skips + 1):
                 agent_selection = _agent_selector.next()
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
