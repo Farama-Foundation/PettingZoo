@@ -99,9 +99,7 @@ class Viewer(object):
         for geom in self.onetime_geoms:
             geom.render()
         self.transform.disable()
-        #gluOrtho2D(-1, 1, -1, 1)
-        print(self.transform.scale[0])
-        #self.transform.inv_scale()
+        
         pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
         pyglet.gl.glLoadIdentity()
         gluOrtho2D(0, self.window.width, 0, self.window.height)
