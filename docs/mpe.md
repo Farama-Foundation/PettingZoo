@@ -4,13 +4,13 @@
 |-------------------------|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | simple                  | Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
 | simple_adversary        | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent (8),(10) | (-inf,inf)         | ?          |
-| simple_crypto           | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent (4),(8)  | (-inf,inf)         | ?          |
-| simple_push             | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent (8),(19) | (-inf,inf)         | ?          |
+| simple_crypto           | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | (4), (8)  | (-inf,inf)         | ?          |
+| simple_push             | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | (8), (19) | (-inf,inf)         | ?          |
 | simple_reference        | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 | simple_speaker_listener | Vector       | Discrete | 2      | No             | (3),(5) | agent dependent  | agent dependent (3),(11) | (-inf,inf)         | ?          |
 | simple_spread           | Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 | simple_tag              | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | (14),(16) | (-inf,inf)         | ?          |
-| simple_world_comm       | Vector       | Discrete | 6      | No             | (5),(20) | agent dependent | agent dependent (28),(34) | (-inf,inf)         | ?          |
+| simple_world_comm       | Vector       | Discrete | 6      | No             | (5),(20) | agent dependent | (28), (34) | (-inf,inf)         | ?          |
 
 
 `pip install pettingzoo[mpe]`
