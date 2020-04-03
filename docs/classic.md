@@ -145,7 +145,7 @@ As described by [RLCard](http://rlcard.org/games.html#dou-dizhu), the size of th
 | Action Type      | Number of Actions | Number of Actions after Abstraction | Action ID         |
 | ---------------- | :---------------: | :---------------------------------: | :---------------: | 
 | Solo             |        15         |        15                           | 0-14              |
-| pair             |        13         |        13                           | 15-27             |
+| Pair             |        13         |        13                           | 15-27             |
 | Trio             |        13         |        13                           | 28-40             |
 | Trio with single |        182        |        13                           | 41-53             |
 | Trio with pair   |        156        |        13                           | 54-66             |
