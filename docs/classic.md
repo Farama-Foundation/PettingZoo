@@ -52,10 +52,6 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 
 *Blurb*
 
-*Env arguments*
-
-*About env arguments*
-
 
 ### Checkers
 
@@ -70,6 +66,16 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 *AEC Diagram*
 
 *Blurb*
+
+#### Observation Space
+
+#### Action Space
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
 
 ### Chess
 
@@ -118,7 +124,9 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 #### Rewards
 
-Rewards are zero until the end of a game. If there is a decisive outcome then the score is +1 for a the winning player, -1 for the losing player. If there is a draw, then both player receive zero reward. Like all classical games, if an illegal move is played, then the player who made the illegal move receives -1 reward, and the other player receives 0 reward (this can be avoided by only choosing moves in the `"legal_moves"` entry in the info dictionary).
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
 
 ### Dou Dizhu
 
@@ -353,6 +361,14 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 *Blurb*
 
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
+
+If the game ends in a draw, both players will recieve a reward of 0.
+
 ### Rock Paper Scissors Lizard Spock
 
 | Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
@@ -366,6 +382,20 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 *AEC Diagram*
 
 *Blurb*
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
+
+If the game ends in a draw, both players will recieve a reward of 0.
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
 
 ### Texas Hold'em
 
@@ -467,7 +497,19 @@ The legal moves available for each agent, found in `env.infos`, are updated afte
 
 *AEC Diagram*
 
-Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal row is the winner. If played properly by both players, the game will always end in a draw. Check out [Wikipedia](https://en.wikipedia.org/wiki/Tic-tac-toe) for more information.
+Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal row is the winner.
+
+#### Observation Space
+
+#### Action Space
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | ----- |
+| +1     | -1    |
+
+If the game ends in a draw, both players will recieve a reward of 0.
 
 ### Uno
 
