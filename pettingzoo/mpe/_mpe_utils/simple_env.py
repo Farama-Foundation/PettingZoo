@@ -14,7 +14,7 @@ class SimpleEnv(AECEnv):
         self.scenario = scenario
         self.world = world
 
-        self.num_agents = len(self.world.agents)
+        self._num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
@@ -42,7 +42,7 @@ class SimpleEnv(AECEnv):
         self.display_wait = 0.04
 
         self.agent_selection = self.agent_order[0]
-        self.current_actions = [None] * self.num_agents
+        self.current_actions = [None] * self._num_agents
 
         self.viewer = None
 
@@ -60,10 +60,14 @@ class SimpleEnv(AECEnv):
 
         self._reset_render()
 
+        self.rewards = {name: 0. for name in self.agents}
+        self.dones = {name: False for name in self.agents}
+        self.infos = {name: {} for name in self.agents}
+
         self.agent_selection = self.agent_order[0]
         self.steps = 0
 
-        self.current_actions = [None] * self.num_agents
+        self.current_actions = [None] * self._num_agents
 
         if observe:
             agent = self.world.agents[0]
@@ -125,7 +129,7 @@ class SimpleEnv(AECEnv):
 
     def step(self, action, observe=True):
         current_idx = self._index_map[self.agent_selection]
-        next_idx = (current_idx + 1) % self.num_agents
+        next_idx = (current_idx + 1) % self._num_agents
         self.agent_selection = self.agent_order[next_idx]
 
         self.current_actions[current_idx] = action

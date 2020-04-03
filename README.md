@@ -99,10 +99,10 @@ Full documentation of each environment is available [here].
 
 ```
 import pettingzoo.tests.api_test as api_test
-api_test.api_test(env, render=True, manual_control=True, save_obs=False)
+api_test.api_test(env, render=True, manual_control=None, save_obs=False)
 ```
 
-This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set `save_obs=True` to save observations from the directory to the command is run in as .png files. This is very helpful for debugging graphical environments.
+This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set `save_obs=True` to save observations as .png images in the directory the command is run in for debugging purposes (this only supports enviornment with image observations). `manual_control` takes the manual control method name for an environment (i.e. `manual_control=pistonball.manual_control`) to run the test.
 
 ### Bombardment Test
 

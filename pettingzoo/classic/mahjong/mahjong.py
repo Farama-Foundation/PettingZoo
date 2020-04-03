@@ -63,7 +63,6 @@ class env(AECEnv):
             curr_player_ind = self.agent_order.index(next_player)
             if next_player == self.prev_player:
                 self.agent_order.insert(0, self.agent_order.pop(-1))
-
             elif prev_player_ind == self.num_agents - 1:
                 self.agent_order.remove(next_player)
                 self.agent_order.insert(0, next_player)
