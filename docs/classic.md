@@ -391,11 +391,6 @@ If the game ends in a draw, both players will recieve a reward of 0.
 
 If the game ends in a draw, both players will recieve a reward of 0.
 
-#### Rewards
-
-| Winner | Loser |
-| :----: | ----- |
-| +1     | -1    |
 
 ### Texas Hold'em
 
