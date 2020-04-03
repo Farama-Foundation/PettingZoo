@@ -16,8 +16,7 @@ class env(AECEnv):
 
         self.board = chess.Board()
 
-        self.num_agents = 2
-        self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
+        self.agents = ["player_{}".format(i) for i in range(2)]
 
         self.agent_order = list(self.agents)
         self._agent_selector = agent_selector(self.agent_order)
