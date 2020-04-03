@@ -14,7 +14,7 @@ except ImportError:
     raise ImportError("HINT: you can install pyglet directly via 'pip install pyglet'. But if you really just want to install all Gym dependencies and not have to think about it, 'pip install -e .[all]' or 'pip install gym[all]' will do it.")
 
 try:
-    from pyglet.gl import glEnable, glHint, glLineWidth, glBlendFunc, glBegin, glPushMatrix, glTranslatef, glClearColor, glRotatef, glScalef, glPopMatrix, glColor4f, glLineStipple, glDisable, glVertex3f, glEnd, glVertex2f
+    from pyglet.gl import glEnable, glHint, glLineWidth, glBlendFunc, glBegin, glPushMatrix, glTranslatef, glClearColor, glRotatef, glScalef, glPopMatrix, glColor4f, glLineStipple, glDisable, glVertex3f, glEnd, glVertex2f, gluOrtho2D
 except ImportError:
     raise ImportError("""Error occured while running `from pyglet.gl import ...`
             HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'""")
@@ -92,14 +92,22 @@ class Viewer(object):
         self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()
+        scale_val = self.transform.scale[0]
         self.transform.enable()
         for geom in self.geoms:
             geom.render()
         for geom in self.onetime_geoms:
             geom.render()
+        self.transform.disable()
+        #gluOrtho2D(-1, 1, -1, 1)
+        print(self.transform.scale[0])
+        #self.transform.inv_scale()
+        pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
+        pyglet.gl.glLoadIdentity()
+        gluOrtho2D(0, self.window.width, 0, self.window.height)
+        #gluOrtho2D(0, self.window.width, 0, self.window.height)
         for geom in self.text_lines:
             geom.render()
-        self.transform.disable()
 
         arr = None
         if return_rgb_array:
@@ -201,6 +209,9 @@ class Transform(Attr):
         glRotatef(RAD2DEG * self.rotation, 0, 0, 1.0)
         glScalef(self.scale[0], self.scale[1], 1)
 
+    def inv_scale(self):
+        glScalef(1/self.scale[0], 1/self.scale[1], 1)
+
     def disable(self):
         glPopMatrix()
 
@@ -270,8 +281,9 @@ class TextLine:
         self.label = pyglet.text.Label(text,
                                   font_name='Lato',
                                   color=(0,0,0,255),
-                                  font_size=1,#,x=0.1,y=0.2)
-                                  x=0.1, y=0.2)#self.window.height-self.idx*40-10)#,
+                                  font_size=25,#,x=0.1,y=0.2)
+                                  x=0,y=self.idx*40+20,
+                                  anchor_x="left",anchor_y="bottom")#,
 
         self.label.draw()
 

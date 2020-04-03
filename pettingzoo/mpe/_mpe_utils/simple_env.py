@@ -173,14 +173,18 @@ class SimpleEnv(AECEnv):
                 self.viewer.add_geom(geom)
 
             self.viewer.text_lines = []
-            for idx,agent in enumerate(self.world.agents):
-                tline = rendering.TextLine(self.viewer.window,idx)
-                self.viewer.text_lines.append(tline)
+            idx = 0
+            for agent in self.world.agents:
+                if not agent.silent:
+                    tline = rendering.TextLine(self.viewer.window,idx)
+                    self.viewer.text_lines.append(tline)
+                    idx += 1
 
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         message = ''
         # for agent in self.world.agents:
+        idx = 0
         for idx,other in enumerate(self.world.agents):
             if other.silent:
                 continue
@@ -191,10 +195,9 @@ class SimpleEnv(AECEnv):
 
             message += (other.name + ' sends ' + word + '   ')
 
-            if message:
-                message = "hello world"
-                self.viewer.text_lines[idx].set_text(message)
-                print(message)
+            self.viewer.text_lines[idx].set_text(message)
+            print(message)
+            idx += 1
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
