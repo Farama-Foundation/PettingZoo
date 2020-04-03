@@ -186,7 +186,6 @@ class SimpleEnv(AECEnv):
 
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        message = ''
         # for agent in self.world.agents:
         idx = 0
         for idx,other in enumerate(self.world.agents):
@@ -197,10 +196,10 @@ class SimpleEnv(AECEnv):
             else:
                 word = alphabet[np.argmax(other.state.c)]
 
-            message += (other.name + ' sends ' + word + '   ')
+            message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            print(message)
+            #print(message)
             idx += 1
 
         # update bounds to center around agent
