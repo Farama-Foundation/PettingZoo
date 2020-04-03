@@ -24,7 +24,7 @@ Classic environments represent implementations of popular turn based human games
 
 * No classic environments currently take any environment arguments
 * All classic environments are rendered solely via printing to terminal
-* Many classic environments have illegal moves in the action space that, if taken, will end the game as a loss for the player who made the illegal move, and assign zero reward for every other player. If there are any illegal moves in that game, then there is a list of legal moves in the "legal_moves" entry in the info dictionary (e.g. `env.infos[agent]['legal_moves']`). Note that this list is only well defined right before the agent's takes its step.
+* Many classic environments have illegal moves in the action space, and describe legal moves in  `env.infos[agent]['legal_moves']`. In environments that use this, taking an illegal move will give a reward of -1 to the illegally moving player, 0 to the other players, and end the game. Note that this list is only well defined right before the agent's takes its step.
 * Reward for most environments only happens at the end of the games once an agent wins or looses, with a reward of 1 for winning and -1 for loosing.
 
 Many environments in classic are based on [RLCard](https://github.com/datamllab/rlcard). If you use these libraries in your research, please cite them:
@@ -177,7 +177,7 @@ For example, you would use action `0` to play a single "3" card or action `30` t
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
 
 #### Rewards
 
@@ -231,10 +231,6 @@ There are 110 actions in Gin Rummy.
 | 58 - 109      | knock_action               |
 
 For example, you would use action `2` to draw a card or action `3` to pick up a discarded card. 
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos`, are updated after each step.
 
 #### Rewards
 
