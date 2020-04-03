@@ -105,7 +105,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent (8),(10) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (8),(10) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_adversary`
 
@@ -135,7 +135,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent (4),(8)  | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | (4),(8)  | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_crypto`
 
@@ -167,7 +167,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent (8),(19) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | (8),(19) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_push`
 
@@ -223,7 +223,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | agent dependent (3),(5) | agent dependent  | agent dependent (3),(11) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | agent dependent (3),(5) | agent dependent  | (3),(11) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_speaker_listener`
 
@@ -280,7 +280,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent (14),(16) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | (14),(16) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_tag`
 
@@ -325,7 +325,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 6      | No             | agent dependent (5),(20) | agent dependent | agent dependent (28),(34) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 6      | No             | agent dependent (5),(20) | agent dependent | (28),(34) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_world_comm`
 
