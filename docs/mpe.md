@@ -3,14 +3,14 @@
 | Environment             | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |-------------------------|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | simple                  | Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
-| simple_adversary        | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent max (10) | (-inf,inf)         | ?          |
-| simple_crypto           | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent max (8)  | (-inf,inf)         | ?          |
-| simple_push             | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent max (19) | (-inf,inf)         | ?          |
+| simple_adversary        | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent (8),(10) | (-inf,inf)         | ?          |
+| simple_crypto           | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent (4),(8)  | (-inf,inf)         | ?          |
+| simple_push             | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent (8),(19) | (-inf,inf)         | ?          |
 | simple_reference        | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
-| simple_speaker_listener | Vector       | Discrete | 2      | No             | agent dependent max(5) | agent dependent  | agent dependent max (11) | (-inf,inf)         | ?          |
+| simple_speaker_listener | Vector       | Discrete | 2      | No             | agent dependent (3),(5) | agent dependent  | agent dependent (3),(11) | (-inf,inf)         | ?          |
 | simple_spread           | Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
-| simple_tag              | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent max (16) | (-inf,inf)         | ?          |
-| simple_world_comm       | Vector       | Discrete | 6      | No             | agent dependent max(20) | agent dependent | agent dependent max (34) | (-inf,inf)         | ?          |
+| simple_tag              | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent (14),(16) | (-inf,inf)         | ?          |
+| simple_world_comm       | Vector       | Discrete | 6      | No             | agent dependent (5),(20) | agent dependent | agent dependent (28),(34) | (-inf,inf)         | ?          |
 
 
 `pip install pettingzoo[mpe]`
@@ -21,25 +21,25 @@ These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-
 
 ### Types of Environments
 
-The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adverserial- a "good" agent being rewarded means an "adversery" agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
+The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adversarial- a "good" agent being rewarded means an "adversary" agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
 
-The simple_reference, simple_speaker_listener, and simple_spread environments are cooperative- <Ben explain exactly how rewards work here>
+The simple_reference, simple_speaker_listener, and simple_spread environments are more cooperative in nature, where the agents all benefit from working with the others, though the rewards for each agent are not identical.
 
 ### Key Concepts
 
-* Landmark: <Ben>
+* Landmark: Landmarks are static circular features in the environment that cannot be controlled. In some environments, like simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more details for each environment.
 
-* Visibility: <Ben>
+* Visibility: When an agent is visible to another, the other agent can see its
 
-* Communication: <Ben>
+* Communication: Some agents in some environments can broadcast a message as part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In simple_crypto, this message is also used to signal that Bob and Eve have reconstructed the message.
 
-* Color: <Ben>
+* Color: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments.
 
 ### Observation Space
 
-The observation space of an agent is a vector generally composed of the agent's position and velocity, other agent's relative position and velocity, the landmarks relative poistions, the landmark's and agent's types, and  communications it received from other agents.
+The observation space of an agent is a vector generally composed of the agent's position and velocity, other agent's relative position and velocity, the landmarks relative positions, the landmark's and agent's types, and communications it received from other agents. The exact form of this is detailed in the environments.
 
-If an agent_1 cannot see or observe the communication of agent_b, then agent_b is not included in agent_a's observation space, resulting in varying observation space sizes in certain environments.
+If an agent_1 cannot see or observe the communication of agent_2, then agent_2 is not included in agent_1's observation space, resulting in varying observation space sizes in certain environments.
 
 ### Action Space
 
@@ -91,6 +91,7 @@ Please cite one or both of these if you use these environments in your research.
 
 In this environment, a single agent sees landmark position, and is rewarded based on how close it gets to landmark (Euclidian distance). This is not a multiagent environment, and is primarily intended for debugging purposes.
 
+Observation space: `<self_vel, landmark_offset>`
 
 ```
 simple.env(max_frames=500)
@@ -104,11 +105,11 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent max (10) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | agent dependent (8),(10) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_adversary`
 
-`agents= `
+`agents= [adversary_0,agent_0,agent_1]`
 
 *gif*
 
@@ -116,7 +117,9 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 In this environment, there is 1 adversary (red), N good agents (green), N landmarks (default N=2). All agents observe the position of landmarks and other agents. One landmark is the ‘target landmark’ (colored green). Good agents are rewarded based on how close one of them is to the target landmark, but negatively rewarded based on how close the adversary is to the target landmark. The adversary is rewarded based on distance to the target, but it doesn’t know which landmark is the target landmark. This means good agents have to learn to ‘split up’ and cover all landmarks to deceive the adversary.
 
-Note that changing the environment parameters to add or remove agents will change the observation space of every agent, for example, increasing N will increase the number of landmarks and agents each agent sees, increasing the dimension of the observation space of the agents.
+Agent Observation space: `<self_pos, self_vel, goal_offset, landmark_offset, other_agent_offsets>`
+
+Adversary observation space: `<landmark_offset, other_agents_offsets>`
 
 ```
 simple_adversary.env(N=2, max_frames=500)
@@ -132,11 +135,11 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent max (8)  | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | agent dependent (4),(8)  | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_crypto`
 
-`agents= `
+`agents= [eve_0,bob_0,alice_0]`
 
 *gif*
 
@@ -144,6 +147,12 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded if Bob reconstructs the message, but are negatively rewarded if Eve reconstruct the message. Eve is rewarded based on how well it can reconstruct the signal. Alice and Bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message.
 
+
+Alice Observation space: `<message, private_key>`
+
+Bob Observation space: `<private_key, alices_comm, 1>`
+
+Eve's observation space: `<alices_comm, 1>`
 
 ```
 simple_crypto.env(max_frames=500)
@@ -158,17 +167,21 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | agent dependent (8),(19) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_push`
 
-`agents= `
+`agents= [adversary_0, agent_0]`
 
 *gif*
 
 *AEC diagram*
 
 This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.
+
+Agent Observation space: `<self_vel, goal_offset, goal_landmark_id, all_landmark_offsets, landmark_ids, other_agent_offsets>`
+
+Adversary Observation space: `<self_vel, all_landmark_offsets, other_agent_offsets>`
 
 
 ```
@@ -188,7 +201,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_reference`
 
-`agents= `
+`agents= [agent_0, agent_1]`
 
 *gif*
 
@@ -196,6 +209,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. The reward is collective, so agents have to learn to communicate the goal of the other agent, and navigate to their landmark. Both agents are simultaneous speakers and listeners.
 
+Agent Observation space: `<self_vel, all_landmark_offsets, landmark_ids, goal_id, communication>`
 
 ```
 simple_reference.env(max_frames=500)
@@ -209,17 +223,21 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | agent dependent | agent dependent max(5)  | agent dependent max (11) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 2      | No             | agent dependent (3),(5) | agent dependent  | agent dependent (3),(11) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_speaker_listener`
 
-`agents= `
+`agents=[speaker_0, listener_0]`
 
 *gif*
 
 *AEC diagram*
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
+
+Speaker: `<goal_id>`
+
+Listener: `<self_vel, all_landmark_offsets, communication>`
 
 
 ```
@@ -234,11 +252,11 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
+| Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_spread`
 
-`agents= `
+`agents= [agent_0,agent_1,agent_2]`
 
 *gif*
 
@@ -246,7 +264,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment has N agents, N landmarks (default N=3). The agents are rewarded based on how far the closest agent is to each landmark (sum of the minimum distances), but are penalized if they collide with other agents (-1 for each collision). Agents must learn to cover all the landmarks while avoiding collisions.
 
-Note that changing the environment parameters to add or remove agents will change the observation space of every agent, for example, increasing N by one will increase the number of landmarks and agents each agent sees, increasing the dimension of the observation space of the agents by 6.
+Agent observations: `<self_vel, self_pos, landmark_offsets, other_agent_offsets, communication>`
 
 ```
 simple_spread.env(N=3, max_frames=500)
@@ -262,11 +280,11 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent max (16) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | agent dependent (14),(16) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_tag`
 
-`agents= `
+`agents= [adversary_0,adversary_1,adversary_2,agent_0]`
 
 *gif*
 
@@ -285,7 +303,8 @@ def bound(x):
       return min(np.exp(2 * x - 2), 10)
 ```
 
-Note that changing the environment parameters to add or remove agents will change the observation space of every agent, for example, adding a obstacles will increase the number of landmarks each agent sees, increasing the dimension of the observation space of the agents by 2.
+Agent and adversary observations: `<self_vel, self_pos, landmark_offsets, other_agent_offsets, other_agent_velocities>`
+
 
 ```
 simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
@@ -306,11 +325,11 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 6      | No             | agent dependent | agent dependent max(20) | agent dependent max (34) | (-inf,inf)         | ?          |
+| Vector       | Discrete | 6      | No             | agent dependent (5),(20) | agent dependent | agent dependent (28),(34) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe import simple_world_comm`
 
-`agents= `
+`agents=[lead_adversary_0,adversary_0,adversary_1,adversary_3,agent_0,agent_1]`
 
 *gif*
 
@@ -320,12 +339,18 @@ This environment is similar to simple_tag, except there is food (small blue ball
 
 In particular, the good agents reward, is -5 for every collision with an adversary, -2*bound by the `bound` function described in simple_tag, +2 for every collision with a food, and -0.05*minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1*minimum distance to a good agent.
 
+
+Good agent observations: `<self_vel, self_pos, landmark_offsets, other_agent_offsets, other_agent_velocities, self_in_forest>`
+
+Normal adversary observations:`<self_vel, self_pos, landmark_offsets, other_agent_offsets, other_agent_velocities, self_in_forest, leader_comm>`
+
+Adversary leader observations: `<self_vel, self_pos, landmark_offsets, other_agent_offsets, other_agent_velocities, leader_comm>`
+
 Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).
 
-Note that changing the environment parameters to add or remove agents will change the observation space of every agent, for example, adding a forest will increase the number of landmarks each agent sees, increasing the dimension of the observation space of the agents by 2.
 
 ```
-simple_world_comm.env(it=2, num_adversaries=4, num_obstacles=1,
+simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
                 num_food=2, num_forests=2, max_frames=500)
 ```
 
