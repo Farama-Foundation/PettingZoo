@@ -1,6 +1,3 @@
-import itertools
-
-
 class Board(object):
     def __init__(self):
         # internally self.board.squares holds a flat representation of tic tac toe board
