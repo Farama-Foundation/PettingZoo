@@ -44,7 +44,7 @@ class SimpleEnv(AECEnv):
         self.agent_selection = self.agent_order[0]
         self.current_actions = [None] * self._num_agents
 
-        self.viewers = [None] * self._num_agents
+        self.viewer = None
 
         self.reset()
 
@@ -53,6 +53,10 @@ class SimpleEnv(AECEnv):
 
     def reset(self, observe=True):
         self.scenario.reset_world(self.world)
+
+        self.rewards = {name: 0. for name in self.agents}
+        self.dones = {name: False for name in self.agents}
+        self.infos = {name: {} for name in self.agents}
 
         self._reset_render()
 
@@ -145,27 +149,9 @@ class SimpleEnv(AECEnv):
 
     def render(self, mode='human'):
         from . import rendering
-        if mode == 'human':
-            alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            message = ''
-            # for agent in self.world.agents:
-            for other in self.world.agents:
-                if other.silent:
-                    continue
-                if np.all(other.state.c == 0):
-                    word = '_'
-                else:
-                    word = alphabet[np.argmax(other.state.c)]
-                message += (other.name + ' sends ' + word + '   ')
-            if message:
-                print(message)
 
-        for i in range(len(self.viewers)):
-            # create viewers (if necessary)
-            if self.viewers[i] is None:
-                # import rendering only if we need it (and don't import for headless machines)
-                # from gym.envs.classic_control import rendering
-                self.viewers[i] = rendering.Viewer(700, 700)
+        if self.viewer is None:
+            self.viewer = rendering.Viewer(700, 700)
 
         # create rendering geometry
         if self.render_geoms is None:
@@ -186,24 +172,45 @@ class SimpleEnv(AECEnv):
                 self.render_geoms_xform.append(xform)
 
             # add geoms to viewer
-            for viewer in self.viewers:
-                viewer.geoms = []
-                for geom in self.render_geoms:
-                    viewer.add_geom(geom)
+            self.viewer.geoms = []
+            for geom in self.render_geoms:
+                self.viewer.add_geom(geom)
 
-        results = []
-        for i in range(len(self.viewers)):
-            # update bounds to center around agent
-            cam_range = 1
-            pos = self.world.agents[i].state.p_pos
-            self.viewers[i].set_bounds(pos[0] - cam_range, pos[0] + cam_range, pos[1] - cam_range, pos[1] + cam_range)
-            # update geometry positions
-            for e, entity in enumerate(self.world.entities):
-                self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
-            # render to display or array
-            results.append(self.viewers[i].render(return_rgb_array=mode == 'rgb_array'))
+            self.viewer.text_lines = []
+            idx = 0
+            for agent in self.world.agents:
+                if not agent.silent:
+                    tline = rendering.TextLine(self.viewer.window,idx)
+                    self.viewer.text_lines.append(tline)
+                    idx += 1
 
-        return results
+
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        # for agent in self.world.agents:
+        idx = 0
+        for idx,other in enumerate(self.world.agents):
+            if other.silent:
+                continue
+            if np.all(other.state.c == 0):
+                word = '_'
+            else:
+                word = alphabet[np.argmax(other.state.c)]
+
+            message = (other.name + ' sends ' + word + '   ')
+
+            self.viewer.text_lines[idx].set_text(message)
+            #print(message)
+            idx += 1
+
+        # update bounds to center around agent
+        all_poses = [entity.state.p_pos for entity in self.world.entities]
+        cam_range = np.max(np.abs(np.array(all_poses))) + 1
+        self.viewer.set_max_size(cam_range)
+        # update geometry positions
+        for e, entity in enumerate(self.world.entities):
+            self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
+        # render to display or array
+        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
 
     # reset rendering assets
     def _reset_render(self):
@@ -211,7 +218,7 @@ class SimpleEnv(AECEnv):
         self.render_geoms_xform = None
 
     def close(self):
-        for viewer in self.viewers:
-            if viewer is not None:
-                viewer.close()
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
         self._reset_render()
