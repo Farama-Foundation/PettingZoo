@@ -6,17 +6,17 @@
 | Checkers                         | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Chess                            | Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 | Connect Four                     | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
-| Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]               | ?          |
+| Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]               | 10^53 ~ 10^83 |
 | Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]               | ?          |
 | Go                               | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
-| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, Inf]               | ?          |
-| Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]                 | ?          |
+| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, Inf]               | 10^2       |
+| Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]                 | 10^121     |
 | Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
 | Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
-| Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]                 | ?          |
-| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]               | ?          |
+| Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]                 | 10^14      |
+| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]               | 10^162     |
 | Tic Tac Toe                      | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?          |
-| Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]                 | ?          |
+| Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]                 | 10^163     |
 
 `pip install pettingzoo[classic]`
 
@@ -78,7 +78,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 ### Chess
@@ -131,7 +131,7 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 
@@ -142,13 +142,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Dou Dizhu
 
-| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | ?          |
+| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
+|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
+| Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 ~ 10^83 |
 
 `from pettingzoo.classic import dou_dizhu`
-
-`agents= `
 
 *gif*
 
@@ -160,39 +158,62 @@ The "Landlord" plays first by putting down a combination of cards. The next play
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+#### Agents
+
+| Agent 0    | Agent 1    | Agent 2    |
+| :--------: | :--------: | :--------: |
+| landlord_0 | peasant_0  | peasant_1  |
+
 #### Observation Space
 
 The *Observation Space* is encoded in 6 planes with 5x15 entries each. For each plane, the 5 rows represent 0, 1, 2, 3, or 4 cards of the same rank and the 15 columns represents all possible ranks ("3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, Black Joker, and Red Joker"). The first plane, Plane 0, is the current player while Plane 1, Plane 2-4, and Plane 5 correspond to the union of the other two players' hand, the recent three actions, and the union of all played cards, respectively.
 
+| Plane | Description                      |
+|:-----:|----------------------------------|
+|   0   | Current Player's hand            |
+|   1   | Union of the other players' hand |
+| 2 - 4 | Recent three actions             |
+|   5   | Union of all played card         |
+
+##### Encoding per plane.
+
+|                                          | 0<br><br>(3 Card) | 1<br><br>(4 Card) | 2<br><br>(5 Card) | 3<br><br>(6 Card) | 4<br><br>(7 Card) | 5<br><br>(8 Card) | 6<br><br>(9 Card) | 7<br><br>(10 Card) | 8<br><br>(J Card) | 9<br><br>(Q Card) | 10<br><br>(K Card) | 11<br><br>(A Card) | 12<br><br>(2 Card) | 13<br><br>(B Joker) | 14<br><br>(R Joker) |
+|:----------------------------------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:------------------:|:-----------------:|:-----------------:|:------------------:|:------------------:|:------------------:|:-------------------:|:-------------------:|
+| 0<br><br>(0 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 1<br><br>(1 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 2<br><br>(2 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 3<br><br>(3 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 4<br><br>(4 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+
 #### Action Space
 
-The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below:
+The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below. The core idea is to abstract actions by only focusing on the major combination and ignoring the kicker (e.g. a trio with single "4445" would be "444&ast")
 
-| Action Type      | Number of Actions | Number of Actions after Abstraction | Action ID         |
-| ---------------- | :---------------: | :---------------------------------: | :---------------: | 
-| Solo             |        15         |        15                           | 0-14              |
-| Pair             |        13         |        13                           | 15-27             |
-| Trio             |        13         |        13                           | 28-40             |
-| Trio with single |        182        |        13                           | 41-53             |
-| Trio with pair   |        156        |        13                           | 54-66             |
-| Chain of solo    |       36          |        36                           | 67-102            |
-| Chain of pair    |       52          |        52                           | 103-154           |
-| Chain of trio    |        45         |        45                           | 155-199           |
-| Plane with solo  |        24721      |        38                           | 200-237           |
-| Plane with pair  |        6552       |        30                           | 238-267           |
-| Quad with solo   |       1339        |        13                           | 268-280           |
-| Quad with pair   |       1014        |        13                           | 281-293           |
-| Bomb             |        13         |        13                           | 294-306           |
-| Rocket           |         1         |         1                           | 307               |
-| Pass             |         1         |         1                           | 308               |
-| Total            |       33676       |        309                          |                   |
+| Action Type      | Description                                                                         | Number of Actions | Number of Actions after Abstraction | Action ID | Example                                                                                                                                                                                                                          |
+|------------------|-------------------------------------------------------------------------------------|:-----------------:|:-----------------------------------:|:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Solo             | Any single card                                                                     |         15        |                  15                 |    0-14   | `0`: 3, `1`: 4, ..., `12`: 2, `13`: Black Joker, `14`: Red Joker                                                                                                                                                                 |
+| Pair             | Two matching cards of equal rank                                                    |         13        |                  13                 |   15-27   | `15`: 33, `16`: 44, ..., `25`: KK, `26`: AA, `27`: 22                                                                                                                                                                            |
+| Trio             | Three matching cards of equal rank                                                  |         13        |                  13                 |   28-40   | `28`: 333, `29`: 444, ..., `38`: KKK, `39`: AAA, `40`: 222                                                                                                                                                                       |
+| Trio with single | Three matching cards of equal rank + single card of next higher rank (e.g. 3334)    |        182        |                  13                 |   41-53   | `41`: 333&ast, `42`: 444&ast, ..., `51`: KKK&ast, `52`: AAA&ast, `53`: 222&ast                                                                                                                                                   |
+| Trio with pair   | Three matching cards of equal rank + pair of cards of next higher rank (e.g. 33344) |        156        |                  13                 |   54-66   | `54`: 333&ast&ast, `55`: 444&ast&ast, ..., `64`: KKK&ast&ast, `65`: AAA&ast&ast, `66`: 222&ast&ast                                                                                                                               |
+| Chain of solo    | At least five consecutive solo cards                                                |         36        |                  36                 |   67-102  | `67`: 34567, `68`: 45678, ..., `100`: 3456789TJQK, `101`: 456789TJQKA, `102`: 3456789TJQKA                                                                                                                                       |
+| Chain of pair    | At least three consecutive pairs                                                    |         52        |                  52                 |  103-154  | `103`: 334455, `104`: 445566, ..., `152`: 33445566778899TTJJQQ, `153`: 445566778899TTJJQQKK, `154`: 5566778899TTJJQQKKAA                                                                                                         |
+| Chain of trio    | At least two consecutive trios                                                      |         45        |                  45                 |  155-199  | `155`: 333444, `156`: 444555, ..., `197`: 777888999TTTJJJQQQ, `198`: 888999TTTJJJQQQKKK, `199`: 999TTTJJJQQQKKKAAA                                                                                                               |
+| Plane with solo  | Two consecutive trios + 2 consecutive solo cards (e.g. 33344456)                    |       24721       |                  38                 |  200-237  | `200`: 333444&ast&ast, `201`: 444555&ast&ast, ..., `235`: 888999TTTJJJQQQ&ast&ast&ast&ast&ast, `236`: 999TTTJJJQQQKKK&ast&ast&ast&ast&ast, `237`: TTTJJJQQQKKKAAA&ast&ast&ast&ast&ast                                            |
+| Plane with pair  | Two consecutive trios + 2 consecutive pairs (e.g. 3334445566)                       |        6552       |                  30                 |  238-267  | `238`: 333444&ast&ast&ast&ast, `239`: 444555&ast&ast&ast&ast, ..., `265`: 999TTTJJJQQQ&ast&ast&ast&ast&ast&ast&ast&ast, `266`: TTTJJJQQQKKK&ast&ast&ast&ast&ast&ast&ast&ast, `267`: JJJQQQKKKAAA&ast&ast&ast&ast&ast&ast&ast&ast |
+| Quad with solo   | Four matching cards of equal rank + 2 consecutive solo cards (e.g 333345)           |        1339       |                  13                 |  268-280  | `268`: 3333&ast&ast, `269`: 4444&ast&ast, ..., `278`: KKKK&ast&ast, `279`: AAAA&ast&ast, `280`: 2222&ast&ast                                                                                                                     |
+| Quad with pair   | Four matching cards of equal rank + 2 consecutive pair (e.g 33334455)               |        1014       |                  13                 |  281-293  | `281`: 3333&ast&ast&ast&ast, `282`: 4444&ast&ast&ast&ast, ..., `291`: KKKK&ast&ast&ast&ast, `292`: AAAA&ast&ast&ast&ast, `293`: 2222&ast&ast&ast&ast                                                                             |
+| Bomb             | Four matching cards of equal rank                                                   |         13        |                  13                 |  294-306  | `294`: 3333, `295`: 4444, ..., `304`: KKKK, `305`: AAAA, `306`: 2222                                                                                                                                                             |
+| Rocket           | Black Joker + Red Joker                                                             |         1         |                  1                  |    307    | `307`: Black Joker (B) + Red Joker (R)                                                                                                                                                                                           |
+| Pass             | Pass                                                                                |         1         |                  1                  |    308    | `308`: Pass                                                                                                                                                                                                                      |
+| Total            |                                                                                     |       33676       |                 309                 |           |                                                                                                                                                                                                                                  |
 
 For example, you would use action `0` to play a single "3" card or action `30` to play a trio of "5". 
 
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | 0     |
 
 #### Legal Moves
@@ -218,34 +239,38 @@ Gin Rummy is a 2 players card game with a 52 card deck. The objective is to comb
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+#### Agents
+
+| Agent 0    | Agent 1    |
+| :--------: | :--------: |
+| player_0   | player_1   |
+
 #### Observation Space
 
 The observation space is (5, 52) with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered from Ace of spades to King of spades, Ace of hearts to King of hearts, Ace of diamonds to King of diamonds, followed by the Ace of clubs to King of clubs.
 
-The observation and action space descriptions are taken from RLCard.
-
-| Plane |              Feature                                                       |
-| :---: | -------------------------------------------------------------------------- |
-| 0     | the cards in current player's hand                                         |
-| 1     | the top card of the discard pile                                           |
-| 2     | the dead cards: cards in discard pile (excluding the top card)             |
-| 3     | opponent known cards: cards picked up from discard pile, but not discarded |
-| 4     | the unknown cards: cards in stockpile or in opponent hand (but not known)  |
+|                                                           | 0<br><br>(A-Spades) | ... | 12<br><br>(K-Spades) | 13<br><br>(A-Hearts) | ... | 25<br><br>(K-Hearts) | 26<br><br>(A-Diamonds) | ... | 38<br><br>(K-Diamonds) | 39<br><br>(A-Clubs) | ... | 51<br><br>(K-Clubs) |
+|:---------------------------------------------------------:|:-------------------:|:---:|:--------------------:|:--------------------:|:---:|:--------------------:|:----------------------:|:---:|:----------------------:|:-------------------:|:---:|:-------------------:|
+|              0<br><br>(current player's hand)             |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|          1<br><br>(top card of the discard pile)          |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+| 2<br><br>(cards in discard pile (excluding the top card)) |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|              3<br><br>(opponent known cards)              |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|                  4<br><br>(unknown cards)                 |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
 
 #### Action Space
 
 There are 110 actions in Gin Rummy.
 
-| Action ID     |     Action                 |
-| :-----------: | -------------------------- |
-| 0             | score_player_0_action      |
-| 1             | score_player_1_action      |
-| 2             | draw_card_action           |
-| 3             | pick_up_discard_action     |
-| 4             | declare_dead_hand_action   |
-| 5             | gin_action                 |
-| 6 - 57        | discard_action             |
-| 58 - 109      | knock_action               |
+| Action ID | Action                                                                                                                                                                                 |
+|:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     0     | Score Player 0<br><br>Used after knock, gin, or dead hand to compute the player's hand.                                                                                                |
+|     1     | Score Player 1<br><br><br>Used after knock, gin, or dead hand to compute the player's hand.                                                                                            |
+|     2     | Draw a card                                                                                                                                                                            |
+|     3     | Pick top card from Discard pile                                                                                                                                                        |
+|     4     | Declare dead hand                                                                                                                                                                      |
+|     5     | Gin                                                                                                                                                                                    |
+|   6 - 57  | Discard a card<br><br>`6`: A-Spade, `7`: 2-Spade, ..., `18`: K-Spades<br>`19`: A-Hearts ... `31`: K-Hearts<br>`32`: A-Diamonds ... `44`: K-Diamonds<br>`45`: A-Clubs ... `57`: K-Clubs |
+|  58 - 109 | Knock<br><br>`58`: A-Spade, `59`: 2-Spade, ..., `70`: K-Spades<br>`71`: A-Hearts ... `83`: K-Hearts<br>`84`: A-Diamonds ... `96`: K-Diamonds<br>`97`: A-Clubs ... `109`: K-Clubs       |
 
 For example, you would use action `2` to draw a card or action `3` to pick up a discarded card. 
 
@@ -284,11 +309,9 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, Inf]           | ?          |
+| Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, Inf]           | 10^2       |
 
 `from pettingzoo.classic import leduc_holdem`
-
-`agents= `
 
 *gif*
 
@@ -298,18 +321,36 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+#### Agents
+
+| Agent 0    | Agent 1    |
+| :--------: | :--------: |
+| player_0   | player_1   |
+
 #### Observation Space
 
 As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#leduc-holdem), the first 3 entries correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
 
+|  Index  | Description                                                                  |
+|:-------:|------------------------------------------------------------------------------|
+|  0 - 2  | Current Player's Hand<br><br>`0`: J, `1`: Q, `2`: K                          |
+|  3 - 5  | Community Cards<br><br>`3`: J, `4`: Q, `5`: K                                |
+|  6 - 19 | Current Player's Chips<br><br>`6`: 0 chips, `7`: 1 chip, ..., `19`: 13 chips |
+| 20 - 33 | Opponent's Chips<br><br><br>`20`: 0 chips, `21`: 1 chip, ..., `33`: 13 chips |
+
 #### Action Space
 
-The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", and `3` for "Check".
+| Action ID | Action |
+|:---------:|--------|
+|     0     | Call   |
+|     1     | Raise  |
+|     2     | Fold   |
+|     3     | Check  |
 
 #### Rewards
 
 | Winner        | Loser         |
-| :-----------: | ------------- |
+| :-----------: | :-----------: |
 | +raised chips | -raised chips |
 
 #### Legal Moves
@@ -321,23 +362,58 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | ?          |
+| Vector       | Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | 10^121     |
 
 `from pettingzoo.classic import mahjong`
-
-`agents= `
 
 *gif*
 
 *AEC Diagram*
 
-Mahjong is a tile-based game with 4 players and 136 tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
+Mahjong is a tile-based game with 4 players and 136 tiles, which includes 4 identical sets of 34 unique tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Agents
+
+| Agent 0    | Agent 1    | Agent 2    | Agent 3    |
+| :--------: | :--------: | :--------: | :--------: |
+| player_0   | player_1   | player_2   | player_3   |
 
 #### Observation Space
 
 The observation space has a (6, 34, 4) shape with the first index representing the encoding plane. Plane 0 represent the current player's hand, Plane 1 represent the played cards on the table, and Planes 2-5 encode the public piles of each player (Plane 2: Player 0, Plane 3: Player 1, Plane 4: Player 2, and Plane 5: Player 3).
+
+| Plane | Description               |
+|:-----:|---------------------------|
+|   0   | Current Player's hand     |
+|   1   | Played tiles on the table |
+|   2   | Public piles of player_0  |
+|   3   | Public piles of player_1  |
+|   4   | Public piles of player_2  |
+|   5   | Public piles of player_3  |
+
+##### Encoding per Plane
+
+|                          | 0<br><br>(Set 1) | 1<br><br>(Set 2) | 2<br><br>(Set 3) | 3<br><br>(Set 4) |
+|--------------------------|:----------------:|:----------------:|:----------------:|:----------------:|
+| 0<br><br>(Bamboo-1)      |       Bool       |       Bool       |       Bool       |       Bool       |
+| 1<br><br>(Bamboo-2)      |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                      |        ...       |        ...       |        ...       |        ...       |
+| 8<br><br>(Bamboo-9)      |       Bool       |       Bool       |       Bool       |       Bool       |
+| 9<br><br>(Characters-1)  |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                      |        ...       |        ...       |        ...       |        ...       |
+| 17<br><br>(Characters-9) |       Bool       |       Bool       |       Bool       |       Bool       |
+| 18<br><br>(Dots-1)       |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                      |        ...       |        ...       |        ...       |        ...       |
+| 26<br><br>(Dots-9)       |       Bool       |       Bool       |       Bool       |       Bool       |
+| 27<br><br>(Dragon-Green) |       Bool       |       Bool       |       Bool       |       Bool       |
+| 28<br><br>(Dragon-Red)   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 29<br><br>(Dragon-White) |       Bool       |       Bool       |       Bool       |       Bool       |
+| 30<br><br>(Winds-East)   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 31<br><br>(Winds-West)   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 32<br><br>(Winds-North)  |       Bool       |       Bool       |       Bool       |       Bool       |
+| 33<br><br>(Winds-South)  |       Bool       |       Bool       |       Bool       |       Bool       |
 
 #### Action Space
 
@@ -365,7 +441,7 @@ For example, you would use action `34` to pong or action `37` to stand.
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 #### Legal Moves
@@ -392,7 +468,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 If the game ends in a draw, both players will recieve a reward of 0.
@@ -416,7 +492,7 @@ If the game ends in a draw, both players will recieve a reward of 0.
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 If the game ends in a draw, both players will recieve a reward of 0.
@@ -426,11 +502,9 @@ If the game ends in a draw, both players will recieve a reward of 0.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]           | ?          |
+| Graphical    | Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]             | 10^14      |
 
 `from pettingzoo.classic import texas_holdem`
-
-`agents= `
 
 *gif*
 
@@ -439,6 +513,12 @@ If the game ends in a draw, both players will recieve a reward of 0.
 Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Agents
+
+| Agent 0    | Agent 1    |
+| :--------: | :--------: |
+| player_0   | player_1   |
 
 #### Observation Space
 
@@ -457,12 +537,17 @@ The observation space is a vector of 72 boolean integers. The first 52 entries d
 
 #### Action Space
 
-The action space is encoded as `0` for "Call", `1` for "Raise", `2` for "Fold", and `3` for "Check".
+| Action ID | Action |
+|:---------:|--------|
+|     0     | Call   |
+|     1     | Raise  |
+|     2     | Fold   |
+|     3     | Check  |
 
 #### Rewards
 
 | Winner          | Loser           |
-| :-------------: | --------------- |
+| :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
 
 #### Legal Moves
@@ -474,11 +559,9 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | ?          |
+| Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |
 
 `from pettingzoo.classic import texas_holdem_no_limit`
-
-`agents= `
 
 *gif*
 
@@ -487,6 +570,12 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of raise or the number of raises.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Agents
+
+| Agent 0    | Agent 1    |
+| :--------: | :--------: |
+| player_0   | player_1   |
 
 #### Observation Space
 
@@ -503,12 +592,17 @@ The observation space is similar to Texas Hold'em. The first 52 entries represen
 
 #### Action Space
 
-The action space is encoded as `0` for "Call", `1` for "Fold", `2` for "Check", and `3` to `102` for "Raise Amount" from 1 to 100.
+| Action ID | Action                                                   |
+|:---------:|----------------------------------------------------------|
+|     0     | Call                                                     |
+|     1     | Raise                                                    |
+|     2     | Check                                                    |
+|  3 - 102  | Raise (`3`: 1 chip, `4`: 2 chips, ..., `102`: 100 chips) |
 
 #### Rewards
 
 | Winner          | Loser           |
-| :-------------: | --------------- |
+| :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
 
 #### Legal Moves
@@ -539,7 +633,7 @@ Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take 
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 If the game ends in a draw, both players will receive a reward of 0.
@@ -548,11 +642,9 @@ If the game ends in a draw, both players will receive a reward of 0.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | ?          |
+| Vector       | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | 10^163     |
 
 `from pettingzoo.classic import uno`
-
-`agents= `
 
 *gif*
 
@@ -561,6 +653,12 @@ If the game ends in a draw, both players will receive a reward of 0.
 Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is determined as the first player with no cards left. In order to get rid of a card, a player must match either the color and number of the card on top of the discard pile. If the player does not have a card to discard, then it will take a card from the Draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild Draw Four, Skip, Reverse).
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Agents
+
+| Agent 0    | Agent 1    |
+| :--------: | :--------: |
+| player_0   | player_1   |
 
 #### Observation Space
 
@@ -576,36 +674,45 @@ The observation space has a shape of (7, 4, 15). The first index represent the p
 | 5     | Opponent's Hand with 1 cards of the same color and number |
 | 6     | Opponent's Hand with 2 cards of the same color and number |
 
+##### Encoding per Plane
+
+|                   | 0<br><br>("0" card) | 1<br><br>("1" card) | 2<br><br>("2" card) | ... | 9<br><br>("9" card) | 10<br><br>("Wild" card) | 11<br><br>("Wild Draw Four" card) | 12<br><br>("Skip" card) | 13<br><br>("Draw Two" card) | 14<br><br>("Reverse" card) |
+|:-----------------:|:-------------------:|:-------------------:|:-------------------:|:---:|:-------------------:|:-----------------------:|:---------------------------------:|:-----------------------:|:---------------------------:|:--------------------------:|
+|   0<br><br>(Red)  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+|  1<br><br>(Green) |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+|  2<br><br>(Blue)  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+| 3<br><br>(Yellow) |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+
 #### Action Space
 
 The action space is as described by RLCards.
 
-| Action ID |                   Action                   |
-| --------- | :----------------------------------------: |
-| 0~9       |        Red number cards from 0 to 9        |
-| 10~12     |  Red action cards: skip, reverse, draw 2   |
-| 13        |               Red wild card                |
-| 14        |          Red wild and draw 4 card          |
-| 15~24     |       green number cards from 0 to 9       |
-| 25~27     | green action cards: skip, reverse, draw 2  |
-| 28        |              green wild card               |
-| 29        |         green wild and draw 4 card         |
-| 30~39     |       blue number cards from 0 to 9        |
-| 40~42     |  blue action cards: skip, reverse, draw 2  |
-| 43        |               blue wild card               |
-| 44        |         blue wild and draw 4 card          |
-| 45~54     |      yellow number cards from 0 to 9       |
-| 55~57     | yellow action cards: skip, reverse, draw 2 |
-| 58        |              yellow wild card              |
-| 59        |        yellow wild and draw 4 card         |
-| 60        |                    draw                    |
+| Action ID |                                     Action                                     |
+|:---------:|:------------------------------------------------------------------------------:|
+|    0~9    | Red number cards<br><br>`0`: 0-Red, `1`: 1-Red, ..., `9`: 9-Red                |
+|   10~12   | Red action cards<br><br>`10`: Skip, `11`: Reverse, `12`: Draw 2                |
+|     13    | Red "wild" card                                                                |
+|     14    | Red "wild and draw 4" card                                                     |
+|   15~24   | Green number cards<br><br><br>`15`: 0-Green, `16`: 1-Green, ..., `24`: 9-Green |
+|   25~27   | Green action cards:<br><br>`25`: Skip, `26`: Reverse, `27`: Draw 2             |
+|     28    | Green "wild" card                                                              |
+|     29    | Green "wild and draw 4" card                                                   |
+|   30~39   | Blue number cards<br><br>`30`: 0-Blue, `31`: 1-Blue, ..., `39`: 9-Blue         |
+|   40~42   | Blue action cards<br><br>`40`: Skip, `41`: Reverse, `42`: Draw 2               |
+|     43    | Blue "wild" card                                                               |
+|     44    | Blue "wild and draw 4" card                                                    |
+|   45~54   | Yellow number cards<br><br>`45`: 0-Yellow, `46`: 1-Yellow, ..., `54`: 9-Yellow |
+|   55~57   | Yellow action cards<br><br>`55`: Skip, `56`: Reverse, `57`: Draw 2             |
+|     58    | <br>Yellow "wild" card                                                         |
+|     59    | Yellow "wild and draw 4" card                                                  |
+|     60    | Draw                                                                           |
 
 For example, you would use action `6` to put down a red "6" card or action `60` to draw a card. 
 
 #### Rewards
 
 | Winner | Loser |
-| :----: | ----- |
+| :----: | :---: |
 | +1     | -1    |
 
 #### Legal Moves

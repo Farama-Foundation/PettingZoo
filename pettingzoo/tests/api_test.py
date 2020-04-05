@@ -143,19 +143,20 @@ def play_test(env, observation_0):
 def test_observe(env, observation_0, save_obs):
     if save_obs:
         save_obs_folder = "saved_observations/{}".format(env.__module__)
-        os.makedirs(save_obs_folder,exist_ok=True)
+        os.makedirs(save_obs_folder, exist_ok=True)
 
     for agent in env.agent_order:
         observation = env.observe(agent)
         test_obervation(observation, observation_0)
         if save_obs:
-            fname = os.path.join(save_obs_folder,str(agent) + '.png')
+            fname = os.path.join(save_obs_folder, str(agent) + '.png')
             skimage.io.imsave(fname, observation)
 
 
 def test_render(env):
     render_modes = env.metadata.get('render.modes')
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
+    env.reset(observe=False)
     for mode in render_modes:
         for _ in range(10):
             for agent in env.agent_order:
