@@ -27,7 +27,7 @@ def manual_control(**kwargs):
 
                 # check if its a valid action
                 if env.board.squares[action] == 0:
-                    if env.agent_selection == 0:
+                    if env.agent_selection == env.agents[0]:
                         square.mark_x()
                     else:
                         square.mark_o()

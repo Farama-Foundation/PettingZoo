@@ -1,9 +1,13 @@
 import pettingzoo
+from pettingzoo.utils import agent_selector
 import warnings
 import numpy as np
+from copy import copy
 import gym
 import random
 import re
+import skimage
+import os
 
 
 def test_obervation(observation, observation_0):
@@ -136,15 +140,23 @@ def play_test(env, observation_0):
         assert observation is None, "step(observe=False) must not return anything"
 
 
-def test_observe(env, observation_0):
+def test_observe(env, observation_0, save_obs):
+    if save_obs:
+        save_obs_folder = "saved_observations/{}".format(env.__module__)
+        os.makedirs(save_obs_folder, exist_ok=True)
+
     for agent in env.agent_order:
         observation = env.observe(agent)
         test_obervation(observation, observation_0)
+        if save_obs:
+            fname = os.path.join(save_obs_folder, str(agent) + '.png')
+            skimage.io.imsave(fname, observation)
 
 
 def test_render(env):
     render_modes = env.metadata.get('render.modes')
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
+    env.reset(observe=False)
     for mode in render_modes:
         for _ in range(10):
             for agent in env.agent_order:
@@ -159,12 +171,73 @@ def test_render(env):
                     break
 
 
-def test_manual_control(env):
-    pass
+def test_agent_selector(env):
+    if not hasattr(env, "_agent_selector"):
+        warnings.warn("Env has no agent_selector object named _agent_selector")
+        return
+
+    assert hasattr(env, "agent_order"), "Env does not have agent_order"
+
+    env.reset(observe=False)
+    agent_order = copy(env.agent_order)
+    _agent_selector = agent_selector(agent_order)
+    agent_selection = _agent_selector.next()
+    assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
+    assert env.agent_selection == agent_selection, "env.agent_selection is not the same as the first agent in agent_order"
+
+    for _ in range(200):
+        agent = agent_selection
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
+        env.step(action, observe=False)
+
+        if all(env.dones.values()):
+            break
+
+        if agent_order == env.agent_order:
+            agent_selection = _agent_selector.next()
+            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
+        else:
+            previous_agent_selection_index = agent_order.index(agent_selection)
+            agent_order = copy(env.agent_order)
+            _agent_selector.reinit(agent_order)
+            skips = (previous_agent_selection_index + 1) % len(env.agents)
+            for _ in range(skips + 1):
+                agent_selection = _agent_selector.next()
+            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
-def api_test(env, render=False, manual_control=False):
+def inp_handler(name):
+    from pynput.keyboard import Key, Controller as KeyboardController
+    import time
+
+    keyboard = KeyboardController()
+    time.sleep(0.1)
+    for i in ['w', 'a', 's', 'd', Key.left, Key.right, Key.up, Key.down, Key.esc]:
+        keyboard.press(i)
+        time.sleep(0.1)
+        keyboard.release(i)
+
+
+def test_manual_control(manual_control):
+    import threading
+    manual_in_thread = threading.Thread(target=inp_handler, args=(1,))
+
+    manual_in_thread.start()
+
+    try:
+        manual_control()
+    except Exception:
+        raise Exception("manual_control() has crashed. Please fix it.")
+
+    manual_in_thread.join()
+
+
+def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
+    env_agent_sel = copy(env)
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
     observation = env.reset(observe=False)
@@ -172,6 +245,14 @@ def api_test(env, render=False, manual_control=False):
 
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
+
+    if save_obs:
+        for agent in env.agents:
+            assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
+            assert np.all(np.equal(env.observation_spaces[agent].low, 0)) and np.all(np.equal(env.observation_spaces[agent].high, 255)), "Observations must be 0 to 255 to save as image"
+            assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
+            if len(env.observation_spaces[agent].shape) == 3:
+                assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
 
     assert isinstance(env.agent_order, list), "agent_order must be a list"
 
@@ -189,14 +270,19 @@ def api_test(env, render=False, manual_control=False):
 
     test_rewards_dones(env, agent_0)
 
-    test_observe(env, observation_0)
+    test_observe(env, observation_0, save_obs=save_obs)
+
+    test_agent_selector(env_agent_sel)
+
+    if hasattr(env, "num_agents"):
+        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
 
     if render:
         test_render(env)
 
-    if manual_control:
-        test_manual_control(env)
-
-    env.close()
+    if manual_control is not None:
+        test_manual_control(manual_control)
+    else:
+        env.close()
 
     print("Passed API test")  # You only get here if you don't fail

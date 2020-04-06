@@ -16,39 +16,37 @@ class env(AECEnv):
     def __init__(self):
         super(env, self).__init__()
 
-        self.ch = Checkers()
+        self.ch = CheckersRules()
         self.num_agents = 2
-        self.agents = list(range(self.num_agents))
+        self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
         self.agent_order = list(self.agents)
 
-        self.action_spaces = {} #{i: spaces.Discrete(8 * 8 * 73) for i in range(2)}
-        self.observation_spaces = {} #{i: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for i in range(2)}
-        
+        self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
+        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
+        self.observation = np.zeros((8, 8, 2))
+
         self.reset()
 
     def observe(self, agent):
-        pass 
+        return self.observation[:, :, agent]
 
     def reset(self, observe=True):
         self.board = self.ch.initial_board()
+        self.observation[:, :, 0] = np.array(self.ch.flat_board())
+        self.observation[:, :, 1] = np.array(self.ch.flat_board())
         self.num_moves_max = 300
         self.num_moves = 0
         self.agent_selection = 0
-        self.rewards = {i: 0 for i in range(self.num_agents)}
-        self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': []} for i in range(self.num_agents)}
-        self.infos[self.agent_selection]['legal_moves'] = self.ch.legal_moves()
+        self.rewards = {name: 0 for name in self.agents}
+        self.dones = {name: False for name in self.agents}
+        self.infos = {name: {'legal_moves': []} for name in self.agents}
+        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = self.ch.legal_moves()
         self.winner = -1
-        
-        if observe:
-            return self.observe(0)
-        else:
-            return
             
     def step(self, action, observe=True):
         self.num_moves += 1
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
-
+        
         if turn == 'black':
             self.agent_selection = 0
         elif turn == 'white':
@@ -56,12 +54,16 @@ class env(AECEnv):
         else:
             raise ValueError
         
-        print("After " + str(self.num_moves) + " moves: " )
-        self.ch.print_board()
-        #print(self.board)
-        #print(self.agent_selection)
+        self.observation[:, :, self.agent_selection] = np.array(self.ch.flat_board())
         
-        self.infos[self.agent_selection]['legal_moves'] = moves 
+        print("After " + str(self.num_moves) + " moves: " )
+        #self.ch.print_board()
+        #print(self.agent_selection)
+        #print(self.observe(self.agent_selection))
+        #print(self.observation)
+
+        #self.infos[self.agent_selection]['legal_moves'] 
+        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = moves 
         #print(self.infos[self.agent_selection])
         
         if winner == None and self.num_moves > self.num_moves_max:
@@ -79,27 +81,23 @@ class env(AECEnv):
                 self.rewards[0] = -1
                 self.rewards[1] = 1
             else:
-                self.winner = -1
+                pass
 
         if observe:
             next_observation = self.observe(self.agent_selection)
         else:
             next_observation = None
-        return next_observation
+        return np.array(next_observation)
  
     def render(self, mode='human'):
-        print(self.board)
+        print(self.ch.flat_board())
 
     def close(self):
         pass
 
 
-class Checkers:
-    '''
-    The board is represented by the positions of all pieces of different types belonging to the two players.
-    The game state as the `board`, `turn`, `last_moved_piece`.
-    A move is represented by the origin and destination squares by the current player.
-    '''
+class CheckersRules:
+
     size = 8
     n_positions = int(size ** 2 // 2)
     n_per_row = int(size // 2)
@@ -138,7 +136,7 @@ class Checkers:
                 If the upper left corner of the board should be used. Default to be False.
         '''
         # assert size == 8, 'Only supports size 8.'
-        assert turn in Checkers.all_players, 'It must be either `black` or `white`\'s turn'
+        # assert turn in CheckersRules.all_players, 'It must be either `black` or `white`\'s turn'
         self.empty_corner = empty_corner
 
         # Game state
@@ -152,7 +150,7 @@ class Checkers:
         for sq in range(self.n_positions):
             row, col = self.sq2pos(sq)
             # For each direction
-            for di, (drow, dcol) in enumerate(Checkers.dir2del):
+            for di, (drow, dcol) in enumerate(CheckersRules.dir2del):
                 next_row, next_col = row + drow, col + dcol
                 # Out of bound
                 if not (0 <= next_row < self.size and 0 <= next_col < self.size):
@@ -203,7 +201,7 @@ class Checkers:
 
     @staticmethod
     def board_equal(board1, board2):
-        return Checkers.immutable_board(board1) == Checkers.immutable_board(board2)
+        return CheckersRules.immutable_board(board1) == CheckersRules.immutable_board(board2)
 
     @property
     def board(self):
@@ -289,7 +287,7 @@ class Checkers:
 
     def available_simple_moves(self, player, type, sq):
         simple_moves = []
-        for di in Checkers.legal_dirs[player][type]:
+        for di in CheckersRules.legal_dirs[player][type]:
             next_sq = self.neighbors[sq][di]
             # There is a neighboring square
             if next_sq is not None:
@@ -313,7 +311,7 @@ class Checkers:
         '''Returns the available jumps of `player`'s piece of `type` at `sq`.'''
         jumps = []
         adversary = 'black' if player == 'white' else 'white'
-        for di in Checkers.legal_dirs[player][type]:
+        for di in CheckersRules.legal_dirs[player][type]:
             capture_sq = self.neighbors[sq][di]
             # There is a neighboring square
             if capture_sq is not None:
@@ -373,20 +371,20 @@ class Checkers:
 
     def flat_board(self):
         # Empty board
-        board = np.ones((self.size, self.size), dtype='int') * Checkers.empty_square
+        board = np.ones((self.size, self.size), dtype='int') * CheckersRules.empty_square
         # Place the pieces
         for sq in self._board['black']['men']:
             row, col = self.sq2pos(sq)
-            board[row][col] = Checkers.black_man
+            board[row][col] = CheckersRules.black_man
         for sq in self._board['black']['kings']:
             row, col = self.sq2pos(sq)
-            board[row][col] = Checkers.black_king
+            board[row][col] = CheckersRules.black_king
         for sq in self._board['white']['men']:
             row, col = self.sq2pos(sq)
-            board[row][col] = Checkers.white_man
+            board[row][col] = CheckersRules.white_man
         for sq in self._board['white']['kings']:
             row, col = self.sq2pos(sq)
-            board[row][col] = Checkers.white_king
+            board[row][col] = CheckersRules.white_king
         return board
 
     def print_board(self):
@@ -438,34 +436,8 @@ class Checkers:
         self._turn = turn
         self._last_moved_piece = last_moved_piece
 
+
 """
-class Player():
-    '''An abstract player.'''
-
-    def __init__(self, color, seed=None):
-        assert color in Checkers.all_players, '`color` must be in %r.' % Checkers.all_players
-
-        # Which side is being played
-        self.color = color
-        # Internal simulator for rollouts
-        self.simulator = Checkers()
-        # Fixing the random state for easy replications
-        self.random = np.random.RandomState(seed=seed)
-
-    def next_move(self, board, last_moved_piece):
-        raise NotImplementedError
-
-class RandomPlayer(Player):
-    '''A player that makes random legal moves.'''
-
-    def next_move(self, board, last_moved_piece):
-        state = (board, self.color, last_moved_piece)
-        self.simulator.restore_state(state)
-        legal_moves = self.simulator.legal_moves()
-        move = self.random.choice(np.asarray(legal_moves, dtype='int,int'))
-        return move
-
-
 # Human keyboard player
 def keyboard_player_move(board, last_moved_piece):
     '''A player that uses keyboard to select moves.'''
@@ -476,35 +448,4 @@ def keyboard_player_move(board, last_moved_piece):
     from_sq, to_sq = map(int, input_str.strip().split(','))
     return from_sq, to_sq
 
-
-def play_a_game(checkers, black_player_move, white_player_move, max_plies=float('inf')):
-    # Play a quick game
-    players = {
-        'black': black_player_move,
-        'white': white_player_move,
-    }
-    ply = 0
-    tot_moves = 0
-    board, turn, last_moved_piece = checkers.save_state()
-    moves = checkers.legal_moves()
-    winner = None
-    while winner is None and ply < max_plies:
-        tot_moves += len(moves)
-        # The current game state
-        checkers.print_board()
-        print(ply, 'turn:', turn, 'last_moved_piece:', last_moved_piece)
-        print('%i legal moves %r' % (len(moves), moves))
-        # Select a legal move for the current player
-        from_sq, to_sq = players[turn](board, last_moved_piece)
-        print(turn, 'moved %i, %i' % (from_sq, to_sq))
-        print()
-        # Update the game
-        board, turn, last_moved_piece, moves, winner = checkers.move(from_sq, to_sq)
-        ply += 1
-    if winner is None:
-        print('draw')
-    else:
-        print('%s player wins' % winner)
-    print('total legal moves', tot_moves, 'avg branching factor', tot_moves / ply)
-    return winner
 """
