@@ -38,7 +38,7 @@ class env(AECEnv):
         self.agent_selection = 0
         self.continuous = continuous
         if self.continuous:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shaape=(1,))] * self.num_agents))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.num_agents))
         self.action_spaces = dict(
             zip(self.agents, [gym.spaces.Discrete(3)] * self.num_agents))
         self.observation_spaces = dict(
