@@ -6,7 +6,7 @@ from copy import copy
 import gym
 import random
 import re
-import skimage
+from skimage.io import imsave
 import os
 
 
@@ -150,7 +150,7 @@ def test_observe(env, observation_0, save_obs):
         test_obervation(observation, observation_0)
         if save_obs:
             fname = os.path.join(save_obs_folder, str(agent) + '.png')
-            skimage.io.imsave(fname, observation)
+            imsave(fname, observation)
 
 
 def test_render(env):
