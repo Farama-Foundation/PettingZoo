@@ -177,32 +177,32 @@ The *Observation Space* is encoded in 6 planes with 5x15 entries each. For each 
 
 ##### Encoding per plane.
 
-|                                          | 0<br><br>(3 Card) | 1<br><br>(4 Card) | 2<br><br>(5 Card) | 3<br><br>(6 Card) | 4<br><br>(7 Card) | 5<br><br>(8 Card) | 6<br><br>(9 Card) | 7<br><br>(10 Card) | 8<br><br>(J Card) | 9<br><br>(Q Card) | 10<br><br>(K Card) | 11<br><br>(A Card) | 12<br><br>(2 Card) | 13<br><br>(B Joker) | 14<br><br>(R Joker) |
+|                                          | 0<br>_(3 Card)_ | 1<br>_(4 Card)_ | 2<br>_(5 Card)_ | 3<br>_(6 Card)_ | 4<br>_(7 Card)_ | 5<br>_(8 Card)_ | 6<br>_(9 Card)_ | 7<br>_(10 Card)_ | 8<br>_(J Card)_ | 9<br>_(Q Card)_ | 10<br>_(K Card)_ | 11<br>_(A Card)_ | 12<br>_(2 Card)_ | 13<br>_(B Joker)_ | 14<br>_(R Joker)_ |
 |:----------------------------------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:------------------:|:-----------------:|:-----------------:|:------------------:|:------------------:|:------------------:|:-------------------:|:-------------------:|
-| 0<br><br>(0 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
-| 1<br><br>(1 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
-| 2<br><br>(2 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
-| 3<br><br>(3 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
-| 4<br><br>(4 matching cards of same rank) |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 0<br>_(0 matching cards of same rank)_ |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 1<br>_(1 matching cards of same rank)_ |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 2<br>_(2 matching cards of same rank)_ |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 3<br>_(3 matching cards of same rank)_ |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
+| 4<br>_(4 matching cards of same rank)_ |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool       |        Bool        |        Bool       |        Bool       |        Bool        |        Bool        |        Bool        |         Bool        |         Bool        |
 
 #### Action Space
 
-The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below. The core idea is to abstract actions by only focusing on the major combination and ignoring the kicker (e.g. a trio with single "4445" would be "444&ast")
+The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below. The core idea is to abstract actions by only focusing on the major combination and ignoring the kicker (e.g. a trio with single "4445" would be "444&ast;")
 
 | Action Type      | Description                                                                         | Number of Actions | Number of Actions after Abstraction | Action ID | Example                                                                                                                                                                                                                          |
 |------------------|-------------------------------------------------------------------------------------|:-----------------:|:-----------------------------------:|:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Solo             | Any single card                                                                     |         15        |                  15                 |    0-14   | `0`: 3, `1`: 4, ..., `12`: 2, `13`: Black Joker, `14`: Red Joker                                                                                                                                                                 |
 | Pair             | Two matching cards of equal rank                                                    |         13        |                  13                 |   15-27   | `15`: 33, `16`: 44, ..., `25`: KK, `26`: AA, `27`: 22                                                                                                                                                                            |
 | Trio             | Three matching cards of equal rank                                                  |         13        |                  13                 |   28-40   | `28`: 333, `29`: 444, ..., `38`: KKK, `39`: AAA, `40`: 222                                                                                                                                                                       |
-| Trio with single | Three matching cards of equal rank + single card of next higher rank (e.g. 3334)    |        182        |                  13                 |   41-53   | `41`: 333&ast, `42`: 444&ast, ..., `51`: KKK&ast, `52`: AAA&ast, `53`: 222&ast                                                                                                                                                   |
-| Trio with pair   | Three matching cards of equal rank + pair of cards of next higher rank (e.g. 33344) |        156        |                  13                 |   54-66   | `54`: 333&ast&ast, `55`: 444&ast&ast, ..., `64`: KKK&ast&ast, `65`: AAA&ast&ast, `66`: 222&ast&ast                                                                                                                               |
+| Trio with single | Three matching cards of equal rank + single card of next higher rank (e.g. 3334)    |        182        |                  13                 |   41-53   | `41`: 333&ast;, `42`: 444&ast;, ..., `51`: KKK&ast;, `52`: AAA&ast;, `53`: 222&ast;                                                                                                                                                   |
+| Trio with pair   | Three matching cards of equal rank + pair of cards of next higher rank (e.g. 33344) |        156        |                  13                 |   54-66   | `54`: 333&ast;&ast;, `55`: 444&ast;&ast;, ..., `64`: KKK&ast;&ast;, `65`: AAA&ast;&ast;, `66`: 222&ast;&ast;                                                                                                                               |
 | Chain of solo    | At least five consecutive solo cards                                                |         36        |                  36                 |   67-102  | `67`: 34567, `68`: 45678, ..., `100`: 3456789TJQK, `101`: 456789TJQKA, `102`: 3456789TJQKA                                                                                                                                       |
 | Chain of pair    | At least three consecutive pairs                                                    |         52        |                  52                 |  103-154  | `103`: 334455, `104`: 445566, ..., `152`: 33445566778899TTJJQQ, `153`: 445566778899TTJJQQKK, `154`: 5566778899TTJJQQKKAA                                                                                                         |
 | Chain of trio    | At least two consecutive trios                                                      |         45        |                  45                 |  155-199  | `155`: 333444, `156`: 444555, ..., `197`: 777888999TTTJJJQQQ, `198`: 888999TTTJJJQQQKKK, `199`: 999TTTJJJQQQKKKAAA                                                                                                               |
-| Plane with solo  | Two consecutive trios + 2 consecutive solo cards (e.g. 33344456)                    |       24721       |                  38                 |  200-237  | `200`: 333444&ast&ast, `201`: 444555&ast&ast, ..., `235`: 888999TTTJJJQQQ&ast&ast&ast&ast&ast, `236`: 999TTTJJJQQQKKK&ast&ast&ast&ast&ast, `237`: TTTJJJQQQKKKAAA&ast&ast&ast&ast&ast                                            |
-| Plane with pair  | Two consecutive trios + 2 consecutive pairs (e.g. 3334445566)                       |        6552       |                  30                 |  238-267  | `238`: 333444&ast&ast&ast&ast, `239`: 444555&ast&ast&ast&ast, ..., `265`: 999TTTJJJQQQ&ast&ast&ast&ast&ast&ast&ast&ast, `266`: TTTJJJQQQKKK&ast&ast&ast&ast&ast&ast&ast&ast, `267`: JJJQQQKKKAAA&ast&ast&ast&ast&ast&ast&ast&ast |
-| Quad with solo   | Four matching cards of equal rank + 2 consecutive solo cards (e.g 333345)           |        1339       |                  13                 |  268-280  | `268`: 3333&ast&ast, `269`: 4444&ast&ast, ..., `278`: KKKK&ast&ast, `279`: AAAA&ast&ast, `280`: 2222&ast&ast                                                                                                                     |
-| Quad with pair   | Four matching cards of equal rank + 2 consecutive pair (e.g 33334455)               |        1014       |                  13                 |  281-293  | `281`: 3333&ast&ast&ast&ast, `282`: 4444&ast&ast&ast&ast, ..., `291`: KKKK&ast&ast&ast&ast, `292`: AAAA&ast&ast&ast&ast, `293`: 2222&ast&ast&ast&ast                                                                             |
+| Plane with solo  | Two consecutive trios + 2 consecutive solo cards (e.g. 33344456)                    |       24721       |                  38                 |  200-237  | `200`: 333444&ast;&ast;, `201`: 444555&ast;&ast;, ..., `235`: 888999TTTJJJQQQ&ast;&ast;&ast;&ast;&ast;, `236`: 999TTTJJJQQQKKK&ast;&ast;&ast;&ast;&ast;, `237`: TTTJJJQQQKKKAAA&ast;&ast;&ast;&ast;&ast;                                            |
+| Plane with pair  | Two consecutive trios + 2 consecutive pairs (e.g. 3334445566)                       |        6552       |                  30                 |  238-267  | `238`: 333444&ast;&ast;&ast;&ast;, `239`: 444555&ast;&ast;&ast;&ast;, ..., `265`: 999TTTJJJQQQ&ast;&ast;&ast;&ast;&ast;&ast;&ast;&ast;, `266`: TTTJJJQQQKKK&ast;&ast;&ast;&ast;&ast;&ast;&ast;&ast;, `267`: JJJQQQKKKAAA&ast;&ast;&ast;&ast;&ast;&ast;&ast;&ast; |
+| Quad with solo   | Four matching cards of equal rank + 2 consecutive solo cards (e.g 333345)           |        1339       |                  13                 |  268-280  | `268`: 3333&ast;&ast;, `269`: 4444&ast;&ast;, ..., `278`: KKKK&ast;&ast;, `279`: AAAA&ast;&ast;, `280`: 2222&ast;&ast;                                                                                                                     |
+| Quad with pair   | Four matching cards of equal rank + 2 consecutive pair (e.g 33334455)               |        1014       |                  13                 |  281-293  | `281`: 3333&ast;&ast;&ast;&ast;, `282`: 4444&ast;&ast;&ast;&ast;, ..., `291`: KKKK&ast;&ast;&ast;&ast;, `292`: AAAA&ast;&ast;&ast;&ast;, `293`: 2222&ast;&ast;&ast;&ast;                                                                             |
 | Bomb             | Four matching cards of equal rank                                                   |         13        |                  13                 |  294-306  | `294`: 3333, `295`: 4444, ..., `304`: KKKK, `305`: AAAA, `306`: 2222                                                                                                                                                             |
 | Rocket           | Black Joker + Red Joker                                                             |         1         |                  1                  |    307    | `307`: Black Joker (B) + Red Joker (R)                                                                                                                                                                                           |
 | Pass             | Pass                                                                                |         1         |                  1                  |    308    | `308`: Pass                                                                                                                                                                                                                      |
@@ -247,15 +247,15 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and yo
 
 #### Observation Space
 
-The observation space is (5, 52) with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered from Ace of spades to King of spades, Ace of hearts to King of hearts, Ace of diamonds to King of diamonds, followed by the Ace of clubs to King of clubs.
+The observation space is (5, 52) with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered from Ace of spades to King of spades, Ace of heart to King of heart, Ace of diamond to King of diamond, followed by the Ace of club to King of club.
 
-|                                                           | 0<br><br>(A-Spades) | ... | 12<br><br>(K-Spades) | 13<br><br>(A-Hearts) | ... | 25<br><br>(K-Hearts) | 26<br><br>(A-Diamonds) | ... | 38<br><br>(K-Diamonds) | 39<br><br>(A-Clubs) | ... | 51<br><br>(K-Clubs) |
+|                                                           | 0<br>_(A-Spades)_ | ... | 12<br>_(K-Spades)_ | 13<br>_(A-Heart)_ | ... | 25<br>_(K-Heart)_ | 26<br>_(A-Diamond)_ | ... | 38<br>_(K-Diamond)_ | 39<br>_(A-Club)_ | ... | 51<br>_(K-Club)_ |
 |:---------------------------------------------------------:|:-------------------:|:---:|:--------------------:|:--------------------:|:---:|:--------------------:|:----------------------:|:---:|:----------------------:|:-------------------:|:---:|:-------------------:|
-|              0<br><br>(current player's hand)             |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
-|          1<br><br>(top card of the discard pile)          |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
-| 2<br><br>(cards in discard pile (excluding the top card)) |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
-|              3<br><br>(opponent known cards)              |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
-|                  4<br><br>(unknown cards)                 |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|              0<br>_(current player's hand)_             |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|          1<br>_(top card of the discard pile)_          |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+| 2<br>_(cards in discard pile (excluding the top card))_ |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|              3<br>_(opponent known cards)_              |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
+|                  4<br>_(unknown cards)_                 |         Bool        | ... |         Bool         |         Bool         | ... |         Bool         |          Bool          | ... |          Bool          |         Bool        | ... |         Bool        |
 
 #### Action Space
 
@@ -263,14 +263,14 @@ There are 110 actions in Gin Rummy.
 
 | Action ID | Action                                                                                                                                                                                 |
 |:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     0     | Score Player 0<br><br>Used after knock, gin, or dead hand to compute the player's hand.                                                                                                |
-|     1     | Score Player 1<br><br><br>Used after knock, gin, or dead hand to compute the player's hand.                                                                                            |
+|     0     | Score Player 0<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                |
+|     1     | Score Player 1<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                |
 |     2     | Draw a card                                                                                                                                                                            |
 |     3     | Pick top card from Discard pile                                                                                                                                                        |
 |     4     | Declare dead hand                                                                                                                                                                      |
 |     5     | Gin                                                                                                                                                                                    |
-|   6 - 57  | Discard a card<br><br>`6`: A-Spade, `7`: 2-Spade, ..., `18`: K-Spades<br>`19`: A-Hearts ... `31`: K-Hearts<br>`32`: A-Diamonds ... `44`: K-Diamonds<br>`45`: A-Clubs ... `57`: K-Clubs |
-|  58 - 109 | Knock<br><br>`58`: A-Spade, `59`: 2-Spade, ..., `70`: K-Spades<br>`71`: A-Hearts ... `83`: K-Hearts<br>`84`: A-Diamonds ... `96`: K-Diamonds<br>`97`: A-Clubs ... `109`: K-Clubs       |
+|   6 - 57  | Discard a card<br>_`6`: A-Spade, `7`: 2-Spade, ..., `18`: K-Spades<br>`19`: A-Heart ... `31`: K-Heart<br>`32`: A-Diamond ... `44`: K-Diamond<br>`45`: A-Club ... `57`: K-Club_ |
+|  58 - 109 | Knock<br>_`58`: A-Spade, `59`: 2-Spade, ..., `70`: K-Spades<br>`71`: A-Heart ... `83`: K-Heart<br>`84`: A-Diamond ... `96`: K-Diamond<br>`97`: A-Club ... `109`: K-Club_       |
 
 For example, you would use action `2` to draw a card or action `3` to pick up a discarded card. 
 
@@ -333,10 +333,10 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 |  Index  | Description                                                                  |
 |:-------:|------------------------------------------------------------------------------|
-|  0 - 2  | Current Player's Hand<br><br>`0`: J, `1`: Q, `2`: K                          |
-|  3 - 5  | Community Cards<br><br>`3`: J, `4`: Q, `5`: K                                |
-|  6 - 19 | Current Player's Chips<br><br>`6`: 0 chips, `7`: 1 chip, ..., `19`: 13 chips |
-| 20 - 33 | Opponent's Chips<br><br><br>`20`: 0 chips, `21`: 1 chip, ..., `33`: 13 chips |
+|  0 - 2  | Current Player's Hand<br>_`0`: J, `1`: Q, `2`: K_                            |
+|  3 - 5  | Community Cards<br>_`3`: J, `4`: Q, `5`: K_                                  |
+|  6 - 19 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `19`: 13 chips_   |
+| 20 - 33 | Opponent's Chips<br>_`20`: 0 chips, `21`: 1 chip, ..., `33`: 13 chips_       |
 
 #### Action Space
 
@@ -395,46 +395,46 @@ The observation space has a (6, 34, 4) shape with the first index representing t
 
 ##### Encoding per Plane
 
-|                          | 0<br><br>(Set 1) | 1<br><br>(Set 2) | 2<br><br>(Set 3) | 3<br><br>(Set 4) |
-|--------------------------|:----------------:|:----------------:|:----------------:|:----------------:|
-| 0<br><br>(Bamboo-1)      |       Bool       |       Bool       |       Bool       |       Bool       |
-| 1<br><br>(Bamboo-2)      |       Bool       |       Bool       |       Bool       |       Bool       |
-| ...                      |        ...       |        ...       |        ...       |        ...       |
-| 8<br><br>(Bamboo-9)      |       Bool       |       Bool       |       Bool       |       Bool       |
-| 9<br><br>(Characters-1)  |       Bool       |       Bool       |       Bool       |       Bool       |
-| ...                      |        ...       |        ...       |        ...       |        ...       |
-| 17<br><br>(Characters-9) |       Bool       |       Bool       |       Bool       |       Bool       |
-| 18<br><br>(Dots-1)       |       Bool       |       Bool       |       Bool       |       Bool       |
-| ...                      |        ...       |        ...       |        ...       |        ...       |
-| 26<br><br>(Dots-9)       |       Bool       |       Bool       |       Bool       |       Bool       |
-| 27<br><br>(Dragon-Green) |       Bool       |       Bool       |       Bool       |       Bool       |
-| 28<br><br>(Dragon-Red)   |       Bool       |       Bool       |       Bool       |       Bool       |
-| 29<br><br>(Dragon-White) |       Bool       |       Bool       |       Bool       |       Bool       |
-| 30<br><br>(Winds-East)   |       Bool       |       Bool       |       Bool       |       Bool       |
-| 31<br><br>(Winds-West)   |       Bool       |       Bool       |       Bool       |       Bool       |
-| 32<br><br>(Winds-North)  |       Bool       |       Bool       |       Bool       |       Bool       |
-| 33<br><br>(Winds-South)  |       Bool       |       Bool       |       Bool       |       Bool       |
+|                        | 0<br>_(Set 1)_   | 1<br>_(Set 2)_   | 2<br>_(Set 3)_   | 3<br>_(Set 4)_   |
+|------------------------|:----------------:|:----------------:|:----------------:|:----------------:|
+| 0<br>_(Bamboo-1)_      |       Bool       |       Bool       |       Bool       |       Bool       |
+| 1<br>_(Bamboo-2)_      |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                    |        ...       |        ...       |        ...       |        ...       |
+| 8<br>_(Bamboo-9)_      |       Bool       |       Bool       |       Bool       |       Bool       |
+| 9<br>_(Characters-1)_  |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                    |        ...       |        ...       |        ...       |        ...       |
+| 17<br>_(Characters-9)_ |       Bool       |       Bool       |       Bool       |       Bool       |
+| 18<br>_(Dots-1)_       |       Bool       |       Bool       |       Bool       |       Bool       |
+| ...                    |        ...       |        ...       |        ...       |        ...       |
+| 26<br>_(Dots-9)_       |       Bool       |       Bool       |       Bool       |       Bool       |
+| 27<br>_(Dragon-Green)_ |       Bool       |       Bool       |       Bool       |       Bool       |
+| 28<br>_(Dragon-Red)_   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 29<br>_(Dragon-White)_ |       Bool       |       Bool       |       Bool       |       Bool       |
+| 30<br>_(Winds-East)_   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 31<br>_(Winds-West)_   |       Bool       |       Bool       |       Bool       |       Bool       |
+| 32<br>_(Winds-North)_  |       Bool       |       Bool       |       Bool       |       Bool       |
+| 33<br>_(Winds-South)_  |       Bool       |       Bool       |       Bool       |       Bool       |
 
 #### Action Space
 
 The action space, as described by RLCard, is
 
-| Action ID   |     Action                  |
-| ----------- | :-------------------------: |
-| 0 ~ 8       | Bamboo-1 ~ Bamboo-9         |
-| 9 ~ 17      | Characters-1 ~ Character-9  |
-| 18 ~ 26     | Dots-1 ~ Dots-9             |
-| 27          | Dragons-green               |
-| 28          | Dragons-red                 |
-| 29          | Dragons-white               |
-| 30          | Winds-east                  |
-| 31          | Winds-west                  |
-| 32          | Winds-north                 |
-| 33          | Winds-south                 |
-| 34          | Pong                        |
-| 35          | Chow                        |
-| 36          | Gong                        |
-| 37          | Stand                       |
+| Action ID   | Action                                         |
+| :---------: | ---------------------------------------------- |
+| 0 - 8       | Bamboo<br>_`0`: 1, `1`: 2, ..., `8`: 9_        |
+| 9 - 17      | Characters<br>_`9`: 1, `10`: 2, ..., `17`: 9_  |
+| 18 - 26     | Dots<br>_`18`: 1, `19`: 2, ..., `26`: 9_       |
+| 27          | Dragons Green                                  |
+| 28          | Dragons Red                                    |
+| 29          | Dragons White                                  |
+| 30          | Winds East                                     |
+| 31          | Winds West                                     |
+| 32          | Winds North                                    |
+| 33          | Winds South                                    |
+| 34          | Pong                                           |
+| 35          | Chow                                           |
+| 36          | Gong                                           |
+| 37          | Stand                                          |
 
 For example, you would use action `34` to pong or action `37` to stand. 
 
@@ -471,7 +471,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 | :----: | :---: |
 | +1     | -1    |
 
-If the game ends in a draw, both players will recieve a reward of 0.
+If the game ends in a draw, both players will receive a reward of 0.
 
 ### Rock Paper Scissors Lizard Spock
 
@@ -495,8 +495,7 @@ If the game ends in a draw, both players will recieve a reward of 0.
 | :----: | :---: |
 | +1     | -1    |
 
-If the game ends in a draw, both players will recieve a reward of 0.
-
+If the game ends in a draw, both players will receive a reward of 0.
 
 ### Texas Hold'em
 
@@ -524,16 +523,41 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-
 
 The observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
 
-| Index   | Meaning                 |
-| ------- | :----------------------:|
-| 0~12    | Spade A ~ Spade K       |
-| 13~25   | Heart A ~ Heart K       |
-| 26~38   | Diamond A ~ Diamond K   |
-| 39~51   | Club A ~ Club K         |
-| 52~56   | Raise number in round 1 |
-| 37~61   | Raise number in round 2 |
-| 62~66   | Raise number in round 3 |
-| 67~71   | Raise number in round 4 |
+| Index     | Meaning                     | Values   |
+| :-------: | --------------------------- |----------|
+| 0         | Spade A                     | [0, 1]   |
+| 1         | Spade 2                     | [0, 1]   |
+| ...       | ...                         | ...      |
+| 12        | Spade K                     | [0, 1]   |
+| 13        | Heart A                     | [0, 1]   |
+| ...       | ...                         | ...      |
+| 25        | Heart K                     | [0, 1]   |
+| 26        | Diamond A                   | [0, 1]   |
+| ...       | ...                         | ...      |
+| 38        | Diamond K                   | [0, 1]   |
+| 39        | Club A                      | [0, 1]   |
+| ...       | ...                         | ...      |
+| 51        | Club  K                     | [0, 1]   |
+| 52        | 0 chips raised in Round 1   | [0, 1]   |
+| 53        | 1 chip  raised in Round 1   | [0, 1]   |
+| 54        | 2 chips raised in Round 1   | [0, 1]   |
+| 55        | 3 chips raised in Round 1   | [0, 1]   |
+| 56        | 4 chips raised in Round 1   | [0, 1]   |
+| 57        | 0 chips raised in Round 2   | [0, 1]   |
+| 58        | 1 chip  raised in Round 2   | [0, 1]   |
+| 59        | 2 chips raised in Round 2   | [0, 1]   |
+| 60        | 3 chips raised in Round 2   | [0, 1]   |
+| 61        | 4 chips raised in Round 2   | [0, 1]   |
+| 62        | 0 chips raised in Round 3   | [0, 1]   |
+| 63        | 1 chip  raised in Round 3   | [0, 1]   |
+| 64        | 2 chips raised in Round 3   | [0, 1]   |
+| 65        | 3 chips raised in Round 3   | [0, 1]   |
+| 66        | 4 chips raised in Round 3   | [0, 1]   |
+| 67        | 0 chips raised in Round 4   | [0, 1]   |
+| 68        | 1 chip  raised in Round 4   | [0, 1]   |
+| 69        | 2 chips raised in Round 4   | [0, 1]   |
+| 70        | 3 chips raised in Round 4   | [0, 1]   |
+| 71        | 4 chips raised in Round 4   | [0, 1]   |
 
 #### Action Space
 
@@ -581,23 +605,32 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-ho
 
 The observation space is similar to Texas Hold'em. The first 52 entries represent the current player's hand with any community card.
 
-| Index   | Meaning                     | Values   |
-| ------- | :-------------------------- |----------|
-| 0~12    | Spade A ~ Spade K           | [0, 1]   |
-| 13~25   | Heart A ~ Heart K           | [0, 1]   |
-| 26~38   | Diamond A ~ Diamond K       | [0, 1]   |
-| 39~51   | Club A ~ Club K             | [0, 1]   |
-| 52      | Number of Chips of player 1 | [0, 100] |
-| 53      | Number of Chips of player 2 | [0, 100] |
+| Index     | Meaning                     | Values   |
+| :-------: | --------------------------- |----------|
+| 0         | Spade A                     | [0, 1]   |
+| 1         | Spade 2                     | [0, 1]   |
+| ...       | ...                         | ...      |
+| 12        | Spade K                     | [0, 1]   |
+| 13        | Heart A                     | [0, 1]   |
+| ...       | ...                         | ...      |
+| 25        | Heart K                     | [0, 1]   |
+| 26        | Diamond A                   | [0, 1]   |
+| ...       | ...                         | ...      |
+| 38        | Diamond K                   | [0, 1]   |
+| 39        | Club A                      | [0, 1]   |
+| ...       | ...                         | ...      |
+| 51        | Club  K                     | [0, 1]   |
+| 52        | Number of Chips of player_0 | [0, 100] |
+| 53        | Number of Chips of player_1 | [0, 100] |
 
 #### Action Space
 
-| Action ID | Action                                                   |
-|:---------:|----------------------------------------------------------|
-|     0     | Call                                                     |
-|     1     | Raise                                                    |
-|     2     | Check                                                    |
-|  3 - 102  | Raise (`3`: 1 chip, `4`: 2 chips, ..., `102`: 100 chips) |
+| Action ID | Action                                                      |
+|:---------:|-------------------------------------------------------------|
+|     0     | Call                                                        |
+|     1     | Raise                                                       |
+|     2     | Check                                                       |
+|  3 - 102  | Raise<br>_`3`: 1 chip, `4`: 2 chips, ..., `102`: 100 chips_ |
 
 #### Rewards
 
@@ -665,46 +698,46 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can 
 The observation space has a shape of (7, 4, 15). The first index represent the plane, the second index the color, and the last index the card number (including any special card).
 
 | Plane | Feature                                                   |
-| ----- | :-------------------------------------------------------- |
+| :---: | --------------------------------------------------------- |
 | 0     | Player's Hand with 0 cards of the same color and number   |
 | 1     | Player's Hand with 1 card of the same color and number    |
 | 2     | Player's Hand with 2 cards of the same color and number   |
-| 3     | target card (top of the Discard pile)                     |
+| 3     | Target card (top of the Discard pile)                     |
 | 4     | Opponent's Hand with 0 cards of the same color and number |
 | 5     | Opponent's Hand with 1 cards of the same color and number |
 | 6     | Opponent's Hand with 2 cards of the same color and number |
 
 ##### Encoding per Plane
 
-|                   | 0<br><br>("0" card) | 1<br><br>("1" card) | 2<br><br>("2" card) | ... | 9<br><br>("9" card) | 10<br><br>("Wild" card) | 11<br><br>("Wild Draw Four" card) | 12<br><br>("Skip" card) | 13<br><br>("Draw Two" card) | 14<br><br>("Reverse" card) |
+|                     | 0<br>_("0" card)_ | 1<br>_("1" card)_ | 2<br>_("2" card)_ | ... | 9<br>_("9" card)_ | 10<br>_("Wild" card)_ | 11<br>_("Wild Draw Four" card)_ | 12<br>_("Skip" card)_ | 13<br>_("Draw Two" card)_ | 14<br>_("Reverse" card)_ |
 |:-----------------:|:-------------------:|:-------------------:|:-------------------:|:---:|:-------------------:|:-----------------------:|:---------------------------------:|:-----------------------:|:---------------------------:|:--------------------------:|
-|   0<br><br>(Red)  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
-|  1<br><br>(Green) |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
-|  2<br><br>(Blue)  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
-| 3<br><br>(Yellow) |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+|   **0<br>_(Red)_**  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+|  **1<br>_(Green)_** |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+|  **2<br>_(Blue)_**  |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
+| **3<br>_(Yellow)_** |         Bool        |         Bool        |         Bool        | ... |         Bool        |           Bool          |                Bool               |           Bool          |             Bool            |            Bool            |
 
 #### Action Space
 
 The action space is as described by RLCards.
 
 | Action ID |                                     Action                                     |
-|:---------:|:------------------------------------------------------------------------------:|
-|    0~9    | Red number cards<br><br>`0`: 0-Red, `1`: 1-Red, ..., `9`: 9-Red                |
-|   10~12   | Red action cards<br><br>`10`: Skip, `11`: Reverse, `12`: Draw 2                |
-|     13    | Red "wild" card                                                                |
-|     14    | Red "wild and draw 4" card                                                     |
-|   15~24   | Green number cards<br><br><br>`15`: 0-Green, `16`: 1-Green, ..., `24`: 9-Green |
-|   25~27   | Green action cards:<br><br>`25`: Skip, `26`: Reverse, `27`: Draw 2             |
-|     28    | Green "wild" card                                                              |
-|     29    | Green "wild and draw 4" card                                                   |
-|   30~39   | Blue number cards<br><br>`30`: 0-Blue, `31`: 1-Blue, ..., `39`: 9-Blue         |
-|   40~42   | Blue action cards<br><br>`40`: Skip, `41`: Reverse, `42`: Draw 2               |
-|     43    | Blue "wild" card                                                               |
-|     44    | Blue "wild and draw 4" card                                                    |
-|   45~54   | Yellow number cards<br><br>`45`: 0-Yellow, `46`: 1-Yellow, ..., `54`: 9-Yellow |
-|   55~57   | Yellow action cards<br><br>`55`: Skip, `56`: Reverse, `57`: Draw 2             |
-|     58    | <br>Yellow "wild" card                                                         |
-|     59    | Yellow "wild and draw 4" card                                                  |
+|:---------:| ------------------------------------------------------------------------------ |
+|  0 - 9    | Red number cards<br>_`0`: 0-Red, `1`: 1-Red, ..., `9`: 9-Red_                  |
+| 10 - 12   | Red action cards<br>_`10`: Skip, `11`: Reverse, `12`: Draw 2_                  |
+|     13    | Red "Wild" card                                                                |
+|     14    | Red "Wild and Draw 4" card                                                     |
+| 15 - 24   | Green number cards<br>_`15`: 0-Green, `16`: 1-Green, ..., `24`: 9-Green_       |
+| 25 - 27   | Green action cards<br>_`25`: Skip, `26`: Reverse, `27`: Draw 2_                |
+|     28    | Green "Wild" card                                                              |
+|     29    | Green "Wild and draw 4" card                                                   |
+| 30 - 39   | Blue number cards<br>_`30`: 0-Blue, `31`: 1-Blue, ..., `39`: 9-Blue_           |
+| 40 - 42   | Blue action cards<br>_`40`: Skip, `41`: Reverse, `42`: Draw 2_                 |
+|     43    | Blue "Wild" card                                                               |
+|     44    | Blue "Wild and Draw 4" card                                                    |
+| 45 - 54   | Yellow number cards<br>_`45`: 0-Yellow, `46`: 1-Yellow, ..., `54`: 9-Yellow_   |
+| 55 - 57   | Yellow action cards<br>_`55`: Skip, `56`: Reverse, `57`: Draw 2_               |
+|     58    | Yellow "Wild" card                                                             |
+|     59    | Yellow "Wild and Draw 4" card                                                  |
 |     60    | Draw                                                                           |
 
 For example, you would use action `6` to put down a red "6" card or action `60` to draw a card. 
