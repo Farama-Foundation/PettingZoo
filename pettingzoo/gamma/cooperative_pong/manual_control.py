@@ -1,13 +1,9 @@
 import numpy as np
 import pygame
-from pettingzoo.utils import save_image_observation
-from pettingzoo.utils import wrapper
-
 
 def manual_control(**kwargs):
     from .cooperative_pong import env as _env
     env = _env(**kwargs)
-    env = wrapper(env, color_reduction='B', down_scale=(10, 10), range_scale=(0, 255), new_dtype=np.float32, frame_stacking=4)
     env.reset(observe=True)
 
     quit_loop = 0

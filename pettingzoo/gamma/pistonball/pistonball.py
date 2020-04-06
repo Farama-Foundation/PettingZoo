@@ -12,6 +12,7 @@ from skimage import measure
 import gym
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from .manual_control import manual_control
 
 _image_library = {}
 
@@ -30,7 +31,8 @@ class env(AECEnv):
     def __init__(self, max_frames=500, continuous=False):
         super(env, self).__init__()
         self.num_agents = 20
-        self.agents = list(range(self.num_agents))
+        self.agents = ["piston_" + str(r) for r in range(self.num_agents)]
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
@@ -40,7 +42,7 @@ class env(AECEnv):
         self.action_spaces = dict(
             zip(self.agents, [gym.spaces.Discrete(3)] * self.num_agents))
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0.0, high=1.0, shape=(50, 30, 1), dtype=np.float32)] * self.num_agents))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(30, 200, 3), dtype=np.uint8)] * self.num_agents))
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
         self.clock = pygame.time.Clock()
@@ -94,7 +96,7 @@ class env(AECEnv):
 
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.frames = 0
         self.display_wait = 0.0
@@ -102,22 +104,9 @@ class env(AECEnv):
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
-        observation = np.rot90(observation, k=3)
-        observation = np.fliplr(observation)
-        # take blue channel only instead of doing full greyscale
-        observation = observation[257:457, 40:920, 2]
-
-        def mean(x, axis):
-            return np.mean(x, axis=axis, dtype=np.uint8)
-        observation = measure.block_reduce(
-            observation, block_size=(4, 4), func=mean)
-
-        i = agent
-        cropped = observation[:, i * 10:30 + i * 10]
-        unscaled_obs = np.expand_dims(cropped, axis=2)
-        cropped_obs = np.divide(
-            unscaled_obs, 255, dtype=np.float32)
-        return cropped_obs
+        i = self.agent_name_mapping[agent]
+        cropped = np.array(observation[i * 10:30 + i * 10, 257:457, :])
+        return cropped
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((960, 560))
@@ -190,7 +179,7 @@ class env(AECEnv):
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.frames = 0
 
@@ -251,9 +240,9 @@ class env(AECEnv):
                 agent, self.action_spaces[agent].n, action))
 
         if self.continuous:
-            self.move_piston(self.pistonList[agent], action)
+            self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
         else:
-            self.move_piston(self.pistonList[agent], action - 1)
+            self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
         self.space.step(1 / 30.0)
 
@@ -293,5 +282,4 @@ class env(AECEnv):
         if observe:
             return self.observe(self.agent_selection)
 
-from .manual_control import manual_control
-
+# Game art created by Justin Terry

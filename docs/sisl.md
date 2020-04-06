@@ -29,8 +29,9 @@ Please additionally cite
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
 
-
 `from pettingzoo.sisl import multiwalker`
+
+`agents= `
 
 *gif*
 
@@ -80,6 +81,8 @@ Add Gupta et al and DDPG paper results too
 | Graphical    | Either  | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
 
 `from pettingzoo.sisl import pursuit`
+
+`agents= `
 
 *gif*
 
@@ -151,6 +154,8 @@ Leaderboard:
 
 
 `from pettingzoo.sisl import waterworld`
+
+`agents= `
 
 *gif*
 

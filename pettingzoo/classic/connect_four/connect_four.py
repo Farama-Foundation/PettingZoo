@@ -1,9 +1,10 @@
 from pettingzoo import AECEnv
 from gym import spaces
-
 import numpy as np
-
 import warnings
+
+from .manual_control import manual_control
+
 
 class env(AECEnv):
     metadata = {'render.modes': ['ansi']}
@@ -22,12 +23,12 @@ class env(AECEnv):
 
         self.agent_order = list(self.agents)
 
-        self.action_spaces = {i: spaces.Discrete(6 * 7) for i in range(2)}
+        self.action_spaces = {i: spaces.Discrete(7) for i in range(2)}
         self.observation_spaces = {i: spaces.Box(low=0, high=2, shape=(6, 7), dtype=np.int8) for i in range(2)}
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0, len(self.board)))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(7))} for i in range(self.num_agents)}
 
         self.agent_selection = 0
 
@@ -47,28 +48,32 @@ class env(AECEnv):
     def observe(self, agent):
         return np.array(self.board).reshape(6, 7)
 
-    # action in this case is a value from 0 to 42 indicating position to move on the flat representation of the connect4 board
+    # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action, observe=True):
         # check if input action is a valid move (0 == empty spot)
-        if(self.board[action] == 0):
+        if(self.board[0:7][action] == 0):
             # valid move
-            self.board[action] = self.agent_selection + 1
+            for i in list(filter(lambda x: x % 7 == action, list(range(41, -1, -1)))):
+                if self.board[i] == 0:
+                    self.board[i] = self.agent_selection + 1
+                    break
 
             next_agent = 1 if (self.agent_selection == 0) else 0
 
             # update infos with valid moves
-            self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board)) if self.board[i] == 0]
-            self.infos[next_agent]['legal_moves'] = [i for i in range(len(self.board)) if self.board[i] == 0]
+            self.infos[self.agent_selection]['legal_moves'] = [i for i in range(7) if self.board[i] == 0]
+            self.infos[next_agent]['legal_moves'] = [i for i in range(7) if self.board[i] == 0]
 
             winner = self.check_for_winner()
 
-            # check if tie
-            if all(x in [1, 2] for x in self.board):
-                # once either play wins or there is a draw, game over, both players are done
-                self.dones = {i: True for i in range(self.num_agents)}
-            elif winner:
+            # check if there is a winner
+            if winner:
                 self.rewards[self.agent_selection] += 1
                 self.rewards[next_agent] -= 1
+                self.dones = {i: True for i in range(self.num_agents)}
+            # check if there is a tie
+            elif all(x in [1, 2] for x in self.board):
+                # once either play wins or there is a draw, game over, both players are done
                 self.dones = {i: True for i in range(self.num_agents)}
             else:
                 # no winner yet
@@ -80,13 +85,18 @@ class env(AECEnv):
             self.dones = {i: True for i in range(self.num_agents)}
             warnings.warn("Bad connect four move made, game terminating with current player losing. env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
+        if observe:
+            return self.observe(self.agent_selection)
+        else:
+            return
+
     def reset(self, observe=True):
         # reset environment
         self.board = [0] * (6 * 7)
 
         self.rewards = {i: 0 for i in range(self.num_agents)}
         self.dones = {i: False for i in range(self.num_agents)}
-        self.infos = {i: {'legal_moves': list(range(0, 6 * 7))} for i in range(self.num_agents)}
+        self.infos = {i: {'legal_moves': list(range(7))} for i in range(self.num_agents)}
 
         # selects the first agent
         self.agent_selection = 0
@@ -94,21 +104,48 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
         else:
             return
-    
-    def render(self, mode='human'):
+
+    def render(self, mode='ansi'):
         print(str(self.observe(self.agent_selection)))
 
     def close(self):
         pass
 
-    # return 0 for no winner
-    # return 1 for agent 0
-    # return 2 for agent 1
     def check_for_winner(self):
-        return 0
+        board = np.array(self.board).reshape(6, 7)
+        piece = self.agent_selection + 1
+
+        # Check horizontal locations for win
+        column_count = 7
+        row_count = 6
+
+        for c in range(column_count - 3):
+            for r in range(row_count):
+                if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+                    return True
+
+        # Check vertical locations for win
+        for c in range(column_count):
+            for r in range(row_count - 3):
+                if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+                    return True
+
+        # Check positively sloped diaganols
+        for c in range(column_count - 3):
+            for r in range(row_count - 3):
+                if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
+                    return True
+
+        # Check negatively sloped diaganols
+        for c in range(column_count - 3):
+            for r in range(3, row_count):
+                if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
+                    return True
+
+        return False
 
 # import pettingzoo as pz
-# env = pz.classic.connect4.env()
+# env = pz.classic.connect_four.env()
 
 # import pettingzoo as pz
-# env = pz.classic.connect4.manual_control()
+# env = pz.classic.connect_four.manual_control()

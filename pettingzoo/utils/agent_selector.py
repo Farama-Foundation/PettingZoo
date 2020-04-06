@@ -24,3 +24,9 @@ class agent_selector():
         Does not work as expected if you change the order
         '''
         return self.selected_agent == self.agent_order[-1]
+
+    def __eq__(self, other):
+        if not isinstance(other, agent_selector):
+            return NotImplemented
+
+        return self.agent_order == other.agent_order and self._current_agent == other._current_agent and self.selected_agent == other.selected_agent
