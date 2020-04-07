@@ -137,14 +137,7 @@ class Scenario(BaseScenario):
                 continue
             comm.append(other.state.c)
 
-        confer = np.array([0])
-
-        if world.agents[2].key is None:
-            confer = np.array([1])
-            key = np.zeros(world.dim_c)
-            goal_color = np.zeros(world.dim_c)
-        else:
-            key = world.agents[2].key
+        key = world.agents[2].key
 
         prnt = False
         # speaker
@@ -152,18 +145,18 @@ class Scenario(BaseScenario):
             if prnt:
                 print('speaker')
                 print(agent.state.c)
-                print(np.concatenate([goal_color] + [key] + [confer] + [np.random.randn(1)]))
+                print(np.concatenate([goal_color] + [key]))
             return np.concatenate([goal_color] + [key])
         # listener
         if not agent.speaker and not agent.adversary:
             if prnt:
                 print('listener')
                 print(agent.state.c)
-                print(np.concatenate([key] + comm + [confer]))
+                print(np.concatenate([key] + comm))
             return np.concatenate([key] + comm)
         if not agent.speaker and agent.adversary:
             if prnt:
                 print('adversary')
                 print(agent.state.c)
-                print(np.concatenate(comm + [confer]))
+                print(np.concatenate(comm))
             return np.concatenate(comm)
