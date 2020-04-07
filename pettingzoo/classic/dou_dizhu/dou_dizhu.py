@@ -38,6 +38,9 @@ class env(AECEnv):
     def _convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
+    def _scale_rewards(self, reward):
+        return 2 * reward - 1
+
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs']
@@ -58,7 +61,7 @@ class env(AECEnv):
             obs, next_player_id = self.env.step(action)
             self._last_obs = obs['obs']
             if self.env.is_over():
-                self.rewards = self._convert_to_dict(self.env.get_payoffs())
+                self.rewards = self._convert_to_dict(self._scale_rewards(self.env.get_payoffs()))
                 self.dones = self._convert_to_dict([True for _ in range(self._num_agents)])
                 self.infos[self._int_to_name(next_player_id)]['legal_moves'] = [308]
             else:
