@@ -288,4 +288,10 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     else:
         env.close()
 
+    # test that if env has overridden render(), they must have overridden close() as well
+    base_render = pettingzoo.utils.env.AECEnv.render
+    base_close = pettingzoo.utils.env.AECEnv.close
+    if base_render != env.__class__.render:
+        assert (base_close != env.__class__.close), "If render method defined, then close method required"
+
     print("Passed API test")  # You only get here if you don't fail
