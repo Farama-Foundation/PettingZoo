@@ -170,7 +170,6 @@ def test_render(env):
                     env.reset()
                     break
 
-
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
         warnings.warn("Env has no agent_selector object named _agent_selector")
@@ -215,7 +214,10 @@ def inp_handler(name):
 
     keyboard = KeyboardController()
     time.sleep(0.1)
-    for i in ['w', 'a', 's', 'd', Key.left, Key.right, Key.up, Key.down, Key.esc]:
+    choices = ['w', 'a', 's', 'd', 'j', 'k', Key.left, Key.right, Key.up, Key.down]
+    NUM_TESTS = 50
+    for x in range(NUM_TESTS):
+        i = random.choice(choices) if x != NUM_TESTS - 1 else Key.esc
         keyboard.press(i)
         time.sleep(0.1)
         keyboard.release(i)
@@ -284,5 +286,13 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
         test_manual_control(manual_control)
     else:
         env.close()
+
+    # test that if env has overridden render(), they must have overridden close() as well
+    base_render = pettingzoo.utils.env.AECEnv.render
+    base_close = pettingzoo.utils.env.AECEnv.close
+    if base_render != env.__class__.render:
+        assert (base_close != env.__class__.close), "If render method defined, then close method required"
+    else:
+        warnings.warn("environment has not defined a render() method")
 
     print("Passed API test")  # You only get here if you don't fail
