@@ -39,6 +39,7 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def _scale_rewards(self, reward):
+        # Maps 1 to 1 and 0 to -1
         return 2 * reward - 1
 
     def observe(self, agent):
