@@ -80,13 +80,10 @@ class env(AECEnv):
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.metadata = {'render.modes': ['human']}
         self.rendering = False
         self.max_frames = max_frames
-
+        self.reinit()
         pygame.init()
         self.clock = pygame.time.Clock()
         self.num_frames = 0
@@ -141,8 +138,6 @@ class env(AECEnv):
             self.prisoners[p].set_sprite(self.sprite_list[sprite])
             sprite = (sprite + 1) % len(self.sprite_list)
 
-        self.frames = 0
-        self.reset()
 
     def create_walls(self):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
@@ -216,9 +211,17 @@ class env(AECEnv):
             sub_screen = np.array(capture[x1:x2, y1:y2, :])
             return sub_screen
 
+    def reinit(self):
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
+        self.done_val = False
+        self.num_frames = 0
+        self.dones = {agent : False for agent in self.agents}
+        
     def reset(self, observe=True):
         self.num_frames = 0
-        self.done_val = False
+        self.reinit()
 
         prisoner_spawn_locs = [(200, 150 - 40, 50, 350, (50, 50, 350, 150)),
                                (550, 150 - 40, 400, 700, (400, 50, 700, 150)),
