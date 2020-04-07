@@ -89,7 +89,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 
 `pettingzoo.classic.chess`
 
-`agents= `
+`agents= ['player_1', 'player_2']`
 
 *gif*
 
