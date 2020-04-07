@@ -170,7 +170,6 @@ def test_render(env):
                     env.reset()
                     break
 
-
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
         warnings.warn("Env has no agent_selector object named _agent_selector")
@@ -293,5 +292,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     base_close = pettingzoo.utils.env.AECEnv.close
     if base_render != env.__class__.render:
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
+    else:
+        warnings.warn("environment has not defined a render() method")
 
     print("Passed API test")  # You only get here if you don't fail
