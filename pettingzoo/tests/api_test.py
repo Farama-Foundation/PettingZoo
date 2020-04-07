@@ -244,6 +244,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
+    assert not any(env.dones.values()), "dones must all be False after reset"
 
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
