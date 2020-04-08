@@ -214,10 +214,10 @@ class wrapper(AECEnv):
             obs_space = self.observation_spaces[agent]
             dtype = obs_space.dtype
             down_scale = self.down_scale[agent]
-            shape = obs_space.shape
-            new_shape = tuple([int(shape[i] / down_scale[i]) for i in range(len(shape))])
-            low = obs_space.low.flatten()[:np.product(new_shape)].reshape(new_shape)
-            high = obs_space.high.flatten()[:np.product(new_shape)].reshape(new_shape)
+            self.dtype_before_down_scale = copy.copy(dtype)
+            mean = lambda x, axis: np.mean(x, axis=axis, dtype=dtype)
+            low = measure.block_reduce(obs_space.low, block_size=down_scale, func=mean)
+            high = measure.block_reduce(obs_space.high, block_size=down_scale, func=mean)
             self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: down_scale", self.observation_spaces)
 
@@ -300,7 +300,8 @@ class wrapper(AECEnv):
 
     def _down_scale_obs(self, obs, agent):
         down_scale = self.down_scale[agent]
-        mean = lambda x, axis: np.mean(x, axis=axis, dtype=np.uint8)
+        self.dtype_before_down_scale = copy.copy(dtype)
+        mean = lambda x, axis: np.mean(x, axis=axis, dtype=self.dtype_before_down_scale)
         obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
         return obs
 
