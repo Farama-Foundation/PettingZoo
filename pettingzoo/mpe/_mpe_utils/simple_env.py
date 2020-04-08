@@ -46,12 +46,15 @@ class SimpleEnv(AECEnv):
 
         self.viewer = None
 
-        self.reset()
+        self.has_reset = False
 
     def observe(self, agent):
+        assert self.has_reset, "reset() needs to be called before observe"
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
+        self.has_reset = True
+
         self.scenario.reset_world(self.world)
 
         self.rewards = {name: 0. for name in self.agents}
@@ -128,6 +131,8 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        assert self.has_reset, "reset() needs to be called before step"
+        assert self.action_spaces[self.agent_selection].contains(action), "action must be in the env.action_spaces[env.agent_selection]. Action is: {}".format(action)
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self._num_agents
         self.agent_selection = self.agent_order[next_idx]

@@ -237,10 +237,41 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
+def check_asserts(fn):
+    try:
+        fn()
+        return False
+    except AssertionError:
+        return True
+    except Exception:
+        return False
+
+def test_requires_reset(env):
+    first_agent = env.agent_selection
+    first_action_space = env.action_spaces[first_agent]
+    assert check_asserts(lambda: env.step(first_action_space.sample())), "env.step should assert before a reset"
+    assert check_asserts(lambda: env.observe(first_agent)), "env.observe should assert before a reset"
+
+
+def test_bad_actions(env):
+    env.reset()
+    first_action_space = env.action_spaces[env.agent_selection]
+    if isinstance(first_action_space, gym.spaces.Box):
+        assert check_asserts(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
+        assert check_asserts(lambda: env.step(np.ones((29,67,17)))), "actions of a shape not equal to the box should assert with a helpful error message"
+    elif isinstance(first_action_space, gym.spaces.Discrete):
+        assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+
+    env.reset()
+
+
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     env_agent_sel = copy(env)
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
+
+    # do this before reset
+    test_requires_reset(env)
 
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
@@ -264,6 +295,8 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observation_action_spaces(env, agent_0)
 
     play_test(env, observation_0)
+
+    test_bad_actions(env)
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
