@@ -299,6 +299,8 @@ If the hand is declared dead, both players get a reward equal to negative of the
 | Knock<br>_Knocking player: +0.2_ |   --   | -deadwood_count/100                                 |
 | Gin<br>_Going Gin Player: +1_    |   --   | -deadwood_count/100                                 |
 
+Penalties of deadwood_count/100 ensure that the reward never goes below -1.
+
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
