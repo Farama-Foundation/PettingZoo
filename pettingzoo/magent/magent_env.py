@@ -54,3 +54,39 @@ class env(AECEnv):
 
     def clear_dead(self):
         self.env.clear_dead()
+
+    def get_handles(self):
+        return self.env.get_handles()
+
+    def get_num_agents(self, handle):
+        return self.env.get_num(handle)
+
+    def get_action_space(self, handle):
+        return self.env.get_action_space(handle)
+
+    def get_view_space(self, handle):
+        return self.env.get_view_space(handle)
+
+    def get_feature_space(self, handle):
+        return self.env.get_feature_space(handle)
+
+    def get_agent_id(self, handle):
+        return self.env.get_agent_id(handle)
+
+    def get_alive(self, handle):
+        return self.env.get_alive(handle)
+
+    def get_pos(self, handle):
+        return self.env.get_pos(handle)
+
+    def get_view2attack(self, handle):
+        return self.env.get_view2attack(handle)
+
+    def get_global_minimap(self, height, width):
+        return self.env.get_global_minimap(height, width)
+
+    def set_seed(self, seed):
+        self.env.set_seed(seed)
+
+    def set_render_dir(self, name):
+        self.env.set_render_dir(name)

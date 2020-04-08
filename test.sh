@@ -1,5 +1,4 @@
 # Classic
-
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401
 # python3 -m pettingzoo.tests.ci_test classic/backgammon
 # python3 -m pettingzoo.tests.ci_test classic/checkers
@@ -43,3 +42,7 @@ flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401
 python3 -m pettingzoo.tests.ci_test sisl/multiwalker
 python3 -m pettingzoo.tests.ci_test sisl/pursuit
 python3 -m pettingzoo.tests.ci_test sisl/waterworld
+
+#MAgent
+flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401
+python3 -m pettingzoo.tests.ci_test magent
