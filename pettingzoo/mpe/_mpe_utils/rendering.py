@@ -267,16 +267,23 @@ class TextLine:
         self.idx = idx
         self.window = window
         pyglet.font.add_file(os.path.join(os.path.dirname(__file__), "secrcode.ttf"))
+        self.label = None
         self.set_text('')
 
     def render(self):
-        self.label.draw()
+        if self.label is not None:
+            self.label.draw()
 
     def set_text(self, text):
-        assert pyglet.font.have_font('Secret Code'), "font not supported"
+        if pyglet.font.have_font('Courier'):
+            font = "Courier"
+        elif pyglet.font.have_font('Secret Code'):
+            font = "Secret Code"
+        else:
+            return
 
         self.label = pyglet.text.Label(text,
-                                       font_name='Secret Code',
+                                       font_name=font,
                                        color=(0, 0, 0, 255),
                                        font_size=25,
                                        x=0, y=self.idx * 40 + 20,
