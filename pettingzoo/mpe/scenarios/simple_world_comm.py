@@ -22,7 +22,7 @@ class Scenario(BaseScenario):
             base_index = i - 1 if i < num_adversaries else i - num_adversaries
             base_index = 0 if base_index < 0 else base_index
             base_name = "adversary" if agent.adversary else "agent"
-            base_name = "lead_adversary" if i == 0 else base_name
+            base_name = "leadadversary" if i == 0 else base_name
             agent.name = '{}_{}'.format(base_name, base_index)
             agent.collide = True
             agent.leader = True if i == 0 else False
