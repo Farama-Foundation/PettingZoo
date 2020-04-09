@@ -75,7 +75,7 @@ class Viewer(object):
         self.close()
 
     def set_max_size(self, current_size):
-        max_size = self.max_size = max(current_size,self.max_size)
+        max_size = self.max_size = max(current_size, self.max_size)
         left = -max_size
         right = max_size
         bottom = -max_size
@@ -98,7 +98,6 @@ class Viewer(object):
         self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()
-        scale_val = self.transform.scale[0]
         self.transform.enable()
         for geom in self.geoms:
             geom.render()
@@ -109,7 +108,6 @@ class Viewer(object):
         pyglet.gl.glMatrixMode(pyglet.gl.GL_PROJECTION)
         pyglet.gl.glLoadIdentity()
         gluOrtho2D(0, self.window.width, 0, self.window.height)
-        #gluOrtho2D(0, self.window.width, 0, self.window.height)
         for geom in self.text_lines:
             geom.render()
 
@@ -213,9 +211,6 @@ class Transform(Attr):
         glRotatef(RAD2DEG * self.rotation, 0, 0, 1.0)
         glScalef(self.scale[0], self.scale[1], 1)
 
-    def inv_scale(self):
-        glScalef(1/self.scale[0], 1/self.scale[1], 1)
-
     def disable(self):
         glPopMatrix()
 
@@ -266,27 +261,29 @@ class Point(Geom):
         glVertex3f(0.0, 0.0, 0.0)
         glEnd()
 
+
 class TextLine:
     def __init__(self, window, idx):
         self.idx = idx
         self.window = window
-        pyglet.font.add_file(os.path.join(os.path.dirname(__file__),"secrcode.ttf"))
+        pyglet.font.add_file(os.path.join(os.path.dirname(__file__), "secrcode.ttf"))
         self.set_text('')
 
     def render(self):
         self.label.draw()
 
-    def set_text(self,text):
+    def set_text(self, text):
         assert pyglet.font.have_font('Secret Code'), "font not supported"
 
         self.label = pyglet.text.Label(text,
-                                  font_name='Secret Code',
-                                  color=(0,0,0,255),
-                                  font_size=25,#,x=0.1,y=0.2)
-                                  x=0,y=self.idx*40+20,
-                                  anchor_x="left",anchor_y="bottom")#,
+                                       font_name='Secret Code',
+                                       color=(0, 0, 0, 255),
+                                       font_size=25,
+                                       x=0, y=self.idx * 40 + 20,
+                                       anchor_x="left", anchor_y="bottom")
 
         self.label.draw()
+
 
 class FilledPolygon(Geom):
     def __init__(self, v):
