@@ -329,7 +329,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 `pettingzoo.mpe import simple_world_comm`
 
-`agents=[lead_adversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]`
+`agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]`
 
 *gif*
 
