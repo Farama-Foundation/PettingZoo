@@ -19,7 +19,7 @@ class Scenario(BaseScenario):
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
             agent.adversary = True if i < num_adversaries else False
-            base_index = i-1 if i < num_adversaries else i - num_adversaries
+            base_index = i - 1 if i < num_adversaries else i - num_adversaries
             base_index = 0 if base_index < 0 else base_index
             base_name = "adversary" if agent.adversary else "agent"
             base_name = "lead_adversary" if i == 0 else base_name
