@@ -4,25 +4,29 @@ from .._mpe_utils.scenario import BaseScenario
 
 
 class Scenario(BaseScenario):
-    def make_world(self):
+    def make_world(self, num_good_agents=2, num_adversaries=4, num_landmarks=1, num_food=2, num_forests=2):
         world = World()
         # set any world properties first
         world.dim_c = 4
         # world.damping = 1
-        num_good_agents = 2
-        num_adversaries = 4
+        num_good_agents = num_good_agents
+        num_adversaries = num_adversaries
         num_agents = num_adversaries + num_good_agents
-        num_landmarks = 1
-        num_food = 2
-        num_forests = 2
+        num_landmarks = num_landmarks
+        num_food = num_food
+        num_forests = num_forests
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent %d' % i
+            agent.adversary = True if i < num_adversaries else False
+            base_index = i-1 if i < num_adversaries else i - num_adversaries
+            base_index = 0 if base_index < 0 else base_index
+            base_name = "adversary" if agent.adversary else "agent"
+            base_name = "lead_adversary" if i == 0 else base_name
+            agent.name = '{}_{}'.format(base_name, base_index)
             agent.collide = True
             agent.leader = True if i == 0 else False
             agent.silent = True if i > 0 else False
-            agent.adversary = True if i < num_adversaries else False
             agent.size = 0.075 if agent.adversary else 0.045
             agent.accel = 3.0 if agent.adversary else 4.0
             # agent.accel = 20.0 if agent.adversary else 25.0
@@ -175,7 +179,7 @@ class Scenario(BaseScenario):
         for food in world.food:
             if self.is_collision(agent, food):
                 rew += 2
-        rew += 0.05 * min([np.sqrt(np.sum(np.square(food.state.p_pos - agent.state.p_pos))) for food in world.food])
+        rew -= 0.05 * min([np.sqrt(np.sum(np.square(food.state.p_pos - agent.state.p_pos))) for food in world.food])
 
         return rew
 

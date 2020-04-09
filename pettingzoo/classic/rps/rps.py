@@ -19,8 +19,9 @@ class env(AECEnv):
 
     def __init__(self):
         self.num_agents = 2
-        self.agents = list(range(0, self.num_agents))
-        self.agent_order = list(range(0, self.num_agents))
+        self.agents = ["player_" + str(r) for r in range(self.num_agents)]
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
+        self.agent_order = self.agents[:]
 
         self.action_spaces = {agent: Discrete(3) for agent in self.agents}
         self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
@@ -39,11 +40,11 @@ class env(AECEnv):
         self.num_moves = 0
 
     def render(self, mode="human"):
-        print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[0]], MOVES[self.state[1]]))
+        print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
 
     def observe(self, agent):
         # observation of one agent is the previous state of the other
-        return self.observations[agent]
+        return np.array(self.observations[agent])
 
     def close(self):
         pass
@@ -51,7 +52,7 @@ class env(AECEnv):
     def reset(self, observe=True):
         self.reinit()
         if observe:
-            return self.observe(0)
+            return self.observe(self.agent_selection)
 
     def step(self, action, observe=True):
         agent = self.agent_selection
@@ -64,7 +65,7 @@ class env(AECEnv):
 
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
-            self.rewards[0], self.rewards[1] = {
+            self.rewards[self.agents[0]], self.rewards[self.agents[1]] = {
                 (rock, rock): (0, 0),
                 (rock, paper): (-1, 1),
                 (rock, scissors): (1, -1),
@@ -74,16 +75,16 @@ class env(AECEnv):
                 (scissors, rock): (-1, 1),
                 (scissors, paper): (1, -1),
                 (scissors, scissors): (0, 0),
-            }[(self.state[0], self.state[1])]
+            }[(self.state[self.agents[0]], self.state[self.agents[0]])]
 
             self.num_moves += 1
             self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
 
             # observe the current state
             for i in self.agents:
-                self.observations[i] = self.state[1 - i]
+                self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
-            self.state[1 - agent] = none
+            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
 
         self.agent_selection = self._agent_selector.next()
         if observe:

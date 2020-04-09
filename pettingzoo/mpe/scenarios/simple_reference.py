@@ -12,7 +12,7 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(2)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent %d' % i
+            agent.name = 'agent_{}'.format(i)
             agent.collide = False
         # add landmarks
         world.landmarks = [Landmark() for i in range(3)]
@@ -56,7 +56,7 @@ class Scenario(BaseScenario):
     def reward(self, agent, world):
         if agent.goal_a is None or agent.goal_b is None:
             return 0.0
-        dist2 = np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos))
+        dist2 = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
         return -dist2
 
     def observation(self, agent, world):
