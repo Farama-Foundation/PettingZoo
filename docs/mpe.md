@@ -29,7 +29,7 @@ The simple_reference, simple_speaker_listener, and simple_spread environments ar
 
 * Landmarks: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more details for each environment.
 
-* Visibility: When an agent is visible to another, the other agent can see its
+* Visibility: When an agent is visible to another, the other agent's observation contains the agent's relative position (and in simple_world_comm and simple_tag, the agent's velocity). If the agent is temporarily hidden (only possible in simple_world_comm) the agent's position and velocity is set to zero.
 
 * Communication: Some agents in some environments can broadcast a message as part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In simple_crypto, this message is also used to signal that Bob and Eve have reconstructed the message.
 
@@ -117,9 +117,13 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 In this environment, there is 1 adversary (red), N good agents (green), N landmarks (default N=2). All agents observe the position of landmarks and other agents. One landmark is the ‘target landmark’ (colored green). Good agents are rewarded based on how close one of them is to the target landmark, but negatively rewarded based on how close the adversary is to the target landmark. The adversary is rewarded based on distance to the target, but it doesn’t know which landmark is the target landmark. This means good agents have to learn to ‘split up’ and cover all landmarks to deceive the adversary.
 
-Agent Observation space: `[self_pos, self_vel, goal_rel_position, landmark_rel_position, other_agent_rel_positions]`
+Agent observation space: `[self_pos, self_vel, goal_rel_position, landmark_rel_position, other_agent_rel_positions]`
 
 Adversary observation space: `[landmark_rel_position, other_agents_rel_positions]`
+
+Agent action space: `movement(5)`
+
+Adversary action space: `movement(5)`
 
 ```
 simple_adversary.env(N=2, max_frames=500)
@@ -148,11 +152,17 @@ max_frames: number of frames (a step for each agent) until game terminates
 In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded if Bob reconstructs the message, but are negatively rewarded if Eve reconstruct the message. Eve is rewarded based on how well it can reconstruct the signal. Alice and Bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message.
 
 
-Alice Observation space: `[message, private_key]`
+Alice observation space: `[message, private_key]`
 
-Bob Observation space: `[private_key, alices_comm]`
+Bob observation space: `[private_key, alices_comm]`
 
-Eve's observation space: `[alices_comm]`
+Eve observation space: `[alices_comm]`
+
+Alice action space: `communication(4)`
+
+Bob action space: `communication(4)`
+
+Eve action space: `communication(4)`
 
 ```
 simple_crypto.env(max_frames=500)
@@ -179,10 +189,13 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.
 
-Agent Observation space: `[self_vel, goal_rel_position, goal_landmark_id, all_landmark_rel_positions, landmark_ids, other_agent_rel_positions]`
+Agent observation space: `[self_vel, goal_rel_position, goal_landmark_id, all_landmark_rel_positions, landmark_ids, other_agent_rel_positions]`
 
-Adversary Observation space: `[self_vel, all_landmark_rel_positions, other_agent_rel_positions]`
+Adversary observation space: `[self_vel, all_landmark_rel_positions, other_agent_rel_positions]`
 
+Agent action space: `movement(5)`
+
+Adversary action space: `movement(5)`
 
 ```
 simple_push.env(max_frames=500)
@@ -209,7 +222,10 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. The reward is collective, so agents have to learn to communicate the goal of the other agent, and navigate to their landmark. Both agents are simultaneous speakers and listeners.
 
-Agent Observation space: `[self_vel, all_landmark_rel_positions, landmark_ids, goal_id, communication]`
+Agent observation space: `[self_vel, all_landmark_rel_positions, landmark_ids, goal_id, communication]`
+
+Agent action space: `communication(10) X movement(5)`
+
 
 ```
 simple_reference.env(max_frames=500)
@@ -235,10 +251,13 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 
-Speaker: `[goal_id]`
+Speaker observation space: `[goal_id]`
 
-Listener: `[self_vel, all_landmark_rel_positions, communication]`
+Listener observation space: `[self_vel, all_landmark_rel_positions, communication]`
 
+Speaker action space: `communication(10)`
+
+Listener action space: `movement(5)`
 
 ```
 simple_speaker_listener.env(max_frames=500)
@@ -265,6 +284,8 @@ max_frames: number of frames (a step for each agent) until game terminates
 This environment has N agents, N landmarks (default N=3). The agents are rewarded based on how far the closest agent is to each landmark (sum of the minimum distances), but are penalized if they collide with other agents (-1 for each collision). Agents must learn to cover all the landmarks while avoiding collisions.
 
 Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, communication]`
+
+Agent action space: `movement(5)`
 
 ```
 simple_spread.env(N=3, max_frames=500)
@@ -305,6 +326,7 @@ def bound(x):
 
 Agent and adversary observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities]`
 
+Agent and adversary action space: `movement(5)`
 
 ```
 simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
@@ -346,7 +368,13 @@ Normal adversary observations:`[self_vel, self_pos, landmark_rel_positions, othe
 
 Adversary leader observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, leader_comm]`
 
-Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).
+*Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).*
+
+Good agent action space: `movement(5)`
+
+Normal adversary action space: `movement(5)`
+
+Adversary leader observation space: `communication(4) X movement(5)`
 
 
 ```
