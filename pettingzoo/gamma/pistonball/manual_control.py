@@ -17,7 +17,7 @@ def manual_control(**kwargs):
     done = False
     quit_game = 0
     pygame.key.set_repeat(20, 0)
-    num_agents = env.num_agents  # 20
+    num_agents = len(env.agents)  # 20
     while not done:
         action_list = np.array([1 for _ in range(num_agents)])
         for event in pygame.event.get():
