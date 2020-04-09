@@ -1,23 +1,4 @@
 # Classic
-<<<<<<< HEAD
-flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401
-# python3 -m pettingzoo.tests.ci_test classic/backgammon
-# python3 -m pettingzoo.tests.ci_test classic/checkers
-python3 -m pettingzoo.tests.ci_test classic/chess
-# python3 -m pettingzoo.tests.ci_test classic/connect_four
-python3 -m pettingzoo.tests.ci_test classic/dou_dizhu
-# python3 -m pettingzoo.tests.ci_test classic/gin_rummy
-# python3 -m pettingzoo.tests.ci_test classic/go
-# python3 -m pettingzoo.tests.ci_test classic/hanabi
-python3 -m pettingzoo.tests.ci_test classic/leduc_holdem
-python3 -m pettingzoo.tests.ci_test classic/mahjong
-python3 -m pettingzoo.tests.ci_test classic/rps
-python3 -m pettingzoo.tests.ci_test classic/rpsls
-python3 -m pettingzoo.tests.ci_test classic/texas_holdem
-python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit
-python3 -m pettingzoo.tests.ci_test classic/tictactoe
-python3 -m pettingzoo.tests.ci_test classic/uno
-=======
 
 render=True
 manual_control=True
@@ -42,7 +23,6 @@ python3 -m pettingzoo.tests.ci_test classic/texas_holdem $render $manual_control
 python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/tictactoe $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/uno $render $manual_control $bombardment $performance $save_obs
->>>>>>> master
 
 # Gamma
 flake8 pettingzoo/gamma --ignore E501,E731,E741,E402,F401,W503
@@ -51,6 +31,10 @@ python3 -m pettingzoo.tests.ci_test gamma/knights_archers_zombies $render $manua
 python3 -m pettingzoo.tests.ci_test gamma/pistonball $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test gamma/prison $render $manual_control $bombardment $performance $save_obs
 # python3 -m pettingzoo.tests.ci_test gamma/prospector $render $manual_control $bombardment $performance $save_obs
+
+# MAgent
+flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401,W503
+python3 -m pettingzoo.tests.ci_test magent $render $manual_control $bombardment $performance $save_obs
 
 # MPE
 flake8 pettingzoo/mpe --ignore E501,E731,E741,E402,F401,W503
@@ -65,16 +49,6 @@ python3 -m pettingzoo.tests.ci_test mpe/simple_tag $render $manual_control $bomb
 python3 -m pettingzoo.tests.ci_test mpe/simple_world_comm $render $manual_control $bombardment $performance $save_obs
 
 # SISL
-<<<<<<< HEAD
-flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401
-python3 -m pettingzoo.tests.ci_test sisl/multiwalker
-python3 -m pettingzoo.tests.ci_test sisl/pursuit
-python3 -m pettingzoo.tests.ci_test sisl/waterworld
-
-#MAgent
-flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401
-python3 -m pettingzoo.tests.ci_test magent
-=======
 flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401,W503
 python3 -m pettingzoo.tests.ci_test sisl/multiwalker  $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test sisl/pursuit $render $manual_control $bombardment $performance $save_obs
@@ -87,4 +61,3 @@ flake8 pettingzoo/utils --ignore E501,E731,E741,E402,F401,W503
 flake8 pettingzoo/tests --ignore E501,E731,E741,E402,F401,W503
 
 python3 -m pettingzoo.tests.print_test
->>>>>>> master
