@@ -27,7 +27,7 @@ python3 -m pettingzoo.tests.ci_test classic/uno $render $manual_control $bombard
 # Gamma
 flake8 pettingzoo/gamma --ignore E501,E731,E741,E402,F401,W503
 python3 -m pettingzoo.tests.ci_test gamma/cooperative_pong $render $manual_control $bombardment $performance $save_obs
-# python3 -m pettingzoo.tests.ci_test gamma/knights_archers_zombies $render $manual_control $bombardment $performance $save_obs
+python3 -m pettingzoo.tests.ci_test gamma/knights_archers_zombies $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test gamma/pistonball $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test gamma/prison $render $manual_control $bombardment $performance $save_obs
 # python3 -m pettingzoo.tests.ci_test gamma/prospector $render $manual_control $bombardment $performance $save_obs
