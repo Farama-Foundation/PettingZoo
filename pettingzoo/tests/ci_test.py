@@ -435,3 +435,15 @@ if sys.argv[1] == 'sisl/waterworld':
     if performance:
         _env = waterworld.env()
         performance_benchmark.performance_benchmark(_env)
+
+if sys.argv[1] == 'magent':
+    print("magent")
+    from pettingzoo.magent import magent_env
+    _env = magent_env.env()
+    api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
+    if bombardment:
+        _env = magent_env.env()
+        bombardment_test.bombardment_test(_env)
+    if performance:
+        _env = magent_env.env()
+        performance_benchmark.performance_benchmark(_env)
