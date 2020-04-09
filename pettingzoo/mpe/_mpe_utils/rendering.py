@@ -270,7 +270,8 @@ class TextLine:
     def __init__(self, window, idx):
         self.idx = idx
         self.window = window
-        self.set_text('hello world')
+        pyglet.font.add_file(os.path.join(os.path.dirname(__file__),"secrcode.ttf"))
+        self.set_text('')
 
     def render(self):
         self.label.draw()
@@ -278,12 +279,12 @@ class TextLine:
     def set_text(self,text):
         #document = pyglet.text.decode_text('Hello, world.')
         #layout = pyglet.text.layout.TextLayout(document, 200, 30)
-        assert pyglet.font.have_font('Lato'), "font not supported"
+        assert pyglet.font.have_font('Secret Code'), "font not supported"
         #times = pyglet.font.load('Lato', 16)
         #font_name = document.get_style("Lato", 0)
 
         self.label = pyglet.text.Label(text,
-                                  font_name='Lato',
+                                  font_name='Secret Code',
                                   color=(0,0,0,255),
                                   font_size=25,#,x=0.1,y=0.2)
                                   x=0,y=self.idx*40+20,
