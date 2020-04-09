@@ -180,15 +180,14 @@ class SimpleEnv(AECEnv):
             idx = 0
             for agent in self.world.agents:
                 if not agent.silent:
-                    tline = rendering.TextLine(self.viewer.window,idx)
+                    tline = rendering.TextLine(self.viewer.window, idx)
                     self.viewer.text_lines.append(tline)
                     idx += 1
-
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         # for agent in self.world.agents:
         idx = 0
-        for idx,other in enumerate(self.world.agents):
+        for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
@@ -199,7 +198,6 @@ class SimpleEnv(AECEnv):
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            #print(message)
             idx += 1
 
         # update bounds to center around agent
