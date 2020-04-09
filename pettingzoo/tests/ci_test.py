@@ -416,7 +416,7 @@ if sys.argv[1] == 'sisl/pursuit':
     _env = pursuit.env()
     if manual_control:
         _manual_control = pursuit.manual_control
-    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
+    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=False)
     if bombardment:
         _env = pursuit.env()
         bombardment_test.bombardment_test(_env)
