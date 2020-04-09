@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+
 def manual_control(**kwargs):
     from .cooperative_pong import env as _env
     env = _env(**kwargs)

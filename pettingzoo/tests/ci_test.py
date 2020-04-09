@@ -416,7 +416,7 @@ if sys.argv[1] == 'sisl/pursuit':
     _env = pursuit.env()
     if manual_control:
         _manual_control = pursuit.manual_control
-    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
+    api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=False)
     if bombardment:
         _env = pursuit.env()
         bombardment_test.bombardment_test(_env)
@@ -434,4 +434,16 @@ if sys.argv[1] == 'sisl/waterworld':
         bombardment_test.bombardment_test(_env)
     if performance:
         _env = waterworld.env()
+        performance_benchmark.performance_benchmark(_env)
+
+if sys.argv[1] == 'magent':
+    print("magent")
+    from pettingzoo.magent import magent_env
+    _env = magent_env.env("pursuit", map_size = 100)
+    api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
+    if bombardment:
+        _env = magent_env.env("pursuit", map_size = 100)
+        bombardment_test.bombardment_test(_env)
+    if performance:
+        _env = magent_env.env("pursuit", map_size = 100)
         performance_benchmark.performance_benchmark(_env)

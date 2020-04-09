@@ -170,6 +170,7 @@ def test_render(env):
                     env.reset()
                     break
 
+
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
         warnings.warn("Env has no agent_selector object named _agent_selector")
