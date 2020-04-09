@@ -22,7 +22,7 @@ def performance_benchmark(env):
             if all(env.dones.values()):
                 _ = env.reset()
                 break
-        if time.time() - start > 60:
+        if time.time() - start > 5:
             end = time.time()
             break
 

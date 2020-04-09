@@ -14,13 +14,12 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent %d' % i
+            agent.adversary = True if i < num_adversaries else False
+            base_name = "adversary" if agent.adversary else "agent"
+            base_index = i if i < num_adversaries else i - num_adversaries
+            agent.name = '{}_{}'.format(base_name, base_index)
             agent.collide = True
             agent.silent = True
-            if i < num_adversaries:
-                agent.adversary = True
-            else:
-                agent.adversary = False
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
         for i, landmark in enumerate(world.landmarks):

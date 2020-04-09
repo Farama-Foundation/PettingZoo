@@ -1,15 +1,16 @@
-from .prison import env as _env
 import pygame
 import numpy as np
 
 
 def manual_control(**kwargs):
+    from .prison import env as _env
     env = _env(**kwargs)
     x = 0
     y = 0
     while True:
         agent_actions = np.array([0 for _ in range(8)])
         num_actions = 0
+        test_done = False
         for event in pygame.event.get():
             # wasd to switch prisoner, jk to move left and right
             if event.type == pygame.KEYDOWN:
@@ -29,9 +30,10 @@ def manual_control(**kwargs):
                     num_actions += 1
                     agent_actions[env.convert_coord_to_prisoner_id(
                         (x, y))] = 20
+                elif event.key == pygame.K_ESCAPE:
+                    test_done = True
 
         actions = dict(zip(env.agents, agent_actions))
-        test_done = False
         for i in env.agents:
             reward, done, info = env.last()
             if done:
