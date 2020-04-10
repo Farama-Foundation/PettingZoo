@@ -44,7 +44,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import backgammon`
+`from pettingzoo.classic import backgammon_v0`
 
 `agents= `
 
@@ -61,7 +61,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import checkers`
+`from pettingzoo.classic import checkers_v0`
 
 `agents= `
 
@@ -87,7 +87,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 |--------------|----------|--------|----------------|----------------------------------------|----------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 
-`pettingzoo.classic.chess`
+`pettingzoo.classic.chess_v0`
 
 `agents= ['player_1', 'player_2']`
 
@@ -146,7 +146,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
 | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
 
-`from pettingzoo.classic import dou_dizhu`
+`from pettingzoo.classic import dou_dizhu_v0`
 
 `agents= ['landlord_0', 'peasant_0', 'peasant_1']`
 
@@ -239,7 +239,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | ?          |
 
-`from pettingzoo.classic import gin_rummy`
+`from pettingzoo.classic import gin_rummy_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -312,7 +312,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import go`
+`from pettingzoo.classic import go_v0`
 
 `agents= `
 
@@ -332,7 +332,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, 1]             | 10^2       |
 
-`from pettingzoo.classic import leduc_holdem`
+`from pettingzoo.classic import leduc_holdem_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -381,7 +381,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | 10^121     |
 
-`from pettingzoo.classic import mahjong`
+`from pettingzoo.classic import mahjong_v0`
 
 `agents= ['player_0', 'player_1', 'player_2', 'player_3']`
 
@@ -468,7 +468,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import rps`
+`from pettingzoo.classic import rps_v0`
 
 `agents= `
 
@@ -492,7 +492,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import rpsls`
+`from pettingzoo.classic import rpsls_v0`
 
 `agents= `
 
@@ -516,7 +516,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]             | 10^14      |
 
-`from pettingzoo.classic import texas_holdem`
+`from pettingzoo.classic import texas_holdem_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -569,7 +569,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |
 
-`from pettingzoo.classic import texas_holdem_no_limit`
+`from pettingzoo.classic import texas_holdem_no_limit_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -620,7 +620,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
 
-`from pettingzoo.classic import tictactoe`
+`from pettingzoo.classic import tictactoe_v0`
 
 `agents= `
 
@@ -648,7 +648,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | 10^163     |
 
-`from pettingzoo.classic import uno`
+`from pettingzoo.classic import uno_v0`
 
 `agents= ['player_0', 'player_1']`
 

@@ -31,7 +31,7 @@ Please additionally cite:
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
 
-`from pettingzoo.sisl import multiwalker`
+`from pettingzoo.sisl import multiwalker_v0`
 
 `agents= `
 
@@ -82,7 +82,7 @@ Add Gupta et al and DDPG paper results too
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Either  | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
 
-`from pettingzoo.sisl import pursuit`
+`from pettingzoo.sisl import pursuit_v0`
 
 `agents= `
 
@@ -155,7 +155,7 @@ Leaderboard:
 | Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
 
 
-`from pettingzoo.sisl import waterworld`
+`from pettingzoo.sisl import waterworld_v0`
 
 `agents= `
 

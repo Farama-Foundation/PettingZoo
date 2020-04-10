@@ -81,7 +81,7 @@ Please cite one or both of these if you use these environments in your research.
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe.simple`
+`pettingzoo.mpe.simple_v0`
 
 `agents= [agent_0]`
 
@@ -107,7 +107,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (8),(10) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe.simple_adversary`
+`pettingzoo.mpe.simple_adversary_v0`
 
 `agents= [adversary_0, agent_0,agent_1]`
 
@@ -141,7 +141,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | (4),(8)  | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_crypto`
+`pettingzoo.mpe import simple_crypto_v0`
 
 `agents= [eve_0, bob_0, alice_0]`
 
@@ -181,7 +181,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | (8),(19) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_push`
+`pettingzoo.mpe import simple_push_v0`
 
 `agents= [adversary_0, agent_0]`
 
@@ -214,7 +214,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_reference`
+`pettingzoo.mpe import simple_reference_v0`
 
 `agents= [agent_0, agent_1]`
 
@@ -245,7 +245,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (3),(5) | Discrete(3),(5)  | (3),(11) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_speaker_listener`
+`pettingzoo.mpe import simple_speaker_listener_v0`
 
 `agents=[speaker_0, listener_0]`
 
@@ -277,7 +277,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_spread`
+`pettingzoo.mpe import simple_spread_v0`
 
 `agents= [agent_0, agent_1, agent_2]`
 
@@ -307,7 +307,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | (14),(16) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_tag`
+`pettingzoo.mpe import simple_tag_v0`
 
 `agents= [adversary_0, adversary_1, adversary_2, agent_0]`
 
@@ -353,7 +353,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 6      | No             | (5),(20) | Discrete(5),(20) | (28),(34) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_world_comm`
+`pettingzoo.mpe import simple_world_comm_v0`
 
 `agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]`
 

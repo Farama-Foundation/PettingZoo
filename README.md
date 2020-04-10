@@ -95,7 +95,7 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 Full documentation of each environment is available [here].
 
-All environments end in \_v<number>, starting at v0. When changes are made to environments that might impact learning results, this number is increased by one to prevent potential confusion.
+All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
 ## Utils
 
