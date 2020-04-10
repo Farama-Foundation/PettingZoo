@@ -72,8 +72,9 @@ class Prisoner:
 
 class env(AECEnv):
 
-    def __init__(self, continuous=False, vector_observation=True, max_frames=500):
+    def __init__(self, continuous=False, vector_observation=False, max_frames=500):
         # super(env, self).__init__()
+        self.num_agents = 8
         self.agents = ["prisoner_" + str(s) for s in range(0, 8)]
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
@@ -276,8 +277,8 @@ class env(AECEnv):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
-
-        self.draw()
+        if self._agent_selector.is_last():
+            self.draw()
         if self.rendering:
             pygame.event.pump()
 
