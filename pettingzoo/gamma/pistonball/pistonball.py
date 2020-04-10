@@ -247,9 +247,6 @@ class env(AECEnv):
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
-        self.space.step(1 / 30.0)
-
-
         newX = int(self.ball.position[0] - 40)
         local_reward = self.get_local_reward(self.lastX, newX)
         # opposite order due to moving right to left
@@ -257,12 +254,14 @@ class env(AECEnv):
         self.lastX = newX
         if newX <= 81:
             self.done = True
+
         if self.renderOn:
-            self.clock.tick(30)
+            self.clock.tick(60)
         else:
             self.clock.tick()
-        self.draw()
+        self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
+            self.draw()
             total_reward = [(global_reward / 20) * self.global_reward_weight] * 20  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
