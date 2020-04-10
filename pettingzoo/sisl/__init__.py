@@ -16,6 +16,6 @@ class Agent(object):
         return '<{} instance>'.format(type(self).__name__)
 
 
-from .pursuit import pursuit
-from .waterworld import waterworld
-from .multiwalker import multiwalker
+from .pursuit import pursuit as pursuit_v0
+from .waterworld import waterworld as waterworld_v0
+from .multiwalker import multiwalker as multiwalker_v0
