@@ -19,7 +19,7 @@ All other environments require a high degree of coordination and learning emerge
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import cooperative_pong`
+`from pettingzoo.gamma import cooperative_pong_v0`
 
 `agents= `
 
@@ -48,7 +48,7 @@ Leaderboard:
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import knights_archers_zombies`
+`from pettingzoo.gamma import knights_archers_zombies_v0`
 
 `agents= `
 
@@ -86,7 +86,7 @@ Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Either  | 20     | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import pistonball`
+`from pettingzoo.gamma import pistonball_v0`
 
 `agents= `
 
@@ -123,7 +123,7 @@ Continuous Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Either       | Either  | 8      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prison`
+`from pettingzoo.gamma import prison_v0`
 
 `agents= `
 
@@ -160,7 +160,7 @@ Continuous Leaderboard:
 |--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prospector`
+`from pettingzoo.gamma import prospector_v0`
 
 `agents= `
 
