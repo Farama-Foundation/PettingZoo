@@ -247,6 +247,10 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     assert observation is None, "reset(observe=False) must not return anything"
     assert not any(env.dones.values()), "dones must all be False after reset"
 
+    assert isinstance(env.num_agents, int), "num_agents must be an integer"
+    assert env.num_agents != 0, "Your environment should have nonzero number of agents"
+    assert env.num_agents > 0, "Your environment can't have a negative number of agents"
+
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
 
@@ -277,9 +281,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observe(env, observation_0, save_obs=save_obs)
 
     test_agent_selector(env_agent_sel)
-
-    if hasattr(env, "num_agents"):
-        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
 
     if render:
         test_render(env)
