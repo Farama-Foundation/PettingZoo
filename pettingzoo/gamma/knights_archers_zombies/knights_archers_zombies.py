@@ -84,7 +84,6 @@ class env(AECEnv):
 
         self.agent_list = []
         self.agents = []
-        self.num_agents = num_archers + num_knights
 
         # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
         for i in range(num_archers):
@@ -118,7 +117,7 @@ class env(AECEnv):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(40, 40, 3), dtype=np.float32) for _ in enumerate(self.agents)]))
+        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
 
@@ -349,12 +348,12 @@ class env(AECEnv):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            cropped = np.zeros((40, 40, 3))
+            cropped = np.zeros((512, 512, 3))
         else:
-            min_x = agent_position[0] - 20
-            max_x = agent_position[0] + 20
-            min_y = agent_position[1] - 20
-            max_y = agent_position[1] + 20
+            min_x = agent_position[0] - 256
+            max_x = agent_position[0] + 256
+            min_y = agent_position[1] - 256
+            max_y = agent_position[1] + 256
             lower_y_bound = max(min_y, 0)
             upper_y_bound = min(max_y, self.HEIGHT)
             lower_x_bound = max(min_x, 0)
@@ -366,20 +365,21 @@ class env(AECEnv):
                 # Add blackness to the left side of the window
                 if min_x < 0:
                     pad = np.zeros((abs(min_x), cropped.shape[1], 3))
-                    cropped = np.hstack((pad, cropped))
+                    cropped = np.vstack((pad, cropped))
                 # Add blackness to the right side of the window
                 if max_x > self.WIDTH:
                     pad = np.zeros(((max_x - self.WIDTH), cropped.shape[1], 3))
-                    cropped = np.hstack((cropped, pad))
+                    cropped = np.vstack((cropped, pad))
                 # Add blackness to the top side of the window
                 if min_y < 0:
                     pad = np.zeros((cropped.shape[0], abs(min_y), 3))
-                    cropped = np.vstack((pad, cropped))
+                    cropped = np.hstack((pad, cropped))
                 # Add blackness to the bottom side of the window
                 if max_y > self.HEIGHT:
                     pad = np.zeros((cropped.shape[0], (max_y - self.HEIGHT), 3))
-                    cropped = np.vstack((cropped, pad))
-
+                    cropped = np.hstack((cropped, pad))
+            cropped = np.rot90(cropped, k=3)
+            cropped = np.fliplr(cropped).astype(np.uint8)
         return cropped
 
     def step(self, action, observe=True):
