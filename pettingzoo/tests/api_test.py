@@ -174,8 +174,10 @@ def test_render(env):
 
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no agent_selector object named _agent_selector")
-        return
+        warnings.warn("Env has no agent_selector object named _agent_selector. We recommend using an object to handle cycling through your agents.")
+
+    if not isinstance(env._agent_selector, agent_selector):
+        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
 
