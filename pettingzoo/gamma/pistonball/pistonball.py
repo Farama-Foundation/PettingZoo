@@ -104,8 +104,8 @@ class env(AECEnv):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_low = 40*i
-        x_high = 40*i + 120
+        x_low = 40 * i
+        x_high = 40 * i + 120
         cropped = np.array(observation[x_low:x_high, 257:457, :])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
