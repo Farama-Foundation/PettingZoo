@@ -33,6 +33,7 @@ if sys.argv[1] == 'classic/backgammon':
     if performance:
         _env = backgammon_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/checkers':
     print('classic/checkers_')
@@ -45,6 +46,7 @@ if sys.argv[1] == 'classic/checkers':
     if performance:
         _env = checkers_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/chess':
     print('classic/chess')
@@ -57,6 +59,7 @@ if sys.argv[1] == 'classic/chess':
     if performance:
         _env = chess_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/connect_four':
     print('classic/connect_four')
@@ -69,6 +72,7 @@ if sys.argv[1] == 'classic/connect_four':
     if performance:
         _env = connect_four_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/dou_dizhu':
     print('classic/dou_dizhu')
@@ -81,6 +85,7 @@ if sys.argv[1] == 'classic/dou_dizhu':
     if performance:
         _env = dou_dizhu_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/gin_rummy':
     print('classic/gin_rummy')
@@ -93,6 +98,7 @@ if sys.argv[1] == 'classic/gin_rummy':
     if performance:
         _env = gin_rummy_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/go':
     print('classic/go')
@@ -105,6 +111,7 @@ if sys.argv[1] == 'classic/go':
     if performance:
         _env = go_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/hanabi':
     print('classic/hanabi')
@@ -117,6 +124,7 @@ if sys.argv[1] == 'classic/hanabi':
     if performance:
         _env = hanabi_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/leduc_holdem':
     print('classic/leduc_holdem')
@@ -129,6 +137,7 @@ if sys.argv[1] == 'classic/leduc_holdem':
     if performance:
         _env = leduc_holdem_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/mahjong':
     print('classic/mahjong')
@@ -141,6 +150,7 @@ if sys.argv[1] == 'classic/mahjong':
     if performance:
         _env = mahjong_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/rps':
     print('classic/rps')
@@ -153,6 +163,7 @@ if sys.argv[1] == 'classic/rps':
     if performance:
         _env = rps_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')
@@ -165,6 +176,7 @@ if sys.argv[1] == 'classic/rpsls':
     if performance:
         _env = rpsls_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/texas_holdem':
     print('classic/texas_holdem')
@@ -177,6 +189,7 @@ if sys.argv[1] == 'classic/texas_holdem':
     if performance:
         _env = texas_holdem_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/texas_holdem_no_limit':
     print('classic/texas_holdem_no_limit')
@@ -189,6 +202,7 @@ if sys.argv[1] == 'classic/texas_holdem_no_limit':
     if performance:
         _env = texas_holdem_no_limit_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/tictactoe':
     print('classic/tictactoe')
@@ -201,6 +215,7 @@ if sys.argv[1] == 'classic/tictactoe':
     if performance:
         _env = tictactoe_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/uno':
     print('classic/uno')
@@ -213,6 +228,7 @@ if sys.argv[1] == 'classic/uno':
     if performance:
         _env = uno_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # gamma
 
@@ -229,6 +245,7 @@ if sys.argv[1] == 'gamma/cooperative_pong':
     if performance:
         _env = cooperative_pong_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')
@@ -243,6 +260,7 @@ if sys.argv[1] == 'gamma/knights_archers_zombies':
     if performance:
         _env = knights_archers_zombies_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/pistonball':
     print('gamma/pistonball')
@@ -257,6 +275,7 @@ if sys.argv[1] == 'gamma/pistonball':
     if performance:
         _env = pistonball_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
@@ -271,6 +290,7 @@ if sys.argv[1] == 'gamma/prison':
     if performance:
         _env = prison_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/prospector':
     print('gamma/prospector')
@@ -285,6 +305,7 @@ if sys.argv[1] == 'gamma/prospector':
     if performance:
         _env = prospector_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # mpe
 
@@ -299,6 +320,7 @@ if sys.argv[1] == 'mpe/simple':
     if performance:
         _env = simple_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_adversary':
     print('mpe/simple_adversary')
@@ -311,6 +333,7 @@ if sys.argv[1] == 'mpe/simple_adversary':
     if performance:
         _env = simple_adversary_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_crypto':
     print('mpe/simple_crypto')
@@ -323,6 +346,7 @@ if sys.argv[1] == 'mpe/simple_crypto':
     if performance:
         _env = simple_crypto_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_push':
     print('mpe/simple_push')
@@ -335,6 +359,7 @@ if sys.argv[1] == 'mpe/simple_push':
     if performance:
         _env = simple_push_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_reference':
     print('mpe/simple_reference')
@@ -347,6 +372,7 @@ if sys.argv[1] == 'mpe/simple_reference':
     if performance:
         _env = simple_reference_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_speak_listener':
     print('mpe/simple_speak_listener')
@@ -359,6 +385,7 @@ if sys.argv[1] == 'mpe/simple_speak_listener':
     if performance:
         _env = simple_speak_listener_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_spread':
     print('mpe/simple_spread')
@@ -371,6 +398,7 @@ if sys.argv[1] == 'mpe/simple_spread':
     if performance:
         _env = simple_spread_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_tag':
     print('mpe/simple_tag')
@@ -383,6 +411,7 @@ if sys.argv[1] == 'mpe/simple_tag':
     if performance:
         _env = simple_tag_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_world_comm':
     print('mpe/simple_world_comm')
@@ -395,6 +424,7 @@ if sys.argv[1] == 'mpe/simple_world_comm':
     if performance:
         _env = simple_world_comm_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # sisl
 
@@ -409,6 +439,7 @@ if sys.argv[1] == 'sisl/multiwalker':
     if performance:
         _env = multiwalker_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'sisl/pursuit':
     print('sisl/pursuit')
@@ -423,6 +454,7 @@ if sys.argv[1] == 'sisl/pursuit':
     if performance:
         _env = pursuit_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'sisl/waterworld':
     print('sisl/waterworld')
@@ -435,6 +467,7 @@ if sys.argv[1] == 'sisl/waterworld':
     if performance:
         _env = waterworld_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'magent':
     print("magent")
@@ -447,3 +480,4 @@ if sys.argv[1] == 'magent':
     if performance:
         _env = magent_env.env("pursuit", map_size=100)
         performance_benchmark.performance_benchmark(_env)
+    print('')
