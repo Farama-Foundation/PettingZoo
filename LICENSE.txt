@@ -1,6 +1,8 @@
 This code is licensed under the MIT license, except for the GO enviroment (based
 on code from Google's minigo repo), which is licensed under Apache 2.0.
 
+Additionally, we include the Secret Code font from http://www.squaregear.net/fonts/license.shtml, by Matthew Welch, for the MPE games. This font was released under the MPE license.
+
 Copyrights go to the authors of the code. The MIT and Apache licenses are 
 included below:
 

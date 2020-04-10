@@ -23,7 +23,7 @@ These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-
 
 The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adversarial- a "good" agent being rewarded means an "adversary" agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
 
-The simple_reference, simple_speaker_listener, and simple_spread environments are more cooperative in nature, where the agents all benefit from working with the others, though the rewards for each agent are not identical.
+The simple_reference, simple_speaker_listener, and simple_spread environments are cooperative in nature: agents must work together to achieve their goals, and received a mixture of rewards based on their own success and the success of the other agents.
 
 ### Key Concepts
 
@@ -81,7 +81,7 @@ Please cite one or both of these if you use these environments in your research.
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 1      | No             | (5)             | Discrete(5)             | (4)                      | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe.simple`
+`pettingzoo.mpe.simple_v0`
 
 `agents= [agent_0]`
 
@@ -107,7 +107,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (8),(10) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe.simple_adversary`
+`pettingzoo.mpe.simple_adversary_v0`
 
 `agents= [adversary_0, agent_0,agent_1]`
 
@@ -121,9 +121,9 @@ Agent observation space: `[self_pos, self_vel, goal_rel_position, landmark_rel_p
 
 Adversary observation space: `[landmark_rel_position, other_agents_rel_positions]`
 
-Agent action space: `movement(5)`
+Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Adversary action space: `movement(5)`
+Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
 simple_adversary.env(N=2, max_frames=500)
@@ -141,7 +141,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (4)             | Discrete(4)             | (4),(8)  | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_crypto`
+`pettingzoo.mpe import simple_crypto_v0`
 
 `agents= [eve_0, bob_0, alice_0]`
 
@@ -158,11 +158,13 @@ Bob observation space: `[private_key, alices_comm]`
 
 Eve observation space: `[alices_comm]`
 
-Alice action space: `communication(4)`
+Alice action space: `[say_0, say_1, say_2, say_3]`
 
-Bob action space: `communication(4)`
+Bob action space: `[say_0, say_1, say_2, say_3]`
 
-Eve action space: `communication(4)`
+Eve action space: `[say_0, say_1, say_2, say_3]`
+
+For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.
 
 ```
 simple_crypto.env(max_frames=500)
@@ -179,7 +181,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (5)             | Discrete(5)             | (8),(19) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_push`
+`pettingzoo.mpe import simple_push_v0`
 
 `agents= [adversary_0, agent_0]`
 
@@ -193,9 +195,9 @@ Agent observation space: `[self_vel, goal_rel_position, goal_landmark_id, all_la
 
 Adversary observation space: `[self_vel, all_landmark_rel_positions, other_agent_rel_positions]`
 
-Agent action space: `movement(5)`
+Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Adversary action space: `movement(5)`
+Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
 simple_push.env(max_frames=500)
@@ -212,7 +214,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_reference`
+`pettingzoo.mpe import simple_reference_v0`
 
 `agents= [agent_0, agent_1]`
 
@@ -224,7 +226,9 @@ This environment has 2 agents and 3 landmarks of different colors. Each agent wa
 
 Agent observation space: `[self_vel, all_landmark_rel_positions, landmark_ids, goal_id, communication]`
 
-Agent action space: `communication(10) X movement(5)`
+Agent action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, say_8, say_9] X [no_action, move_left, move_right, move_down, move_up]`
+
+Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
@@ -241,7 +245,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 2      | No             | (3),(5) | Discrete(3),(5)  | (3),(11) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_speaker_listener`
+`pettingzoo.mpe import simple_speaker_listener_v0`
 
 `agents=[speaker_0, listener_0]`
 
@@ -255,9 +259,9 @@ Speaker observation space: `[goal_id]`
 
 Listener observation space: `[self_vel, all_landmark_rel_positions, communication]`
 
-Speaker action space: `communication(10)`
+Speaker action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, say_8, say_9]`
 
-Listener action space: `movement(5)`
+Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
 simple_speaker_listener.env(max_frames=500)
@@ -273,7 +277,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 3      | No             | (5)              | Discrete(5)             | (18)                     | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_spread`
+`pettingzoo.mpe import simple_spread_v0`
 
 `agents= [agent_0, agent_1, agent_2]`
 
@@ -285,7 +289,7 @@ This environment has N agents, N landmarks (default N=3). The agents are rewarde
 
 Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, communication]`
 
-Agent action space: `movement(5)`
+Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
 simple_spread.env(N=3, max_frames=500)
@@ -303,7 +307,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 4      | No             | (5)             | Discrete(5)             | (14),(16) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_tag`
+`pettingzoo.mpe import simple_tag_v0`
 
 `agents= [adversary_0, adversary_1, adversary_2, agent_0]`
 
@@ -326,7 +330,7 @@ def bound(x):
 
 Agent and adversary observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities]`
 
-Agent and adversary action space: `movement(5)`
+Agent and adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
 simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
@@ -349,7 +353,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
 | Vector       | Discrete | 6      | No             | (5),(20) | Discrete(5),(20) | (28),(34) | (-inf,inf)         | ?          |
 
-`pettingzoo.mpe import simple_world_comm`
+`pettingzoo.mpe import simple_world_comm_v0`
 
 `agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]`
 
@@ -359,8 +363,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are 'forests' that hide agents inside from being seen, and there is a ‘leader adversary' that can see the agents at all times and can communicate with the other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.
 
-In particular, the good agents reward, is -5 for every collision with an adversary, -2*bound by the `bound` function described in simple_tag, +2 for every collision with a food, and -0.05*minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1*minimum distance to a good agent.
-
+In particular, the good agents reward, is -5 for every collision with an adversary, -2 x bound by the `bound` function described in simple_tag, +2 for every collision with a food, and -0.05 x minimum distance to any food. The adversarial agents are rewarded +5 for collisions and -0.1 x minimum distance to a good agent. s
 
 Good agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, other_agent_velocities, self_in_forest]`
 
@@ -370,11 +373,13 @@ Adversary leader observations: `[self_vel, self_pos, landmark_rel_positions, oth
 
 *Note that when the forests prevent an agent from being seen, the observation of that agents relative position is set to (0,0).*
 
-Good agent action space: `movement(5)`
+Good agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Normal adversary action space: `movement(5)`
+Normal adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Adversary leader observation space: `communication(4) X movement(5)`
+Adversary leader observation space: `[say_0, say_1, say_2, say_3] X [no_action, move_left, move_right, move_down, move_up]`
+
+Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```

@@ -24,8 +24,8 @@ We support Python 3.5, 3.6, 3.7 and 3.8
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.gamma import pistonball
-env = pistonball.env()
+from pettingzoo.gamma import pistonball_v0
+env = pistonball_v0.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -66,6 +66,8 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
+`num_agents`: The number of agents currently in the environment.
+
 `observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
@@ -80,7 +82,7 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
 
-`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`.
+`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
@@ -92,6 +94,8 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 ## Environment Documentation
 
 Full documentation of each environment is available [here].
+
+All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
 ## Utils
 

@@ -27,6 +27,8 @@ class env(AECEnv):
 
         # agent selection stuff
         self._agent_selector = agent_selector(self.agent_order)
+        
+        self.num_agents = len(self.agents)
 
         # Initialize game stuff
 
