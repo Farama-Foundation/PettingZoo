@@ -24,8 +24,8 @@ We support Python 3.5, 3.6, 3.7 and 3.8
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.gamma import pistonball
-env = pistonball.env()
+from pettingzoo.gamma import pistonball_v0
+env = pistonball_v0.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -94,6 +94,8 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 ## Environment Documentation
 
 Full documentation of each environment is available [here].
+
+All environments end in \_v<number>, starting at v0. When changes are made to environments that might impact learning results, this number is increased by one to prevent potential confusion.
 
 ## Utils
 
