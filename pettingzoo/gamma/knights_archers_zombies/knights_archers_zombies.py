@@ -124,6 +124,7 @@ class env(AECEnv):
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
+        self.num_agents = len(self.agents)
         self.reinit()
 
     # Controls the Spawn Rate of Weapons

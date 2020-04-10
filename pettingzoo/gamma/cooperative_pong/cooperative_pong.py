@@ -231,12 +231,14 @@ class CooperativePong(gym.Env):
         else:
             self.p2 = PaddleSprite((20, 100), p2_speed)
 
+        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
+
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
+
         self.reinit()
 
     def reinit(self):
-        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.dones = dict(zip(self.agents, [False] * len(self.agents)))
         self.infos = dict(zip(self.agents, [{}] * len(self.agents)))

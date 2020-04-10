@@ -42,31 +42,33 @@ class env(AECEnv):
         self.infos = {name: {'legal_moves': []} for name in self.agents}
         self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = self.ch.legal_moves()
         self.winner = -1
-            
+
     def step(self, action, observe=True):
         self.num_moves += 1
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
-        
+
         if turn == 'black':
             self.agent_selection = 0
         elif turn == 'white':
             self.agent_selection = 1
         else:
             raise ValueError
-        
-        self.observation[:, :, self.agent_selection] = np.array(self.ch.flat_board())
-        
-        print("After " + str(self.num_moves) + " moves: " )
-        #self.ch.print_board()
-        #print(self.agent_selection)
-        #print(self.observe(self.agent_selection))
-        #print(self.observation)
 
-        #self.infos[self.agent_selection]['legal_moves'] 
-        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = moves 
-        #print(self.infos[self.agent_selection])
-        
-        if winner == None and self.num_moves > self.num_moves_max:
+        self.observation[:, :, self.agent_selection] = np.array(self.ch.flat_board())
+
+        print("After " + str(self.num_moves) + " moves: ")
+
+        """
+        self.ch.print_board()
+        print(self.agent_selection)
+        print(self.observe(self.agent_selection))
+        print(self.observation)
+        self.infos[self.agent_selection]['legal_moves']
+        """
+
+        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = moves
+
+        if winner is None and self.num_moves > self.num_moves_max:
             print("Draw")
             self.winner = -1
             self.rewards[0] = 0
@@ -88,7 +90,7 @@ class env(AECEnv):
         else:
             next_observation = None
         return np.array(next_observation)
- 
+
     def render(self, mode='human'):
         print(self.ch.flat_board())
 
@@ -168,7 +170,7 @@ class CheckersRules:
                 'kings': set(),
             },
             'white': {
-                'men': set(range(32-12, 32)),
+                'men': set(range(32 - 12, 32)),
                 'kings': set(),
             },
         }

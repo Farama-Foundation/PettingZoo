@@ -138,7 +138,6 @@ class env(AECEnv):
             self.prisoners[p].set_sprite(self.sprite_list[sprite])
             sprite = (sprite + 1) % len(self.sprite_list)
 
-
     def create_walls(self):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
                       (700, 0, 50, 700)]
@@ -217,8 +216,8 @@ class env(AECEnv):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.done_val = False
         self.num_frames = 0
-        self.dones = {agent : False for agent in self.agents}
-        
+        self.dones = {agent: False for agent in self.agents}
+
     def reset(self, observe=True):
         self.num_frames = 0
         self.reinit()
