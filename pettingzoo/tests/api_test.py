@@ -121,6 +121,7 @@ def play_test(env, observation_0):
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
+        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
