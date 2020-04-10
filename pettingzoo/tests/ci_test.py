@@ -261,15 +261,15 @@ if sys.argv[1] == 'gamma/pistonball':
 if sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
     from pettingzoo.gamma import prison
-    _env = prison.env()
+    _env = prison.env(vector_observation=False)
     if manual_control:
         _manual_control = prison.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = prison.env()
+        _env = prison.env(vector_observation=False)
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = prison.env()
+        _env = prison.env(vector_observation=False)
         performance_benchmark.performance_benchmark(_env)
 
 if sys.argv[1] == 'gamma/prospector':
