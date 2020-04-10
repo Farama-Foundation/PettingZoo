@@ -32,8 +32,8 @@ def test_obervation(observation, observation_0):
             warnings.warn("Observation numpy array is not a numeric dtype")
         if np.array_equal(observation, np.zeros(observation.shape)):
             warnings.warn("Observation numpy array is all zeros.")
-        if not np.all(observation >= 0):
-            warnings.warn("Observation contains negative numbers. This is bad in many environments.")
+        if not np.all(observation >= 0) and ((len(observation.shape) == 2) or (len(observation.shape) == 3 and observation.shape[2] == 1) or (len(observation.shape) == 3 and observation.shape[2] == 3)):
+            warnings.warn("The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing.")
     else:
         warnings.warn("Observation is not NumPy array")
 
@@ -52,7 +52,7 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if (not isinstance(agent, str)) and agent != 'env':
             warnings.warn("Agent's are recommended to have numbered string names, like player_0")
-        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integers>
+        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integer>
             warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
             warnings.warn("The class of observation spaces is different between two agents")
@@ -62,6 +62,7 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Agents have different observation space sizes")
         if env.action_spaces[agent] != env.action_spaces[agent_0]:
             warnings.warn("Agents have different action space sizes")
+
         if isinstance(env.action_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.action_spaces[agent].low, -np.inf)):
                 warnings.warn("Agent's minimum action space value is -infinity. This is probably too low.")
@@ -73,6 +74,8 @@ def test_observation_action_spaces(env, agent_0):
                 assert False, "Agent's minimum action space value is greater than it's maximum"
             if env.action_spaces[agent].low.shape != env.action_spaces[agent].shape:
                 assert False, "Agent's action_space.low and action_space have different shapes"
+            if env.action_spaces[agent].high.shape != env.action_spaces[agent].shape:
+                assert False, "Agent's action_space.high and action_space have different shapes"
 
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.observation_spaces[agent].low, -np.inf)):
@@ -85,6 +88,8 @@ def test_observation_action_spaces(env, agent_0):
                 assert False, "Agent's minimum observation space value is greater than it's maximum"
             if env.observation_spaces[agent].low.shape != env.observation_spaces[agent].shape:
                 assert False, "Agent's observation_space.low and observation_space have different shapes"
+            if env.observation_spaces[agent].high.shape != env.observation_spaces[agent].shape:
+                assert False, "Agent's observation_space.high and observation_space have different shapes"
 
 
 def test_reward(reward):
@@ -121,6 +126,7 @@ def play_test(env, observation_0):
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
+        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
@@ -173,8 +179,10 @@ def test_render(env):
 
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no agent_selector object named _agent_selector")
-        return
+        warnings.warn("Env has no agent_selector object named _agent_selector. We recommend using an object to handle cycling through your agents.")
+
+    if not isinstance(env._agent_selector, agent_selector):
+        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
 
@@ -247,6 +255,10 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     assert observation is None, "reset(observe=False) must not return anything"
     assert not any(env.dones.values()), "dones must all be False after reset"
 
+    assert isinstance(env.num_agents, int), "num_agents must be an integer"
+    assert env.num_agents != 0, "Your environment should have nonzero number of agents"
+    assert env.num_agents > 0, "Your environment can't have a negative number of agents"
+
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
 
@@ -277,9 +289,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observe(env, observation_0, save_obs=save_obs)
 
     test_agent_selector(env_agent_sel)
-
-    if hasattr(env, "num_agents"):
-        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
 
     if render:
         test_render(env)

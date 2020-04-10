@@ -30,6 +30,8 @@ class env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
+        self.num_agents = len(self.agents)
+
         self.reset()
 
     def observe(self, agent):

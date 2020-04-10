@@ -99,7 +99,8 @@ class env(AECEnv):
 
         self.frames = 0
         self.display_wait = 0.0
-        self.reset()
+
+        self.num_agents = len(self.agents)
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
