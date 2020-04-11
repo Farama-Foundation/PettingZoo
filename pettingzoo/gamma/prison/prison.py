@@ -96,19 +96,19 @@ class env(AECEnv):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,), dtype=np.int8)
 
         self.observation_spaces = {}
         self.last_observation = {}
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,))
+                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
-                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3))
+                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls()
