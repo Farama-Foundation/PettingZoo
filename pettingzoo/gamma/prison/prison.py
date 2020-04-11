@@ -72,7 +72,7 @@ class Prisoner:
 
 class env(AECEnv):
 
-    def __init__(self, continuous=False, vector_observation=False, max_frames=500):
+    def __init__(self, continuous=False, vector_observation=False, max_frames=900):
         # super(env, self).__init__()
         self.num_agents = 8
         self.agents = ["prisoner_" + str(s) for s in range(0, 8)]

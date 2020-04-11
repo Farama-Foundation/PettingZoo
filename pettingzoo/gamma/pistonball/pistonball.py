@@ -28,7 +28,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, max_frames=500, continuous=False):
+    def __init__(self, max_frames=900, continuous=False):
         super(env, self).__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))

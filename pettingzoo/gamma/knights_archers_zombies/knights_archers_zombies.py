@@ -28,7 +28,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=500):
+    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=900):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
