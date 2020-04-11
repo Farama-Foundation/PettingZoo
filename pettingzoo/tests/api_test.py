@@ -121,6 +121,8 @@ def play_test(env, observation_0):
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+        if not env.observation_spaces[agent].contains(prev_observe):
+            print("Out of bounds observation: ", prev_observe)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
