@@ -32,7 +32,7 @@ class env(AECEnv):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
-        self.FPS = 15
+        self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
         self.max_frames = 500
@@ -385,24 +385,32 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        # Controls the Spawn Rate of Weapons
-        self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
+        if self.render_on:
+            self.clock.tick(self.FPS)                # FPS
+        else:
+            self.clock.tick()
 
-        # Keyboard input check
-        for event in pygame.event.get():
-            # Quit Game
-            if event.type == pygame.QUIT:
-                self.run = False
+        if self._agent_selector.is_last(): 
+            # Controls the Spawn Rate of Weapons
+            self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
-            elif event.type == pygame.KEYDOWN:
+            # Keyboard input check
+            for event in pygame.event.get():
                 # Quit Game
-                if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.QUIT:
                     self.run = False
 
-                # Reset Environment
-                if event.key == pygame.K_BACKSPACE:
-                    self.reset(observe=False)
+                elif event.type == pygame.KEYDOWN:
+                    # Quit Game
+                    if event.key == pygame.K_ESCAPE:
+                        self.run = False
+
+                    # Reset Environment
+                    if event.key == pygame.K_BACKSPACE:
+                        self.reset(observe=False)
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
+        agent_name.update(action)
+
         sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
         # Knight
         self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
@@ -414,8 +422,6 @@ class env(AECEnv):
         self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
         # Arrow
         self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
-        agent_name.update(action)
-
         if self._agent_selector.is_last():
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
@@ -459,14 +465,9 @@ class env(AECEnv):
             self.WINDOW.blit(self.floor_patch4, (300, 50))
             self.WINDOW.blit(self.floor_patch1, (1000, 250))
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
-            if self.render_on:
-                self.clock.tick(self.FPS)                # FPS
-            else:
-                self.clock.tick()
 
             self.check_game_end()
             self.frames += 1
-
         self.agent_selection = self._agent_selector.next()
         self.rewards[agent] = agent_name.score
         self.dones[agent] = not self.run or self.frames >= self.max_frames
@@ -491,31 +492,6 @@ class env(AECEnv):
         self.render_on = False
         pygame.event.pump()
         pygame.display.quit()
-
-    def plot_obs(self, observation, fname):
-        # shrink observation dims
-        # shape = original_obs_shape(self.s_width, self.s_height)
-        shape = (40, 40)
-        for i in range(len(observation)):
-            observation[i] = np.squeeze(observation[i])
-            observation[i] = observation[i].reshape(shape)
-
-        fig = plt.figure()
-        # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
-        ax1 = fig.add_subplot(221)
-        ax2 = fig.add_subplot(222)
-        ax3 = fig.add_subplot(223)
-        ax4 = fig.add_subplot(224)
-        ax1.imshow(observation[0], cmap=plt.cm.gray)
-        ax2.imshow(observation[1], cmap=plt.cm.gray)
-        ax3.imshow(observation[2], cmap=plt.cm.gray)
-        ax4.imshow(observation[3], cmap=plt.cm.gray)
-        ax1.set_title("Observation[0]")
-        ax2.set_title("Observation[1]")
-        ax3.set_title("Observation[2]")
-        ax4.set_title("Observation[3]")
-        plt.savefig(fname)
-        quit()
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen

@@ -106,7 +106,7 @@ class env(AECEnv):
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(2,))
+                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,))
             else:
                 self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3))
 
@@ -201,7 +201,7 @@ class env(AECEnv):
         if self.vector_obs:
             p = self.prisoners[agent]
             x = p.position[0]
-            obs = np.array([x - p.left_bound, p.right_bound - x])
+            obs = [x - p.left_bound]
             return obs
         else:
             capture = pygame.surfarray.pixels3d(self.screen)
