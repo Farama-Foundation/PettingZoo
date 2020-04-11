@@ -29,11 +29,11 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=-10, high=10, shape=(self._obs_dim,))
+        return spaces.Box(low=np.float32(-10), high=np.float32(10), shape=(self._obs_dim,), dtype=np.float32)
 
     @property
     def action_space(self):
-        return spaces.Box(low=-1, high=1, shape=(2,))
+        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
