@@ -12,6 +12,7 @@ from skimage import measure
 import gym
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import EnvLogger
 from .manual_control import manual_control
 
 _image_library = {}
@@ -34,7 +35,7 @@ class env(AECEnv):
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
+        self.agent_selection = self._agent_selector.next()
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
@@ -118,10 +119,13 @@ class env(AECEnv):
         self.reset()
 
     def close(self):
-        self.screen = pygame.Surface((960, 560))
-        self.renderOn = False
-        pygame.event.pump()
-        pygame.display.quit()
+        if not self.renderOn:
+            EnvLogger.warn_close_unrendered_env()
+        else:
+            self.screen = pygame.Surface((960, 560))
+            self.renderOn = False
+            pygame.event.pump()
+            pygame.display.quit()
 
     def add_walls(self):
         walls = [pymunk.Segment(self.space.static_body, (80, 80), (880, 80), 1), pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1), pymunk.Segment(
@@ -237,9 +241,11 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if np.isnan(action):
+        if action is None or np.isnan(action):
             action = 1
+            EnvLogger.warn_action_out_of_bound()
         elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
             raise Exception('Action for agent {} must be in space ({}). It is currently {}'.format(
                 agent, self.action_spaces[agent].n, action))
 

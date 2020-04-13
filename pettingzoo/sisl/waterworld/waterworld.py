@@ -1,6 +1,7 @@
 from .waterworld_base import MAWaterWorld as _env
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import EnvLogger
 import numpy as np
 
 
@@ -54,9 +55,11 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if any(action) is None or any(action) == np.NaN:
-            action = [0 for _ in action]
+        if action is None or any(action) is None or any(action) == np.NaN:
+            EnvLogger.warn_action_out_of_bound()
+            raise Exception("Action for agent {} cannot be null".format(agent))
         elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
             raise Exception('Action for agent {} must be in {}. \
                                  It is currently {}'.format(agent, self.action_spaces[agent], action))
 
