@@ -297,15 +297,17 @@ For example, you would use action `2` to draw a card or action `3` to pick up a 
 
 #### Rewards
 
-At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.2 points, and the losing player receives a reward equal to the negative of their deadwood count.
+At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.5 points, and the losing player receives a reward equal to the negative of their deadwood count.
 
 If the hand is declared dead, both players get a reward equal to negative of their deadwood count.
 
 | End Action                                | Winner | Loser               |
 |-------------------------------------------|:------:|---------------------|
 | Dead Hand<br>_Both players are penalized_ |   --   | -deadwood_count/100 |
-| Knock<br>_Knocking player: Default +0.2_  |   --   | -deadwood_count/100 |
+| Knock<br>_Knocking player: Default +0.5_  |   --   | -deadwood_count/100 |
 | Gin<br>_Going Gin Player: Default +1_     |   --   | -deadwood_count/100 |
+
+Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
 
 Penalties of deadwood_count/100 ensure that the reward never goes below -1.
 
