@@ -181,10 +181,12 @@ def test_render(env):
 
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no agent_selector object named _agent_selector. We recommend using an object to handle cycling through your agents.")
+        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
+        return
 
     if not isinstance(env._agent_selector, agent_selector):
         warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
+        return
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
 
@@ -333,4 +335,4 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     else:
         warnings.warn("environment has not defined a render() method")
 
-    print("Passed API test")  # You only get here if you don't fail
+    print("Passed API test")
