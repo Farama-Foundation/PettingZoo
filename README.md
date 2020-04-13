@@ -90,6 +90,11 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `close()`: Closes the rendering window.
 
+## Environment Actions
+
+In this API, when the environment acts following an agents action, they're treated as happening at the same time. There are cases where breaking these apart can be very helpful. Our API supports this by treating the environment as an "agent". While initially odd, having an environment agent that can act on the state of the game is actually a common modeling practice in game theory.
+
+We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
 
 ## Environment Documentation
 
@@ -159,8 +164,7 @@ Our cooperative games have leaderboards for best total (summed over all agents) 
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/checkers (Tianchen)
-* classic/connect_four (Praveen)
+* classic/checkers (Ben)
 * classic/go (Luis)
 * classic/hanabi (Clemens)
 * gamma/prospector (Yashas)
