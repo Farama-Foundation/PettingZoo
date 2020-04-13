@@ -84,9 +84,6 @@ class env(AECEnv):
         else:
             return
 
-    def close(self):
-        pass
-
     def render(self, mode='human'):
         for player in self.agents:
             state = self.env.game.get_state(self._name_to_int(player))
@@ -96,3 +93,6 @@ class env(AECEnv):
         for action in state['trace'][:-4:-1]:
             print('{}: {}'.format(self._int_to_name(action[0]), action[1]))
         print('\n')
+
+    def close(self):
+        pass
