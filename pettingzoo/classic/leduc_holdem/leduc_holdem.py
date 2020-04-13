@@ -19,7 +19,7 @@ class env(AECEnv):
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(34,), dtype=np.bool) for _ in range(self.num_agents)])
+        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(36,), dtype=np.bool) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
         obs, player_id = self.env.init_game()

@@ -9,7 +9,7 @@
 | Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
 | Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52         |
 | Go                               | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, 1]             | 10^2          |
+| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2          |
 | Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]             | 10^121        |
 | Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
 | Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
@@ -237,7 +237,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | ?          |
+| Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52      |
 
 `from pettingzoo.classic import gin_rummy_v0`
 
@@ -250,6 +250,14 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit. 
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Arguments
+
+Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
+
+`gin_rummy_v0.env(knock_reward = 0.5, gin_reward = 1.0)`
+
+`gin_rummy_v0.env() # with default values`
 
 #### Observation Space
 
@@ -293,11 +301,11 @@ At the end of the game, a player who gins is awarded 1 point, a player who knock
 
 If the hand is declared dead, both players get a reward equal to negative of their deadwood count.
 
-| End Action                       | Winner | Loser                                               |
-|----------------------------------|:------:|-----------------------------------------------------|
-| Dead Hand                        |   --   | -deadwood_count/100<br>_Both players are penalized_ |
-| Knock<br>_Knocking player: +0.2_ |   --   | -deadwood_count/100                                 |
-| Gin<br>_Going Gin Player: +1_    |   --   | -deadwood_count/100                                 |
+| End Action                                | Winner | Loser               |
+|-------------------------------------------|:------:|---------------------|
+| Dead Hand<br>_Both players are penalized_ |   --   | -deadwood_count/100 |
+| Knock<br>_Knocking player: Default +0.2_  |   --   | -deadwood_count/100 |
+| Gin<br>_Going Gin Player: Default +1_     |   --   | -deadwood_count/100 |
 
 Penalties of deadwood_count/100 ensure that the reward never goes below -1.
 
@@ -330,7 +338,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, 1]             | 10^2       |
+| Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2       |
 
 `from pettingzoo.classic import leduc_holdem_v0`
 
@@ -352,8 +360,8 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 |:-------:|------------------------------------------------------------------------------|
 |  0 - 2  | Current Player's Hand<br>_`0`: J, `1`: Q, `2`: K_                            |
 |  3 - 5  | Community Cards<br>_`3`: J, `4`: Q, `5`: K_                                  |
-|  6 - 19 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `19`: 13 chips_   |
-| 20 - 33 | Opponent's Chips<br>_`20`: 0 chips, `21`: 1 chip, ..., `33`: 13 chips_       |
+|  6 - 20 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `20`: 14 chips_   |
+| 21 - 35 | Opponent's Chips<br>_`21`: 0 chips, `22`: 1 chip, ..., `35`: 14 chips_       |
 
 #### Action Space
 
@@ -366,9 +374,9 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 #### Rewards
 
-| Winner        | Loser         |
-| :-----------: | :-----------: |
-| +raised chips | -raised chips |
+| Winner          | Loser           |
+| :-------------: | :-------------: |
+| +raised chips/2 | -raised chips/2 |
 
 #### Legal Moves
 
