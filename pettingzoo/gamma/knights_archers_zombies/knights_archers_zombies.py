@@ -14,6 +14,7 @@ from skimage import measure
 import matplotlib.pyplot as plt
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import EnvLogger
 from gym.spaces import Box, Discrete
 
 
@@ -389,7 +390,8 @@ class env(AECEnv):
             self.clock.tick(self.FPS)                # FPS
         else:
             self.clock.tick()
-
+        if not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
         if self._agent_selector.is_last(): 
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
@@ -487,11 +489,14 @@ class env(AECEnv):
         pygame.display.flip()
 
     def close(self):
-        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-        self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
-        self.render_on = False
-        pygame.event.pump()
-        pygame.display.quit()
+        if not self.render_on:
+            EnvLogger.warn_close_unrendered_env()
+        else:
+            # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+            self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+            self.render_on = False
+            pygame.event.pump()
+            pygame.display.quit()
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen
