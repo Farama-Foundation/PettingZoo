@@ -1,6 +1,7 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
 import warnings
+import inspect
 import numpy as np
 from copy import copy
 import gym
@@ -8,6 +9,7 @@ import random
 import re
 from skimage.io import imsave
 import os
+import pettingzoo.utils.messages as messages
 
 
 def test_obervation(observation, observation_0):
@@ -250,32 +252,45 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
-def check_asserts(fn):
+def check_asserts(fn, message=None):
     try:
         fn()
         return False
-    except AssertionError:
+    except AssertionError as e:
+        if message is not None:
+            return message in str(e)
         return True
-    except Exception:
-        return False
+    except Exception as e:
+        raise e
+
+
+def check_warns(fn, message=None):
+    with warnings.catch_warnings(record=True) as w:
+        fn()
+        return len(w) > 0
+
 
 def test_requires_reset(env):
     first_agent = env.agent_selection
     first_action_space = env.action_spaces[first_agent]
-    assert check_asserts(lambda: env.step(first_action_space.sample())), "env.step should assert before a reset"
-    assert check_asserts(lambda: env.observe(first_agent)), "env.observe should assert before a reset"
+    assert check_asserts(lambda: env.step(first_action_space.sample()), message=messages.step_before_reset), "env.step should assert before a reset with error message messages.step_before_reset"
+    assert check_asserts(lambda: env.observe(first_agent), message=messages.observe_before_reset), "env.observe should assert before a reset with error message messages.observe_before_reset"
 
 
 def test_bad_actions(env):
     env.reset()
     first_action_space = env.action_spaces[env.agent_selection]
     if isinstance(first_action_space, gym.spaces.Box):
-        assert check_asserts(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
+        assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
         assert check_asserts(lambda: env.step(np.ones((29,67,17)))), "actions of a shape not equal to the box should assert with a helpful error message"
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
 
     env.reset()
+
+def check_environment_args(env):
+    if "random_seed" not in set(inspect.getargspec(env.__init__).args):
+        warnings.warn("environment does not have a random seed parameter. It should have a seed if the environment uses any randomness")
 
 
 def api_test(env, render=False, manual_control=None, save_obs=False):
@@ -285,6 +300,8 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     # do this before reset
     test_requires_reset(env)
+
+    check_environment_args(env)
 
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"

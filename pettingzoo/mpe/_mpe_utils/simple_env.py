@@ -1,13 +1,14 @@
 from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
-
+from pettingzoo.utils import messages
+import warnings
 
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames):
+    def __init__(self, scenario, world, max_frames, random_seed):
         super(SimpleEnv, self).__init__()
 
         self.max_frames = max_frames
@@ -49,7 +50,7 @@ class SimpleEnv(AECEnv):
         self.has_reset = False
 
     def observe(self, agent):
-        assert self.has_reset, "reset() needs to be called before observe"
+        assert self.has_reset, messages.observe_before_reset
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
@@ -131,8 +132,10 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
-        assert self.has_reset, "reset() needs to be called before step"
-        assert self.action_spaces[self.agent_selection].contains(action), "action must be in the env.action_spaces[env.agent_selection]. Action is: {}".format(action)
+        assert self.has_reset, messages.step_before_reset
+        current_space = self.action_spaces[self.agent_selection]
+        if not current_space.contains(action):
+            warnings.warn(messages.action_warning(current_space, action))
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self.agent_order[next_idx]

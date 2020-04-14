@@ -3,7 +3,7 @@ from .scenarios.simple_spread import Scenario
 
 
 class env(SimpleEnv):
-    def __init__(self, N=3, max_frames=500):
+    def __init__(self, N=3, max_frames=500, random_seed=None):
         scenario = Scenario()
         world = scenario.make_world(N)
-        super(env, self).__init__(scenario, world, max_frames)
+        super(env, self).__init__(scenario, world, max_frames, random_seed)
