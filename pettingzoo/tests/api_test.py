@@ -181,7 +181,7 @@ def test_render(env):
 
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no agent_selector object named _agent_selector. We recommend using an object to handle cycling through your agents.")
+        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
         return
 
     if not isinstance(env._agent_selector, agent_selector):
@@ -221,6 +221,27 @@ def test_agent_selector(env):
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
+def test_warnings(env):
+    from pettingzoo.utils import EnvLogger
+    EnvLogger.suppress_output()
+    try:
+        EnvLogger.flush()
+        e1 = copy(env)
+        e1.reset()
+        e1.close()
+    except:
+        # e1 should throw a close_unrendered_environment warning
+        assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
+
+    try:
+        e2 = copy(env)
+        EnvLogger.flush()
+        e2.step(None)
+    except:
+        assert "[WARNING]: Received an action that was outside action space" in EnvLogger.mqueue, "env does not warn on out of bounds/NaN action"
+    EnvLogger.unsuppress_output()
+
+
 def inp_handler(name):
     from pynput.keyboard import Key, Controller as KeyboardController
     import time
@@ -253,6 +274,8 @@ def test_manual_control(manual_control):
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     env_agent_sel = copy(env)
+    env_warnings = copy(env)
+
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
     observation = env.reset(observe=False)
@@ -294,6 +317,8 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     test_agent_selector(env_agent_sel)
 
+    test_warnings(env_warnings)
+
     if render:
         test_render(env)
 
@@ -310,4 +335,4 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     else:
         warnings.warn("environment has not defined a render() method")
 
-    print("Passed API test")  # You only get here if you don't fail
+    print("Passed API test")
