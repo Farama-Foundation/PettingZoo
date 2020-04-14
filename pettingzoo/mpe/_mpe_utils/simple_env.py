@@ -3,6 +3,7 @@ import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import messages
 import warnings
+from gym.utils import seeding
 
 
 class SimpleEnv(AECEnv):
@@ -12,9 +13,13 @@ class SimpleEnv(AECEnv):
     def __init__(self, scenario, world, max_frames, seed):
         super(SimpleEnv, self).__init__()
 
+        self.np_random, seed = seeding.np_random(seed)
+
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
@@ -57,7 +62,7 @@ class SimpleEnv(AECEnv):
     def reset(self, observe=True):
         self.has_reset = True
 
-        self.scenario.reset_world(self.world)
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
