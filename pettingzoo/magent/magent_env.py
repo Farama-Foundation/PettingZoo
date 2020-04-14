@@ -3,6 +3,7 @@ import warnings
 import magent
 from pettingzoo import AECEnv
 
+
 class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
@@ -32,7 +33,6 @@ class env(AECEnv):
 
     def close(self):
         pass
-
 
     '''
     Child Class Methods

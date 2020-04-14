@@ -72,18 +72,16 @@ class Prisoner:
 
 class env(AECEnv):
 
-    def __init__(self, continuous=False, vector_observation=True, max_frames=500):
+    def __init__(self, continuous=False, vector_observation=False, max_frames=900):
         # super(env, self).__init__()
         self.num_agents = 8
-        self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
+        self.agents = ["prisoner_" + str(s) for s in range(0, 8)]
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.metadata = {'render.modes': ['human']}
         self.rendering = False
         self.max_frames = max_frames
-        self.reinit()
         pygame.init()
         self.clock = pygame.time.Clock()
         self.num_frames = 0
@@ -98,19 +96,19 @@ class env(AECEnv):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,))
+                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,), dtype=np.int8)
 
         self.observation_spaces = {}
         self.last_observation = {}
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(2,))
+                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
-                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(300, 100, 3))
+                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls()
@@ -138,6 +136,7 @@ class env(AECEnv):
             self.prisoners[p].set_sprite(self.sprite_list[sprite])
             sprite = (sprite + 1) % len(self.sprite_list)
 
+        self.reinit()
 
     def create_walls(self):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
@@ -202,13 +201,15 @@ class env(AECEnv):
         if self.vector_obs:
             p = self.prisoners[agent]
             x = p.position[0]
-            obs = np.array([x - p.left_bound, p.right_bound - x])
+            obs = [x - p.left_bound]
             return obs
         else:
             capture = pygame.surfarray.pixels3d(self.screen)
             p = self.prisoners[agent]
             x1, y1, x2, y2 = p.window
             sub_screen = np.array(capture[x1:x2, y1:y2, :])
+            sub_screen = np.rot90(sub_screen, k=3)
+            sub_screen = np.fliplr(sub_screen)
             return sub_screen
 
     def reinit(self):
@@ -217,8 +218,15 @@ class env(AECEnv):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.done_val = False
         self.num_frames = 0
-        self.dones = {agent : False for agent in self.agents}
-        
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
+        self.last_rewards = [0 for _ in self.agents]
+        self.frames = 0
+        self.rendering = False
+        self.screen = pygame.Surface((750, 650))
+        self.screen.blit(self.background, (0, 0))
+        self.rendering = False
+
     def reset(self, observe=True):
         self.num_frames = 0
         self.reinit()
@@ -231,20 +239,12 @@ class env(AECEnv):
                                (550, 450 - 54, 400, 700, (400, 350, 700, 450)),
                                (200, 600 - 48, 50, 350, (50, 500, 350, 600)),
                                (550, 600 - 53, 400, 700, (400, 500, 700, 600))]
-        self._agent_selector.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector.next()
         p_count = 0
         for i in self.agents:
             p = self.prisoners[i]
             x, y, l, r, u = prisoner_spawn_locs[p_count]
             p.position = (x + random.randint(-20, 20), y)
             p_count += 1
-        self.last_rewards = [0 for _ in self.agents]
-        self.frames = 0
-        self.rendering = False
-        self.screen = pygame.Surface((750, 650))
-        self.screen.blit(self.background, (0, 0))
-        self.rendering = False
         if observe:
             return self.observe(self.agent_selection)
 
@@ -277,8 +277,8 @@ class env(AECEnv):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
-
-        self.draw()
+        if self._agent_selector.is_last():
+            self.draw()
         if self.rendering:
             pygame.event.pump()
 

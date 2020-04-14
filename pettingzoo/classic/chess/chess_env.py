@@ -32,6 +32,8 @@ class env(AECEnv):
 
         self.has_reset = False
 
+        self.num_agents = len(self.agents)
+
     def observe(self, agent):
         assert self.has_reset, "reset() needs to be called before observe"
         return chess_utils.get_observation(self.board, self.agents.index(agent))

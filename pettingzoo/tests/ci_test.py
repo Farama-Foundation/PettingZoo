@@ -24,426 +24,460 @@ if sys.argv[6] == 'True':
 
 if sys.argv[1] == 'classic/backgammon':
     print('classic/backgammon')
-    from pettingzoo.classic import backgammon
-    _env = backgammon.env()
+    from pettingzoo.classic import backgammon_v0
+    _env = backgammon_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = backgammon.env()
+        _env = backgammon_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = backgammon.env()
+        _env = backgammon_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/checkers':
-    print('classic/checkers')
-    from pettingzoo.classic import checkers
-    _env = checkers.env()
+    print('classic/checkers_')
+    from pettingzoo.classic import checkers_v0
+    _env = checkers_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = checkers.env()
+        _env = checkers_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = checkers.env()
+        _env = checkers_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/chess':
     print('classic/chess')
-    from pettingzoo.classic import chess
-    _env = chess.env()
+    from pettingzoo.classic import chess_v0
+    _env = chess_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = chess.env()
+        _env = chess_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = chess.env()
+        _env = chess_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/connect_four':
     print('classic/connect_four')
-    from pettingzoo.classic import connect_four
-    _env = connect_four.env()
+    from pettingzoo.classic import connect_four_v0
+    _env = connect_four_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = connect_four.env()
+        _env = connect_four_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = connect_four.env()
+        _env = connect_four_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/dou_dizhu':
     print('classic/dou_dizhu')
-    from pettingzoo.classic import dou_dizhu
-    _env = dou_dizhu.env()
+    from pettingzoo.classic import dou_dizhu_v0
+    _env = dou_dizhu_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = dou_dizhu.env()
+        _env = dou_dizhu_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = dou_dizhu.env()
+        _env = dou_dizhu_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/gin_rummy':
     print('classic/gin_rummy')
-    from pettingzoo.classic import gin_rummy
-    _env = gin_rummy.env()
+    from pettingzoo.classic import gin_rummy_v0
+    _env = gin_rummy_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = gin_rummy.env()
+        _env = gin_rummy_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = gin_rummy.env()
+        _env = gin_rummy_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/go':
     print('classic/go')
-    from pettingzoo.classic import go
-    _env = go.env()
+    from pettingzoo.classic import go_v0
+    _env = go_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = go.env()
+        _env = go_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = go.env()
+        _env = go_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/hanabi':
     print('classic/hanabi')
-    from pettingzoo.classic import hanabi
-    _env = hanabi.env()
+    from pettingzoo.classic import hanabi_v0
+    _env = hanabi_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = hanabi.env()
+        _env = hanabi_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = hanabi.env()
+        _env = hanabi_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/leduc_holdem':
     print('classic/leduc_holdem')
-    from pettingzoo.classic import leduc_holdem
-    _env = leduc_holdem.env()
+    from pettingzoo.classic import leduc_holdem_v0
+    _env = leduc_holdem_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = leduc_holdem.env()
+        _env = leduc_holdem_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = leduc_holdem.env()
+        _env = leduc_holdem_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/mahjong':
     print('classic/mahjong')
-    from pettingzoo.classic import mahjong
-    _env = mahjong.env()
+    from pettingzoo.classic import mahjong_v0
+    _env = mahjong_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = mahjong.env()
+        _env = mahjong_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = mahjong.env()
+        _env = mahjong_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/rps':
     print('classic/rps')
-    from pettingzoo.classic import rps
-    _env = rps.env()
+    from pettingzoo.classic import rps_v0
+    _env = rps_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = rps.env()
+        _env = rps_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = rps.env()
+        _env = rps_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')
-    from pettingzoo.classic import rpsls
-    _env = rpsls.env()
+    from pettingzoo.classic import rpsls_v0
+    _env = rpsls_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = rpsls.env()
+        _env = rpsls_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = rpsls.env()
+        _env = rpsls_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/texas_holdem':
     print('classic/texas_holdem')
-    from pettingzoo.classic import texas_holdem
-    _env = texas_holdem.env()
+    from pettingzoo.classic import texas_holdem_v0
+    _env = texas_holdem_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = texas_holdem.env()
+        _env = texas_holdem_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = texas_holdem.env()
+        _env = texas_holdem_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/texas_holdem_no_limit':
     print('classic/texas_holdem_no_limit')
-    from pettingzoo.classic import texas_holdem_no_limit
-    _env = texas_holdem_no_limit.env()
+    from pettingzoo.classic import texas_holdem_no_limit_v0
+    _env = texas_holdem_no_limit_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = texas_holdem_no_limit.env()
+        _env = texas_holdem_no_limit_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = texas_holdem_no_limit.env()
+        _env = texas_holdem_no_limit_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/tictactoe':
     print('classic/tictactoe')
-    from pettingzoo.classic import tictactoe
-    _env = tictactoe.env()
+    from pettingzoo.classic import tictactoe_v0
+    _env = tictactoe_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = tictactoe.env()
+        _env = tictactoe_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = tictactoe.env()
+        _env = tictactoe_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'classic/uno':
     print('classic/uno')
-    from pettingzoo.classic import uno
-    _env = uno.env()
+    from pettingzoo.classic import uno_v0
+    _env = uno_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = uno.env()
+        _env = uno_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = uno.env()
+        _env = uno_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # gamma
 
 if sys.argv[1] == 'gamma/cooperative_pong':
     print('gamma/cooperative_pong')
-    from pettingzoo.gamma import cooperative_pong
-    _env = cooperative_pong.env()
+    from pettingzoo.gamma import cooperative_pong_v0
+    _env = cooperative_pong_v0.env()
     if manual_control:
-        _manual_control = cooperative_pong.manual_control
+        _manual_control = cooperative_pong_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = cooperative_pong.env()
+        _env = cooperative_pong_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = cooperative_pong.env()
+        _env = cooperative_pong_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')
-    from pettingzoo.gamma import knights_archers_zombies
-    _env = knights_archers_zombies.env()
+    from pettingzoo.gamma import knights_archers_zombies_v0
+    _env = knights_archers_zombies_v0.env()
     if manual_control:
-        _manual_control = knights_archers_zombies.manual_control
+        _manual_control = knights_archers_zombies_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = knights_archers_zombies.env()
+        _env = knights_archers_zombies_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = knights_archers_zombies.env()
+        _env = knights_archers_zombies_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/pistonball':
     print('gamma/pistonball')
-    from pettingzoo.gamma import pistonball
-    _env = pistonball.env()
+    from pettingzoo.gamma import pistonball_v0
+    _env = pistonball_v0.env()
     if manual_control:
-        _manual_control = pistonball.manual_control
+        _manual_control = pistonball_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = pistonball.env()
+        _env = pistonball_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = pistonball.env()
+        _env = pistonball_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
-    from pettingzoo.gamma import prison
-    _env = prison.env()
+    from pettingzoo.gamma import prison_v0
+    _env = prison_v0.env()
     if manual_control:
-        _manual_control = prison.manual_control
+        _manual_control = prison_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = prison.env()
+        _env = prison_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = prison.env()
+        _env = prison_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'gamma/prospector':
     print('gamma/prospector')
-    from pettingzoo.gamma import prospector
-    _env = prospector.env()
+    from pettingzoo.gamma import prospector_v0
+    _env = prospector_v0.env()
     if manual_control:
-        _manual_control = prospector.manual_control
+        _manual_control = prospector_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=save_obs)
     if bombardment:
-        _env = prospector.env()
+        _env = prospector_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = prospector.env()
+        _env = prospector_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # mpe
 
 if sys.argv[1] == 'mpe/simple':
     print('mpe/simple')
-    from pettingzoo.mpe import simple
-    _env = simple.env()
+    from pettingzoo.mpe import simple_v0
+    _env = simple_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple.env()
+        _env = simple_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple.env()
+        _env = simple_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_adversary':
     print('mpe/simple_adversary')
-    from pettingzoo.mpe import simple_adversary
-    _env = simple_adversary.env()
+    from pettingzoo.mpe import simple_adversary_v0
+    _env = simple_adversary_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_adversary.env()
+        _env = simple_adversary_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_adversary.env()
+        _env = simple_adversary_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_crypto':
     print('mpe/simple_crypto')
-    from pettingzoo.mpe import simple_crypto
-    _env = simple_crypto.env()
+    from pettingzoo.mpe import simple_crypto_v0
+    _env = simple_crypto_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_crypto.env()
+        _env = simple_crypto_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_crypto.env()
+        _env = simple_crypto_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_push':
     print('mpe/simple_push')
-    from pettingzoo.mpe import simple_push
-    _env = simple_push.env()
+    from pettingzoo.mpe import simple_push_v0
+    _env = simple_push_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_push.env()
+        _env = simple_push_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_push.env()
+        _env = simple_push_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_reference':
     print('mpe/simple_reference')
-    from pettingzoo.mpe import simple_reference
-    _env = simple_reference.env()
+    from pettingzoo.mpe import simple_reference_v0
+    _env = simple_reference_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_reference.env()
+        _env = simple_reference_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_reference.env()
+        _env = simple_reference_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_speak_listener':
     print('mpe/simple_speak_listener')
-    from pettingzoo.mpe import simple_speak_listener
-    _env = simple_speak_listener.env()
+    from pettingzoo.mpe import simple_speak_listener_v0
+    _env = simple_speak_listener_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_speak_listener.env()
+        _env = simple_speak_listener_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_speak_listener.env()
+        _env = simple_speak_listener_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_spread':
     print('mpe/simple_spread')
-    from pettingzoo.mpe import simple_spread
-    _env = simple_spread.env()
+    from pettingzoo.mpe import simple_spread_v0
+    _env = simple_spread_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_spread.env()
+        _env = simple_spread_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_spread.env()
+        _env = simple_spread_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_tag':
     print('mpe/simple_tag')
-    from pettingzoo.mpe import simple_tag
-    _env = simple_tag.env()
+    from pettingzoo.mpe import simple_tag_v0
+    _env = simple_tag_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_tag.env()
+        _env = simple_tag_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_tag.env()
+        _env = simple_tag_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'mpe/simple_world_comm':
     print('mpe/simple_world_comm')
-    from pettingzoo.mpe import simple_world_comm
-    _env = simple_world_comm.env()
+    from pettingzoo.mpe import simple_world_comm_v0
+    _env = simple_world_comm_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = simple_world_comm.env()
+        _env = simple_world_comm_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = simple_world_comm.env()
+        _env = simple_world_comm_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 # sisl
 
 if sys.argv[1] == 'sisl/multiwalker':
     print('sisl/multiwalker')
-    from pettingzoo.sisl import multiwalker
-    _env = multiwalker.env()
+    from pettingzoo.sisl import multiwalker_v0
+    _env = multiwalker_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = multiwalker.env()
+        _env = multiwalker_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = multiwalker.env()
+        _env = multiwalker_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'sisl/pursuit':
     print('sisl/pursuit')
-    from pettingzoo.sisl import pursuit
-    _env = pursuit.env()
+    from pettingzoo.sisl import pursuit_v0
+    _env = pursuit_v0.env()
     if manual_control:
-        _manual_control = pursuit.manual_control
+        _manual_control = pursuit_v0.manual_control
     api_test.api_test(_env, render=render, manual_control=_manual_control, save_obs=False)
     if bombardment:
-        _env = pursuit.env()
+        _env = pursuit_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = pursuit.env()
+        _env = pursuit_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'sisl/waterworld':
     print('sisl/waterworld')
-    from pettingzoo.sisl import waterworld
-    _env = waterworld.env()
+    from pettingzoo.sisl import waterworld_v0
+    _env = waterworld_v0.env()
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = waterworld.env()
+        _env = waterworld_v0.env()
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = waterworld.env()
+        _env = waterworld_v0.env()
         performance_benchmark.performance_benchmark(_env)
+    print('')
 
 if sys.argv[1] == 'magent':
     print("magent")
     from pettingzoo.magent import magent_env
-    _env = magent_env.env("pursuit", map_size = 100)
+    _env = magent_env.env("pursuit", map_size=100)
     api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
     if bombardment:
-        _env = magent_env.env("pursuit", map_size = 100)
+        _env = magent_env.env("pursuit", map_size=00)
         bombardment_test.bombardment_test(_env)
     if performance:
-        _env = magent_env.env("pursuit", map_size = 100)
+        _env = magent_env.env("pursuit", map_size=100)
         performance_benchmark.performance_benchmark(_env)
+    print('')
