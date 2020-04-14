@@ -293,7 +293,45 @@ def check_environment_args(env):
     args = inspect.getargspec(env.__init__)
     if len(args) < 2 or "seed" != args.args[1]:
         warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
+    else:
+        def hash_obsevation(obs):
+            try:
+                #obs.flags.writeable = False
+                val = hash(obs.tobytes())
+                #obs.flags.writeable = True
+                return val
+            except AttributeError:
+                try:
+                    return hash(obs)
+                except TypeError:
+                    warnings.warn("observation not an int or an ndarray")
+                    return 0
 
+        # checks deterministic behavior if seed is set
+        base_seed = 192312
+        new_env = env.__class__(seed=base_seed)
+        actions = {agent:space.sample() for agent,space in new_env.action_spaces.items()}
+        hashes = []
+        num_seeds = 5
+        rand_seeds = [random.randint(1000000) for _ in range(num_seeds)]
+        for x in range(num_seeds):
+            cur_hashes = []
+            random.seed(rand_seeds[x])
+            np.random.seed(rand_seeds[x])
+            obs = new_env.reset()
+            cur_hashes.append(hash_obsevation(obs))
+            first_hash = None
+            for _ in range(50):
+                rew,done,info = new_env.last()
+                if done:
+                    break
+                next_obs = new_env.step(actions[new_env.agent_selection])
+                cur_hashes.append(hash_obsevation(next_obs))
+
+            hashes.append(hash(tuple(cur_hashes)))
+            new_env = env.__class__(seed=base_seed)
+        if not all(hashes[0] == h for h in hashes):
+            warnings.warn("seeded environment is not fully deterministic, depends on random.seed or numpy.random.seed")
 
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
