@@ -282,15 +282,17 @@ def test_bad_actions(env):
     first_action_space = env.action_spaces[env.agent_selection]
     if isinstance(first_action_space, gym.spaces.Box):
         assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
-        assert check_asserts(lambda: env.step(np.ones((29,67,17)))), "actions of a shape not equal to the box should assert with a helpful error message"
+        assert check_asserts(lambda: env.step(np.ones((29, 67, 17)))), "actions of a shape not equal to the box should assert with a helpful error message"
     elif isinstance(first_action_space, gym.spaces.Discrete):
         assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
 
     env.reset()
 
+
 def check_environment_args(env):
-    if "random_seed" not in set(inspect.getargspec(env.__init__).args):
-        warnings.warn("environment does not have a random seed parameter. It should have a seed if the environment uses any randomness")
+    args = inspect.getargspec(env.__init__)
+    if len(args) < 2 or "seed" != args.args[1]:
+        warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
 
 
 def api_test(env, render=False, manual_control=None, save_obs=False):
