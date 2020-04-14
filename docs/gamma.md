@@ -19,7 +19,7 @@ All other environments require a high degree of coordination and learning emerge
 |--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 2      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import cooperative_pong`
+`from pettingzoo.gamma import cooperative_pong_v0`
 
 `agents= `
 
@@ -48,7 +48,7 @@ Leaderboard:
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import knights_archers_zombies`
+`from pettingzoo.gamma import knights_archers_zombies_v0`
 
 `agents= `
 
@@ -86,7 +86,7 @@ Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Either  | 20     | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import pistonball`
+`from pettingzoo.gamma import pistonball_v0`
 
 `agents= `
 
@@ -94,7 +94,12 @@ Leaderboard:
 
 *AEC diagram*
 
-This is a simple cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty pistons (pistons move vertically only). Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* control how far the selected piston moves in the vertical direction.
+This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them. 
+Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter.
+
+Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.
+
+Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
 
 ```
 pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
@@ -123,7 +128,7 @@ Continuous Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Either       | Either  | 8      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prison`
+`from pettingzoo.gamma import prison_v0`
 
 `agents= `
 
@@ -160,7 +165,7 @@ Continuous Leaderboard:
 |--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prospector`
+`from pettingzoo.gamma import prospector_v0`
 
 `agents= `
 

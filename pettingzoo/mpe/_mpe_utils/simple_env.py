@@ -14,7 +14,7 @@ class SimpleEnv(AECEnv):
         self.scenario = scenario
         self.world = world
 
-        self._num_agents = len(self.world.agents)
+        self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
@@ -42,7 +42,7 @@ class SimpleEnv(AECEnv):
         self.display_wait = 0.04
 
         self.agent_selection = self.agent_order[0]
-        self.current_actions = [None] * self._num_agents
+        self.current_actions = [None] * self.num_agents
 
         self.viewer = None
 
@@ -70,7 +70,7 @@ class SimpleEnv(AECEnv):
         self.agent_selection = self.agent_order[0]
         self.steps = 0
 
-        self.current_actions = [None] * self._num_agents
+        self.current_actions = [None] * self.num_agents
 
         if observe:
             agent = self.world.agents[0]
@@ -134,7 +134,7 @@ class SimpleEnv(AECEnv):
         assert self.has_reset, "reset() needs to be called before step"
         assert self.action_spaces[self.agent_selection].contains(action), "action must be in the env.action_spaces[env.agent_selection]. Action is: {}".format(action)
         current_idx = self._index_map[self.agent_selection]
-        next_idx = (current_idx + 1) % self._num_agents
+        next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self.agent_order[next_idx]
 
         self.current_actions[current_idx] = action
@@ -185,15 +185,14 @@ class SimpleEnv(AECEnv):
             idx = 0
             for agent in self.world.agents:
                 if not agent.silent:
-                    tline = rendering.TextLine(self.viewer.window,idx)
+                    tline = rendering.TextLine(self.viewer.window, idx)
                     self.viewer.text_lines.append(tline)
                     idx += 1
-
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         # for agent in self.world.agents:
         idx = 0
-        for idx,other in enumerate(self.world.agents):
+        for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
@@ -204,7 +203,6 @@ class SimpleEnv(AECEnv):
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            #print(message)
             idx += 1
 
         # update bounds to center around agent

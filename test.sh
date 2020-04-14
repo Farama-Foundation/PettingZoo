@@ -7,6 +7,7 @@ performance=True
 save_obs=True
 
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401,W503
+echo
 # python3 -m pettingzoo.tests.ci_test classic/backgammon $render $manual_control $bombardment $performance $save_obs
 # python3 -m pettingzoo.tests.ci_test classic/checkers $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/chess $render $manual_control $bombardment $performance $save_obs
@@ -26,6 +27,7 @@ python3 -m pettingzoo.tests.ci_test classic/uno $render $manual_control $bombard
 
 # Gamma
 flake8 pettingzoo/gamma --ignore E501,E731,E741,E402,F401,W503
+echo
 python3 -m pettingzoo.tests.ci_test gamma/cooperative_pong $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test gamma/knights_archers_zombies $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test gamma/pistonball $render $manual_control $bombardment $performance $save_obs
@@ -34,10 +36,12 @@ python3 -m pettingzoo.tests.ci_test gamma/prison $render $manual_control $bombar
 
 # MAgent
 flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401,W503
+echo
 python3 -m pettingzoo.tests.ci_test magent $render $manual_control $bombardment $performance $save_obs
 
 # MPE
 flake8 pettingzoo/mpe --ignore E501,E731,E741,E402,F401,W503
+echo
 python3 -m pettingzoo.tests.ci_test mpe/simple $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test mpe/simple_adversary $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test mpe/simple_crypto $render $manual_control $bombardment $performance $save_obs
@@ -50,14 +54,18 @@ python3 -m pettingzoo.tests.ci_test mpe/simple_world_comm $render $manual_contro
 
 # SISL
 flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401,W503
+echo
 python3 -m pettingzoo.tests.ci_test sisl/multiwalker  $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test sisl/pursuit $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test sisl/waterworld $render $manual_control $bombardment $performance $save_obs
 
 # Utils
 flake8 pettingzoo/utils --ignore E501,E731,E741,E402,F401,W503
+echo
 
 # Tests
 flake8 pettingzoo/tests --ignore E501,E731,E741,E402,F401,W503
+echo
 
 python3 -m pettingzoo.tests.print_test
+echo

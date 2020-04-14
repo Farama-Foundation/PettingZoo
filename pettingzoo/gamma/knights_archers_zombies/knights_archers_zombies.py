@@ -28,11 +28,11 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=500):
+    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=900):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
-        self.FPS = 15
+        self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
         self.max_frames = 500
@@ -84,7 +84,6 @@ class env(AECEnv):
 
         self.agent_list = []
         self.agents = []
-        self.num_agents = num_archers + num_knights
 
         # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
         for i in range(num_archers):
@@ -118,13 +117,14 @@ class env(AECEnv):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(40, 40, 3), dtype=np.float32) for _ in enumerate(self.agents)]))
+        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
 
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = 0
+        self.num_agents = len(self.agents)
         self.reinit()
 
     # Controls the Spawn Rate of Weapons
@@ -349,12 +349,12 @@ class env(AECEnv):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            cropped = np.zeros((40, 40, 3))
+            cropped = np.zeros((512, 512, 3))
         else:
-            min_x = agent_position[0] - 20
-            max_x = agent_position[0] + 20
-            min_y = agent_position[1] - 20
-            max_y = agent_position[1] + 20
+            min_x = agent_position[0] - 256
+            max_x = agent_position[0] + 256
+            min_y = agent_position[1] - 256
+            max_y = agent_position[1] + 256
             lower_y_bound = max(min_y, 0)
             upper_y_bound = min(max_y, self.HEIGHT)
             lower_x_bound = max(min_x, 0)
@@ -366,42 +366,51 @@ class env(AECEnv):
                 # Add blackness to the left side of the window
                 if min_x < 0:
                     pad = np.zeros((abs(min_x), cropped.shape[1], 3))
-                    cropped = np.hstack((pad, cropped))
+                    cropped = np.vstack((pad, cropped))
                 # Add blackness to the right side of the window
                 if max_x > self.WIDTH:
                     pad = np.zeros(((max_x - self.WIDTH), cropped.shape[1], 3))
-                    cropped = np.hstack((cropped, pad))
+                    cropped = np.vstack((cropped, pad))
                 # Add blackness to the top side of the window
                 if min_y < 0:
                     pad = np.zeros((cropped.shape[0], abs(min_y), 3))
-                    cropped = np.vstack((pad, cropped))
+                    cropped = np.hstack((pad, cropped))
                 # Add blackness to the bottom side of the window
                 if max_y > self.HEIGHT:
                     pad = np.zeros((cropped.shape[0], (max_y - self.HEIGHT), 3))
-                    cropped = np.vstack((cropped, pad))
-
+                    cropped = np.hstack((cropped, pad))
+            cropped = np.rot90(cropped, k=3)
+            cropped = np.fliplr(cropped).astype(np.uint8)
         return cropped
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        # Controls the Spawn Rate of Weapons
-        self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
+        if self.render_on:
+            self.clock.tick(self.FPS)                # FPS
+        else:
+            self.clock.tick()
 
-        # Keyboard input check
-        for event in pygame.event.get():
-            # Quit Game
-            if event.type == pygame.QUIT:
-                self.run = False
+        if self._agent_selector.is_last(): 
+            # Controls the Spawn Rate of Weapons
+            self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
-            elif event.type == pygame.KEYDOWN:
+            # Keyboard input check
+            for event in pygame.event.get():
                 # Quit Game
-                if event.key == pygame.K_ESCAPE:
+                if event.type == pygame.QUIT:
                     self.run = False
 
-                # Reset Environment
-                if event.key == pygame.K_BACKSPACE:
-                    self.reset(observe=False)
+                elif event.type == pygame.KEYDOWN:
+                    # Quit Game
+                    if event.key == pygame.K_ESCAPE:
+                        self.run = False
+
+                    # Reset Environment
+                    if event.key == pygame.K_BACKSPACE:
+                        self.reset(observe=False)
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
+        agent_name.update(action)
+
         sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
         # Knight
         self.knight_player_num, self.knight_list, self.all_sprites, self.knight_dict = sp.spawnKnight()
@@ -413,8 +422,6 @@ class env(AECEnv):
         self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
         # Arrow
         self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
-        agent_name.update(action)
-
         if self._agent_selector.is_last():
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
@@ -458,14 +465,9 @@ class env(AECEnv):
             self.WINDOW.blit(self.floor_patch4, (300, 50))
             self.WINDOW.blit(self.floor_patch1, (1000, 250))
             self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
-            if self.render_on:
-                self.clock.tick(self.FPS)                # FPS
-            else:
-                self.clock.tick()
 
             self.check_game_end()
             self.frames += 1
-
         self.agent_selection = self._agent_selector.next()
         self.rewards[agent] = agent_name.score
         self.dones[agent] = not self.run or self.frames >= self.max_frames
@@ -490,31 +492,6 @@ class env(AECEnv):
         self.render_on = False
         pygame.event.pump()
         pygame.display.quit()
-
-    def plot_obs(self, observation, fname):
-        # shrink observation dims
-        # shape = original_obs_shape(self.s_width, self.s_height)
-        shape = (40, 40)
-        for i in range(len(observation)):
-            observation[i] = np.squeeze(observation[i])
-            observation[i] = observation[i].reshape(shape)
-
-        fig = plt.figure()
-        # plt.imsave('test.png', observation[0], cmap = plt.cm.gray)
-        ax1 = fig.add_subplot(221)
-        ax2 = fig.add_subplot(222)
-        ax3 = fig.add_subplot(223)
-        ax4 = fig.add_subplot(224)
-        ax1.imshow(observation[0], cmap=plt.cm.gray)
-        ax2.imshow(observation[1], cmap=plt.cm.gray)
-        ax3.imshow(observation[2], cmap=plt.cm.gray)
-        ax4.imshow(observation[3], cmap=plt.cm.gray)
-        ax1.set_title("Observation[0]")
-        ax2.set_title("Observation[1]")
-        ax3.set_title("Observation[2]")
-        ax4.set_title("Observation[3]")
-        plt.savefig(fname)
-        quit()
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen
