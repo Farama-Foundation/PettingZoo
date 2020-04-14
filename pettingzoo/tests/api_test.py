@@ -284,7 +284,7 @@ def test_bad_actions(env):
         assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
         assert check_asserts(lambda: env.step(np.ones((29,67,17)))), "actions of a shape not equal to the box should assert with a helpful error message"
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+        assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
 
     env.reset()
 
