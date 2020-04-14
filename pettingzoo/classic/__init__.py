@@ -1,3 +1,4 @@
+from .checkers import checkers as checkers_v0
 from .chess import chess_env as chess_v0
 from .rps import rps as rps_v0
 from .rpsls import rpsls as rpsls_v0

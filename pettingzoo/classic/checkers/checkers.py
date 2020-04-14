@@ -7,6 +7,7 @@ import numpy as np
 
 from pettingzoo import AECEnv
 from gym import spaces
+from pettingzoo.utils.agent_selector import agent_selector
 
 
 class env(AECEnv):
@@ -20,6 +21,8 @@ class env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
         self.agent_order = list(self.agents)
+
+        self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
@@ -36,11 +39,11 @@ class env(AECEnv):
         self.observation[:, :, 1] = np.array(self.ch.flat_board())
         self.num_moves_max = 300
         self.num_moves = 0
-        self.agent_selection = 0
+        self.agent_selection = self._agent_selector.reset()
         self.rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {'legal_moves': []} for name in self.agents}
-        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = self.ch.legal_moves()
+        self.infos[self.agent_selection]['legal_moves'] = self.ch.legal_moves()
         self.winner = -1
 
     def step(self, action, observe=True):
@@ -48,9 +51,11 @@ class env(AECEnv):
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
         if turn == 'black':
-            self.agent_selection = 0
+            self.agent_order = [self.agents[0],self.agents[1]]
+            self.agent_selection = self._agent_selector.reset()
         elif turn == 'white':
-            self.agent_selection = 1
+            self.agent_order = [self.agents[1],self.agents[0]]
+            self.agent_selection = self._agent_selector.reset()
         else:
             raise ValueError
 
