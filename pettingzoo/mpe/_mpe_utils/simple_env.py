@@ -4,11 +4,12 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import messages
 import warnings
 
+
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames, random_seed):
+    def __init__(self, scenario, world, max_frames, seed):
         super(SimpleEnv, self).__init__()
 
         self.max_frames = max_frames
@@ -134,8 +135,7 @@ class SimpleEnv(AECEnv):
     def step(self, action, observe=True):
         assert self.has_reset, messages.step_before_reset
         current_space = self.action_spaces[self.agent_selection]
-        if not current_space.contains(action):
-            warnings.warn(messages.action_warning(current_space, action))
+        assert current_space.contains(action), (messages.action_warning(current_space, action))
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self.agent_order[next_idx]
