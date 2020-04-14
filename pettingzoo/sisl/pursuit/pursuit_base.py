@@ -6,6 +6,7 @@ from subprocess import call
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
+from pettingzoo.utils import EnvLogger
 
 
 import pygame
@@ -159,9 +160,12 @@ class Pursuit():
         self.reset()
 
     def close(self):
-        pygame.event.pump()
-        pygame.display.quit()
-        pygame.quit()
+        if not self.renderOn:
+            EnvLogger.warn_close_unrendered_env()
+        else:
+            pygame.event.pump()
+            pygame.display.quit()
+            pygame.quit()
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #

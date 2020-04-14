@@ -3,6 +3,7 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
+from pettingzoo.utils import EnvLogger
 
 
 class env(AECEnv):
@@ -52,13 +53,12 @@ class env(AECEnv):
         self.env.render()
 
     def step(self, action, observe=True):
-        if not np.isscalar(action):
-            action = action[0]
-
         agent = self.agent_selection
         if action is None or action == np.NaN:
             action = 4
+            EnvLogger.warn_action_out_of_bound()
         elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
             raise Exception('Action for agent {} must be in Discrete({}). \
                                 It is currently {}'.format(agent, self.action_spaces[agent].n, action))
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())

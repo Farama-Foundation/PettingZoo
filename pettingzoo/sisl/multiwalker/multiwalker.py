@@ -1,6 +1,7 @@
 from .multiwalker_base import MultiWalkerEnv as _env
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import EnvLogger
 import numpy as np
 
 
@@ -59,13 +60,14 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        action = np.array(action, dtype=np.float32)
-        if any(np.isnan(action)):
-            action = [0 for _ in action]
+        if action is None or any(np.isnan(action)):
+            EnvLogger.warn_action_out_of_bound()
+            raise Exception('Action for agent {} cannot be null'.format(agent))
         elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
             raise Exception('Action for agent {} must be in {}. It is currently {}'.format(
                 agent, self.action_spaces[agent], action))
-
+        action = np.array(action, dtype=np.float32)
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for r in self.rewards:
             self.rewards[r] = self.env.get_last_rewards()[self.agent_name_mapping[r]]
