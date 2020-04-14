@@ -6,6 +6,7 @@ import numpy as np
 import random
 from gym import spaces
 from .manual_control import manual_control
+from pettingzoo.utils import EnvLogger
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
@@ -189,6 +190,8 @@ class env(AECEnv):
         if self.rendering:
             pygame.event.pump()
             pygame.display.quit()
+        else:
+            EnvLogger.warn_close_unrendered_env()
         pygame.quit()
 
     def draw(self):
@@ -252,6 +255,8 @@ class env(AECEnv):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         agent = self.agent_selection
         # if not continuous, input must be normalized
+        if action is None or not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound()
         reward = 0
         if action is not None:
             if action != 0 and not self.continuous:
