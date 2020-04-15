@@ -26,7 +26,7 @@ import itertools
 import numpy as np
 import os
 
-import coords
+from . import coords
 
 N = int(os.environ.get('BOARD_SIZE', 19))
 
@@ -46,9 +46,9 @@ def _check_bounds(c):
 
 
 NEIGHBORS = {(x, y): list(filter(_check_bounds, [
-    (x+1, y), (x-1, y), (x, y+1), (x, y-1)])) for x, y in ALL_COORDS}
+    (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)])) for x, y in ALL_COORDS}
 DIAGONALS = {(x, y): list(filter(_check_bounds, [
-    (x+1, y+1), (x+1, y-1), (x-1, y+1), (x-1, y-1)])) for x, y in ALL_COORDS}
+    (x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1)])) for x, y in ALL_COORDS}
 
 
 class IllegalMove(Exception):
