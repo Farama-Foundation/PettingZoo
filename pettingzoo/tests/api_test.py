@@ -230,15 +230,16 @@ def test_warnings(env):
         e1 = copy(env)
         e1.reset()
         e1.close()
-    except:
+    finally:
         # e1 should throw a close_unrendered_environment warning
         assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
 
     try:
         e2 = copy(env)
+        e2.reset()
         EnvLogger.flush()
         e2.step(None)
-    except:
+    finally:
         assert "[WARNING]: Received an action that was outside action space" in EnvLogger.mqueue, "env does not warn on out of bounds/NaN action"
     EnvLogger.unsuppress_output()
 
@@ -278,23 +279,24 @@ def check_asserts(fn, message=None):
         return False
     except AssertionError as e:
         if message is not None:
-            return message in str(e)
+            return message == str(e)
         return True
     except Exception as e:
         raise e
 
-
-def check_warns(fn, message=None):
-    with warnings.catch_warnings(record=True) as w:
-        fn()
-        return len(w) > 0
-
+def check_warns(fn):
+    from pettingzoo.utils import EnvLogger
+    EnvLogger.suppress_output()
+    EnvLogger.flush()
+    fn()
+    EnvLogger.unsuppress_output()
+    return EnvLogger.mqueue
 
 def test_requires_reset(env):
     first_agent = env.agent_selection
     first_action_space = env.action_spaces[first_agent]
-    assert check_asserts(lambda: env.step(first_action_space.sample())), "env.step should assert before a reset with error message via env_logger"
-    assert check_asserts(lambda: env.observe(first_agent)), "env.observe should assert before a reset with error message via env_logger"
+    assert check_asserts(lambda: env.step(first_action_space.sample()), "reset() needs to be called before step"), "env.step should call EnvLogger.error_step_before_reset if it is called before reset"
+    assert check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"), "env.observe should call EnvLogger.error_observe_before_reset if it is called before reset"
 
 
 def test_bad_actions(env):
@@ -304,7 +306,7 @@ def test_bad_actions(env):
         assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
         assert check_asserts(lambda: env.step(np.ones((29, 67, 17)))), "actions of a shape not equal to the box should assert with a helpful error message"
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
 
     env.reset()
 
