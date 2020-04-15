@@ -10,7 +10,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, board_size: int = 19, komi: float = 7.5, **kwargs):
+    def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super(env, self).__init__()
