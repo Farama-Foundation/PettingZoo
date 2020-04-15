@@ -26,18 +26,16 @@ class Scenario(BaseScenario):
             landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
-        # make initial conditions
-        self.reset_world(world)
         return world
 
-    def reset_world(self, world):
+    def reset_world(self, world, np_random):
         # random properties for landmarks
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.1, 0.1, 0.1])
             landmark.color[i + 1] += 0.8
             landmark.index = i
         # set goal landmark
-        goal = np.random.choice(world.landmarks)
+        goal = np_random.choice(world.landmarks)
         for i, agent in enumerate(world.agents):
             agent.goal_a = goal
             agent.color = np.array([0.25, 0.25, 0.25])
@@ -48,11 +46,11 @@ class Scenario(BaseScenario):
                 agent.color[j + 1] += 0.5
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            agent.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def reward(self, agent, world):
@@ -93,5 +91,4 @@ class Scenario(BaseScenario):
         if not agent.adversary:
             return np.concatenate([agent.state.p_vel] + [agent.goal_a.state.p_pos - agent.state.p_pos] + [agent.color] + entity_pos + entity_color + other_pos)
         else:
-            # other_pos = list(reversed(other_pos)) if random.uniform(0,1) > 0.5 else other_pos  # randomize position of other agents in adversary network
             return np.concatenate([agent.state.p_vel] + entity_pos + other_pos)

@@ -1,19 +1,26 @@
 from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
+from pettingzoo.utils import messages
 from pettingzoo.utils.agent_selector import agent_selector
+import warnings
+from gym.utils import seeding
 
 
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames):
+    def __init__(self, scenario, world, max_frames, seed):
         super(SimpleEnv, self).__init__()
+
+        self.np_random, seed = seeding.np_random(seed)
 
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
@@ -48,13 +55,16 @@ class SimpleEnv(AECEnv):
 
         self.viewer = None
 
-        self.reset()
+        self.has_reset = False
 
     def observe(self, agent):
+        assert self.has_reset, messages.observe_before_reset
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
-        self.scenario.reset_world(self.world)
+        self.has_reset = True
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
@@ -130,6 +140,9 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        assert self.has_reset, messages.step_before_reset
+        current_space = self.action_spaces[self.agent_selection]
+        assert current_space.contains(action), (messages.action_warning(current_space, action))
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()
