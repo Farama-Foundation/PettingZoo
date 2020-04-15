@@ -1,24 +1,33 @@
 from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
+from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
+from gym.utils import seeding
 
 
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames):
+    def __init__(self, scenario, world, max_frames, seed):
         super(SimpleEnv, self).__init__()
+
+        self.np_random, seed = seeding.np_random(seed)
 
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self.agent_order = list(self.agents)
+
+        self._agent_selector = agent_selector(self.agent_order)
 
         # set spaces
         self.action_spaces = dict()
@@ -39,20 +48,22 @@ class SimpleEnv(AECEnv):
         self.infos = {name: {} for name in self.agents}
 
         self.steps = 0
-        self.display_wait = 0.04
 
-        self.agent_selection = self.agent_order[0]
+        self.agent_selection = self._agent_selector.reset()
         self.current_actions = [None] * self.num_agents
 
         self.viewer = None
 
-        self.reset()
+        self.has_reset = False
 
     def observe(self, agent):
+        assert self.has_reset, EnvLogger.error_observe_before_reset()
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
-        self.scenario.reset_world(self.world)
+        self.has_reset = True
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
@@ -64,7 +75,7 @@ class SimpleEnv(AECEnv):
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
-        self.agent_selection = self.agent_order[0]
+        self.agent_selection = self._agent_selector.reset()
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
@@ -128,9 +139,15 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        current_space = self.action_spaces[self.agent_selection]
+        if not current_space.contains(action):
+            EnvLogger.warn_action_out_of_bound()
+            return
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
-        self.agent_selection = self.agent_order[next_idx]
+        self.agent_selection = self._agent_selector.next()
 
         self.current_actions[current_idx] = action
 
@@ -219,4 +236,6 @@ class SimpleEnv(AECEnv):
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
+        else:
+            EnvLogger.warn_close_unrendered_env()
         self._reset_render()
