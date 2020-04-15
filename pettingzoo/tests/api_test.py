@@ -9,7 +9,6 @@ import random
 import re
 from skimage.io import imsave
 import os
-import pettingzoo.utils.messages as messages
 
 
 def test_obervation(observation, observation_0):
@@ -294,8 +293,8 @@ def check_warns(fn, message=None):
 def test_requires_reset(env):
     first_agent = env.agent_selection
     first_action_space = env.action_spaces[first_agent]
-    assert check_asserts(lambda: env.step(first_action_space.sample()), message=messages.step_before_reset), "env.step should assert before a reset with error message messages.step_before_reset"
-    assert check_asserts(lambda: env.observe(first_agent), message=messages.observe_before_reset), "env.observe should assert before a reset with error message messages.observe_before_reset"
+    assert check_asserts(lambda: env.step(first_action_space.sample())), "env.step should assert before a reset with error message via env_logger"
+    assert check_asserts(lambda: env.observe(first_agent)), "env.observe should assert before a reset with error message via env_logger"
 
 
 def test_bad_actions(env):
@@ -312,7 +311,7 @@ def test_bad_actions(env):
 
 def check_environment_args(env):
     args = inspect.getargspec(env.__init__)
-    if len(args) < 2 or "seed" != args.args[1]:
+    if len(args.args) < 2 or "seed" != args.args[1]:
         warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
     else:
         def hash_obsevation(obs):

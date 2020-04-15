@@ -38,6 +38,13 @@ class EnvLogger():
     def warn_close_unrendered_env():
         EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment")
 
+    @staticmethod
+    def error_observe_before_reset():
+        assert False, "reset() needs to be called before observe"
+
+    @staticmethod
+    def error_step_before_reset():
+        assert False, "reset() needs to be called before step"
 
 class EnvWarningHandler(logging.Handler):
     def __init__(self, *args, mqueue, **kwargs):

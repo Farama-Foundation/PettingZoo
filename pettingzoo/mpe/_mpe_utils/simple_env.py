@@ -1,9 +1,8 @@
 from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
-from pettingzoo.utils import messages
 from pettingzoo.utils.agent_selector import agent_selector
-import warnings
+from pettingzoo.utils.env_logger import env_logger
 from gym.utils import seeding
 
 
@@ -58,7 +57,7 @@ class SimpleEnv(AECEnv):
         self.has_reset = False
 
     def observe(self, agent):
-        assert self.has_reset, messages.observe_before_reset
+        #assert self.has_reset, env_logger.error_observe_before_reset()
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
@@ -140,7 +139,7 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
-        assert self.has_reset, messages.step_before_reset
+        assert self.has_reset, env_logger.error_step_before_reset()
         current_space = self.action_spaces[self.agent_selection]
         assert current_space.contains(action), (messages.action_warning(current_space, action))
         current_idx = self._index_map[self.agent_selection]
