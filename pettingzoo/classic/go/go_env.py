@@ -23,18 +23,18 @@ class env(AECEnv):
         self.agents = ['black', 'white']
         self.num_agents = len(self.agents)
 
-        self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
-        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.append(np.full((self._N * self._N,), -1), np.zeros(3,)), high=np.append(np.full((self._N * self._N,), 1), np.full((3,), self._N * self._N)), dtype=np.int) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
-        self._last_obs = self.observe(self.agents[0])
         self.agent_order = self.agents
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
+
+        self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
+        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
+        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
         self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+        self._last_obs = self.observe(self.agents[0])
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -60,64 +60,59 @@ class env(AECEnv):
     def _encode_legal_actions(self, actions):
         return np.where(actions==1)[0]
 
+    def _encode_rewards(self, result):
+        return [1, -1] if result == 1 else [-1, 1]
+
     def observe(self, agent):
         obs = self._go.board.flatten()
         moves = self._go.n
         captures = self._go.caps
         return np.append(obs, [moves, captures[0], captures[1]])
 
-        obs = self.env.get_state(self._name_to_int(agent))
-        return obs['obs']
+    def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+            next_player = False
+        else:
+            if action not in self.infos[self.agent_selection]['legal_moves']:
+                self.rewards[self.agent_selection] = -1
+                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+                info_copy = self.infos[self.agent_selection]
+                self.infos = self._convert_to_dict([{'legal_moves': [self._N * self._N + 1]} for agent in range(self.num_agents)])
+                self.infos[self.agent_selection] = info_copy
+                self.agent_selection = self._agent_selector.next()
+                return self._last_obs
+            self._go = self._go.play_move(coords.from_flat(action))
+            self._last_obs = self.observe(self.agent_selection)
+            next_player = self._agent_selector.next()
+            if self._go.is_game_over():
+                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+                self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
+                self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
+            else:
+                self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+        self.agent_selection = next_player if next_player else self._agent_selector.next() 
+        if observe:
+            return self._last_obs
 
-    # def step(self, action, observe=True):
-    #     if self.dones[self.agent_selection]:
-    #         self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-    #         obs = False
-    #     else:
-    #         if action not in self.infos[self.agent_selection]['legal_moves']:
-    #             self.rewards[self.agent_selection] = -1
-    #             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-    #             info_copy = self.infos[self.agent_selection]
-    #             self.infos = self._convert_to_dict([{'legal_moves': [2]} for agent in range(self.num_agents)])
-    #             self.infos[self.agent_selection] = info_copy
-    #             self.agent_selection = self._agent_selector.next()
-    #             return self._last_obs
-    #         obs, next_player_id = self.env.step(action)
-    #         self._last_obs = obs['obs']
-    #         if self.env.is_over():
-    #             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-    #             self.rewards = self._convert_to_dict(self.env.get_payoffs())
-    #             self.infos[self._int_to_name(next_player_id)]['legal_moves'] = [2]
-    #         else:
-    #             self.infos[self._int_to_name(next_player_id)]['legal_moves'] = obs['legal_actions']
-    #     self.agent_selection = self._agent_selector.next()
-    #     if observe:
-    #         return obs['obs'] if obs else self._last_obs
+    def reset(self, observe=True):
+        self._go = go.Position(komi=self._komi)
 
-    # def reset(self, observe=True):
-    #     obs, player_id = self.env.init_game()
-    #     self.agent_order = [self._int_to_name(agent) for agent in [player_id, 0 if player_id == 1 else 1]]
-    #     self._agent_selector.reinit(self.agent_order)
-    #     self.agent_selection = self._agent_selector.reset()
-    #     self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
-    #     self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-    #     self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-    #     self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
-    #     self._last_obs = obs['obs']
-    #     if observe:
-    #         return obs['obs']
-    #     else:
-    #         return
+        self.agent_order = self.agents
+        self._agent_selector = agent_selector(self.agent_order)
+        self.agent_selection = self._agent_selector.reset()
+        self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
+        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
+        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
+        self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+        self._last_obs = self.observe(self.agents[0])
+        if observe:
+            return self._last_obs
+        else:
+            return
 
-    # def render(self, mode='human'):
-    #     for player in self.agents:
-    #         state = self.env.game.get_state(self._name_to_int(player))
-    #         print("\n=============== {}'s Hand ===============".format(player))
-    #         print_card(state['hand'])
-    #         print("\n{}'s Chips: {}".format(player, state['my_chips']))
-    #     print('\n================= Public Cards =================')
-    #     print_card(state['public_cards']) if state['public_cards'] else print('No public cards.')
-    #     print('\n')
+    def render(self, mode='human'):
+        print(self._go)
 
     def close(self):
         pass
