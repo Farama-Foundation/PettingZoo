@@ -297,18 +297,23 @@ def check_warns(fn):
 def test_requires_reset(env):
     first_agent = env.agent_selection
     first_action_space = env.action_spaces[first_agent]
-    assert check_asserts(lambda: env.step(first_action_space.sample()), "reset() needs to be called before step"), "env.step should call EnvLogger.error_step_before_reset if it is called before reset"
-    assert check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"), "env.observe should call EnvLogger.error_observe_before_reset if it is called before reset"
+    if not check_asserts(lambda: env.step(first_action_space.sample()), "reset() needs to be called before step"):
+        warnings.warn("env.step should call EnvLogger.error_step_before_reset if it is called before reset")
+    if not check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"):
+        warnings.warn("env.observe should call EnvLogger.error_observe_before_reset if it is called before reset")
 
 
 def test_bad_actions(env):
     env.reset()
     first_action_space = env.action_spaces[env.agent_selection]
     if isinstance(first_action_space, gym.spaces.Box):
-        assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "out of bounds actions should call EnvLogger.warn_action_out_of_bound"
-        assert check_asserts(lambda: env.step(np.ones((29, 67, 17)))), "actions of a shape not equal to the box should assert with a helpful error message"
+        if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))):
+            warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
+        if not check_asserts(lambda: env.step(np.ones((29, 67, 17)))):
+            warnings.warn("actions of a shape not equal to the box should assert with a helpful error message")
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should call EnvLogger.warn_action_out_of_bound"
+        if not check_warns(lambda: env.step(first_action_space.n)):
+            warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
 
     env.reset()
 
