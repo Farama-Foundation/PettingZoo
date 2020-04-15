@@ -284,6 +284,7 @@ def check_asserts(fn, message=None):
     except Exception as e:
         raise e
 
+
 def check_warns(fn):
     from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
@@ -291,6 +292,7 @@ def check_warns(fn):
     fn()
     EnvLogger.unsuppress_output()
     return EnvLogger.mqueue
+
 
 def test_requires_reset(env):
     first_agent = env.agent_selection
@@ -303,10 +305,10 @@ def test_bad_actions(env):
     env.reset()
     first_action_space = env.action_spaces[env.agent_selection]
     if isinstance(first_action_space, gym.spaces.Box):
-        assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
+        assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "out of bounds actions should call EnvLogger.warn_action_out_of_bound"
         assert check_asserts(lambda: env.step(np.ones((29, 67, 17)))), "actions of a shape not equal to the box should assert with a helpful error message"
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+        assert check_warns(lambda: env.step(first_action_space.n)), "out of bounds actions should call EnvLogger.warn_action_out_of_bound"
 
     env.reset()
 
@@ -318,9 +320,7 @@ def check_environment_args(env):
     else:
         def hash_obsevation(obs):
             try:
-                #obs.flags.writeable = False
                 val = hash(obs.tobytes())
-                #obs.flags.writeable = True
                 return val
             except AttributeError:
                 try:
@@ -332,19 +332,18 @@ def check_environment_args(env):
         # checks deterministic behavior if seed is set
         base_seed = 192312
         new_env = env.__class__(seed=base_seed)
-        actions = {agent:space.sample() for agent,space in new_env.action_spaces.items()}
+        actions = {agent: space.sample() for agent, space in new_env.action_spaces.items()}
         hashes = []
         num_seeds = 5
-        rand_seeds = [random.randint(0,1000000) for _ in range(num_seeds)]
+        rand_seeds = [random.randint(0, 1000000) for _ in range(num_seeds)]
         for x in range(num_seeds):
             cur_hashes = []
             random.seed(rand_seeds[x])
             np.random.seed(rand_seeds[x])
             obs = new_env.reset()
             cur_hashes.append(hash_obsevation(obs))
-            first_hash = None
             for _ in range(50):
-                rew,done,info = new_env.last()
+                rew, done, info = new_env.last()
                 if done:
                     break
                 next_obs = new_env.step(actions[new_env.agent_selection])
@@ -354,6 +353,7 @@ def check_environment_args(env):
             new_env = env.__class__(seed=base_seed)
         if not all(hashes[0] == h for h in hashes):
             warnings.warn("seeded environment is not fully deterministic, depends on random.seed or numpy.random.seed")
+
 
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")

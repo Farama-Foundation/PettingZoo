@@ -5,6 +5,7 @@ from gym import spaces
 import numpy as np
 import warnings
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
 
 
 class env(AECEnv):
@@ -31,11 +32,13 @@ class env(AECEnv):
         self.agent_selection = self._agent_selector.reset()
 
         self.has_reset = False
+        self.has_rendered = False
 
         self.num_agents = len(self.agents)
 
     def observe(self, agent):
-        assert self.has_reset, "reset() needs to be called before observe"
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         return chess_utils.get_observation(self.board, self.agents.index(agent))
 
     def reset(self, observe=True):
@@ -63,7 +66,10 @@ class env(AECEnv):
             self.infos[name] = {'legal_moves': []}
 
     def step(self, action, observe=True):
-        assert self.has_reset, "reset() needs to be called before step"
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        if not self.action_spaces[self.agent_selection].contains(action):
+            EnvLogger.warn_action_out_of_bound()
 
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
@@ -107,7 +113,10 @@ class env(AECEnv):
         return next_observation
 
     def render(self, mode='human'):
+        self.has_rendered = True
         print(self.board)
 
     def close(self):
-        pass
+        if not self.has_rendered:
+            EnvLogger.warn_close_unrendered_env()
+        self.has_rendered = False
