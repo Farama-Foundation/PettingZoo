@@ -1,6 +1,7 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
 import warnings
+import inspect
 import numpy as np
 from copy import copy
 import gym
@@ -8,6 +9,7 @@ import random
 import re
 from skimage.io import imsave
 import os
+import pettingzoo.utils.messages as messages
 
 
 def test_obervation(observation, observation_0):
@@ -271,12 +273,98 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
+def check_asserts(fn, message=None):
+    try:
+        fn()
+        return False
+    except AssertionError as e:
+        if message is not None:
+            return message in str(e)
+        return True
+    except Exception as e:
+        raise e
+
+
+def check_warns(fn, message=None):
+    with warnings.catch_warnings(record=True) as w:
+        fn()
+        return len(w) > 0
+
+
+def test_requires_reset(env):
+    first_agent = env.agent_selection
+    first_action_space = env.action_spaces[first_agent]
+    assert check_asserts(lambda: env.step(first_action_space.sample()), message=messages.step_before_reset), "env.step should assert before a reset with error message messages.step_before_reset"
+    assert check_asserts(lambda: env.observe(first_agent), message=messages.observe_before_reset), "env.observe should assert before a reset with error message messages.observe_before_reset"
+
+
+def test_bad_actions(env):
+    env.reset()
+    first_action_space = env.action_spaces[env.agent_selection]
+    if isinstance(first_action_space, gym.spaces.Box):
+        assert check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))), "nan actions should assert with a helpful error message"
+        assert check_asserts(lambda: env.step(np.ones((29, 67, 17)))), "actions of a shape not equal to the box should assert with a helpful error message"
+    elif isinstance(first_action_space, gym.spaces.Discrete):
+        assert check_asserts(lambda: env.step(first_action_space.n)), "out of bounds actions should assert with a helpful error message"
+
+    env.reset()
+
+
+def check_environment_args(env):
+    args = inspect.getargspec(env.__init__)
+    if len(args) < 2 or "seed" != args.args[1]:
+        warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
+    else:
+        def hash_obsevation(obs):
+            try:
+                #obs.flags.writeable = False
+                val = hash(obs.tobytes())
+                #obs.flags.writeable = True
+                return val
+            except AttributeError:
+                try:
+                    return hash(obs)
+                except TypeError:
+                    warnings.warn("observation not an int or an ndarray")
+                    return 0
+
+        # checks deterministic behavior if seed is set
+        base_seed = 192312
+        new_env = env.__class__(seed=base_seed)
+        actions = {agent:space.sample() for agent,space in new_env.action_spaces.items()}
+        hashes = []
+        num_seeds = 5
+        rand_seeds = [random.randint(1000000) for _ in range(num_seeds)]
+        for x in range(num_seeds):
+            cur_hashes = []
+            random.seed(rand_seeds[x])
+            np.random.seed(rand_seeds[x])
+            obs = new_env.reset()
+            cur_hashes.append(hash_obsevation(obs))
+            first_hash = None
+            for _ in range(50):
+                rew,done,info = new_env.last()
+                if done:
+                    break
+                next_obs = new_env.step(actions[new_env.agent_selection])
+                cur_hashes.append(hash_obsevation(next_obs))
+
+            hashes.append(hash(tuple(cur_hashes)))
+            new_env = env.__class__(seed=base_seed)
+        if not all(hashes[0] == h for h in hashes):
+            warnings.warn("seeded environment is not fully deterministic, depends on random.seed or numpy.random.seed")
+
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     env_agent_sel = copy(env)
     env_warnings = copy(env)
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
+
+    # do this before reset
+    test_requires_reset(env)
+
+    check_environment_args(env)
 
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
@@ -304,6 +392,8 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observation_action_spaces(env, agent_0)
 
     play_test(env, observation_0)
+
+    test_bad_actions(env)
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
