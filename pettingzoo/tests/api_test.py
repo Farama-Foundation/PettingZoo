@@ -334,7 +334,7 @@ def check_environment_args(env):
         actions = {agent:space.sample() for agent,space in new_env.action_spaces.items()}
         hashes = []
         num_seeds = 5
-        rand_seeds = [random.randint(1000000) for _ in range(num_seeds)]
+        rand_seeds = [random.randint(0,1000000) for _ in range(num_seeds)]
         for x in range(num_seeds):
             cur_hashes = []
             random.seed(rand_seeds[x])
