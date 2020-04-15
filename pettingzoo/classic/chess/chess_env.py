@@ -30,14 +30,17 @@ class env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
+        self.has_reset = False
+
         self.num_agents = len(self.agents)
 
-        self.reset()
-
     def observe(self, agent):
+        assert self.has_reset, "reset() needs to be called before observe"
         return chess_utils.get_observation(self.board, self.agents.index(agent))
 
     def reset(self, observe=True):
+        self.has_reset = True
+
         self.board = chess.Board()
 
         self.agent_selection = self._agent_selector.reset()
@@ -60,6 +63,8 @@ class env(AECEnv):
             self.infos[name] = {'legal_moves': []}
 
     def step(self, action, observe=True):
+        assert self.has_reset, "reset() needs to be called before step"
+
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         self.agent_selection = next_agent = self._agent_selector.next()

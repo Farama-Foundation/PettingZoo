@@ -21,7 +21,7 @@ class EnvLogger():
     @staticmethod
     def flush():
         EnvLogger.mqueue.clear()
-    
+
     @staticmethod
     def suppress_output():
         EnvLogger._output = False

@@ -94,10 +94,12 @@ In this environment, a single agent sees landmark position, and is rewarded base
 Observation space: `[self_vel, landmark_rel_position]`
 
 ```
-simple.env(max_frames=500)
+simple.env(seed=None, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 max_frames: number of frames (a step for each agent) until game terminates
 ```
 
@@ -126,10 +128,12 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_adversary.env(N=2, max_frames=500)
+simple_adversary.env(seed=None, N=2, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 N: number of good agents and landmarks
 
 max_frames: number of frames (a step for each agent) until game terminates
@@ -167,10 +171,12 @@ Eve action space: `[say_0, say_1, say_2, say_3]`
 For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.
 
 ```
-simple_crypto.env(max_frames=500)
+simple_crypto.env(seed=None, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 max_frames: number of frames (a step for each agent) until game terminates
 ```
 
@@ -200,10 +206,12 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_push.env(max_frames=500)
+simple_push.env(seed=None, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 max_frames: number of frames (a step for each agent) until game terminates
 ```
 
@@ -232,10 +240,12 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(max_frames=500)
+simple_reference.env(seed=None, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 max_frames: number of frames (a step for each agent) until game terminates
 ```
 
@@ -264,10 +274,12 @@ Speaker action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, 
 Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_speaker_listener.env(max_frames=500)
+simple_speaker_listener.env(seed=None, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 max_frames: number of frames (a step for each agent) until game terminates
 ```
 
@@ -292,10 +304,12 @@ Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_re
 Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_spread.env(N=3, max_frames=500)
+simple_spread.env(seed=None, N=3, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 N: number of agents and landmarks
 
 max_frames: number of frames (a step for each agent) until game terminates
@@ -333,10 +347,12 @@ Agent and adversary observations: `[self_vel, self_pos, landmark_rel_positions, 
 Agent and adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
+simple_tag.env(seed=None, num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 num_good: number of good agents
 
 num_adversaries: number of adversaries
@@ -383,11 +399,13 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
+simple_world_comm.env(seed=None, num_good=2, num_adversaries=4, num_obstacles=1,
                 num_food=2, num_forests=2, max_frames=500)
 ```
 
 ```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 num_good: number of good agents
 
 num_adversaries: number of adversaries
