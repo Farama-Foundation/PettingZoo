@@ -73,7 +73,7 @@ class Prisoner:
 
 class env(AECEnv):
 
-    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4):
+    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         # super(env, self).__init__()
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
@@ -96,6 +96,12 @@ class env(AECEnv):
         self.velocity = 8
         self.continuous = continuous
         self.vector_obs = vector_observation
+        self.synchronized_start = synchronized_start
+        self.identical_aliens = identical_aliens
+        if (self.identical_aliens):
+            self.random_aliens = False
+        else:
+            self.random_aliens = random_aliens
 
         self.action_spaces = {}
         if continuous:
@@ -133,6 +139,30 @@ class env(AECEnv):
             self.walls.append((400, y, 300, 50))
 
     def spawn_prisoners(self):
+
+        chosen_sprites_imgs = []
+        chosen_sprites_heights = []
+        # possible sprite configurations are, identical_aliens, random_aliens or neither
+        if self.identical_aliens:
+            # randomly chosen sprite used for all aliens
+            sprite_id = random.randint(0, len(self.sprite_list) - 1)
+            for s in range(self.num_agents):
+                chosen_sprites_imgs.append(self.sprite_list[sprite_id])
+                chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
+        elif self.random_aliens:
+            # randomly choose sprite for each agent
+            for s in range(self.num_agents):
+                sprite_id = random.randint(0, len(self.sprite_list) - 1)
+                chosen_sprites_imgs.append(self.sprite_list[sprite_id])
+                chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
+        else:
+            # cycle through each sprite and assign to agent
+            p = 0
+            for s in range(self.num_agents):
+                chosen_sprites_imgs.append(self.sprite_list[p])
+                chosen_sprites_heights.append(self.sprite_img_heights[p])
+                p = (p + 1) % len(self.sprite_list)
+
         self.prisoners = {}
         prisoner_spawn_locs = []
         self.prisoner_mapping = {}
@@ -148,25 +178,17 @@ class env(AECEnv):
             self.prisoner_mapping[map_tuple_0] = map_count
             self.prisoner_mapping[map_tuple_1] = map_count + 1
             map_count += 2
-        # prisoner_spawn_locs = [(200, 150, 50, 350, (50, 50, 350, 150)),
-        #                        (550, 150, 400, 700, (400, 50, 700, 150)),
-        #                        (200, 300, 50, 350, (50, 200, 350, 300)),
-        #                        (550, 300, 400, 700, (400, 200, 700, 300)),
-        #                        (200, 450, 50, 350, (50, 350, 350, 450)),
-        #                        (550, 450, 400, 700, (400, 350, 700, 450)),
-        #                        (200, 600, 50, 350, (50, 500, 350, 600)),
-        #                        (550, 600, 400, 700, (400, 500, 700, 600))]
-        # self.prisoner_mapping = {(0, 0): 0, (1, 0): 1, (0, 1): 2,
-        #                          (1, 1): 3, (0, 2): 4, (1, 2): 5, (0, 3): 6, (1, 3): 7}
         p_count = 0
-        sprite_count = 0
         for p in prisoner_spawn_locs:
+            agent_name = self.agents[p_count]
             x_pos, y_pos, l_bound, r_bound, view_window = p
-            self.prisoners[self.agents[p_count]] = self.create_prisoner(
-                x_pos + random.randint(-20, 20), y_pos - self.sprite_img_heights[sprite_count], l_bound, r_bound, view_window, self.agents[p_count])
-            self.prisoners[self.agents[p_count]].set_sprite(self.sprite_list[sprite_count])
+            x_noise = 0
+            if not self.synchronized_start:
+                x_noise = random.randint(-20, 20)
+            self.prisoners[agent_name] = self.create_prisoner(
+                x_pos + x_noise, y_pos - chosen_sprites_heights[p_count], l_bound, r_bound, view_window, agent_name)
+            self.prisoners[agent_name].set_sprite(chosen_sprites_imgs[p_count])
             p_count += 1
-            sprite_count = (sprite_count + 1) % len(self.sprite_list)
 
     def create_prisoner(self, x, y, l, r, u, nam):
         return Prisoner((x, y), l, r, u, nam)
@@ -215,12 +237,9 @@ class env(AECEnv):
         pygame.quit()
 
     def draw(self):
-        self.screen.blit(self.dynamic_background, (0, 0))
-        if self.num_floors > 4:
-            min_num = self.num_floors - 4
-            for k in range(min_num):
-                h = 650 + 150 * k
-                self.screen.blit(self.dynamic_background_append, (50, h))
+        for k in range(self.num_floors):
+            h = 50 + 150 * k
+            self.screen.blit(self.dynamic_background_append, (50, h))
         for p in self.prisoners:
             self.screen.blit(self.prisoners[p].get_sprite(), self.prisoners[p].position)
 
