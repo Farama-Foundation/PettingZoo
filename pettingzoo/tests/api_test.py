@@ -225,22 +225,12 @@ def test_agent_selector(env):
 def test_warnings(env):
     from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
-    try:
-        EnvLogger.flush()
-        e1 = copy(env)
-        e1.reset()
-        e1.close()
-    finally:
-        # e1 should throw a close_unrendered_environment warning
-        assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
-
-    try:
-        e2 = copy(env)
-        e2.reset()
-        EnvLogger.flush()
-        e2.step(None)
-    finally:
-        assert "[WARNING]: Received an action that was outside action space" in EnvLogger.mqueue, "env does not warn on out of bounds/NaN action"
+    EnvLogger.flush()
+    e1 = copy(env)
+    e1.reset()
+    e1.close()
+    # e1 should throw a close_unrendered_environment warning
+    assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
     EnvLogger.unsuppress_output()
 
 
@@ -308,9 +298,12 @@ def test_bad_actions(env):
     first_action_space = env.action_spaces[env.agent_selection]
     if isinstance(first_action_space, gym.spaces.Box):
         if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))):
-            warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
+            warnings.warn("NaN actions should call EnvLogger.warn_action_NaN")
         if not check_asserts(lambda: env.step(np.ones((29, 67, 17)))):
             warnings.warn("actions of a shape not equal to the box should assert with a helpful error message")
+        test_action = env.action_spaces[env.agent_selection].high + 1
+        if not check_asserts(lambda: env.step(test_action)):
+            warnings.warn("Out of bound actions should call EnvLogger.warn_actions_out_of_bound")
     elif isinstance(first_action_space, gym.spaces.Discrete):
         if not check_warns(lambda: env.step(first_action_space.n)):
             warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
