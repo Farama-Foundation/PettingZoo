@@ -35,7 +35,7 @@ if sys.argv[1] == 'classic/backgammon':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/checkers':
+elif sys.argv[1] == 'classic/checkers':
     print('classic/checkers_')
     from pettingzoo.classic import checkers_v0
     _env = checkers_v0.env()
@@ -48,7 +48,7 @@ if sys.argv[1] == 'classic/checkers':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/chess':
+elif sys.argv[1] == 'classic/chess':
     print('classic/chess')
     from pettingzoo.classic import chess_v0
     _env = chess_v0.env()
@@ -61,7 +61,7 @@ if sys.argv[1] == 'classic/chess':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/connect_four':
+elif sys.argv[1] == 'classic/connect_four':
     print('classic/connect_four')
     from pettingzoo.classic import connect_four_v0
     _env = connect_four_v0.env()
@@ -74,7 +74,7 @@ if sys.argv[1] == 'classic/connect_four':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/dou_dizhu':
+elif sys.argv[1] == 'classic/dou_dizhu':
     print('classic/dou_dizhu')
     from pettingzoo.classic import dou_dizhu_v0
     _env = dou_dizhu_v0.env()
@@ -87,7 +87,7 @@ if sys.argv[1] == 'classic/dou_dizhu':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/gin_rummy':
+elif sys.argv[1] == 'classic/gin_rummy':
     print('classic/gin_rummy')
     from pettingzoo.classic import gin_rummy_v0
     _env = gin_rummy_v0.env()
@@ -100,7 +100,7 @@ if sys.argv[1] == 'classic/gin_rummy':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/go':
+elif sys.argv[1] == 'classic/go':
     print('classic/go')
     from pettingzoo.classic import go_v0
     _env = go_v0.env()
@@ -113,7 +113,7 @@ if sys.argv[1] == 'classic/go':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/hanabi':
+elif sys.argv[1] == 'classic/hanabi':
     print('classic/hanabi')
     from pettingzoo.classic import hanabi_v0
     _env = hanabi_v0.env()
@@ -126,7 +126,7 @@ if sys.argv[1] == 'classic/hanabi':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/leduc_holdem':
+elif sys.argv[1] == 'classic/leduc_holdem':
     print('classic/leduc_holdem')
     from pettingzoo.classic import leduc_holdem_v0
     _env = leduc_holdem_v0.env()
@@ -139,7 +139,7 @@ if sys.argv[1] == 'classic/leduc_holdem':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/mahjong':
+elif sys.argv[1] == 'classic/mahjong':
     print('classic/mahjong')
     from pettingzoo.classic import mahjong_v0
     _env = mahjong_v0.env()
@@ -152,7 +152,7 @@ if sys.argv[1] == 'classic/mahjong':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/rps':
+elif sys.argv[1] == 'classic/rps':
     print('classic/rps')
     from pettingzoo.classic import rps_v0
     _env = rps_v0.env()
@@ -165,7 +165,7 @@ if sys.argv[1] == 'classic/rps':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/rpsls':
+elif sys.argv[1] == 'classic/rpsls':
     print('classic/rpsls')
     from pettingzoo.classic import rpsls_v0
     _env = rpsls_v0.env()
@@ -178,7 +178,7 @@ if sys.argv[1] == 'classic/rpsls':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/texas_holdem':
+elif sys.argv[1] == 'classic/texas_holdem':
     print('classic/texas_holdem')
     from pettingzoo.classic import texas_holdem_v0
     _env = texas_holdem_v0.env()
@@ -191,7 +191,7 @@ if sys.argv[1] == 'classic/texas_holdem':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/texas_holdem_no_limit':
+elif sys.argv[1] == 'classic/texas_holdem_no_limit':
     print('classic/texas_holdem_no_limit')
     from pettingzoo.classic import texas_holdem_no_limit_v0
     _env = texas_holdem_no_limit_v0.env()
@@ -204,7 +204,7 @@ if sys.argv[1] == 'classic/texas_holdem_no_limit':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/tictactoe':
+elif sys.argv[1] == 'classic/tictactoe':
     print('classic/tictactoe')
     from pettingzoo.classic import tictactoe_v0
     _env = tictactoe_v0.env()
@@ -217,7 +217,7 @@ if sys.argv[1] == 'classic/tictactoe':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'classic/uno':
+elif sys.argv[1] == 'classic/uno':
     print('classic/uno')
     from pettingzoo.classic import uno_v0
     _env = uno_v0.env()
@@ -232,7 +232,7 @@ if sys.argv[1] == 'classic/uno':
 
 # gamma
 
-if sys.argv[1] == 'gamma/cooperative_pong':
+elif sys.argv[1] == 'gamma/cooperative_pong':
     print('gamma/cooperative_pong')
     from pettingzoo.gamma import cooperative_pong_v0
     _env = cooperative_pong_v0.env()
@@ -247,7 +247,7 @@ if sys.argv[1] == 'gamma/cooperative_pong':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'gamma/knights_archers_zombies':
+elif sys.argv[1] == 'gamma/knights_archers_zombies':
     print('gamma/knights_archers_zombies')
     from pettingzoo.gamma import knights_archers_zombies_v0
     _env = knights_archers_zombies_v0.env()
@@ -262,7 +262,7 @@ if sys.argv[1] == 'gamma/knights_archers_zombies':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'gamma/pistonball':
+elif sys.argv[1] == 'gamma/pistonball':
     print('gamma/pistonball')
     from pettingzoo.gamma import pistonball_v0
     _env = pistonball_v0.env()
@@ -277,7 +277,7 @@ if sys.argv[1] == 'gamma/pistonball':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'gamma/prison':
+elif sys.argv[1] == 'gamma/prison':
     print('gamma/prison')
     from pettingzoo.gamma import prison_v0
     _env = prison_v0.env()
@@ -292,7 +292,7 @@ if sys.argv[1] == 'gamma/prison':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'gamma/prospector':
+elif sys.argv[1] == 'gamma/prospector':
     print('gamma/prospector')
     from pettingzoo.gamma import prospector_v0
     _env = prospector_v0.env()
@@ -309,7 +309,7 @@ if sys.argv[1] == 'gamma/prospector':
 
 # mpe
 
-if sys.argv[1] == 'mpe/simple':
+elif sys.argv[1] == 'mpe/simple':
     print('mpe/simple')
     from pettingzoo.mpe import simple_v0
     _env = simple_v0.env()
@@ -322,7 +322,7 @@ if sys.argv[1] == 'mpe/simple':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_adversary':
+elif sys.argv[1] == 'mpe/simple_adversary':
     print('mpe/simple_adversary')
     from pettingzoo.mpe import simple_adversary_v0
     _env = simple_adversary_v0.env()
@@ -335,7 +335,7 @@ if sys.argv[1] == 'mpe/simple_adversary':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_crypto':
+elif sys.argv[1] == 'mpe/simple_crypto':
     print('mpe/simple_crypto')
     from pettingzoo.mpe import simple_crypto_v0
     _env = simple_crypto_v0.env()
@@ -348,7 +348,7 @@ if sys.argv[1] == 'mpe/simple_crypto':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_push':
+elif sys.argv[1] == 'mpe/simple_push':
     print('mpe/simple_push')
     from pettingzoo.mpe import simple_push_v0
     _env = simple_push_v0.env()
@@ -361,7 +361,7 @@ if sys.argv[1] == 'mpe/simple_push':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_reference':
+elif sys.argv[1] == 'mpe/simple_reference':
     print('mpe/simple_reference')
     from pettingzoo.mpe import simple_reference_v0
     _env = simple_reference_v0.env()
@@ -374,7 +374,7 @@ if sys.argv[1] == 'mpe/simple_reference':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_speak_listener':
+elif sys.argv[1] == 'mpe/simple_speak_listener':
     print('mpe/simple_speak_listener')
     from pettingzoo.mpe import simple_speak_listener_v0
     _env = simple_speak_listener_v0.env()
@@ -387,7 +387,7 @@ if sys.argv[1] == 'mpe/simple_speak_listener':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_spread':
+elif sys.argv[1] == 'mpe/simple_spread':
     print('mpe/simple_spread')
     from pettingzoo.mpe import simple_spread_v0
     _env = simple_spread_v0.env()
@@ -400,7 +400,7 @@ if sys.argv[1] == 'mpe/simple_spread':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_tag':
+elif sys.argv[1] == 'mpe/simple_tag':
     print('mpe/simple_tag')
     from pettingzoo.mpe import simple_tag_v0
     _env = simple_tag_v0.env()
@@ -413,7 +413,7 @@ if sys.argv[1] == 'mpe/simple_tag':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'mpe/simple_world_comm':
+elif sys.argv[1] == 'mpe/simple_world_comm':
     print('mpe/simple_world_comm')
     from pettingzoo.mpe import simple_world_comm_v0
     _env = simple_world_comm_v0.env()
@@ -428,7 +428,7 @@ if sys.argv[1] == 'mpe/simple_world_comm':
 
 # sisl
 
-if sys.argv[1] == 'sisl/multiwalker':
+elif sys.argv[1] == 'sisl/multiwalker':
     print('sisl/multiwalker')
     from pettingzoo.sisl import multiwalker_v0
     _env = multiwalker_v0.env()
@@ -441,7 +441,7 @@ if sys.argv[1] == 'sisl/multiwalker':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'sisl/pursuit':
+elif sys.argv[1] == 'sisl/pursuit':
     print('sisl/pursuit')
     from pettingzoo.sisl import pursuit_v0
     _env = pursuit_v0.env()
@@ -456,7 +456,7 @@ if sys.argv[1] == 'sisl/pursuit':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'sisl/waterworld':
+elif sys.argv[1] == 'sisl/waterworld':
     print('sisl/waterworld')
     from pettingzoo.sisl import waterworld_v0
     _env = waterworld_v0.env()
@@ -469,7 +469,7 @@ if sys.argv[1] == 'sisl/waterworld':
         performance_benchmark.performance_benchmark(_env)
     print('')
 
-if sys.argv[1] == 'magent':
+elif sys.argv[1] == 'magent':
     print("magent")
     from pettingzoo.magent import magent_env
     _env = magent_env.env("pursuit", map_size=100)
@@ -481,3 +481,6 @@ if sys.argv[1] == 'magent':
         _env = magent_env.env("pursuit", map_size=100)
         performance_benchmark.performance_benchmark(_env)
     print('')
+
+else:
+    assert False, "bad intput to CI test"
