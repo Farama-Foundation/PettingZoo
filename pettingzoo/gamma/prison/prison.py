@@ -73,7 +73,7 @@ class Prisoner:
 
 class env(AECEnv):
 
-    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+    def __init__(self, seed=0, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         # super(env, self).__init__()
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
@@ -102,6 +102,7 @@ class env(AECEnv):
             self.random_aliens = False
         else:
             self.random_aliens = random_aliens
+        random.seed(seed)
 
         self.action_spaces = {}
         if continuous:
@@ -124,6 +125,7 @@ class env(AECEnv):
         self.create_walls(num_floors)
 
         self.spawn_prisoners()
+        self.has_reset = False
 
         self.reinit()
 
@@ -170,7 +172,7 @@ class env(AECEnv):
         for f in range(self.num_floors):
             spawn_y = 150 * (f + 1)
             first_view_window = (50, 50 + 150 * f, 350, 150 + 150 * f)
-            second_view_window = (50, 50 + 150 * f, 700, 150 + 150 * f)
+            second_view_window = (400, 50 + 150 * f, 700, 150 + 150 * f)
             prisoner_spawn_locs.append((200, spawn_y, 50, 350, first_view_window))
             prisoner_spawn_locs.append((550, spawn_y, 400, 700, second_view_window))
             map_tuple_0 = (0, f)
@@ -244,6 +246,8 @@ class env(AECEnv):
             self.screen.blit(self.prisoners[p].get_sprite(), self.prisoners[p].position)
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         if self.vector_obs:
             p = self.prisoners[agent]
             x = p.position[0]
@@ -274,6 +278,7 @@ class env(AECEnv):
         self.rendering = False
 
     def reset(self, observe=True):
+        self.has_reset = True
         self.num_frames = 0
         self.reinit()
         self.spawn_prisoners()
@@ -281,14 +286,20 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         agent = self.agent_selection
         # if not continuous, input must be normalized
-        if action is None or not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound()
+        if None in action or np.NaN in action:
+            EnvLogger.warn_action_is_NaN()
+            action = np.zeros_like(self.action_spaces[agent].sample())
+        elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound(msg=str(action))
+            action = np.zeros_like(self.action_spaces[agent].sample())
         reward = 0
         if action is not None:
-            if action != 0 and not self.continuous:
+            if 0 not in action and not self.continuous:
                 action = action / abs(action)
             reward = self.move_prisoner(agent, action)
         else:
