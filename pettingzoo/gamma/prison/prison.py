@@ -295,7 +295,7 @@ class env(AECEnv):
             EnvLogger.warn_action_is_NaN()
             action = np.zeros_like(self.action_spaces[agent].sample())
         elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound()
+            EnvLogger.warn_action_out_of_bound(msg=str(action))
             action = np.zeros_like(self.action_spaces[agent].sample())
         reward = 0
         if action is not None:

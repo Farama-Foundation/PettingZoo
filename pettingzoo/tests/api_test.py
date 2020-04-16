@@ -230,7 +230,7 @@ def test_warnings(env):
     e1.reset()
     e1.close()
     # e1 should throw a close_unrendered_environment warning
-    assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
+    assert len(EnvLogger.mqueue) > 0, "env does not warn when closing unrendered env"
     EnvLogger.unsuppress_output()
 
 
@@ -275,13 +275,14 @@ def check_asserts(fn, message=None):
         raise e
 
 
+# yields length of mqueue
 def check_warns(fn):
     from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
     EnvLogger.flush()
     fn()
     EnvLogger.unsuppress_output()
-    return EnvLogger.mqueue
+    return len(EnvLogger.mqueue)
 
 
 def test_requires_reset(env):
@@ -299,10 +300,10 @@ def test_bad_actions(env):
     if isinstance(first_action_space, gym.spaces.Box):
         if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))):
             warnings.warn("NaN actions should call EnvLogger.warn_action_NaN")
-        if not check_asserts(lambda: env.step(np.ones((29, 67, 17)))):
+        if not check_warns(lambda: env.step(np.ones((29, 67, 17)))):
             warnings.warn("actions of a shape not equal to the box should assert with a helpful error message")
         test_action = env.action_spaces[env.agent_selection].high + 1
-        if not check_asserts(lambda: env.step(test_action)):
+        if not check_warns(lambda: env.step(test_action)):
             warnings.warn("Out of bound actions should call EnvLogger.warn_actions_out_of_bound")
     elif isinstance(first_action_space, gym.spaces.Discrete):
         if not check_warns(lambda: env.step(first_action_space.n)):
