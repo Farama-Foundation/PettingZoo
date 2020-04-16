@@ -78,7 +78,7 @@ class env(AECEnv):
         old_legal_moves = self.infos[current_agent]['legal_moves']
 
         if action not in old_legal_moves:
-            warnings.warn("Bad chess move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
+            EnvLogger.warn_on_illegal_move()
             player_loses_val = -1 if current_index == 0 else 1
             self.set_game_result(player_loses_val)
             self.rewards[next_agent] = 0
