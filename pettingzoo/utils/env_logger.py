@@ -35,6 +35,10 @@ class EnvLogger():
         EnvLogger._generic_warning("[WARNING]: Received an action that was outside action space")
 
     @staticmethod
+    def warn_action_is_NaN():
+        EnvLogger._generic_warning("[WARNING]: Received an NaN action")
+
+    @staticmethod
     def warn_close_unrendered_env():
         EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment")
 
@@ -45,6 +49,7 @@ class EnvLogger():
     @staticmethod
     def error_step_before_reset():
         assert False, "reset() needs to be called before step"
+
 
 class EnvWarningHandler(logging.Handler):
     def __init__(self, *args, mqueue, **kwargs):
