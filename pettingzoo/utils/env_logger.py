@@ -48,7 +48,7 @@ class EnvLogger():
 
     @staticmethod
     def warn_on_illegal_move(msg=""):
-        EnvLogger._generic_warning("Illegal move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen. {}".format(msg))
+        EnvLogger._generic_warning("[WARNING]: Illegal move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen. {}".format(msg))
 
     @staticmethod
     def error_observe_before_reset():
