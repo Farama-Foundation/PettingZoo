@@ -1,7 +1,7 @@
 ## Gamma Environments
 
 | Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|-------------------------|--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+|:------------------------|:-------------|:-----------|:-------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|----------:|
 | Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Pistonball              | Graphical    | Either     | 20      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
@@ -16,18 +16,22 @@ All other environments require a high degree of coordination and learning emerge
 
 ### Cooperative Pong
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+|:-------------|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
 | Graphical    | Discrete | 2      | Yes            |      --      |   [0, 1]      |  (560, 480, 3)    |   [0, 255]         | ?          |
 
 `from pettingzoo.gamma import cooperative_pong_v0`
 
 `agents= ["paddle_0", "paddle_1"]`
 
-*gif*
+Example gameplay:
 
-*AEC diagram*
+![](media/cooperative_pong.gif)
 
-Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped , by default. Observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, both agents receive a combined reward of $100 / max_frames$, if they successfully complete a frame. Otherwise, they receive $-100$ reward and the game ends. 
+AEC diagram:
+
+![](media/cooperative_pong_aec.png)
+
+Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped , by default. Observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, both agents receive a combined reward of `100 / max_frames`, if they successfully complete a frame. Otherwise, they receive $-100$ reward and the game ends. 
 
 
 Manual Control:
