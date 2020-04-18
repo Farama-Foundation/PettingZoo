@@ -4,6 +4,7 @@ import warnings
 import magent
 from pettingzoo import AECEnv
 
+
 class env(AECEnv):
     metadata = {'render.modes': ['human']}
     '''

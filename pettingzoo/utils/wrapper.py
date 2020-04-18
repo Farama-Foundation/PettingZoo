@@ -1,6 +1,5 @@
 import numpy as np
 import copy
-from gym.spaces import Box
 from gym import spaces
 import warnings
 from skimage import measure
@@ -14,7 +13,7 @@ OBS_RESHAPE_LIST = ["expand", "flatten"]
 
 class wrapper(AECEnv):
 
-    def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, continuous_actions=False, frame_stacking=1):
+    def __init__(self, env, color_reduction=None, down_scale=None, reshape=None, range_scale=None, new_dtype=None, continuous_actions=False, frame_stacking=1, homogenize_observations=False, homogenize_actions=False):
         '''
         Creates a wrapper around `env`.
 
@@ -36,6 +35,10 @@ class wrapper(AECEnv):
             If the action space is discrete, make a one-hot continuous vector. The default is False.
         frame_stacking : int, optional
             No. of observation frames to stack.. The default is 1.
+        homogenize_observations: bool, optional
+            If True, observations will be of same shape and will belong to the same observation_space
+        homogenize_actions: bool, optional
+            If True, actions will be of same shape and will belong to the same action_space
 
         Returns
         -------
@@ -51,6 +54,8 @@ class wrapper(AECEnv):
         self.new_dtype = new_dtype
         self.continuous_actions = continuous_actions
         self.frame_stacking = frame_stacking
+        self.homogenize_observations = homogenize_observations
+        self.homogenize_actions = homogenize_actions
 
         self.agents = self.env.agents
         self.agent_selection = self.env.agent_selection
@@ -71,10 +76,114 @@ class wrapper(AECEnv):
         self._check_wrapper_params()
 
         self.modify_action_space()
-        if self._check_box_space():
+        if self._check_box_space(self.observation_spaces):
             self.modify_observation_space()
         else:
             warnings.warn("All agents' observation spaces are not Box: {}, and as such the observation spaces are not modified.".format(self.observation_spaces))
+
+        if self.homogenize_observations:
+            self.original_observation_spaces = copy.deepcopy(self.observation_spaces)
+            self.homogenize_observation_spaces()
+        if self.homogenize_actions:
+            self.original_action_spaces = copy.deepcopy(self.action_spaces)
+            self.homogenize_action_spaces()
+
+    def homogenize_observation_spaces(self):
+        if self._check_box_space(self.observation_spaces):
+            _flat_shapes = [(agent, np.product(self.observation_spaces[agent].shape)) for agent in self.observation_spaces]
+            max_agent, _ = max(_flat_shapes, key=lambda x: x[1])  # gives you the first agent with the max length
+            max_space = self.observation_spaces[max_agent]
+
+            for agent in self.agents:
+                if agent == max_agent:
+                    continue
+                _space = self.observation_spaces[agent]
+                low = _space.low
+                high = _space.high
+                dtype = _space.dtype
+                assert max_space.contains(low) and max_space.contains(high) and max_space.dtype == dtype, "Incompatible observation_spaces. Cannot homogenize."
+                self.observation_spaces[agent] = copy.deepcopy(max_space)
+
+        elif self._check_discrete_space(self.observation_spaces):
+            _flat_shapes = [(agent, self.observation_spaces[agent].n) for agent in self.observation_spaces]
+            max_agent, _ = max(_flat_shapes, key=lambda x: x[1])  # gives you the first agent with the max n
+            max_n = self.observation_spaces[max_agent].n
+
+            for agent in self.agents:
+                if agent == max_agent:
+                    continue
+                if self.observation_spaces[agent].n is not max_n:
+                    self.observation_spaces[agent] = spaces.Discrete(max_n)
+
+        else:
+            assert False, "Cannot homogenize observation_spaces. They are not gym.spaces.Box or gym.spaces.Discrete."
+
+    def homogenize_observations_data(self, agent, obs):
+        '''
+            Pad observations with obs.low
+        '''
+        obs_space = self.observation_spaces[agent]
+
+        if isinstance(obs_space, spaces.Box):
+            new_obs = copy.copy(obs_space.low.flatten())
+            new_obs[: np.product(obs.shape)] = obs
+            return new_obs.reshape(obs_space.shape)
+
+        elif isinstance(obs_space, spaces.Discrete):
+            return obs
+        else:
+            return obs
+
+    def dehomogenize_actions_data(self, agent, action):
+        '''
+            Extract the original actions
+        '''
+        orig_action_space = self.original_action_spaces[agent]
+
+        if isinstance(orig_action_space, spaces.Box):
+            # choose only the relevant action values
+            new_action = action.flatten()
+            new_action[: np.product(orig_action_space.shape)]
+            return new_action.reshape(orig_action_space)
+
+        elif isinstance(orig_action_space, spaces.Discrete):
+            # extra action values refer to action value 0
+            n = orig_action_space.n
+            if action > n - 1:
+                action = 0
+            return action
+        else:
+            return action
+
+    def homogenize_action_spaces(self):
+        if self._check_box_space(self.action_spaces):
+            _flat_shapes = [(agent, np.product(self.action_spaces[agent].shape)) for agent in self.action_spaces]
+            max_agent, _ = max(_flat_shapes, key=lambda x: x[1])  # gives you the first agent with the max length
+            max_space = self.action_spaces[max_agent]
+
+            for agent in self.agents:
+                if agent == max_agent:
+                    continue
+                _space = self.action_spaces[agent]
+                low = _space.low
+                high = _space.high
+                dtype = _space.dtype
+                assert max_space.contains(low) and max_space.contains(high) and max_space.dtype == dtype, "Incompatible action_spaces. Cannot homogenize."
+                self.action_spaces[agent] = copy.deepcopy(max_space)
+
+        elif self._check_discrete_space(self.action_spaces):
+            _flat_shapes = [(agent, self.action_spaces[agent].n) for agent in self.action_spaces]
+            max_agent, _ = max(_flat_shapes, key=lambda x: x[1])  # gives you the first agent with the max n
+            max_n = self.action_spaces[max_agent].n
+
+            for agent in self.agents:
+                if agent == max_agent:
+                    continue
+                if self.action_spaces[agent].n is not max_n:
+                    self.action_spaces[agent] = spaces.Discrete(max_n)
+
+        else:
+            assert False, "Cannot homogenize action_spaces. They are not gym.spaces.Box or gym.spaces.Discrete."
 
     def _check_wrapper_params(self):
         '''
@@ -130,15 +239,25 @@ class wrapper(AECEnv):
                     assert agent in self.new_dtype.keys(), "Agent id {} is not a key of new_dtype {}".format(agent, self.new_dtype)
                     assert isinstance(self.new_dtype[agent], type), "new_dtype[agent] must be a dict of types. It is {}".format(self.new_dtype[agent])
 
-    def _check_box_space(self):
+    def _check_box_space(self, env_spaces):
         '''
-        Checks if all observation spaces are box.
+        Checks if all (observation_ or action_) spaces are Box.
 
         Returns
         -------
-        True if all obs spaces are gym.spaces.Box.
+        True if all spaces are gym.spaces.Box.
         '''
-        return all([isinstance(obs_space, Box) for obs_space in self.observation_spaces.values()])
+        return all([isinstance(space, spaces.Box) for space in env_spaces.values()])
+
+    def _check_discrete_space(self, env_spaces):
+        '''
+        Checks if all (observation_ or action_) spaces are Discrete.
+
+        Returns
+        -------
+        True if all spaces are gym.spaces.Discrete.
+        '''
+        return all([isinstance(space, spaces.Discrete) for space in env_spaces.values()])
 
     def modify_action_space(self):
         if self.continuous_actions:
@@ -206,7 +325,7 @@ class wrapper(AECEnv):
             if color_reduction == 'full':
                 low = np.average(obs_space.low, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
                 high = np.average(obs_space.high, weights=[0.299, 0.587, 0.114], axis=2).astype(obs_space.dtype)
-            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            self.observation_spaces[agent] = spaces.Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: color_reduction", self.observation_spaces)
 
     def _down_scale_obs_space(self):
@@ -218,7 +337,7 @@ class wrapper(AECEnv):
             mean = lambda x, axis: np.mean(x, axis=axis, dtype=dtype)
             low = measure.block_reduce(obs_space.low, block_size=down_scale, func=mean)
             high = measure.block_reduce(obs_space.high, block_size=down_scale, func=mean)
-            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            self.observation_spaces[agent] = spaces.Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: down_scale", self.observation_spaces)
 
     def _reshape_obs_space(self):
@@ -234,20 +353,19 @@ class wrapper(AECEnv):
                 # flatten
                 low = obs_space.low.flatten()
                 high = obs_space.high.flatten()
-            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            self.observation_spaces[agent] = spaces.Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: reshape", self.observation_spaces)
 
     def _range_scale_obs_space(self):
         for agent in self.agents:
             obs_space = self.observation_spaces[agent]
-            range_scale = self.range_scale[agent]
             if self.new_dtype is not None:
                 dtype = self.new_dtype[agent]
             else:
                 warnings.warn("Trying to scale observation_space, but a new dtype is not given. Defaulting to np.float32. Please verify if this is valid for your case.")
                 dtype = np.float32
             shape = obs_space.shape
-            self.observation_spaces[agent] = Box(low=0, high=1, shape=shape, dtype=dtype)
+            self.observation_spaces[agent] = spaces.Box(low=0, high=1, shape=shape, dtype=dtype)
         print("Mod obs space: range_scale", self.observation_spaces)
 
     def _new_dtype_obs_space(self):
@@ -256,7 +374,7 @@ class wrapper(AECEnv):
             dtype = self.new_dtype[agent]
             low = obs_space.low
             high = obs_space.high
-            self.observation_spaces[agent] = Box(low=low, high=high, dtype=dtype)
+            self.observation_spaces[agent] = spaces.Box(low=low, high=high, dtype=dtype)
         print("Mod obs space: new_dtype", self.observation_spaces)
 
     def _frame_stacking_obs_space(self):
@@ -300,7 +418,6 @@ class wrapper(AECEnv):
 
     def _down_scale_obs(self, obs, agent):
         down_scale = self.down_scale[agent]
-        self.dtype_before_down_scale = copy.copy(dtype)
         mean = lambda x, axis: np.mean(x, axis=axis, dtype=self.dtype_before_down_scale)
         obs = measure.block_reduce(obs, block_size=down_scale, func=mean)
         return obs
@@ -379,10 +496,14 @@ class wrapper(AECEnv):
     def observe(self, agent):
         obs = self.env.observe(agent)
         observation = self.modify_observation(agent, obs)
+        if self.homogenize_observations:
+            observation = self.homogenize_observations_data(agent, observation)
         return observation
 
     def step(self, action, observe=True):
         agent = self.env.agent_selection
+        if self.homogenize_actions:
+            action = self.dehomogenize_actions_data(agent, action)
         action = self.modify_action(agent, action)
         if observe:
             next_obs = self.env.step(action, observe=True)

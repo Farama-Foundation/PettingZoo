@@ -4,6 +4,7 @@ from gym import spaces
 from gym.utils import seeding
 from .. import Agent
 import cv2
+from pettingzoo.utils import EnvLogger
 
 
 class Archea(Agent):
@@ -29,11 +30,11 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=-10, high=10, shape=(self._obs_dim,))
+        return spaces.Box(low=np.float32(-10), high=np.float32(10), shape=(self._obs_dim,), dtype=np.float32)
 
     @property
     def action_space(self):
-        return spaces.Box(low=-1, high=1, shape=(2,))
+        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
@@ -150,6 +151,8 @@ class MAWaterWorld():
         if self.renderOn:
             cv2.destroyAllWindows()
             cv2.waitKey(1)
+        else:
+            EnvLogger.warn_close_unrendered_env()
 
     @property
     def reward_mech(self):

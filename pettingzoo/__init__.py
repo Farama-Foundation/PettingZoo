@@ -4,3 +4,4 @@ import pettingzoo.gamma
 import pettingzoo.sisl
 import pettingzoo.classic
 import pettingzoo.tests
+import pettingzoo.magent
