@@ -8,3 +8,4 @@ gym[box2d]>=0.15.4
 python-chess
 rlcard >= 0.1.14
 pynput
+opencv-python

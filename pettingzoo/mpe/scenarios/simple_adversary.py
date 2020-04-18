@@ -30,11 +30,9 @@ class Scenario(BaseScenario):
             landmark.collide = False
             landmark.movable = False
             landmark.size = 0.08
-        # make initial conditions
-        self.reset_world(world)
         return world
 
-    def reset_world(self, world):
+    def reset_world(self, world, np_random):
         # random properties for agents
         world.agents[0].color = np.array([0.85, 0.35, 0.35])
         for i in range(1, world.num_agents):
@@ -43,17 +41,17 @@ class Scenario(BaseScenario):
         for i, landmark in enumerate(world.landmarks):
             landmark.color = np.array([0.15, 0.15, 0.15])
         # set goal landmark
-        goal = np.random.choice(world.landmarks)
+        goal = np_random.choice(world.landmarks)
         goal.color = np.array([0.15, 0.65, 0.15])
         for agent in world.agents:
             agent.goal_a = goal
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            agent.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def benchmark_data(self, agent, world):

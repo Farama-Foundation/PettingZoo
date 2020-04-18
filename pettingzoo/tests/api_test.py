@@ -1,6 +1,7 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
 import warnings
+import inspect
 import numpy as np
 from copy import copy
 import gym
@@ -32,8 +33,8 @@ def test_obervation(observation, observation_0):
             warnings.warn("Observation numpy array is not a numeric dtype")
         if np.array_equal(observation, np.zeros(observation.shape)):
             warnings.warn("Observation numpy array is all zeros.")
-        if not np.all(observation >= 0):
-            warnings.warn("Observation contains negative numbers. This is bad in many environments.")
+        if not np.all(observation >= 0) and ((len(observation.shape) == 2) or (len(observation.shape) == 3 and observation.shape[2] == 1) or (len(observation.shape) == 3 and observation.shape[2] == 3)):
+            warnings.warn("The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing.")
     else:
         warnings.warn("Observation is not NumPy array")
 
@@ -52,7 +53,7 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if (not isinstance(agent, str)) and agent != 'env':
             warnings.warn("Agent's are recommended to have numbered string names, like player_0")
-        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integers>
+        if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integer>
             warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
             warnings.warn("The class of observation spaces is different between two agents")
@@ -62,6 +63,7 @@ def test_observation_action_spaces(env, agent_0):
             warnings.warn("Agents have different observation space sizes")
         if env.action_spaces[agent] != env.action_spaces[agent_0]:
             warnings.warn("Agents have different action space sizes")
+
         if isinstance(env.action_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.action_spaces[agent].low, -np.inf)):
                 warnings.warn("Agent's minimum action space value is -infinity. This is probably too low.")
@@ -73,6 +75,8 @@ def test_observation_action_spaces(env, agent_0):
                 assert False, "Agent's minimum action space value is greater than it's maximum"
             if env.action_spaces[agent].low.shape != env.action_spaces[agent].shape:
                 assert False, "Agent's action_space.low and action_space have different shapes"
+            if env.action_spaces[agent].high.shape != env.action_spaces[agent].shape:
+                assert False, "Agent's action_space.high and action_space have different shapes"
 
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.observation_spaces[agent].low, -np.inf)):
@@ -85,6 +89,8 @@ def test_observation_action_spaces(env, agent_0):
                 assert False, "Agent's minimum observation space value is greater than it's maximum"
             if env.observation_spaces[agent].low.shape != env.observation_spaces[agent].shape:
                 assert False, "Agent's observation_space.low and observation_space have different shapes"
+            if env.observation_spaces[agent].high.shape != env.observation_spaces[agent].shape:
+                assert False, "Agent's observation_space.high and observation_space have different shapes"
 
 
 def test_reward(reward):
@@ -116,11 +122,14 @@ def play_test(env, observation_0):
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+        if not env.observation_spaces[agent].contains(prev_observe):
+            print("Out of bounds observation: ", prev_observe)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_obervation(prev_observe, observation_0)
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
+        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
@@ -173,7 +182,11 @@ def test_render(env):
 
 def test_agent_selector(env):
     if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no agent_selector object named _agent_selector")
+        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
+        return
+
+    if not isinstance(env._agent_selector, agent_selector):
+        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
         return
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
@@ -209,6 +222,19 @@ def test_agent_selector(env):
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
+def test_warnings(env):
+    from pettingzoo.utils import EnvLogger
+    EnvLogger.suppress_output()
+    EnvLogger.flush()
+    e1 = copy(env)
+    e1.reset()
+    e1.close()
+    # e1 should throw a close_unrendered_environment warning
+    if len(EnvLogger.mqueue) == 0:
+        warnings.warn("env does not warn when closing unrendered env. Should call EnvLogger.warn_close_unrendered_env")
+    EnvLogger.unsuppress_output()
+
+
 def inp_handler(name):
     from pynput.keyboard import Key, Controller as KeyboardController
     import time
@@ -238,14 +264,168 @@ def test_manual_control(manual_control):
     manual_in_thread.join()
 
 
+def check_asserts(fn, message=None):
+    try:
+        fn()
+        return False
+    except AssertionError as e:
+        if message is not None:
+            return message == str(e)
+        return True
+    except Exception as e:
+        raise e
+
+def check_excepts(fn):
+    try:
+        fn()
+        return False
+    except Exception:
+        return True
+
+# yields length of mqueue
+def check_warns(fn,message=None):
+    from pettingzoo.utils import EnvLogger
+    EnvLogger.suppress_output()
+    EnvLogger.flush()
+    fn()
+    EnvLogger.unsuppress_output()
+    if message is None:
+        return EnvLogger.mqueue
+    else:
+        for item in EnvLogger.mqueue:
+            if message in item:
+                return True
+        return False
+
+def test_requires_reset(env):
+    first_agent = env.agent_selection
+    first_action_space = env.action_spaces[first_agent]
+    if not check_asserts(lambda: env.step(first_action_space.sample()), "reset() needs to be called before step"):
+        warnings.warn("env.step should call EnvLogger.error_step_before_reset if it is called before reset")
+    if not check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"):
+        warnings.warn("env.observe should call EnvLogger.error_observe_before_reset if it is called before reset")
+
+
+def test_bad_actions(env):
+    env.reset()
+    first_action_space = env.action_spaces[env.agent_selection]
+
+    if isinstance(first_action_space, gym.spaces.Box):
+        try:
+            if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low)), "[WARNING]: Received an NaN"):
+                warnings.warn("NaN actions should call EnvLogger.warn_action_is_NaN")
+        except Exception:
+            warnings.warn("nan values should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action, (perhaps the all zeros action?)")
+
+        env.reset()
+        if np.all(np.greater(first_action_space.low.flatten(),-1e10)):
+            small_value = first_action_space.low - 1e10
+            try:
+                if not check_warns(lambda: env.step(small_value), "[WARNING]: Received an action"):
+                    warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
+            except Exception:
+                warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_action_out_of_bound and instead perform some reasonable action, (perhaps the all zeros action?)")
+
+        if not check_excepts(lambda: env.step(np.ones((29, 67, 17)))):
+            warnings.warn("actions of a shape not equal to the box should fail with some useful error")
+    elif isinstance(first_action_space, gym.spaces.Discrete):
+        try:
+            if not check_warns(lambda: env.step(np.nan), "[WARNING]: Received an NaN"):
+                warnings.warn("nan actions should call EnvLogger.warn_action_is_NaN, and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+        except Exception:
+            warnings.warn("nan actions should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+
+        env.reset()
+        try:
+            if not check_warns(lambda: env.step(first_action_space.n)):
+                warnings.warn("out of bounds actions should call EnvLogger.warn_discrete_out_of_bound")
+        except Exception:
+            warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_discrete_out_of_bound and instead perform some reasonable action (perhaps the do nothing action if your environment has one? Or perhaps the same behavior as an illegal action?)")
+
+
+    env.reset()
+
+    # test illegal actions
+    first_agent = env.agent_selection
+    info = env.infos[first_agent]
+    action_space = env.action_spaces[first_agent]
+    if 'legal_moves' in info:
+        legal_moves = info['legal_moves']
+        illegal_moves = set(range(action_space.n)) - set(legal_moves)
+
+        if len(illegal_moves) > 0:
+            illegal_move = list(illegal_moves)[0]
+            if not check_warns(lambda: env.step(env.step(illegal_move)),"[WARNING]: Illegal"):
+                warnings.warn("if illegal move is made, warning should be generated by calling EnvLogger.warn_on_illegal_move")
+            if not env.dones[first_agent]:
+                warnings.warn("game should terminate after making an illegal move")
+        else:
+            warnings.warn("legal moves is all possible moves. This is very unsual.")
+
+    env.reset()
+
+
+def check_environment_args(env):
+    args = inspect.getfullargspec(env.__init__)
+    if len(args.args) < 2 or "seed" != args.args[1]:
+        warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
+    else:
+        def hash_obsevation(obs):
+            try:
+                val = hash(obs.tobytes())
+                return val
+            except AttributeError:
+                try:
+                    return hash(obs)
+                except TypeError:
+                    warnings.warn("observation not an int or an ndarray")
+                    return 0
+
+        # checks deterministic behavior if seed is set
+        base_seed = 192312
+        new_env = env.__class__(seed=base_seed)
+        actions = {agent: space.sample() for agent, space in new_env.action_spaces.items()}
+        hashes = []
+        num_seeds = 5
+        rand_seeds = [random.randint(0, 1000000) for _ in range(num_seeds)]
+        for x in range(num_seeds):
+            cur_hashes = []
+            random.seed(rand_seeds[x])
+            np.random.seed(rand_seeds[x])
+            obs = new_env.reset()
+            cur_hashes.append(hash_obsevation(obs))
+            for _ in range(50):
+                rew, done, info = new_env.last()
+                if done:
+                    break
+                next_obs = new_env.step(actions[new_env.agent_selection])
+                cur_hashes.append(hash_obsevation(next_obs))
+
+            hashes.append(hash(tuple(cur_hashes)))
+            new_env = env.__class__(seed=base_seed)
+        if not all(hashes[0] == h for h in hashes):
+            warnings.warn("seeded environment is not fully deterministic, depends on random.seed or numpy.random.seed")
+
+
 def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     env_agent_sel = copy(env)
+    env_warnings = copy(env)
+
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
+
+    # do this before reset
+    test_requires_reset(env)
+
+    check_environment_args(env)
 
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
     assert not any(env.dones.values()), "dones must all be False after reset"
+
+    assert isinstance(env.num_agents, int), "num_agents must be an integer"
+    assert env.num_agents != 0, "Your environment should have nonzero number of agents"
+    assert env.num_agents > 0, "Your environment can't have a negative number of agents"
 
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
@@ -266,6 +446,8 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     play_test(env, observation_0)
 
+    test_bad_actions(env)
+
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
     assert isinstance(env.infos, dict), "infos must be a dict"
@@ -278,8 +460,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     test_agent_selector(env_agent_sel)
 
-    if hasattr(env, "num_agents"):
-        warnings.warn("env.num_agents is not part of the PettingZoo API. Call len(env.agents) instead.")
+    test_warnings(env_warnings)
 
     if render:
         test_render(env)
@@ -297,4 +478,4 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     else:
         warnings.warn("environment has not defined a render() method")
 
-    print("Passed API test")  # You only get here if you don't fail
+    print("Passed API test")

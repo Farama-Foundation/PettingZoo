@@ -5,6 +5,7 @@ from gym import spaces
 import numpy as np
 import warnings
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
 
 
 class env(AECEnv):
@@ -30,12 +31,19 @@ class env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
-        self.reset()
+        self.has_reset = False
+        self.has_rendered = False
+
+        self.num_agents = len(self.agents)
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         return chess_utils.get_observation(self.board, self.agents.index(agent))
 
     def reset(self, observe=True):
+        self.has_reset = True
+
         self.board = chess.Board()
 
         self.agent_selection = self._agent_selector.reset()
@@ -58,6 +66,15 @@ class env(AECEnv):
             self.infos[name] = {'legal_moves': []}
 
     def step(self, action, observe=True):
+        backup_policy = "game terminating with current player losing"
+        act_space = self.action_spaces[self.agent_selection]
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN(backup_policy)
+        if not act_space.contains(action):
+            EnvLogger.warn_action_out_of_bound(action,act_space,backup_policy)
+
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         self.agent_selection = next_agent = self._agent_selector.next()
@@ -65,7 +82,7 @@ class env(AECEnv):
         old_legal_moves = self.infos[current_agent]['legal_moves']
 
         if action not in old_legal_moves:
-            warnings.warn("Bad chess move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
+            EnvLogger.warn_on_illegal_move()
             player_loses_val = -1 if current_index == 0 else 1
             self.set_game_result(player_loses_val)
             self.rewards[next_agent] = 0
@@ -100,7 +117,10 @@ class env(AECEnv):
         return next_observation
 
     def render(self, mode='human'):
+        self.has_rendered = True
         print(self.board)
 
     def close(self):
-        pass
+        if not self.has_rendered:
+            EnvLogger.warn_close_unrendered_env()
+        self.has_rendered = False

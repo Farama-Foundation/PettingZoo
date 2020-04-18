@@ -1,7 +1,7 @@
 ## Gamma Environments
 
 | Environment             | Observations | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|-------------------------|--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+|:------------------------|:-------------|:-----------|:-------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|----------:|
 | Cooperative Pong        | Graphical    | Discrete   | 2       | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Knights Archers Zombies | Graphical    | Discrete   | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Pistonball              | Graphical    | Either     | 20      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
@@ -16,25 +16,34 @@ All other environments require a high degree of coordination and learning emerge
 
 ### Cooperative Pong
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
+|:-------------|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
+| Graphical    | Discrete | 2      | Yes            |      --      |   [0, 1]      |  (560, 480, 3)    |   [0, 255]         | ?          |
 
-`from pettingzoo.gamma import cooperative_pong`
+`from pettingzoo.gamma import cooperative_pong_v0`
 
-`agents= `
+`agents= ["paddle_0", "paddle_1"]`
 
-*gif*
+Example gameplay:
 
-*AEC diagram*
+![](media/cooperative_pong.gif)
 
-*blurb*
+AEC diagram:
+
+![](media/cooperative_pong_aec.png)
+
+Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped , by default. Observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, both agents receive a combined reward of `100 / max_frames`, if they successfully complete a frame. Otherwise, they receive $-100$ reward and the game ends. 
+
+
+Manual Control:
+
+Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.
 
 ```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
-right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
+cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-*about arguments*
+The speed of ball is held constant (governed by the argument `ball_speed`) throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `is_cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
 
 Leaderboard:
 
@@ -48,7 +57,7 @@ Leaderboard:
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete | 4 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import knights_archers_zombies`
+`from pettingzoo.gamma import knights_archers_zombies_v0`
 
 `agents= `
 
@@ -86,7 +95,7 @@ Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Either  | 20     | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import pistonball`
+`from pettingzoo.gamma import pistonball_v0`
 
 `agents= `
 
@@ -94,7 +103,12 @@ Leaderboard:
 
 *AEC diagram*
 
-This is a simple cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty pistons (pistons move vertically only). Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* control how far the selected piston moves in the vertical direction.
+This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them. 
+Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter.
+
+Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.
+
+Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
 
 ```
 pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
@@ -123,7 +137,7 @@ Continuous Leaderboard:
 |--------------|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Either       | Either  | 8      | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prison`
+`from pettingzoo.gamma import prison_v0`
 
 `agents= `
 
@@ -160,7 +174,7 @@ Continuous Leaderboard:
 |--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.gamma import prospector`
+`from pettingzoo.gamma import prospector_v0`
 
 `agents= `
 

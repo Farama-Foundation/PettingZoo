@@ -129,7 +129,7 @@ class PaddleSprite(pygame.sprite.Sprite):
 
 
 class BallSprite(pygame.sprite.Sprite):
-    def __init__(self, dims, speed, bounce_randomness=0):  # def __init__(self, image, speed):
+    def __init__(self, dims, speed, bounce_randomness=False):  # def __init__(self, image, speed):
         # self.surf = get_image(image)
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
@@ -139,16 +139,16 @@ class BallSprite(pygame.sprite.Sprite):
         self.done = False
         self.hit = False
 
-    def update2(self, area, p1, p2):
+    def update2(self, area, p0, p1):
         (speed_x, speed_y) = self.speed
         done_x, done_y = False, False
         if self.speed[0] != 0:
-            done_x = self.move_single_axis(self.speed[0], 0, area, p1, p2)
+            done_x = self.move_single_axis(self.speed[0], 0, area, p0, p1)
         if self.speed[1] != 0:
-            done_y = self.move_single_axis(0, self.speed[1], area, p1, p2)
+            done_y = self.move_single_axis(0, self.speed[1], area, p0, p1)
         return (done_x or done_y)
 
-    def move_single_axis(self, dx, dy, area, p1, p2):
+    def move_single_axis(self, dx, dy, area, p0, p1):
         # returns done
 
         # move ball rect
@@ -178,12 +178,12 @@ class BallSprite(pygame.sprite.Sprite):
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 1)
+                is_collision, self.rect, self.speed = p0.process_collision(self.rect, dx, dy, self.speed, 1)
                 if is_collision:
                     self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
             # ball in right half
             else:
-                is_collision, self.rect, self.speed = p2.process_collision(self.rect, dx, dy, self.speed, 2)
+                is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 2)
                 if is_collision:
                     self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
 
@@ -198,8 +198,8 @@ class CooperativePong(gym.Env):
 
     metadata = {'render.modes': ['human']}
 
-    # ball_speed = [3,3], p1_speed = 3, p2_speed = 3
-    def __init__(self, ball_speed=18, p1_speed=25, p2_speed=25, is_cake=1, bounce_randomness=0):
+    # ball_speed = [3,3], left_paddle_speed = 3, right_paddle_speed = 3
+    def __init__(self, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -222,21 +222,25 @@ class CooperativePong(gym.Env):
         self.renderOn = False
 
         # set speed
-        self.speed = [ball_speed, p1_speed, p2_speed]
+        self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
+
+        self.max_frames = max_frames
 
         # paddles
-        self.p1 = PaddleSprite((20, 80), p1_speed)
-        if is_cake:
-            self.p2 = CakePaddle(p2_speed)
+        self.p0 = PaddleSprite((20, 80), left_paddle_speed)
+        if is_cake_paddle:
+            self.p1 = CakePaddle(right_paddle_speed)
         else:
-            self.p2 = PaddleSprite((20, 100), p2_speed)
+            self.p1 = PaddleSprite((20, 100), right_paddle_speed)
+
+        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
         self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
+
         self.reinit()
 
     def reinit(self):
-        self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
         self.dones = dict(zip(self.agents, [False] * len(self.agents)))
         self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
@@ -252,12 +256,12 @@ class CooperativePong(gym.Env):
         # angle = deg_to_rad(89)
         self.ball.speed = [int(self.ball.speed_val * np.cos(angle)), int(self.ball.speed_val * np.sin(angle))]
 
-        self.p1.rect.midleft = self.area.midleft
-        self.p2.rect.midright = self.area.midright
+        self.p0.rect.midleft = self.area.midleft
+        self.p1.rect.midright = self.area.midright
+        self.p0.reset()
         self.p1.reset()
-        self.p2.reset()
-        self.p1.speed = self.speed[1]
-        self.p2.speed = self.speed[2]
+        self.p0.speed = self.speed[1]
+        self.p1.speed = self.speed[2]
 
         self.done = False
 
@@ -297,8 +301,8 @@ class CooperativePong(gym.Env):
         # pygame.display.get_surface().fill((0, 0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), self.area)
         # draw ball and paddles
+        self.p0.draw(self.screen)
         self.p1.draw(self.screen)
-        self.p2.draw(self.screen)
         self.ball.draw(self.screen)
 
     def step(self, action, agent):
@@ -306,18 +310,18 @@ class CooperativePong(gym.Env):
         Does not return anything
         '''
 
-        # update p1, p2 accordingly
+        # update p0, p1 accordingly
         # action: 0: do nothing,
         # action: 1: p[i] move up, 2: p[i] move down
         if agent == self.agents[0]:
-            self.p1.update(self.area, action)
+            self.p0.update(self.area, action)
         elif agent == self.agents[1]:
-            self.p2.update(self.area, action)
+            self.p1.update(self.area, action)
 
             # do the rest if not done
             if not self.done:
                 # update ball position
-                self.done = self.ball.update2(self.area, self.p1, self.p2)
+                self.done = self.ball.update2(self.area, self.p0, self.p1)
 
                 # do the miscellaneous stuff after the last agent has moved
                 # reward is the length of time ball is in play
@@ -329,9 +333,9 @@ class CooperativePong(gym.Env):
                 if not self.done:
                     self.num_frames += 1
                     # scaling reward so that the max reward is 100
-                    reward = 1 / 9
+                    reward = 100 / self.max_frames
                     self.score += reward
-                    if self.num_frames == 900:
+                    if self.num_frames == self.max_frames:
                         self.done = True
 
                 # let the clock tick
@@ -358,6 +362,7 @@ class env(AECEnv):
         self.env = CooperativePong(**kwargs)
 
         self.agents = self.env.agents
+        self.num_agents = len(self.agents)
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()

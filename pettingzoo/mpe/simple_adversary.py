@@ -3,7 +3,7 @@ from .scenarios.simple_adversary import Scenario
 
 
 class env(SimpleEnv):
-    def __init__(self, N=2, max_frames=500):
+    def __init__(self, seed=None, N=2, max_frames=500):
         scenario = Scenario()
         world = scenario.make_world(N=2)
-        super(env, self).__init__(scenario, world, max_frames)
+        super(env, self).__init__(scenario, world, max_frames, seed)
