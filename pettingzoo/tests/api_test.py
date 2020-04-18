@@ -231,7 +231,7 @@ def test_warnings(env):
     e1.close()
     # e1 should throw a close_unrendered_environment warning
     if len(EnvLogger.mqueue) == 0:
-        warnings.warn("env does not warn when closing unrendered env")
+        warnings.warn("env does not warn when closing unrendered env. Should call EnvLogger.warn_close_unrendered_env")
     EnvLogger.unsuppress_output()
 
 
@@ -312,28 +312,28 @@ def test_bad_actions(env):
 
     if isinstance(first_action_space, gym.spaces.Box):
         try:
-            if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))):
-                warnings.warn("NaN actions should call EnvLogger.warn_action_NaN")
+            if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low)), "[WARNING]: Received an NaN"):
+                warnings.warn("NaN actions should call EnvLogger.warn_action_is_NaN")
         except Exception:
-            warnings.warn("nan values should not raise an error, instead, they should call EnvLogger.warn_action_NaN and instead perform some reasonable action, (perhaps the all zeros action?)")
+            warnings.warn("nan values should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action, (perhaps the all zeros action?)")
 
         env.reset()
         if np.all(np.greater(first_action_space.low.flatten(),-1e10)):
             small_value = first_action_space.low - 1e10
             try:
-                if not check_warns(lambda: env.step(small_value)):
-                    warnings.warn("out of bounds actions should call EnvLogger.warn_actions_out_of_bound")
+                if not check_warns(lambda: env.step(small_value), "[WARNING]: Received an action"):
+                    warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
             except Exception:
-                warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_actions_out_of_bound and instead perform some reasonable action, (perhaps the all zeros action?)")
+                warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_action_out_of_bound and instead perform some reasonable action, (perhaps the all zeros action?)")
 
         if not check_excepts(lambda: env.step(np.ones((29, 67, 17)))):
             warnings.warn("actions of a shape not equal to the box should fail with some useful error")
     elif isinstance(first_action_space, gym.spaces.Discrete):
         try:
-            if not check_warns(lambda: env.step(np.nan)):
-                warnings.warn("nan actions should call EnvLogger.warn_action_NaN, and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+            if not check_warns(lambda: env.step(np.nan), "[WARNING]: Received an NaN"):
+                warnings.warn("nan actions should call EnvLogger.warn_action_is_NaN, and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
         except Exception:
-            warnings.warn("nan actions should not raise an error, instead, they should call EnvLogger.warn_action_NaN and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+            warnings.warn("nan actions should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
 
         env.reset()
         try:
