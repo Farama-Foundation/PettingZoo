@@ -1,4 +1,7 @@
 from unittest import TestCase
+
+from typing import Dict
+
 from pettingzoo.classic.hanabi.hanabi import env
 
 class HanabiTest(TestCase):
@@ -61,7 +64,13 @@ class HanabiTest(TestCase):
         pass
 
     def test_reset(self):
-        pass
+        test_env = env(**self.full_config)
+
+        obs = test_env.reset()
+        self.assertIsInstance(obs, Dict)
+
+        obs = test_env.reset(observe=False)
+        self.assertIsNone(obs)
 
     def test_observe(self):
         pass
