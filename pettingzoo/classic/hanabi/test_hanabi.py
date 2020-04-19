@@ -59,10 +59,6 @@ class HanabiTest(TestCase):
     def test_config_values_out_of_range(self):
         self.assertRaises(ValueError, env, **self.config_values_out_of_reach)
 
-    # ToDo:
-    def test_step(self):
-        pass
-
     def test_reset(self):
         test_env = env(**self.full_config)
 
@@ -72,7 +68,17 @@ class HanabiTest(TestCase):
         obs = test_env.reset(observe=False)
         self.assertIsNone(obs)
 
+        old_state = test_env.hanabi_env.state
+        test_env.reset(observe=False)
+        new_state = test_env.hanabi_env.state
+
+        self.assertNotEqual(old_state, new_state)
+
     def test_observe(self):
+        pass
+
+    # ToDo:
+    def test_step(self):
         pass
 
     def test_last(self):

@@ -77,7 +77,7 @@ class env(AECEnv):
     def __init__(self, preset_name: str = None, **kwargs):
         super(env, self).__init__()
 
-        # first try importing pettingZoo and throw error message if submodule is not installed yet.
+        # try importing Hanabi and throw error message if git submodule is not installed yet.
         try:
             from pettingzoo.classic.hanabi.env.hanabi_learning_environment.rl_env import HanabiEnv, make
 
@@ -105,19 +105,6 @@ class env(AECEnv):
                 else:
                     raise KeyError("Incomplete environment configuration provided.")
 
-            self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
-            self.observation_spaces = {player_name: spaces.Box(low=0,
-                                                               high=1,
-                                                               shape=(1,
-                                                                      1,
-                                                                      self.hanabi_env.vectorized_observation_shape()[
-                                                                          0]),
-                                                               dtype=np.float32)
-                                       for player_name in self.agents}
-
-            # Sets hanabi game to clean state and updates all internal dictionaries
-            self.reset(observe=False)
-
             # List of agent names
             self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
 
@@ -127,6 +114,20 @@ class env(AECEnv):
 
             # Set initial agent
             self.agent_selection = self._agent_selector.reset()
+
+            # Sets hanabi game to clean state and updates all internal dictionaries
+            self.reset(observe=False)
+
+            # Set action_spaces and observation_spaces based on params in hanabi_env
+            self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
+            self.observation_spaces = {player_name: spaces.Box(low=0,
+                                                               high=1,
+                                                               shape=(1,
+                                                                      1,
+                                                                      self.hanabi_env.vectorized_observation_shape()[
+                                                                          0]),
+                                                               dtype=np.float32)
+                                       for player_name in self.agents}
 
     @staticmethod
     def _raise_error_if_config_values_out_of_range(kwargs):
@@ -264,13 +265,32 @@ class env(AECEnv):
         if observe:
             return obs
 
-    # FixMe: Implement this
-    def step(self, action: int, observe=True):
-        raise NotImplementedError
+    # FixMe: Implement tests
+    def step(self, action: int, observe: bool = True, as_vector: bool = True):
 
-    # FixMe: Implement this
-    def observe(self, agent: str):
-        raise NotImplementedError
+        agent_on_turn = self.agent_selection
+        self.agent_selection = self._agent_selector.next()
+
+        if action not in self.infos[agent_on_turn]['legal_moves_as_int']:
+            raise ValueError(f'Illegal action. Please choose between legal actions, as documented in dict self.infos')
+
+        else:
+            # Apply action
+            all_observations, reward, done, _ = self.hanabi_env.step(action=action)
+
+            # Update internal state
+            self._process_latest_observations(obs=all_observations, reward=reward, done=done)
+
+            # Return latest observations if specified
+            if observe:
+                return self.observe(agent_name=agent_on_turn, as_vector=as_vector)
+
+    # FixMe: Implement tests
+    def observe(self, agent_name: str, as_vector: bool = True):
+        if as_vector:
+            return self.latest_observations[agent_name]['vectorized']
+        else:
+            return self.latest_observations[agent_name]['observed_hands']
 
     # FixMe: Implement this
     def render(self, mode='human'):
@@ -280,12 +300,12 @@ class env(AECEnv):
     def close(self):
         pass
 
-    def _process_latest_observations(self, obs: Dict):
+    def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
 
         self.latest_observations = obs
-        self.rewards = {player_name: 0 for player_name in self.agents}
-        self.dones = {player_name: False for player_name in self.agents}
+        self.rewards = {player_name: reward for player_name in self.agents}
+        self.dones = {player_name: done for player_name in self.agents}
         self.infos = {player_name: dict(legal_moves=self.latest_observations['player_observations']
         [player_index]['legal_moves'], legal_moves_as_int=self.latest_observations['player_observations']
         [player_index]['legal_moves_as_int'], observed_hands=self.latest_observations['player_observations']
