@@ -481,7 +481,7 @@ elif sys.argv[1] == 'magent':
         _env = magent_env.env("pursuit", map_size=100)
         performance_benchmark.performance_benchmark(_env)
 
-if sys.argv[1] = 'magent':
+elif sys.argv[1] == 'magent':
     print('magent')
     from pettingzoo.magent import magent
     _env = magent.env()
