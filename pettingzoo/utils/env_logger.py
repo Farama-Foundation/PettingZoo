@@ -31,16 +31,20 @@ class EnvLogger():
         EnvLogger._output = True
 
     @staticmethod
-    def warn_action_out_of_bound(msg=""):
-        EnvLogger._generic_warning("[WARNING]: Received an action that was outside action space {}".format(msg))
+    def warn_action_out_of_bound(action, action_space, backup_policy):
+        EnvLogger._generic_warning("[WARNING]: Received an action {} that was outside action space {}. Environment is {}".format(action, action_space, backup_policy))
 
     @staticmethod
-    def warn_action_is_NaN(msg=""):
-        EnvLogger._generic_warning("[WARNING]: Received an NaN action {}".format(msg))
+    def warn_action_is_NaN(backup_policy):
+        EnvLogger._generic_warning("[WARNING]: Received an NaN action. Environment is {}".format(backup_policy))
 
     @staticmethod
-    def warn_close_unrendered_env(msg=""):
-        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment {}".format(msg))
+    def warn_close_unrendered_env():
+        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
+
+    @staticmethod
+    def warn_on_illegal_move():
+        EnvLogger._generic_warning("[WARNING]: Illegal move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
     @staticmethod
     def error_observe_before_reset():

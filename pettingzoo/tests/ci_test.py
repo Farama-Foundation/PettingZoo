@@ -480,7 +480,15 @@ elif sys.argv[1] == 'magent':
     if performance:
         _env = magent_env.env("pursuit", map_size=100)
         performance_benchmark.performance_benchmark(_env)
-    print('')
 
-else:
-    assert False, "bad intput to CI test"
+elif sys.argv[1] == 'magent':
+    print('magent')
+    from pettingzoo.magent import magent
+    _env = magent.env()
+    api_test.api_test(_env, render=render, manual_control=None, save_obs=False)
+    if bombardment:
+        _env = waterworld.env()
+        bombardment_test.bombardment_test(_env)
+    if performance:
+        _env = waterworld.env()
+        performance_benchmark.performance_benchmark(_env)

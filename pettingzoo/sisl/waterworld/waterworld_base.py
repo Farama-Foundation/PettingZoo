@@ -201,7 +201,7 @@ class MAWaterWorld():
             evader.set_position(self.np_random.rand(2))
             evader.set_position(self._respawn(evader.position, evader._radius))
             evader.set_velocity(
-                (self.np_random.rand(2) - 0.5) * self.ev_speed)  # TODO policies
+                (self.np_random.rand(2) - 0.5) * self.ev_speed)
 
         # Initialize poisons
         for poison in self._poisons:
