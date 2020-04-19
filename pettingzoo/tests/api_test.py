@@ -298,13 +298,13 @@ def check_warns(fn,message=None):
         return False
 
 def test_requires_reset(env):
-    if env.agent_selection is not None:
+    if not check_excepts(lambda: env.agent_selection):
         warnings.warn("env.agent_selection should not be defined until reset is called")
-    if env.infos is not None:
+    if not check_excepts(lambda: env.infos):
         warnings.warn("env.infos should not be defined until reset is called")
-    if env.dones is not None:
+    if not check_excepts(lambda: env.dones):
         warnings.warn("env.dones should not be defined until reset is called")
-    if env.rewards is not None:
+    if not check_excepts(lambda: env.rewards):
         warnings.warn("env.rewards should not be defined until reset is called")
     first_agent = list(env.action_spaces.keys())[0]
     first_action_space = env.action_spaces[first_agent]
