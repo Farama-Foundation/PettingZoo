@@ -10,3 +10,4 @@ from .texas_holdem_no_limit import texas_holdem_no_limit
 from .uno import uno
 from .dou_dizhu import dou_dizhu
 from .gin_rummy import gin_rummy
+from .hanabi import hanabi

@@ -11,4 +11,4 @@ pip install .
 cd ..
 
 echo "Verify hanabi wrapper is working"
-python hanabi_wrapper.py --test
+python hanabi.py --test
