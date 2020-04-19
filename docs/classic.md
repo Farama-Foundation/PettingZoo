@@ -1,22 +1,22 @@
 ## Classic Environments
 
-| Environment                      | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
-|----------------------------------|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
-| Backgammon                       | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Checkers                         | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Chess                            | Graphical    | Discrete | 2      | No             | Discrete(4672)| Discrete(4672) | (8,8,20)          | [0,1]              | ?             |
-| Connect Four                     | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
-| Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52         |
-| Go                               | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2          |
-| Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]             | 10^121        |
-| Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]             | 10^14         |
-| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]           | 10^162        |
-| Tic Tac Toe                      | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]             | 10^163        |
+| Environment                      | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States    |
+|----------------------------------|--------------|----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|---------------|
+| Backgammon                       | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Checkers                         | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Chess                            | Graphical    | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0,1]              | ?             |
+| Connect Four                     | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
+| Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0,1]              | 10^52         |
+| Go (N=board size)                | Graphical    | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N^2+3,)          | [-1,N^2]           | 3^(N^2)       |
+| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (36,)             | [0, 1]             | 10^2          |
+| Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)    | Discrete(38)    | (6, 34, 4)        | [0, 1]             | 10^121        |
+| Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (72,)             | [0, 1]             | 10^14         |
+| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103)   | Discrete(103)   | (54,)             | [0, 100]           | 10^162        |
+| Tic Tac Toe                      | ?            | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)    | Discrete(61)    | (7, 4, 15)        | [0, 1]             | 10^163        |
 
 `pip install pettingzoo[classic]`
 
@@ -318,23 +318,96 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Go
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
+|--------------|----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
+| Graphical    | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N^2+3,)          | [-1,N^2]           | 3^(N^2)    |
 
 `from pettingzoo.classic import go_v0`
 
-`agents= `
+`agents= ['black', 'white']`
 
 *gif*
 
 *AEC Diagram*
 
-*Blurb*
+Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows with the purpuse of surrounding more territory than the opponent or capturing the opponent's stones. The game ends if both players sequentially decide to pass. Refer to [Wikipedia](https://en.wikipedia.org/wiki/Go_(game)) for additional details about the game.
 
-*Env arguments*
+The board intersection locations are named as (row, column) where the row is numerical and column is alphabetical. For example, a 9x9 board with a black stone at (2, C) will look like:
+```
+   A B C D E F G H J   
+ 9 . . . . . . . . .  9
+ 8 . . . . . . . . .  8
+ 7 . . . . . . . . .  7
+ 6 . . . . . . . . .  6
+ 5 . . . . . . . . .  5
+ 4 . . . . . . . . .  4
+ 3 . . . . . . . . .  3
+ 2 . . X . . . . . .  2
+ 1 . . . . . . . . .  1
+   A B C D E F G H J   
+```
 
-*About env arguments*
+Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minigo).
+
+#### Arguments
+
+Go takes two optional arguments that define the board size (int) and komi (float) compensation points. The default values for the board size and komi are 19 and 7.5, respectively.
+
+`g0_v0.env(board_size = 13, komi = 2.5)`
+
+`g0_v0.env() # with default values`
+
+#### Observation Space
+
+The observation shape is a function of the board size _N_. The first N^2 indexes represent the flattened version of the (N, N) board with the top left corner as (0, 0). The last three indexes of the observation space are the number of moves and captures per player.
+
+|     Index     | Description                                              |
+|:-------------:|----------------------------------------------------------|
+|    0 ~ N-1    | Board 1st row<br>_`N^2-N`: (1,A), `N^2-N+1`: (1,B), ..._ |
+|    0 ~ N-1    | Board Nth row<br>_`0`: (N,A), `1`: (N,B), ..._           |
+|   N ~ 2*N-1   | Board (N-1)th row<br>_`N`: (N-1,A), `N+1`: (N-1,B), ..._ |
+|      ...      |                            ...                           |
+| N^2-N ~ N^2-1 | Board 1st row<br>_`N^2-N`: (1,A), `N^2-N+1`: (1,B), ..._ |
+|      N^2      | Total number of moves made by both players               |
+|     N^2+1     | Number of captured stones by black player                |
+|     N^2+2     | Number of captured stones by white player                |
+
+#### Action Space
+
+There are 110 actions in Gin Rummy.
+
+| Action ID | Action                                                                                                                                                                                 |
+|:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     0     | Score Player 0<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                  |
+|     1     | Score Player 1<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                  |
+|     2     | Draw a card                                                                                                                                                                            |
+|     3     | Pick top card from Discard pile                                                                                                                                                        |
+|     4     | Declare dead hand                                                                                                                                                                      |
+|     5     | Gin                                                                                                                                                                                    |
+|   6 - 57  | Discard a card<br>_`6`: A-Spades, `7`: 2-Spades, ..., `18`: K-Spades<br>`19`: A-Hearts ... `31`: K-Hearts<br>`32`: A-Diamonds ... `44`: K-Diamonds<br>`45`: A-Clubs ... `57`: K-Clubs_ |
+|  58 - 109 | Knock<br>_`58`: A-Spades, `59`: 2-Spades, ..., `70`: K-Spades<br>`71`: A-Hearts ... `83`: K-Hearts<br>`84`: A-Diamonds ... `96`: K-Diamonds<br>`97`: A-Clubs ... `109`: K-Clubs_       |
+
+For example, you would use action `2` to draw a card or action `3` to pick up a discarded card. 
+
+#### Rewards
+
+At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.5 points, and the losing player receives a reward equal to the negative of their deadwood count.
+
+If the hand is declared dead, both players get a reward equal to negative of their deadwood count.
+
+| End Action                                | Winner | Loser               |
+|-------------------------------------------|:------:|---------------------|
+| Dead Hand<br>_Both players are penalized_ |   --   | -deadwood_count/100 |
+| Knock<br>_Knocking player: Default +0.5_  |   --   | -deadwood_count/100 |
+| Gin<br>_Going Gin Player: Default +1_     |   --   | -deadwood_count/100 |
+
+Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
+
+Penalties of deadwood_count/100 ensure that the reward never goes below -1.
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
 
 ### Leduc Hold'em
 
