@@ -25,11 +25,11 @@ class env(AECEnv):
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
 
-        self.rewards = {name: 0 for name in self.agents}
-        self.dones = {name: False for name in self.agents}
-        self.infos = {name: {'legal_moves': []} for name in self.agents}
+        self.rewards = None
+        self.dones = None
+        self.infos = None
 
-        self.agent_selection = self._agent_selector.reset()
+        self.agent_selection = None
 
         self.has_reset = False
         self.has_rendered = False
@@ -66,10 +66,10 @@ class env(AECEnv):
             self.infos[name] = {'legal_moves': []}
 
     def step(self, action, observe=True):
-        backup_policy = "game terminating with current player losing"
-        act_space = self.action_spaces[self.agent_selection]
         if not self.has_reset:
             EnvLogger.error_step_before_reset()
+        backup_policy = "game terminating with current player losing"
+        act_space = self.action_spaces[self.agent_selection]
         if np.isnan(action).any():
             EnvLogger.warn_action_is_NaN(backup_policy)
         if not act_space.contains(action):
