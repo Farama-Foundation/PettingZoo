@@ -86,7 +86,6 @@ class env(AECEnv):
         self.agent_list = []
         self.agents = []
 
-        # TODO: add zombie spawn rate parameter? and add max # of timesteps parameter?
         for i in range(num_archers):
             self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer()
             self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
