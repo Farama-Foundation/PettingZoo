@@ -51,7 +51,6 @@ class Sword(pygame.sprite.Sprite):
 
     def __init__(self, knight):
         super().__init__()
-        self.i = i  # TODO: remove this. Does it break the code if I remove it?
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))

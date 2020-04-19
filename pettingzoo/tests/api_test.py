@@ -230,7 +230,8 @@ def test_warnings(env):
     e1.reset()
     e1.close()
     # e1 should throw a close_unrendered_environment warning
-    assert len(EnvLogger.mqueue) > 0, "env does not warn when closing unrendered env"
+    if len(EnvLogger.mqueue) == 0:
+        warnings.warn("env does not warn when closing unrendered env. Should call EnvLogger.warn_close_unrendered_env")
     EnvLogger.unsuppress_output()
 
 
@@ -274,16 +275,27 @@ def check_asserts(fn, message=None):
     except Exception as e:
         raise e
 
+def check_excepts(fn):
+    try:
+        fn()
+        return False
+    except Exception:
+        return True
 
 # yields length of mqueue
-def check_warns(fn):
+def check_warns(fn,message=None):
     from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
     EnvLogger.flush()
     fn()
     EnvLogger.unsuppress_output()
-    return len(EnvLogger.mqueue)
-
+    if message is None:
+        return EnvLogger.mqueue
+    else:
+        for item in EnvLogger.mqueue:
+            if message in item:
+                return True
+        return False
 
 def test_requires_reset(env):
     first_agent = env.agent_selection
@@ -297,23 +309,64 @@ def test_requires_reset(env):
 def test_bad_actions(env):
     env.reset()
     first_action_space = env.action_spaces[env.agent_selection]
+
     if isinstance(first_action_space, gym.spaces.Box):
-        if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low))):
-            warnings.warn("NaN actions should call EnvLogger.warn_action_NaN")
-        if not check_warns(lambda: env.step(np.ones((29, 67, 17)))):
-            warnings.warn("actions of a shape not equal to the box should assert with a helpful error message")
-        test_action = env.action_spaces[env.agent_selection].high + 1
-        if not check_warns(lambda: env.step(test_action)):
-            warnings.warn("Out of bound actions should call EnvLogger.warn_actions_out_of_bound")
+        try:
+            if not check_warns(lambda: env.step(np.nan * np.ones_like(first_action_space.low)), "[WARNING]: Received an NaN"):
+                warnings.warn("NaN actions should call EnvLogger.warn_action_is_NaN")
+        except Exception:
+            warnings.warn("nan values should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action, (perhaps the all zeros action?)")
+
+        env.reset()
+        if np.all(np.greater(first_action_space.low.flatten(),-1e10)):
+            small_value = first_action_space.low - 1e10
+            try:
+                if not check_warns(lambda: env.step(small_value), "[WARNING]: Received an action"):
+                    warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
+            except Exception:
+                warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_action_out_of_bound and instead perform some reasonable action, (perhaps the all zeros action?)")
+
+        if not check_excepts(lambda: env.step(np.ones((29, 67, 17)))):
+            warnings.warn("actions of a shape not equal to the box should fail with some useful error")
     elif isinstance(first_action_space, gym.spaces.Discrete):
-        if not check_warns(lambda: env.step(first_action_space.n)):
-            warnings.warn("out of bounds actions should call EnvLogger.warn_action_out_of_bound")
+        try:
+            if not check_warns(lambda: env.step(np.nan), "[WARNING]: Received an NaN"):
+                warnings.warn("nan actions should call EnvLogger.warn_action_is_NaN, and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+        except Exception:
+            warnings.warn("nan actions should not raise an error, instead, they should call EnvLogger.warn_action_is_NaN and instead perform some reasonable action (perhaps the do nothing action?  Or perhaps the same behavior as an illegal action?)")
+
+        env.reset()
+        try:
+            if not check_warns(lambda: env.step(first_action_space.n)):
+                warnings.warn("out of bounds actions should call EnvLogger.warn_discrete_out_of_bound")
+        except Exception:
+            warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_discrete_out_of_bound and instead perform some reasonable action (perhaps the do nothing action if your environment has one? Or perhaps the same behavior as an illegal action?)")
+
+
+    env.reset()
+
+    # test illegal actions
+    first_agent = env.agent_selection
+    info = env.infos[first_agent]
+    action_space = env.action_spaces[first_agent]
+    if 'legal_moves' in info:
+        legal_moves = info['legal_moves']
+        illegal_moves = set(range(action_space.n)) - set(legal_moves)
+
+        if len(illegal_moves) > 0:
+            illegal_move = list(illegal_moves)[0]
+            if not check_warns(lambda: env.step(env.step(illegal_move)),"[WARNING]: Illegal"):
+                warnings.warn("if illegal move is made, warning should be generated by calling EnvLogger.warn_on_illegal_move")
+            if not env.dones[first_agent]:
+                warnings.warn("game should terminate after making an illegal move")
+        else:
+            warnings.warn("legal moves is all possible moves. This is very unsual.")
 
     env.reset()
 
 
 def check_environment_args(env):
-    args = inspect.getargspec(env.__init__)
+    args = inspect.getfullargspec(env.__init__)
     if len(args.args) < 2 or "seed" != args.args[1]:
         warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
     else:

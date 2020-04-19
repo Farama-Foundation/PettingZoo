@@ -139,12 +139,15 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        backup_policy = "taking zero action (no movement, communication 0)"
+        act_space = self.action_spaces[self.agent_selection]
         if not self.has_reset:
             EnvLogger.error_step_before_reset()
-        current_space = self.action_spaces[self.agent_selection]
-        if not current_space.contains(action):
-            EnvLogger.warn_action_out_of_bound()
-            return
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN(backup_policy)
+        if not act_space.contains(action):
+            EnvLogger.warn_action_out_of_bound(action,act_space,backup_policy)
+
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()

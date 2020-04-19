@@ -3,10 +3,10 @@ from pettingzoo.utils import agent_selector
 import pygame
 import os
 import numpy as np
-import random
 from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import EnvLogger
+from gym.utils import seeding
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
@@ -102,7 +102,7 @@ class env(AECEnv):
             self.random_aliens = False
         else:
             self.random_aliens = random_aliens
-        random.seed(seed)
+        self.np_random, seed = seeding.np_random(seed)
 
         self.action_spaces = {}
         if continuous:
@@ -147,14 +147,14 @@ class env(AECEnv):
         # possible sprite configurations are, identical_aliens, random_aliens or neither
         if self.identical_aliens:
             # randomly chosen sprite used for all aliens
-            sprite_id = random.randint(0, len(self.sprite_list) - 1)
+            sprite_id = self.np_random.random_integers(0, len(self.sprite_list) - 1)
             for s in range(self.num_agents):
                 chosen_sprites_imgs.append(self.sprite_list[sprite_id])
                 chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
         elif self.random_aliens:
             # randomly choose sprite for each agent
             for s in range(self.num_agents):
-                sprite_id = random.randint(0, len(self.sprite_list) - 1)
+                sprite_id = self.np_random.random_integers(0, len(self.sprite_list) - 1)
                 chosen_sprites_imgs.append(self.sprite_list[sprite_id])
                 chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
         else:
@@ -186,7 +186,7 @@ class env(AECEnv):
             x_pos, y_pos, l_bound, r_bound, view_window = p
             x_noise = 0
             if not self.synchronized_start:
-                x_noise = random.randint(-20, 20)
+                x_noise = self.np_random.random_integers(-20, 20)
             self.prisoners[agent_name] = self.create_prisoner(
                 x_pos + x_noise, y_pos - chosen_sprites_heights[p_count], l_bound, r_bound, view_window, agent_name)
             self.prisoners[agent_name].set_sprite(chosen_sprites_imgs[p_count])
@@ -295,7 +295,7 @@ class env(AECEnv):
             EnvLogger.warn_action_is_NaN()
             action = np.zeros_like(self.action_spaces[agent].sample())
         elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(msg=str(action))
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to zero")
             action = np.zeros_like(self.action_spaces[agent].sample())
         reward = 0
         if action is not None:
