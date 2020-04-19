@@ -24,12 +24,12 @@ class env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
-
-        self.rewards = None
-        self.dones = None
-        self.infos = None
-
-        self.agent_selection = None
+        
+        # self.rewards = None
+        # self.dones = None
+        # self.infos = None
+        #
+        # self.agent_selection = None
 
         self.has_reset = False
         self.has_rendered = False
