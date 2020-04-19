@@ -5,11 +5,11 @@ import pymunkoptions
 pymunkoptions.options["debug"] = False
 import pymunk
 import pymunk.pygame_util
-import random
 import math
 import numpy as np
 from skimage import measure
 import gym
+from gym.utils import seeding
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
@@ -29,7 +29,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, max_frames=900, continuous=False):
+    def __init__(self, seed=0, max_frames=900, continuous=False):
         super(env, self).__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
@@ -46,6 +46,7 @@ class env(AECEnv):
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
         self.clock = pygame.time.Clock()
+        self.np_random, seed = seeding.np_random(seed)
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
@@ -76,13 +77,13 @@ class env(AECEnv):
         self.resolution = 16
 
         for i in range(20):
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - random.randrange(
-                0, .5 * self.velocity * self.resolution, self.velocity))
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
             self.pistonList.append(piston)
 
-        self.offset = random.randint(-30, 30)
+        self.offset = self.np_random.random_integers(-30, 30)
         self.ball = self.add_ball(
-            800 + self.offset, 350 + random.randint(-15, 15))
+            800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
 
@@ -102,8 +103,11 @@ class env(AECEnv):
         self.display_wait = 0.0
 
         self.num_agents = len(self.agents)
+        self.has_reset = False
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
         x_low = 40 * i
@@ -141,7 +145,7 @@ class env(AECEnv):
         body = pymunk.Body(mass, inertia)
         body.position = x, y
         # radians per second
-        body.angular_velocity = random.uniform(-6 * math.pi, 6 * math.pi)
+        body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
         shape.friction = .3
         shape.elasticity = 1.5
@@ -170,12 +174,13 @@ class env(AECEnv):
             piston.position[1] - v * self.velocity))
 
     def reset(self, observe=True):
+        self.has_reset = True
         for i, piston in enumerate(self.pistonList):
-            piston.position = (85 + 40 * i, 451 - random.randrange(
-                0, .5 * self.velocity * self.resolution, self.velocity))
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
 
-        self.offset = random.randint(-30, 30)
-        self.ball.position = (800 + self.offset, 350 + random.randint(-15, 15))
+        self.offset = self.np_random.random_integers(-30, 30)
+        self.ball.position = (800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
         self.screen.blit(self.background, (0, 0))
@@ -240,14 +245,15 @@ class env(AECEnv):
         pygame.display.flip()
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
         if action is None or np.isnan(action):
             action = 1
-            EnvLogger.warn_action_out_of_bound()
+            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
         elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound()
-            raise Exception('Action for agent {} must be in space ({}). It is currently {}'.format(
-                agent, self.action_spaces[agent].n, action))
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
+            action = 1
 
         if self.continuous:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
