@@ -65,7 +65,7 @@ class Prisoner:
             self.last_sprite_movement = movement
         if self.sprite_timer_on:
             self.sprite_timer += 1
-        if self.sprite_timer > 2:  # FIXME: change the number here if you want the left/right sprite to last longer on screen after moving to either direction
+        if self.sprite_timer > 2:
             self.sprite_timer = 0
             self.sprite_timer_on = False
             self.last_sprite_movement = 0

@@ -3,7 +3,6 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import sys
 sys.dont_write_bytecode = True
 import pygame
-import random
 import pygame.gfxdraw
 from .src.players import Knight, Archer
 from .src.zombie import Zombie
@@ -16,6 +15,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
 from gym.spaces import Box, Discrete
+from gym.utils import seeding
 
 
 def get_image(path):
@@ -29,7 +29,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, num_archers=2, num_knights=2, pad_observation=True, max_frames=900):
+    def __init__(self, seed=0, num_archers=2, num_knights=2, pad_observation=True, max_frames=900):
         # Game Constants
         self.ZOMBIE_SPAWN = 20
         self.SPAWN_STAB_RATE = 20
@@ -39,6 +39,8 @@ class env(AECEnv):
         self.max_frames = 500
         self.frames = 0
         self.pad_observation = pad_observation
+        self.has_reset = False
+        self.np_random, seed = seeding.np_random(seed)
 
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -251,7 +253,7 @@ class env(AECEnv):
         zombie = Zombie()
 
         if zombie_spawn_rate >= self.ZOMBIE_SPAWN:
-            zombie.rect.x = random.randrange(self.WIDTH)
+            zombie.rect.x = self.np_random.randint(0, self.WIDTH)
             zombie.rect.y = 5
 
             zombie_list.add(zombie)
@@ -342,6 +344,8 @@ class env(AECEnv):
         return run
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         screen = pygame.surfarray.pixels3d(self.WINDOW)
 
         i = self.agent_name_mapping[agent]
@@ -384,14 +388,20 @@ class env(AECEnv):
         return cropped
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
+        if action is None or np.isnan(action):
+            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
+            action = 1
+        elif not self.action_spaces[agent].contains(action):
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
+            action = 1
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
         else:
             self.clock.tick()
-        if not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound()
-        if self._agent_selector.is_last(): 
+        if self._agent_selector.is_last():
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
@@ -578,6 +588,7 @@ class env(AECEnv):
         self.frames = 0
 
     def reset(self, observe=True):
+        self.has_reset = True
         self.reinit()
         if observe:
             return self.observe(self.agent_selection)
