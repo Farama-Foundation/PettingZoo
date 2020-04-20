@@ -256,7 +256,7 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+    def __init__(self, seed=0, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
                  forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
         """
@@ -279,6 +279,7 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
+        self.seed(seed=seed)
         self.setup()
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
@@ -291,7 +292,6 @@ class MultiWalkerEnv():
         return self.__dict__
 
     def setup(self):
-        self.seed()
         self.viewer = None
 
         self.world = Box2D.b2World()
@@ -408,13 +408,13 @@ class MultiWalkerEnv():
                 else:
                     xm = (self.walkers[j].hull.position.x - x) / self.package_length
                     ym = (self.walkers[j].hull.position.y - y) / self.package_length
-                    nobs.append(np.random.normal(xm, self.position_noise))
-                    nobs.append(np.random.normal(ym, self.position_noise))
+                    nobs.append(self.np_random.normal(xm, self.position_noise))
+                    nobs.append(self.np_random.normal(ym, self.position_noise))
             xd = (self.package.position.x - x) / self.package_length
             yd = (self.package.position.y - y) / self.package_length
-            nobs.append(np.random.normal(xd, self.position_noise))
-            nobs.append(np.random.normal(yd, self.position_noise))
-            nobs.append(np.random.normal(self.package.angle, self.angle_noise))
+            nobs.append(self.np_random.normal(xd, self.position_noise))
+            nobs.append(self.np_random.normal(yd, self.position_noise))
+            nobs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
