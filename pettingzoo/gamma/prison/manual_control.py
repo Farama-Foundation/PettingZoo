@@ -5,6 +5,7 @@ import numpy as np
 def manual_control(**kwargs):
     from .prison import env as _env
     env = _env(**kwargs)
+    env.reset()
     x = 0
     y = 0
     while True:

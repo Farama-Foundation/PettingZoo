@@ -37,25 +37,25 @@ def complex_map(xs, ys):
     return cmap
 
 
-def gen_map(xs, ys, n_obs, center_bounds=[0.0, 1.0], length_bounds=[0.1, 0.5], gmap=None):
+def gen_map(xs, ys, n_obs, randomizer, center_bounds=[0.0, 1.0], length_bounds=[0.1, 0.5], gmap=None):
     cl, cu = center_bounds
     ll, lu = length_bounds
     if gmap is None:
         gmap = np.zeros((xs, ys), dtype=np.int32)
     for _ in xrange(n_obs):
-        xc = np.random.uniform(cl, cu)
-        yc = np.random.uniform(cl, cu)
-        xl = np.random.uniform(ll, lu)
-        yl = np.random.uniform(ll, lu)
+        xc = randomizer.uniform(cl, cu)
+        yc = randomizer.uniform(cl, cu)
+        xl = randomizer.uniform(ll, lu)
+        yl = randomizer.uniform(ll, lu)
         gmap = add_rectangle(gmap, xc=xc, yc=yc, xl=xl, yl=yl)
     return gmap
 
 
-def multi_scale_map(xs, ys, scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.05, 0.1]), (150, [0.01, 0.05])]):
+def multi_scale_map(xs, ys, randomizer, scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.05, 0.1]), (150, [0.01, 0.05])]):
     gmap = np.zeros((xs, ys), dtype=np.int32)
     for scale in scales:
         n, lb = scale
-        gmap = gen_map(xs, ys, n, length_bounds=lb, gmap=gmap)
+        gmap = gen_map(xs, ys, n, randomizer, length_bounds=lb, gmap=gmap)
     return gmap
 
 
