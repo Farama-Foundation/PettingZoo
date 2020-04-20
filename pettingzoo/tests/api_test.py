@@ -298,13 +298,20 @@ def check_warns(fn,message=None):
         return False
 
 def test_requires_reset(env):
-    first_agent = env.agent_selection
+    if not check_excepts(lambda: env.agent_selection):
+        warnings.warn("env.agent_selection should not be defined until reset is called")
+    if not check_excepts(lambda: env.infos):
+        warnings.warn("env.infos should not be defined until reset is called")
+    if not check_excepts(lambda: env.dones):
+        warnings.warn("env.dones should not be defined until reset is called")
+    if not check_excepts(lambda: env.rewards):
+        warnings.warn("env.rewards should not be defined until reset is called")
+    first_agent = list(env.action_spaces.keys())[0]
     first_action_space = env.action_spaces[first_agent]
     if not check_asserts(lambda: env.step(first_action_space.sample()), "reset() needs to be called before step"):
         warnings.warn("env.step should call EnvLogger.error_step_before_reset if it is called before reset")
     if not check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"):
         warnings.warn("env.observe should call EnvLogger.error_observe_before_reset if it is called before reset")
-
 
 def test_bad_actions(env):
     env.reset()
