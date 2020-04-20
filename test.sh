@@ -1,22 +1,3 @@
-# Classic
-flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401
-# python3 -m pettingzoo.tests.ci_test classic/backgammon
-# python3 -m pettingzoo.tests.ci_test classic/checkers
-python3 -m pettingzoo.tests.ci_test classic/chess
-# python3 -m pettingzoo.tests.ci_test classic/connect_four
-python3 -m pettingzoo.tests.ci_test classic/dou_dizhu
-# python3 -m pettingzoo.tests.ci_test classic/gin_rummy
-# python3 -m pettingzoo.tests.ci_test classic/go
-# python3 -m pettingzoo.tests.ci_test classic/hanabi
-python3 -m pettingzoo.tests.ci_test classic/leduc_holdem
-python3 -m pettingzoo.tests.ci_test classic/mahjong
-python3 -m pettingzoo.tests.ci_test classic/rps
-python3 -m pettingzoo.tests.ci_test classic/rpsls
-python3 -m pettingzoo.tests.ci_test classic/texas_holdem
-python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit
-python3 -m pettingzoo.tests.ci_test classic/tictactoe
-python3 -m pettingzoo.tests.ci_test classic/uno
-
 render=True
 manual_control=True
 bombardment=True
@@ -54,7 +35,7 @@ python3 -m pettingzoo.tests.ci_test gamma/prison $render $manual_control $bombar
 # MAgent
 flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401,W503
 echo
-python3 -m pettingzoo.tests.ci_test magent $render $manual_control $bombardment $performance $save_obs
+#python3 -m pettingzoo.tests.ci_test magent $render $manual_control $bombardment $performance $save_obs
 
 # MPE
 flake8 pettingzoo/mpe --ignore E501,E731,E741,E402,F401,W503
@@ -70,11 +51,6 @@ python3 -m pettingzoo.tests.ci_test mpe/simple_tag $render $manual_control $bomb
 python3 -m pettingzoo.tests.ci_test mpe/simple_world_comm $render $manual_control $bombardment $performance $save_obs
 
 # SISL
-flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401
-
-#MAgent
-flake8 pettingzoo/magent --ignore E501,E731,E741,E402,F401
-python3 -m pettingzoo.tests.ci_test magent $render $manual_control $bombardment $performance $save_obs
 flake8 pettingzoo/sisl --ignore E501,E731,E741,E402,F401,W503
 echo
 python3 -m pettingzoo.tests.ci_test sisl/multiwalker  $render $manual_control $bombardment $performance $save_obs
