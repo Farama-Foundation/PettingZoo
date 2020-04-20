@@ -582,13 +582,13 @@ class env(AECEnv):
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.next()
 
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.frames = 0
 
     def reset(self, observe=True):
         self.has_reset = True
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
         if observe:
             return self.observe(self.agent_selection)

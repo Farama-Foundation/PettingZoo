@@ -263,13 +263,8 @@ class env(AECEnv):
             return sub_screen
 
     def reinit(self):
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.done_val = False
         self.num_frames = 0
-        self._agent_selector.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector.next()
         self.last_rewards = [0 for _ in self.agents]
         self.frames = 0
         self.rendering = False
@@ -279,6 +274,11 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         self.has_reset = True
+        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         self.num_frames = 0
         self.reinit()
         self.spawn_prisoners()
@@ -291,7 +291,7 @@ class env(AECEnv):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         agent = self.agent_selection
         # if not continuous, input must be normalized
-        if None in action or np.NaN in action:
+        if None in [action] or np.NaN in [action]:
             EnvLogger.warn_action_is_NaN()
             action = np.zeros_like(self.action_spaces[agent].sample())
         elif not self.action_spaces[agent].contains(action):

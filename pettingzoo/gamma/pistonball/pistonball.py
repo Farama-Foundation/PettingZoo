@@ -95,10 +95,6 @@ class env(AECEnv):
         self.valid_ball_position_rect = pygame.Rect(
             self.rect.left + 40, self.rect.top + 40, self.rect.width - 80, self.rect.height - 80)
 
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-
         self.frames = 0
         self.display_wait = 0.0
 
