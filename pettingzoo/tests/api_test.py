@@ -275,12 +275,14 @@ def check_asserts(fn, message=None):
     except Exception as e:
         raise e
 
+
 def check_excepts(fn):
     try:
         fn()
         return False
     except Exception:
         return True
+
 
 # yields length of mqueue
 def check_warns(fn,message=None):
@@ -300,8 +302,6 @@ def check_warns(fn,message=None):
 def test_requires_reset(env):
     if not check_excepts(lambda: env.agent_selection):
         warnings.warn("env.agent_selection should not be defined until reset is called")
-    if not check_excepts(lambda: env.infos):
-        warnings.warn("env.infos should not be defined until reset is called")
     if not check_excepts(lambda: env.dones):
         warnings.warn("env.dones should not be defined until reset is called")
     if not check_excepts(lambda: env.rewards):
