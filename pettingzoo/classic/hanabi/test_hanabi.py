@@ -2,6 +2,7 @@ from unittest import TestCase
 from pettingzoo.classic.hanabi.hanabi import env
 import pettingzoo.tests.api_test as api_test
 
+
 class HanabiTest(TestCase):
 
     @classmethod
@@ -16,7 +17,7 @@ class HanabiTest(TestCase):
             "max_information_tokens": 3,
             "max_life_tokens": 1,
             "observation_type": 0,
-            'seed': 1 ,
+            'seed': 1,
             "random_start_player": 1
         }
 
@@ -35,7 +36,7 @@ class HanabiTest(TestCase):
             "max_information_tokens": 3,
             "max_life_tokens": 1,
             "observation_type": 0,
-            'seed': 1 ,
+            'seed': 1,
             "random_start_player": 1
         }
 
@@ -141,6 +142,4 @@ class HanabiTest(TestCase):
         self.assertIs(all(test_env.dones.values()), True)
 
     def test_api(self):
-        api_test.api_test(env(**self.full_config), render=True, manual_control=None, save_obs=False)
-
-
+        api_test.api_test(env(**self.full_config))

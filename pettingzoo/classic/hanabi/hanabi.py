@@ -12,7 +12,6 @@ For full information see README.md.
 
 
 class env(AECEnv):
-
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
     # set of all required params
@@ -114,15 +113,15 @@ class env(AECEnv):
             # List of agent names
             self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
 
+            # Rearrange self.agents as pyhanabi starts with player 1 not 0
+            self.agents = self.agents[1:] + [self.agents[0]]
+
             # Agent order list, on which the agent selector operates on.
             self.agent_order = list(self.agents)
             self._agent_selector = agent_selector(self.agent_order)
 
             # Set initial agent
             self.agent_selection = self._agent_selector.reset()
-
-            # Iterate one player, as pyhanabi starts with player 1 not 0
-            self.agent_selection = self._agent_selector.next()
 
             # Sets hanabi game to clean state and updates all internal dictionaries
             self.reset(observe=False)
@@ -170,7 +169,7 @@ class env(AECEnv):
     @property
     def legal_moves(self) -> List[int]:
         obs = self.latest_observations['player_observations']
-        return obs[self.agents.index(self.agent_selection)]['legal_moves_as_int']
+        return obs[self._offset(self.agents.index(self.agent_selection))]['legal_moves']
 
     @property
     def all_moves(self) -> List[int]:
@@ -245,9 +244,17 @@ class env(AECEnv):
         self.latest_observations = obs
         self.rewards = {player_name: reward for player_name in self.agents}
         self.dones = {player_name: done for player_name in self.agents}
+
+        # Here we have to deal with the player index with offset = 1
         self.infos = {player_name: dict(legal_moves=self.latest_observations['player_observations']
-        [player_index]['legal_moves'], legal_moves_as_int=self.latest_observations['player_observations']
-        [player_index]['legal_moves_as_int'], observations_vectorized=self.latest_observations['player_observations']
-        [player_index]['vectorized'], observations=self.latest_observations['player_observations'][player_index])
+                                        [self._offset(player_index)]['legal_moves_as_int'],
+                                        legal_moves_as_dict=self.latest_observations['player_observations']
+                                        [self._offset(player_index)]['legal_moves'],
+                                        observations_vectorized=self.latest_observations['player_observations']
+                                        [self._offset(player_index)]['vectorized'],
+                                        observations=self.latest_observations['player_observations']
+                                        [self._offset(player_index)])
                       for player_index, player_name in enumerate(self.agents)}
-        self.infos['legal_moves'] = self.legal_moves
+
+    def _offset(self, index: int) -> int:
+        return (index + 1) % len(self.agents)
