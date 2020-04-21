@@ -150,11 +150,21 @@ In prison, 8 aliens locked in identical prison cells are controlled by the user.
 Arguments:
 
 ```
-prison.env(graphical_output=True, discrete_input=True, syncronized_start=False,
+prison.env(graphical_output=True, discrete_input=True, synchronized_start=False,
 identical_aliens=False, max_frames=900, random_aliens=False)
 ```
 
 *about arguments*
+
+graphics_output: If set to True an image of the prisoner's cell is observed. If set to False, the distance to the left side wall is returned.
+
+discrete_input: If True, each agent action is a discrete value indicating whether to move left or right one unit. If False, each agent action represents a real value that is added to the agent's x position
+
+synchronized_start: If set to true, all aliens will start in the same x position, relative to their cells. Otherwise, their position is random.
+
+identical_aliens: If set to true, each alien will have the some randomly chosen sprite. Overrides the random_aliens argument.
+
+random_aliens: If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprites are chosen cyclically from all possible sprites.
 
 Discrete Leaderboard:
 
