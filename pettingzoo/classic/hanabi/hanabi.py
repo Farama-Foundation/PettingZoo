@@ -1,65 +1,19 @@
 from typing import Optional, Dict, List, Union
 import numpy as np
 from gym import spaces
-
 from pettingzoo import AECEnv
-
-# FixMe: Complete the class documentation
 from pettingzoo.utils import agent_selector
 
 """
-The game config, can be specified in two ways:
-
-EITHER:
-Specify a config preset by handing in a config string, which is one of:
-'Hanabi-Full' | 'Hanabi-Small' | 'Hanabi-Very-Small'
-
-    Hanabi-Full :  {
-        "colors": 5, 
-        "ranks": 5, 
-        "players": 2, 
-        "max_information_tokens": 8, 
-        "max_life_tokens": 3, 
-        "observation_type": 1}
-    
-    Hanabi-Small : {
-        "colors": 5, 
-        "ranks": 5, 
-        "players": 2, 
-        "max_information_tokens": 
-        "max_life_tokens": 
-        "observation_type": 1}
-        
-    Hanabi-Very-Small : {
-        "colors": 2, 
-        "ranks": 5, 
-        "players": 2, 
-        "max_information_tokens": 
-        "max_life_tokens": 
-        "observation_type": 1}
-        
-    ADDITIONALLY: You can specify the number of players, when using a preset, by specifying:
-     players: int, Number of players \in [2,5].
-    
-
-OR: 
-Use the following keyword arguments to specify a custom game setup:
-    kwargs:
-      - colors: int, Number of colors \in [2,5].
-      - ranks: int, Number of ranks \in [2,5].
-      - players: int, Number of players \in [2,5].
-      - hand_size: int, Hand size \in [2,5].
-      - max_information_tokens: int, Number of information tokens (>=0).
-      - max_life_tokens: int, Number of life tokens (>=1).
-      - observation_type: int.
-            0: Minimal observation.
-            1: First-order common knowledge observation.
-      - seed: int, Random seed.
-      - random_start_player: bool, Random start player.
+This wrapper is directly based on their git repository and requires
+it to be downloaded and installed via git submodule to operate.
+For full information see README.md.
 """
 
 
 class env(AECEnv):
+
+    """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
     # set of all required params
     required_keys: set = {
@@ -75,6 +29,58 @@ class env(AECEnv):
     }
 
     def __init__(self, preset_name: str = None, **kwargs):
+        """
+        Game configuration for an environment instance can be specified in two ways:
+
+        EITHER:
+        Specify a config preset by handing in a config string, which is one of:
+        'Hanabi-Full' | 'Hanabi-Small' | 'Hanabi-Very-Small'
+
+            Hanabi-Full :  {
+                "colors": 5,
+                "ranks": 5,
+                "players": 2,
+                "max_information_tokens": 8,
+                "max_life_tokens": 3,
+                "observation_type": 1}
+
+            Hanabi-Small : {
+                "colors": 5,
+                "ranks": 5,
+                "players": 2,
+                "max_information_tokens":
+                "max_life_tokens":
+                "observation_type": 1}
+
+            Hanabi-Very-Small : {
+                "colors": 2,
+                "ranks": 5,
+                "players": 2,
+                "max_information_tokens":
+                "max_life_tokens":
+                "observation_type": 1}
+
+            ADDITIONALLY: You can specify the number of players, when using a preset, by specifying:
+             players: int, Number of players \in [2,5].
+
+
+        OR:
+        Use the following keyword arguments to specify a custom game setup:
+            kwargs:
+              - colors: int, Number of colors \in [2,5].
+              - ranks: int, Number of ranks \in [2,5].
+              - players: int, Number of players \in [2,5].
+              - hand_size: int, Hand size \in [2,5].
+              - max_information_tokens: int, Number of information tokens (>=0).
+              - max_life_tokens: int, Number of life tokens (>=1).
+              - observation_type: int.
+                    0: Minimal observation.
+                    1: First-order common knowledge observation.
+              - seed: int, Random seed.
+              - random_start_player: bool, Random start player.
+
+        """
+
         super(env, self).__init__()
 
         # try importing Hanabi and throw error message if git submodule is not installed yet.
@@ -227,8 +233,8 @@ class env(AECEnv):
             return self.infos[agent_name]['observations']
 
     def render(self, mode='human'):
+        """ Prints the whole status dictionary """
         print(self.latest_observations)
-
 
     def close(self):
         pass
@@ -243,5 +249,5 @@ class env(AECEnv):
         [player_index]['legal_moves'], legal_moves_as_int=self.latest_observations['player_observations']
         [player_index]['legal_moves_as_int'], observations_vectorized=self.latest_observations['player_observations']
         [player_index]['vectorized'], observations=self.latest_observations['player_observations'][player_index])
-
                       for player_index, player_name in enumerate(self.agents)}
+        self.infos['legal_moves'] = self.legal_moves

@@ -1,8 +1,6 @@
 from unittest import TestCase
-
-from typing import Dict
-
 from pettingzoo.classic.hanabi.hanabi import env
+import pettingzoo.tests.api_test as api_test
 
 class HanabiTest(TestCase):
 
@@ -124,24 +122,25 @@ class HanabiTest(TestCase):
         illegal_move = list(set(all_moves) - set(new_legal_moves))[0]
         self.assertRaises(ValueError, test_env.step, illegal_move)
 
-    def test_render(self):
-        """ Prints the whole status dictionary """
-        pass
-
     def test_legal_moves(self):
         test_env = env(**self.full_config)
         legal_moves = test_env.legal_moves
 
         self.assertIsInstance(legal_moves, list)
         self.assertIsInstance(legal_moves[0], int)
-        self.assertLessEqual(len(legal_moves), test_env.hanabi_env.num_moves())
+        self.assertLessEqual(len(legal_moves), len(test_env.all_moves))
         test_env.step(legal_moves[0])
 
-    # ToDo: Run one whole game
     def test_run_whole_game(self):
-        pass
+        test_env = env(**self.full_config)
 
-    # ToDo: How is dealing implemented????
-    # ToDo: Test the AEC game interface
-    def test_close(self):
-        pass
+        while not all(test_env.dones.values()):
+            self.assertIs(all(test_env.dones.values()), False)
+            test_env.step(test_env.legal_moves[0], observe=False)
+
+        self.assertIs(all(test_env.dones.values()), True)
+
+    def test_api(self):
+        api_test.api_test(env(**self.full_config), render=True, manual_control=None, save_obs=False)
+
+
