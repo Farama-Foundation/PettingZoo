@@ -18,12 +18,13 @@ class env(AECEnv):
         self._overwrite_go_global_variables(board_size=board_size)
 
         self._komi = komi
-        self._go = go.Position(komi=self._komi)
+        self._go = go.Position(board=None, komi=self._komi)
 
         self.agents = ['black', 'white']
         self.num_agents = len(self.agents)
 
-        self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.append(np.full((self._N * self._N,), -1), np.zeros(3,)), high=np.append(np.full((self._N * self._N,), 1), np.full((3,), self._N * self._N)), dtype=np.int) for _ in range(self.num_agents)])
+        # self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.append(np.full((self._N * self._N,), -1), np.zeros(3,)), high=np.append(np.full((self._N * self._N,), 1), np.full((3,), self._N ** 3)), dtype=np.int) for _ in range(self.num_agents)])
+        self.observation_spaces = self._convert_to_dict([spaces.Box(low=-1, high=1, shape=(self._N, self._N), dtype=np.int) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
         self.agent_order = self.agents
@@ -58,16 +59,17 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def _encode_legal_actions(self, actions):
-        return np.where(actions==1)[0]
+        return np.where(actions == 1)[0]
 
     def _encode_rewards(self, result):
         return [1, -1] if result == 1 else [-1, 1]
 
     def observe(self, agent):
-        obs = self._go.board.flatten()
-        moves = self._go.n
-        captures = self._go.caps
-        return np.append(obs, [moves, captures[0], captures[1]])
+        # obs = self._go.board.flatten()
+        # moves = self._go.n
+        # captures = self._go.caps
+        # return np.append(obs, [moves, captures[0], captures[1]])
+        return self._go.board
 
     def step(self, action, observe=True):
         if self.dones[self.agent_selection]:
@@ -91,12 +93,12 @@ class env(AECEnv):
                 self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
             else:
                 self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
-        self.agent_selection = next_player if next_player else self._agent_selector.next() 
+        self.agent_selection = next_player if next_player else self._agent_selector.next()
         if observe:
             return self._last_obs
 
     def reset(self, observe=True):
-        self._go = go.Position(komi=self._komi)
+        self._go = go.Position(board=None, komi=self._komi)
 
         self.agent_order = self.agents
         self._agent_selector = agent_selector(self.agent_order)
