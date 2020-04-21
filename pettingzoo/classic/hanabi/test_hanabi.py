@@ -63,7 +63,8 @@ class HanabiTest(TestCase):
         test_env = env(**self.full_config)
 
         obs = test_env.reset()
-        self.assertIsInstance(obs, Dict)
+        self.assertIsInstance(obs, list)
+        self.assertIsInstance(obs[0], int)
 
         obs = test_env.reset(observe=False)
         self.assertIsNone(obs)
@@ -74,18 +75,73 @@ class HanabiTest(TestCase):
 
         self.assertNotEqual(old_state, new_state)
 
+    # ToDo: Implement and test this, so that internal properties of class do not have to get queried.
+    def test_get_legal_moves(self):
+        pass
+
     def test_observe(self):
+        # Tested within test_step
         pass
 
-    # ToDo:
     def test_step(self):
-        pass
+        test_env = env(**self.full_config)
 
-    def test_last(self):
-        pass
+        # Get current player
+        old_player = test_env.agent_selection
+
+        # Get range of moves
+        all_moves = test_env.all_moves
+
+        # Pick a legal move
+        legal_moves = test_env.legal_moves
+
+        # Assert return value
+        new_obs = test_env.step(action=legal_moves[0])
+        self.assertIsInstance(test_env.infos, dict)
+        self.assertIsInstance(new_obs, list)
+        self.assertIsInstance(new_obs[0], int)
+
+        # Get new_player
+        new_player = test_env.agent_selection
+        # Assert player shifted
+        self.assertNotEqual(old_player, new_player)
+
+        # Assert legal moves have changed
+        new_legal_moves = test_env.legal_moves
+        self.assertNotEqual(legal_moves, new_legal_moves)
+
+        # Assert return not as vector:
+        new_obs = test_env.step(action=new_legal_moves[0], as_vector=False)
+        self.assertIsInstance(new_obs, dict)
+
+        # Assert no return
+        new_legal_moves = test_env.legal_moves
+        new_obs = test_env.step(action=new_legal_moves[0], observe=False)
+        self.assertIsNone(new_obs)
+
+        # Assert raises error if wrong input
+        new_legal_moves = test_env.legal_moves
+        illegal_move = list(set(all_moves) - set(new_legal_moves))[0]
+        self.assertRaises(ValueError, test_env.step, illegal_move)
 
     def test_render(self):
+        """ Prints the whole status dictionary """
         pass
 
+    def test_legal_moves(self):
+        test_env = env(**self.full_config)
+        legal_moves = test_env.legal_moves
+
+        self.assertIsInstance(legal_moves, list)
+        self.assertIsInstance(legal_moves[0], int)
+        self.assertLessEqual(len(legal_moves), test_env.hanabi_env.num_moves())
+        test_env.step(legal_moves[0])
+
+    # ToDo: Run one whole game
+    def test_run_whole_game(self):
+        pass
+
+    # ToDo: How is dealing implemented????
+    # ToDo: Test the AEC game interface
     def test_close(self):
         pass

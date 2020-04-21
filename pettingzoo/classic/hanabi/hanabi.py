@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List, Union
 import numpy as np
 from gym import spaces
 
@@ -115,6 +115,9 @@ class env(AECEnv):
             # Set initial agent
             self.agent_selection = self._agent_selector.reset()
 
+            # Iterate one player, as pyhanabi starts with player 1 not 0
+            self.agent_selection = self._agent_selector.next()
+
             # Sets hanabi game to clean state and updates all internal dictionaries
             self.reset(observe=False)
 
@@ -154,105 +157,26 @@ class env(AECEnv):
             elif key == 'observation_type' and not (0 <= value <= 1):
                 raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
 
-    def reset(self, observe=True) -> Optional[Dict]:
-        """ Resets the environment for a new game.
+    @property
+    def observation_vector_dim(self):
+        return self.hanabi_env.vectorized_observation_shape()
+
+    @property
+    def legal_moves(self) -> List[int]:
+        obs = self.latest_observations['player_observations']
+        return obs[self.agents.index(self.agent_selection)]['legal_moves_as_int']
+
+    @property
+    def all_moves(self) -> List[int]:
+        return range(0, self.hanabi_env.num_moves())
+
+    # ToDo: Fix Return value
+    def reset(self, observe=True) -> Optional[List[int]]:
+        """ Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
-            observation: dict, containing the full observation about the game at the
-        current step. *WARNING* This observation contains all the hands of the
-        players and should not be passed to the agents.
-        An example observation:
-        {'current_player': 0,
-         'player_observations': [{'current_player': 0,
-                                  'current_player_offset': 0,
-                                  'deck_size': 40,
-                                  'discard_pile': [],
-                                  'fireworks': {'B': 0,
-                                                'G': 0,
-                                                'R': 0,
-                                                'W': 0,
-                                                'Y': 0},
-                                  'information_tokens': 8,
-                                  'legal_moves': [{'action_type': 'PLAY',
-                                                   'card_index': 0},
-                                                  {'action_type': 'PLAY',
-                                                   'card_index': 1},
-                                                  {'action_type': 'PLAY',
-                                                   'card_index': 2},
-                                                  {'action_type': 'PLAY',
-                                                   'card_index': 3},
-                                                  {'action_type': 'PLAY',
-                                                   'card_index': 4},
-                                                  {'action_type':
-                                                  'REVEAL_COLOR',
-                                                   'color': 'R',
-                                                   'target_offset': 1},
-                                                  {'action_type':
-                                                  'REVEAL_COLOR',
-                                                   'color': 'G',
-                                                   'target_offset': 1},
-                                                  {'action_type':
-                                                  'REVEAL_COLOR',
-                                                   'color': 'B',
-                                                   'target_offset': 1},
-                                                  {'action_type': 'REVEAL_RANK',
-                                                   'rank': 0,
-                                                   'target_offset': 1},
-                                                  {'action_type': 'REVEAL_RANK',
-                                                   'rank': 1,
-                                                   'target_offset': 1},
-                                                  {'action_type': 'REVEAL_RANK',
-                                                   'rank': 2,
-                                                   'target_offset': 1}],
-                                  'life_tokens': 3,
-                                  'observed_hands': [[{'color': None, 'rank':
-                                  -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1}],
-                                                     [{'color': 'G', 'rank': 2},
-                                                      {'color': 'R', 'rank': 0},
-                                                      {'color': 'R', 'rank': 1},
-                                                      {'color': 'B', 'rank': 0},
-                                                      {'color': 'R', 'rank':
-                                                      1}]],
-                                  'num_players': 2,
-                                  'vectorized': [ 0, 0, 1, ... ]},
-                                 {'current_player': 0,
-                                  'current_player_offset': 1,
-                                  'deck_size': 40,
-                                  'discard_pile': [],
-                                  'fireworks': {'B': 0,
-                                                'G': 0,
-                                                'R': 0,
-                                                'W': 0,
-                                                'Y': 0},
-                                  'information_tokens': 8,
-                                  'legal_moves': [],
-                                  'life_tokens': 3,
-                                  'observed_hands': [[{'color': None, 'rank':
-                                  -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1},
-                                                      {'color': None, 'rank':
-                                                      -1}],
-                                                     [{'color': 'W', 'rank': 2},
-                                                      {'color': 'Y', 'rank': 4},
-                                                      {'color': 'Y', 'rank': 2},
-                                                      {'color': 'G', 'rank': 0},
-                                                      {'color': 'W', 'rank':
-                                                      1}]],
-                                  'num_players': 2,
-                                  'vectorized': [ 0, 0, 1, ... ]}]}
+            observation: Optional list of integers of length self.observation_vector_dim, describing observations of
+            current agent (agent_selection).
         """
 
         # Reset underlying hanabi reinforcement learning environment
@@ -261,20 +185,31 @@ class env(AECEnv):
         # Update internal state
         self._process_latest_observations(obs=obs)
 
-        # If specified, return observations
+        # If specified, return observation of current agent
         if observe:
-            return obs
+            return self.observe(agent_name=self.agent_selection)
+        else:
+            return None
 
-    # FixMe: Implement tests
-    def step(self, action: int, observe: bool = True, as_vector: bool = True):
+    def step(self, action: int, observe: bool = True, as_vector: bool = True) -> Optional[Union[List[int],
+                                                                                                List[List[dict]]]]:
+        """ Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.
+
+        Returns:
+            observation: Optional List of new observations of agent at turn after the action step is performed.
+            By default a list of integers, describing the logic state of the game from the view of the agent.
+            Can be a returned as a descriptive dictionary, if as_vector=False.
+        """
 
         agent_on_turn = self.agent_selection
-        self.agent_selection = self._agent_selector.next()
 
-        if action not in self.infos[agent_on_turn]['legal_moves_as_int']:
+        if action not in self.legal_moves:
             raise ValueError(f'Illegal action. Please choose between legal actions, as documented in dict self.infos')
 
         else:
+            # Iterate agent_selection
+            self.agent_selection = self._agent_selector.next()
+
             # Apply action
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
@@ -285,18 +220,16 @@ class env(AECEnv):
             if observe:
                 return self.observe(agent_name=agent_on_turn, as_vector=as_vector)
 
-    # FixMe: Implement tests
-    def observe(self, agent_name: str, as_vector: bool = True):
+    def observe(self, agent_name: str, as_vector: bool = True) -> List:
         if as_vector:
-            return self.latest_observations[agent_name]['vectorized']
+            return self.infos[agent_name]['observations_vectorized']
         else:
-            return self.latest_observations[agent_name]['observed_hands']
+            return self.infos[agent_name]['observations']
 
-    # FixMe: Implement this
     def render(self, mode='human'):
-        raise NotImplementedError
+        print(self.latest_observations)
 
-    # FixMe: Implement this
+
     def close(self):
         pass
 
@@ -308,8 +241,7 @@ class env(AECEnv):
         self.dones = {player_name: done for player_name in self.agents}
         self.infos = {player_name: dict(legal_moves=self.latest_observations['player_observations']
         [player_index]['legal_moves'], legal_moves_as_int=self.latest_observations['player_observations']
-        [player_index]['legal_moves_as_int'], observed_hands=self.latest_observations['player_observations']
-        [player_index]['observed_hands'], observed_hands_vectorized=self.latest_observations['player_observations']
-        [player_index]['vectorized'])
+        [player_index]['legal_moves_as_int'], observations_vectorized=self.latest_observations['player_observations']
+        [player_index]['vectorized'], observations=self.latest_observations['player_observations'][player_index])
 
                       for player_index, player_name in enumerate(self.agents)}
