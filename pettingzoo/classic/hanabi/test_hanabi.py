@@ -1,6 +1,7 @@
 from unittest import TestCase
 from pettingzoo.classic.hanabi.hanabi import env
 import pettingzoo.tests.api_test as api_test
+import numpy as np
 
 
 class HanabiTest(TestCase):
@@ -62,8 +63,8 @@ class HanabiTest(TestCase):
         test_env = env(**self.full_config)
 
         obs = test_env.reset()
-        self.assertIsInstance(obs, list)
-        self.assertIsInstance(obs[0], int)
+        self.assertIsInstance(obs, np.ndarray)
+        self.assertEqual(obs.size, test_env.hanabi_env.vectorized_observation_shape()[0])
 
         obs = test_env.reset(observe=False)
         self.assertIsNone(obs)
@@ -74,9 +75,9 @@ class HanabiTest(TestCase):
 
         self.assertNotEqual(old_state, new_state)
 
-    # ToDo: Implement and test this, so that internal properties of class do not have to get queried.
     def test_get_legal_moves(self):
-        pass
+        test_env = env(**self.full_config)
+        self.assertIs(set(test_env.legal_moves).issubset(set(test_env.all_moves)), True)
 
     def test_observe(self):
         # Tested within test_step
@@ -88,17 +89,14 @@ class HanabiTest(TestCase):
         # Get current player
         old_player = test_env.agent_selection
 
-        # Get range of moves
-        all_moves = test_env.all_moves
-
         # Pick a legal move
         legal_moves = test_env.legal_moves
 
         # Assert return value
         new_obs = test_env.step(action=legal_moves[0])
         self.assertIsInstance(test_env.infos, dict)
-        self.assertIsInstance(new_obs, list)
-        self.assertIsInstance(new_obs[0], int)
+        self.assertIsInstance(new_obs, np.ndarray)
+        self.assertEqual(new_obs.size, test_env.hanabi_env.vectorized_observation_shape()[0])
 
         # Get new_player
         new_player = test_env.agent_selection
@@ -120,7 +118,7 @@ class HanabiTest(TestCase):
 
         # Assert raises error if wrong input
         new_legal_moves = test_env.legal_moves
-        illegal_move = list(set(all_moves) - set(new_legal_moves))[0]
+        illegal_move = list(set(test_env.all_moves) - set(new_legal_moves))[0]
         self.assertRaises(ValueError, test_env.step, illegal_move)
 
     def test_legal_moves(self):
@@ -134,6 +132,12 @@ class HanabiTest(TestCase):
 
     def test_run_whole_game(self):
         test_env = env(**self.full_config)
+
+        while not all(test_env.dones.values()):
+            self.assertIs(all(test_env.dones.values()), False)
+            test_env.step(test_env.legal_moves[0], observe=False)
+
+        test_env.reset(observe=False)
 
         while not all(test_env.dones.values()):
             self.assertIs(all(test_env.dones.values()), False)

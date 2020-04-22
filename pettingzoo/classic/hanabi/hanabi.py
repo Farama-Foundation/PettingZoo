@@ -113,15 +113,7 @@ class env(AECEnv):
             # List of agent names
             self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
 
-            # Rearrange self.agents as pyhanabi starts with player 1 not 0
-            self.agents = self.agents[1:] + [self.agents[0]]
-
-            # Agent order list, on which the agent selector operates on.
-            self.agent_order = list(self.agents)
-            self._agent_selector = agent_selector(self.agent_order)
-
-            # Set initial agent
-            self.agent_selection = self._agent_selector.reset()
+            self.agent_selection: str
 
             # Sets hanabi game to clean state and updates all internal dictionaries
             self.reset(observe=False)
@@ -168,12 +160,11 @@ class env(AECEnv):
 
     @property
     def legal_moves(self) -> List[int]:
-        obs = self.latest_observations['player_observations']
-        return obs[self._offset(self.agents.index(self.agent_selection))]['legal_moves']
+        return self.infos[self.agent_selection]['legal_moves']
 
     @property
     def all_moves(self) -> List[int]:
-        return range(0, self.hanabi_env.num_moves())
+        return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
     def reset(self, observe=True) -> Optional[List[int]]:
@@ -187,7 +178,10 @@ class env(AECEnv):
         # Reset underlying hanabi reinforcement learning environment
         obs = self.hanabi_env.reset()
 
-        # Update internal state
+        # Reset agent and agent_selection
+        self._reset_agents(player_number=obs['current_player'])
+
+        # Reset internal state
         self._process_latest_observations(obs=obs)
 
         # If specified, return observation of current agent
@@ -196,7 +190,24 @@ class env(AECEnv):
         else:
             return None
 
-    def step(self, action: int, observe: bool = True, as_vector: bool = True) -> Optional[Union[List[int],
+    def _reset_agents(self, player_number: int):
+        """ Rearrange self.agents as pyhanabi starts a different player after each reset(). """
+
+        # Shifts self.agents list as long order starting player is not according to player_number
+        while not self.agents[0] == 'player_' + str(player_number):
+            self.agents = self.agents[1:] + [self.agents[0]]
+
+        # Agent order list, on which the agent selector operates on.
+        self.agent_order = list(self.agents)
+        self._agent_selector = agent_selector(self.agent_order)
+
+        # Reset agent_selection
+        self.agent_selection = self._agent_selector.reset()
+
+    def _step_agents(self):
+        self.agent_selection = self._agent_selector.next()
+
+    def step(self, action: int, observe: bool = True, as_vector: bool = True) -> Optional[Union[np.ndarray,
                                                                                                 List[List[dict]]]]:
         """ Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.
 
@@ -213,7 +224,7 @@ class env(AECEnv):
 
         else:
             # Iterate agent_selection
-            self.agent_selection = self._agent_selector.next()
+            self._step_agents()
 
             # Apply action
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
@@ -225,9 +236,9 @@ class env(AECEnv):
             if observe:
                 return self.observe(agent_name=agent_on_turn, as_vector=as_vector)
 
-    def observe(self, agent_name: str, as_vector: bool = True) -> List:
+    def observe(self, agent_name: str, as_vector: bool = True) -> Union[np.ndarray, List]:
         if as_vector:
-            return self.infos[agent_name]['observations_vectorized']
+            return np.array([[self.infos[agent_name]['observations_vectorized']]], np.int32)
         else:
             return self.infos[agent_name]['observations']
 
@@ -247,14 +258,11 @@ class env(AECEnv):
 
         # Here we have to deal with the player index with offset = 1
         self.infos = {player_name: dict(legal_moves=self.latest_observations['player_observations']
-                                        [self._offset(player_index)]['legal_moves_as_int'],
+        [int(player_name[-1])]['legal_moves_as_int'],
                                         legal_moves_as_dict=self.latest_observations['player_observations']
-                                        [self._offset(player_index)]['legal_moves'],
+                                        [int(player_name[-1])]['legal_moves'],
                                         observations_vectorized=self.latest_observations['player_observations']
-                                        [self._offset(player_index)]['vectorized'],
+                                        [int(player_name[-1])]['vectorized'],
                                         observations=self.latest_observations['player_observations']
-                                        [self._offset(player_index)])
-                      for player_index, player_name in enumerate(self.agents)}
-
-    def _offset(self, index: int) -> int:
-        return (index + 1) % len(self.agents)
+                                        [int(player_name[-1])])
+                      for player_name in self.agents}
