@@ -230,7 +230,9 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 *AEC diagram*
 
-This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. The reward is collective, so agents have to learn to communicate the goal of the other agent, and navigate to their landmark. Both agents are simultaneous speakers and listeners.
+This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.
+
+The agents are rewarded by both their distance to their landmark and the average distance of all the agents to their respective landmarks. The relative weight of these rewards is controlled by the `global_reward_weight` parameter.
 
 Agent observation space: `[self_vel, all_landmark_rel_positions, landmark_ids, goal_id, communication]`
 
@@ -240,11 +242,13 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(seed=None, max_frames=500)
+simple_reference.env(seed=None, global_reward_weight=0.5, max_frames=500)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
+global_reward_weight: proportion of reward that is globally calculated vs agent specific.
 
 max_frames: number of frames (a step for each agent) until game terminates
 ```
@@ -297,20 +301,22 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 *AEC diagram*
 
-This environment has N agents, N landmarks (default N=3). The agents are rewarded based on how far the closest agent is to each landmark (sum of the minimum distances), but are penalized if they collide with other agents (-1 for each collision). Agents must learn to cover all the landmarks while avoiding collisions.
+This environment has N agents, N landmarks (default N=3). The agents are rewarded based on how far the closest agent is to each landmark (sum of the minimum distances), and are penalized if they collide with other agents (-1 for each collision). The relative weights of these rewards can be controlled with the `global_reward_weight` parameter. Agents must learn to cover all the landmarks while avoiding collisions.
 
 Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, communication]`
 
 Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_spread.env(seed=None, N=3, max_frames=500)
+simple_spread.env(seed=None, N=3, global_reward_weight=0.5, max_frames=500)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
 N: number of agents and landmarks
+
+global_reward_weight: proportion of reward that is globally calculated vs agent specific.
 
 max_frames: number of frames (a step for each agent) until game terminates
 ```
