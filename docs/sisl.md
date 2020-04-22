@@ -33,7 +33,7 @@ Please additionally cite:
 
 `from pettingzoo.sisl import multiwalker_v0`
 
-`agents= `
+`agents= ["walker_0", "walker_1", "walker_2"]`
 
 *gif*
 
@@ -46,6 +46,8 @@ multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech=
 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
 max_frames=500)
 ```
+
+*about arguments*
 
 ```
 n_walkers: number of bipedal walker agents in environment
@@ -84,7 +86,7 @@ Add Gupta et al and DDPG paper results too
 
 `from pettingzoo.sisl import pursuit_v0`
 
-`agents= `
+`agents= ["pursuer_0", "pursuer_1", ..., "pursuer_7"]`
 
 *gif*
 
@@ -101,6 +103,8 @@ train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
 opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 ```
+
+*about arguments*
 
 ```
 max_frames: after max_frames steps all agents will return done
@@ -152,12 +156,12 @@ Leaderboard:
 
 | Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |-------------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector (viewable) | Either  | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
+| Vector (viewable) | Either  | 5 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
 
 
 `from pettingzoo.sisl import waterworld_v0`
 
-`agents= `
+`agents= ["pursuer_0", "pursuer_1", ..., "pursuer_4"]`
 
 *gif*
 
@@ -172,6 +176,8 @@ poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
 poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
 reward_mech='local', speed_features=True, max_frames=500)
 ```
+
+*about arguments*
 
 ```
 n_pursuers: number of pursuing archea

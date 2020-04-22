@@ -29,7 +29,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, max_frames=900, continuous=False):
+    def __init__(self, seed=0, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         super(env, self).__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
@@ -39,8 +39,8 @@ class env(AECEnv):
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
-        self.action_spaces = dict(
-            zip(self.agents, [gym.spaces.Discrete(3)] * 20))
+        else:
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * 20))
         self.observation_spaces = dict(
             zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
         pygame.init()
@@ -54,6 +54,8 @@ class env(AECEnv):
 
         self.pistonSprite = get_image('piston.png')
         self.background = get_image('background.png')
+        self.random_drop = random_drop
+        self.starting_angular_momentum = starting_angular_momentum
 
         self.space = pymunk.Space(threaded=True)
         self.space.threads = 2
@@ -66,7 +68,7 @@ class env(AECEnv):
         # Defines what "recent" means in terms of number of frames.
         self.recentFrameLimit = 20
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
-        self.global_reward_weight = 0.5
+        self.global_reward_weight = 1 - local_ratio
         self.local_reward_weight = 1 - self.global_reward_weight
 
         self.add_walls()
@@ -81,9 +83,11 @@ class env(AECEnv):
             piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
             self.pistonList.append(piston)
 
-        self.offset = self.np_random.random_integers(-30, 30)
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.random_integers(-30, 30)
         self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
+            800 + self.offset, 350 + self.np_random.random_integers(-15, 15), ball_mass, ball_friction, ball_elasticity)
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
 
@@ -134,17 +138,18 @@ class env(AECEnv):
             wall.friction = .64
             self.space.add(wall)
 
-    def add_ball(self, x, y):
-        mass = .75
+    def add_ball(self, x, y, b_mass, b_friction, b_elasticity):
+        mass = b_mass
         radius = 40
         inertia = pymunk.moment_for_circle(mass, 0, radius, (0, 0))
         body = pymunk.Body(mass, inertia)
         body.position = x, y
         # radians per second
-        body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
+        if self.starting_angular_momentum:
+            body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
-        shape.friction = .3
-        shape.elasticity = 1.5
+        shape.friction = b_friction
+        shape.elasticity = b_elasticity
         self.space.add(body, shape)
         return body
 
@@ -175,8 +180,12 @@ class env(AECEnv):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
             piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
 
-        self.offset = self.np_random.random_integers(-30, 30)
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.random_integers(-30, 30)
         self.ball.position = (800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
+        if self.starting_angular_momentum:
+            self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
         self.screen.blit(self.background, (0, 0))

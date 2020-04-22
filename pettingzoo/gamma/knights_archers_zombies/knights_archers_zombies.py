@@ -29,16 +29,17 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, num_archers=2, num_knights=2, pad_observation=True, max_frames=900):
+    def __init__(self, seed=0, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, max_frames=900):
         # Game Constants
-        self.ZOMBIE_SPAWN = 20
-        self.SPAWN_STAB_RATE = 20
+        self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
         self.max_frames = 500
         self.frames = 0
         self.pad_observation = pad_observation
+        self.killable_knights = killable_knights
+        self.killable_archers = killable_archers
         self.has_reset = False
         self.np_random, seed = seeding.np_random(seed)
 
@@ -447,10 +448,12 @@ class env(AECEnv):
             self.zombie_list, self.sword_list, self.all_sprites, self.score = self.zombie_sword(self.zombie_list, self.sword_list, self.all_sprites, self.score)
 
             # Zombie Kills the Archer
-            self.zombie_archer(self.zombie_list, self.archer_list, self.all_sprites, self.archer_killed)
+            if self.killable_archers:
+                self.zombie_archer(self.zombie_list, self.archer_list, self.all_sprites, self.archer_killed)
 
             # Zombie Kills the Knight
-            self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed = self.zombie_knight(self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed)
+            if self.killable_knights:
+                self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed = self.zombie_knight(self.zombie_list, self.knight_list, self.all_sprites, self.knight_killed, self.sword_list, self.sword_killed)
 
             # Kill the Sword when Knight dies
             self.sword_killed, self.sword_list, self.all_sprites = self.kill_sword(self.sword_killed, self.sword_list, self.all_sprites)
