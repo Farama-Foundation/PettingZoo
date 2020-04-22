@@ -1,5 +1,6 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import observation_saver
 import warnings
 import inspect
 import numpy as np
@@ -7,7 +8,6 @@ from copy import copy
 import gym
 import random
 import re
-from skimage.io import imsave
 import os
 
 
@@ -150,16 +150,10 @@ def play_test(env, observation_0):
 
 
 def test_observe(env, observation_0, save_obs):
-    if save_obs:
-        save_obs_folder = "saved_observations/{}".format(env.__module__)
-        os.makedirs(save_obs_folder, exist_ok=True)
-
     for agent in env.agent_order:
         observation = env.observe(agent)
+        observation_saver.save_observation_for_agent(env, agent)
         test_obervation(observation, observation_0)
-        if save_obs:
-            fname = os.path.join(save_obs_folder, str(agent) + '.png')
-            imsave(fname, observation)
 
 
 def test_render(env):

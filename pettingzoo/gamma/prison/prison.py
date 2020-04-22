@@ -282,6 +282,7 @@ class env(AECEnv):
         self.num_frames = 0
         self.reinit()
         self.spawn_prisoners()
+        self.draw()
         if observe:
             return self.observe(self.agent_selection)
 
@@ -291,8 +292,8 @@ class env(AECEnv):
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         agent = self.agent_selection
         # if not continuous, input must be normalized
-        if None in [action] or np.NaN in [action]:
-            EnvLogger.warn_action_is_NaN()
+        if None in [action] or np.isnan(action):
+            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 0")
             action = np.zeros_like(self.action_spaces[agent].sample())
         elif not self.action_spaces[agent].contains(action):
             EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to zero")
@@ -334,7 +335,9 @@ class env(AECEnv):
     def render(self, mode='human'):
         if not self.rendering:
             pygame.display.init()
+            old_screen = self.screen
             self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
+            self.screen.blit(old_screen, (0, 0))
             self.screen.blit(self.background, (0, 0))
             if self.num_floors > 4:
                 min_rows = self.num_floors - 4
