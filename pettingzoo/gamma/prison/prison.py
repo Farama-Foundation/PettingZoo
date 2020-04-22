@@ -110,7 +110,7 @@ class env(AECEnv):
                 self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(1,), dtype=np.int8)
+                self.action_spaces[a] = spaces.Discrete(3)
 
         self.observation_spaces = {}
         self.last_observation = {}
@@ -298,12 +298,10 @@ class env(AECEnv):
             EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to zero")
             action = np.zeros_like(self.action_spaces[agent].sample())
         reward = 0
-        if action is not None:
-            if 0 not in action and not self.continuous:
-                action = action / abs(action)
+        if self.continuous:
             reward = self.move_prisoner(agent, action)
         else:
-            action = 0
+            reward = self.move_prisoner(agent, action - 1)
 
         # set the sprite state to action normalized
         if action != 0:
@@ -317,13 +315,13 @@ class env(AECEnv):
         else:
             self.clock.tick()
 
-        self.num_frames += 1
         if (self.num_frames >= self.max_frames):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
         if self._agent_selector.is_last():
             self.draw()
+            self.num_frames += 1
         if self.rendering:
             pygame.event.pump()
 
