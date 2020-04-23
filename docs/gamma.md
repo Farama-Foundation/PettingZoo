@@ -1,6 +1,6 @@
 ## Gamma Environments
 
-| Environment             || Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+| Environment             | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |:------------------------|:-----------|:-------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|----------:|
 | Cooperative Pong        | Discrete   | 2       | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 | Knights Archers Zombies | Discrete   | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           | ?          |
