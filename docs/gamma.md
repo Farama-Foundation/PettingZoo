@@ -56,7 +56,7 @@ Leaderboard:
 
 ### Knights Archers Zombies ('KAZ')
 | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Discrete | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           | ?          |
 
 `from pettingzoo.gamma import knights_archers_zombies_v0`
@@ -217,7 +217,7 @@ Continuous Leaderboard:
 
 ### Prospector
 | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+|------------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
 
 `from pettingzoo.gamma import prospector_v0`
