@@ -31,8 +31,8 @@ env = pistonball_v0.env()
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
-right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
+cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
