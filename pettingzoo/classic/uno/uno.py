@@ -1,7 +1,9 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 import rlcard
+import random
 from rlcard.games.uno.card import UnoCard
 import numpy as np
 
@@ -10,25 +12,21 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, **kwargs):
+    def __init__(self, seed=None, **kwargs):
         super(env, self).__init__()
+        if seed is not None:
+            np.random.seed(seed)
+            random.seed(seed)
         self.env = rlcard.make('uno', **kwargs)
         self.agents = ['player_0', 'player_1']
         self.num_agents = len(self.agents)
+        self.has_reset = False
 
-        self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
-        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(7, 4, 15), dtype=np.bool) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
-        obs, player_id = self.env.init_game()
-
-        self._last_obs = obs['obs']
-        self.agent_order = [self._int_to_name(agent) for agent in [player_id, 0 if player_id == 1 else 1]]
+        self.agent_order = self.agents
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = self._agent_selector.reset()
-        self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
 
     def _int_to_name(self, ind):
         return self.agents[ind]
@@ -40,15 +38,27 @@ class env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs']
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        backup_policy = "Game terminating with current player losing"
+        act_space = self.action_spaces[self.agent_selection]
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN(backup_policy)
+        if not act_space.contains(action):
+            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
+
         if self.dones[self.agent_selection]:
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             obs = False
         else:
             if action not in self.infos[self.agent_selection]['legal_moves']:
+                EnvLogger.warn_on_illegal_move()
                 self.rewards[self.agent_selection] = -1
                 self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
                 info_copy = self.infos[self.agent_selection]
@@ -76,6 +86,7 @@ class env(AECEnv):
             return obs['obs'] if obs else self._last_obs
 
     def reset(self, observe=True):
+        self.has_reset = True
         obs, player_id = self.env.init_game()
         self.agent_order = [self.agents[agent] for agent in [player_id, 0 if player_id == 1 else 1]]
         self._agent_selector.reinit(self.agent_order)
@@ -100,4 +111,4 @@ class env(AECEnv):
         print('\n')
 
     def close(self):
-        pass
+        EnvLogger.warn_close_unrendered_env()
