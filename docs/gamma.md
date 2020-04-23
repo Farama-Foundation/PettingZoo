@@ -18,7 +18,7 @@ All environments are highly configurable with environment arguments.
 
 ### Cooperative Pong
 | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|:-------------|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
+|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
 | Discrete | 2      | Yes            |      --      |   [0, 1]      |  (560, 480, 3)    |   [0, 255]         | ?          |
 
 `from pettingzoo.gamma import cooperative_pong_v0`
