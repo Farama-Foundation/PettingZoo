@@ -152,7 +152,8 @@ def play_test(env, observation_0):
 def test_observe(env, observation_0, save_obs):
     for agent in env.agent_order:
         observation = env.observe(agent)
-        observation_saver.save_observation_for_agent(env, agent)
+        if save_obs:
+            observation_saver.save_observation_for_agent(env, agent)
         test_obervation(observation, observation_0)
 
 
@@ -385,16 +386,17 @@ def check_environment_args(env):
 
         # checks deterministic behavior if seed is set
         base_seed = 192312
-        new_env = env.__class__(seed=base_seed)
-        actions = {agent: space.sample() for agent, space in new_env.action_spaces.items()}
+        actions = {agent: space.sample() for agent, space in env.action_spaces.items()}
         hashes = []
         num_seeds = 5
         rand_seeds = [random.randint(0, 1000000) for _ in range(num_seeds)]
         for x in range(num_seeds):
+            new_env = env.__class__(seed=base_seed)
             cur_hashes = []
-            random.seed(rand_seeds[x])
-            np.random.seed(rand_seeds[x])
             obs = new_env.reset()
+            for i in range(x + 1):
+                random.randint(0, 1000)
+                np.random.normal(size=100)
             cur_hashes.append(hash_obsevation(obs))
             for _ in range(50):
                 rew, done, info = new_env.last()
@@ -406,7 +408,7 @@ def check_environment_args(env):
             hashes.append(hash(tuple(cur_hashes)))
             new_env = env.__class__(seed=base_seed)
         if not all(hashes[0] == h for h in hashes):
-            warnings.warn("seeded environment is not fully deterministic, depends on random.seed or numpy.random.seed")
+            warnings.warn("seeded environment is not fully deterministic, depends on random or numpy.random's random state")
 
 
 def api_test(env, render=False, manual_control=None, save_obs=False):
