@@ -24,7 +24,7 @@ class env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
-        
+
         # self.rewards = None
         # self.dones = None
         # self.infos = None
@@ -73,7 +73,7 @@ class env(AECEnv):
         if np.isnan(action).any():
             EnvLogger.warn_action_is_NaN(backup_policy)
         if not act_space.contains(action):
-            EnvLogger.warn_action_out_of_bound(action,act_space,backup_policy)
+            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
 
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
