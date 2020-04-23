@@ -10,7 +10,7 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames, seed, global_reward_weight=None):
+    def __init__(self, scenario, world, max_frames, seed, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.np_random, seed = seeding.np_random(seed)
@@ -18,7 +18,7 @@ class SimpleEnv(AECEnv):
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
-        self.global_reward_weight = global_reward_weight
+        self.local_ratio = local_ratio
 
         self.scenario.reset_world(self.world, self.np_random)
 
@@ -96,13 +96,13 @@ class SimpleEnv(AECEnv):
         self.world.step()
 
         global_reward = 0.
-        if self.global_reward_weight is not None:
+        if self.local_ratio is not None:
             global_reward = float(self.scenario.global_reward(self.world))
 
         for agent in self.world.agents:
             agent_reward = float(self.scenario.reward(agent, self.world))
-            if self.global_reward_weight is not None:
-                reward = global_reward * self.global_reward_weight + agent_reward * (1. - self.global_reward_weight)
+            if self.local_ratio is not None:
+                reward = global_reward * (1 - self.local_ratio) + agent_reward * self.local_ratio
             else:
                 reward = agent_reward
 
