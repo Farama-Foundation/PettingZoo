@@ -3,4 +3,4 @@ __pycache__/
 *.swp
 .DS_Store
 .vscode/
-saved_observatons
+saved_observatons/
