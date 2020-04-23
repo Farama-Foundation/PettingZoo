@@ -1,22 +1,22 @@
 ## Classic Environments
 
-| Environment                      | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
-|----------------------------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
-| Backgammon                       | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Checkers                         | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Chess                            | Discrete | 2      | No             | Discrete(4672)| Discrete(4672) | (8,8,20)          | [0,1]              | ?             |
-| Connect Four                     | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Dou Dizhu                        | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
-| Gin Rummy                        | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52         |
-| Go                               | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Leduc Hold'em                    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2          |
-| Mahjong                          | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]             | 10^121        |
-| Rock Paper Scissors              | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Rock Paper Scissors Lizard Spock | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Texas Hold'em                    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]             | 10^14         |
-| Texas Hold'em No Limit           | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]           | 10^162        |
-| Tic Tac Toe                      | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Uno                              | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]             | 10^163        |
+| Environment                      | Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States    |
+|----------------------------------|----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|---------------|
+| Backgammon                       | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Checkers                         | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Chess                            | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0,1]              | ?             |
+| Connect Four                     | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Dou Dizhu                        | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
+| Gin Rummy                        | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0,1]              | 10^52         |
+| Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1,1]             | 3^(N^2)       |
+| Leduc Hold'em                    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (36,)             | [0, 1]             | 10^2          |
+| Mahjong                          | Discrete | 4      | No             | Discrete(38)    | Discrete(38)    | (6, 34, 4)        | [0, 1]             | 10^121        |
+| Rock Paper Scissors              | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Rock Paper Scissors Lizard Spock | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Texas Hold'em                    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (72,)             | [0, 1]             | 10^14         |
+| Texas Hold'em No Limit           | Discrete | 2      | No             | Discrete(103)   | Discrete(103)   | (54,)             | [0, 100]           | 10^162        |
+| Tic Tac Toe                      | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Uno                              | Discrete | 2      | No             | Discrete(61)    | Discrete(61)    | (7, 4, 15)        | [0, 1]             | 10^163        |
 
 `pip install pettingzoo[classic]`
 
@@ -137,7 +137,7 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Dou Dizhu
@@ -230,7 +230,7 @@ We modified the reward structure compared to RLCard. Instead of rewarding `0` to
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Gin Rummy
@@ -313,28 +313,82 @@ Penalties of deadwood_count/100 ensure that the reward never goes below -1.
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Go
 
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
+ Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
+----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
+ Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1, 1]            | 3^(N^2)    |
 
 `from pettingzoo.classic import go_v0`
 
-`agents= `
+`agents= ['black', 'white']`
 
 *gif*
 
 *AEC Diagram*
 
-*Blurb*
+Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows with the purpuse of surrounding more territory than the opponent or capturing the opponent's stones. The game ends if both players sequentially decide to pass. Refer to [Wikipedia](https://en.wikipedia.org/wiki/Go_(game)) for additional details about the game.
 
-*Env arguments*
+Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minigo).
 
-*About env arguments*
+#### Arguments
+
+Go takes two optional arguments that define the board size (int) and komi (float) compensation points. The default values for the board size and komi are 19 and 7.5, respectively.
+
+`g0_v0.env(board_size = 13, komi = 2.5)`
+
+`g0_v0.env() # with default values`
+
+#### Observation Space
+
+The observation shape is a function of the board size _N_ and has a shape (N, N) that represent the state of the board with the top left corner as (0, 0). For example, a (9, 9) board is  
+```
+   0 1 2 3 4 5 6 7 8
+ 0 . . . . . . . . .  0
+ 1 . . . . . . . . .  1
+ 2 . . . . . . . . .  2
+ 3 . . . . . . . . .  3
+ 4 . . . . . . . . .  4
+ 5 . . . . . . . . .  5
+ 6 . . . . . . . . .  6
+ 7 . . . . . . . . .  7
+ 8 . . . . . . . . .  8
+   0 1 2 3 4 5 6 7 8
+```
+| Value | Description |
+|:-----:|-------------|
+|   -1  | White Stone |
+|   0   | No Stone    |
+|   1   | Black Stone |
+
+While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
+
+#### Action Space
+
+Similar to the observation space, the action space is dependent on the board size _N_.
+
+|   Action ID   | Description                                                                                                   |
+|:-------------:|---------------------------------------------------------------------------------------------------------------|
+|    0 ~ N-1    | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_                   |
+|    N ~ 2N-1   | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_                |
+|      ...      | ...                                                                                                           |
+| N^2-N ~ N^2-1 | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
+|      N^2      | Pass                                                                                                          |
+
+For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. 
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | :---: |
+| +1     | -1    |
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Leduc Hold'em
 
@@ -382,7 +436,7 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Mahjong
@@ -469,7 +523,7 @@ For example, you would use action `34` to pong or action `37` to stand.
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Rock Paper Scissors
@@ -569,7 +623,7 @@ The observation space is a vector of 72 boolean integers. The first 52 entries d
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Texas Hold'em No Limit
@@ -620,7 +674,7 @@ The observation space is similar to Texas Hold'em. The first 52 entries represen
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 
 ### Tic Tac Toe
@@ -738,5 +792,5 @@ For example, you would use action `6` to put down a red "6" card or action `60` 
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 

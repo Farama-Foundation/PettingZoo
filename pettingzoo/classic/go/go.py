@@ -26,7 +26,7 @@ import itertools
 import numpy as np
 import os
 
-import coords
+from . import coords
 
 N = int(os.environ.get('BOARD_SIZE', 19))
 
@@ -46,9 +46,9 @@ def _check_bounds(c):
 
 
 NEIGHBORS = {(x, y): list(filter(_check_bounds, [
-    (x+1, y), (x-1, y), (x, y+1), (x, y-1)])) for x, y in ALL_COORDS}
+    (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)])) for x, y in ALL_COORDS}
 DIAGONALS = {(x, y): list(filter(_check_bounds, [
-    (x+1, y+1), (x+1, y-1), (x-1, y+1), (x-1, y-1)])) for x, y in ALL_COORDS}
+    (x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1)])) for x, y in ALL_COORDS}
 
 
 class IllegalMove(Exception):
@@ -344,8 +344,8 @@ class Position():
         for i in range(N):
             row = [' ']
             for j in range(N):
-                appended = '<' if (self.recent and (i, j) ==
-                                   self.recent[-1].move) else ' '
+                appended = '<' if (self.recent and (i, j)
+                                   == self.recent[-1].move) else ' '
                 row.append(pretty_print_map[board[i, j]] + appended)
                 if colors:
                     row.append('\x1b[0m')
@@ -404,8 +404,8 @@ class Position():
         # padding is because the edge always counts as a lost liberty.
         adjacent = np.ones([N + 2, N + 2], dtype=np.int8)
         adjacent[1:-1, 1:-1] = np.abs(self.board)
-        num_adjacent_stones = (adjacent[:-2, 1:-1] + adjacent[1:-1, :-2] +
-                               adjacent[2:, 1:-1] + adjacent[1:-1, 2:])
+        num_adjacent_stones = (adjacent[:-2, 1:-1] + adjacent[1:-1, :-2]
+                               + adjacent[2:, 1:-1] + adjacent[1:-1, 2:])
         # Surrounded spots are those that are empty and have 4 adjacent stones.
         surrounded_spots = np.multiply(
             (self.board == EMPTY),
@@ -498,9 +498,9 @@ class Position():
         return pos
 
     def is_game_over(self):
-        return (len(self.recent) >= 2 and
-                self.recent[-1].move is None and
-                self.recent[-2].move is None)
+        return (len(self.recent) >= 2
+                and self.recent[-1].move is None
+                and self.recent[-2].move is None)
 
     def score(self):
         'Return score from B perspective. If W is winning, score is negative.'
