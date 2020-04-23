@@ -53,9 +53,14 @@ class Scenario(BaseScenario):
 
     def reward(self, agent, world):
         if agent.goal_a is None or agent.goal_b is None:
-            return 0.0
-        dist2 = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
-        return -dist2
+            agent_reward = 0.0
+        else:
+            agent_reward = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
+        return -agent_reward
+
+    def global_reward(self, world):
+        all_rewards = sum(self.reward(agent, world) for agent in world.agents)
+        return all_rewards / len(world.agents)
 
     def observation(self, agent, world):
         # goal color
