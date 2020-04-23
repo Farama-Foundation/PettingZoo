@@ -3,7 +3,7 @@ from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 import rlcard
-from rlcard.utils.utils import set_global_seed
+import random
 import numpy as np
 
 
@@ -13,8 +13,9 @@ class env(AECEnv):
 
     def __init__(self, seed=None, **kwargs):
         super(env, self).__init__()
-        # if seed is not None:
-        #     set_global_seed(seed)
+        if seed is not None:
+            np.random.seed(seed)
+            random.seed(seed)
         self.env = rlcard.make('mahjong', **kwargs)
         self.agents = ['player_0', 'player_1', 'player_2', 'player_3']
         self.num_agents = len(self.agents)

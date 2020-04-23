@@ -3,7 +3,8 @@ from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 import rlcard
-from rlcard.utils.utils import print_card, set_global_seed
+import random
+from rlcard.utils.utils import print_card
 import numpy as np
 
 
@@ -13,8 +14,9 @@ class env(AECEnv):
 
     def __init__(self, seed=None, **kwargs):
         super(env, self).__init__()
-        # if seed is not None:
-        #     set_global_seed(seed)
+        if seed is not None:
+            np.random.seed(seed)
+            random.seed(seed)
         self.env = rlcard.make('no-limit-holdem', **kwargs)
         self.agents = ['player_0', 'player_1']
         self.num_agents = len(self.agents)

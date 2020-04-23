@@ -2,8 +2,9 @@ from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
+import random
 import rlcard
-from rlcard.utils.utils import print_card, set_global_seed
+from rlcard.utils.utils import print_card
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import KnockAction, GinAction
@@ -17,8 +18,9 @@ class env(AECEnv):
 
     def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0, **kwargs):
         super(env, self).__init__()
-        # if seed is not None:
-        #     set_global_seed(seed)
+        if seed is not None:
+            np.random.seed(seed)
+            random.seed(seed)
         self._knock_reward = knock_reward
         self._gin_reward = gin_reward
         self.env = rlcard.make('gin-rummy', **kwargs)
