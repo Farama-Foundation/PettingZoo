@@ -10,7 +10,7 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames, seed):
+    def __init__(self, scenario, world, max_frames, seed, global_reward_weight=None):
         super(SimpleEnv, self).__init__()
 
         self.np_random, seed = seeding.np_random(seed)
@@ -18,6 +18,7 @@ class SimpleEnv(AECEnv):
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
+        self.global_reward_weight = global_reward_weight
 
         self.scenario.reset_world(self.world, self.np_random)
 
@@ -43,13 +44,8 @@ class SimpleEnv(AECEnv):
             self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = {name: 0. for name in self.agents}
-        self.dones = {name: False for name in self.agents}
-        self.infos = {name: {} for name in self.agents}
-
         self.steps = 0
 
-        self.agent_selection = self._agent_selector.reset()
         self.current_actions = [None] * self.num_agents
 
         self.viewer = None
@@ -70,10 +66,6 @@ class SimpleEnv(AECEnv):
         self.infos = {name: {} for name in self.agents}
 
         self._reset_render()
-
-        self.rewards = {name: 0. for name in self.agents}
-        self.dones = {name: False for name in self.agents}
-        self.infos = {name: {} for name in self.agents}
 
         self.agent_selection = self._agent_selector.reset()
         self.steps = 0
@@ -102,8 +94,19 @@ class SimpleEnv(AECEnv):
             self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
+
+        global_reward = 0.
+        if self.global_reward_weight is not None:
+            global_reward = float(self.scenario.global_reward(self.world))
+
         for agent in self.world.agents:
-            self.rewards[agent.name] = float(self.scenario.reward(agent, self.world))
+            agent_reward = float(self.scenario.reward(agent, self.world))
+            if self.global_reward_weight is not None:
+                reward = global_reward * self.global_reward_weight + agent_reward * (1. - self.global_reward_weight)
+            else:
+                reward = agent_reward
+
+            self.rewards[agent.name] = reward
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -139,14 +142,14 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
-        backup_policy = "taking zero action (no movement, communication 0)"
-        act_space = self.action_spaces[self.agent_selection]
         if not self.has_reset:
             EnvLogger.error_step_before_reset()
+        backup_policy = "taking zero action (no movement, communication 0)"
+        act_space = self.action_spaces[self.agent_selection]
         if np.isnan(action).any():
             EnvLogger.warn_action_is_NaN(backup_policy)
         if not act_space.contains(action):
-            EnvLogger.warn_action_out_of_bound(action,act_space,backup_policy)
+            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
 
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents

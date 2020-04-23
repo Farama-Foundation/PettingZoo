@@ -28,7 +28,6 @@ class env(AECEnv):
 
         self.has_reset = False
 
-
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 

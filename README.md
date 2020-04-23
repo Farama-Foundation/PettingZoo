@@ -31,8 +31,8 @@ env = pistonball_v0.env()
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
-right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
+cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
@@ -101,6 +101,10 @@ We encourage calling the environment actor `'env'` in `env.agents`, and having i
 Full documentation of each environment is available [here].
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
+
+## SuperSuit
+
+[SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
 ## Utils
 
