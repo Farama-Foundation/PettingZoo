@@ -14,6 +14,8 @@ All Gamma environments were created by us, using PyGame, with visual Atari space
 
 All other environments require a high degree of coordination and learning emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.
 
+All environments are *highly* configurable, based on environment arguments.
+
 ### Cooperative Pong
 | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |:-------------|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
