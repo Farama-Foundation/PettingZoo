@@ -3,8 +3,8 @@ from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 import rlcard
+import random
 from rlcard.games.uno.card import UnoCard
-from rlcard.utils.utils import set_global_seed
 import numpy as np
 
 
@@ -14,8 +14,9 @@ class env(AECEnv):
 
     def __init__(self, seed=None, **kwargs):
         super(env, self).__init__()
-        # if seed is not None:
-        #     set_global_seed(seed)
+        if seed is not None:
+            np.random.seed(seed)
+            random.seed(seed)
         self.env = rlcard.make('uno', **kwargs)
         self.agents = ['player_0', 'player_1']
         self.num_agents = len(self.agents)
