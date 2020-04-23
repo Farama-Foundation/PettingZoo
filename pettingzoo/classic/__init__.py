@@ -10,3 +10,4 @@ from .texas_holdem_no_limit import texas_holdem_no_limit as texas_holdem_no_limi
 from .uno import uno as uno_v0
 from .dou_dizhu import dou_dizhu as dou_dizhu_v0
 from .gin_rummy import gin_rummy as gin_rummy_v0
+from .go import go_env as go_v0
