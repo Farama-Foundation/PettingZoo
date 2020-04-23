@@ -362,7 +362,7 @@ def test_bad_actions(env):
             if not env.dones[first_agent]:
                 warnings.warn("Environment should terminate after receiving an illegal move")
         else:
-            warnings.warn("The legal moves were just all possible moves. This is very usual.")
+            warnings.warn("The legal moves were just all possible moves. This is very usual")
 
     env.reset()
 
@@ -370,7 +370,7 @@ def test_bad_actions(env):
 def check_environment_args(env):
     args = inspect.getfullargspec(env.__init__)
     if len(args.args) < 2 or "seed" != args.args[1]:
-        warnings.warn("environment does not have a `seed` parameter as its first argument. It should have a seed if the environment uses any randomness")
+        warnings.warn("Environment does not take `seed` as its first argument. If it uses any randomness, it should")
     else:
         def hash_obsevation(obs):
             try:
@@ -380,7 +380,7 @@ def check_environment_args(env):
                 try:
                     return hash(obs)
                 except TypeError:
-                    warnings.warn("observation not an int or an numpy array")
+                    warnings.warn("Observation not an int or an Numpy array")
                     return 0
 
         # checks deterministic behavior if seed is set
@@ -426,7 +426,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     assert not any(env.dones.values()), "dones must all be False after reset"
 
     assert isinstance(env.num_agents, int), "num_agents must be an integer"
-    assert env.num_agents != 0, "Your environment should have nonzero number of agents"
+    assert env.num_agents != 0, "Your environment should have a nonzero number of agents"
     assert env.num_agents > 0, "Your environment can't have a negative number of agents"
 
     observation_0 = env.reset()
@@ -478,6 +478,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     if base_render != env.__class__.render:
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
     else:
-        warnings.warn("environment has not defined a render() method")
+        warnings.warn("Environment has not defined a render() method")
 
     print("Passed API test")
