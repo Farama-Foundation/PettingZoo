@@ -2,7 +2,7 @@ import os
 
 
 # add more dir names here
-dir_names = ["gamma", "sisl"]
+dir_names = ["gamma", "sisl", "magent", "mpe"]
 
 for name in dir_names:
     root_dir = os.path.join(os.pardir, name)
