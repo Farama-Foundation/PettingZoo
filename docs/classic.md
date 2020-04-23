@@ -8,7 +8,7 @@
 | Connect Four                     | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | Dou Dizhu                        | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
 | Gin Rummy                        | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0,1]              | 10^52         |
-| Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N,N)             | [-1,1]             | 3^(N^2)       |
+| Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1,1]             | 3^(N^2)       |
 | Leduc Hold'em                    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (36,)             | [0, 1]             | 10^2          |
 | Mahjong                          | Discrete | 4      | No             | Discrete(38)    | Discrete(38)    | (6, 34, 4)        | [0, 1]             | 10^121        |
 | Rock Paper Scissors              | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
@@ -320,7 +320,7 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
  Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
 ----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
- Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N,N)             | [-1,1]             | 3^(N^2)    |
+ Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1, 1]            | 3^(N^2)    |
 
 `from pettingzoo.classic import go_v0`
 
@@ -344,19 +344,7 @@ Go takes two optional arguments that define the board size (int) and komi (float
 
 #### Observation Space
 
-The observation shape is a function of the board size _N_. The first N^2 indexes represent the flattened version of the (N, N) board with the top left corner as (0, 0). The last three indexes of the observation space are the number of moves and captures per player.
-
-|     Index     | Description                                                                      | Values                                             |
-|:-------------:|----------------------------------------------------------------------------------|----------------------------------------------------|
-|    0 ~ N-1    | Board 1st row<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_                   | `-1`: White Stone, `0`: No stone, `1`: black stone |
-|    N ~ 2N-1   | Board 2nd row<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_                | `-1`: White Stone, `0`: No stone, `1`: black stone |
-|      ...      | ...                                                                              | ...                                                |
-| N^2-N ~ N^2-1 | Board Nth row<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ | `-1`: White Stone, `0`: No stone, `1`: black stone |
-|      N^2      | Total number of moves made by both players                                       | [0,N^2]                                            |
-|     N^2+1     | Number of captured stones by black player                                        | [0,N^2]                                            |
-|     N^2+2     | Number of captured stones by white player                                        | [0,N^2]                                            |
-
-The [MiniGo](https://github.com/tensorflow/minigo/blob/master/coords.py) coordinate system for a (9, 9) board is as follows.
+The observation shape is a function of the board size _N_ and has a shape (N, N) that represent the state of the board with the top left corner as (0, 0). For example, a (9, 9) board is  
 ```
    0 1 2 3 4 5 6 7 8
  0 . . . . . . . . .  0
@@ -370,6 +358,12 @@ The [MiniGo](https://github.com/tensorflow/minigo/blob/master/coords.py) coordin
  8 . . . . . . . . .  8
    0 1 2 3 4 5 6 7 8
 ```
+| Value | Description |
+|:-----:|-------------|
+|   -1  | White Stone |
+|   0   | No Stone    |
+|   1   | Black Stone |
+
 While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
 
 #### Action Space

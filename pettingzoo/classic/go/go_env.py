@@ -1,5 +1,6 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 from . import go
 from . import coords
@@ -16,26 +17,17 @@ class env(AECEnv):
         super(env, self).__init__()
 
         self._overwrite_go_global_variables(board_size=board_size)
-
         self._komi = komi
-        self._go = go.Position(board=None, komi=self._komi)
 
-        self.agents = ['black', 'white']
+        self.agents = ['black_0', 'white_0']
         self.num_agents = len(self.agents)
+        self.has_reset = False
 
-        # self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.append(np.full((self._N * self._N,), -1), np.zeros(3,)), high=np.append(np.full((self._N * self._N,), 1), np.full((3,), self._N ** 3)), dtype=np.int) for _ in range(self.num_agents)])
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=-1, high=1, shape=(self._N, self._N), dtype=np.int) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
         self.agent_order = self.agents
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = self._agent_selector.reset()
-
-        self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
-        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
-        self._last_obs = self.observe(self.agents[0])
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -65,18 +57,26 @@ class env(AECEnv):
         return [1, -1] if result == 1 else [-1, 1]
 
     def observe(self, agent):
-        # obs = self._go.board.flatten()
-        # moves = self._go.n
-        # captures = self._go.caps
-        # return np.append(obs, [moves, captures[0], captures[1]])
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         return self._go.board
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        backup_policy = "Game terminating with current player losing"
+        act_space = self.action_spaces[self.agent_selection]
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN(backup_policy)
+        if not act_space.contains(action):
+            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
+
         if self.dones[self.agent_selection]:
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             next_player = False
         else:
             if action not in self.infos[self.agent_selection]['legal_moves']:
+                EnvLogger.warn_on_illegal_move()
                 self.rewards[self.agent_selection] = -1
                 self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
                 info_copy = self.infos[self.agent_selection]
@@ -98,10 +98,9 @@ class env(AECEnv):
             return self._last_obs
 
     def reset(self, observe=True):
+        self.has_reset = True
         self._go = go.Position(board=None, komi=self._komi)
 
-        self.agent_order = self.agents
-        self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
@@ -117,4 +116,4 @@ class env(AECEnv):
         print(self._go)
 
     def close(self):
-        pass
+        EnvLogger.warn_close_unrendered_env()
