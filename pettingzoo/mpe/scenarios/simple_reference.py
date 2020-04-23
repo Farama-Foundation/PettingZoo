@@ -20,20 +20,18 @@ class Scenario(BaseScenario):
             landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
-        # make initial conditions
-        self.reset_world(world)
         return world
 
-    def reset_world(self, world):
+    def reset_world(self, world, np_random):
         # assign goals to agents
         for agent in world.agents:
             agent.goal_a = None
             agent.goal_b = None
         # want other agent to go to the goal landmark
         world.agents[0].goal_a = world.agents[1]
-        world.agents[0].goal_b = np.random.choice(world.landmarks)
+        world.agents[0].goal_b = np_random.choice(world.landmarks)
         world.agents[1].goal_a = world.agents[0]
-        world.agents[1].goal_b = np.random.choice(world.landmarks)
+        world.agents[1].goal_b = np_random.choice(world.landmarks)
         # random properties for agents
         for i, agent in enumerate(world.agents):
             agent.color = np.array([0.25, 0.25, 0.25])
@@ -46,18 +44,23 @@ class Scenario(BaseScenario):
         world.agents[1].goal_a.color = world.agents[1].goal_b.color
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            agent.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def reward(self, agent, world):
         if agent.goal_a is None or agent.goal_b is None:
-            return 0.0
-        dist2 = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
-        return -dist2
+            agent_reward = 0.0
+        else:
+            agent_reward = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
+        return -agent_reward
+
+    def global_reward(self, world):
+        all_rewards = sum(self.reward(agent, world) for agent in world.agents)
+        return all_rewards / len(world.agents)
 
     def observation(self, agent, world):
         # goal color

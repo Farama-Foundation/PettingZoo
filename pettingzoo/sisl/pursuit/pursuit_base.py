@@ -6,6 +6,7 @@ from subprocess import call
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
+from pettingzoo.utils import EnvLogger
 
 
 import pygame
@@ -18,7 +19,7 @@ from .utils import two_d_maps
 
 class Pursuit():
 
-    def __init__(self, **kwargs):
+    def __init__(self, seed=0, **kwargs):
         """
         In evade purusit a set of pursuers must 'tag' a set of evaders
         Required arguments:
@@ -55,6 +56,7 @@ class Pursuit():
         ys = self.ys
         self.map_matrix = two_d_maps.rectangle_map(self.xs, self.ys)
         self.max_frames = kwargs.pop("max_frames", 500)
+        self.seed(seed)
 
         self._reward_mech = kwargs.pop('reward_mech', 'local')
 
@@ -71,9 +73,9 @@ class Pursuit():
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
         self.pursuers = agent_utils.create_agents(
-            self.n_pursuers, self.map_matrix, self.obs_range)
+            self.n_pursuers, self.map_matrix, self.obs_range, self.np_random)
         self.evaders = agent_utils.create_agents(
-            self.n_evaders, self.map_matrix, self.obs_range)
+            self.n_evaders, self.map_matrix, self.obs_range, self.np_random)
 
         self.pursuer_layer = kwargs.pop(
             'ally_layer', AgentLayer(xs, ys, self.pursuers))
@@ -99,9 +101,9 @@ class Pursuit():
                 'pursuer_controller', SingleActionPolicy(4))
         else:
             self.evader_controller = kwargs.pop(
-                'evader_controller', RandomPolicy(n_act_purs))
+                'evader_controller', RandomPolicy(n_act_purs, self.np_random))
             self.pursuer_controller = kwargs.pop(
-                'pursuer_controller', RandomPolicy(n_act_ev))
+                'pursuer_controller', RandomPolicy(n_act_ev, self.np_random))
 
         self.current_agent_layer = np.zeros((xs, ys), dtype=np.int32)
 
@@ -159,9 +161,12 @@ class Pursuit():
         self.reset()
 
     def close(self):
-        pygame.event.pump()
-        pygame.display.quit()
-        pygame.quit()
+        if not self.renderOn:
+            EnvLogger.warn_close_unrendered_env()
+        else:
+            pygame.event.pump()
+            pygame.display.quit()
+            pygame.quit()
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #
@@ -191,17 +196,17 @@ class Pursuit():
             else:
                 self.n_pursuers = self.np_random.randint(1, self.max_opponents)
 
-        x_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        y_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
+        x_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
+        y_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
         xlb, xub = int(self.xs * x_window_start), int(self.xs * (x_window_start + self.constraint_window))
         ylb, yub = int(self.ys * y_window_start), int(self.ys * (y_window_start + self.constraint_window))
         constraints = [[xlb, xub], [ylb, yub]]
 
-        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
+        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range, self.np_random,
                                                   randinit=True, constraints=constraints)
         self.pursuer_layer = AgentLayer(self.xs, self.ys, self.pursuers)
 
-        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range,
+        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range, self.np_random,
                                                  randinit=True, constraints=constraints)
         self.evader_layer = AgentLayer(self.xs, self.ys, self.evaders)
 

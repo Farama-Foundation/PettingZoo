@@ -3,22 +3,23 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
+from pettingzoo.utils import EnvLogger
 
 
 class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, seed=0, *args, **kwargs):
         super(env, self).__init__()
-        self.env = _env(*args, **kwargs)
+        self.env = _env(*args, seed, **kwargs)
 
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
+        self.has_reset = False
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -27,14 +28,8 @@ class env(AECEnv):
         self.steps = 0
         self.display_wait = 0.0
 
-        self.rewards = dict(
-            zip(self.agents, [np.float64(0) for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-
-        self.reset()
-
     def reset(self, observe=True):
+        self.has_reset = True
         self.steps = 0
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
@@ -52,15 +47,15 @@ class env(AECEnv):
         self.env.render()
 
     def step(self, action, observe=True):
-        if not np.isscalar(action):
-            action = action[0]
-
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if action is None or action == np.NaN:
-            action = 4
+        if action is None or np.isnan(action):
+            action = 0
+            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 0")
         elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(agent, self.action_spaces[agent].n, action))
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 0")
+            action = 0
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
             if self.env.frames >= self.env.max_frames:
@@ -75,5 +70,7 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         o = np.array(self.env.safely_observe(self.agent_name_mapping[agent]))
         return o

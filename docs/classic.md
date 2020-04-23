@@ -1,22 +1,22 @@
 ## Classic Environments
 
-| Environment                      | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
-|----------------------------------|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
-| Backgammon                       | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Checkers                         | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Chess                            | Graphical    | Discrete | 2      | No             | Discrete(4672)| Discrete(4672) | (8,8,20)          | [0,1]              | ?             |
-| Connect Four                     | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Dou Dizhu                        | Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
-| Gin Rummy                        | Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52         |
-| Go                               | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Leduc Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, 1]             | 10^2          |
-| Mahjong                          | Vector       | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]             | 10^121        |
-| Rock Paper Scissors              | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Rock Paper Scissors Lizard Spock | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Texas Hold'em                    | Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]             | 10^14         |
-| Texas Hold'em No Limit           | Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]           | 10^162        |
-| Tic Tac Toe                      | ?            | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
-| Uno                              | Vector       | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]             | 10^163        |
+| Environment                      | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
+|----------------------------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
+| Backgammon                       | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Checkers                         | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Chess                            | Discrete | 2      | No             | Discrete(4672)| Discrete(4672) | (8,8,20)          | [0,1]              | ?             |
+| Connect Four                     | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Dou Dizhu                        | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
+| Gin Rummy                        | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52         |
+| Go                               | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Leduc Hold'em                    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2          |
+| Mahjong                          | Discrete | 4      | No             | Discrete(38)  | Discrete(38)   | (6, 34, 4)        | [0, 1]             | 10^121        |
+| Rock Paper Scissors              | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Rock Paper Scissors Lizard Spock | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Texas Hold'em                    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (72,)             | [0, 1]             | 10^14         |
+| Texas Hold'em No Limit           | Discrete | 2      | No             | Discrete(103) | Discrete(103)  | (54,)             | [0, 100]           | 10^162        |
+| Tic Tac Toe                      | ?        | ?      | ?              | ?             | ?              | ?                 | ?                  | ?             |
+| Uno                              | Discrete | 2      | No             | Discrete(61)  | Discrete(61)   | (7, 4, 15)        | [0, 1]             | 10^163        |
 
 `pip install pettingzoo[classic]`
 
@@ -44,7 +44,7 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 |--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import backgammon`
+`from pettingzoo.classic import backgammon_v0`
 
 `agents= `
 
@@ -57,11 +57,11 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 
 ### Checkers
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import checkers`
+`from pettingzoo.classic import checkers_v0`
 
 `agents= `
 
@@ -83,11 +83,11 @@ Many environments in classic are based on [RLCard](https://github.com/datamllab/
 
 ### Chess
 
-| Observations | Actions  | Agents | Manual Control | Action Shape                           | Action Values  | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|----------------------------------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
+| Actions  | Agents | Manual Control | Action Shape                           | Action Values  | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|----------------------------------------|----------------|-------------------|--------------------|------------|
+| Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 
-`pettingzoo.classic.chess`
+`pettingzoo.classic.chess_v0`
 
 `agents= ['player_1', 'player_2']`
 
@@ -142,11 +142,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Dou Dizhu
 
-| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
-|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
-| Vector       | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
+| Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
+|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
+| Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
 
-`from pettingzoo.classic import dou_dizhu`
+`from pettingzoo.classic import dou_dizhu_v0`
 
 `agents= ['landlord_0', 'peasant_0', 'peasant_1']`
 
@@ -235,11 +235,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Gin Rummy
 
-| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | ?          |
+| Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
+| Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52      |
 
-`from pettingzoo.classic import gin_rummy`
+`from pettingzoo.classic import gin_rummy_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -250,6 +250,14 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit. 
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+#### Arguments
+
+Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
+
+`gin_rummy_v0.env(knock_reward = 0.5, gin_reward = 1.0)`
+
+`gin_rummy_v0.env() # with default values`
 
 #### Observation Space
 
@@ -289,15 +297,17 @@ For example, you would use action `2` to draw a card or action `3` to pick up a 
 
 #### Rewards
 
-At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.2 points, and the losing player receives a reward equal to the negative of their deadwood count.
+At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.5 points, and the losing player receives a reward equal to the negative of their deadwood count.
 
 If the hand is declared dead, both players get a reward equal to negative of their deadwood count.
 
-| End Action                       | Winner | Loser                                               |
-|----------------------------------|:------:|-----------------------------------------------------|
-| Dead Hand                        |   --   | -deadwood_count/100<br>_Both players are penalized_ |
-| Knock<br>_Knocking player: +0.2_ |   --   | -deadwood_count/100                                 |
-| Gin<br>_Going Gin Player: +1_    |   --   | -deadwood_count/100                                 |
+| End Action                                | Winner | Loser               |
+|-------------------------------------------|:------:|---------------------|
+| Dead Hand<br>_Both players are penalized_ |   --   | -deadwood_count/100 |
+| Knock<br>_Knocking player: Default +0.5_  |   --   | -deadwood_count/100 |
+| Gin<br>_Going Gin Player: Default +1_     |   --   | -deadwood_count/100 |
+
+Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
 
 Penalties of deadwood_count/100 ensure that the reward never goes below -1.
 
@@ -308,11 +318,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Go
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import go`
+`from pettingzoo.classic import go_v0`
 
 `agents= `
 
@@ -330,9 +340,9 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (34,)             | [0, 1]             | 10^2       |
+| Discrete | 2      | No             | Discrete(4)   | Discrete(4)    | (36,)             | [0, 1]             | 10^2       |
 
-`from pettingzoo.classic import leduc_holdem`
+`from pettingzoo.classic import leduc_holdem_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -352,8 +362,8 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 |:-------:|------------------------------------------------------------------------------|
 |  0 - 2  | Current Player's Hand<br>_`0`: J, `1`: Q, `2`: K_                            |
 |  3 - 5  | Community Cards<br>_`3`: J, `4`: Q, `5`: K_                                  |
-|  6 - 19 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `19`: 13 chips_   |
-| 20 - 33 | Opponent's Chips<br>_`20`: 0 chips, `21`: 1 chip, ..., `33`: 13 chips_       |
+|  6 - 20 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `20`: 14 chips_   |
+| 21 - 35 | Opponent's Chips<br>_`21`: 0 chips, `22`: 1 chip, ..., `35`: 14 chips_       |
 
 #### Action Space
 
@@ -366,9 +376,9 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 #### Rewards
 
-| Winner        | Loser         |
-| :-----------: | :-----------: |
-| +raised chips | -raised chips |
+| Winner          | Loser           |
+| :-------------: | :-------------: |
+| +raised chips/2 | -raised chips/2 |
 
 #### Legal Moves
 
@@ -377,11 +387,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Mahjong
 
-| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | 10^121     |
+| Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | 10^121     |
 
-`from pettingzoo.classic import mahjong`
+`from pettingzoo.classic import mahjong_v0`
 
 `agents= ['player_0', 'player_1', 'player_2', 'player_3']`
 
@@ -464,11 +474,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Rock Paper Scissors
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import rps`
+`from pettingzoo.classic import rps_v0`
 
 `agents= `
 
@@ -488,11 +498,11 @@ If the game ends in a draw, both players will receive a reward of 0.
 
 ### Rock Paper Scissors Lizard Spock
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | ?            | ?       | ?      | ?              | ?            | ?             | ?                 | ?                  | ?          |
 
-`from pettingzoo.classic import rpsls`
+`from pettingzoo.classic import rpsls_v0`
 
 `agents= `
 
@@ -511,12 +521,11 @@ If the game ends in a draw, both players will receive a reward of 0.
 If the game ends in a draw, both players will receive a reward of 0.
 
 ### Texas Hold'em
+| Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]             | 10^14      |
 
-| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(4)  | Discrete(4)   | (72,)             | [0, 1]             | 10^14      |
-
-`from pettingzoo.classic import texas_holdem`
+`from pettingzoo.classic import texas_holdem_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -565,11 +574,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 ### Texas Hold'em No Limit
 
-| Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |
+| Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
+| Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |
 
-`from pettingzoo.classic import texas_holdem_no_limit`
+`from pettingzoo.classic import texas_holdem_no_limit_v0`
 
 `agents= ['player_0', 'player_1']`
 
@@ -615,12 +624,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 
 ### Tic Tac Toe
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
 
-| Observations | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| ?            | Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
-
-`from pettingzoo.classic import tictactoe`
+`from pettingzoo.classic import tictactoe_v0`
 
 `agents= `
 
@@ -644,11 +652,11 @@ If the game ends in a draw, both players will receive a reward of 0.
 
 ### Uno
 
-| Observations | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | 10^163     |
+| Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | 10^163     |
 
-`from pettingzoo.classic import uno`
+`from pettingzoo.classic import uno_v0`
 
 `agents= ['player_0', 'player_1']`
 

@@ -4,6 +4,7 @@ from gym import spaces
 from gym.utils import seeding
 from .. import Agent
 import cv2
+from pettingzoo.utils import EnvLogger
 
 
 class Archea(Agent):
@@ -29,11 +30,11 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=-10, high=10, shape=(self._obs_dim,))
+        return spaces.Box(low=np.float32(-10), high=np.float32(10), shape=(self._obs_dim,), dtype=np.float32)
 
     @property
     def action_space(self):
-        return spaces.Box(low=-1, high=1, shape=(2,))
+        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
@@ -71,7 +72,7 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
+    def __init__(self, seed=0, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
@@ -121,7 +122,7 @@ class MAWaterWorld():
         self._reward_mech = reward_mech
         self._speed_features = speed_features
         self.max_frames = max_frames
-        self.seed()
+        self.seed(seed)
         self._pursuers = [
             Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu],
                    speed_features=self._speed_features) for npu in range(self.n_pursuers)
@@ -150,6 +151,8 @@ class MAWaterWorld():
         if self.renderOn:
             cv2.destroyAllWindows()
             cv2.waitKey(1)
+        else:
+            EnvLogger.warn_close_unrendered_env()
 
     @property
     def reward_mech(self):
@@ -198,7 +201,7 @@ class MAWaterWorld():
             evader.set_position(self.np_random.rand(2))
             evader.set_position(self._respawn(evader.position, evader._radius))
             evader.set_velocity(
-                (self.np_random.rand(2) - 0.5) * self.ev_speed)  # TODO policies
+                (self.np_random.rand(2) - 0.5) * self.ev_speed)
 
         # Initialize poisons
         for poison in self._poisons:

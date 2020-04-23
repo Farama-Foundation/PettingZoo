@@ -5,13 +5,14 @@ import pymunkoptions
 pymunkoptions.options["debug"] = False
 import pymunk
 import pymunk.pygame_util
-import random
 import math
 import numpy as np
 from skimage import measure
 import gym
+from gym.utils import seeding
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import EnvLogger
 from .manual_control import manual_control
 
 _image_library = {}
@@ -28,24 +29,24 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, max_frames=500, continuous=False):
+    def __init__(self, seed=0, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         super(env, self).__init__()
-        self.num_agents = 20
-        self.agents = ["piston_" + str(r) for r in range(self.num_agents)]
-        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
+        self.agents = ["piston_" + str(r) for r in range(20)]
+        self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
+        self.agent_selection = self._agent_selector.next()
         self.continuous = continuous
         if self.continuous:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.num_agents))
-        self.action_spaces = dict(
-            zip(self.agents, [gym.spaces.Discrete(3)] * self.num_agents))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
+        else:
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * 20))
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(30, 200, 3), dtype=np.uint8)] * self.num_agents))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
         self.clock = pygame.time.Clock()
+        self.np_random, seed = seeding.np_random(seed)
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
@@ -53,6 +54,8 @@ class env(AECEnv):
 
         self.pistonSprite = get_image('piston.png')
         self.background = get_image('background.png')
+        self.random_drop = random_drop
+        self.starting_angular_momentum = starting_angular_momentum
 
         self.space = pymunk.Space(threaded=True)
         self.space.threads = 2
@@ -65,7 +68,7 @@ class env(AECEnv):
         # Defines what "recent" means in terms of number of frames.
         self.recentFrameLimit = 20
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
-        self.global_reward_weight = 0.5
+        self.global_reward_weight = 1 - local_ratio
         self.local_reward_weight = 1 - self.global_reward_weight
 
         self.add_walls()
@@ -76,13 +79,15 @@ class env(AECEnv):
         self.resolution = 16
 
         for i in range(20):
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - random.randrange(
-                0, .5 * self.velocity * self.resolution, self.velocity))
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
             self.pistonList.append(piston)
 
-        self.offset = random.randint(-30, 30)
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.random_integers(-30, 30)
         self.ball = self.add_ball(
-            800 + self.offset, 350 + random.randint(-15, 15))
+            800 + self.offset, 350 + self.np_random.random_integers(-15, 15), ball_mass, ball_friction, ball_elasticity)
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
 
@@ -94,19 +99,23 @@ class env(AECEnv):
         self.valid_ball_position_rect = pygame.Rect(
             self.rect.left + 40, self.rect.top + 40, self.rect.width - 80, self.rect.height - 80)
 
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-
         self.frames = 0
         self.display_wait = 0.0
-        self.reset()
+
+        self.num_agents = len(self.agents)
+        self.has_reset = False
 
     def observe(self, agent):
+        if not self.has_reset:
+            EnvLogger.error_observe_before_reset()
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        cropped = np.array(observation[i * 10:30 + i * 10, 257:457, :])
-        return cropped
+        x_low = 40 * i
+        x_high = 40 * i + 120
+        cropped = np.array(observation[x_low:x_high, 257:457, :])
+        observation = np.rot90(cropped, k=3)
+        observation = np.fliplr(observation)
+        return observation
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((960, 560))
@@ -114,10 +123,13 @@ class env(AECEnv):
         self.reset()
 
     def close(self):
-        self.screen = pygame.Surface((960, 560))
-        self.renderOn = False
-        pygame.event.pump()
-        pygame.display.quit()
+        if not self.renderOn:
+            EnvLogger.warn_close_unrendered_env()
+        else:
+            self.screen = pygame.Surface((960, 560))
+            self.renderOn = False
+            pygame.event.pump()
+            pygame.display.quit()
 
     def add_walls(self):
         walls = [pymunk.Segment(self.space.static_body, (80, 80), (880, 80), 1), pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1), pymunk.Segment(
@@ -126,17 +138,18 @@ class env(AECEnv):
             wall.friction = .64
             self.space.add(wall)
 
-    def add_ball(self, x, y):
-        mass = .75
+    def add_ball(self, x, y, b_mass, b_friction, b_elasticity):
+        mass = b_mass
         radius = 40
         inertia = pymunk.moment_for_circle(mass, 0, radius, (0, 0))
         body = pymunk.Body(mass, inertia)
         body.position = x, y
         # radians per second
-        body.angular_velocity = random.uniform(-6 * math.pi, 6 * math.pi)
+        if self.starting_angular_momentum:
+            body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
-        shape.friction = .3
-        shape.elasticity = 1.5
+        shape.friction = b_friction
+        shape.elasticity = b_elasticity
         self.space.add(body, shape)
         return body
 
@@ -162,12 +175,17 @@ class env(AECEnv):
             piston.position[1] - v * self.velocity))
 
     def reset(self, observe=True):
+        self.has_reset = True
         for i, piston in enumerate(self.pistonList):
-            piston.position = (85 + 40 * i, 451 - random.randrange(
-                0, .5 * self.velocity * self.resolution, self.velocity))
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
 
-        self.offset = random.randint(-30, 30)
-        self.ball.position = (800 + self.offset, 350 + random.randint(-15, 15))
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.random_integers(-30, 30)
+        self.ball.position = (800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
+        if self.starting_angular_momentum:
+            self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
         self.screen.blit(self.background, (0, 0))
@@ -232,21 +250,20 @@ class env(AECEnv):
         pygame.display.flip()
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if np.isnan(action):
+        if action is None or np.isnan(action):
             action = 1
+            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
         elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in space ({}). It is currently {}'.format(
-                agent, self.action_spaces[agent].n, action))
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
+            action = 1
 
         if self.continuous:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
-
-        self.space.step(1 / 30.0)
-
-        self.draw()
 
         newX = int(self.ball.position[0] - 40)
         local_reward = self.get_local_reward(self.lastX, newX)
@@ -255,13 +272,15 @@ class env(AECEnv):
         self.lastX = newX
         if newX <= 81:
             self.done = True
+
         if self.renderOn:
-            self.clock.tick(30)
+            self.clock.tick(60)
         else:
             self.clock.tick()
-
+        self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
-            total_reward = [(global_reward / self.num_agents) * self.global_reward_weight] * self.num_agents  # start with global reward
+            self.draw()
+            total_reward = [(global_reward / 20) * self.global_reward_weight] * 20  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
                 total_reward[index] += local_reward

@@ -1,24 +1,34 @@
 from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
+from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.env_logger import EnvLogger
+from gym.utils import seeding
 
 
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames):
+    def __init__(self, scenario, world, max_frames, seed, global_reward_weight=None):
         super(SimpleEnv, self).__init__()
+
+        self.np_random, seed = seeding.np_random(seed)
 
         self.max_frames = max_frames
         self.scenario = scenario
         self.world = world
+        self.global_reward_weight = global_reward_weight
 
-        self._num_agents = len(self.world.agents)
+        self.scenario.reset_world(self.world, self.np_random)
+
+        self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self.agent_order = list(self.agents)
+
+        self._agent_selector = agent_selector(self.agent_order)
 
         # set spaces
         self.action_spaces = dict()
@@ -34,25 +44,22 @@ class SimpleEnv(AECEnv):
             self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
 
-        self.rewards = {name: 0. for name in self.agents}
-        self.dones = {name: False for name in self.agents}
-        self.infos = {name: {} for name in self.agents}
-
         self.steps = 0
-        self.display_wait = 0.04
 
-        self.agent_selection = self.agent_order[0]
-        self.current_actions = [None] * self._num_agents
+        self.current_actions = [None] * self.num_agents
 
         self.viewer = None
 
-        self.reset()
+        self.has_reset = False
 
     def observe(self, agent):
+        assert self.has_reset, EnvLogger.error_observe_before_reset()
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
-        self.scenario.reset_world(self.world)
+        self.has_reset = True
+
+        self.scenario.reset_world(self.world, self.np_random)
 
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
@@ -60,14 +67,10 @@ class SimpleEnv(AECEnv):
 
         self._reset_render()
 
-        self.rewards = {name: 0. for name in self.agents}
-        self.dones = {name: False for name in self.agents}
-        self.infos = {name: {} for name in self.agents}
-
-        self.agent_selection = self.agent_order[0]
+        self.agent_selection = self._agent_selector.reset()
         self.steps = 0
 
-        self.current_actions = [None] * self._num_agents
+        self.current_actions = [None] * self.num_agents
 
         if observe:
             agent = self.world.agents[0]
@@ -91,8 +94,19 @@ class SimpleEnv(AECEnv):
             self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
+
+        global_reward = 0.
+        if self.global_reward_weight is not None:
+            global_reward = float(self.scenario.global_reward(self.world))
+
         for agent in self.world.agents:
-            self.rewards[agent.name] = float(self.scenario.reward(agent, self.world))
+            agent_reward = float(self.scenario.reward(agent, self.world))
+            if self.global_reward_weight is not None:
+                reward = global_reward * self.global_reward_weight + agent_reward * (1. - self.global_reward_weight)
+            else:
+                reward = agent_reward
+
+            self.rewards[agent.name] = reward
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):
@@ -128,9 +142,18 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        if not self.has_reset:
+            EnvLogger.error_step_before_reset()
+        backup_policy = "taking zero action (no movement, communication 0)"
+        act_space = self.action_spaces[self.agent_selection]
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN(backup_policy)
+        if not act_space.contains(action):
+            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
+
         current_idx = self._index_map[self.agent_selection]
-        next_idx = (current_idx + 1) % self._num_agents
-        self.agent_selection = self.agent_order[next_idx]
+        next_idx = (current_idx + 1) % self.num_agents
+        self.agent_selection = self._agent_selector.next()
 
         self.current_actions[current_idx] = action
 
@@ -180,15 +203,14 @@ class SimpleEnv(AECEnv):
             idx = 0
             for agent in self.world.agents:
                 if not agent.silent:
-                    tline = rendering.TextLine(self.viewer.window,idx)
+                    tline = rendering.TextLine(self.viewer.window, idx)
                     self.viewer.text_lines.append(tline)
                     idx += 1
-
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         # for agent in self.world.agents:
         idx = 0
-        for idx,other in enumerate(self.world.agents):
+        for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
@@ -199,7 +221,6 @@ class SimpleEnv(AECEnv):
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            #print(message)
             idx += 1
 
         # update bounds to center around agent
@@ -221,4 +242,6 @@ class SimpleEnv(AECEnv):
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
+        else:
+            EnvLogger.warn_close_unrendered_env()
         self._reset_render()

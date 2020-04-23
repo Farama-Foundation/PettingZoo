@@ -24,15 +24,15 @@ We support Python 3.5, 3.6, 3.7 and 3.8
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.gamma import pistonball
-env = pistonball.env()
+from pettingzoo.gamma import pistonball_v0
+env = pistonball_v0.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
 ```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
-right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
+cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
+right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
@@ -66,6 +66,8 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
+`num_agents`: The number of agents currently in the environment.
+
 `observation_spaces`: A dict of the gym observation spaces of every agent, by name.
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
@@ -80,7 +82,7 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
 
-`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`.
+`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
@@ -88,10 +90,21 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `close()`: Closes the rendering window.
 
+## Environment Actions
+
+In this API, when the environment acts following an agents action, they're treated as happening at the same time. There are cases where breaking these apart can be very helpful. Our API supports this by treating the environment as an "agent". While initially odd, having an environment agent that can act on the state of the game is actually a common modeling practice in game theory.
+
+We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
 
 ## Environment Documentation
 
 Full documentation of each environment is available [here].
+
+All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
+
+## SuperSuit
+
+[SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
 ## Utils
 
@@ -155,8 +168,7 @@ Our cooperative games have leaderboards for best total (summed over all agents) 
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/checkers (Tianchen)
-* classic/connect_four (Praveen)
+* classic/checkers (Ben)
 * classic/go (Luis)
 * classic/hanabi (Clemens)
 * gamma/prospector (Yashas)
