@@ -26,7 +26,6 @@ class env(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.num_moves = 0
 
-
     def step(self, action, observe=True):
         self.env.step()
 
