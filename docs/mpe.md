@@ -35,9 +35,11 @@ The simple_reference, simple_speaker_listener, and simple_spread environments ar
 
 * Color: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments. The color is not observed by the agents.
 
+* Distances: The landmarks and agents typically start out uniformly randomly placed from -1. to 1. on the map. This means they are typically around 1-2 units distance apart, so keep that in mind when reasoning about the scale of the rewards, which often depend on distance, and the observation space, which contain relative and absolute positions.
+
 ### Termination
 
-The game terminates after a number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original source code, the default value was 25, not 100. 
+The game terminates after a number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original source code, the default value was 25, not 100.
 
 ### Observation Space
 
