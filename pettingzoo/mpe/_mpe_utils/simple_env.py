@@ -42,7 +42,7 @@ class SimpleEnv(AECEnv):
 
             obs_dim = len(self.scenario.observation(agent, self.world))
             self.action_spaces[agent.name] = spaces.Discrete(space_dim)
-            self.observation_spaces[agent.name] = spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32)
+            self.observation_spaces[agent.name] = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(obs_dim,), dtype=np.float32)
 
         self.steps = 0
 

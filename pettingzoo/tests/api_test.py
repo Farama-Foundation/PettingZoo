@@ -1,6 +1,6 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import observation_saver
+from pettingzoo.utils import save_observation
 import warnings
 import inspect
 import numpy as np
@@ -153,7 +153,7 @@ def test_observe(env, observation_0, save_obs):
     for agent in env.agent_order:
         observation = env.observe(agent)
         if save_obs:
-            observation_saver.save_observation_for_agent(env=env, agent=agent, save_dir="saved_observations")
+            save_observation(env=env, agent=agent, save_dir="saved_observations")
         test_obervation(observation, observation_0)
 
 
@@ -413,7 +413,6 @@ def check_environment_args(env):
         actions = {agent: space.sample() for agent, space in env.action_spaces.items()}
         hashes = []
         num_seeds = 5
-        rand_seeds = [random.randint(0, 1000000) for _ in range(num_seeds)]
         for x in range(num_seeds):
             new_env = env.__class__(seed=base_seed)
             cur_hashes = []
