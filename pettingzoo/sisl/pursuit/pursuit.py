@@ -27,6 +27,7 @@ class env(AECEnv):
             zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.0
+        self.closed = False
 
     def reset(self, observe=True):
         self.has_reset = True
@@ -41,7 +42,9 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def close(self):
-        self.env.close()
+        if not self.closed:
+            self.closed = True
+            self.env.close()
 
     def render(self, mode="human"):
         self.env.render()

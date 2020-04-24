@@ -217,6 +217,30 @@ def test_agent_selector(env):
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
+def test_bad_close(env):
+    from pettingzoo.utils import EnvLogger
+    EnvLogger.suppress_output()
+    e1 = copy(env)
+    # test that immediately closing the environment does not crash
+    try:
+        e1.close()
+    except Exception as e:
+        warnings.warn("Immediately closing a newly initialized environment should not crash with {}".format(e))
+
+    # test that closing twice does not crash
+
+    e2 = copy(env)
+    if "render.modes" in e2.metadata and len(e2.metadata["render.modes"]) > 0:
+        e2.reset()
+        e2.render()
+        e2.close()
+        try:
+            e2.close()
+        except Exception as e:
+            warnings.warn("Closing an already closed environment should not crash with {}".format(e))
+    EnvLogger.unsuppress_output()
+
+
 def test_warnings(env):
     from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
@@ -415,6 +439,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
     env_agent_sel = copy(env)
     env_warnings = copy(env)
+    env_bad_close = copy(env)
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
@@ -481,5 +506,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
     else:
         warnings.warn("Environment has not defined a render() method")
+
+    test_bad_close(env_bad_close)
 
     print("Passed API test")
