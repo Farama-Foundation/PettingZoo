@@ -155,6 +155,19 @@ from pettingzoo.utils import random_demo
 random_demo(env)
 ```
 
+### Observation Saver
+
+If the agents in a game make observations that are images, the observation can be saved to a file. There are 3 provided utility functions for saving observations as images. By default the images are stored in the current working directory, creating a folder with the same name as the environment. This can be changed by passing in a save_dir keyword argument. The images saved match the name of the agent whos observation is recorded.
+
+```
+from pettingzoo.utils import observation_saver
+observation_saver.save_observation_for_agent(env, agent, save_dir=os.getcwd())
+observation_saver.save_observation_selected(env)
+observation_saver.save_observation_for_all(env)
+```
+
+The first function will save the current observation for the specified agent. The second function will save the current observation based on the currently selected agent. The last function will save the current observations of all agents in the environment.
+
 ## OS Support
 
 We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
