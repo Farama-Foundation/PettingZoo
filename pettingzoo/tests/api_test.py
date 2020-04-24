@@ -153,7 +153,7 @@ def test_observe(env, observation_0, save_obs):
     for agent in env.agent_order:
         observation = env.observe(agent)
         if save_obs:
-            observation_saver.save_observation_for_agent(env, agent)
+            observation_saver.save_observation_for_agent(env=env, agent=agent, save_dir="saved_observations")
         test_obervation(observation, observation_0)
 
 
