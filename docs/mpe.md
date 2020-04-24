@@ -35,6 +35,10 @@ The simple_reference, simple_speaker_listener, and simple_spread environments ar
 
 * Color: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments. The color is not observed by the agents.
 
+### Termination
+
+The game terminates after a number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original source code, the default value was 25, not 100. 
+
 ### Observation Space
 
 The observation space of an agent is a vector generally composed of the agent's position and velocity, other agent's relative position and velocity, the landmarks relative positions, the landmark's and agent's types, and communications it received from other agents. The exact form of this is detailed in the environments.
@@ -94,7 +98,7 @@ In this environment, a single agent sees landmark position, and is rewarded base
 Observation space: `[self_vel, landmark_rel_position]`
 
 ```
-simple.env(seed=None, max_frames=500)
+simple.env(seed=None, max_frames=100)
 ```
 
 ```
@@ -128,7 +132,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_adversary.env(seed=None, N=2, max_frames=500)
+simple_adversary.env(seed=None, N=2, max_frames=100)
 ```
 
 ```
@@ -171,7 +175,7 @@ Eve action space: `[say_0, say_1, say_2, say_3]`
 For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.
 
 ```
-simple_crypto.env(seed=None, max_frames=500)
+simple_crypto.env(seed=None, max_frames=100)
 ```
 
 ```
@@ -206,7 +210,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_push.env(seed=None, max_frames=500)
+simple_push.env(seed=None, max_frames=100)
 ```
 
 ```
@@ -242,7 +246,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(seed=None, local_ratio=0.5, max_frames=500)
+simple_reference.env(seed=None, local_ratio=0.5, max_frames=100)
 ```
 
 ```
@@ -278,7 +282,7 @@ Speaker action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, 
 Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_speaker_listener.env(seed=None, max_frames=500)
+simple_speaker_listener.env(seed=None, max_frames=100)
 ```
 
 ```
@@ -310,7 +314,7 @@ Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_re
 Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_spread.env(seed=None, N=3, local_ratio=0.5, max_frames=500)
+simple_spread.env(seed=None, N=3, local_ratio=0.5, max_frames=100)
 ```
 
 ```
@@ -355,7 +359,7 @@ Agent and adversary observations: `[self_vel, self_pos, landmark_rel_positions, 
 Agent and adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ```
-simple_tag.env(seed=None, num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=500)
+simple_tag.env(seed=None, num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=100)
 ```
 
 ```
@@ -408,7 +412,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 ```
 simple_world_comm.env(seed=None, num_good=2, num_adversaries=4, num_obstacles=1,
-                num_food=2, num_forests=2, max_frames=500)
+                num_food=2, num_forests=2, max_frames=100)
 ```
 
 ```

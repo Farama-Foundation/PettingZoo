@@ -3,7 +3,7 @@ from .scenarios.simple_reference import Scenario
 
 
 class env(SimpleEnv):
-    def __init__(self, seed=None, local_ratio=0.5, max_frames=500):
+    def __init__(self, seed=None, local_ratio=0.5, max_frames=100):
         assert 0. <= local_ratio <= 1., "local_ratio is a proportion. Must be between 0 and 1."
         scenario = Scenario()
         world = scenario.make_world()
