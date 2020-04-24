@@ -104,6 +104,7 @@ class env(AECEnv):
 
         self.num_agents = len(self.agents)
         self.has_reset = False
+        self.closed = False
 
     def observe(self, agent):
         if not self.has_reset:
@@ -123,13 +124,15 @@ class env(AECEnv):
         self.reset()
 
     def close(self):
-        if not self.renderOn:
-            EnvLogger.warn_close_unrendered_env()
-        else:
-            self.screen = pygame.Surface((960, 560))
-            self.renderOn = False
-            pygame.event.pump()
-            pygame.display.quit()
+        if not self.closed:
+            self.closed = True
+            if not self.renderOn:
+                EnvLogger.warn_close_unrendered_env()
+            else:
+                self.screen = pygame.Surface((960, 560))
+                self.renderOn = False
+                pygame.event.pump()
+                pygame.display.quit()
 
     def add_walls(self):
         walls = [pymunk.Segment(self.space.static_body, (80, 80), (880, 80), 1), pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1), pymunk.Segment(
