@@ -58,6 +58,7 @@ class env(AECEnv):
         self.archer_killed = False
         self.knight_killed = False
         self.sword_killed = False
+        self.closed = False
 
         # Creating Sprite Groups
         self.all_sprites = pygame.sprite.Group()
@@ -501,14 +502,16 @@ class env(AECEnv):
         pygame.display.flip()
 
     def close(self):
-        if not self.render_on:
-            EnvLogger.warn_close_unrendered_env()
-        else:
-            # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
-            self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
-            self.render_on = False
-            pygame.event.pump()
-            pygame.display.quit()
+        if not self.closed:
+            self.closed = True
+            if not self.render_on:
+                EnvLogger.warn_close_unrendered_env()
+            else:
+                # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+                self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
+                self.render_on = False
+                pygame.event.pump()
+                pygame.display.quit()
 
     def check_game_end(self):
         # Zombie reaches the End of the Screen

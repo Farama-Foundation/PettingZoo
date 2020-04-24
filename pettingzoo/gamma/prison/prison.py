@@ -103,6 +103,7 @@ class env(AECEnv):
         else:
             self.random_aliens = random_aliens
         self.np_random, seed = seeding.np_random(seed)
+        self.closed = False
 
         self.action_spaces = {}
         if continuous:
@@ -231,12 +232,14 @@ class env(AECEnv):
         return self.prisoner_mapping[c]
 
     def close(self):
-        if self.rendering:
-            pygame.event.pump()
-            pygame.display.quit()
-        else:
-            EnvLogger.warn_close_unrendered_env()
-        pygame.quit()
+        if not self.closed:
+            self.closed = True
+            if self.rendering:
+                pygame.event.pump()
+                pygame.display.quit()
+            else:
+                EnvLogger.warn_close_unrendered_env()
+            pygame.quit()
 
     def draw(self):
         for k in range(self.num_floors):
