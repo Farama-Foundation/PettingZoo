@@ -397,6 +397,8 @@ def check_environment_args(env):
     if len(args.args) < 2 or "seed" != args.args[1]:
         warnings.warn("Environment does not take `seed` as its first argument. If it uses any randomness, it should")
     else:
+        if args.defaults[0] != None:
+            warnings.warn("Environment's seed parameter should have a default value of None. This defaults to a nondeterministic seed, which is what you want as a default.")
         def hash_obsevation(obs):
             try:
                 val = hash(obs.tobytes())

@@ -29,7 +29,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, max_frames=900):
+    def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, max_frames=900):
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
@@ -127,7 +127,6 @@ class env(AECEnv):
 
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
         self.num_agents = len(self.agents)
         self.reinit()
 
@@ -585,13 +584,13 @@ class env(AECEnv):
             a_count += 1
 
         self.agent_order = self.agents[:]
-        self._agent_selector.reinit(self.agent_order)
-        self.agent_selection = self._agent_selector.next()
 
         self.frames = 0
 
     def reset(self, observe=True):
         self.has_reset = True
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
