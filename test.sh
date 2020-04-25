@@ -12,7 +12,7 @@ python3 -m pettingzoo.tests.ci_test classic/chess $render $manual_control $bomba
 python3 -m pettingzoo.tests.ci_test classic/connect_four $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/dou_dizhu $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/gin_rummy $render $manual_control $bombardment $performance $save_obs
-# python3 -m pettingzoo.tests.ci_test classic/go $render $manual_control $bombardment $performance $save_obs
+python3 -m pettingzoo.tests.ci_test classic/go $render $manual_control $bombardment $performance $save_obs
 # python3 -m pettingzoo.tests.ci_test classic/hanabi $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/leduc_holdem $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/mahjong $render $manual_control $bombardment $performance $save_obs

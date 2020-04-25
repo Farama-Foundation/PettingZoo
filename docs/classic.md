@@ -4,11 +4,11 @@
 |----------------------------------|----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|---------------|
 | Backgammon                       | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | Checkers                         | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
-| Chess                            | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0,1]              | ?             |
+| Chess                            | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0, 1]             | ?             |
 | Connect Four                     | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
-| Dou Dizhu                        | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |
-| Gin Rummy                        | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0,1]              | 10^52         |
-| Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1,1]             | 3^(N^2)       |
+| Dou Dizhu                        | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0, 1]             | 10^53 - 10^83 |
+| Gin Rummy                        | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0, 1]             | 10^52         |
+| Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N, 3)         | [0, 1]             | 3^(N^2)       |
 | Leduc Hold'em                    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (36,)             | [0, 1]             | 10^2          |
 | Mahjong                          | Discrete | 4      | No             | Discrete(38)    | Discrete(38)    | (6, 34, 4)        | [0, 1]             | 10^121        |
 | Rock Paper Scissors              | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
@@ -320,11 +320,11 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
  Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
 ----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
- Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N)            | [-1, 1]            | 3^(N^2)    |
+ Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N, 3)         | [0, 1]             | 3^(N^2)    |
 
 `from pettingzoo.classic import go_v0`
 
-`agents= ['black', 'white']`
+`agents= ['black_0', 'white_0']`
 
 *gif*
 
@@ -344,7 +344,7 @@ Go takes two optional arguments that define the board size (int) and komi (float
 
 #### Observation Space
 
-The observation shape is a function of the board size _N_ and has a shape (N, N) that represent the state of the board with the top left corner as (0, 0). For example, a (9, 9) board is  
+The observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:,:,0), represent the stones on the board for the current player while the second plane, (:,:,1), encodes the stones of the opponent. The third plane, (:,:,2), is all 1 if the current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is  
 ```
    0 1 2 3 4 5 6 7 8
  0 . . . . . . . . .  0
@@ -358,11 +358,12 @@ The observation shape is a function of the board size _N_ and has a shape (N, N)
  8 . . . . . . . . .  8
    0 1 2 3 4 5 6 7 8
 ```
-| Value | Description |
-|:-----:|-------------|
-|   -1  | White Stone |
-|   0   | No Stone    |
-|   1   | Black Stone |
+
+|  Plane  | Description                                               |
+|:-------:|-----------------------------------------------------------|
+|    0    | Current Player's stones<br>_'`0`: no stone, `1`: stone_   |
+|    1    | Opponent Player's stones<br>_'`0`: no stone, `1`: stone_  |
+|    2    | Player<br>_'`0`: white, `1`: black_                       |
 
 While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
 
