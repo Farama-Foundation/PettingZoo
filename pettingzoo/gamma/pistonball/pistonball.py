@@ -29,13 +29,12 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
+    def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         super(env, self).__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = self._agent_selector.next()
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
