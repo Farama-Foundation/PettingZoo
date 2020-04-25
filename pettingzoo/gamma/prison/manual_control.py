@@ -26,11 +26,11 @@ def manual_control(**kwargs):
                 elif event.key == pygame.K_j:
                     num_actions += 1
                     agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = -20
+                        (x, y))] = 0
                 elif event.key == pygame.K_k:
                     num_actions += 1
                     agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = 20
+                        (x, y))] = 2
                 elif event.key == pygame.K_ESCAPE:
                     test_done = True
 

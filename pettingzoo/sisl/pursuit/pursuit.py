@@ -4,16 +4,17 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
 from pettingzoo.utils import EnvLogger
+import pygame
 
 
 class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, *args, **kwargs):
+    def __init__(self, seed=None, *args, **kwargs):
         super(env, self).__init__()
         self.env = _env(*args, seed, **kwargs)
-
+        pygame.init()
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
@@ -38,16 +39,18 @@ class env(AECEnv):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.next()
+        self.env.reset()
         if observe:
             return self.observe(self.agent_selection)
 
     def close(self):
-        if not self.closed:
+        if not self.closed and self.has_reset:
             self.closed = True
             self.env.close()
 
     def render(self, mode="human"):
-        self.env.render()
+        if not self.closed:
+            self.env.render()
 
     def step(self, action, observe=True):
         if not self.has_reset:
