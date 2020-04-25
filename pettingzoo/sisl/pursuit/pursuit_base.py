@@ -155,7 +155,6 @@ class Pursuit():
         self.renderOn = False
         self.pixel_scale = 30
 
-        pygame.init()
         self.clock = pygame.time.Clock()
         self.frames = 0
         self.reset()
@@ -219,6 +218,7 @@ class Pursuit():
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
         self.frames = 0
+        self.renderOn = False
 
         return self.safely_observe(0)
 

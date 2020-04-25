@@ -82,13 +82,13 @@ class ContactDetector(contactListener):
 class BipedalWalker(Agent):
 
     def __init__(self, world, init_x=TERRAIN_STEP * TERRAIN_STARTPAD / 2,
-                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2):
+                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2, seed=None):
         self.world = world
         self._n_walkers = n_walkers
         self.hull = None
         self.init_x = init_x
         self.init_y = init_y
-        self._seed()
+        self._seed(seed)
 
     def _destroy(self):
         if not self.hull:
@@ -256,7 +256,7 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, seed=0, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+    def __init__(self, seed=None, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
                  forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
         """
@@ -279,6 +279,7 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
+        self.seed_val = seed
         self.seed(seed=seed)
         self.setup()
         self.agent_list = list(range(self.n_walkers))
@@ -304,7 +305,7 @@ class MultiWalkerEnv():
         ]
         self.walkers = [
             BipedalWalker(self.world, init_x=sx,
-                          init_y=init_y)
+                          init_y=init_y, seed=self.seed_val)
             for sx in self.start_x
         ]
         self.num_agents = len(self.walkers)

@@ -9,7 +9,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=0, *args, **kwargs):
+    def __init__(self, seed=None, *args, **kwargs):
         super(env, self).__init__()
         self.env = _env(seed, *args, **kwargs)
 
