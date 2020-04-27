@@ -184,9 +184,10 @@ The following environments are under active development:
 * classic/go (Luis)
 * classic/hanabi (Clemens)
 * gamma/prospector (Yashas)
-* magent/* (David and Mario)
+* magent/* (Mario)
+* robotics/* (Yiling)
+* classic/backgammon (Caroline)
 
 Development has not yet started on:
 
-* classic/backgammon
 * classic/shogi (python-shogi)
