@@ -495,10 +495,13 @@ class env(AECEnv):
         self.reset()
 
     def render(self, mode="human"):
-        if not self.render_on:
-            # sets self.render_on to true and initializes display
-            self.enable_render()
-        pygame.display.flip()
+        if not self.has_reset:
+            EnvLogger.error_render_before_reset()
+        else:
+            if not self.render_on:
+                # sets self.render_on to true and initializes display
+                self.enable_render()
+            pygame.display.flip()
 
     def close(self):
         if not self.closed:

@@ -45,7 +45,10 @@ class env(AECEnv):
         self.env.close()
 
     def render(self, mode="human"):
-        self.env.render()
+        if not self.has_reset:
+            EnvLogger.error_render_before_reset()
+        else:
+            self.env.render()
 
     def step(self, action, observe=True):
         if not self.has_reset:

@@ -246,10 +246,13 @@ class env(AECEnv):
         return local_reward * self.local_reward_weight
 
     def render(self, mode="human"):
-        if not self.renderOn:
-            # sets self.renderOn to true and initializes display
-            self.enable_render()
-        pygame.display.flip()
+        if not self.has_reset:
+            EnvLogger.error_render_before_reset()
+        else:
+            if not self.renderOn:
+                # sets self.renderOn to true and initializes display
+                self.enable_render()
+            pygame.display.flip()
 
     def step(self, action, observe=True):
         if not self.has_reset:
