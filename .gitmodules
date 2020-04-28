@@ -1,0 +1,3 @@
+[submodule "pettingzoo/classic/hanabi/env"]
+	path = pettingzoo/classic/hanabi/env
+	url = https://github.com/deepmind/hanabi-learning-environment
