@@ -332,6 +332,9 @@ def test_requires_reset(env):
         warnings.warn("env.step should call EnvLogger.error_step_before_reset if it is called before reset")
     if not check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"):
         warnings.warn("env.observe should call EnvLogger.error_observe_before_reset if it is called before reset")
+    if "render.modes" in env.metadata and len(env.metadata["render.modes"]) > 0:
+        if not check_asserts(lambda: env.render(), "reset() needs to be called before render"):
+            warnings.warn("env.render should call EnvLogger.error_render_before_reset if it is called before reset")
 
 
 def test_bad_actions(env):

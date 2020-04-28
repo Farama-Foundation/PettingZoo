@@ -9,7 +9,7 @@ def manual_control(**kwargs):
     x = 0
     y = 0
     while True:
-        agent_actions = np.array([0 for _ in range(8)])
+        agent_actions = np.array([1 for _ in range(8)])
         num_actions = 0
         test_done = False
         for event in pygame.event.get():
@@ -37,6 +37,8 @@ def manual_control(**kwargs):
         actions = dict(zip(env.agents, agent_actions))
         for i in env.agents:
             reward, done, info = env.last()
+            if reward != 0:
+                print("Agent {} was reward {}".format(i, reward))
             if done:
                 test_done = True
             action = actions[i]

@@ -325,7 +325,7 @@ class env(AECEnv):
                 self.dones[d] = True
         if self._agent_selector.is_last():
             self.draw()
-            self.num_frames += 1
+        self.num_frames += 1
         if self.rendering:
             pygame.event.pump()
 
@@ -336,19 +336,22 @@ class env(AECEnv):
             return observation
 
     def render(self, mode='human'):
-        if not self.rendering:
-            pygame.display.init()
-            old_screen = self.screen
-            self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
-            self.screen.blit(old_screen, (0, 0))
-            self.screen.blit(self.background, (0, 0))
-            if self.num_floors > 4:
-                min_rows = self.num_floors - 4
-                for k in range(min_rows):
-                    h = 650 + 150 * k
-                    self.screen.blit(self.background_append, (0, h))
-        self.rendering = True
-        pygame.display.flip()
+        if not self.has_reset:
+            EnvLogger.error_render_before_reset()
+        else:
+            if not self.rendering:
+                pygame.display.init()
+                old_screen = self.screen
+                self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
+                self.screen.blit(old_screen, (0, 0))
+                self.screen.blit(self.background, (0, 0))
+                if self.num_floors > 4:
+                    min_rows = self.num_floors - 4
+                    for k in range(min_rows):
+                        h = 650 + 150 * k
+                        self.screen.blit(self.background_append, (0, h))
+            self.rendering = True
+            pygame.display.flip()
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven
 # Tank and bunny sprites commissioned from https://www.fiverr.com/jeimansutrisman

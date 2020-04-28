@@ -53,7 +53,15 @@ class EnvLogger():
     @staticmethod
     def error_step_before_reset():
         assert False, "reset() needs to be called before step"
-    
+
+    @staticmethod
+    def error_close_before_reset():
+        assert False, "reset() needs to be called before close"
+
+    @staticmethod
+    def error_render_before_reset():
+        assert False, "reset() needs to be called before render"
+
     @staticmethod
     def error_field_before_reset(field):
         assert False, "{} cannot be accessed before reset".format(field)
