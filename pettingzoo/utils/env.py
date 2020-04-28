@@ -1,18 +1,14 @@
-import numpy as np
-from typing import Optional
-
-
 class AECEnv(object):
     def __init__(self):
         pass
 
-    def step(self, action, observe=True) -> Optional[np.ndarray]:
+    def step(self, action, observe=True):
         raise NotImplementedError
 
-    def reset(self, observe=True) -> Optional[np.ndarray]:
+    def reset(self, observe=True):
         raise NotImplementedError
 
-    def observe(self, agent) -> Optional[np.ndarray]:
+    def observe(self, agent):
         raise NotImplementedError
 
     def last(self):
