@@ -12,6 +12,8 @@ Wrapper class around google deepmind's hanabi.
 class env(AECEnv):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
+    metadata = {'render.modes': ['human']}
+
     # set of all required params
     required_keys: set = {
         'colors',
@@ -25,21 +27,42 @@ class env(AECEnv):
         'random_start_player',
     }
 
-    def __init__(self, preset_name: str = None, **kwargs):
+    def __init__(self,
+                 colors: int = 5,
+                 ranks: int = 5,
+                 players: int = 2,
+                 hand_size: int = 2,
+                 max_information_tokens: int = 8,
+                 max_life_tokens: int = 3,
+                 observation_type: int = 1,
+                 seed: int = 1,
+                 random_start_player: bool = False,
+                 ):
+
         """
-        Game configuration for an environment instance can be specified in two ways:
+        Parameter descriptions :
+              - colors: int, Number of colors \in [2,5].
+              - ranks: int, Number of ranks \in [2,5].
+              - players: int, Number of players \in [2,5].
+              - hand_size: int, Hand size \in [2,5].
+              - max_information_tokens: int, Number of information tokens (>=0).
+              - max_life_tokens: int, Number of life tokens (>=1).
+              - observation_type: int.
+                    0: Minimal observation.
+                    1: First-order common knowledge observation.
+              - seed: int, Random seed.
+              - random_start_player: bool, Random start player.
 
-        EITHER:
-        Specify a config preset by handing in a config string, which is one of:
-        'Hanabi-Full' | 'Hanabi-Small' | 'Hanabi-Very-Small'
-
-            Hanabi-Full :  {
+        Common game configurations:
+            Hanabi-Full (default) :  {
                 "colors": 5,
                 "ranks": 5,
                 "players": 2,
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
-                "observation_type": 1}
+                "observation_type": 1,
+                "hand_size": 2
+                }
 
             Hanabi-Small : {
                 "colors": 5,
@@ -57,30 +80,10 @@ class env(AECEnv):
                 "max_life_tokens":
                 "observation_type": 1}
 
-            ADDITIONALLY: You can specify the number of players, when using a preset, by specifying:
-             players: int, Number of players \in [2,5].
-
-
-        OR:
-        Use the following keyword arguments to specify a custom game setup:
-            kwargs:
-              - colors: int, Number of colors \in [2,5].
-              - ranks: int, Number of ranks \in [2,5].
-              - players: int, Number of players \in [2,5].
-              - hand_size: int, Hand size \in [2,5].
-              - max_information_tokens: int, Number of information tokens (>=0).
-              - max_life_tokens: int, Number of life tokens (>=1).
-              - observation_type: int.
-                    0: Minimal observation.
-                    1: First-order common knowledge observation.
-              - seed: int, Random seed.
-              - random_start_player: bool, Random start player.
-
         """
 
         super(env, self).__init__()
 
-        # ToDo: Check how to use the self-hosted pypi package
         # importing Hanabi and throw error message if pypi package is not installed correctly.
         try:
             from hanabi_learning_environment.rl_env import HanabiEnv, make
@@ -94,24 +97,26 @@ class env(AECEnv):
 
             # ToDo: Starts
             # Check if all possible dictionary values are within a certain ranges.
-            self._raise_error_if_config_values_out_of_range(kwargs)
+            self._raise_error_if_config_values_out_of_range(colors,
+                                                            ranks,
+                                                            players,
+                                                            hand_size,
+                                                            max_information_tokens,
+                                                            max_life_tokens,
+                                                            observation_type,
+                                                            random_start_player)
 
-            # If a preset name string is provided
-            if preset_name is not None:
-                # check if players argument is provided
-                if 'players' in kwargs.keys():
-                    self.hanabi_env: HanabiEnv = make(environment_name=preset_name, num_players={**kwargs}['players'])
-                else:
-                    self.hanabi_env: HanabiEnv = make(environment_name=preset_name)
 
-            else:
-                # check if all required params are provided
-                if self.__class__.required_keys.issubset(set(kwargs.keys())):
-                    self.hanabi_env: HanabiEnv = HanabiEnv(config=kwargs)
-                else:
-                    raise KeyError("Incomplete environment configuration provided.")
+            self.hanabi_env: HanabiEnv = HanabiEnv(config={'colors': colors,
+                                                           'ranks': ranks,
+                                                           'players': players,
+                                                           'hand_size': hand_size,
+                                                           'max_information_tokens': max_information_tokens,
+                                                           'max_life_tokens': max_life_tokens,
+                                                           'observation_type': observation_type,
+                                                           'random_start_player': random_start_player,
+                                                           'seed': seed})
 
-            # ToDo: Ends
 
             # List of agent names
             self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
@@ -133,29 +138,30 @@ class env(AECEnv):
                                        for player_name in self.agents}
 
     @staticmethod
-    def _raise_error_if_config_values_out_of_range(kwargs):
-        for key, value in kwargs.items():
+    def _raise_error_if_config_values_out_of_range(colors, ranks, players, hand_size, max_information_tokens,
+                                                   max_life_tokens, observation_type, random_start_player):
 
-            if key == 'colors' and not (2 <= value <= 5):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        if not (2 <= colors <= 5):
+            raise ValueError(f'Config parameter {colors} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'ranks' and not (2 <= value <= 5):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (2 <= ranks <= 5):
+            raise ValueError(f'Config parameter {ranks} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'players' and not (2 <= value <= 5):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (2 <= players <= 5):
+            raise ValueError(f'Config parameter {players} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'hand_size' and not (2 <= value <= 5):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (2 <= hand_size <= 5):
+            raise ValueError(f'Config parameter {hand_size} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'max_information_tokens' and not (0 <= value):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (0 <= max_information_tokens):
+            raise ValueError(
+                f'Config parameter {max_information_tokens} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'max_life_tokens' and not (1 <= value):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (1 <= max_life_tokens):
+            raise ValueError(f'Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py.')
 
-            elif key == 'observation_type' and not (0 <= value <= 1):
-                raise ValueError(f'Config parameter {key} is out of bounds. See description in hanabi.py.')
+        elif not (0 <= observation_type <= 1):
+            raise ValueError(f'Config parameter {observation_type} is out of bounds. See description in hanabi.py.')
 
     @property
     def observation_vector_dim(self):
@@ -266,7 +272,6 @@ class env(AECEnv):
                                         observations=self.latest_observations['player_observations']
                                         [int(player_name[-1])])
                       for player_name in self.agents}
-
 
     def render(self, mode='human'):
         """ Supports console print only. Prints the whole status dictionary.
