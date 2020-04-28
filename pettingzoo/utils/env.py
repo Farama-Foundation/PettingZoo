@@ -1,17 +1,18 @@
-from pettingzoo.utils import EnvLogger
+import numpy as np
+from typing import Optional
 
 
 class AECEnv(object):
     def __init__(self):
         pass
 
-    def step(self, action, observe=True):
+    def step(self, action, observe=True) -> Optional[np.ndarray]:
         raise NotImplementedError
 
-    def reset(self, observe=True):
+    def reset(self, observe=True) -> Optional[np.ndarray]:
         raise NotImplementedError
 
-    def observe(self, agent):
+    def observe(self, agent) -> Optional[np.ndarray]:
         raise NotImplementedError
 
     def last(self):
@@ -23,10 +24,3 @@ class AECEnv(object):
 
     def close(self):
         pass
-
-    def __getattr__(self, value):
-        if value in {"rewards", "dones", "agent_selection"}:
-            EnvLogger.error_field_before_reset(value)
-            return None
-        else:
-            raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
