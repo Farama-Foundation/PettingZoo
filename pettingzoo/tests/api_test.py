@@ -335,6 +335,8 @@ def test_requires_reset(env):
     if "render.modes" in env.metadata and len(env.metadata["render.modes"]) > 0:
         if not check_asserts(lambda: env.render(), "reset() needs to be called before render"):
             warnings.warn("env.render should call EnvLogger.error_render_before_reset if it is called before reset")
+    if not check_warns(lambda: env.close(), "reset() needs to be called before close."):
+        warnings.warn("env should warn_close_before_reset() if closing before reset()")
 
 
 def test_bad_actions(env):
