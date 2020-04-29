@@ -123,7 +123,9 @@ class env(AECEnv):
         self.reset()
 
     def close(self):
-        if not self.closed:
+        if not self.has_reset:
+            EnvLogger.warn_close_before_reset()
+        elif not self.closed:
             self.closed = True
             if not self.renderOn:
                 EnvLogger.warn_close_unrendered_env()

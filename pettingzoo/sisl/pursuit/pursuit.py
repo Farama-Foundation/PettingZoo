@@ -44,7 +44,9 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def close(self):
-        if not self.closed and self.has_reset:
+        if not self.has_reset:
+            EnvLogger.warn_close_before_reset()
+        elif not self.closed and self.has_reset:
             self.closed = True
             self.env.close()
 

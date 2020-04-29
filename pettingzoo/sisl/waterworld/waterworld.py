@@ -42,7 +42,10 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def close(self):
-        self.env.close()
+        if not self.has_reset:
+            EnvLogger.warn_close_before_reset()
+        else:
+            self.env.close()
 
     def render(self, mode="human"):
         if not self.has_reset:

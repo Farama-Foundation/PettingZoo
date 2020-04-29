@@ -504,7 +504,9 @@ class env(AECEnv):
             pygame.display.flip()
 
     def close(self):
-        if not self.closed:
+        if not self.has_reset:
+            EnvLogger.warn_close_before_reset()
+        elif not self.closed:
             self.closed = True
             if not self.render_on:
                 EnvLogger.warn_close_unrendered_env()
