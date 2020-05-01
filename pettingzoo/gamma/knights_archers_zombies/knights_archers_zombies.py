@@ -29,7 +29,7 @@ class env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, max_frames=900):
+    def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
@@ -40,6 +40,8 @@ class env(AECEnv):
         self.pad_observation = pad_observation
         self.killable_knights = killable_knights
         self.killable_archers = killable_archers
+        self.black_death = black_death
+        self.line_death = line_death
         self.has_reset = False
         self.np_random, seed = seeding.np_random(seed)
 
@@ -421,7 +423,16 @@ class env(AECEnv):
                     if event.key == pygame.K_BACKSPACE:
                         self.reset(observe=False)
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
-        agent_name.update(action)
+        action = action + 1
+        out_of_bounds = agent_name.update(action)
+
+        if self.line_death and out_of_bounds:
+            agent_name.alive = False
+            if agent_name in self.archer_list:
+                self.archer_list.remove(agent_name)
+            else:
+                self.knight_list.remove(agent_name)
+            self.all_sprites.remove(agent_name)
 
         sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
         # Knight
@@ -434,6 +445,7 @@ class env(AECEnv):
         self.sword_spawn_rate, self.knight_killed, self.knight_dict, self.knight_list, self.knight_player_num, self.all_sprites, self.sword_dict, self.sword_list = sw.spawnSword()
         # Arrow
         self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
+
         if self._agent_selector.is_last():
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
