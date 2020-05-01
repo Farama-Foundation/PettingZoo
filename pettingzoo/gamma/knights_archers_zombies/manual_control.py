@@ -15,10 +15,10 @@ def manual_control(**kwargs):
 
     while not done:
         # while frame_count < frame_limit: # Uncomment this if you want the game to run for fame_limit amount of frames instead of ending by normal game conditions (useful for testing purposes)
-        agents = env.agent_list
+        agents = env.agents
         frame_count += 1
-        actions = [6 for x in range(len(env.agents))]  # If you want to do manual input
-
+        actions = [5 for x in range(len(env.agents))]  # If you want to do manual input
+        # 5 is do nothing, 0 is up, 1 is down, 2 is turn CW, 3 is CCW, 4 is attack
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -37,19 +37,18 @@ def manual_control(**kwargs):
                     if cur_agent > len(agents) - 1:
                         cur_agent = 0
                 if event.key == pygame.K_q:
-                    actions[cur_agent] = 3
-                if event.key == pygame.K_e:
-                    actions[cur_agent] = 4
-                if event.key == pygame.K_w:
-                    actions[cur_agent] = 1
-                if event.key == pygame.K_s:
                     actions[cur_agent] = 2
+                if event.key == pygame.K_e:
+                    actions[cur_agent] = 3
+                if event.key == pygame.K_w:
+                    actions[cur_agent] = 0
+                if event.key == pygame.K_s:
+                    actions[cur_agent] = 1
                 if event.key == pygame.K_f:
-                    actions[cur_agent] = 5
+                    actions[cur_agent] = 4
 
         if quit_game:
             break
-
         for a in actions:
             env.step(a)
         env.render()

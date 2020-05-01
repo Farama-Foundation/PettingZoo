@@ -7,8 +7,8 @@ WIDTH = 1280
 HEIGHT = 720
 ARCHER_SPEED = 25
 KNIGHT_SPEED = 25
-ARCHER_X, ARCHER_Y = 400, 710
-KNIGHT_X, KNIGHT_Y = 800, 710
+ARCHER_X, ARCHER_Y = 400, 610
+KNIGHT_X, KNIGHT_Y = 800, 610
 ANGLE_RATE = 10
 
 
@@ -32,6 +32,7 @@ class Archer(pygame.sprite.Sprite):
         self.is_knight = False
 
     def update(self, action):
+        went_out_of_bounds = False
 
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
@@ -54,12 +55,16 @@ class Archer(pygame.sprite.Sprite):
                 pass
 
             # Clamp to stay inside the screen
+            if self.rect.y < 0 or self.rect.y > (HEIGHT - 40):
+                went_out_of_bounds = True
+
             self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
             self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
 
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
+        return went_out_of_bounds
 
     def offset(self, x_offset, y_offset):
         self.rect.x += x_offset
@@ -91,7 +96,7 @@ class Knight(pygame.sprite.Sprite):
 
     def update(self, action):
         self.action = action
-
+        went_out_of_bounds = False
         if not self.attacking:
             move_angle = math.radians(self.angle + 90)
             # Up and Down movement
@@ -112,12 +117,17 @@ class Knight(pygame.sprite.Sprite):
                 pass
 
             # Clamp to stay inside the screen
+            if self.rect.y < 0 or self.rect.y > (HEIGHT - 40):
+                went_out_of_bounds = True
+
             self.rect.x = max(min(self.rect.x, WIDTH - 132), 100)
             self.rect.y = max(min(self.rect.y, HEIGHT - 40), 0)
 
         self.direction = pygame.Vector2(0, -1).rotate(-self.angle)
         self.image = pygame.transform.rotate(self.org_image, self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
+
+        return went_out_of_bounds
 
     def offset(self, x_offset, y_offset):
         self.rect.x += x_offset
