@@ -20,12 +20,13 @@ from .pursuit import pursuit
 from .waterworld import waterworld as waterworld_v0
 from .multiwalker import multiwalker as multiwalker_v0
 
+from pettingzoo.utils.wrappers import TerminateIllegalWrapper,TerminateNaNWrapper,NanNoOpWrapper, \
+                                AssertOutOfBoundsWrapper,OrderEnforcingWrapper
 class pursuit_v0:
     @staticmethod
     def env(**kwargs):
-        env = chess_env.env(**kwargs)
-        env = TerminateIllegalWrapper(env,illegal_reward=-1)
-        env = AssertOutOfBoundsWrapper(env)
+        env = pursuit.env(**kwargs)
+        example_space = list(env.action_spaces.values())[0]
         env = TerminateNaNWrapper(env)
         env = OrderEnforcingWrapper(env)
         return env
