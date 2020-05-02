@@ -1,13 +1,15 @@
 import numpy as np
 import copy
-from gym.spaces import Box
+from gym.spaces import Box, Discrete
 from gym import spaces
 import warnings
 from skimage import measure
 from pettingzoo import AECEnv
+from gym.utils import seeding
 
 from .env_logger import EnvLogger
 from .frame_stack import stack_obs_space, stack_obs
+
 
 class BaseWrapper(AECEnv):
     '''
@@ -66,6 +68,7 @@ class BaseWrapper(AECEnv):
 
         return next_obs
 
+
 class TerminateIllegalWrapper(BaseWrapper):
     '''
     this wrapper terminates the game with the current player losing
@@ -83,28 +86,14 @@ class TerminateIllegalWrapper(BaseWrapper):
         assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
         if action not in self.infos[current_agent]['legal_moves']:
             EnvLogger.warn_on_illegal_move()
-            self.dones = {d:True for d in self.dones}
+            self.dones = {d: True for d in self.dones}
             for info in self.infos.values():
                 info['legal_moves'] = []
-            self.rewards = {d:0 for d in self.dones}
+            self.rewards = {d: 0 for d in self.dones}
             self.rewards[current_agent] = self._illegal_value
         else:
             return super().step(action, observe)
 
-class TerminateNaNWrapper(BaseWrapper):
-    '''
-    this wrapper terminates the game with zero reward in case of nan values
-    '''
-    def step(self, action, observe=True):
-        if np.isnan(action).any():
-            backup_policy = "terminating with zero reward for all players"
-            EnvLogger.warn_action_is_NaN(backup_policy)
-            self.dones = {d:True for d in self.dones}
-            for info in self.infos.values():
-                info['legal_moves'] = []
-            self.rewards = {d:0 for d in self.dones}
-        else:
-            return super().step(action, observe)
 
 class NanNoOpWrapper(BaseWrapper):
     '''
@@ -112,7 +101,7 @@ class NanNoOpWrapper(BaseWrapper):
     is the action to take in cases when nothing should be done.
     '''
     def __init__(self, env, no_op_action):
-        super().__init__(self, env)
+        super().__init__(env)
         self._no_op_action = no_op_action
 
     def step(self, action, observe=True):
@@ -120,7 +109,33 @@ class NanNoOpWrapper(BaseWrapper):
             backup_policy = "passing their turn"
             EnvLogger.warn_action_is_NaN(backup_policy)
             action = self._no_op_action
-        return env.step(action, observe)
+        return super().step(action, observe)
+
+
+class NaNRandomWrapper(BaseWrapper):
+    '''
+    this wrapper takes a random action
+    '''
+    def __init__(self, env, seed):
+        super().__init__(env)
+        assert all(isinstance(space, Discrete) for space in env.action_spaces.values()), "action space should be discrete for NaNRandomWrapper"
+        self.np_random, seed = seeding.np_random(seed)
+
+    def step(self, action, observe=True):
+        if np.isnan(action).any():
+            cur_info = self.infos[self.agent_selection]
+            if 'legal_moves' in cur_info:
+                backup_policy = "taking a random legal action"
+                EnvLogger.warn_action_is_NaN(backup_policy)
+                action = self.np_random.choice(cur_info['legal_moves'])
+            else:
+                backup_policy = "taking a random action"
+                EnvLogger.warn_action_is_NaN(backup_policy)
+                act_space = self.action_spaces[self.agent_selection]
+                action = self.np_random.choice(act_space.n)
+
+        return super().step(action, observe)
+
 
 class AssertOutOfBoundsWrapper(BaseWrapper):
     '''
@@ -160,6 +175,8 @@ class OrderEnforcingWrapper(BaseWrapper):
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
 
     def render(self, mode='human'):
+        if not self._has_reset:
+            EnvLogger.error_render_before_reset()
         self.has_rendered = True
         super().render(mode)
 
