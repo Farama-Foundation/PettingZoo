@@ -16,6 +16,16 @@ class Agent(object):
         return '<{} instance>'.format(type(self).__name__)
 
 
-from .pursuit import pursuit as pursuit_v0
+from .pursuit import pursuit
 from .waterworld import waterworld as waterworld_v0
 from .multiwalker import multiwalker as multiwalker_v0
+
+class pursuit_v0:
+    @staticmethod
+    def env(**kwargs):
+        env = chess_env.env(**kwargs)
+        env = TerminateIllegalWrapper(env,illegal_reward=-1)
+        env = AssertOutOfBoundsWrapper(env)
+        env = TerminateNaNWrapper(env)
+        env = OrderEnforcingWrapper(env)
+        return env

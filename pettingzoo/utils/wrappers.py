@@ -1,0 +1,190 @@
+import numpy as np
+import copy
+from gym.spaces import Box
+from gym import spaces
+import warnings
+from skimage import measure
+from pettingzoo import AECEnv
+
+from .env_logger import EnvLogger
+from .frame_stack import stack_obs_space, stack_obs
+
+class BaseWrapper(AECEnv):
+    '''
+    Creates a wrapper around `env` parameter. Extend this class
+    to create a useful wrapper.
+    '''
+    metadata = {'render.modes': ['human']}
+
+    def __init__(self, env):
+        super().__init__()
+        self.env = env
+
+        self.num_agents = self.env.num_agents
+        self.agents = self.env.agents
+        self.observation_spaces = self.env.observation_spaces
+        self.action_spaces = self.env.action_spaces
+
+        # we don't want these defined as we don't want them used before they are gotten
+
+        # self.agent_selection = self.env.agent_selection
+
+        # self.rewards = self.env.rewards
+        # self.dones = self.env.dones
+        # self.infos = self.env.infos
+
+        # self.agent_order = self.env.agent_order
+
+    def close(self):
+        self.env.close()
+
+    def render(self, mode='human'):
+        self.env.render(mode)
+
+    def reset(self, observe=True):
+        observation = self.env.reset(observe)
+
+        self.agent_selection = self.env.agent_selection
+        self.agent_order = self.env.agent_order
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
+
+        return observation
+
+    def observe(self, agent):
+        return self.env.observe(agent)
+
+    def step(self, action, observe=True):
+        next_obs = self.env.step(action, observe=observe)
+
+        self.agent_selection = self.env.agent_selection
+        self.agent_order = self.env.agent_order
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
+
+        return next_obs
+
+class TerminateIllegalWrapper(BaseWrapper):
+    '''
+    this wrapper terminates the game with the current player losing
+    in case of illegal values
+
+    parameters:
+        - illegal_reward: number that is the value of the player making an illegal move.
+    '''
+    def __init__(self, env, illegal_reward):
+        super().__init__(env)
+        self._illegal_value = illegal_reward
+
+    def step(self, action, observe=True):
+        current_agent = self.agent_selection
+        assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
+        if action not in self.infos[current_agent]['legal_moves']:
+            EnvLogger.warn_on_illegal_move()
+            self.dones = {d:True for d in self.dones}
+            for info in self.infos.values():
+                info['legal_moves'] = []
+            self.rewards = {d:0 for d in self.dones}
+            self.rewards[current_agent] = self._illegal_value
+        else:
+            return super().step(action, observe)
+
+class TerminateNaNWrapper(BaseWrapper):
+    '''
+    this wrapper terminates the game with zero reward in case of nan values
+    '''
+    def step(self, action, observe=True):
+        if np.isnan(action).any():
+            backup_policy = "terminating with zero reward for all players"
+            EnvLogger.warn_action_is_NaN(backup_policy)
+            self.dones = {d:True for d in self.dones}
+            for info in self.infos.values():
+                info['legal_moves'] = []
+            self.rewards = {d:0 for d in self.dones}
+        else:
+            return super().step(action, observe)
+
+class NanNoOpWrapper(BaseWrapper):
+    '''
+    this wrapper expects there to be a no_op_action parameter which
+    is the action to take in cases when nothing should be done.
+    '''
+    def __init__(self, env, no_op_action):
+        super().__init__(self, env)
+        self._no_op_action = no_op_action
+
+    def step(self, action, observe=True):
+        if np.isnan(action).any():
+            backup_policy = "passing their turn"
+            EnvLogger.warn_action_is_NaN(backup_policy)
+            action = self._no_op_action
+        return env.step(action, observe)
+
+class AssertOutOfBoundsWrapper(BaseWrapper):
+    '''
+    this wrapper crashes for out of bounds actions
+    '''
+    def __init__(self, env):
+        super().__init__(env)
+
+    def step(self, action, observe=True):
+        assert self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
+        return super().step(action, observe)
+
+
+class OrderEnforcingWrapper(BaseWrapper):
+    '''
+    check all orders:
+
+    * error on getting rewards, dones, infos, agent_selection, agent_order before reset
+    * error on calling step, observe before reset
+    * warn on calling close before render or reset
+    * warn on calling step after environment is done
+    '''
+    def __init__(self, env):
+        self._has_reset = False
+        self._has_rendered = False
+        super().__init__(env)
+
+    def __getattr__(self, value):
+        '''
+        raises an error message when data is gotten from the env
+        which should only be gotten after reset
+        '''
+        if value in {"rewards", "dones", "infos", "agent_selection", "agent_order"}:
+            EnvLogger.error_field_before_reset(value)
+            return None
+        else:
+            raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
+
+    def render(self, mode='human'):
+        self.has_rendered = True
+        super().render(mode)
+
+    def close(self):
+        super().close()
+        if not self._has_rendered:
+            EnvLogger.warn_close_unrendered_env()
+        if not self._has_reset:
+            EnvLogger.warn_close_before_reset()
+
+        self.has_rendered = False
+
+    def step(self, action, observe=True):
+        if not self._has_reset:
+            EnvLogger.error_step_before_reset()
+        if self.dones[self.agent_selection]:
+            EnvLogger.warn_step_after_done()
+
+        return super().step(action, observe)
+
+    def observe(self, observe=True):
+        if not self._has_reset:
+            EnvLogger.error_observe_before_reset()
+        return super().observe(observe)
+
+    def reset(self, observe=True):
+        self._has_reset = True
+        return super().reset(observe)
