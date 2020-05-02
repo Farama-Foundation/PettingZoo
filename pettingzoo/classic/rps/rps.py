@@ -2,6 +2,8 @@ from gym.spaces import Discrete
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils.wrappers import TerminateIllegalWrapper, NaNRandomWrapper, \
+    AssertOutOfBoundsWrapper, OrderEnforcingWrapper
 
 rock = 0
 paper = 1
@@ -11,7 +13,15 @@ MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 
 
-class env(AECEnv):
+def env(seed=None):
+    env = raw_env()
+    env = AssertOutOfBoundsWrapper(env)
+    env = NaNRandomWrapper(env, seed)
+    env = OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 

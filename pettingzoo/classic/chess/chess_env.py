@@ -6,14 +6,25 @@ import numpy as np
 import warnings
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
+from pettingzoo.utils.wrappers import TerminateIllegalWrapper, NaNRandomWrapper, \
+    AssertOutOfBoundsWrapper, OrderEnforcingWrapper
 
 
-class env(AECEnv):
+def env(seed=None):
+    env = raw_env()
+    env = TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = AssertOutOfBoundsWrapper(env)
+    env = NaNRandomWrapper(env, seed)
+    env = OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human', 'ascii']}
 
     def __init__(self):
-        super(env, self).__init__()
+        super().__init__()
 
         self.board = chess.Board()
 

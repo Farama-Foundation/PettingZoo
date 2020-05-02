@@ -5,14 +5,23 @@ from pettingzoo.utils import agent_selector
 import numpy as np
 from pettingzoo.utils import EnvLogger
 import pygame
+from pettingzoo.utils.wrappers import OrderEnforcingWrapper, NanNoOpWrapper
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    example_space = list(env.action_spaces.values())[0]
+    env = NanNoOpWrapper(env, np.zeros(example_space.shape,dtype=example_space.dtype))
+    env = OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, *args, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         self.env = _env(*args, seed, **kwargs)
         pygame.init()
         self.num_agents = self.env.num_agents
