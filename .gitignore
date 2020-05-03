@@ -6,4 +6,4 @@ __pycache__/
 saved_observations/
 build/
 dist/
-PettingZoo.egg-info
+PettingZoo.egg-info/
