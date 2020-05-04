@@ -358,7 +358,7 @@ class env(AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         self.env = CooperativePong(**kwargs)
 
         self.agents = self.env.agents

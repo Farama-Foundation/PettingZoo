@@ -2,8 +2,7 @@ from gym.spaces import Discrete
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils.wrappers import TerminateIllegalWrapper, NaNRandomWrapper, \
-    AssertOutOfBoundsWrapper, OrderEnforcingWrapper
+from pettingzoo.utils import wrappers
 
 rock = 0
 paper = 1
@@ -15,9 +14,9 @@ NUM_ITERS = 100
 
 def env():
     env = raw_env()
-    env = AssertOutOfBoundsWrapper(env)
-    env = NaNRandomWrapper(env)
-    env = OrderEnforcingWrapper(env)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
@@ -66,11 +65,7 @@ class raw_env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if np.isnan(action):
-            action = 0
-        elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in Discrete({}).'
-                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
+
         self.state[self.agent_selection] = action
 
         # collect reward if it is the last agent to act

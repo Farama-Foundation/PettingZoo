@@ -6,16 +6,15 @@ import numpy as np
 import warnings
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.env_logger import EnvLogger
-from pettingzoo.utils.wrappers import TerminateIllegalWrapper, NaNRandomWrapper, \
-    AssertOutOfBoundsWrapper, OrderEnforcingWrapper
+from pettingzoo.utils import wrappers
 
 
 def env():
     env = raw_env()
-    env = TerminateIllegalWrapper(env, illegal_reward=-1)
-    env = AssertOutOfBoundsWrapper(env)
-    env = NaNRandomWrapper(env)
-    env = OrderEnforcingWrapper(env)
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
