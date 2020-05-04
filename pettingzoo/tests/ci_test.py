@@ -19,6 +19,7 @@ save_obs = sys.argv[6] == 'True'
 
 env_id = sys.argv[1]
 if env_id in all_environments:
+    print("running game {}".format(env_id))
     env_module = all_environments[env_id]
     _env = env_module.env()
     api_test.api_test(_env, render=render)
