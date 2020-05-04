@@ -74,7 +74,7 @@ class Prisoner:
 class env(AECEnv):
 
     def __init__(self, seed=None, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        # super(env, self).__init__()
+        # super().__init__()
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
         self.agent_order = self.agents[:]

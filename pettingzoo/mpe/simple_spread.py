@@ -7,4 +7,4 @@ class env(SimpleEnv):
         assert 0. <= local_ratio <= 1., "local_ratio is a proportion. Must be between 0 and 1."
         scenario = Scenario()
         world = scenario.make_world(N)
-        super(env, self).__init__(scenario, world, max_frames, seed, local_ratio)
+        super().__init__(scenario, world, max_frames, seed, local_ratio)

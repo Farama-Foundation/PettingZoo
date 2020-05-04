@@ -5,7 +5,16 @@ from gym import spaces
 import rlcard
 import random
 import numpy as np
+from pettingzoo.utils import wrappers
 
+
+def env():
+    env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
 
 class env(AECEnv):
 
