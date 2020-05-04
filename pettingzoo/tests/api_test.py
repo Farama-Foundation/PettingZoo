@@ -161,7 +161,7 @@ def test_agent_order(env):
     _agent_selector = agent_selector(agent_order)
     agent_selection = _agent_selector.next()
 
-    if  hasattr(env, "_agent_selector"):
+    if hasattr(env, "_agent_selector"):
         assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
 
     assert env.agent_selection == agent_selection, "env.agent_selection is not the same as the first agent in agent_order"

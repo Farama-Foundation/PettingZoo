@@ -1,5 +1,6 @@
 import random
 
+
 def test_render(env):
     render_modes = env.metadata.get('render.modes')
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"

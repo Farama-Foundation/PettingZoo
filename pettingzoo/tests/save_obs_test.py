@@ -1,5 +1,7 @@
 from pettingzoo.utils import save_observation
 import gym
+import numpy as np
+
 
 def check_save_obs(env):
     for agent in env.agents:
@@ -10,13 +12,11 @@ def check_save_obs(env):
             assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
 
 
-def test_observe(env, observation_0, save_obs):
+def test_save_obs(env):
     try:
         check_save_obs(env)
         for agent in env.agent_order:
-            observation = env.observe(agent)
-            if save_obs:
-                save_observation(env=env, agent=agent, save_dir="saved_observations")
-            test_obervation(observation, observation_0)
+            save_observation(env=env, agent=agent, save_dir="saved_observations")
+
     except AssertionError as ae:
-        print("did not save the observations: ",ae)
+        print("did not save the observations: ", ae)
