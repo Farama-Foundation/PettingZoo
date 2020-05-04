@@ -10,11 +10,11 @@ from pettingzoo.utils.wrappers import TerminateIllegalWrapper, NaNRandomWrapper,
     AssertOutOfBoundsWrapper, OrderEnforcingWrapper
 
 
-def env(seed=None):
+def env():
     env = raw_env()
     env = TerminateIllegalWrapper(env, illegal_reward=-1)
     env = AssertOutOfBoundsWrapper(env)
-    env = NaNRandomWrapper(env, seed)
+    env = NaNRandomWrapper(env)
     env = OrderEnforcingWrapper(env)
     return env
 

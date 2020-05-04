@@ -5,10 +5,8 @@ from gym import spaces
 import warnings
 from skimage import measure
 from pettingzoo import AECEnv
-from gym.utils import seeding
 
 from .env_logger import EnvLogger
-from .frame_stack import stack_obs_space, stack_obs
 
 
 class BaseWrapper(AECEnv):
@@ -116,10 +114,11 @@ class NaNRandomWrapper(BaseWrapper):
     '''
     this wrapper takes a random action
     '''
-    def __init__(self, env, seed):
+    def __init__(self, env):
         super().__init__(env)
         assert all(isinstance(space, Discrete) for space in env.action_spaces.values()), "action space should be discrete for NaNRandomWrapper"
-        self.np_random, seed = seeding.np_random(seed)
+        SEED = 0x33bb9cc9
+        self.np_random = np.random.RandomState(SEED)
 
     def step(self, action, observe=True):
         if np.isnan(action).any():

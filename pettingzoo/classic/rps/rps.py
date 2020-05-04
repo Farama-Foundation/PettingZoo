@@ -13,10 +13,10 @@ MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 
 
-def env(seed=None):
+def env():
     env = raw_env()
     env = AssertOutOfBoundsWrapper(env)
-    env = NaNRandomWrapper(env, seed)
+    env = NaNRandomWrapper(env)
     env = OrderEnforcingWrapper(env)
     return env
 
