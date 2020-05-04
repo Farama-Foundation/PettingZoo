@@ -1,4 +1,6 @@
-
+import warnings
+import random
+import numpy as np
 
 def check_environment_deterministic(env1, env2):
     '''
@@ -10,7 +12,7 @@ def check_environment_deterministic(env1, env2):
     # checks deterministic behavior if seed is set
     actions = {agent: space.sample() for agent, space in env1.action_spaces.items()}
     hashes = []
-    num_seeds = 5
+    num_seeds = 2
     envs = [env1, env2]
     for x in range(num_seeds):
         new_env = envs[x]
@@ -28,9 +30,9 @@ def check_environment_deterministic(env1, env2):
             cur_hashes.append(hash_obsevation(next_obs))
 
         hashes.append(hash(tuple(cur_hashes)))
-        new_env = env.__class__(seed=base_seed)
 
     return all(hashes[0] == h for h in hashes)
+
 
 def hash_obsevation(obs):
     try:
@@ -42,3 +44,17 @@ def hash_obsevation(obs):
         except TypeError:
             warnings.warn("Observation not an int or an Numpy array")
             return 0
+
+def seed_test(env_constructor):
+    try:
+        env = env_constructor(seed=None)
+    except Exception:
+        assert check_environment_deterministic(env_constructor(),env_constructor()),\
+            "The environment gives different results on multiple runs and does not have a `seed` argument. Environments which use random values should take a seed as an argument."
+        return
+        
+    base_seed = 42
+    assert check_environment_deterministic(env_constructor(seed=base_seed),env_constructor(seed=base_seed)),\
+        "The environment gives different results on multiple runs when intialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state."
+    assert not check_environment_deterministic(env_constructor(),env_constructor()),\
+        "The environment gives same results on multiple runs when intialized by default. By default, environments that take a seed argument should be nondeterministic"
