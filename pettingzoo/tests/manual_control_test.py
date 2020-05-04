@@ -2,6 +2,7 @@ import random
 import time
 import threading
 
+
 def inp_handler(name):
     from pynput.keyboard import Key, Controller as KeyboardController
 

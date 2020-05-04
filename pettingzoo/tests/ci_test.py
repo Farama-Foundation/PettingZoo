@@ -2,13 +2,13 @@ import pettingzoo.tests.api_test as api_test
 import pettingzoo.tests.bombardment_test as bombardment_test
 import pettingzoo.tests.performance_benchmark as performance_benchmark
 import pettingzoo.tests.manual_control_test as test_manual_control
-from pettingzoo.utils import save_observation
+
 import sys
 from .all_modules import all_environments
 from .render_test import test_render
 from .error_tests import error_test
 from .seed_test import seed_test
-
+from .save_obs_test import test_save_obs
 
 render = sys.argv[2] == 'True'
 manual_control = sys.argv[3] == 'True'
@@ -27,16 +27,13 @@ if env_id in all_environments:
     error_test(env_module.env())
 
     if save_obs:
-        for agent in _env.agent_order:
-            observation = env.observe(agent)
-            if save_obs:
-                save_observation(env=_env, agent=agent, save_dir="saved_observations")
+        test_save_obs(_env)
 
     if render:
         test_render(_env)
 
     if manual_control:
-        manual_control_fn = getattr(env_module,"manual_control",None)
+        manual_control_fn = getattr(env_module, "manual_control", None)
         if manual_control_fn is not None:
             test_manual_control(manual_control_fn)
 

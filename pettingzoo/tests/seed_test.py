@@ -2,6 +2,7 @@ import warnings
 import random
 import numpy as np
 
+
 def check_environment_deterministic(env1, env2):
     '''
     env1 and env2 should be seeded environments
@@ -45,16 +46,17 @@ def hash_obsevation(obs):
             warnings.warn("Observation not an int or an Numpy array")
             return 0
 
+
 def seed_test(env_constructor):
     try:
-        env = env_constructor(seed=None)
+        env_constructor(seed=None)
     except Exception:
-        assert check_environment_deterministic(env_constructor(),env_constructor()),\
+        assert check_environment_deterministic(env_constructor(), env_constructor()),\
             "The environment gives different results on multiple runs and does not have a `seed` argument. Environments which use random values should take a seed as an argument."
         return
-        
+
     base_seed = 42
-    assert check_environment_deterministic(env_constructor(seed=base_seed),env_constructor(seed=base_seed)),\
+    assert check_environment_deterministic(env_constructor(seed=base_seed), env_constructor(seed=base_seed)),\
         "The environment gives different results on multiple runs when intialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state."
-    assert not check_environment_deterministic(env_constructor(),env_constructor()),\
+    assert not check_environment_deterministic(env_constructor(), env_constructor()),\
         "The environment gives same results on multiple runs when intialized by default. By default, environments that take a seed argument should be nondeterministic"
