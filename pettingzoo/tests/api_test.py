@@ -1,6 +1,5 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import save_observation
 import warnings
 import numpy as np
 from copy import copy
@@ -148,40 +147,12 @@ def play_test(env, observation_0):
         assert observation is None, "step(observe=False) must not return anything"
 
 
-def test_observe(env, observation_0, save_obs):
-    for agent in env.agent_order:
-        observation = env.observe(agent)
-        if save_obs:
-            save_observation(env=env, agent=agent, save_dir="saved_observations")
-        test_obervation(observation, observation_0)
-
-
-def test_render(env):
-    render_modes = env.metadata.get('render.modes')
-    assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
-    env.reset(observe=False)
-    for mode in render_modes:
-        for _ in range(10):
-            for agent in env.agent_order:
-                if 'legal_moves' in env.infos[agent]:
-                    action = random.choice(env.infos[agent]['legal_moves'])
-                else:
-                    action = env.action_spaces[agent].sample()
-                env.step(action, observe=False)
-                env.render(mode=mode)
-                if all(env.dones.values()):
-                    env.reset()
-                    break
-
-
-def test_agent_selector(env):
+def test_agent_order(env):
     if not hasattr(env, "_agent_selector"):
         warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
-        return
 
-    if not isinstance(env._agent_selector, agent_selector):
+    elif not isinstance(env._agent_selector, agent_selector):
         warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
-        return
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
 
@@ -189,7 +160,10 @@ def test_agent_selector(env):
     agent_order = copy(env.agent_order)
     _agent_selector = agent_selector(agent_order)
     agent_selection = _agent_selector.next()
-    assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
+
+    if  hasattr(env, "_agent_selector"):
+        assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
+
     assert env.agent_selection == agent_selection, "env.agent_selection is not the same as the first agent in agent_order"
 
     for _ in range(200):
@@ -216,19 +190,13 @@ def test_agent_selector(env):
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
-def api_test(env, render=False, manual_control=None, save_obs=False):
+def api_test(env, render=False):
     print("Starting API test")
     env_agent_sel = copy(env)
-    env_warnings = copy(env)
-    env_bad_close = copy(env)
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
     # do this before reset
-    test_requires_reset(env)
-
-    check_environment_args(env)
-
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
     assert not any(env.dones.values()), "dones must all be False after reset"
@@ -240,14 +208,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     observation_0 = env.reset()
     test_obervation(observation_0, observation_0)
 
-    if save_obs:
-        for agent in env.agents:
-            assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
-            assert np.all(np.equal(env.observation_spaces[agent].low, 0)) and np.all(np.equal(env.observation_spaces[agent].high, 255)), "Observations must be 0 to 255 to save as image"
-            assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
-            if len(env.observation_spaces[agent].shape) == 3:
-                assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
-
     assert isinstance(env.agent_order, list), "agent_order must be a list"
 
     agent_0 = env.agent_order[0]
@@ -255,8 +215,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     test_observation_action_spaces(env, agent_0)
 
     play_test(env, observation_0)
-
-    test_bad_actions(env)
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
@@ -266,19 +224,7 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     test_rewards_dones(env, agent_0)
 
-    test_observe(env, observation_0, save_obs=save_obs)
-
-    test_agent_selector(env_agent_sel)
-
-    test_warnings(env_warnings)
-
-    if render:
-        test_render(env)
-
-    if manual_control is not None:
-        test_manual_control(manual_control)
-    else:
-        env.close()
+    test_agent_order(env_agent_sel)
 
     # test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
@@ -287,7 +233,5 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
     else:
         warnings.warn("Environment has not defined a render() method")
-
-    test_bad_close(env_bad_close)
 
     print("Passed API test")
