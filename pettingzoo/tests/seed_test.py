@@ -51,12 +51,12 @@ def seed_test(env_constructor):
     try:
         env_constructor(seed=None)
     except Exception:
-        assert check_environment_deterministic(env_constructor(), env_constructor()),\
-            "The environment gives different results on multiple runs and does not have a `seed` argument. Environments which use random values should take a seed as an argument."
+        if not check_environment_deterministic(env_constructor(), env_constructor()):
+            warnings.warn("The environment gives different results on multiple runs and does not have a `seed` argument. Environments which use random values should take a seed as an argument.")
         return
 
     base_seed = 42
-    assert check_environment_deterministic(env_constructor(seed=base_seed), env_constructor(seed=base_seed)),\
-        "The environment gives different results on multiple runs when intialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state."
-    assert not check_environment_deterministic(env_constructor(), env_constructor()),\
-        "The environment gives same results on multiple runs when intialized by default. By default, environments that take a seed argument should be nondeterministic"
+    if not check_environment_deterministic(env_constructor(seed=base_seed), env_constructor(seed=base_seed)):
+        warnings.warn("The environment gives different results on multiple runs when intialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state.")
+    if check_environment_deterministic(env_constructor(), env_constructor()):
+        warnings.warn("The environment gives same results on multiple runs when intialized by default. By default, environments that take a seed argument should be nondeterministic")
