@@ -6,6 +6,8 @@ from pettingzoo.utils import save_observation
 import sys
 from .all_modules import all_environments
 from .render_test import test_render
+from .error_tests import error_test
+from .seed_test import seed_test
 
 
 render = sys.argv[2] == 'True'
@@ -20,6 +22,10 @@ if env_id in all_environments:
     env_module = all_environments[env_id]
     _env = env_module.env()
     api_test.api_test(_env, render=render)
+
+    seed_test(env_module.env)
+    error_test(env_module.env())
+
     if save_obs:
         for agent in _env.agent_order:
             observation = env.observe(agent)
