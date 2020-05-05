@@ -13,9 +13,10 @@ with open("README.md", "r") as fh:
 
 setup(
     name='PettingZoo',
-    version="0.1.1",
+    version="0.1.2",
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
+    description="Gym for multi-agent reinforcement learning",
     url='https://github.com/PettingZoo-Team/PettingZoo',
     long_description=long_description,
     long_description_content_type="text/markdown",
