@@ -14,7 +14,7 @@ with open("README.md", "r") as fh:
 setup(
     name='PettingZoo',
     version="0.1.1",
-    author='PettingZoo Team', 
+    author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     url='https://github.com/PettingZoo-Team/PettingZoo',
     long_description=long_description,
