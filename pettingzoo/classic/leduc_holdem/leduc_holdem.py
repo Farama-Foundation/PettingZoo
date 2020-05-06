@@ -22,7 +22,7 @@ class raw_env(AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         if seed is not None:
             np.random.seed(seed)
             random.seed(seed)

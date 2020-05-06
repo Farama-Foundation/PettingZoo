@@ -98,14 +98,14 @@ class NanNoOpWrapper(BaseWrapper):
     this wrapper expects there to be a no_op_action parameter which
     is the action to take in cases when nothing should be done.
     '''
-    def __init__(self, env, no_op_action):
+    def __init__(self, env, no_op_action, no_op_policy):
         super().__init__(env)
         self._no_op_action = no_op_action
+        self._no_op_policy = no_op_policy
 
     def step(self, action, observe=True):
         if np.isnan(action).any():
-            backup_policy = "passing their turn"
-            EnvLogger.warn_action_is_NaN(backup_policy)
+            EnvLogger.warn_action_is_NaN(self._no_op_policy)
             action = self._no_op_action
         return super().step(action, observe)
 
@@ -139,12 +139,34 @@ class NaNRandomWrapper(BaseWrapper):
 class AssertOutOfBoundsWrapper(BaseWrapper):
     '''
     this wrapper crashes for out of bounds actions
+    Should be used for Discrete spaces
     '''
     def __init__(self, env):
         super().__init__(env)
+        assert all(isinstance(space, Discrete) for space in self.action_spaces.values()), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
     def step(self, action, observe=True):
         assert self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
+        return super().step(action, observe)
+
+
+class ClipOutOfBoundsWrapper(BaseWrapper):
+    '''
+    this wrapper crops out of bounds actions for Box spaces
+    '''
+    def __init__(self, env):
+        super().__init__(env)
+        assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use ClipOutOfBoundsWrapper for Box spaces"
+
+
+    def step(self, action, observe=True):
+        space = self.action_spaces[self.agent_selection]
+        if not space.contains(action):
+            assert space.shape == action.shape, "action should have shape {}".format(space.shape)
+
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
+            action = np.clip(space, space.low, space.high)
+
         return super().step(action, observe)
 
 
