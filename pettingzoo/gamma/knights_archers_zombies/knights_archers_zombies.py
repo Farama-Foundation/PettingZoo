@@ -10,7 +10,6 @@ from .src.weapons import Arrow, Sword
 from .manual_control import manual_control
 import numpy as np
 from skimage import measure
-import matplotlib.pyplot as plt
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
@@ -69,6 +68,7 @@ class env(AECEnv):
         self.sword_list = pygame.sprite.Group()
         self.archer_list = pygame.sprite.Group()
         self.knight_list = pygame.sprite.Group()
+        self.kill_list = []
 
         self.num_archers = num_archers
         self.num_knights = num_knights
