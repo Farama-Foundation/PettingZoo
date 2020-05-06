@@ -16,6 +16,7 @@ from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
+from pettingzoo.utils import wrappers
 
 
 def get_image(path):
@@ -25,7 +26,16 @@ def get_image(path):
     return image
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    default_val = 1
+    env = wrappers.NanNoOpWrapper(env, default_val)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
