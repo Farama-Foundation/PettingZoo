@@ -75,7 +75,7 @@ class Prisoner:
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, 0)
+    env = wrappers.NanNoOpWrapper(env, 0, "setting action to 0")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 

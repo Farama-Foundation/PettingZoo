@@ -5,14 +5,15 @@ from pettingzoo.utils import agent_selector
 import numpy as np
 from pettingzoo.utils import EnvLogger
 import pygame
-from pettingzoo.utils.wrappers import OrderEnforcingWrapper, NanNoOpWrapper
+from pettingzoo.utils import wrappers
 
 
 def env(**kwargs):
     env = raw_env(**kwargs)
     example_space = list(env.action_spaces.values())[0]
-    env = NanNoOpWrapper(env, np.zeros(example_space.shape,dtype=example_space.dtype))
-    env = OrderEnforcingWrapper(env)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape,dtype=example_space.dtype), "taking all zeros action")
+    env = wrappers.OrderEnforcingWrapper(env)
     return env
 
 
