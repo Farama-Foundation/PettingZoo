@@ -6,6 +6,7 @@ import numpy as np
 from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import EnvLogger
+from pettingzoo.utils import wrappers
 from gym.utils import seeding
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
@@ -71,7 +72,15 @@ class Prisoner:
             self.last_sprite_movement = 0
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, 0)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     def __init__(self, seed=None, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         # super().__init__()
