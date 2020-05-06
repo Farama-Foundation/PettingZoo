@@ -16,7 +16,7 @@ PettingZoo includes the following sets of games:
 
 To install, use `pip install pettingzoo` 
 
-We support Python 3.5, 3.6, 3.7 and 3.8
+We support Python 3.6, 3.7 and 3.8
 
 
 ## Initializing Environments
