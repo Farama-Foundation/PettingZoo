@@ -165,7 +165,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             assert space.shape == action.shape, "action should have shape {}".format(space.shape)
 
             EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
-            action = np.clip(space, space.low, space.high)
+            action = np.clip(action, space.low, space.high)
 
         return super().step(action, observe)
 
@@ -198,7 +198,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     def render(self, mode='human'):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
-        self.has_rendered = True
+        self._has_rendered = True
         super().render(mode)
 
     def close(self):
@@ -208,7 +208,8 @@ class OrderEnforcingWrapper(BaseWrapper):
         if not self._has_reset:
             EnvLogger.warn_close_before_reset()
 
-        self.has_rendered = False
+        self._has_rendered = False
+        self._has_reset = False
 
     def step(self, action, observe=True):
         if not self._has_reset:
