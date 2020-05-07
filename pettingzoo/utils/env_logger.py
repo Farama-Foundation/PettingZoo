@@ -17,6 +17,8 @@ class EnvLogger():
             handler = EnvWarningHandler(mqueue=EnvLogger.mqueue)
             logger.addHandler(handler)
         logger.warning(msg)
+        # to get pytest error tests to pass
+        EnvLogger.mqueue.append(msg)
 
     @staticmethod
     def flush():

@@ -9,11 +9,12 @@ import gym
 import random
 import re
 import os
+from pettingzoo.utils import EnvLogger
 
 
 def test_bad_close(env):
-    from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
+    EnvLogger.flush()
     e1 = copy(env)
     # test that immediately closing the environment does not crash
     try:
@@ -36,7 +37,6 @@ def test_bad_close(env):
 
 
 def test_warnings(env):
-    from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
     EnvLogger.flush()
     e1 = copy(env)
@@ -70,7 +70,6 @@ def check_excepts(fn):
 
 # yields length of mqueue
 def check_warns(fn, message=None):
-    from pettingzoo.utils import EnvLogger
     EnvLogger.suppress_output()
     EnvLogger.flush()
     fn()
@@ -100,7 +99,7 @@ def test_requires_reset(env):
     if "render.modes" in env.metadata and len(env.metadata["render.modes"]) > 0:
         if not check_asserts(lambda: env.render(), "reset() needs to be called before render"):
             warnings.warn("env.render should call EnvLogger.error_render_before_reset if it is called before reset")
-    if not check_warns(lambda: env.close(), "reset() needs to be called before close."):
+    if not check_warns(lambda: env.close(), "reset() needs to be called before close"):
         warnings.warn("env should warn_close_before_reset() if closing before reset()")
 
 
@@ -135,10 +134,10 @@ def test_bad_actions(env):
 
         env.reset()
         try:
-            if not check_warns(lambda: env.step(first_action_space.n)):
-                warnings.warn("out of bounds actions should call EnvLogger.warn_discrete_out_of_bound")
+            if not check_asserts(lambda: env.step(first_action_space.n)):
+                warnings.warn("out of bounds actions should assert")
         except Exception:
-            warnings.warn("out of bounds actions should not raise an error, instead, they should call EnvLogger.warn_discrete_out_of_bound and instead perform some reasonable action (perhaps the do nothing action if your environment has one? Or perhaps the same behavior as an illegal action?)")
+            warnings.warn("out of bounds actions should assert")
 
     env.reset()
 
@@ -167,12 +166,12 @@ def error_test(env):
     env_warnings = copy(env)
     env_bad_close = copy(env)
 
+    test_warnings(env_warnings)
     # do this before reset
     test_requires_reset(env)
 
     test_bad_actions(env)
 
-    test_warnings(env_warnings)
 
     test_bad_close(env_bad_close)
 
