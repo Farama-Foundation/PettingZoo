@@ -4,6 +4,7 @@ import gym
 from .cake_paddle import CakePaddle
 from .manual_control import manual_control
 from pettingzoo import AECEnv
+from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -353,12 +354,20 @@ class CooperativePong(gym.Env):
         self.draw()
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, 0, "doing nothing")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         self.env = CooperativePong(**kwargs)
 
         self.agents = self.env.agents
