@@ -14,7 +14,7 @@ class env(AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        super(env, self).__init__()
+        super().__init__()
 
         self.ch = CheckersRules()
         self.num_agents = 2

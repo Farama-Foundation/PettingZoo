@@ -3,14 +3,24 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
 import numpy as np
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    example_space = list(env.action_spaces.values())[0]
+    env = wrappers.ClipOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape,dtype=example_space.dtype), "taking all zeros action")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, *args, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         self.env = _env(seed, *args, **kwargs)
 
         self.num_agents = self.env.num_agents

@@ -14,6 +14,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import EnvLogger
 from .manual_control import manual_control
+from pettingzoo.utils import wrappers
 
 _image_library = {}
 
@@ -25,12 +26,21 @@ def get_image(path):
     return image
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    default_val = np.zeros((1,)) if env.continuous else 1
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, default_val, "setting action to {}".format(default_val))
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        super(env, self).__init__()
+        super().__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self.agent_order = self.agents[:]

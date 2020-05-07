@@ -341,7 +341,7 @@ class agent2(pygame.sprite.Sprite):
 
 class env(gym.Env):
     def __init__(self):
-        super(env, self).__init__()
+        super().__init__()
         global agent2, agent1
         pygame.init()
 
