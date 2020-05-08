@@ -7,7 +7,6 @@ import Box2D
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
 from .. import Agent
-from pettingzoo.utils import EnvLogger
 
 MAX_AGENTS = 40
 
@@ -354,8 +353,6 @@ class MultiWalkerEnv():
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
-        else:
-            EnvLogger.warn_close_unrendered_env()
 
     def reset(self):
         self._destroy()
