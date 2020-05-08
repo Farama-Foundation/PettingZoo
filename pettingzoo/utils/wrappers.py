@@ -178,7 +178,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     '''
     check all orders:
 
-    * error on getting rewards, dones, agent_selection, agent_order before reset
+    * error on getting rewards, dones, infos, agent_selection, agent_order before reset
     * error on calling step, observe before reset
     * warn on calling close before render or reset
     * warn on calling step after environment is done
@@ -193,7 +193,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value in {"rewards", "dones", "agent_selection", "agent_order"}:
+        if value in {"rewards", "dones", "infos", "agent_selection", "agent_order"}:
             EnvLogger.error_field_before_reset(value)
             return None
         else:
