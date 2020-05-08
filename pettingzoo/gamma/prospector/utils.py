@@ -7,9 +7,11 @@ import math
 
 from . import constants as const
 
+
 def load_image(path: list) -> pg.Surface:  # All images stored in data/
-    img = pg.image.load(os.path.join("data", *path))
-    img = img.convert_alpha()
+    cwd = os.path.dirname(__file__)
+    img = pg.image.load(os.path.join(cwd, "data", *path))
+    # img = img.convert_alpha()
     return img
 
 
