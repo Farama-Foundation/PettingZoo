@@ -25,7 +25,7 @@ if env_id in all_environments:
     api_test.api_test(_env, render=render)
 
     seed_test(env_module.env)
-    error_test(env_module.env())
+    # error_test(env_module.env())
 
     if save_obs:
         test_save_obs(_env)
