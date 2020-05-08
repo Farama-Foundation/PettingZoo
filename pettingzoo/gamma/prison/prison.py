@@ -5,7 +5,6 @@ import os
 import numpy as np
 from gym import spaces
 from .manual_control import manual_control
-from pettingzoo.utils import EnvLogger
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
@@ -241,15 +240,11 @@ class raw_env(AECEnv):
         return self.prisoner_mapping[c]
 
     def close(self):
-        if not self.has_reset:
-            EnvLogger.warn_close_before_reset()
-        elif not self.closed:
+        if not self.closed:
             self.closed = True
             if self.rendering:
                 pygame.event.pump()
                 pygame.display.quit()
-            else:
-                EnvLogger.warn_close_unrendered_env()
             pygame.quit()
 
     def draw(self):
@@ -260,8 +255,6 @@ class raw_env(AECEnv):
             self.screen.blit(self.prisoners[p].get_sprite(), self.prisoners[p].position)
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         if self.vector_obs:
             p = self.prisoners[agent]
             x = p.position[0]
@@ -301,17 +294,8 @@ class raw_env(AECEnv):
             return self.observe(self.agent_selection)
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         agent = self.agent_selection
-        # if not continuous, input must be normalized
-        if None in [action] or np.isnan(action):
-            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 0")
-            action = np.zeros_like(self.action_spaces[agent].sample())
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to zero")
-            action = np.zeros_like(self.action_spaces[agent].sample())
         reward = 0
         if self.continuous:
             reward = self.move_prisoner(agent, action)
@@ -347,22 +331,19 @@ class raw_env(AECEnv):
             return observation
 
     def render(self, mode='human'):
-        if not self.has_reset:
-            EnvLogger.error_render_before_reset()
-        else:
-            if not self.rendering:
-                pygame.display.init()
-                old_screen = self.screen
-                self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
-                self.screen.blit(old_screen, (0, 0))
-                self.screen.blit(self.background, (0, 0))
-                if self.num_floors > 4:
-                    min_rows = self.num_floors - 4
-                    for k in range(min_rows):
-                        h = 650 + 150 * k
-                        self.screen.blit(self.background_append, (0, h))
-            self.rendering = True
-            pygame.display.flip()
+        if not self.rendering:
+            pygame.display.init()
+            old_screen = self.screen
+            self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
+            self.screen.blit(old_screen, (0, 0))
+            self.screen.blit(self.background, (0, 0))
+            if self.num_floors > 4:
+                min_rows = self.num_floors - 4
+                for k in range(min_rows):
+                    h = 650 + 150 * k
+                    self.screen.blit(self.background_append, (0, h))
+        self.rendering = True
+        pygame.display.flip()
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven
 # Tank and bunny sprites commissioned from https://www.fiverr.com/jeimansutrisman
