@@ -202,7 +202,7 @@ class CooperativePong(gym.Env):
     metadata = {'render.modes': ['human']}
 
     # ball_speed = [3,3], left_paddle_speed = 3, right_paddle_speed = 3
-    def __init__(self, randomizer, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -231,7 +231,7 @@ class CooperativePong(gym.Env):
 
         # paddles
         self.p0 = PaddleSprite((20, 80), left_paddle_speed)
-        if is_cake_paddle:
+        if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
             self.p1 = PaddleSprite((20, 100), right_paddle_speed)

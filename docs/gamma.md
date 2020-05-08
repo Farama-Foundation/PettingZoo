@@ -42,10 +42,10 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
+right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `is_cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
+The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
 
 Leaderboard:
 
