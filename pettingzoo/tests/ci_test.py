@@ -21,7 +21,7 @@ env_id = sys.argv[1]
 if env_id in all_environments:
     print("running game {}".format(env_id))
     env_module = all_environments[env_id]
-    _env = env_module.env()
+    _env = env_module.raw_env()
     api_test.api_test(_env, render=render)
 
     seed_test(env_module.env)

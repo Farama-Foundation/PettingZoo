@@ -42,10 +42,10 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
+right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `is_cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
+The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
 
 Leaderboard:
 
@@ -67,7 +67,7 @@ Leaderboard:
 
 *AEC diagram*
 
-Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. An agent gets a reward when it kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 image around the agent.
+Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
 
 Manual Control:
 
@@ -80,7 +80,7 @@ Press 'M' key to spawn a new knight.
 
 ```
 knights_archers_zombies.env(spawn_rate=20, knights=2, archers=2, 
-killable_knights=True, killable_archers=True, line_death=True, pad_observation=True, max_frames=900)
+killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_frames=900)
 ```
 
 *about arguments*
@@ -96,7 +96,9 @@ killable_knights: if set to False, knight agents cannot be killed by zombies.
 
 killable_archers: if set to False, archer agents cannot be killed by zombies.
 
-line_death:
+black_death: if set to True, agents who die will observe only black. If False, dead agents do not have reward, done, info or observations and are removed from agent list.
+
+line_death: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
 pad_observation: if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 ```

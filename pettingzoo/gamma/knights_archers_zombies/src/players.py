@@ -14,9 +14,8 @@ ANGLE_RATE = 10
 
 class Archer(pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, agent_name):
         super().__init__()
-        # rand_x = random.randint(20, 1260)
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
         self.image = pygame.image.load(os.path.join(img_path, 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
@@ -30,6 +29,7 @@ class Archer(pygame.sprite.Sprite):
         self.score = 0
         self.is_archer = True
         self.is_knight = False
+        self.agent_name = agent_name
 
     def update(self, action):
         went_out_of_bounds = False
@@ -75,7 +75,7 @@ class Archer(pygame.sprite.Sprite):
 
 
 class Knight(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, agent_name):
         super().__init__()
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
         self.image = pygame.image.load(os.path.join(img_path, 'knight.png'))
@@ -93,6 +93,7 @@ class Knight(pygame.sprite.Sprite):
         self.score = 0
         self.is_archer = False
         self.is_knight = True
+        self.agent_name = agent_name
 
     def update(self, action):
         self.action = action

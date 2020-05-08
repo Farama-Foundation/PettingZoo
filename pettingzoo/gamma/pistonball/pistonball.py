@@ -12,8 +12,8 @@ import gym
 from gym.utils import seeding
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import EnvLogger
 from .manual_control import manual_control
+from pettingzoo.utils import wrappers
 
 _image_library = {}
 
@@ -25,12 +25,21 @@ def get_image(path):
     return image
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    default_val = np.zeros((1,)) if env.continuous else 1
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, default_val, "setting action to {}".format(default_val))
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        super(env, self).__init__()
+        super().__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self.agent_order = self.agents[:]
@@ -106,8 +115,6 @@ class env(AECEnv):
         self.closed = False
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
         x_low = 40 * i
@@ -123,13 +130,9 @@ class env(AECEnv):
         self.reset()
 
     def close(self):
-        if not self.has_reset:
-            EnvLogger.warn_close_before_reset()
-        elif not self.closed:
+        if not self.closed:
             self.closed = True
-            if not self.renderOn:
-                EnvLogger.warn_close_unrendered_env()
-            else:
+            if self.renderOn:
                 self.screen = pygame.Surface((960, 560))
                 self.renderOn = False
                 pygame.event.pump()
@@ -248,25 +251,13 @@ class env(AECEnv):
         return local_reward * self.local_reward_weight
 
     def render(self, mode="human"):
-        if not self.has_reset:
-            EnvLogger.error_render_before_reset()
-        else:
-            if not self.renderOn:
-                # sets self.renderOn to true and initializes display
-                self.enable_render()
-            pygame.display.flip()
+        if not self.renderOn:
+            # sets self.renderOn to true and initializes display
+            self.enable_render()
+        pygame.display.flip()
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if action is None or np.isnan(action):
-            action = 1
-            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
-            action = 1
-
         if self.continuous:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
         else:

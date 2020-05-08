@@ -148,6 +148,7 @@ def play_test(env, observation_0):
 
 
 def test_agent_order(env):
+    env.reset()
     if not hasattr(env, "_agent_selector"):
         warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
 
@@ -193,6 +194,8 @@ def test_agent_order(env):
 def api_test(env, render=False):
     print("Starting API test")
     env_agent_sel = copy(env)
+
+    env.reset()
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 

@@ -60,6 +60,9 @@ class EnvLogger():
     def error_step_before_reset():
         assert False, "reset() needs to be called before step"
 
+    @staticmethod
+    def warn_step_after_done():
+        EnvLogger._generic_warning("[WARNING]: step() called after all agents are done. Should reset() first.")
 
     @staticmethod
     def error_render_before_reset():
