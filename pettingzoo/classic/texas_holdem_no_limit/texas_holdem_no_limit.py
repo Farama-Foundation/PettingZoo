@@ -9,8 +9,8 @@ import numpy as np
 from pettingzoo.utils import wrappers
 
 
-def env():
-    env = raw_env()
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
@@ -22,12 +22,12 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, **kwargs):
+    def __init__(self, seed=None):
         super().__init__()
         if seed is not None:
             np.random.seed(seed)
             random.seed(seed)
-        self.env = rlcard.make('no-limit-holdem', **kwargs)
+        self.env = rlcard.make('no-limit-holdem', config={"seed": seed})
         self.agents = ['player_0', 'player_1']
         self.num_agents = len(self.agents)
         self.has_reset = False
@@ -90,7 +90,7 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.has_reset = True
-        obs, player_id = self.env.init_game()
+        obs, player_id = self.env.reset()
         self.agent_order = [self._int_to_name(agent) for agent in [player_id, 0 if player_id == 1 else 1]]
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
