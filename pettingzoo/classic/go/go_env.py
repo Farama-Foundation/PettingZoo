@@ -5,16 +5,27 @@ from gym import spaces
 from . import go
 from . import coords
 import numpy as np
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    pass_move = env._N * env._N
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, pass_move, "passing turn with action {}".format(pass_move))
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
-        super(env, self).__init__()
+        super().__init__()
 
         self._overwrite_go_global_variables(board_size=board_size)
         self._komi = komi

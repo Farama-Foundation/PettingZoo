@@ -10,14 +10,24 @@ from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import KnockAction, GinAction
 import rlcard.games.gin_rummy.utils.melding as melding
 import numpy as np
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         if seed is not None:
             np.random.seed(seed)
             random.seed(seed)

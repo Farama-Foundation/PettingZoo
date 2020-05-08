@@ -2,6 +2,7 @@ from gym.spaces import Discrete
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import wrappers
 
 rock = 0
 paper = 1
@@ -11,7 +12,15 @@ MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
@@ -56,11 +65,7 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if np.isnan(action):
-            action = 0
-        elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in Discrete({}).'
-                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
+
         self.state[self.agent_selection] = action
 
         # collect reward if it is the last agent to act

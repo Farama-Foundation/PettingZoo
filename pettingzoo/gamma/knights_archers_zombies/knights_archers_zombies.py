@@ -12,9 +12,9 @@ import numpy as np
 from skimage import measure
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import EnvLogger
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
+from pettingzoo.utils import wrappers
 
 
 def get_image(path):
@@ -24,7 +24,16 @@ def get_image(path):
     return image
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    default_val = 1
+    env = wrappers.NanNoOpWrapper(env, default_val, "setting action to 1")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
@@ -68,6 +77,8 @@ class env(AECEnv):
         self.sword_list = pygame.sprite.Group()
         self.archer_list = pygame.sprite.Group()
         self.knight_list = pygame.sprite.Group()
+
+        # If black_death, this represents agents to remove at end of cycle
         self.kill_list = []
 
         self.num_archers = num_archers
@@ -93,7 +104,8 @@ class env(AECEnv):
         self.agents = []
 
         for i in range(num_archers):
-            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer()
+            name = "archer_" + str(i)
+            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer(agent_name=name)
             self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
             self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
@@ -102,7 +114,8 @@ class env(AECEnv):
                 self.archer_player_num += 1
 
         for i in range(num_knights):
-            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight()
+            name = "knight_" + str(i)
+            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight(agent_name=name)
             self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
             self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
@@ -253,7 +266,7 @@ class env(AECEnv):
     # Spawning Zombies at Random Location at every 100 iterations
     def spawn_zombie(self, zombie_spawn_rate, zombie_list, all_sprites):
         zombie_spawn_rate += 1
-        zombie = Zombie()
+        zombie = Zombie(self.np_random)
 
         if zombie_spawn_rate >= self.ZOMBIE_SPAWN:
             zombie.rect.x = self.np_random.randint(0, self.WIDTH)
@@ -275,6 +288,8 @@ class env(AECEnv):
                 all_sprites.remove(knight)
                 sword_killed = True
                 knight_killed = True
+                if knight.agent_name not in self.kill_list:
+                    self.kill_list.append(knight.agent_name)
         return zombie_list, knight_list, all_sprites, knight_killed, sword_list, sword_killed
 
     # Kill the Sword when Knight dies
@@ -296,6 +311,8 @@ class env(AECEnv):
                 archer_list.remove(archer)
                 all_sprites.remove(archer)
                 archer_killed = True
+                if archer.agent_name not in self.kill_list:
+                    self.kill_list.append(archer.agent_name)
         return zombie_list, archer_list, all_sprites, archer_killed
 
     # Zombie Kills the Sword
@@ -347,8 +364,6 @@ class env(AECEnv):
         return run
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         screen = pygame.surfarray.pixels3d(self.WINDOW)
 
         i = self.agent_name_mapping[agent]
@@ -391,15 +406,7 @@ class env(AECEnv):
         return cropped
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if action is None or np.isnan(action):
-            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
-            action = 1
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
-            action = 1
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
         else:
@@ -422,6 +429,7 @@ class env(AECEnv):
                     # Reset Environment
                     if event.key == pygame.K_BACKSPACE:
                         self.reset(observe=False)
+
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
         action = action + 1
         out_of_bounds = agent_name.update(action)
@@ -433,6 +441,7 @@ class env(AECEnv):
             else:
                 self.knight_list.remove(agent_name)
             self.all_sprites.remove(agent_name)
+            self.kill_list.append(agent_name.agent_name)
 
         sp = self.spawnPlayers(action, self.knight_player_num, self.archer_player_num, self.knight_list, self.archer_list, self.all_sprites, self.knight_dict, self.archer_dict)
         # Knight
@@ -494,9 +503,28 @@ class env(AECEnv):
 
             self.check_game_end()
             self.frames += 1
-        self.agent_selection = self._agent_selector.next()
+
         self.rewards[agent] = agent_name.score
         self.dones[agent] = not self.run or self.frames >= self.max_frames
+
+        if self._agent_selector.is_last() and not self.black_death:
+            # self.agents must be recreated
+            for k in self.kill_list:
+                print("Killed ", k)
+                self.agents.remove(k)
+                self.dones.pop(k, None)
+                self.rewards.pop(k, None)
+                self.infos.pop(k, None)
+
+            # reinit agent_order from agents
+            self.agent_order = self.agents[:]
+            self._agent_selector.reinit(self.agent_order)
+            self.num_agents = len(self.agents)
+
+            # reset the kill list
+            self.kill_list = []
+
+        self.agent_selection = self._agent_selector.next()
         if observe:
             return self.observe(self.agent_selection)
 
@@ -507,22 +535,15 @@ class env(AECEnv):
         self.reset()
 
     def render(self, mode="human"):
-        if not self.has_reset:
-            EnvLogger.error_render_before_reset()
-        else:
-            if not self.render_on:
-                # sets self.render_on to true and initializes display
-                self.enable_render()
-            pygame.display.flip()
+        if not self.render_on:
+            # sets self.render_on to true and initializes display
+            self.enable_render()
+        pygame.display.flip()
 
     def close(self):
-        if not self.has_reset:
-            EnvLogger.warn_close_before_reset()
-        elif not self.closed:
+        if not self.closed:
             self.closed = True
-            if not self.render_on:
-                EnvLogger.warn_close_unrendered_env()
-            else:
+            if self.render_on:
                 # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
                 self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
                 self.render_on = False
@@ -570,7 +591,8 @@ class env(AECEnv):
         self.agents = []
 
         for i in range(self.num_archers):
-            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer()
+            name = "archer_" + str(i)
+            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer(agent_name=name)
             self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
             self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
@@ -579,7 +601,8 @@ class env(AECEnv):
                 self.archer_player_num += 1
 
         for i in range(self.num_knights):
-            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight()
+            name = "knight_" + str(i)
+            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight(agent_name=name)
             self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
             self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])

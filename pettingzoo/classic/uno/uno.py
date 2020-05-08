@@ -6,14 +6,24 @@ import rlcard
 import random
 from rlcard.games.uno.card import UnoCard
 import numpy as np
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         if seed is not None:
             np.random.seed(seed)
             random.seed(seed)
