@@ -16,7 +16,6 @@ class Archer(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__()
-        # rand_x = random.randint(20, 1260)
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
         self.image = pygame.image.load(os.path.join(img_path, 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
