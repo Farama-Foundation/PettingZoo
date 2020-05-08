@@ -1,5 +1,4 @@
 import pygame
-import random
 import os
 
 ZOMBIE_Y_SPEED = 5
@@ -9,14 +8,15 @@ WIDTH = 1280
 
 class Zombie(pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, randomizer):
         super().__init__()
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
         self.image = pygame.image.load(os.path.join(img_path, 'zombie.png'))
         self.rect = self.image.get_rect(center=(50, 50))
+        self.randomizer = randomizer
 
     def update(self):
-        rand_x = random.randint(0, 10)
+        rand_x = self.randomizer.randint(0, 10)
 
         # Wobbling in X-Y Direction
         self.rect.y += ZOMBIE_Y_SPEED

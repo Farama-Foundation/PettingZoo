@@ -12,7 +12,6 @@ import numpy as np
 from skimage import measure
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import EnvLogger
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
@@ -263,7 +262,7 @@ class raw_env(AECEnv):
     # Spawning Zombies at Random Location at every 100 iterations
     def spawn_zombie(self, zombie_spawn_rate, zombie_list, all_sprites):
         zombie_spawn_rate += 1
-        zombie = Zombie()
+        zombie = Zombie(self.np_random)
 
         if zombie_spawn_rate >= self.ZOMBIE_SPAWN:
             zombie.rect.x = self.np_random.randint(0, self.WIDTH)
@@ -357,8 +356,6 @@ class raw_env(AECEnv):
         return run
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         screen = pygame.surfarray.pixels3d(self.WINDOW)
 
         i = self.agent_name_mapping[agent]
@@ -401,15 +398,7 @@ class raw_env(AECEnv):
         return cropped
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if action is None or np.isnan(action):
-            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 1")
-            action = 1
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 1")
-            action = 1
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
         else:
@@ -517,22 +506,15 @@ class raw_env(AECEnv):
         self.reset()
 
     def render(self, mode="human"):
-        if not self.has_reset:
-            EnvLogger.error_render_before_reset()
-        else:
-            if not self.render_on:
-                # sets self.render_on to true and initializes display
-                self.enable_render()
-            pygame.display.flip()
+        if not self.render_on:
+            # sets self.render_on to true and initializes display
+            self.enable_render()
+        pygame.display.flip()
 
     def close(self):
-        if not self.has_reset:
-            EnvLogger.warn_close_before_reset()
-        elif not self.closed:
+        if not self.closed:
             self.closed = True
-            if not self.render_on:
-                EnvLogger.warn_close_unrendered_env()
-            else:
+            if self.render_on:
                 # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
                 self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
                 self.render_on = False
