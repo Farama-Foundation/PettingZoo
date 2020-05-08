@@ -23,7 +23,8 @@ def create_agents(nagents, map_matrix, obs_range, randomizer, flatten=False, ran
     for i in xrange(nagents):
         xinit, yinit = (0, 0)
         if randinit:
-            xinit, yinit = feasible_position_exp(randomizer,
+            xinit, yinit = feasible_position_exp(
+                randomizer,
                 map_matrix, expanded_mat, constraints=constraints)
             # fill expanded_mat
             expanded_mat[xinit + 1, yinit + 1] = -1
