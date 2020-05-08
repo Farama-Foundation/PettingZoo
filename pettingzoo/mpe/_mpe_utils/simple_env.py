@@ -17,6 +17,7 @@ def make_env(raw_env):
         return env
     return env
 
+
 class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
