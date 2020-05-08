@@ -158,7 +158,6 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
         super().__init__(env)
         assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use ClipOutOfBoundsWrapper for Box spaces"
 
-
     def step(self, action, observe=True):
         space = self.action_spaces[self.agent_selection]
         if not space.contains(action):

@@ -172,7 +172,6 @@ def error_test(env):
 
     test_bad_actions(env)
 
-
     test_bad_close(env_bad_close)
 
     print("Passed Error test")
