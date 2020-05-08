@@ -108,6 +108,17 @@ def test_reward(reward):
 def test_rewards_dones(env, agent_0):
     for agent in env.agents:
         assert isinstance(env.dones[agent], bool), "Agent's values in dones must be True or False"
+        print()
+        print()
+        print()
+        print(agent_0 is env.agent_order[0])
+        print('class')
+        # print(env.rewards[agent_0])
+        print(env.rewards[agent_0].__class__)
+        print('class done')
+        print()
+        print()
+        print()
         assert isinstance(env.rewards[agent], env.rewards[agent_0].__class__), "Rewards for each agent must be of the same class"
         test_reward(env.rewards[agent])
 
