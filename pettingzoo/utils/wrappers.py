@@ -31,7 +31,7 @@ class BaseWrapper(AECEnv):
 
         # self.rewards = self.env.rewards
         # self.dones = self.env.dones
-        # self.infos = self.env.infos
+        self.infos = self.env.infos
 
         # self.agent_order = self.env.agent_order
 
@@ -173,7 +173,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     '''
     check all orders:
 
-    * error on getting rewards, dones, infos, agent_selection, agent_order before reset
+    * error on getting rewards, dones, agent_selection, agent_order before reset
     * error on calling step, observe before reset
     * warn on calling close before render or reset
     * warn on calling step after environment is done
@@ -188,7 +188,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value in {"rewards", "dones", "infos", "agent_selection", "agent_order"}:
+        if value in {"rewards", "dones", "agent_selection", "agent_order"}:
             EnvLogger.error_field_before_reset(value)
             return None
         else:
@@ -213,12 +213,15 @@ class OrderEnforcingWrapper(BaseWrapper):
     def step(self, action, observe=True):
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
-        if self.dones[self.agent_selection]:
+        elif self.dones[self.agent_selection]:
             EnvLogger.warn_step_after_done()
+            self.dones = {agent: True for agent in self.dones}
+            self.rewards = {agent: 0 for agent in self.rewards}
+            return super().observe(observe)
+        else:
+            return super().step(action, observe)
 
-        return super().step(action, observe)
-
-    def observe(self, observe=True):
+    def observe(self, agent):
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(observe)
