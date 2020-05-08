@@ -31,7 +31,12 @@ class BaseWrapper(AECEnv):
 
         # self.rewards = self.env.rewards
         # self.dones = self.env.dones
-        self.infos = self.env.infos
+
+        # we don't want to care one way or the other whether environments have an infos or not before reset
+        try:
+            self.infos = self.env.infos
+        except AttributeError:
+            pass
 
         # self.agent_order = self.env.agent_order
 
