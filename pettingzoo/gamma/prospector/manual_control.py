@@ -2,15 +2,19 @@ import pygame
 import numpy as np
 from . import constants as const
 
+
 def manual_control(**kwargs):
     from .prospector import env as _env
+
     env = _env(**kwargs)
-    x = y = ang = 0
-    default_scalar = 0.7
+    env.reset()
+    default_scalar = 5.0
 
     while True:
-        agent_actions = np.array([[0, 0, 0] for _ in range(const.NUM_PROSPECTORS)] + 
-                                 [[0, 0] for _ in range(const.NUM_BANKERS)])
+        agent_actions = np.array(
+            [[0, 0, 0] for _ in range(const.NUM_PROSPECTORS)]
+            + [[0, 0] for _ in range(const.NUM_BANKERS)]
+        )
         num_actions = 0
         agent = 0
         for event in pygame.event.get():
@@ -47,7 +51,8 @@ def manual_control(**kwargs):
                     if 0 <= agent <= 3:
                         num_actions += 1
                         agent_actions[agent][2] = -default_scalar
-
+                elif event.key == pygame.K_ESCAPE:
+                    test_done = True
         actions = dict(zip(env.agents, agent_actions))
         test_done = False
         for i in env.agents:

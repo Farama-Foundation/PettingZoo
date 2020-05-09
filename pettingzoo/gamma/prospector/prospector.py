@@ -7,6 +7,7 @@ import numpy as np
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import wrappers
 from . import constants as const
 from . import utils
 from .manual_control import manual_control
@@ -15,7 +16,7 @@ import math
 import os
 from enum import IntEnum, auto
 import itertools as it
-from random import randint
+import random
 
 
 class CollisionTypes(IntEnum):
@@ -28,7 +29,7 @@ class CollisionTypes(IntEnum):
 
 
 class Prospector(pg.sprite.Sprite):
-    def __init__(self, pos, space, num,  *sprite_groups):
+    def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
         # self.image = load_image(['prospec.png'])
         self.image = utils.load_image(["prospector-pickaxe-big.png"])
@@ -62,13 +63,10 @@ class Prospector(pg.sprite.Sprite):
 
     def reset(self, pos):
         self.body.angle = 0
-        self.image = pg.transform.rotozoom(
-            self.orig_image, 0, 1
-        )
+        self.image = pg.transform.rotozoom(self.orig_image, 0, 1)
         self.rect = self.image.get_rect(topleft=pos)
         self.body.position = utils.flipy(pos)
-        self.body.velocity = Vec2d(0., 0.)
-        
+        self.body.velocity = Vec2d(0.0, 0.0)
 
     @property
     def center(self):
@@ -100,48 +98,8 @@ class Prospector(pg.sprite.Sprite):
 
         self.body.velocity = curr_vel
 
-    def _update(self, keys):
-        x = y = 0
-        if keys[locals.K_w]:
-            y = 1
-        if keys[locals.K_s]:
-            y = -1
-        if keys[locals.K_d]:
-            x = 1
-        if keys[locals.K_a]:
-            x = -1
-        if keys[locals.K_q]:
-            self.body.angle += 0.1
-            self.body.angular_velocity = 0
-        if keys[locals.K_e]:
-            self.body.angle -= 0.1
-            self.body.angular_velocity = 0
-
-        if x != 0 and y != 0:
-            self.body.velocity = Vec2d(x, y).rotated(self.body.angle) * (
-                const.PROSPECTOR_SPEED / math.sqrt(2)
-            )
-        else:
-            self.body.velocity = (
-                Vec2d(x, y).rotated(self.body.angle) * const.PROSPECTOR_SPEED
-            )
-
-        # Rotate the image of the sprite.
-        self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotozoom(
-            self.orig_image, math.degrees(self.body.angle), 1
-        )
-        self.rect = self.image.get_rect(center=self.rect.center)
-
-        curr_vel = self.body.velocity
-
-        if self.body.nugget is not None:
-            self.body.nugget.update(self.body.position, self.body.angle, False)
-
-        self.body.velocity = curr_vel
-
     def __str__(self):
-        return 'prospector_%s' % self.id
+        return "prospector_%s" % self.id
 
     def __repr__(self):
         return self.__str__()
@@ -179,51 +137,12 @@ class Banker(pg.sprite.Sprite):
     def center(self):
         return self.rect.x + const.AGENT_RADIUS, self.rect.y + const.AGENT_RADIUS
 
-    def _update(self, keys):
-        move = 0
-        if any(
-            keys[key]
-            for key in (locals.K_UP, locals.K_DOWN, locals.K_RIGHT, locals.K_LEFT,)
-        ):
-            move = 1
-
-        if keys[locals.K_UP]:
-            self.body.angle = 0
-        elif keys[locals.K_DOWN]:
-            self.body.angle = math.pi
-        elif keys[locals.K_RIGHT]:
-            self.body.angle = -math.pi / 2
-        elif keys[locals.K_LEFT]:
-            self.body.angle = math.pi / 2
-
-        self.body.velocity = (
-            Vec2d(0, move).rotated(self.body.angle) * const.BANKER_SPEED
-        )
-
-        # Rotate the image of the sprite.
-        self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotozoom(
-            self.orig_image, math.degrees(self.body.angle), 1
-        )
-
-        self.rect = self.image.get_rect(center=self.rect.center)
-
-        curr_vel = self.body.velocity
-
-        if self.body.nugget is not None:
-            corrected = utils.normalize_angle(self.body.angle + (math.pi / 2))
-            self.body.nugget.update(self.body.position, corrected, True)
-
-        self.body.velocity = curr_vel
-
     def reset(self, pos):
         self.body.angle = 0
-        self.image = pg.transform.rotozoom(
-            self.orig_image, 0, 1
-        )
+        self.image = pg.transform.rotozoom(self.orig_image, 0, 1)
         self.rect = self.image.get_rect(topleft=pos)
         self.body.position = utils.flipy(pos)
-        self.body.velocity = Vec2d(0., 0.)
+        self.body.velocity = Vec2d(0.0, 0.0)
 
     def update(self, action):
         # up/down action
@@ -254,7 +173,7 @@ class Banker(pg.sprite.Sprite):
         self.body.velocity = curr_vel
 
     def __str__(self):
-        return 'banker_%s' % self.id
+        return "banker_%s" % self.id
 
     def __repr__(self):
         return self.__str__()
@@ -384,202 +303,15 @@ class Gold(pg.sprite.Sprite):
         surf.blit(self.image, self.rect)
 
 
-class Game:
-    def __init__(self):
-        self.done = False
-        self.screen = pg.display.set_mode(const.SCREEN_SIZE)
-        self.clock = pg.time.Clock()
-
-        self.background = utils.load_image(["background-debris.png"])
-        # self.background_rect = pg.Rect(0, 0, *const.SCREEN_SIZE)
-        self.background_rect = self.background.get_rect(topleft=(0, 0))
-
-        self.space = pm.Space()
-        self.space.gravity = Vec2d(0.0, 0.0)
-        # self.space.damping = 0.5
-        self.space.damping = 0.0
-
-        self.all_sprites = pg.sprite.Group()
-        self.gold = []
-
-        prospec_info = [utils.rand_pos("prospector") for _ in range(3)]
-        self.prospectors = []
-        for pos in prospec_info:
-            self.prospectors.append(Prospector(pos, self.space, self.all_sprites))
-
-        banker_info = (
-            (1, utils.rand_pos("banker")),
-            (2, utils.rand_pos("banker")),
-            (3, utils.rand_pos("banker")),
-        )
-        self.bankers = []
-        for num, pos in banker_info:
-            self.bankers.append(Banker(pos, self.space, num, self.all_sprites))
-
-        bank_verts = (
-            (0, 0),
-            (184, 0),
-            (184, 100),
-            (0, 100),
-        )
-
-        bank_info = [
-            ([184 * 1, 50], chest_verts),
-            ([184 * 3, 50], chest_verts),
-            ([184 * 5, 50], chest_verts),
-        ]
-
-        self.banks = []
-        for pos, verts in bank_info:
-            self.banks.append(Bank(pos, verts, self.space, self.all_sprites))
-
-        for w_type, s_pos, b_pos, verts in const.FENCE_INFO:
-            Fence(w_type, s_pos, b_pos, verts, self.space, self.all_sprites)
-
-        water_info = {
-            "pos": (0, const.SCREEN_HEIGHT - const.WATER_HEIGHT),
-            "verts": (
-                (0, 0),
-                (const.SCREEN_WIDTH, 0),
-                (const.SCREEN_WIDTH, const.WATER_HEIGHT),
-                (0, const.WATER_HEIGHT),
-            ),
-        }
-
-        Water(water_info["pos"], water_info["verts"], self.space, self.all_sprites)
-
-        def add_gold(arbiter, space, data):
-            prospec = arbiter.shapes[0]
-            prospec_body = prospec.body
-
-            position = arbiter.contact_point_set.points[0].point_a
-            normal = arbiter.contact_point_set.normal
-
-            prospec_body.position = position - (24 * normal)
-            prospec_body.velocity = (0, 0)
-
-            if prospec_body.nugget is None:
-
-                position = arbiter.contact_point_set.points[0].point_a
-
-                gold = Gold(position, prospec_body, self.space)
-                self.gold.append(gold)
-
-                prospec_body.nugget = gold
-
-            return True
-
-        gold_dispenser = self.space.add_collision_handler(
-            CollisionTypes.PROSPECTOR, CollisionTypes.WATER
-        )
-
-        gold_dispenser.begin = add_gold
-
-        def handoff_gold_handler(arbiter, space, data):
-            banker, gold = arbiter.shapes[0], arbiter.shapes[1]
-
-            gold_class = None
-            for g in self.gold:
-                if g.id == gold.id:
-                    gold_class = g
-
-            if gold_class.parent_body.sprite_type == "prospector":
-
-                banker_body = banker.body
-
-                normal = arbiter.contact_point_set.normal
-
-                corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
-
-                if (
-                    corrected - const.BANKER_HANDOFF_TOLERANCE
-                    <= normal.angle
-                    <= corrected + const.BANKER_HANDOFF_TOLERANCE
-                ):
-
-                    gold_class.parent_body.nugget = None
-
-                    gold_class.parent_body = banker_body
-                    banker_body.nugget = gold_class
-                    banker_body.nugget_offset = normal.angle
-
-            return True
-
-        handoff_gold = self.space.add_collision_handler(
-            CollisionTypes.BANKER, CollisionTypes.GOLD
-        )
-
-        handoff_gold.begin = handoff_gold_handler
-
-        def gold_score_handler(arbiter, space, data):
-            gold, bank = arbiter.shapes[0], arbiter.shapes[1]
-
-            gold_class = None
-            for g in self.gold:
-                if g.id == gold.id:
-                    gold_class = g
-
-            if gold_class.parent_body.sprite_type == "banker":
-
-                bank.body.score += 1
-
-                self.space.remove(gold, gold.body)
-
-                gold_class.parent_body.nugget = None
-
-                # total_score = ", ".join(
-                #     [
-                #         "Chest %d: %d" % (i, c.body.score)
-                #         for i, c in enumerate(self.chests)
-                #     ]
-                # )
-
-                # print(total_score)
-
-                self.gold.remove(gold_class)
-                self.all_sprites.remove(gold_class)
-
-            return False
-
-        gold_score = self.space.add_collision_handler(
-            CollisionTypes.GOLD, CollisionTypes.BANK
-        )
-
-        gold_score.begin = gold_score_handler
-
-    def run(self):
-        while not self.done:
-            for event in pg.event.get():
-                if event.type == locals.QUIT or (
-                    event.type == locals.KEYDOWN and event.key in [locals.K_ESCAPE]
-                ):
-                    self.done = True
-
-            self.dt = self.clock.tick(15)
-
-            self.space.step(1 / 15)
-            self.all_sprites.update(pg.key.get_pressed())
-
-            self.draw()
-
-    def draw(self):
-        # self.screen.fill(BACKGROUND_COLOR)
-        # self.background.blit(self.screen)
-        self.screen.blit(self.background, self.background_rect)
-        self.all_sprites.draw(self.screen)
-
-        for p in self.prospectors:
-            if p.body.nugget is not None:
-                p.body.nugget.draw(self.screen)
-
-        for b in self.bankers:
-            if b.body.nugget is not None:
-                b.body.nugget.draw(self.screen)
-
-        pg.display.flip()
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    # env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, 0, "setting action to 0")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
 
 
-class env(AECEnv):
+class raw_env(AECEnv):
     def __init__(
         self,
         ind_reward=0.8,
@@ -590,7 +322,10 @@ class env(AECEnv):
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
         max_frames=900,
+        seed=None,
     ):
+        random.seed(seed)
+
         if ind_reward + group_reward + other_group_reward != 1.0:
             raise ValueError(
                 "Individual reward, group reward, and other group reward should "
@@ -610,12 +345,15 @@ class env(AECEnv):
         self.rendering = False
         self.max_frames = max_frames
         self.frame = 0
+        print('Frame:', self.frame)
 
         # TODO: Setup game data here
         pg.init()
-        self.screen = pg.display.set_mode(const.SCREEN_SIZE)
+        # self.screen = pg.display.set_mode(const.SCREEN_SIZE)
+        self.screen = pg.Surface(const.SCREEN_SIZE)
         self.clock = pg.time.Clock()
         self.done = False
+        self.closed = False
 
         self.background = utils.load_image(["background-debris.png"])
         self.background_rect = pg.Rect(0, 0, *const.SCREEN_SIZE)
@@ -628,40 +366,56 @@ class env(AECEnv):
         self.gold = []
 
         # Generate random positions for each prospector agent
-        prospector_info = [(i, utils.rand_pos("prospector")) for i in range(const.NUM_PROSPECTORS)]
-        self.prospectors = []
+        prospector_info = [
+            (i, utils.rand_pos("prospector")) for i in range(const.NUM_PROSPECTORS)
+        ]
+        self.prospectors = {}
         for num, pos in prospector_info:
             prospector = Prospector(pos, self.space, num, self.all_sprites)
-            self.prospectors.append(prospector)
-            self.agents.append(prospector)
+            identifier = f"prospector_{num}"
+            self.prospectors[identifier] = prospector
+            self.agents.append(identifier)
 
         banker_info = [(i, utils.rand_pos("banker")) for i in range(const.NUM_BANKERS)]
-        self.bankers = []
+        self.bankers = {}
         for num, pos in banker_info:
             banker = Banker(pos, self.space, num, self.all_sprites)
-            self.bankers.append(banker)
-            self.agents.append(banker)
+            identifier = f"banker_{num}"
+            self.bankers[identifier] = banker
+            self.agents.append(identifier)
+
+        self.banks = []
+        for pos, verts in const.BANK_INFO:
+            self.banks.append(Bank(pos, verts, self.space, self.all_sprites))
+
+        for w_type, s_pos, b_pos, verts in const.FENCE_INFO:
+            Fence(w_type, s_pos, b_pos, verts, self.space, self.all_sprites)
+
+        Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.all_sprites)
 
         # Create these dictionaries after self.agents is populated
-        self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.metadata = {"render.modes": ["human"]}
 
         # TODO: Setup action spaces
         self.action_spaces = {}
-        for a in self.agents:
-            num_actions = 0
-            vec_size = 0
-            if type(a) is Prospector:
-                # num_actions = 6
-                vec_size = 3
-            else:
-                # num_actions = 4
-                vec_size = 2
-            # self.action_spaces[a] = spaces.Discrete(num_actions + 1)
+        for p in self.prospectors:
+            self.action_spaces[p] = spaces.Box(low=-1, high=1, shape=(3,))
 
-            self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(vec_size,))
+        for b in self.bankers:
+            self.action_spaces[b] = spaces.Box(low=-1, high=1, shape=(2,))
+
+        # for a in self.agents:
+        #     num_actions = 0
+        #     vec_size = 0
+        #     if type(a) is Prospector:
+        #         # num_actions = 6
+        #         vec_size = 3
+        #     else:
+        #         # num_actions = 4
+        #         vec_size = 2
+        #     # self.action_spaces[a] = spaces.Discrete(num_actions + 1)
+
+        #     self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(vec_size,))
 
         # TODO: Setup observation spaces
         self.observation_spaces = {}
@@ -673,19 +427,10 @@ class env(AECEnv):
                 low=0, high=255, shape=const.OBSERVATION_SHAPE
             )
 
-        """ Finish setting up environment agents """
         self.agent_order = self.agents[:]
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.next()
-
-        self.banks = []
-        for pos, verts in const.BANK_INFO:
-            self.banks.append(Bank(pos, verts, self.space, self.all_sprites))
-
-        for w_type, s_pos, b_pos, verts in const.FENCE_INFO:
-            Fence(w_type, s_pos, b_pos, verts, self.space, self.all_sprites)
-
-        Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.all_sprites)
+        self.reset()
 
         # Collision Handler Functions --------------------------------------------
         # Water to Prospector
@@ -699,17 +444,21 @@ class env(AECEnv):
             prospec_body.position = position - (24 * normal)
             prospec_body.velocity = (0, 0)
 
+            prospec_id = None
             prospec_sprite = None
-            for p in self.prospectors:
-                if p.body is prospec_body:
-                    prospec_sprite = p
-            self.rewards[prospec_sprite] += ind_reward * prospec_find_gold_reward
+            for k, v in self.prospectors.items():
+                if v.body is prospec_body:
+                    prospec_id = k
+                    prospec_sprite = v
+                    break
+            self.rewards[prospec_id] += ind_reward * prospec_find_gold_reward
 
-            for a in self.agents:
-                if isinstance(a, Prospector) and a is not prospec_sprite:
-                    self.rewards[a] += group_reward * prospec_find_gold_reward
-                elif isinstance(a, Banker):
-                    self.rewards[a] += other_group_reward * prospec_find_gold_reward
+            for k, v in self.prospectors.items():
+                if v is not prospec_sprite:
+                    self.rewards[k] += group_reward * prospec_find_gold_reward
+
+            for k in self.bankers:
+                self.rewards[k] += other_group_reward * prospec_find_gold_reward
 
             if prospec_body.nugget is None:
                 position = arbiter.contact_point_set.points[0].point_a
@@ -729,51 +478,65 @@ class env(AECEnv):
                 if g.id == gold_shape.id:
                     gold_sprite = g
 
-            if gold_sprite.parent_body.sprite_type == "prospector":
-                banker_body = banker_shape.body
-                prospec_body = gold_sprite.parent_body
+            # if gold_sprite.parent_body.sprite_type == "prospector":
+            if gold_sprite.parent_body.sprite_type != "prospector":
+                return True
 
-                prospec_sprite = None
-                for p in self.prospectors:
-                    if p.body is prospec_body:
-                        prospec_sprite = p
-                self.rewards[prospec_sprite] += prospec_handoff_gold_reward
+            banker_body = banker_shape.body
+            prospec_body = gold_sprite.parent_body
 
-                for a in self.agents:
-                    if isinstance(a, Prospector) and a is not prospec_sprite:
-                        self.rewards[a] += group_reward * prospec_handoff_gold_reward
-                    elif isinstance(a, Banker):
-                        self.rewards[a] += (
-                            other_group_reward * prospec_handoff_gold_reward
-                        )
+            for k, v in self.prospectors.items():
+                if v.body is prospec_body:
+                    prospec_id = k
+                    prospec_sprite = v
+                    break
+            self.rewards[prospec_id] += prospec_handoff_gold_reward
 
-                banker_sprite = None
-                for b in self.bankers:
-                    if b.shape is banker_shape:
-                        banker_sprite = b
-                self.rewards[banker_sprite] += banker_receive_gold_reward
+            for k, v in self.prospectors.items():
+                if v is not prospec_sprite:
+                    self.rewards[k] += group_reward * prospec_handoff_gold_reward
 
-                for a in self.agents:
-                    if isinstance(a, Prospector):
-                        self.rewards[a] += (
-                            other_group_reward * banker_receive_gold_reward
-                        )
-                    elif isinstance(a, Banker) and a is not banker_sprite:
-                        self.rewards[a] += group_reward * banker_receive_gold_reward
+            for k in self.bankers:
+                self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
 
-                normal = arbiter.contact_point_set.normal
-                # Correct the angle because banker's head is rotated pi/2
-                corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
-                if (
-                    corrected - const.BANKER_HANDOFF_TOLERANCE
-                    <= normal.angle
-                    <= corrected + const.BANKER_HANDOFF_TOLERANCE
-                ):
-                    gold_sprite.parent_body.nugget = None
+            for k, v in self.bankers.items():
+                if v.shape is banker_shape:
+                    banker_id = k
+                    banker_sprite = v
+                    break
+            self.rewards[banker_id] += banker_receive_gold_reward
 
-                    gold_sprite.parent_body = banker_body
-                    banker_body.nugget = gold_sprite
-                    banker_body.nugget_offset = normal.angle
+            # for a in self.agents:
+            #     if isinstance(a, Prospector):
+            #         self.rewards[a] += (
+            #             other_group_reward * banker_receive_gold_reward
+            #         )
+            #     elif isinstance(a, Banker) and a is not banker_sprite:
+            #         self.rewards[a] += group_reward * banker_receive_gold_reward
+
+            for k in self.prospectors.items():
+                self.rewards[k] += other_group_reward * banker_receive_gold_reward
+
+            for k, v in self.bankers.items():
+                if v is not banker_sprite:
+                    try:
+                        self.rewards[k] += group_reward * banker_receive_gold_reward
+                    except Exception:
+                        print('Keys:', self.bankers.keys())
+
+            normal = arbiter.contact_point_set.normal
+            # Correct the angle because banker's head is rotated pi/2
+            corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
+            if (
+                corrected - const.BANKER_HANDOFF_TOLERANCE
+                <= normal.angle
+                <= corrected + const.BANKER_HANDOFF_TOLERANCE
+            ):
+                gold_sprite.parent_body.nugget = None
+
+                gold_sprite.parent_body = banker_body
+                banker_body.nugget = gold_sprite
+                banker_body.nugget_offset = normal.angle
 
             return True
 
@@ -781,7 +544,6 @@ class env(AECEnv):
         def gold_score_handler(arbiter, space, data):
             gold_shape, bank = arbiter.shapes[0], arbiter.shapes[1]
 
-            gold_class = None
             for g in self.gold:
                 if g.id == gold_shape.id:
                     gold_class = g
@@ -792,28 +554,16 @@ class env(AECEnv):
                 gold_class.parent_body.nugget = None
                 banker_body = gold_class.parent_body
 
-                banker_sprite = None
-                for b in self.bankers:
-                    if b.body is banker_body:
-                        banker_sprite = b
-                self.rewards[banker_sprite] += banker_deposit_gold_reward
+                for k, v in self.bankers.items():
+                    if v.body is banker_body:
+                        self.rewards[k] += banker_deposit_gold_reward
+                        # banker_sprite = v
+                    else:
+                        self.rewards[k] += group_reward * banker_deposit_gold_reward
 
-                for a in self.agents:
-                    if isinstance(a, Prospector):
-                        self.rewards[a] += (
-                            other_group_reward * banker_deposit_gold_reward
-                        )
-                    elif isinstance(a, Banker) and a is not banker_sprite:
-                        self.rewards[a] += group_reward * banker_deposit_gold_reward
+                for k in self.prospectors:
+                    self.rewards[k] += other_group_reward * banker_deposit_gold_reward
 
-                # total_score = ", ".join(
-                #     [
-                #         "Bank %d: %d" % (i, c.body.score)
-                #         for i, c in enumerate(self.bank)
-                #     ]
-                # )
-
-                # print(total_score)
                 self.gold.remove(gold_class)
                 self.all_sprites.remove(gold_class)
 
@@ -840,32 +590,62 @@ class env(AECEnv):
 
     def observe(self, agent):
         capture = pg.surfarray.array3d(self.screen)
+        # capture = pg.surfarray.pixels3d(self.screen)
         # print(capture.shape)
-        # a = self.agents[agent]
-        ag = None
-        for a in self.agents:
-            if a is agent:
-                ag = a
-        # ag = next((a for a in self.agents if a is agent))
+        if agent in self.prospectors:
+            ag = self.prospectors[agent]
+        else:
+            ag = self.bankers[agent]
 
         assert ag is not None
 
         delta = const.OBSERVATION_SIDE_LENGTH // 2
-        center = ag.center  # Calculated property added to prospector and banker classes
-        x, y = center
-        # print(center)
-        sub_screen = capture[x - delta: x + delta, y - delta: y + delta, :]
+        x, y = ag.center  # Calculated property added to prospector and banker classes
+        sub_screen = np.array(capture[
+            max(0, x - delta): max(0, x + delta), 
+            max(0, y - delta): max(0, y + delta), :])
+
+        s_x, s_y, _ = sub_screen.shape
+        pad_x = const.OBSERVATION_SIDE_LENGTH - s_x
+        if x > const.SCREEN_WIDTH - delta:  # Right side of the screen
+            sub_screen = np.pad(sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode='constant')
+        elif x < 0 + delta:
+            sub_screen = np.pad(sub_screen, pad_width=((pad_x, 0), (0, 0), (0, 0)), mode='constant')
+
+        pad_y = const.OBSERVATION_SIDE_LENGTH - s_y
+        if y > const.SCREEN_HEIGHT - delta:  # Bottom of the screen
+            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode='constant')
+        elif y < 0 + delta:
+            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode='constant')
+
+        # if s_x != sub_screen.shape[0] or s_y != sub_screen.shape[1]:
+        #     print('paddedddddddddddddddddddddddddddddddddddddddddddddddddddddd', pad_x, 'y:', pad_y)
+        #     if pad_x == 150 or pad_y == 150:
+        #         print()
+        #         print('Observation numpy array is only zeroes. Center of agent:', ag.center)
+        #         print('Shape of capture:', capture.shape)
+        #         print('Deltas:', x - delta, x + delta, y - delta, y + delta)
+        #         print('Shape of subscreen:', (s_x, s_y, 0))
+        #         print()
+
         # print(sub_screen.shape)
 
-        self.last_observation = sub_screen
+        self.last_observation[agent] = sub_screen
 
         return sub_screen
 
     def step(self, action, observe=True):
-        agent = self.agent_selection
+        agent_id = self.agent_selection
+
+        if agent_id in self.prospectors:
+            agent = self.prospectors[agent_id]
+        else:
+            agent = self.bankers[agent_id]
+
         # TODO: Figure out rewards
         if action is None:
-            print("Error: NoneType received as action")
+            # print("Error: NoneType received as action")
+            pass
         else:
             agent.update(action)
 
@@ -879,6 +659,7 @@ class env(AECEnv):
             self.space.step(1 / 15)
 
             self.frame += 1
+            print('Frame:', self.frame)
             # If we reached max frames, we're done
             if self.frame == self.max_frames:
                 self.dones = dict(zip(self.agents, [True for _ in self.agents]))
@@ -895,96 +676,69 @@ class env(AECEnv):
     def reward(self):
         return self.rewards
 
-    # TODO: In play_test of api_test.py, the environment is reset after an agent_0
-    #   was picked on line ~270 of api_test.py. Currently, all agents are recreated
-    #   on reset and so the references are not kept the same. Fix this by
-    #   altering how environment is reset (probably just changing the current positions
-    #   and angles of the agent bodies)
     def reset(self, observe=True):
+        self.screen = pg.Surface(const.SCREEN_SIZE)
         self.done = False
         # self.agents = []
-
         # Re-create all agents and Pymunk space
-        self.space = pm.Space()
-        self.space.gravity = Vec2d(0.0, 0.0)
-        self.space.damping = 0.0
+        # self.space = pm.Space()
+        # self.space.gravity = Vec2d(0.0, 0.0)
+        # self.space.damping = 0.0
+        # self.all_sprites = pg.sprite.Group()
+        # self.gold = []
 
-        self.all_sprites = pg.sprite.Group()
-        self.gold = []
-
-        # prospector_info = [(i, utils.rand_pos("prospector")) for i in range(const.NUM_PROSPECTORS)]
-        # self.prospectors = []
-        # for num, pos in prospector_info:
-        #     prospector = Prospector(pos, self.space, num, self.all_sprites)
-        #     self.prospectors.append(prospector)
-        #     self.agents.append(prospector)
-        for p in self.prospectors:
+        for p in self.prospectors.values():
             p.reset(utils.rand_pos("prospector"))
 
-        for b in self.bankers:
+        for b in self.bankers.values():
             b.reset(utils.rand_pos("banker"))
-
-        # banker_info = [(i, utils.rand_pos("banker")) for i in range(const.NUM_BANKERS)]
-        # self.bankers = []
-        # for num, pos in banker_info:
-        #     banker = Banker(pos, self.space, num, self.all_sprites)
-        #     self.bankers.append(banker)
-        #     self.agents.append(banker)
-
-        self.banks = []
-        for pos, verts in const.BANK_INFO:
-            self.banks.append(Bank(pos, verts, self.space, self.all_sprites))
-
-        for w_type, s_pos, b_pos, verts in const.FENCE_INFO:
-            Fence(w_type, s_pos, b_pos, verts, self.space, self.all_sprites)
-
-        Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.all_sprites)
 
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
         self.metadata = {"render.modes": ["human"]}
-
         self.rendering = False
         self.frame = 0
-        
+
         self.agent_order = self.agents[:]
         self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.next()
-
-        self.action_spaces = {}
-        for a in self.agents:
-            num_actions = 0
-            vec_size = 0
-            if type(a) is Prospector:
-                # num_actions = 6
-                vec_size = 3
-            else:
-                # num_actions = 4
-                vec_size = 2
-            # self.action_spaces[a] = spaces.Discrete(num_actions + 1)
-
-            self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(vec_size,))
-
-        self.observation_spaces = {}
-        self.last_observation = {}
-        for a in self.agents:
-            self.last_observation[a] = None
-            # low, high for RGB values
-            self.observation_spaces[a] = spaces.Box(
-                low=0, high=255, shape=const.OBSERVATION_SHAPE
-            )
-
+        self.draw()
         if observe:
             return self.observe(self.agent_selection)
 
     def render(self, mode="human"):
         if not self.rendering:
             pg.display.init()
+            old_screen = self.screen
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
+            self.screen.blit(old_screen, (0, 0))
             self.rendering = True
         self.draw()
         pg.display.flip()
+
+    def draw(self):
+        self.screen.blit(self.background, self.background_rect)
+        self.all_sprites.draw(self.screen)
+        # for p in self.prospectors.values():
+        #     print('Prospector center:', p.center)
+
+        for p in self.prospectors.values():
+            if p.body.nugget is not None:
+                p.body.nugget.draw(self.screen)
+
+        for b in self.bankers.values():
+            if b.body.nugget is not None:
+                b.body.nugget.draw(self.screen)
+
+    def close(self):
+        if not self.closed:
+            self.closed = True
+            if self.rendering:
+                pg.event.pump()
+                pg.display.quit()
+            pg.quit()
+
 
 # class env(gym.Env):
 #     def __init__(self):
@@ -1111,11 +865,5 @@ class env(AECEnv):
 #         pg.event.pump()
 #         pg.display.quit()
 #         pg.quit()
-
-
-if __name__ == "__main__":
-    pg.init()
-    game = Game()
-    game.run()
 
 # Except for the gold png images, all other sprite art was created by Yashas Lokesh
