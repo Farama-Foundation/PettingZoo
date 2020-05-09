@@ -124,7 +124,7 @@ Leaderboard:
 *AEC diagram*
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them. 
-Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. If the ball moves to the left, a positive global reward is applied. If the ball moves to the right then a negative global reward is applied. Additionally, pistons that are within a radius of the ball are given a local reward.
+Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
 
 Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.
 
@@ -169,9 +169,9 @@ Continuous Leaderboard:
 
 ### Prison
 
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3)     | (0, 255)           | ?          |
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape    | Observation Values     | Num States |
+|---------|--------|----------------|--------------|---------------|----------------------|------------------------|------------|
+| Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3) or (1,)| (0, 255) or (-300, 300)| ?          |
 
 `from pettingzoo.gamma import prison_v0`
 
@@ -182,6 +182,10 @@ Continuous Leaderboard:
 *AEC diagram*
 
 In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task, this is an environment primarily intended for debugging purposes- it's multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible, it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of it's cell instead of the normal graphical output.
+
+Manual Control:
+
+Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left with 'J' and right with 'K'.
 
 Arguments:
 
