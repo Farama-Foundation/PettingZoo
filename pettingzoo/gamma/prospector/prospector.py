@@ -353,12 +353,9 @@ class raw_env(AECEnv):
         self.rendering = False
         self.max_frames = max_frames
         self.frame = 0
-        # print('Frame:', self.frame)
 
-        # TODO: Setup game data here
         pg.init()
         self.rng, seed = seeding.np_random(seed)
-        # self.screen = pg.display.set_mode(const.SCREEN_SIZE)
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.clock = pg.time.Clock()
         self.done = False
@@ -366,6 +363,7 @@ class raw_env(AECEnv):
 
         self.background = utils.load_image(["background-debris.png"])
         self.background_rect = pg.Rect(0, 0, *const.SCREEN_SIZE)
+        self.screen.blit(self.background, self.background_rect)
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
@@ -403,16 +401,14 @@ class raw_env(AECEnv):
 
         Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.all_sprites)
 
-        # Create these dictionaries after self.agents is populated
         self.metadata = {"render.modes": ["human"]}
 
-        # TODO: Setup action spaces
         self.action_spaces = {}
         for p in self.prospectors:
-            self.action_spaces[p] = spaces.Box(low=-1, high=1, shape=(3,))
+            self.action_spaces[p] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
 
         for b in self.bankers:
-            self.action_spaces[b] = spaces.Box(low=-1, high=1, shape=(3,))
+            self.action_spaces[b] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
 
         self.observation_spaces = {}
         self.last_observation = {}
@@ -420,7 +416,7 @@ class raw_env(AECEnv):
             self.last_observation[a] = None
             # low, high for RGB values
             self.observation_spaces[a] = spaces.Box(
-                low=0, high=255, shape=const.OBSERVATION_SHAPE
+                low=0, high=255, shape=const.OBSERVATION_SHAPE, dtype=np.uint8
             )
 
         self.agent_order = self.agents[:]
@@ -528,7 +524,6 @@ class raw_env(AECEnv):
                     self.rewards[k] += other_group_reward * banker_deposit_gold_reward
 
                 self.gold.remove(gold_class)
-                self.gold.kill()
                 self.all_sprites.remove(gold_class)
 
             return False
@@ -553,9 +548,7 @@ class raw_env(AECEnv):
         gold_score.begin = gold_score_handler
 
     def observe(self, agent):
-        capture = pg.surfarray.array3d(self.screen)
-        # capture = pg.surfarray.pixels3d(self.screen)
-        # print(capture.shape)
+        capture = pg.surfarray.pixels3d(self.screen)
         if agent in self.prospectors:
             ag = self.prospectors[agent]
         else:
@@ -567,7 +560,7 @@ class raw_env(AECEnv):
         x, y = ag.center  # Calculated property added to prospector and banker classes
         sub_screen = np.array(capture[
             max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
-            max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :])
+            max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :], dtype=np.uint8)
 
         s_x, s_y, _ = sub_screen.shape
         pad_x = const.OBSERVATION_SIDE_LENGTH - s_x
@@ -605,12 +598,13 @@ class raw_env(AECEnv):
                 self.clock.tick()
             self.space.step(1 / const.FPS)
 
+            self.draw()
+
             self.frame += 1
             # If we reached max frames, we're done
             if self.frame == self.max_frames:
                 self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
-        self.draw()
         if self.rendering:
             pg.event.pump()
 
@@ -624,14 +618,8 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.screen = pg.Surface(const.SCREEN_SIZE)
+        self.screen.blit(self.background, self.background_rect)
         self.done = False
-        # self.agents = []
-        # Re-create all agents and Pymunk space
-        # self.space = pm.Space()
-        # self.space.gravity = Vec2d(0.0, 0.0)
-        # self.space.damping = 0.0
-        # self.all_sprites = pg.sprite.Group()
-        # self.gold = []
 
         for p in self.prospectors.values():
             p.reset(utils.rand_pos("prospector", self.rng))
@@ -656,10 +644,9 @@ class raw_env(AECEnv):
     def render(self, mode="human"):
         if not self.rendering:
             pg.display.init()
-            old_screen = self.screen
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
-            self.screen.blit(old_screen, (0, 0))
             self.background = self.background.convert_alpha()
+            self.screen.blit(self.background, self.background_rect)
             for s in self.all_sprites.sprites():
                 s.convert_img()
             self.rendering = True
@@ -668,15 +655,7 @@ class raw_env(AECEnv):
 
     def draw(self):
         self.screen.blit(self.background, self.background_rect)
-        self.rects = self.all_sprites.draw(self.screen)
-
-        # for p in self.prospectors.values():
-        #     if p.body.nugget is not None:
-        #         p.body.nugget.draw(self.screen)
-
-        # for b in self.bankers.values():
-        #     if b.body.nugget is not None:
-        #         b.body.nugget.draw(self.screen)
+        self.all_sprites.draw(self.screen)
 
     def close(self):
         if not self.closed:
