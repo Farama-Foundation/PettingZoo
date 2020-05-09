@@ -36,7 +36,7 @@ if env_id in all_environments:
     if manual_control:
         manual_control_fn = getattr(env_module, "manual_control", None)
         if manual_control_fn is not None:
-            test_manual_control(manual_control_fn)
+            test_manual_control.test_manual_control(manual_control_fn)
 
     if performance:
         _env = env_module.env()
