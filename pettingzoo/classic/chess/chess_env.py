@@ -37,7 +37,7 @@ class raw_env(AECEnv):
 
         self.rewards = None
         self.dones = None
-        self.infos = None
+        self.infos = {name: {} for name in self.agents}
 
         self.agent_selection = None
 

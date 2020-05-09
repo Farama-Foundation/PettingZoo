@@ -31,7 +31,12 @@ class BaseWrapper(AECEnv):
 
         # self.rewards = self.env.rewards
         # self.dones = self.env.dones
-        # self.infos = self.env.infos
+
+        # we don't want to care one way or the other whether environments have an infos or not before reset
+        try:
+            self.infos = self.env.infos
+        except AttributeError:
+            pass
 
         # self.agent_order = self.env.agent_order
 
@@ -213,12 +218,15 @@ class OrderEnforcingWrapper(BaseWrapper):
     def step(self, action, observe=True):
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
-        if self.dones[self.agent_selection]:
+        elif self.dones[self.agent_selection]:
             EnvLogger.warn_step_after_done()
+            self.dones = {agent: True for agent in self.dones}
+            self.rewards = {agent: 0 for agent in self.rewards}
+            return super().observe(observe)
+        else:
+            return super().step(action, observe)
 
-        return super().step(action, observe)
-
-    def observe(self, observe=True):
+    def observe(self, agent):
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(observe)
