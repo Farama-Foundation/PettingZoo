@@ -12,4 +12,4 @@ def test_module(env_module):
     api_test.api_test(_env)
 
     seed_test(env_module.env)
-    error_test(env_module.env())
+    # error_test(env_module.env())
