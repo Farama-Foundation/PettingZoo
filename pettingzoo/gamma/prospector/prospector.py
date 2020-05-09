@@ -97,6 +97,9 @@ class Prospector(pg.sprite.Sprite):
 
         self.body.velocity = curr_vel
 
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
+
     def __str__(self):
         return "prospector_%s" % self.id
 
@@ -171,6 +174,9 @@ class Banker(pg.sprite.Sprite):
 
         self.body.velocity = curr_vel
 
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
+
     def __str__(self):
         return "banker_%s" % self.id
 
@@ -207,6 +213,9 @@ class Fence(pg.sprite.Sprite):
         self.body.position = utils.flipy(body_pos)
         space.add(self.shape)
 
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
+
 
 class Water(pg.sprite.Sprite):
     def __init__(self, pos, verts, space, *sprite_groups):
@@ -231,6 +240,9 @@ class Water(pg.sprite.Sprite):
         self.space = space
         self.space.add(self.shape)
 
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
+
 
 class Bank(pg.sprite.Sprite):
     def __init__(self, pos, verts, space, *sprite_groups):
@@ -241,7 +253,6 @@ class Bank(pg.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
 
         self.body = pm.Body(body_type=pm.Body.STATIC)
-        self.body.score = 0
 
         invert_verts = utils.invert_y(verts)
         self.shape = pm.Poly(self.body, invert_verts)
@@ -251,8 +262,8 @@ class Bank(pg.sprite.Sprite):
         self.space = space
         self.space.add(self.shape, self.body)
 
-    def __str__(self):
-        return str(self.body.score)
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
 
 
 class Gold(pg.sprite.Sprite):
@@ -298,14 +309,14 @@ class Gold(pg.sprite.Sprite):
         )
         self.rect = self.image.get_rect(center=self.rect.center)
 
-    def draw(self, surf):
-        surf.blit(self.image, self.rect)
+    def convert_img(self):
+        self.image = self.image.convert_alpha()
 
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    # env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, 0, "setting action to 0")
+    env = wrappers.ClipOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, [0, 0, 0], "setting action to 0")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -360,7 +371,8 @@ class raw_env(AECEnv):
         self.space.gravity = Vec2d(0.0, 0.0)
         self.space.damping = 0.0
 
-        self.all_sprites = pg.sprite.Group()
+        # self.all_sprites = pg.sprite.Group()
+        self.all_sprites = pg.sprite.RenderUpdates()
         self.gold = []
 
         # Generate random positions for each prospector agent
@@ -400,7 +412,7 @@ class raw_env(AECEnv):
             self.action_spaces[p] = spaces.Box(low=-1, high=1, shape=(3,))
 
         for b in self.bankers:
-            self.action_spaces[b] = spaces.Box(low=-1, high=1, shape=(2,))
+            self.action_spaces[b] = spaces.Box(low=-1, high=1, shape=(3,))
 
         self.observation_spaces = {}
         self.last_observation = {}
@@ -432,7 +444,7 @@ class raw_env(AECEnv):
                 if v.body is prospec_body:
                     self.rewards[k] += ind_reward * prospec_find_gold_reward
                 else:
-                    self.rewards[k] += group_reward * prospec_find_gold_reward     
+                    self.rewards[k] += group_reward * prospec_find_gold_reward
 
             for k in self.bankers:
                 self.rewards[k] += other_group_reward * prospec_find_gold_reward
@@ -440,7 +452,7 @@ class raw_env(AECEnv):
             if prospec_body.nugget is None:
                 position = arbiter.contact_point_set.points[0].point_a
 
-                gold = Gold(position, prospec_body, self.space)
+                gold = Gold(position, prospec_body, self.space, self.all_sprites)
                 self.gold.append(gold)
                 prospec_body.nugget = gold
 
@@ -494,14 +506,13 @@ class raw_env(AECEnv):
 
         # Banker to bank
         def gold_score_handler(arbiter, space, data):
-            gold_shape, bank = arbiter.shapes[0], arbiter.shapes[1]
+            gold_shape, _ = arbiter.shapes[0], arbiter.shapes[1]
 
             for g in self.gold:
                 if g.id == gold_shape.id:
                     gold_class = g
 
             if gold_class.parent_body.sprite_type == "banker":
-                bank.body.score += 1
                 self.space.remove(gold_shape, gold_shape.body)
                 gold_class.parent_body.nugget = None
                 banker_body = gold_class.parent_body
@@ -517,6 +528,7 @@ class raw_env(AECEnv):
                     self.rewards[k] += other_group_reward * banker_deposit_gold_reward
 
                 self.gold.remove(gold_class)
+                self.gold.kill()
                 self.all_sprites.remove(gold_class)
 
             return False
@@ -554,8 +566,8 @@ class raw_env(AECEnv):
         delta = const.OBSERVATION_SIDE_LENGTH // 2
         x, y = ag.center  # Calculated property added to prospector and banker classes
         sub_screen = np.array(capture[
-            max(0, x - delta): max(0, x + delta), 
-            max(0, y - delta): max(0, y + delta), :])
+            max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
+            max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :])
 
         s_x, s_y, _ = sub_screen.shape
         pad_x = const.OBSERVATION_SIDE_LENGTH - s_x
@@ -570,18 +582,6 @@ class raw_env(AECEnv):
         elif y < 0 + delta:
             sub_screen = np.pad(sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode='constant')
 
-        # if s_x != sub_screen.shape[0] or s_y != sub_screen.shape[1]:
-        #     print('paddedddddddddddddddddddddddddddddddddddddddddddddddddddddd', pad_x, 'y:', pad_y)
-        #     if pad_x == 150 or pad_y == 150:
-        #         print()
-        #         print('Observation numpy array is only zeroes. Center of agent:', ag.center)
-        #         print('Shape of capture:', capture.shape)
-        #         print('Deltas:', x - delta, x + delta, y - delta, y + delta)
-        #         print('Shape of subscreen:', (s_x, s_y, 0))
-        #         print()
-
-        # print(sub_screen.shape)
-
         self.last_observation[agent] = sub_screen
 
         return sub_screen
@@ -594,12 +594,7 @@ class raw_env(AECEnv):
         else:
             agent = self.bankers[agent_id]
 
-        # TODO: Figure out rewards
-        if action is None:
-            # print("Error: NoneType received as action")
-            pass
-        else:
-            agent.update(action)
+        agent.update(action)
 
         all_agents_updated = self._agent_selector.is_last()
         # Only take next step in game if all agents have received an action
@@ -608,10 +603,9 @@ class raw_env(AECEnv):
                 self.clock.tick(const.FPS)
             else:
                 self.clock.tick()
-            self.space.step(1 / 15)
+            self.space.step(1 / const.FPS)
 
             self.frame += 1
-            print('Frame:', self.frame)
             # If we reached max frames, we're done
             if self.frame == self.max_frames:
                 self.dones = dict(zip(self.agents, [True for _ in self.agents]))
@@ -665,23 +659,24 @@ class raw_env(AECEnv):
             old_screen = self.screen
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
             self.screen.blit(old_screen, (0, 0))
+            self.background = self.background.convert_alpha()
+            for s in self.all_sprites.sprites():
+                s.convert_img()
             self.rendering = True
         self.draw()
         pg.display.flip()
 
     def draw(self):
         self.screen.blit(self.background, self.background_rect)
-        self.all_sprites.draw(self.screen)
+        self.rects = self.all_sprites.draw(self.screen)
+
         # for p in self.prospectors.values():
-        #     print('Prospector center:', p.center)
+        #     if p.body.nugget is not None:
+        #         p.body.nugget.draw(self.screen)
 
-        for p in self.prospectors.values():
-            if p.body.nugget is not None:
-                p.body.nugget.draw(self.screen)
-
-        for b in self.bankers.values():
-            if b.body.nugget is not None:
-                b.body.nugget.draw(self.screen)
+        # for b in self.bankers.values():
+        #     if b.body.nugget is not None:
+        #         b.body.nugget.draw(self.screen)
 
     def close(self):
         if not self.closed:

@@ -8,12 +8,12 @@ def manual_control(**kwargs):
 
     env = _env(**kwargs)
     env.reset()
-    default_scalar = 5.0
+    default_scalar = 0.8
 
     while True:
         agent_actions = np.array(
             [[0, 0, 0] for _ in range(const.NUM_PROSPECTORS)]
-            + [[0, 0] for _ in range(const.NUM_BANKERS)]
+            + [[0, 0, 0] for _ in range(const.NUM_BANKERS)]
         )
         num_actions = 0
         agent = 0
