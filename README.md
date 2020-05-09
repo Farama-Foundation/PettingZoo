@@ -180,13 +180,12 @@ Our cooperative games have leaderboards for best total (summed over all agents) 
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/checkers (Ben)
-* classic/go (Luis)
+* classic/backgammon (Caroline)
+* classic/checkers (Caroline)
 * classic/hanabi (Clemens)
 * gamma/prospector (Yashas)
 * magent/* (Mario)
 * robotics/* (Yiling)
-* classic/backgammon (Caroline)
 
 Development has not yet started on:
 
