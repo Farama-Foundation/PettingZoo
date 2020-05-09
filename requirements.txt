@@ -1,10 +1,10 @@
-gym>=0.15.4
+gym>=0.17.2
 pygame==2.0.0.dev6
 scikit-image>=0.16.2
 numpy>=1.18.0
 pymunk>=5.6.0
 gym[box2d]>=0.15.4
 python-chess
-rlcard >= 0.1.14
+rlcard >= 0.2.1
 pynput
 opencv-python
