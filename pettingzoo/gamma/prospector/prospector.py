@@ -1,8 +1,8 @@
 import pygame as pg
-import pygame.locals as locals
 import pymunk as pm
 from pymunk import Vec2d
 from gym import spaces
+from gym.utils import seeding
 import numpy as np
 
 from pettingzoo import AECEnv
@@ -16,7 +16,6 @@ import math
 import os
 from enum import IntEnum, auto
 import itertools as it
-import random
 
 
 class CollisionTypes(IntEnum):
@@ -324,8 +323,6 @@ class raw_env(AECEnv):
         max_frames=900,
         seed=None,
     ):
-        random.seed(seed)
-
         if ind_reward + group_reward + other_group_reward != 1.0:
             raise ValueError(
                 "Individual reward, group reward, and other group reward should "
@@ -345,10 +342,11 @@ class raw_env(AECEnv):
         self.rendering = False
         self.max_frames = max_frames
         self.frame = 0
-        print('Frame:', self.frame)
+        # print('Frame:', self.frame)
 
         # TODO: Setup game data here
         pg.init()
+        self.rng, seed = seeding.np_random(seed)
         # self.screen = pg.display.set_mode(const.SCREEN_SIZE)
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.clock = pg.time.Clock()
@@ -367,7 +365,7 @@ class raw_env(AECEnv):
 
         # Generate random positions for each prospector agent
         prospector_info = [
-            (i, utils.rand_pos("prospector")) for i in range(const.NUM_PROSPECTORS)
+            (i, utils.rand_pos("prospector", self.rng)) for i in range(const.NUM_PROSPECTORS)
         ]
         self.prospectors = {}
         for num, pos in prospector_info:
@@ -376,7 +374,7 @@ class raw_env(AECEnv):
             self.prospectors[identifier] = prospector
             self.agents.append(identifier)
 
-        banker_info = [(i, utils.rand_pos("banker")) for i in range(const.NUM_BANKERS)]
+        banker_info = [(i, utils.rand_pos("banker", self.rng)) for i in range(const.NUM_BANKERS)]
         self.bankers = {}
         for num, pos in banker_info:
             banker = Banker(pos, self.space, num, self.all_sprites)
@@ -404,20 +402,6 @@ class raw_env(AECEnv):
         for b in self.bankers:
             self.action_spaces[b] = spaces.Box(low=-1, high=1, shape=(2,))
 
-        # for a in self.agents:
-        #     num_actions = 0
-        #     vec_size = 0
-        #     if type(a) is Prospector:
-        #         # num_actions = 6
-        #         vec_size = 3
-        #     else:
-        #         # num_actions = 4
-        #         vec_size = 2
-        #     # self.action_spaces[a] = spaces.Discrete(num_actions + 1)
-
-        #     self.action_spaces[a] = spaces.Box(low=-1, high=1, shape=(vec_size,))
-
-        # TODO: Setup observation spaces
         self.observation_spaces = {}
         self.last_observation = {}
         for a in self.agents:
@@ -444,18 +428,11 @@ class raw_env(AECEnv):
             prospec_body.position = position - (24 * normal)
             prospec_body.velocity = (0, 0)
 
-            prospec_id = None
-            prospec_sprite = None
             for k, v in self.prospectors.items():
                 if v.body is prospec_body:
-                    prospec_id = k
-                    prospec_sprite = v
-                    break
-            self.rewards[prospec_id] += ind_reward * prospec_find_gold_reward
-
-            for k, v in self.prospectors.items():
-                if v is not prospec_sprite:
-                    self.rewards[k] += group_reward * prospec_find_gold_reward
+                    self.rewards[k] += ind_reward * prospec_find_gold_reward
+                else:
+                    self.rewards[k] += group_reward * prospec_find_gold_reward     
 
             for k in self.bankers:
                 self.rewards[k] += other_group_reward * prospec_find_gold_reward
@@ -478,7 +455,7 @@ class raw_env(AECEnv):
                 if g.id == gold_shape.id:
                     gold_sprite = g
 
-            # if gold_sprite.parent_body.sprite_type == "prospector":
+            # This collision handler is only for prospector -> banker gold handoffs
             if gold_sprite.parent_body.sprite_type != "prospector":
                 return True
 
@@ -486,43 +463,18 @@ class raw_env(AECEnv):
             prospec_body = gold_sprite.parent_body
 
             for k, v in self.prospectors.items():
+                self.rewards[k] += other_group_reward * banker_receive_gold_reward
                 if v.body is prospec_body:
-                    prospec_id = k
-                    prospec_sprite = v
-                    break
-            self.rewards[prospec_id] += prospec_handoff_gold_reward
-
-            for k, v in self.prospectors.items():
-                if v is not prospec_sprite:
+                    self.rewards[k] += prospec_handoff_gold_reward
+                else:
                     self.rewards[k] += group_reward * prospec_handoff_gold_reward
 
-            for k in self.bankers:
+            for k, v in self.bankers.items():
                 self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
-
-            for k, v in self.bankers.items():
-                if v.shape is banker_shape:
-                    banker_id = k
-                    banker_sprite = v
-                    break
-            self.rewards[banker_id] += banker_receive_gold_reward
-
-            # for a in self.agents:
-            #     if isinstance(a, Prospector):
-            #         self.rewards[a] += (
-            #             other_group_reward * banker_receive_gold_reward
-            #         )
-            #     elif isinstance(a, Banker) and a is not banker_sprite:
-            #         self.rewards[a] += group_reward * banker_receive_gold_reward
-
-            for k in self.prospectors.items():
-                self.rewards[k] += other_group_reward * banker_receive_gold_reward
-
-            for k, v in self.bankers.items():
-                if v is not banker_sprite:
-                    try:
-                        self.rewards[k] += group_reward * banker_receive_gold_reward
-                    except Exception:
-                        print('Keys:', self.bankers.keys())
+                if v.body is banker_body:
+                    self.rewards[k] += banker_receive_gold_reward
+                else:
+                    self.rewards[k] += group_reward * banker_receive_gold_reward
 
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
@@ -688,14 +640,14 @@ class raw_env(AECEnv):
         # self.gold = []
 
         for p in self.prospectors.values():
-            p.reset(utils.rand_pos("prospector"))
+            p.reset(utils.rand_pos("prospector", self.rng))
 
         for b in self.bankers.values():
-            b.reset(utils.rand_pos("banker"))
+            b.reset(utils.rand_pos("banker", self.rng))
 
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [[] for _ in self.agents]))
+        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.metadata = {"render.modes": ["human"]}
         self.rendering = False
         self.frame = 0
