@@ -16,6 +16,7 @@ from pettingzoo.gamma import knights_archers_zombies_v0
 from pettingzoo.gamma import pistonball_v0
 from pettingzoo.gamma import cooperative_pong_v0
 from pettingzoo.gamma import prison_v0
+from pettingzoo.gamma import prospector_v0
 
 from pettingzoo.mpe import simple_adversary_v0
 from pettingzoo.mpe import simple_crypto_v0
@@ -50,6 +51,7 @@ all_environments = {
     "gamma/pistonball": pistonball_v0,
     "gamma/cooperative_pong": cooperative_pong_v0,
     "gamma/prison": prison_v0,
+    "gamma/prospector": prospector_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,
