@@ -222,7 +222,7 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.warn_step_after_done()
             self.dones = {agent: True for agent in self.dones}
             self.rewards = {agent: 0 for agent in self.rewards}
-            return super().observe(action)
+            return super().observe(action) if observe else None
         else:
             return super().step(action, observe)
 
