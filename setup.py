@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='PettingZoo',
-    version="0.1.4",
+    version="0.1.5",
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
@@ -26,7 +26,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        "gym>=0.15.4",
+        "gym>=0.17.2",
         "pygame==2.0.0.dev6",
         "scikit-image>=0.16.2",
         "numpy>=1.18.0",

@@ -25,7 +25,7 @@ if env_id in all_environments:
     api_test.api_test(_env, render=render)
 
     seed_test(env_module.env)
-    error_test(env_module.env())
+    # error_test(env_module.env())
 
     if save_obs:
         test_save_obs(_env)
@@ -36,7 +36,7 @@ if env_id in all_environments:
     if manual_control:
         manual_control_fn = getattr(env_module, "manual_control", None)
         if manual_control_fn is not None:
-            test_manual_control(manual_control_fn)
+            test_manual_control.test_manual_control(manual_control_fn)
 
     if performance:
         _env = env_module.env()

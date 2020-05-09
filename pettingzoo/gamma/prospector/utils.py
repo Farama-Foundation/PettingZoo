@@ -2,14 +2,15 @@ import pygame as pg
 from pymunk import Vec2d
 
 import os
-from random import randint
 import math
 
 from . import constants as const
 
+
 def load_image(path: list) -> pg.Surface:  # All images stored in data/
-    img = pg.image.load(os.path.join("data", *path))
-    img = img.convert_alpha()
+    cwd = os.path.dirname(__file__)
+    img = pg.image.load(os.path.join(cwd, "data", *path))
+    # img = img.convert_alpha()
     return img
 
 
@@ -22,12 +23,12 @@ def invert_y(points):
     return [(x, -y) for x, y in points]
 
 
-def rand_pos(sprite):
-    x = randint(100, const.SCREEN_WIDTH - 100)
+def rand_pos(sprite, rng):
+    x = rng.randint(100, const.SCREEN_WIDTH - 100)
     if sprite == "banker":
-        return x, randint(150, 300)
+        return x, rng.randint(150, 300)
     elif sprite == "prospector":
-        return x, randint(350, const.SCREEN_HEIGHT - (const.WATER_HEIGHT + 30))
+        return x, rng.randint(350, const.SCREEN_HEIGHT - (const.WATER_HEIGHT + 30))
 
 
 def normalize_angle(angle):
