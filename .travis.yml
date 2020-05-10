@@ -1,13 +1,26 @@
 language: python
-python:
-  - "3.6"
-  - "3.7"
-  - "3.8"
 
-os:
-  - osx
-  - linux
-  
+jobs:
+  include:
+    - name: "Python 3.6 on Linux"
+      python: 3.6
+    - name: "Python 3.7 on Linux"
+      python: 3.7
+    - name: "Python 3.8 on Linux"
+      python: 3.8
+    - name: "Python 3.8 on macOS"
+      os: osx
+      osx_image: xcode11.4
+      language: shell
+    - name: "Python 3.7 on macOS"
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+    - name: "Python 3.6 on macOS"
+      os: osx
+      osx_image: xcode9.4
+      language: shell
+
 before_install:
   - pip install flake8
 
