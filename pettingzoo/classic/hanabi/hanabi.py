@@ -2,14 +2,25 @@ from typing import Optional, Dict, List, Union
 import numpy as np
 from gym import spaces
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
+from pettingzoo.utils import agent_selector, wrappers
+from gym.utils import seeding
 
 """
 Wrapper class around google deepmind's hanabi.
 """
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    player_losing_reward = -3
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=player_losing_reward)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
     metadata = {'render.modes': ['human']}
@@ -35,22 +46,22 @@ class env(AECEnv):
                  max_information_tokens: int = 8,
                  max_life_tokens: int = 3,
                  observation_type: int = 1,
-                 seed: int = 1,
+                 seed=None,
                  random_start_player: bool = False,
                  ):
 
         """
         Parameter descriptions :
-              - colors: int, Number of colors \in [2,5].
-              - ranks: int, Number of ranks \in [2,5].
-              - players: int, Number of players \in [2,5].
-              - hand_size: int, Hand size \in [2,5].
+              - colors: int, Number of colors in [2,5].
+              - ranks: int, Number of ranks in [2,5].
+              - players: int, Number of players in [2,5].
+              - hand_size: int, Hand size in [2,5].
               - max_information_tokens: int, Number of information tokens (>=0).
               - max_life_tokens: int, Number of life tokens (>=1).
               - observation_type: int.
                     0: Minimal observation.
                     1: First-order common knowledge observation.
-              - seed: int, Random seed.
+              - seed: int, Random seed or None.
               - random_start_player: bool, Random start player.
 
         Common game configurations:
@@ -82,16 +93,18 @@ class env(AECEnv):
 
         """
 
-        super(env, self).__init__()
+        super().__init__()
+
+        seed = seeding.create_seed(seed, max_bytes=3)
 
         # importing Hanabi and throw error message if pypi package is not installed correctly.
         try:
             from hanabi_learning_environment.rl_env import HanabiEnv, make
 
         except ModuleNotFoundError:
-            print("Hanabi is not installed." +
-                  "Run ´pip3 install hanabi_learning_environment´ from within your project environment." +
-                  "Consult hanabi/README.md for detailed information.")
+            print("Hanabi is not installed."
+                  + "Run ´pip3 install hanabi_learning_environment´ from within your project environment."
+                  + "Consult hanabi/README.md for detailed information.")
 
         else:
 
@@ -106,7 +119,6 @@ class env(AECEnv):
                                                             observation_type,
                                                             random_start_player)
 
-
             self.hanabi_env: HanabiEnv = HanabiEnv(config={'colors': colors,
                                                            'ranks': ranks,
                                                            'players': players,
@@ -116,7 +128,6 @@ class env(AECEnv):
                                                            'observation_type': observation_type,
                                                            'random_start_player': random_start_player,
                                                            'seed': seed})
-
 
             # List of agent names
             self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
@@ -130,10 +141,7 @@ class env(AECEnv):
             self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
             self.observation_spaces = {player_name: spaces.Box(low=0,
                                                                high=1,
-                                                               shape=(1,
-                                                                      1,
-                                                                      self.hanabi_env.vectorized_observation_shape()[
-                                                                          0]),
+                                                               shape=(self.hanabi_env.vectorized_observation_shape()[0],),
                                                                dtype=np.float32)
                                        for player_name in self.agents}
 
@@ -247,13 +255,11 @@ class env(AECEnv):
 
             # Return latest observations if specified
             if observe:
-                return self.observe(agent_name=agent_on_turn, as_vector=as_vector)
+                return self.observe(agent_name=agent_on_turn)
 
-    def observe(self, agent_name: str, as_vector: bool = True) -> Union[np.ndarray, List]:
-        if as_vector:
-            return np.array([[self.infos[agent_name]['observations_vectorized']]], np.int32)
-        else:
-            return self.infos[agent_name]['observations']
+    def observe(self, agent_name: str):
+        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32)
+
 
     def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
@@ -263,15 +269,12 @@ class env(AECEnv):
         self.dones = {player_name: done for player_name in self.agents}
 
         # Here we have to deal with the player index with offset = 1
-        self.infos = {player_name: dict(legal_moves=self.latest_observations['player_observations']
-        [int(player_name[-1])]['legal_moves_as_int'],
-                                        legal_moves_as_dict=self.latest_observations['player_observations']
-                                        [int(player_name[-1])]['legal_moves'],
-                                        observations_vectorized=self.latest_observations['player_observations']
-                                        [int(player_name[-1])]['vectorized'],
-                                        observations=self.latest_observations['player_observations']
-                                        [int(player_name[-1])])
-                      for player_name in self.agents}
+        self.infos = {player_name: dict(
+                legal_moves=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves_as_int'],
+                legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
+                observations_vectorized=self.latest_observations['player_observations'][int(player_name[-1])]['vectorized'],
+                observations=self.latest_observations['player_observations'][int(player_name[-1])])
+              for player_name in self.agents}
 
     def render(self, mode='human'):
         """ Supports console print only. Prints the whole status dictionary.
