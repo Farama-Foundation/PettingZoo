@@ -35,6 +35,7 @@ setup(
         "python-chess",
         "rlcard >= 0.1.14",
         "pynput",
-        "opencv-python"
+        "opencv-python",
+        "box2d-py"
     ],
 )
