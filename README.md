@@ -14,9 +14,9 @@ PettingZoo includes the following sets of games:
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-To install a set of games, use `pip3 install pettingzoo[atari]` (or whichever set of games you want).
+To install, use `pip install pettingzoo` 
 
-We support Python 3.5, 3.6, 3.7 and 3.8
+We support Python 3.6, 3.7 and 3.8
 
 
 ## Initializing Environments
@@ -155,7 +155,7 @@ from pettingzoo.utils import random_demo
 random_demo(env)
 ```
 
-### Observation Saver
+### Observation Saving
 
 If the agents in a game make observations that are images, the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no agent is specified, the current selected agent for the environment is chosen. If all_agents is passed in as True, then the observations of all agents in the environment is saved. By default the images are saved to the current working directory, in a folder matching the environment name. The saved image will match the name of the observing agent. If save_dir is passed in, a new folder is created where images will be saved to.
 
@@ -180,14 +180,10 @@ Our cooperative games have leaderboards for best total (summed over all agents) 
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/checkers (Ben)
-* classic/go (Luis)
+* classic/backgammon (Caroline)
+* classic/checkers (Caroline)
 * classic/hanabi (Clemens)
+* classic/shogi (Caroline)
 * gamma/prospector (Yashas)
 * magent/* (Mario)
 * robotics/* (Yiling)
-* classic/backgammon (Caroline)
-
-Development has not yet started on:
-
-* classic/shogi (python-shogi)

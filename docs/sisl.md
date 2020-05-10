@@ -39,7 +39,7 @@ Please additionally cite:
 
 *AEC diagram*
 
-A package is placed on top of (by default) 3 pairs of robot legs which you control. The robots must learn to move the package as far as possible to the right. Each walker gets a reward of 1 for moving the package forward, and a reward of -100 for dropping the package. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 32 element vector, containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment runs for 500 frames by default.
+A package is placed on top of (by default) 3 pairs of robot legs which you control. The robots must learn to move the package as far as possible to the right. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. A walker is given a reward of -100 if they fall and a reward of -100 for each fallen walker in the environment. If the global reward mechanic is chosen, the mean of all rewards is given to each agent. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 32 element vector, containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment runs for 500 frames by default.
 
 ```
 multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
@@ -93,6 +93,11 @@ Add Gupta et al and DDPG paper results too
 *AEC diagram*
 
 By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default. Observation shape takes the full form of `(3, obs_range, obs_range)`.
+
+Manual Control:
+
+Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
+
 
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,

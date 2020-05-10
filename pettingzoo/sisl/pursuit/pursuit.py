@@ -3,16 +3,25 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
-from pettingzoo.utils import EnvLogger
 import pygame
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    example_space = list(env.action_spaces.values())[0]
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape, dtype=example_space.dtype), "taking all zeros action")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, *args, **kwargs):
-        super(env, self).__init__()
+        super().__init__()
         self.env = _env(*args, seed, **kwargs)
         pygame.init()
         self.num_agents = self.env.num_agents
@@ -49,21 +58,11 @@ class env(AECEnv):
             self.env.close()
 
     def render(self, mode="human"):
-        if not self.has_reset:
-            EnvLogger.error_render_before_reset()
-        elif not self.closed:
+        if not self.closed:
             self.env.render()
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
         agent = self.agent_selection
-        if action is None or np.isnan(action):
-            action = 0
-            EnvLogger.warn_action_is_NaN(backup_policy="setting action to 0")
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound(action=action, action_space=self.action_spaces[agent], backup_policy="setting action to 0")
-            action = 0
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
             if self.env.frames >= self.env.max_frames:
@@ -78,7 +77,5 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         o = np.array(self.env.safely_observe(self.agent_name_mapping[agent]))
         return o

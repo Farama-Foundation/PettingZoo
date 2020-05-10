@@ -42,10 +42,10 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
+right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `is_cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
+The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
 
 Leaderboard:
 
@@ -67,7 +67,7 @@ Leaderboard:
 
 *AEC diagram*
 
-Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. An agent gets a reward when it kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 image around the agent.
+Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
 
 Manual Control:
 
@@ -80,7 +80,7 @@ Press 'M' key to spawn a new knight.
 
 ```
 knights_archers_zombies.env(spawn_rate=20, knights=2, archers=2, 
-killable_knights=True, killable_archers=True, line_death=True, pad_observation=True, max_frames=900)
+killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_frames=900)
 ```
 
 *about arguments*
@@ -96,7 +96,9 @@ killable_knights: if set to False, knight agents cannot be killed by zombies.
 
 killable_archers: if set to False, archer agents cannot be killed by zombies.
 
-line_death:
+black_death: if set to True, agents who die will observe only black. If False, dead agents do not have reward, done, info or observations and are removed from agent list.
+
+line_death: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
 pad_observation: if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 ```
@@ -122,7 +124,7 @@ Leaderboard:
 *AEC diagram*
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them. 
-Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. If the ball moves to the left, a positive global reward is applied. If the ball moves to the right then a negative global reward is applied. Additionally, pistons that are within a radius of the ball are given a local reward.
+Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
 
 Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.
 
@@ -167,9 +169,9 @@ Continuous Leaderboard:
 
 ### Prison
 
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3)     | (0, 255)           | ?          |
+| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape    | Observation Values     | Num States |
+|---------|--------|----------------|--------------|---------------|----------------------|------------------------|------------|
+| Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3) or (1,)| (0, 255) or (-300, 300)| ?          |
 
 `from pettingzoo.gamma import prison_v0`
 
@@ -180,6 +182,10 @@ Continuous Leaderboard:
 *AEC diagram*
 
 In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task, this is an environment primarily intended for debugging purposes- it's multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible, it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of it's cell instead of the normal graphical output.
+
+Manual Control:
+
+Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left with 'J' and right with 'K'.
 
 Arguments:
 
