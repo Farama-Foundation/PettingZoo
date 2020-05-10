@@ -22,6 +22,7 @@ python3 -m pettingzoo.tests.ci_test classic/texas_holdem $render $manual_control
 python3 -m pettingzoo.tests.ci_test classic/texas_holdem_no_limit $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/tictactoe $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/uno $render $manual_control $bombardment $performance $save_obs
+python3 -m pettingzoo.tests.ci_test classic/hanabi $render $manual_control $bombardment $performance $save_obs
 
 # Gamma
 flake8 pettingzoo/gamma --ignore E501,E731,E741,E402,F401,W503
