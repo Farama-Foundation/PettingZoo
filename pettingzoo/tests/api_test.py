@@ -9,7 +9,7 @@ import re
 import os
 
 
-def test_obervation(observation, observation_0):
+def test_observation(observation, observation_0):
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():
             warnings.warn("Observation contains infinity (np.inf) or negative infinity (-np.inf)")
@@ -134,7 +134,7 @@ def play_test(env, observation_0):
         if not env.observation_spaces[agent].contains(prev_observe):
             print("Out of bounds observation: ", prev_observe)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
-        test_obervation(prev_observe, observation_0)
+        test_observation(prev_observe, observation_0)
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
@@ -220,7 +220,7 @@ def api_test(env, render=False):
     assert env.num_agents > 0, "Your environment can't have a negative number of agents"
 
     observation_0 = env.reset()
-    test_obervation(observation_0, observation_0)
+    test_observation(observation_0, observation_0)
 
     assert isinstance(env.agent_order, list), "agent_order must be a list"
 
