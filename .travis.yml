@@ -8,4 +8,4 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - pytest
+  - bash test.sh
