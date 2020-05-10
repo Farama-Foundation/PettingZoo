@@ -115,6 +115,22 @@ class NanNoOpWrapper(BaseWrapper):
         return super().step(action, observe)
 
 
+class NanZerosWrapper(BaseWrapper):
+    '''
+    this wrapper warns and executes a zeros action when nothing should be done.
+    Only for Box action spaces.
+    '''
+    def __init__(self, env):
+        super().__init__(env)
+        assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use NanZerosWrapper for Box spaces. Use NanNoOpWrapper for discrete spaces"
+
+    def step(self, action, observe=True):
+        if np.isnan(action).any():
+            EnvLogger.warn_action_is_NaN("taking the all zeros action")
+            action = np.zeros_like(action)
+        return super().step(action, observe)
+
+
 class NaNRandomWrapper(BaseWrapper):
     '''
     this wrapper takes a random action
@@ -166,7 +182,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
     def step(self, action, observe=True):
         space = self.action_spaces[self.agent_selection]
         if not space.contains(action):
-            assert space.shape == action.shape, "action should have shape {}".format(space.shape)
+            assert space.shape == action.shape, "action should have shape {}, has shape {}".format(space.shape, action.shape)
 
             EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
             action = np.clip(action, space.low, space.high)
