@@ -4,27 +4,43 @@ jobs:
   include:
     - name: "Python 3.6 on Linux"
       python: 3.6
+      before_install: 
+        - sudo apt-get install swig
     - name: "Python 3.7 on Linux"
       python: 3.7
+      before_install: 
+        - sudo apt-get install swig
     - name: "Python 3.8 on Linux"
       python: 3.8
+      before_install: 
+        - sudo apt-get install swig
     - name: "Python 3.8 on macOS"
       os: osx
       osx_image: xcode11.4
+      addons:
+        homebrew:
+          packages:
+            - swig
       language: shell
     - name: "Python 3.7 on macOS"
       os: osx
       osx_image: xcode10.2
+      addons:
+        homebrew:
+          packages:
+            - swig
       language: shell
     - name: "Python 3.6 on macOS"
       os: osx
       osx_image: xcode9.4
+      addons:
+        homebrew:
+          packages:
+            - swig
       language: shell
 
-before_install:
-  - pip3 install flake8
-
 install:
+  - pip3 install flake8
   - pip3 install -r requirements.txt
 
 script:
