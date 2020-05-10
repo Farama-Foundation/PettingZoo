@@ -1,9 +1,11 @@
 import os
 import numpy as np
 import gym
+from gym.utils import seeding
 from .cake_paddle import CakePaddle
 from .manual_control import manual_control
 from pettingzoo import AECEnv
+from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -28,7 +30,7 @@ def original_obs_shape(screen_width, screen_height):
     return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (2 * KERNEL_WINDOW_LENGTH)), 1)
 
 
-def get_valid_angle():
+def get_valid_angle(randomizer):
     # generates an angle in [0, 2*np.pi) that \
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
@@ -45,14 +47,14 @@ def get_valid_angle():
 
     angle = 0
     while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
-        angle = 2 * np.pi * np.random.rand()
+        angle = 2 * np.pi * randomizer.rand()
 
     return angle
 
 
-def get_small_random_value():
+def get_small_random_value(randomizer):
     # generates a small random value between [0, 1/100)
-    return (1 / 100) * np.random.rand()
+    return (1 / 100) * randomizer.rand()
 
 
 class PaddleSprite(pygame.sprite.Sprite):
@@ -129,7 +131,7 @@ class PaddleSprite(pygame.sprite.Sprite):
 
 
 class BallSprite(pygame.sprite.Sprite):
-    def __init__(self, dims, speed, bounce_randomness=False):  # def __init__(self, image, speed):
+    def __init__(self, randomizer, dims, speed, bounce_randomness=False):  # def __init__(self, image, speed):
         # self.surf = get_image(image)
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
@@ -138,6 +140,7 @@ class BallSprite(pygame.sprite.Sprite):
         self.bounce_randomness = bounce_randomness
         self.done = False
         self.hit = False
+        self.randomizer = randomizer
 
     def update2(self, area, p0, p1):
         (speed_x, speed_y) = self.speed
@@ -174,7 +177,7 @@ class BallSprite(pygame.sprite.Sprite):
             # add some randomness
             r_val = 0
             if self.bounce_randomness:
-                r_val = get_small_random_value()
+                r_val = get_small_random_value(self.randomizer)
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
@@ -199,7 +202,7 @@ class CooperativePong(gym.Env):
     metadata = {'render.modes': ['human']}
 
     # ball_speed = [3,3], left_paddle_speed = 3, right_paddle_speed = 3
-    def __init__(self, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -228,7 +231,7 @@ class CooperativePong(gym.Env):
 
         # paddles
         self.p0 = PaddleSprite((20, 80), left_paddle_speed)
-        if is_cake_paddle:
+        if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
             self.p1 = PaddleSprite((20, 100), right_paddle_speed)
@@ -236,7 +239,8 @@ class CooperativePong(gym.Env):
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
-        self.ball = BallSprite((20, 20), ball_speed, bounce_randomness)
+        self.ball = BallSprite(randomizer, (20, 20), ball_speed, bounce_randomness)
+        self.randomizer = randomizer
 
         self.reinit()
 
@@ -252,7 +256,7 @@ class CooperativePong(gym.Env):
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
-        angle = get_valid_angle()
+        angle = get_valid_angle(self.randomizer)
         # angle = deg_to_rad(89)
         self.ball.speed = [int(self.ball.speed_val * np.cos(angle)), int(self.ball.speed_val * np.sin(angle))]
 
@@ -349,17 +353,27 @@ class CooperativePong(gym.Env):
                     self.dones[ag] = self.done
                     self.infos[ag] = {}
 
-        pygame.event.pump()
+        if self.renderOn:
+            pygame.event.pump()
         self.draw()
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, 0, "doing nothing")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, **kwargs):
-        super(env, self).__init__()
-        self.env = CooperativePong(**kwargs)
+    def __init__(self, seed=None, **kwargs):
+        super().__init__()
+        self.randomizer, seed = seeding.np_random(seed)
+        self.env = CooperativePong(self.randomizer, **kwargs)
 
         self.agents = self.env.agents
         self.num_agents = len(self.agents)

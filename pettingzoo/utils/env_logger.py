@@ -17,6 +17,8 @@ class EnvLogger():
             handler = EnvWarningHandler(mqueue=EnvLogger.mqueue)
             logger.addHandler(handler)
         logger.warning(msg)
+        # needed to get the pytest runner to work correctly, and doesn't seem to have serious issues
+        EnvLogger.mqueue.append(msg)
 
     @staticmethod
     def flush():
@@ -43,6 +45,10 @@ class EnvLogger():
         EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
 
     @staticmethod
+    def warn_close_before_reset():
+        EnvLogger._generic_warning("[WARNING]: reset() needs to be called before close.")
+
+    @staticmethod
     def warn_on_illegal_move():
         EnvLogger._generic_warning("[WARNING]: Illegal move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
 
@@ -55,8 +61,8 @@ class EnvLogger():
         assert False, "reset() needs to be called before step"
 
     @staticmethod
-    def error_close_before_reset():
-        assert False, "reset() needs to be called before close"
+    def warn_step_after_done():
+        EnvLogger._generic_warning("[WARNING]: step() called after all agents are done. Should reset() first.")
 
     @staticmethod
     def error_render_before_reset():

@@ -4,7 +4,6 @@ from gym import spaces
 from gym.utils import seeding
 from .. import Agent
 import cv2
-from pettingzoo.utils import EnvLogger
 
 
 class Archea(Agent):
@@ -151,8 +150,6 @@ class MAWaterWorld():
         if self.renderOn:
             cv2.destroyAllWindows()
             cv2.waitKey(1)
-        else:
-            EnvLogger.warn_close_unrendered_env()
 
     @property
     def reward_mech(self):

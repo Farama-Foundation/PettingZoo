@@ -5,18 +5,25 @@ from gym import spaces
 import rlcard
 import random
 import numpy as np
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, **kwargs):
-        super(env, self).__init__()
-        if seed is not None:
-            np.random.seed(seed)
-            random.seed(seed)
-        self.env = rlcard.make('doudizhu', **kwargs)
+    def __init__(self, seed=None):
+        super().__init__()
+        self.env = rlcard.make('doudizhu', config={"seed": seed})
         self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
         self.num_agents = len(self.agents)
         self.has_reset = False
@@ -83,7 +90,7 @@ class env(AECEnv):
 
     def reset(self, observe=True):
         self.has_reset = True
-        obs, player_id = self.env.init_game()
+        obs, player_id = self.env.reset()
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])

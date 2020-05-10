@@ -159,7 +159,7 @@ max_frames: number of frames (a step for each agent) until game terminates
 
 *AEC diagram*
 
-In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded if Bob reconstructs the message, but are negatively rewarded if Eve reconstruct the message. Eve is rewarded based on how well it can reconstruct the signal. Alice and Bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message.
+In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams recontruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message.
 
 
 Alice observation space: `[message, private_key]`
