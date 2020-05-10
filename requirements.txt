@@ -8,3 +8,4 @@ python-chess
 rlcard >= 0.2.1
 pynput
 opencv-python
+box2d-py
