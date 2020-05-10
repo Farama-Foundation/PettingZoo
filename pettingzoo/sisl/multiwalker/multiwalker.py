@@ -7,9 +7,8 @@ from pettingzoo.utils import wrappers
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    example_space = list(env.action_spaces.values())[0]
     env = wrappers.ClipOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape, dtype=example_space.dtype), "taking all zeros action")
+    env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
