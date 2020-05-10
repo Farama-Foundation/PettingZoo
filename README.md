@@ -11,7 +11,7 @@ PettingZoo includes the following sets of games:
 
 * atari: Multi-player Atari 2600 games (both cooperative and competitive)
 * classic: Classical, nongraphical, competitive games (i.e. chess, Texas hold 'em, and go)
-* gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
+* gamma: Cooperative graphical games developed by us. Policies for these must learn highly coordinated behaviors.
 * magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
