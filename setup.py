@@ -36,7 +36,6 @@ setup(
         "rlcard >= 0.1.14",
         "pynput",
         "opencv-python",
-        "box2d-py",
         "python-shogi"
     ],
 )
