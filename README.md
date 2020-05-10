@@ -128,7 +128,7 @@ bombardment_test.bombardment_test(env, cycles=10000)
 
 This randomly plays through the environment `cycles` times, to test for stability.
 
-### Performance Test
+### Performance Benchmark
 
 ```
 import pettingzoo.tests.performance_benchmark as performance_benchmark
