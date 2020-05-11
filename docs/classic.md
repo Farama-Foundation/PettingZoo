@@ -5,7 +5,7 @@
 | Backgammon                       | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | Checkers                         | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | Chess                            | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0, 1]             | ?             |
-| Connect Four                     | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Connect Four                     | Discrete | 2      | No             | Discrete(7)     | Discrete(7)     | (6, 7, 2)         | [0, 1]             | ?             |
 | Dou Dizhu                        | Discrete | 3      | No             | Discrete(309)   | Discrete(309)   | (6, 5, 15)        | [0, 1]             | 10^53 - 10^83 |
 | Gin Rummy                        | Discrete | 2      | No             | Discrete(110)   | Discrete(110)   | (5, 52)           | [0, 1]             | 10^52         |
 | Go (N=board size)                | Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N, 3)         | [0, 1]             | 3^(N^2)       |
@@ -15,7 +15,7 @@
 | Rock Paper Scissors Lizard Spock | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | Texas Hold'em                    | Discrete | 2      | No             | Discrete(4)     | Discrete(4)     | (72,)             | [0, 1]             | 10^14         |
 | Texas Hold'em No Limit           | Discrete | 2      | No             | Discrete(103)   | Discrete(103)   | (54,)             | [0, 100]           | 10^162        |
-| Tic Tac Toe                      | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| Tic Tac Toe                      | Discrete | 2      | No             | Discrete(9)     | Discrete(9)     | (3, 3, 2)         | [0, 1]             | ?             |
 | Uno                              | Discrete | 2      | No             | Discrete(61)    | Discrete(61)    | (7, 4, 15)        | [0, 1]             | 10^163        |
 
 `pip install pettingzoo[classic]`
@@ -139,6 +139,37 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
+### Connect Four
+
+| Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
+|----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
+| Discrete | 2      | No             | (1,)          | Discrete(7)    | (6, 7, 2)         | [0,1]              |   ?           |
+
+`from pettingzoo.classic import connect_four_v0`
+
+`agents= ['player_0', 'player_0']`
+
+*gif*
+
+*AEC Diagram*
+
+Connect Four is a 2 player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a standing grid, where each token will fall as far down into its column as possible. Players cannot fill up a column with more than 6 token, and the game ends when either a player has made a sequence of 4 token, or when all 7 columns have been filled.
+
+#### Observation Space
+
+The observation space is 2 stacks of a 6x7 grid. Each stack represents the placement of the corresponding agent's token, where 1 indicates that the agent has a token placed in that cell, and 0 means they do not have a token in that cell. 0 can be interpreted as either the cell being empty, or the other agent may have a token in that cell.
+
+#### Action Space
+
+The action space is integers from 0 to 6, where the action represents which column a token should be dropped in. If a token is dropped in a column that is full, the game will terminate with an illegal move error. The possible actions each agent can make is stored in infos[agent], and is updated on every step.
+
+#### Rewards
+
+If an agent successfully connects four of their tokens, they will be rewarded 1 point. At the same time, the opponent agent will be awarded -1 points. If the game ends in a draw, both players are rewarded 0.
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Dou Dizhu
 
@@ -679,13 +710,13 @@ The legal moves available for each agent, found in `env.infos[agent]['legal_move
 
 
 ### Tic Tac Toe
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+| Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete | 2       | yes            | (1)          | [0, 9]        | (3, 3)            | [0,1,2]            | ?          |
+| Discrete | 2       | No             | (1)          | [0, 8]        | (3, 3, 2)         | [0,1]              | ?          |
 
 `from pettingzoo.classic import tictactoe_v0`
 
-`agents= `
+`agents= ['player_1', 'player_2']`
 
 *gif*
 
@@ -695,7 +726,22 @@ Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take 
 
 #### Observation Space
 
+The observation is 2 layers of the 3x3 board. The first layer represents the placement of Xs, and the other layer is the placement of Os. The possible values for each cell is 0 or 1; in the first layer, 1 indicates that an X has been placed in that cell, and 0 indicates that X is not in that cell. Similarly, in the other layer 1 indicates that an O has been placed, while 0 indicates that 0 has not been placed.
+
 #### Action Space
+
+Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
+
+
+ ```
+0 | 3 | 6
+_________
+
+1 | 4 | 7
+_________
+
+2 | 5 | 8
+ ```
 
 #### Rewards
 
@@ -704,6 +750,10 @@ Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take 
 | +1     | -1    |
 
 If the game ends in a draw, both players will receive a reward of 0.
+
+#### Legal Moves
+
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Uno
 

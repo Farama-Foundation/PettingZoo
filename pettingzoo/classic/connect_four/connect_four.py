@@ -3,7 +3,6 @@ from gym import spaces
 import numpy as np
 import warnings
 
-from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 

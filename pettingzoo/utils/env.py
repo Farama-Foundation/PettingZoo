@@ -1,6 +1,3 @@
-from pettingzoo.utils import EnvLogger
-
-
 class AECEnv(object):
     def __init__(self):
         pass
