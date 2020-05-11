@@ -1,5 +1,7 @@
 # PettingZoo
-PettingZoo is Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
+[![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
+
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
 We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
 
@@ -9,7 +11,7 @@ PettingZoo includes the following sets of games:
 
 * atari: Multi-player Atari 2600 games (both cooperative and competitive)
 * classic: Classical, nongraphical, competitive games (i.e. chess, Texas hold 'em, and go)
-* gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
+* gamma: Cooperative graphical games developed by us. Policies for these must learn highly coordinated behaviors.
 * magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
@@ -126,7 +128,7 @@ bombardment_test.bombardment_test(env, cycles=10000)
 
 This randomly plays through the environment `cycles` times, to test for stability.
 
-### Performance Test
+### Performance Benchmark
 
 ```
 import pettingzoo.tests.performance_benchmark as performance_benchmark
@@ -155,7 +157,7 @@ from pettingzoo.utils import random_demo
 random_demo(env)
 ```
 
-### Observation Saver
+### Observation Saving
 
 If the agents in a game make observations that are images, the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no agent is specified, the current selected agent for the environment is chosen. If all_agents is passed in as True, then the observations of all agents in the environment is saved. By default the images are saved to the current working directory, in a folder matching the environment name. The saved image will match the name of the observing agent. If save_dir is passed in, a new folder is created where images will be saved to.
 
@@ -183,10 +185,7 @@ The following environments are under active development:
 * classic/backgammon (Caroline)
 * classic/checkers (Caroline)
 * classic/hanabi (Clemens)
+* classic/shogi (Caroline)
 * gamma/prospector (Yashas)
 * magent/* (Mario)
 * robotics/* (Yiling)
-
-Development has not yet started on:
-
-* classic/shogi (python-shogi)

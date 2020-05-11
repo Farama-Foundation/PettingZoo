@@ -31,10 +31,12 @@ setup(
         "scikit-image>=0.16.2",
         "numpy>=1.18.0",
         "pymunk>=5.6.0",
-        "gym[box2d]>=0.15.4",
+        "gym[box2d]>=0.17.2",
         "python-chess",
         "rlcard >= 0.1.14",
         "pynput",
-        "opencv-python"
+        "opencv-python",
+        "box2d-py",
+        "python-shogi"
     ],
 )
