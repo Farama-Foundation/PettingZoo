@@ -88,27 +88,15 @@ class raw_env(AECEnv):
         return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
     def step(self, action, observe=True):
-        if self.dones[self.agent_selection]:
+        self._go = self._go.play_move(coords.from_flat(action))
+        self._last_obs = self.observe(self.agent_selection)
+        next_player = self._agent_selector.next()
+        if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-            next_player = False
+            self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
+            self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
         else:
-            if action not in self.infos[self.agent_selection]['legal_moves']:
-                self.rewards[self.agent_selection] = -1
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                info_copy = self.infos[self.agent_selection]
-                self.infos = self._convert_to_dict([{'legal_moves': [self._N * self._N + 1]} for agent in range(self.num_agents)])
-                self.infos[self.agent_selection] = info_copy
-                self.agent_selection = self._agent_selector.next()
-                return self._last_obs
-            self._go = self._go.play_move(coords.from_flat(action))
-            self._last_obs = self.observe(self.agent_selection)
-            next_player = self._agent_selector.next()
-            if self._go.is_game_over():
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
-                self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
-            else:
-                self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+            self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         if observe:
             return self._last_obs
