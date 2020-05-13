@@ -238,14 +238,14 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.warn_step_after_done()
             self.dones = {agent: True for agent in self.dones}
             self.rewards = {agent: 0 for agent in self.rewards}
-            return super().observe(action) if observe else None
+            return super().observe(self.agent_selection) if observe else None
         else:
             return super().step(action, observe)
 
     def observe(self, agent):
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
-        return super().observe(observe)
+        return super().observe(agent)
 
     def reset(self, observe=True):
         self._has_reset = True
