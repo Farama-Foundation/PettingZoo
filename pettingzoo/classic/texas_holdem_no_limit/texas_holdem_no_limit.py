@@ -1,6 +1,5 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 import rlcard
 import random
@@ -48,42 +47,18 @@ class raw_env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs']
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
-        backup_policy = "Game terminating with current player losing"
-        act_space = self.action_spaces[self.agent_selection]
-        if np.isnan(action).any():
-            EnvLogger.warn_action_is_NaN(backup_policy)
-        if not act_space.contains(action):
-            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
-
-        if self.dones[self.agent_selection]:
+        obs, next_player_id = self.env.step(action)
+        self._last_obs = obs['obs']
+        if self.env.is_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-            obs = False
+            self.rewards = self._convert_to_dict(self.env.get_payoffs())
+            self.infos[self._int_to_name(next_player_id)]['legal_moves'] = [2]
         else:
-            if action not in self.infos[self.agent_selection]['legal_moves']:
-                EnvLogger.warn_on_illegal_move()
-                self.rewards[self.agent_selection] = -1
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                info_copy = self.infos[self.agent_selection]
-                self.infos = self._convert_to_dict([{'legal_moves': [2]} for agent in range(self.num_agents)])
-                self.infos[self.agent_selection] = info_copy
-                self.agent_selection = self._agent_selector.next()
-                return self._last_obs
-            obs, next_player_id = self.env.step(action)
-            self._last_obs = obs['obs']
-            if self.env.is_over():
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                self.rewards = self._convert_to_dict(self.env.get_payoffs())
-                self.infos[self._int_to_name(next_player_id)]['legal_moves'] = [2]
-            else:
-                self.infos[self._int_to_name(next_player_id)]['legal_moves'] = obs['legal_actions']
+            self.infos[self._int_to_name(next_player_id)]['legal_moves'] = obs['legal_actions']
         self.agent_selection = self._agent_selector.next()
         if observe:
             return obs['obs'] if obs else self._last_obs
@@ -115,4 +90,4 @@ class raw_env(AECEnv):
         print('\n')
 
     def close(self):
-        EnvLogger.warn_close_unrendered_env()
+        pass

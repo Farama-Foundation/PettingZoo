@@ -1,6 +1,5 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils.env_logger import EnvLogger
 from gym import spaces
 from . import go
 from . import coords
@@ -84,44 +83,20 @@ class raw_env(AECEnv):
         return [1, -1] if result == 1 else [-1, 1]
 
     def observe(self, agent):
-        if not self.has_reset:
-            EnvLogger.error_observe_before_reset()
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
         return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
-        backup_policy = "Game terminating with current player losing"
-        act_space = self.action_spaces[self.agent_selection]
-        if np.isnan(action).any():
-            EnvLogger.warn_action_is_NaN(backup_policy)
-        if not act_space.contains(action):
-            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
-
-        if self.dones[self.agent_selection]:
+        self._go = self._go.play_move(coords.from_flat(action))
+        self._last_obs = self.observe(self.agent_selection)
+        next_player = self._agent_selector.next()
+        if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-            next_player = False
+            self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
+            self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
         else:
-            if action not in self.infos[self.agent_selection]['legal_moves']:
-                EnvLogger.warn_on_illegal_move()
-                self.rewards[self.agent_selection] = -1
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                info_copy = self.infos[self.agent_selection]
-                self.infos = self._convert_to_dict([{'legal_moves': [self._N * self._N + 1]} for agent in range(self.num_agents)])
-                self.infos[self.agent_selection] = info_copy
-                self.agent_selection = self._agent_selector.next()
-                return self._last_obs
-            self._go = self._go.play_move(coords.from_flat(action))
-            self._last_obs = self.observe(self.agent_selection)
-            next_player = self._agent_selector.next()
-            if self._go.is_game_over():
-                self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-                self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
-                self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
-            else:
-                self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+            self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         if observe:
             return self._last_obs
@@ -145,4 +120,4 @@ class raw_env(AECEnv):
         print(self._go)
 
     def close(self):
-        EnvLogger.warn_close_unrendered_env()
+        pass
