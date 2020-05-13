@@ -8,21 +8,21 @@ jobs:
       python: 3.6
       before_install: 
         - sudo apt-get install swig
-        - sudo apt install freeglut-devel
+        - sudo apt install freeglut3-dev
     - name: "Python 3.7 on Linux"
       services:
         - xvfb
       python: 3.7
       before_install: 
         - sudo apt-get install swig
-        - sudo apt install freeglut-devel
+        - sudo apt install freeglut3-dev
     - name: "Python 3.8 on Linux"
       services:
         - xvfb
       python: 3.8
       before_install: 
         - sudo apt-get install swig
-        - sudo apt install freeglut-devel
+        - sudo apt install freeglut3-dev
     - name: "Python 3 on macOS"
       services:
         - xvfb
