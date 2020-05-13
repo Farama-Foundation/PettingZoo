@@ -3,21 +3,29 @@ language: python
 jobs:
   include:
     - name: "Python 3.6 on Linux"
+      services:
+        - xvfb
       python: 3.6
       before_install: 
         - sudo apt-get install swig
-        - sudo apt-get install freeglut-devel
+        - sudo apt install freeglut-devel
     - name: "Python 3.7 on Linux"
+      services:
+        - xvfb
       python: 3.7
       before_install: 
         - sudo apt-get install swig
-        - sudo apt-get install freeglut-devel
+        - sudo apt install freeglut-devel
     - name: "Python 3.8 on Linux"
+      services:
+        - xvfb
       python: 3.8
       before_install: 
         - sudo apt-get install swig
-        - sudo apt-get install freeglut-devel
-    - name: "Python 3.8 on macOS"
+        - sudo apt install freeglut-devel
+    - name: "Python 3 on macOS"
+      services:
+        - xvfb
       os: osx
       osx_image: xcode11.4
       addons:
@@ -25,22 +33,7 @@ jobs:
           packages:
             - swig
       language: shell
-    - name: "Python 3.7 on macOS"
-      os: osx
-      osx_image: xcode10.2
-      addons:
-        homebrew:
-          packages:
-            - swig
-      language: shell
-    - name: "Python 3.6 on macOS"
-      os: osx
-      osx_image: xcode9.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-      language: shell
+
 
 install:
   - pip3 install flake8
