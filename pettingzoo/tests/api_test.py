@@ -202,7 +202,11 @@ def test_agent_order(env):
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
-def api_test(env, render=False):
+def api_test(env, render=False, verbose_progress=False):
+    def progress_report(msg):
+        if verbose_progress:
+            print(msg)
+
     print("Starting API test")
     env_agent_sel = copy(env)
 
@@ -222,13 +226,19 @@ def api_test(env, render=False):
     observation_0 = env.reset()
     test_observation(observation_0, observation_0)
 
+    progress_report("Finished test_observation")
+
     assert isinstance(env.agent_order, list), "agent_order must be a list"
 
     agent_0 = env.agent_order[0]
 
     test_observation_action_spaces(env, agent_0)
 
+    progress_report("Finished test_observation_action_spaces")
+
     play_test(env, observation_0)
+
+    progress_report("Finished play test")
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
@@ -238,7 +248,11 @@ def api_test(env, render=False):
 
     test_rewards_dones(env, agent_0)
 
+    progress_report("Finished test_rewards_dones")
+
     test_agent_order(env_agent_sel)
+
+    progress_report("Finished test_agent_order")
 
     # test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
