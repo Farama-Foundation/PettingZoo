@@ -2,7 +2,6 @@ from gym import spaces
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils.env_logger import EnvLogger
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 
@@ -62,15 +61,10 @@ class SimpleEnv(AECEnv):
 
         self.viewer = None
 
-        self.has_reset = False
-
     def observe(self, agent):
-        assert self.has_reset, EnvLogger.error_observe_before_reset()
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world)
 
     def reset(self, observe=True):
-        self.has_reset = True
-
         self.scenario.reset_world(self.world, self.np_random)
 
         self.rewards = {name: 0. for name in self.agents}
@@ -154,15 +148,6 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
-        if not self.has_reset:
-            EnvLogger.error_step_before_reset()
-        backup_policy = "taking zero action (no movement, communication 0)"
-        act_space = self.action_spaces[self.agent_selection]
-        if np.isnan(action).any():
-            EnvLogger.warn_action_is_NaN(backup_policy)
-        if not act_space.contains(action):
-            EnvLogger.warn_action_out_of_bound(action, act_space, backup_policy)
-
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()
@@ -254,6 +239,4 @@ class SimpleEnv(AECEnv):
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
-        else:
-            EnvLogger.warn_close_unrendered_env()
         self._reset_render()
