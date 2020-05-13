@@ -9,7 +9,7 @@ import gym
 import random
 import re
 import os
-from pettingzoo.utils import EnvLogger
+from pettingzoo.utils.env_logger import EnvLogger
 
 
 def test_bad_close(env):

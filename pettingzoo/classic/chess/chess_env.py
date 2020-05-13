@@ -5,7 +5,6 @@ from gym import spaces
 import numpy as np
 import warnings
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils import wrappers
 
 
