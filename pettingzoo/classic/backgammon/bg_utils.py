@@ -10,39 +10,125 @@ def get_opponent_agent(env):
     env.current_agent = env.game.get_opponent(env.current_agent)
     return env.current_agent
 
-#action goes from (2,4) list to a tuple or 2 or 4 tuples
-def to_bg_format(action):
-    acts = [["bar" if x==25 else x for x in t] for t in action]
-    acts = [(a, b) for a, b in acts if (a != -2 and b != -2)]
-    return acts
+def to_bar(action, roll):
+    if action == 25: #bar
+        if roll < 0: #white
+            return ('bar', 24 - abs(roll))
+        else: #black
+            return ('bar', abs(roll)-1)
+    else:
+        if action+roll-1 > 23:
+            return (action-1, 24)
+        elif action+roll-1 < 0:
+            return (action-1, -1)
+        else:
+            return (action-1, action+roll-1)
 
-#takes list of tuples of tuples (including bar) and converst it to fit in the sction space
-def to_gym_format(actions):
-    lst = [[[25, b] if a =='bar' else ([a, 25] if b == 'bar' else [a,b])
-        for (a,b) in tups] for tups in actions]
-    lst = [[[-2,-2],[-2,-2],[-2,-2],[-2,-2]] if len(act) == 0 else
-        (act + [[-2,-2],[-2,-2],[-2,-2]] if len(act) == 1 else
-        (act + [[-2,-2],[-2,-2]] if len(act) == 2 else
-        (act + [[-2,-2]] if len(act) == 3 else act))) for act in lst]
-    return np.array(lst)
+def from_bar(action):
+    bears_off = False
+    if action[1] == -1 or action[1] == 24:
+        bears_off = True
+    if action[0] == 'bar':
+        if action[1] > 12: #white, top
+            return (25, -(24-action[1]), bears_off)
+        else: #black, bottom
+            return (25, (action[1]+1), bears_off)
+    else:
+        return (action[0]+1, action[1]-action[0], bears_off)
+
+#action goes from single number to a tuple
+def to_bg_format(action, roll):
+    base = 26
+    low_roll = min(roll)
+    high_roll = max(roll)
+
+    if action == base**2 * 2:
+        return (())
+
+    if action < base**2: #Low roll first
+        dig1 = action % base
+        dig2 = action // base
+        a = to_bar(dig1,low_roll)
+        b = to_bar(dig2,high_roll)
+        if b[0] != 'bar' and b[0] > -1:
+            return (a,b)
+        else:
+            return (a,)
+
+    else: #High roll first
+        action = action - base**2
+        dig1 = action % base
+        dig2 = action // base
+        a = to_bar(dig1, high_roll)
+        b = to_bar(dig2, low_roll)
+        if b[0] != 'bar' and b[0] > -1:
+            return (a,b)
+        else:
+            return (a,)
+
+#takes list of tuples and converts to a discrete value
+def to_gym_format(actions, roll):
+    high_roll = max(roll)
+    low_roll = min(roll)
+    nums = []
+    base = 26
+    for act in actions:
+        if len(act) == 1:
+            a, diff1, bears_off = from_bar(act[0])
+            if bears_off:
+                diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
+            if abs(diff1) == abs(high_roll): #high first
+                a += base**2
+            nums.append(a)
+        elif isinstance(act[0], int) or act[0] == 'bar':
+            a, diff1, bears_off = from_bar(act)
+            if bears_off:
+                diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
+            if abs(diff1) == abs(high_roll): #high first
+                a += base**2
+            nums.append(a)
+        elif len(act) == 2:
+            a, diff1, bears_off1 = from_bar(act[0])
+            b, diff2, bears_off2 = from_bar(act[1])
+            if bears_off1 or bears_off2:
+                if bears_off1 and not bears_off2:
+                    if abs(diff2) == abs(high_roll):
+                        diff1 = low_roll
+                    else:
+                        diff1 = high_roll
+                elif not bears_off1 and bears_off2:
+                    if abs(diff1) == abs(high_roll):
+                        diff2 = low_roll
+                    else:
+                        diff2 = high_roll
+            num = a + base * b
+            if diff1 > diff2: #high first
+                num += base**2
+            nums.append(num)
+    return nums
+
+def double_roll(moves):
+    out = []
+    for move in moves:
+        if len(move) > 1:
+            out.append((move[0], move[1]))
+        else:
+            out.append((move[0]))
+    return out
+
+def update_agent_order(agents, order, selection, double_roll):
+    new_order = [0,0]
+    cur_agent = selection
+    opp_agent = agents[0] if selection == agents[1] else agents[1]
+    idx = order.index(selection)
+    if double_roll == 2:
+        new_order[idx] = cur_agent
+        new_order[(idx + 1) % 2] = cur_agent
+    elif double_roll == 1:
+        new_order[idx] = cur_agent
+        new_order[(idx + 1) % 2] = opp_agent
+    return new_order
+
 
 def valid_action(env, action):
-      res = False
-      for moves in env.infos[env.agent_selection]['legal_moves']:
-          if (len(moves) >=1):
-              if moves[0][0] == action[0][0] and moves[0][1] == action[0][1]:
-                  if len(moves) >= 2:
-                      if moves[1][0] == action[1][0] and moves[1][1] == action[1][1]:
-                          if len(moves) >= 3:
-                              if moves[2][0] == action[2][0] and moves[2][1] == action[2][1]:
-                                  if len(moves) == 4:
-                                      if moves[3][0] == action[3][0] and moves[3][1] == action[3][1]:
-                                          res = True
-                                  else:
-                                      res = True
-                          else:
-                              res = True
-                  else:
-                      res = True
-
-      return res
+      return env.action_spaces[env.agent_selection].contains(action)
