@@ -3,7 +3,7 @@ from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 from backgammon import Backgammon as Game, WHITE, BLACK, COLORS
 from gym import spaces
-import bg_utils
+from . import bg_utils
 import numpy as np
 
 def env(**kwargs):

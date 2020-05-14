@@ -1,7 +1,6 @@
 from backgammon import Backgammon as Game, WHITE, BLACK, COLORS
 import numpy as np
 
-
 def get_valid_actions(env, roll):
     a=env.game.get_valid_plays(env.current_agent, roll)
     return a
