@@ -1,10 +1,11 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
-from backgammon import Backgammon as Game, WHITE, BLACK, COLORS
+from .backgammon import Backgammon as Game, WHITE, BLACK, COLORS
 from gym import spaces
 from . import bg_utils
 import numpy as np
+
 
 def env(**kwargs):
     env = raw_env(**kwargs)
@@ -13,6 +14,7 @@ def env(**kwargs):
     env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
 
 class raw_env(AECEnv):
     metadata = {'render.modes': ['human']}
@@ -44,7 +46,7 @@ class raw_env(AECEnv):
         self.has_reset = False
         self.has_rendered = False
 
-    def step(self, action, observe = True):
+    def step(self, action, observe=True):
         if action != 26**2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
             self.game.execute_play(self.current_agent, action)
@@ -71,7 +73,7 @@ class raw_env(AECEnv):
             if(self.current_agent == WHITE):
                 roll = (-roll[0], -roll[1])
             self.roll = roll
-        valid_moves = bg_utils.get_valid_actions(self,self.roll)
+        valid_moves = bg_utils.get_valid_actions(self, self.roll)
 
         if self.double_roll > 0:
             if self.double_roll == 1:
@@ -89,7 +91,7 @@ class raw_env(AECEnv):
                     self.agent_order.insert(self.agent_order.index(prev_player) + 1, next_player)
                 skip_agent = prev_player_ind + 1
                 self._agent_selector.reinit(self.agent_order)
-                for _ in range(skip_agent+1):
+                for _ in range(skip_agent + 1):
                     self.agent_selection = self._agent_selector.next()
 
             valid_moves = bg_utils.double_roll(valid_moves)
@@ -100,12 +102,12 @@ class raw_env(AECEnv):
             legal_moves = [26**2 * 2]
         self.infos = {i: {'legal_moves': legal_moves} for i in self.agents}
 
-        if(observe == True):
+        if(observe is True):
             observation = self.observe(self.game.get_opponent(self.current_agent))
             return observation
 
     def observe(self, agent):
-        return np.array(self.game.get_board_features(agent)).reshape(198,1)
+        return np.array(self.game.get_board_features(agent)).reshape(198, 1)
 
     def reset(self, observe=True):
         self.has_reset = True

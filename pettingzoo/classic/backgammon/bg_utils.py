@@ -1,41 +1,43 @@
-from backgammon import Backgammon as Game, WHITE, BLACK, COLORS
-import numpy as np
 
 def get_valid_actions(env, roll):
-    a=env.game.get_valid_plays(env.current_agent, roll)
+    a = env.game.get_valid_plays(env.current_agent, roll)
     return a
+
 
 def get_opponent_agent(env):
     env.current_agent = env.game.get_opponent(env.current_agent)
     return env.current_agent
 
+
 def to_bar(action, roll):
-    if action == 25: #bar
-        if roll < 0: #white
+    if action == 25:  # bar
+        if roll < 0:  # white
             return ('bar', 24 - abs(roll))
-        else: #black
-            return ('bar', abs(roll)-1)
+        else:  # black
+            return ('bar', abs(roll) - 1)
     else:
-        if action+roll-1 > 23:
-            return (action-1, 24)
-        elif action+roll-1 < 0:
-            return (action-1, -1)
+        if action + roll - 1 > 23:
+            return (action - 1, 24)
+        elif action + roll - 1 < 0:
+            return (action - 1, -1)
         else:
-            return (action-1, action+roll-1)
+            return (action - 1, action + roll - 1)
+
 
 def from_bar(action):
     bears_off = False
     if action[1] == -1 or action[1] == 24:
         bears_off = True
     if action[0] == 'bar':
-        if action[1] > 12: #white, top
-            return (25, -(24-action[1]), bears_off)
-        else: #black, bottom
-            return (25, (action[1]+1), bears_off)
+        if action[1] > 12:  # white, top
+            return (25, -(24 - action[1]), bears_off)
+        else:  # black, bottom
+            return (25, (action[1] + 1), bears_off)
     else:
-        return (action[0]+1, action[1]-action[0], bears_off)
+        return (action[0] + 1, action[1] - action[0], bears_off)
 
-#action goes from single number to a tuple
+
+# action goes from single number to a tuple
 def to_bg_format(action, roll):
     base = 26
     low_roll = min(roll)
@@ -44,28 +46,29 @@ def to_bg_format(action, roll):
     if action == base**2 * 2:
         return (())
 
-    if action < base**2: #Low roll first
+    if action < base**2:  # Low roll first
         dig1 = action % base
         dig2 = action // base
-        a = to_bar(dig1,low_roll)
-        b = to_bar(dig2,high_roll)
+        a = to_bar(dig1, low_roll)
+        b = to_bar(dig2, high_roll)
         if b[0] != 'bar' and b[0] > -1:
-            return (a,b)
+            return (a, b)
         else:
             return (a,)
 
-    else: #High roll first
+    else:  # High roll first
         action = action - base**2
         dig1 = action % base
         dig2 = action // base
         a = to_bar(dig1, high_roll)
         b = to_bar(dig2, low_roll)
         if b[0] != 'bar' and b[0] > -1:
-            return (a,b)
+            return (a, b)
         else:
             return (a,)
 
-#takes list of tuples and converts to a discrete value
+
+# takes list of tuples and converts to a discrete value
 def to_gym_format(actions, roll):
     high_roll = max(roll)
     low_roll = min(roll)
@@ -76,14 +79,14 @@ def to_gym_format(actions, roll):
             a, diff1, bears_off = from_bar(act[0])
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
-            if abs(diff1) == abs(high_roll): #high first
+            if abs(diff1) == abs(high_roll):  # high first
                 a += base**2
             nums.append(a)
         elif isinstance(act[0], int) or act[0] == 'bar':
             a, diff1, bears_off = from_bar(act)
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
-            if abs(diff1) == abs(high_roll): #high first
+            if abs(diff1) == abs(high_roll):  # high first
                 a += base**2
             nums.append(a)
         elif len(act) == 2:
@@ -101,10 +104,11 @@ def to_gym_format(actions, roll):
                     else:
                         diff2 = high_roll
             num = a + base * b
-            if diff1 > diff2: #high first
+            if diff1 > diff2:  # high first
                 num += base**2
             nums.append(num)
     return nums
+
 
 def double_roll(moves):
     out = []
@@ -115,8 +119,9 @@ def double_roll(moves):
             out.append((move[0]))
     return out
 
+
 def update_agent_order(agents, order, selection, double_roll):
-    new_order = [0,0]
+    new_order = [0, 0]
     cur_agent = selection
     opp_agent = agents[0] if selection == agents[1] else agents[1]
     idx = order.index(selection)
@@ -130,4 +135,4 @@ def update_agent_order(agents, order, selection, double_roll):
 
 
 def valid_action(env, action):
-      return env.action_spaces[env.agent_selection].contains(action)
+    return env.action_spaces[env.agent_selection].contains(action)
