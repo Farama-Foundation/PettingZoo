@@ -1,3 +1,5 @@
+from pettingzoo.atari import *
+
 from pettingzoo.classic import chess_v0
 from pettingzoo.classic import rps_v0
 from pettingzoo.classic import rpsls_v0
@@ -34,6 +36,8 @@ from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
 all_environments = {
+    "atari/pong": pong_v0,
+
     "classic/chess": chess_v0,
     "classic/rps": rps_v0,
     "classic/rpsls": rpsls_v0,
