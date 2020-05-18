@@ -184,8 +184,6 @@ The following environments are under active development:
 * atari/* (Ben)
 * classic/backgammon (Caroline)
 * classic/checkers (Caroline)
-* classic/hanabi (Clemens)
 * classic/shogi (Caroline)
-* gamma/prospector (Yashas)
 * magent/* (Mario)
 * robotics/* (Yiling)
