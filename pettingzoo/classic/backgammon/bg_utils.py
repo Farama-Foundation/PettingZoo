@@ -1,12 +1,7 @@
 
 def get_valid_actions(env, roll):
-    a = env.game.get_valid_plays(env.current_agent, roll)
+    a = env.game.get_valid_plays(env.colors[env.agent_selection], roll)
     return a
-
-
-def get_opponent_agent(env):
-    env.current_agent = env.game.get_opponent(env.current_agent)
-    return env.current_agent
 
 
 def to_bar(action, roll):
@@ -120,18 +115,8 @@ def double_roll(moves):
     return out
 
 
-def update_agent_order(agents, order, selection, double_roll):
-    new_order = [0, 0]
-    cur_agent = selection
-    opp_agent = agents[0] if selection == agents[1] else agents[1]
-    idx = order.index(selection)
-    if double_roll == 2:
-        new_order[idx] = cur_agent
-        new_order[(idx + 1) % 2] = cur_agent
-    elif double_roll == 1:
-        new_order[idx] = cur_agent
-        new_order[(idx + 1) % 2] = opp_agent
-    return new_order
+def opp_agent(env, agent):
+    return env.agents[0] if agent == env.agents[1] else env.agents[1]
 
 
 def valid_action(env, action):
