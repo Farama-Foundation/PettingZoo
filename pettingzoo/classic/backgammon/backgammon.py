@@ -558,17 +558,17 @@ class Backgammon:
                     if self.board[s1][0] >= 4:
                         plays.add((move, move, move, move))
                 elif dice_used == 1:
-                        if self.board[s1][0] >= 1:
-                            plays.add((out_of_home_move + (move, )))
-                            plays.update([(out_of_home_move + (move, ) + (single, )) for single in single_moves])
-                            plays.update([(out_of_home_move + (move, ) + (double[0], ) + (double[1], )) for double in double_moves])
+                    if self.board[s1][0] >= 1:
+                        plays.add((out_of_home_move + (move, )))
+                        plays.update([(out_of_home_move + (move, ) + (single, )) for single in single_moves])
+                        plays.update([(out_of_home_move + (move, ) + (double[0], ) + (double[1], )) for double in double_moves])
 
-                        if self.board[s1][0] >= 2:
-                            plays.add((out_of_home_move + (move, ) + (move, )))
-                            plays.update([(out_of_home_move + (move, ) + (move, ) + (single, )) for single in single_moves])
+                    if self.board[s1][0] >= 2:
+                        plays.add((out_of_home_move + (move, ) + (move, )))
+                        plays.update([(out_of_home_move + (move, ) + (move, ) + (single, )) for single in single_moves])
 
-                        if self.board[s1][0] >= 3:
-                            plays.add((out_of_home_move + (move, ) + (move, ) + (move, )))
+                    if self.board[s1][0] >= 3:
+                        plays.add((out_of_home_move + (move, ) + (move, ) + (move, )))
                 elif dice_used == 2:
                     if self.board[s1][0] >= 1:
                         plays.add((out_of_home_move + (move, )))
@@ -577,8 +577,8 @@ class Backgammon:
                     if self.board[s1][0] >= 2:
                         plays.add((out_of_home_move + (move, ) + (move, )))
                 elif dice_used == 3:
-                        if self.board[s1][0] >= 1:
-                            plays.add((out_of_home_move + (move, )))
+                    if self.board[s1][0] >= 1:
+                        plays.add((out_of_home_move + (move, )))
 
                 for s in active_positions:
                     if dice_used == 0:

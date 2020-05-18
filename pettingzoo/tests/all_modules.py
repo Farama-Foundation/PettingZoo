@@ -12,6 +12,7 @@ from pettingzoo.classic import dou_dizhu_v0
 from pettingzoo.classic import gin_rummy_v0
 from pettingzoo.classic import go_v0
 from pettingzoo.classic import hanabi_v0
+from pettingzoo.classic import backgammon_v0
 
 from pettingzoo.gamma import knights_archers_zombies_v0
 from pettingzoo.gamma import pistonball_v0
@@ -48,6 +49,7 @@ all_environments = {
     "classic/gin_rummy": gin_rummy_v0,
     "classic/go": go_v0,
     "classic/hanabi": hanabi_v0,
+    "classic/backgammon": backgammon_v0,
 
     "gamma/knights_archers_zombies": knights_archers_zombies_v0,
     "gamma/pistonball": pistonball_v0,
