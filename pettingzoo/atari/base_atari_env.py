@@ -49,9 +49,9 @@ class BaseAtariEnv(AECEnv):
         self.ale.setFloat(b'repeat_action_probability', repeat_action_probability)
 
         pathstart = os.path.dirname(ale_py.__file__)
-        final_path = os.path.join(pathstart,"ROM",game,game+".bin")
+        final_path = os.path.join(pathstart, "ROM", game, game + ".bin")
         if not os.path.exists(final_path):
-            raise IOError("rom {} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM)")
+            raise IOError("rom {} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM)".format(game))
 
         self.ale.loadROM(final_path)
 
@@ -60,7 +60,7 @@ class BaseAtariEnv(AECEnv):
             mode = all_modes[0]
         else:
             mode = mode_num
-            assert mode not in all_modes, "mode_num parameter is wrong. Only {} modes are supported".format(str(list(all_modes)))
+            assert mode in all_modes, "mode_num parameter is wrong. Mode {} selected, only {} modes are supported".format(mode_num, str(list(all_modes)))
 
         self.ale.setMode(mode)
 
