@@ -30,7 +30,7 @@ class raw_env(AECEnv):
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(6, 34, 4), dtype=np.bool) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
-        self.agent_order = self.agents
+        self.agent_order = list(self.agents)
         self._agent_selector = agent_selector(self.agent_order)
 
     def _int_to_name(self, ind):
@@ -80,7 +80,7 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.has_reset = True
         obs, player_id = self.env.reset()
-        self.agent_order = self.agents
+        self.agent_order = list(self.agents)
         self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(self.env.get_payoffs())
