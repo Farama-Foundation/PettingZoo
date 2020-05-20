@@ -9,41 +9,66 @@ from PIL import Image
 import os
 import scipy.misc
 import sys
+import subprocess
 
-name = sys.argv[1]
-module = all_environments[name]
+def generate_data(nameline,module):
+    dir = f"frames/{nameline}/"
+    os.mkdir(dir)
+    env = module.env()
+    #env = gin_rummy_v0.env()
+    env.reset()
+    for step in range(100):
+        for agent in env.agent_order:  # step through every agent once with observe=True
+            if env.dones[agent]:
+                env.reset()
+                break
+            if 'legal_moves' in env.infos[agent]:
+                action = random.choice(env.infos[agent]['legal_moves'])
+            else:
+                action = env.action_spaces[agent].sample()
+            env.step(action)
 
-nameline = name[name.index("/")+1:]
-dir = f"frames/{nameline}/"
-os.mkdir(dir)
-env = module.env()
-#env = gin_rummy_v0.env()
-env.reset()
-for step in range(100):
-    for agent in env.agent_order:  # step through every agent once with observe=True
-        if env.dones[agent]:
-            env.reset()
-            break
-        if 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
-        else:
-            action = env.action_spaces[agent].sample()
-        env.step(action)
+        ndarray = env.render()
+        tot_size = max(ndarray.shape)
+        target_size = 500
+        ratio = target_size/tot_size
+        new_shape = (int(ndarray.shape[1]*ratio),int(ndarray.shape[0]*ratio))
+        im = Image.fromarray(ndarray)
+        #im  = im.resize(new_shape, Image.ANTIALIAS)
+        im.save(f"{dir}{str(step).zfill(3)}.jpg")
+        #print(text)
 
-    ndarray = env.render()
-    tot_size = max(ndarray.shape)
-    target_size = 500
-    ratio = target_size/tot_size
-    new_shape = (int(ndarray.shape[1]*ratio),int(ndarray.shape[0]*ratio))
-    im = Image.fromarray(ndarray)
-    #im  = im.resize(new_shape, Image.ANTIALIAS)
-    im.save(f"{dir}{str(step).zfill(3)}.png")
-    #print(text)
+    render_gif_image(nameline)
+    # num_games = 0
+    # while num_games < 10000:
+    #     for i in range(2):
+    #         text = text_to_display[i]
+    #         # surf = font.render(text,False,(255,255,255),(0,0,0))
+    #         # screen.blit(surf, (0,0))
 
+def render_gif_image(name):
+    ffmpeg_command = [
+        "ffmpeg",
+        "-f", "image2",
+        "-i", f"frames/{name}/%03d.jpg",
+        f"gifs/{name}.gif"
+    ]
+    print(" ".join(ffmpeg_command))
+    subprocess.run(ffmpeg_command)
 
-# num_games = 0
-# while num_games < 10000:
-#     for i in range(2):
-#         text = text_to_display[i]
-#         # surf = font.render(text,False,(255,255,255),(0,0,0))
-#         # screen.blit(surf, (0,0))
+def render_all():
+    for name,module in all_environments.items():
+        if "classic" not in name:
+            nameline = name.replace("/","_")
+            generate_data(nameline,module)
+            #render_gif_image(nameline)
+
+if __name__ == "__main__":
+    name = sys.argv[1]
+    if name == "all":
+        render_all()
+    else:
+        module = all_environments[name]
+        nameline = name.replace("/","_")
+
+        generate_data(nameline,module)
