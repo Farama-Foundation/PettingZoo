@@ -29,7 +29,6 @@ from .games import surround_erase as surround_erase_v0
 from .games import tennis as tennis_v0
 from .games import video_checkers as video_checkers_v0
 from .games import wizard_of_wor as wizard_of_wor_v0
-from .games import warlords_two_player as warlords_two_player_v0
 from .games import warlords as warlords_v0
 from .games import pong_four_player as pong_four_player_v0
 from .games import pong_quadrapong as pong_quadrapong_v0

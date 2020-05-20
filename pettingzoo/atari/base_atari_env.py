@@ -20,6 +20,9 @@ def base_env_wrapper_fn(raw_env_fn):
 
 
 class BaseAtariEnv(AECEnv):
+
+    metadata = {'render.modes': ['human']}
+
     def __init__(
             self,
             game,
@@ -56,6 +59,7 @@ class BaseAtariEnv(AECEnv):
         self.ale.loadROM(final_path)
 
         all_modes = self.ale.getAvailableModes(num_players)
+
         if mode_num is None:
             mode = all_modes[0]
         else:
@@ -63,6 +67,7 @@ class BaseAtariEnv(AECEnv):
             assert mode in all_modes, "mode_num parameter is wrong. Mode {} selected, only {} modes are supported".format(mode_num, str(list(all_modes)))
 
         self.ale.setMode(mode)
+        assert num_players == self.ale.numPlayersActive()
 
         if full_action_space:
             action_size = 18
@@ -75,8 +80,8 @@ class BaseAtariEnv(AECEnv):
             (screen_width, screen_height) = self.ale.getScreenDims()
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, 3), dtype=np.uint8)
 
-        self.num_agents = 2
-        self.agents = ["player_0", "player_1"]
+        self.num_agents = num_players
+        self.agents = ["player_{}".format(n) for n in range(self.num_agents)]
         self.agent_order = list(self.agents)
 
         self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
@@ -89,7 +94,6 @@ class BaseAtariEnv(AECEnv):
 
     def reset(self, observe=True):
         self.ale.reset_game()
-
         self.agent_selection = self._agent_selector.reset()
 
         self.rewards = {a: 0 for a in self.agents}
@@ -116,7 +120,7 @@ class BaseAtariEnv(AECEnv):
 
         return self.observe(self.agent_selection) if observe else None
 
-    def render(self):
+    def render(self, mode='human'):
         import pygame
         if self._screen is None:
             pygame.init()
