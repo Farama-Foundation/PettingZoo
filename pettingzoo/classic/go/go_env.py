@@ -10,6 +10,7 @@ from pettingzoo.utils import wrappers
 def env():
     env = raw_env()
     pass_move = env._N * env._N
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NanNoOpWrapper(env, pass_move, "passing turn with action {}".format(pass_move))

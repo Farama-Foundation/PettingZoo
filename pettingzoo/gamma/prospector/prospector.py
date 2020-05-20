@@ -650,8 +650,13 @@ class raw_env(AECEnv):
             for s in self.all_sprites.sprites():
                 s.convert_img()
             self.rendering = True
+
         self.draw()
+
+        observation = np.array(pg.surfarray.pixels3d(self.screen))
         pg.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
+
 
     def draw(self):
         self.screen.blit(self.background, self.background_rect)

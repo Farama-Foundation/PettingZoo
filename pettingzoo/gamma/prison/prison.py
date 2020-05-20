@@ -343,7 +343,11 @@ class raw_env(AECEnv):
                     h = 650 + 150 * k
                     self.screen.blit(self.background_append, (0, h))
         self.rendering = True
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
+
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven
 # Tank and bunny sprites commissioned from https://www.fiverr.com/jeimansutrisman

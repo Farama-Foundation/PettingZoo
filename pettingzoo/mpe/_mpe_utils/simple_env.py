@@ -228,7 +228,7 @@ class SimpleEnv(AECEnv):
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
         # render to display or array
-        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+        return self.viewer.render(return_rgb_array=False)
 
     # reset rendering assets
     def _reset_render(self):
