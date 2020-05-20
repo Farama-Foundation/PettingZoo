@@ -138,7 +138,7 @@ class Viewer(object):
         if return_rgb_array:
             buffer = pyglet.image.get_buffer_manager().get_color_buffer()
             image_data = buffer.get_image_data()
-            arr = np.fromstring(image_data.data, dtype=np.uint8, sep='')
+            arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
             arr = arr.reshape((state_h, state_w, 4))
             arr = arr[::-1, :, 0:3]
 
