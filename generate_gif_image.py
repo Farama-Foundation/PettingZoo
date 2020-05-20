@@ -35,7 +35,7 @@ def generate_data(nameline,module):
         new_shape = (int(ndarray.shape[1]*ratio),int(ndarray.shape[0]*ratio))
         im = Image.fromarray(ndarray)
         #im  = im.resize(new_shape, Image.ANTIALIAS)
-        im.save(f"{dir}{str(step).zfill(3)}.jpg")
+        im.save(f"{dir}{str(step).zfill(3)}.png")
         #print(text)
 
     render_gif_image(nameline)
@@ -48,9 +48,8 @@ def generate_data(nameline,module):
 
 def render_gif_image(name):
     ffmpeg_command = [
-        "ffmpeg",
-        "-f", "image2",
-        "-i", f"frames/{name}/%03d.jpg",
+        "convert",
+         f"frames/{name}/*.png",
         f"gifs/{name}.gif"
     ]
     print(" ".join(ffmpeg_command))
