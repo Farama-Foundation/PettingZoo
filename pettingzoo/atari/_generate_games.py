@@ -199,12 +199,6 @@ envs = [
         "mode": None,
     },
     {
-        "fname": "warlords_two_player",
-        "name": "warlords",
-        "num_players": 2,
-        "mode": None,
-    },
-    {
         "fname": "warlords",
         "name": "warlords",
         "num_players": 4,

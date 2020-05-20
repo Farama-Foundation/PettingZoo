@@ -67,7 +67,6 @@ all_environments = {
     "atari/tennis": tennis_v0,
     "atari/video_checkers": video_checkers_v0,
     "atari/wizard_of_wor": wizard_of_wor_v0,
-    "atari/warlords_two_player": warlords_two_player_v0,
     "atari/warlords": warlords_v0,
     "atari/pong_four_player": pong_four_player_v0,
     "atari/pong_quadrapong": pong_quadrapong_v0,
