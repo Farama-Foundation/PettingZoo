@@ -538,7 +538,10 @@ class raw_env(AECEnv):
         if not self.render_on:
             # sets self.render_on to true and initializes display
             self.enable_render()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
         pygame.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
 
     def close(self):
         if not self.closed:

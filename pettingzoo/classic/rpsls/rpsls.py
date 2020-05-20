@@ -51,7 +51,9 @@ class raw_env(AECEnv):
         self.num_moves = 0
 
     def render(self, mode="human"):
-        print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
+        string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
+        print(string)
+        return string
 
     def observe(self, agent):
         # observation of one agent is the previous state of the other

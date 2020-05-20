@@ -13,6 +13,7 @@ Wrapper class around google deepmind's hanabi.
 def env(**kwargs):
     env = raw_env(**kwargs)
     player_losing_reward = -3
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=player_losing_reward)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)

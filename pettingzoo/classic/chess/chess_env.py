@@ -105,6 +105,7 @@ class raw_env(AECEnv):
 
     def render(self, mode='human'):
         print(self.board)
+        return str(self.board)
 
     def close(self):
         pass

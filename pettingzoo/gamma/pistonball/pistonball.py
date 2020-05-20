@@ -254,7 +254,10 @@ class raw_env(AECEnv):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
 
     def step(self, action, observe=True):
         agent = self.agent_selection

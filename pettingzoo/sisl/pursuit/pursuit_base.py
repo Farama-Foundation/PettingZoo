@@ -327,7 +327,9 @@ class Pursuit():
         self.draw_evaders()
         self.draw_pursuers()
 
+        observation = pygame.surfarray.pixels3d(self.screen)
         pygame.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
 
     def animate(self, act_fn, nsteps, file_name, rate=1.5, verbose=False):
         """

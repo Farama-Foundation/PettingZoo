@@ -58,6 +58,15 @@ class raw_env(AECEnv):
     def render(self, mode="human"):
         self.env.render()
 
+        import pyglet
+        buffer = pyglet.image.get_buffer_manager().get_color_buffer()
+        image_data = buffer.get_image_data()
+        arr = np.fromstring(image_data.data, dtype=np.uint8, sep='')
+        arr = arr.reshape(buffer.height, buffer.width, 4)
+        arr = arr[::-1, :, 0:3]
+        return arr
+
+
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
 
