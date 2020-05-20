@@ -19,7 +19,7 @@ def env():
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', 'ascii']}
+    metadata = {'render.modes': ['human']}
 
     def __init__(self):
         super().__init__()
