@@ -122,16 +122,18 @@ class BaseAtariEnv(AECEnv):
 
     def render(self, mode='human'):
         import pygame
+        (screen_width, screen_height) = self.ale.getScreenDims()
+        zoom_factor = 4
         if self._screen is None:
             pygame.init()
-            (screen_width, screen_height) = self.ale.getScreenDims()
-            self._screen = pygame.display.set_mode((screen_width, screen_height))
+            self._screen = pygame.display.set_mode((screen_width*zoom_factor, screen_height*zoom_factor))
 
         image = self.ale.getScreenRGB()
-        #image = np.transpose(image,(1,0,2))
+
         myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
 
-        #self._screen.fill((0,0,0))
+        myImage = pygame.transform.scale(myImage,(screen_width*zoom_factor, screen_height*zoom_factor))
+
         self._screen.blit(myImage, (0, 0))
 
         pygame.display.flip()
