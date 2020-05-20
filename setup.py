@@ -37,6 +37,7 @@ setup(
         "pynput",
         "opencv-python",
         "box2d-py",
-        "python-shogi"
+        "python-shogi",
+        "hanabi_learning_environment"
     ],
 )
