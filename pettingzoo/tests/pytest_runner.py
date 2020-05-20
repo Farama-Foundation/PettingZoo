@@ -13,5 +13,5 @@ def test_module(env_module):
     api_test.api_test(_env)
 
     seed_test(env_module.env)
-    test_render(_env)
+    # test_render(_env)
     # error_test(env_module.env())

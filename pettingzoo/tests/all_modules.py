@@ -1,3 +1,5 @@
+from pettingzoo.atari import *
+
 from pettingzoo.classic import chess_v0
 from pettingzoo.classic import rps_v0
 from pettingzoo.classic import rpsls_v0
@@ -34,6 +36,42 @@ from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
 all_environments = {
+    "atari/backgammon": backgammon_v0,
+    "atari/boxing": boxing_v0,
+    "atari/combat_tank": combat_tank_v0,
+    "atari/combat_tankpong": combat_tankpong_v0,
+    "atari/combat_invisible_tank": combat_invisible_tank_v0,
+    "atari/combat_invisible_tankpong": combat_invisible_tankpong_v0,
+    "atari/combat_biplane": combat_biplane_v0,
+    "atari/combat_jet": combat_jet_v0,
+    "atari/double_dunk": double_dunk_v0,
+    "atari/entombed": entombed_v0,
+    "atari/flag_capture": flag_capture_v0,
+    "atari/joust": joust_v0,
+    "atari/ice_hockey": ice_hockey_v0,
+    "atari/maze_craze_fully_seen": maze_craze_fully_seen_v0,
+    "atari/maze_craze_partial_vis": maze_craze_partial_vis_v0,
+    "atari/maze_craze_invisible": maze_craze_invisible_v0,
+    "atari/maze_craze_robbers": maze_craze_robbers_v0,
+    "atari/maze_craze_capture": maze_craze_capture_v0,
+    "atari/maze_craze_blockade": maze_craze_blockade_v0,
+    "atari/mario_bros": mario_bros_v0,
+    "atari/othello": othello_v0,
+    "atari/pong": pong_v0,
+    "atari/pong_basketball": pong_basketball_v0,
+    "atari/space_invaders_easy": space_invaders_easy_v0,
+    "atari/space_invaders_difficult": space_invaders_difficult_v0,
+    "atari/space_invaders_alternating": space_invaders_alternating_v0,
+    "atari/surround": surround_v0,
+    "atari/surround_erase": surround_erase_v0,
+    "atari/tennis": tennis_v0,
+    "atari/video_checkers": video_checkers_v0,
+    "atari/wizard_of_wor": wizard_of_wor_v0,
+    "atari/warlords": warlords_v0,
+    "atari/pong_four_player": pong_four_player_v0,
+    "atari/pong_quadrapong": pong_quadrapong_v0,
+    "atari/pong_volleyball": pong_volleyball_v0,
+
     "classic/chess": chess_v0,
     "classic/rps": rps_v0,
     "classic/rpsls": rpsls_v0,
