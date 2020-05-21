@@ -55,8 +55,6 @@ The commonly used methods are:
 
 `last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
-`agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argument above).
-
 `reset(observe=True)` is the same as in Gym- it resets the environment (and set's it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
 `step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent in `env.agent_order`, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
@@ -67,6 +65,8 @@ The commonly used methods are:
 PettingZoo models games as AEC games, and thus can support any game multi-agent RL can consider, allowing for fantastically weird cases. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functionality is also needed by the high level functions above though, so implementing them is just a matter of code factoring.
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
+
+`agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know what agent is acting.
 
 `num_agents`: The number of agents currently in the environment.
 
@@ -184,8 +184,6 @@ The following environments are under active development:
 * atari/* (Ben)
 * classic/backgammon (Caroline)
 * classic/checkers (Caroline)
-* classic/hanabi (Clemens)
 * classic/shogi (Caroline)
-* gamma/prospector (Yashas)
 * magent/* (Mario)
 * robotics/* (Yiling)
