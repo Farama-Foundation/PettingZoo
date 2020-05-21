@@ -1,6 +1,8 @@
 
 ### Dou Dizhu
 
+This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+
 | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States    |
 |----------|--------|----------------|---------------|----------------|-------------------|--------------------|---------------|
 | Discrete | 3      | No             | Discrete(309) | Discrete(309)  | (6, 5, 15)        | [0,1]              | 10^53 - 10^83 |

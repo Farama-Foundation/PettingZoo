@@ -1,6 +1,8 @@
 
 ### Texas Hold'em No Limit
 
+This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+
 | Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
 |----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
 | Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |

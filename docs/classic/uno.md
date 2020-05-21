@@ -1,6 +1,8 @@
 
 ### Uno
 
+This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+
 | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Discrete | 2      | No             | Discrete(61) | Discrete(61)  | (7, 4, 15)        | [0, 1]             | 10^163     |
