@@ -31,21 +31,9 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 {doc_blrb}
 
-```
-{env_name}.env(seed=None, obs_type='image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
-```
+#### Environment parameters
 
-```
-seed: Set to specific value for deterministic, reproducible behavior.
-
-obs_type: default value of 'image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'ram' leads to an observation of the 2048 bits that comprise the RAM of the atari console.
-
-frameskip: number of frames to skip each time you take an action.
-
-repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
-
-full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. This shrinks the action space to this smaller space.
-```
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
 
 '''
 
