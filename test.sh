@@ -6,7 +6,7 @@ save_obs=True
 
 flake8 pettingzoo/classic --ignore E501,E731,E741,E402,F401,W503
 echo
-# python3 -m pettingzoo.tests.ci_test classic/backgammon $render $manual_control $bombardment $performance $save_obs
+python3 -m pettingzoo.tests.ci_test classic/backgammon $render $manual_control $bombardment $performance $save_obs
 # python3 -m pettingzoo.tests.ci_test classic/checkers $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/chess $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic/connect_four $render $manual_control $bombardment $performance $save_obs
