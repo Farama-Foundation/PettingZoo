@@ -7,7 +7,6 @@ save_obs=True
 flake8 pettingzoo/atari --ignore E501,E731,E741,E402,F401,W503
 
 
-python3 -m pettingzoo.tests.ci_test atari/backgammon $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/boxing $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/combat_tank $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/combat_tankpong $render $manual_control $bombardment $performance $save_obs
