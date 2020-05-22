@@ -32,8 +32,8 @@ class raw_env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents}
 
-        low = np.zeros((198, 1))
-        high = np.ones((198, 1))
+        low = np.zeros((198,))
+        high = np.ones((198,))
         for i in range(3, 97, 4):
             high[i] = 6.0
         high[96] = 7.5
@@ -73,11 +73,7 @@ class raw_env(AECEnv):
         valid_moves = bg_utils.get_valid_actions(self, self.roll)
 
         if self.double_roll > 0:
-            if self.double_roll == 2:
-                self.agent_order[0] = self.agent_selection
-                self.agent_order[1] = self.agent_selection
-            elif self.double_roll == 1:
-                self.handle_double_roll()
+            self.handle_double_roll()
             valid_moves = bg_utils.double_roll(valid_moves)
             self.double_roll -= 1
 
@@ -92,13 +88,17 @@ class raw_env(AECEnv):
             return self.observe(self.game.get_opponent(self.colors[self.agent_selection]))
 
     def observe(self, agent):
-        return np.array(self.game.get_board_features(agent)).reshape(198, 1)
+        return np.array(self.game.get_board_features(agent)).reshape(198,)
 
     def reset(self, observe=True):
         self.dones = {i: False for i in self.agents}
+        self.infos = {i: {'legal_moves': []} for i in self.agents}
+        self.agent_order = list(self.agents)
+        self._agent_selector.reinit(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {i: 0 for i in self.agents}
         self.colors = {}
+        self.double_roll = 0
         self.game = Game()
 
         opp_agent = bg_utils.opp_agent(self, self.agent_selection)
@@ -132,19 +132,9 @@ class raw_env(AECEnv):
 
     def handle_double_roll(self):
         if self.double_roll == 1:
-            prev_player = self.agent_selection
-            next_player = self._agent_selector.next()
-            prev_player_ind = self.agent_order.index(prev_player)
-            curr_player_ind = self.agent_order.index(next_player)
-            if prev_player_ind == self.num_agents - 1:
-                self.agent_order.remove(next_player)
-                self.agent_order.insert(0, next_player)
-            else:
-                self.agent_order.remove(next_player)
-                if curr_player_ind < prev_player_ind:
-                    self.agent_order.insert(0, self.agent_order.pop(-1))
-                self.agent_order.insert(self.agent_order.index(prev_player) + 1, next_player)
-            skip_agent = prev_player_ind + 1
+            a = self.agent_order[0]
+            self.agent_order[0] = self.agent_order[1]
+            self.agent_order[1] = a
             self._agent_selector.reinit(self.agent_order)
-            for _ in range(skip_agent):
-                self.agent_selection = self._agent_selector.next()
+            if self.agent_selection == self.agent_order[0]:
+                self._agent_selector.next()
