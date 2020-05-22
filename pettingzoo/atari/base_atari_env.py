@@ -81,7 +81,8 @@ class BaseAtariEnv(AECEnv):
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, 3), dtype=np.uint8)
 
         self.num_agents = num_players
-        self.agents = ["player_{}".format(n) for n in range(self.num_agents)]
+        player_names = ["first","second","third","fourth"]
+        self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
         self.agent_order = list(self.agents)
 
         self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
