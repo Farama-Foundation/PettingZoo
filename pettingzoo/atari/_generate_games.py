@@ -1,5 +1,6 @@
 import os
 import json
+from _docs_blurbs import all_docs
 
 base_template = '''from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn
 
@@ -11,219 +12,286 @@ def raw_env(**kwargs):
 env = base_env_wrapper_fn(raw_env)
 '''
 
+doc_template = '''
+### {env_pretty_name}
+
+This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+
+| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
+|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
+| Graphical    | Discrete  | {num_players} | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+
+`from pettingzoo.atari import {env_name}_v0`
+
+`agents= {players}`
+
+![{env_name} gif](../../gifs/atari_{env_name}.gif)
+
+*AEC diagram*
+
+{doc_blrb}
+
+```
+{env_name}.env(seed=None, obs_type='image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
+```
+
+```
+seed: Set to specific value for deterministic, reproducible behavior.
+
+obs_type: default value of 'image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'ram' leads to an observation of the 2048 bits that comprise the RAM of the atari console.
+
+frameskip: number of frames to skip each time you take an action.
+
+repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
+
+full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. This shrinks the action space to this smaller space.
+```
+
+'''
+
+
 envs = [
     {
         "fname": "boxing",
+        "uname": "Boxing",
         "name": "boxing",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "combat_tank",
+        "uname": "Combat: Tank",
         "name": "combat",
         "num_players": 2,
         "mode": 4,
     },
     {
         "fname": "combat_tankpong",
+        "uname": "Combat: Tank Pong",
         "name": "combat",
         "num_players": 2,
         "mode": 6,
     },
     {
         "fname": "combat_invisible_tank",
+        "uname": "Combat: Invisible Tank",
         "name": "combat",
         "num_players": 2,
         "mode": 11,
     },
     {
         "fname": "combat_invisible_tankpong",
+        "uname": "Combat: Invisible Tank Pong",
         "name": "combat",
         "num_players": 2,
         "mode": 14,
     },
     {
         "fname": "combat_biplane",
+        "uname": "Combat: Biplane",
         "name": "combat",
         "num_players": 2,
         "mode": 16,
     },
     {
         "fname": "combat_jet",
+        "uname": "Combat: Jet",
         "name": "combat",
         "num_players": 2,
         "mode": 21,
     },
     {
         "fname": "double_dunk",
+        "uname": "Double Dunk",
         "name": "double_dunk",
         "num_players": 2,
         "mode": None,
     },
     {
-        "fname": "entombed",
-        "name": "entombed",
-        "num_players": 2,
-        "mode": None,
-    },
-    {
         "fname": "entombed_competitive",
+        "uname": "Entombed: Competitive",
         "name": "entombed",
         "num_players": 2,
         "mode": 2,
     },
     {
         "fname": "entombed_cooperative",
+        "uname": "Entombed: Cooperative",
         "name": "entombed",
         "num_players": 2,
         "mode": 3,
     },
     {
         "fname": "flag_capture",
+        "uname": "Flag Capture",
         "name": "flag_capture",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "joust",
+        "uname": "Joust",
         "name": "joust",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "ice_hockey",
+        "uname": "Ice Hockey",
         "name": "ice_hockey",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "maze_craze_fully_seen",
+        "uname": "Maze Craze: Full visibility",
         "name": "maze_craze",
         "num_players": 2,
         "mode": 0,
     },
     {
         "fname": "maze_craze_partial_vis",
+        "uname": "Maze Craze: Partial visibility",
         "name": "maze_craze",
         "num_players": 2,
         "mode": (6-1)*4+3-1,
     },
     {
         "fname": "maze_craze_invisible",
+        "uname": "Maze Craze: Invisible",
         "name": "maze_craze",
         "num_players": 2,
         "mode": (6-1)*4+4-1,
     },
     {
         "fname": "maze_craze_robbers",
+        "uname": "Maze Craze: Robbers",
         "name": "maze_craze",
         "num_players": 2,
         "mode": (3-1)*4+1-1,
     },
     {
         "fname": "maze_craze_capture",
+        "uname": "Maze Craze: Capture",
         "name": "maze_craze",
         "num_players": 2,
         "mode": (4-1)*4+1-1,
     },
     {
         "fname": "maze_craze_blockade",
+        "uname": "Maze Craze: Blockade",
         "name": "maze_craze",
         "num_players": 2,
         "mode": (11-1)*4+1-1,
     },
     {
         "fname": "mario_bros",
+        "uname": "Mario Bros",
         "name": "mario_bros",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "othello",
+        "uname": "Othello",
         "name": "othello",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "pong",
+        "uname": "Pong: Original",
         "name": "pong",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "pong_basketball",
+        "uname": "Pong: Basketball",
         "name": "pong",
         "num_players": 2,
         "mode": 44,
     },
     {
         "fname": "space_invaders_easy",
+        "uname": "Space Invaders: Easy",
         "name": "space_invaders",
         "num_players": 2,
         "mode": 33,
     },
     {
         "fname": "space_invaders_difficult",
+        "uname": "Space Invaders: Difficult",
         "name": "space_invaders",
         "num_players": 2,
         "mode": 44,
     },
     {
         "fname": "space_invaders_alternating",
+        "uname": "Space Invaders: Alternating",
         "name": "space_invaders",
         "num_players": 2,
         "mode": 50,
     },
     {
         "fname": "surround",
+        "uname": "Surround: Original",
         "name": "surround",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "surround_erase",
+        "uname": "Surround: Erase",
         "name": "surround",
         "num_players": 2,
         "mode": 7,
     },
     {
         "fname": "tennis",
+        "uname": "Tennis",
         "name": "tennis",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "video_checkers",
+        "uname": "Video Checkers",
         "name": "video_checkers",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "wizard_of_wor",
+        "uname": "Wizard of Wor",
         "name": "wizard_of_wor",
         "num_players": 2,
         "mode": None,
     },
     {
         "fname": "warlords",
+        "uname": "Warlords",
         "name": "warlords",
         "num_players": 4,
         "mode": None,
     },
     {
         "fname": "pong_four_player",
+        "uname": "Pong: Doubles",
         "name": "pong",
         "num_players": 4,
         "mode": 5,
     },
     {
         "fname": "pong_quadrapong",
+        "uname": "Pong: Quadrapong",
         "name": "pong",
         "num_players": 4,
         "mode": 33,
     },
     {
         "fname": "pong_volleyball",
+        "uname": "Pong: Team Volleyball",
         "name": "pong",
         "num_players": 4,
         "mode": 41,
@@ -259,3 +327,41 @@ def gen_testsh_data():
     with open("atari_mod.py",'w') as file:
         for env in envs:
             file.write(testsh_template.format(fname=env['fname']))
+
+def gen_doc_data():
+    player_names = ["first", "second", "third", "fourth"]
+    os.mkdir("ale_docs")
+    for env in envs:
+        name = env['fname']
+        doc_conent = all_docs[name] if name in all_docs else "*BLRB NEEDED!!!*\n"
+        doc = doc_template.format(
+            env_name=name,
+            doc_blrb=doc_conent,
+            num_players=env['num_players'],
+            players=json.dumps([f"{player_names[i]}_0" for i in range(env['num_players'])]),
+            env_pretty_name=env['uname'],
+        )
+        doc_path = f"ale_docs/{name}.md"
+        with open(doc_path,'w') as file:
+            file.write(doc)
+
+def gen_doc_table():
+    header = "| Environment | Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |"
+    seperator = "|--------------|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|"
+    content_templ = "| [{uname}](atari/{env_name}.md)   | Graphical    | Discrete  | {num_players} | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |"
+
+    content_list = [header,seperator]
+    for env in envs:
+        #name = env['fname']
+        contents = content_templ.format(
+            uname=env['uname'],
+            env_name=env['fname'],
+            num_players=env['num_players']
+        )
+        content_list.append(contents)
+
+    with open("atari_doc.md",'w') as file:
+        file.write("\n".join(content_list)+"\n")
+
+gen_doc_data()
+gen_doc_table()
