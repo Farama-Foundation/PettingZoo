@@ -70,6 +70,13 @@ your own search and your opponent's search in order to
 narrow down the location of the flag quickly and effectively.
 ''',
 "joust":'''
+Scoring points in an unforgiving world (mixed-sum game). Careful positioning, timing,
+and control is essential, as well as awareness of your opponent.
 
+In Joust, you score points by hitting the opponent and NPCs when
+you are above them. If you are below them, you lose a life.
+In a game, there are a variety of waves with different enemies
+and different point scoring systems. However, expect that you can earn
+around 3000 points per wave.
 '''
 }
