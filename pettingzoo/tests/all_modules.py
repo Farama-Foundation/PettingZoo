@@ -36,7 +36,6 @@ from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
 all_environments = {
-    "atari/backgammon": backgammon_v0,
     "atari/boxing": boxing_v0,
     "atari/combat_tank": combat_tank_v0,
     "atari/combat_tankpong": combat_tankpong_v0,

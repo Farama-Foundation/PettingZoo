@@ -1,4 +1,3 @@
-from .games import backgammon as backgammon_v0
 from .games import boxing as boxing_v0
 from .games import combat_tank as combat_tank_v0
 from .games import combat_tankpong as combat_tankpong_v0

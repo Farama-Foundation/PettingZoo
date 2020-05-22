@@ -13,12 +13,6 @@ env = base_env_wrapper_fn(raw_env)
 
 envs = [
     {
-        "fname": "backgammon",
-        "name": "backgammon",
-        "num_players": 2,
-        "mode": None,
-    },
-    {
         "fname": "boxing",
         "name": "boxing",
         "num_players": 2,
@@ -71,6 +65,18 @@ envs = [
         "name": "entombed",
         "num_players": 2,
         "mode": None,
+    },
+    {
+        "fname": "entombed_competitive",
+        "name": "entombed",
+        "num_players": 2,
+        "mode": 2,
+    },
+    {
+        "fname": "entombed_cooperative",
+        "name": "entombed",
+        "num_players": 2,
+        "mode": 3,
     },
     {
         "fname": "flag_capture",
@@ -223,26 +229,33 @@ envs = [
         "mode": 41,
     },
 ]
-os.mkdir("ale_games")
-for env in envs:
-    name = f"ale_games/{env['fname']}.py"
-    with open(name,'w') as file:
-        file.write(base_template.format(**env))
 
-init_template = "from .games import {fname} as {fname}_v0\n"
-with open("atari_init.py",'w') as file:
+
+
+def gen_games():
+    os.mkdir("ale_games")
     for env in envs:
-        fname = env['fname']
-        file.write(init_template.format(fname=fname))
+        name = f"ale_games/{env['fname']}.py"
+        with open(name,'w') as file:
+            file.write(base_template.format(**env))
 
-testsh_template = "python3 -m pettingzoo.tests.ci_test atari/{} $render $manual_control $bombardment $performance $save_obs\n"
-with open("atari_testsh.sh",'w') as file:
-    for env in envs:
-        file.write(testsh_template.format(env['fname']))
+def gen_imports():
+    init_template = "from .games import {fname} as {fname}_v0\n"
+    with open("atari_init.py",'w') as file:
+        for env in envs:
+            fname = env['fname']
+            file.write(init_template.format(fname=fname))
 
-module_dict = {"atari/"+env['fname']: env['fname']+"_v0" for env in envs}
+def gen_ci_test_data():
+    testsh_template = "python3 -m pettingzoo.tests.ci_test atari/{} $render $manual_control $bombardment $performance $save_obs\n"
+    with open("atari_testsh.sh",'w') as file:
+        for env in envs:
+            file.write(testsh_template.format(env['fname']))
 
-testsh_template = '    "atari/{fname}": {fname}_v0,\n'
-with open("atari_mod.py",'w') as file:
-    for env in envs:
-        file.write(testsh_template.format(fname=env['fname']))
+def gen_testsh_data():
+    module_dict = {"atari/"+env['fname']: env['fname']+"_v0" for env in envs}
+
+    testsh_template = '    "atari/{fname}": {fname}_v0,\n'
+    with open("atari_mod.py",'w') as file:
+        for env in envs:
+            file.write(testsh_template.format(fname=env['fname']))
