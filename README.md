@@ -182,7 +182,6 @@ Our cooperative games have leaderboards for best total (summed over all agents) 
 The following environments are under active development:
 
 * atari/* (Ben)
-* classic/backgammon (Caroline)
 * classic/checkers (Caroline)
 * classic/shogi (Caroline)
 * magent/* (Mario)
