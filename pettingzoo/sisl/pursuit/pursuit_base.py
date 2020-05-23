@@ -288,8 +288,8 @@ class Pursuit():
     def draw_pursuers(self):
         for i in range(self.pursuer_layer.n_agents()):
             x, y = self.pursuer_layer.get_position(i)
-            center = (self.pixel_scale * x + self.pixel_scale / 2,
-                      self.pixel_scale * y + self.pixel_scale / 2)
+            center = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                      int(self.pixel_scale * y + self.pixel_scale / 2))
             col = (255, 0, 0)
             pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
@@ -307,11 +307,11 @@ class Pursuit():
     def draw_evaders(self):
         for i in range(self.evader_layer.n_agents()):
             x, y = self.evader_layer.get_position(i)
-            center = (self.pixel_scale * x + self.pixel_scale / 2,
-                      self.pixel_scale * y + self.pixel_scale / 2)
+            center = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                      int(self.pixel_scale * y + self.pixel_scale / 2))
             col = (0, 0, 255)
 
-            pygame.draw.circle(self.screen, col, center, self.pixel_scale / 3)
+            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
     def render(self):
         if not self.renderOn:
