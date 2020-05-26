@@ -4,7 +4,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete           | 2       | No      | Discrete($26^2 * 2 + 1$)              | Discrete( $26^2 * 2 + 1$)            | (198,)             | [0, 7.5]                 | 10^26                  |
+| Discrete           | 2       | No      | Discrete(26^2 * 2 + 1)              | Discrete( 26^2 * 2 + 1)            | (198,)             | [0, 7.5]                 | 10^26                  |
 
 `from pettingzoo.classic import backgammon_v0`
 
@@ -79,19 +79,19 @@ Encoding of the current player:
 | BLACK   | [0.0, 1.0] |
 
 #### Action Space
-The action space for this environment is Discrete($26^2 * 2 + 1$).
+The action space for this environment is Discrete(26^2 * 2 + 1).
 
 Each action number encodes the two source locations to move checkers from in base 26.
 
-Actions in [$0$, $26^ 2 -1$] use the low dice roll first, and actions in [$26^2$, $2*26 ^2 - 1$] use the high dice roll first.
+Actions in [0, 26^ 2 -1] use the low dice roll first, and actions in [26^2, 2*26 ^2 - 1] use the high dice roll first.
 
-The 'do nothing' action is $26^2*2$
+The 'do nothing' action is 26^2*2
 
 | Action ID  | First Source ID  | Second Source ID|  First Roll Used | Second Roll Used |         
 | ------- | ---------- |---------- |---------- |---------- |
-| 0 to $26^ 2 -1$   | action % $26$ | action / $26$ | Low Roll | High Roll
-| $26^2$ to $26^2*2 -1$   | (action $- 26^2$) % $26$ |(action $- 26^2$) / $26$ | High Roll | Low Roll
-| $26^2*2$   | None |None | None | None
+| 0 to 26^ 2 -1   | action % 26 | action / 26 | Low Roll | High Roll
+| 26^2 to 26^2*2 -1   | (action - 26^2) % 26 |(action - 26^2) / 26 | High Roll | Low Roll
+| 26^2*2   | None |None | None | None
 
 The location on the board can be found from the Location ID, which is either the source ID, or the destination ID (source ID + Roll).
 
@@ -110,4 +110,4 @@ The location on the board can be found from the Location ID, which is either the
 
 #### Legal Moves
 
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for 
+The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for the other agent.
