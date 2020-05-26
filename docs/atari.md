@@ -47,19 +47,25 @@ Most games are two player, with the exception of Warlords and a couple of Pong v
 
 There are three types of games:
 
+### Environment details
+
+The ALE environment has been studied extensively and examined for various flaws and how to fix them.  
+
+* Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we enable *sticky actions*, controlled by the `repeat_action_probability` environment parameter, by default. This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+
 
 ### Common Parameters
 
 All the Atari environments have the following environment parameters:
 
 ```
-<atar_game>.env(seed=None, obs_type='image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
+<atar_game>.env(seed=None, obs_type='rgb_image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
 ```
 
 ```
 seed: Set to specific value for deterministic, reproducible behavior.
 
-obs_type: default value of 'image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'ram' leads to an observation of the 2048 bits that comprise the RAM of the atari console.
+obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
 
 frameskip: number of frames to skip each time you take an action.
 
