@@ -2,7 +2,7 @@
 
 | Environment                      | Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States    |
 |----------------------------------|----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|---------------|
-| [Backgammon](classic/backgammon.md)                       | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
+| [Backgammon](classic/backgammon.md)                       | Discrete           | 2       | No      | Discrete(26^2 * 2 + 1)              | Discrete( 26^2 * 2 + 1)            | (198,)             | [0, 7.5]                 | 10^26                  |
 | [Checkers](classic/checkers.md)                         | ?        | ?      | ?              | ?               | ?               | ?                 | ?                  | ?             |
 | [Chess](classic/chess.md)                            | Discrete | 2      | No             | Discrete(4672)  | Discrete(4672)  | (8,8,20)          | [0, 1]             | ?             |
 | [Connect Four](classic/connect_four.md)                     | Discrete | 2      | No             | Discrete(7)     | Discrete(7)     | (6, 7, 2)         | [0, 1]             | ?             |
