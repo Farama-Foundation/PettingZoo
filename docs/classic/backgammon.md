@@ -27,49 +27,30 @@ The observation space has shape (198,). Entries 0-97 represent the positions of 
 | 2         | WHITE - 1st point, 3rd component                                    | 0.0  | 1.0  |
 | 3         | WHITE - 1st point, 4th component                                    | 0.0  | 6.0  |
 | 4         | WHITE - 2nd point, 1st component                                    | 0.0  | 1.0  |
-| 5         | WHITE - 2nd point, 2nd component                                    | 0.0  | 1.0  |
-| 6         | WHITE - 2nd point, 3rd component                                    | 0.0  | 1.0  |
-| 7         | WHITE - 2nd point, 4th component                                    | 0.0  | 6.0  |
 | ...       |                                                                     |      |      |
-| 92        | WHITE - 24th point, 1st component                                   | 0.0  | 1.0  |
-| 93        | WHITE - 24th point, 2nd component                                   | 0.0  | 1.0  |
-| 94        | WHITE - 24th point, 3rd component                                   | 0.0  | 1.0  |
 | 95        | WHITE - 24th point, 4th component                                   | 0.0  | 6.0  |
 | 96        | WHITE - BAR checkers                                                | 0.0  | 7.5  |
 | 97        | WHITE - OFF bar checkers                                            | 0.0  | 1.0  |
 | 98        | BLACK - 1st point, 1st component                                    | 0.0  | 1.0  |
-| 99        | BLACK - 1st point, 2nd component                                    | 0.0  | 1.0  |
-| 100       | BLACK - 1st point, 3rd component                                    | 0.0  | 1.0  |
-| 101       | BLACK - 1st point, 4th component                                    | 0.0  | 6.0  |
 | ...       |                                                                     |      |      |
-| 190       | BLACK - 24th point, 1st component                                   | 0.0  | 1.0  |
-| 191       | BLACK - 24th point, 2nd component                                   | 0.0  | 1.0  |
-| 192       | BLACK - 24th point, 3rd component                                   | 0.0  | 1.0  |
 | 193       | BLACK - 24th point, 4th component                                   | 0.0  | 6.0  |
 | 194       | BLACK - BAR checkers                                                | 0.0  | 7.5  |
 | 195       | BLACK - OFF bar checkers                                            | 0.0  | 1.0  |
 | 196 - 197 | Current player                                                      | 0.0  | 1.0  |
 
-Encoding of a single point (it indicates the number of checkers in that point):
+If there are more than 3 checkers on a point, then the value of the 4th component of that point will be (checkers - 3.0) / 2.0
 
-| Checkers | Encoding                                |           
-| -------- | --------------------------------------- |
-| 0        | [0.0, 0.0, 0.0, 0.0]                    |
-| 1        | [1.0, 0.0, 0.0, 0.0]                    |
-| 2        | [1.0, 1.0, 0.0, 0.0]                    |
-| >= 3     | [1.0, 1.0, 1.0, (checkers - 3.0) / 2.0] |
-
-Encoding of BAR checkers:
+Encoding of checkers on the bar:
 
 | Checkers | Encoding             |           
 | -------- | -------------------- |
-| 0 - 14   | [bar_checkers / 2.0] |
+| 0 - 14   | bar_checkers / 2.0 |
 
-Encoding of OFF bar checkers:
+Encoding of off checkers:
 
 | Checkers | Encoding              |           
 | -------- | --------------------- |
-| 0 - 14   | [off_checkers / 15.0] |
+| 0 - 14   | off_checkers / 15.0 |
 
 Encoding of the current player:
 
@@ -81,19 +62,25 @@ Encoding of the current player:
 #### Action Space
 The action space for this environment is Discrete(26^2 * 2 + 1).
 
-Each action number encodes the two source locations to move checkers from in base 26.
+An agent's turn involves rolling two dice and then performing an action based on those rolls. An action involves using the two dice values to move checkers from one point to another or off of the board.
 
-Actions in [0, 26^ 2 -1] use the low dice roll first, and actions in [26^2, 2*26 ^2 - 1] use the high dice roll first.
+Each action value encodes the two points to move checkers from (source locations), and which dice roll to use first. An action moves a checker from the first source location forward by the amount of the first dice roll (either low roll or high roll, depending on the action value), and then moves a checker from the second source location forward by the amount of the other dice roll.
+
+It is possible that only one of the dice rolls can be used. In that case, one of the source locations will be out of the bounds of the board and is not used.
+
+Actions from 0 to 26^ 2 -1 use the low dice roll first, and actions from 26^2 to 2*26 ^2 - 1 use the high dice roll first.
+
+The two locations to move a checker from are encoded as a number in base 26.
 
 The 'do nothing' action is 26^2*2
 
-| Action ID  | First Source ID  | Second Source ID|  First Roll Used | Second Roll Used |         
+| Action  | First Source Location ID | Second Source Location ID|  First Roll Used | Second Roll Used |         
 | ------- | ---------- |---------- |---------- |---------- |
 | 0 to 26^ 2 -1   | action % 26 | action / 26 | Low Roll | High Roll
 | 26^2 to 26^2*2 -1   | (action - 26^2) % 26 |(action - 26^2) / 26 | High Roll | Low Roll
-| 26^2*2   | None |None | None | None
+| 26^2*2   | None |None | None | None |
 
-The location on the board can be found from the Location ID, which is either the source ID, or the destination ID (source ID + Roll).
+The location on the board can be found from the location ID, which is either the source ID, or the destination ID (source ID + Roll).
 
 | Location ID (S) | Board Location |
 | ------- |  ------- |
