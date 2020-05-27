@@ -21,6 +21,18 @@ The "Landlord" plays first by putting down a combination of cards. The next play
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+
+### Environment arguments
+
+```
+dou_dizhu.env(seed=None)
+```
+
+```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+```
+
+
 #### Observation Space
 
 The *Observation Space* is encoded in 6 planes with 5x15 entries each. For each plane, the 5 rows represent 0, 1, 2, 3, or 4 cards of the same rank and the 15 columns represents all possible ranks ("3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, Black Joker, and Red Joker"). The first plane, Plane 0, is the current player while Plane 1, Plane 2-4, and Plane 5 correspond to the union of the other two players' hand, the recent three actions, and the union of all played cards, respectively.

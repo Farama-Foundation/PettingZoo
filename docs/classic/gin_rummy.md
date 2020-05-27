@@ -19,13 +19,21 @@ Gin Rummy is a 2 players card game with a 52 card deck. The objective is to comb
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-#### Arguments
+### Environment arguments
 
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 
-`gin_rummy_v0.env(knock_reward = 0.5, gin_reward = 1.0)`
+```
+gin_rummy.env(seed=None, knock_reward = 0.5, gin_reward = 1.0)
+```
 
-`gin_rummy_v0.env() # with default values`
+```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
+knock_reward: reward received by a player who knocks
+
+gin_reward: reward received by a player who goes gin
+```
 
 #### Observation Space
 
