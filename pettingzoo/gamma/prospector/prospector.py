@@ -156,7 +156,8 @@ class Banker(pg.sprite.Sprite):
         angle_radians = math.atan2(y_vel, x_vel) - (math.pi / 2)
 
         # Angle is determined only by current trajectory.
-        self.body.angle = angle_radians
+        if not all(a == 0 for a in action):
+            self.body.angle = angle_radians
         self.body.angular_velocity = 0
 
         self.body.velocity = Vec2d(x_vel, y_vel)
@@ -664,132 +665,5 @@ class raw_env(AECEnv):
                 pg.event.pump()
                 pg.display.quit()
             pg.quit()
-
-
-# class env(gym.Env):
-#     def __init__(self):
-#         super().__init__()
-#         global agent2, agent1
-#         pygame.init()
-
-#         # Set the width and height of the screen [width, height]
-#         size = (1002, 699)
-#         self.screen = pygame.display.set_mode(size)
-#         background = get_image("background.jpg")
-#         pygame.display.set_caption("My Game")
-#         self.screen.blit(background, (0, 0))
-#         self.area = self.screen.get_rect()
-
-#         # Loop until the user clicks the close button.
-#         done = False
-
-#         # Used to manage how fast the screen updates
-#         clock = pygame.time.Clock()
-#         agent1 = agent1(size, x=50, y=50, speed=20)
-#         agent2 = agent2(size)
-
-#         block_list, all_sprites_list = self.create_targets()
-
-#         vis = pygame.sprite.Group()  # Visualize block that is being carried by agent 1
-#         vis2 = pygame.sprite.Group()  # Visualize block that is being carried by agent 2
-#         block_picked = None
-#         block_transfered = None
-#         flag = 0
-#         blocks_hit_list = []
-#         # cropped = pygame.Surface((100,100))
-
-#         # -------- Main Program Loop -----------
-#         while not done:
-#             # --- Main event loop
-#             for event in pygame.event.get():
-#                 if event.type == pygame.QUIT:
-#                     done = True
-
-#             self.screen.blit(background, (0, 0))
-#             self.screen.blit(agent1.image, agent1.rect)
-#             # cropped.blit(agent1.image, (agent1.rect.x,agent1.rect.y))
-#             self.screen.blit(agent2.image, agent2.rect)
-#             pos = pygame.mouse.get_pos()
-#             agent1.update(pos, self.area, agent2)
-#             agent2.update(pos)  # , self.area, agent1)
-#             if flag == 0:
-#                 blocks_hit_list = pygame.sprite.spritecollide(agent1, block_list, True)
-#             pygame.draw.circle(self.screen, RED, agent1.rect.topleft, 5)
-#             while len(blocks_hit_list) > 1:
-#                 block_list.add(blocks_hit_list.pop())
-#             if blocks_hit_list:
-#                 # print(len(blocks_hit_list), len(block_list))
-#                 vis.add(blocks_hit_list[0])
-#                 block_picked = blocks_hit_list[0]
-#                 flag = 1
-#             if block_picked:
-#                 corner = agent1.check_collision(block_picked.rect)
-
-#                 block_picked.update(agent1.rect, corner)
-#                 agent1.rotate_flag = True
-#             # --- Go ahead and update the screen with what we've drawn.
-#             # print(len(block_list))
-#             if agent1.rect.y < 355:
-#                 flag = 0
-#                 block_picked = None
-#                 # agent1.rotate_flag = False
-
-#             blocks_transfer_list = pygame.sprite.spritecollide(agent2, vis, True)
-#             if blocks_transfer_list:
-#                 block_transfered = blocks_transfer_list[0]
-#                 block_transfered.update(agent2.rect)
-#                 vis2.add(block_transfered)
-#                 agent2.change_command()
-#                 block_picked = None
-#                 flag = 0
-
-#             if block_transfered:
-#                 block_transfered.update(agent2.rect)
-#             if agent2.rect.y < 105:
-#                 block_transfered = None
-
-#             block_list.draw(self.screen)
-#             vis.draw(self.screen)
-#             vis2.draw(self.screen)
-#             pygame.display.flip()
-#             clock.tick(10)
-
-#         pygame.quit()
-
-#     def create_targets(self):
-#         block_list = pygame.sprite.Group()
-
-#         # This is a list of every sprite.
-#         # All blocks and the player block as well.
-#         all_sprites_list = pygame.sprite.Group()
-#         x = 20
-#         for i in range(18):
-#             # This represents a block
-#             block = Block()
-#             # Set a random location for the block
-#             block.rect.x = x
-#             x += 75
-#             block.rect.y = 630
-#             # Add the block to the list of objects
-#             block_list.add(block)
-#             all_sprites_list.add(block)
-
-#         return block_list, all_sprites_list
-#     def draw(self):
-#         self.screen.blit(self.background, self.background_rect)
-#         self.all_sprites.draw(self.screen)
-
-#         for p in self.prospectors:
-#             if p.body.nugget is not None:
-#                 p.body.nugget.draw(self.screen)
-
-#         for b in self.bankers:
-#             if b.body.nugget is not None:
-#                 b.body.nugget.draw(self.screen)
-
-#     def close(self):
-#         pg.event.pump()
-#         pg.display.quit()
-#         pg.quit()
 
 # Except for the gold png images, all other sprite art was created by Yashas Lokesh
