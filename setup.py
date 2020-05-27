@@ -38,7 +38,7 @@ setup(
         "opencv-python",
         "box2d-py",
         "python-shogi",
-        "hanabi_learning_environment"
+        "hanabi_learning_environment",
         "multi_agent_ale_py"
     ],
 )
