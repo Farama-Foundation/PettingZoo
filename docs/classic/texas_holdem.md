@@ -19,6 +19,17 @@ Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit o
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+
+### Environment arguments
+
+```
+texas_holdem.env(seed=None)
+```
+
+```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+```
+
 #### Observation Space
 
 The observation space is similar to Texas Hold'em. The first 52 entries represent the current player's hand with any community card.

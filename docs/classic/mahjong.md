@@ -18,6 +18,17 @@ Mahjong is a tile-based game with 4 players and 136 tiles, which includes 4 iden
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+
+### Environment arguments
+
+```
+mahjong.env(seed=None)
+```
+
+```
+seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+```
+
 #### Observation Space
 
 The observation space has a (6, 34, 4) shape with the first index representing the encoding plane. Plane 0 represent the current player's hand, Plane 1 represent the played cards on the table, and Planes 2-5 encode the public piles of each player (Plane 2: Player 0, Plane 3: Player 1, Plane 4: Player 2, and Plane 5: Player 3).
