@@ -171,7 +171,7 @@ The first function will save the current observation for the specified agent. Th
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
+We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
 
 
 ## Leaderboards
