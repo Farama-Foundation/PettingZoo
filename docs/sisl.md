@@ -1,10 +1,10 @@
 ## SISL Enviroments
 
-| Environment | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|-------------|-------------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| [Multiwalker](sisl/multiwalker.md) | Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
-| [Pursuit](sisl/pursuit.md)     | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
-| [Waterworld](sisl/waterworld.md)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
+| Environment                       | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States |
+|-----------------------------------|-------------------|----------|---------|----------------|--------------|---------------|-------------|
+| [Multiwalker](sisl/multiwalker.md)| Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | ?           |
+| [Pursuit](sisl/pursuit.md)        | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | ?           |
+| [Waterworld](sisl/waterworld.md)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ?           |
 
 `pip install pettingzoo[sisl]`
 

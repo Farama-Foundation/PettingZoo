@@ -2,9 +2,9 @@
 
 This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Either  | 8 (+/-) | Yes            | (1,)         | [0,4]         | (3, 7, 7)         | (0,255)            | ?          |
+| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values |  Num States |
+|--------------|---------|---------|----------------|--------------|---------------|-------------|
+| Graphical    | Either  | 8 (+/-) | Yes            | (1,)         | [0,4]         |  ?          |
 
 `from pettingzoo.sisl import pursuit_v0`
 
