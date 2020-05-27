@@ -3,9 +3,9 @@
 
 This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
 
-| Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | (31)              | (-5.3, 5.3)        | ?          |
+| Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States |
+|--------------|----------|---------|----------------|--------------|---------------|-------------|
+| Vector       | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       |  ?          |
 
 `from pettingzoo.sisl import multiwalker_v0`
 

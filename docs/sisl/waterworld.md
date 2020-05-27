@@ -3,9 +3,9 @@
 
 This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
 
-| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|-------------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Vector (viewable) | Either  | 5 (+/-) | No             | (2,)         | (-1, 1)       | (122,)            | (-10,10)           | ?          |
+| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values |  Num States |
+|-------------------|---------|---------|----------------|--------------|---------------|-------------|
+| Vector (viewable) | Either  | 5 (+/-) | No             | (2,)         | (-1, 1)       |  ?          |
 
 
 `from pettingzoo.sisl import waterworld_v0`
