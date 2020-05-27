@@ -65,7 +65,7 @@ envs = [
         "uname": "Combat: Invisible Tank",
         "name": "combat",
         "num_players": 2,
-        "mode": 11,
+        "mode": 10,
     },
     {
         "fname": "combat_invisible_tankpong",
@@ -222,6 +222,13 @@ envs = [
         "mode": 50,
     },
     {
+        "fname": "space_war",
+        "uname": "Space War",
+        "name": "space_war",
+        "num_players": 2,
+        "mode": None,
+    },
+    {
         "fname": "surround",
         "uname": "Surround: Original",
         "name": "surround",
@@ -353,3 +360,4 @@ def gen_doc_table():
 
 gen_doc_data()
 gen_doc_table()
+gen_games()

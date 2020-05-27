@@ -28,6 +28,7 @@
 | [Space Invaders: Easy](atari/space_invaders_easy.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Space Invaders: Difficult](atari/space_invaders_difficult.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Space Invaders: Alternating](atari/space_invaders_alternating.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Space War](atari/space_war.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Surround: Original](atari/surround.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Surround: Erase](atari/surround_erase.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Tennis](atari/tennis.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |

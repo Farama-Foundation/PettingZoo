@@ -32,6 +32,7 @@ python3 -m pettingzoo.tests.ci_test atari/pong_basketball $render $manual_contro
 python3 -m pettingzoo.tests.ci_test atari/space_invaders_easy $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/space_invaders_difficult $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/space_invaders_alternating $render $manual_control $bombardment $performance $save_obs
+python3 -m pettingzoo.tests.ci_test atari/space_war $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/surround $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/surround_erase $render $manual_control $bombardment $performance $save_obs
 python3 -m pettingzoo.tests.ci_test atari/tennis $render $manual_control $bombardment $performance $save_obs
