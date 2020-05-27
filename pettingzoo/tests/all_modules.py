@@ -62,6 +62,7 @@ all_environments = {
     "atari/space_invaders_easy": space_invaders_easy_v0,
     "atari/space_invaders_difficult": space_invaders_difficult_v0,
     "atari/space_invaders_alternating": space_invaders_alternating_v0,
+    "atari/space_war": space_war_v0,
     "atari/surround": surround_v0,
     "atari/surround_erase": surround_erase_v0,
     "atari/tennis": tennis_v0,
