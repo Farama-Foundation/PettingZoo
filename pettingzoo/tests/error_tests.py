@@ -1,6 +1,5 @@
 import pettingzoo
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils import save_observation
 import warnings
 import inspect
 import numpy as np
