@@ -23,17 +23,14 @@ The observation space has shape (198,). Entries 0-97 represent the positions of 
 | Num       | Observation                                                         | Min  | Max  |
 | --------- | -----------------------------------------------------------------   | ---- | ---- |
 | 0         | WHITE - 1st point, 1st component                                    | 0.0  | 1.0  |
-| 1         | WHITE - 1st point, 2nd component                                    | 0.0  | 1.0  |
-| 2         | WHITE - 1st point, 3rd component                                    | 0.0  | 1.0  |
+| ...         |                                     |   |   |
 | 3         | WHITE - 1st point, 4th component                                    | 0.0  | 6.0  |
 | 4         | WHITE - 2nd point, 1st component                                    | 0.0  | 1.0  |
 | ...       |                                                                     |      |      |
-| 95        | WHITE - 24th point, 4th component                                   | 0.0  | 6.0  |
 | 96        | WHITE - BAR checkers                                                | 0.0  | 7.5  |
 | 97        | WHITE - OFF bar checkers                                            | 0.0  | 1.0  |
 | 98        | BLACK - 1st point, 1st component                                    | 0.0  | 1.0  |
 | ...       |                                                                     |      |      |
-| 193       | BLACK - 24th point, 4th component                                   | 0.0  | 6.0  |
 | 194       | BLACK - BAR checkers                                                | 0.0  | 7.5  |
 | 195       | BLACK - OFF bar checkers                                            | 0.0  | 1.0  |
 | 196 - 197 | Current player                                                      | 0.0  | 1.0  |
@@ -76,8 +73,8 @@ The 'do nothing' action is 26^2*2
 
 | Action  | First Source Location ID | Second Source Location ID|  First Roll Used | Second Roll Used |         
 | ------- | ---------- |---------- |---------- |---------- |
-| 0 to 26^ 2 -1   | action % 26 | action / 26 | Low Roll | High Roll
-| 26^2 to 26^2*2 -1   | (action - 26^2) % 26 |(action - 26^2) / 26 | High Roll | Low Roll
+| 0 to 26^ 2 -1   | action mod 26 | action / 26 | Low Roll | High Roll
+| 26^2 to 26^2*2 -1   | (action - 26^2) mod 26 |(action - 26^2) / 26 | High Roll | Low Roll
 | 26^2*2   | None |None | None | None |
 
 The location on the board can be found from the location ID, which is either the source ID, or the destination ID (source ID + Roll).
