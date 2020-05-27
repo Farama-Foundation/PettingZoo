@@ -7,7 +7,6 @@ import pymunk
 import pymunk.pygame_util
 import math
 import numpy as np
-from skimage import measure
 import gym
 from gym.utils import seeding
 from pettingzoo import AECEnv

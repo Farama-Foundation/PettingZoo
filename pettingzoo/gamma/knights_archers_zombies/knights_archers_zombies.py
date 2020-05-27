@@ -9,7 +9,6 @@ from .src.zombie import Zombie
 from .src.weapons import Arrow, Sword
 from .manual_control import manual_control
 import numpy as np
-from skimage import measure
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym.spaces import Box, Discrete
