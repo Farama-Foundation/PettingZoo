@@ -81,7 +81,7 @@ If you use the Atari environments in your research please cite the following pap
 
 ```
 @Article{bellemare13arcade,
-  author = {{Bellemare}, M.~G. and {Naddaf}, Y. and {Veness}, J. and {Bowling}, M.},
+  author = { {Bellemare}, M.~G. and {Naddaf}, Y. and {Veness}, J. and {Bowling}, M.},
   title = {The Arcade Learning Environment: An Evaluation Platform for General Agents},
   journal = {Journal of Artificial Intelligence Research},
   year = "2013",
