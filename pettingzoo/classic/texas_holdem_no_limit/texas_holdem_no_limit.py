@@ -12,7 +12,8 @@ def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NaNRandomWrapper(env)
+    pass_action = 2
+    env = wrappers.NanNoOpWrapper(env, pass_action, "'checked' with action {}".format(pass_action))
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 

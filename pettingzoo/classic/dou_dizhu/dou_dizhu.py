@@ -11,7 +11,8 @@ def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NaNRandomWrapper(env)
+    pass_move = 308
+    env = wrappers.NanNoOpWrapper(env, pass_move, "passing turn with action number {}".format(pass_move))
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
