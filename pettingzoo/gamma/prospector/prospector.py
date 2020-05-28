@@ -575,6 +575,9 @@ class raw_env(AECEnv):
             sub_screen = np.pad(sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode='constant')
         elif y < 0 + delta:
             sub_screen = np.pad(sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode='constant')
+        
+        sub_screen = np.rot90(sub_screen, k=3)
+        sub_screen = np.fliplr(sub_screen).astype(np.uint8)
 
         self.last_observation[agent] = sub_screen
 
