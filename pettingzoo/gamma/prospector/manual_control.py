@@ -47,9 +47,7 @@ def manual_control(**kwargs):
                     if 0 <= agent <= 3:
                         agent_actions[agent][2] = -default_scalar
                 elif event.key == pygame.K_ESCAPE:
-                    test_done = True
-        # actions = dict(zip(env.agents, agent_actions))
-        print(agent)
+                    done = True
         for a in agent_actions:
             env.step(a, observe=False)
         env.render()
