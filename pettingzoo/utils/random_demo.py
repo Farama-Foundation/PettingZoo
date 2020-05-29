@@ -33,8 +33,6 @@ def random_demo(env, render=True):
             if not initial_iteration[agent]:
                 reward, dones[agent], _ = env.last()
                 total_reward += reward
-                print("step reward for agent {} is {} done: {}".format(
-                    agent, reward, dones[agent]))
             initial_iteration[agent] = False
 
             if 'legal_moves' in env.infos[agent]:
