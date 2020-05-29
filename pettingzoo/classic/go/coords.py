@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Code from: https://github.com/tensorflow/minigo
+
 """Logic for dealing with coordinates.
 
 This introduces some helpers and terminology that are used throughout Minigo.
