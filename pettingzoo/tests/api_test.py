@@ -128,6 +128,7 @@ def play_test(env, observation_0):
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
         assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
+        print("\tPlay tested ", agent)
 
     env.reset()
     reward_0 = env.rewards[env.agent_order[0]]
@@ -194,7 +195,7 @@ def test_agent_order(env):
 def api_test(env, render=False, verbose_progress=False):
     def progress_report(msg):
         if verbose_progress:
-            print(msg)
+            print("\t", msg)
 
     print("Starting API test")
     env_agent_sel = copy(env)
