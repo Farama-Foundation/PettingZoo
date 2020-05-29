@@ -16,6 +16,7 @@ jobs:
         - cd ${TRAVIS_BUILD_DIR}
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
     - name: "Python 3.7 on Linux"
       services:
         - xvfb
@@ -30,6 +31,7 @@ jobs:
         - cd ${TRAVIS_BUILD_DIR}
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
     - name: "Python 3.8 on Linux"
       services:
         - xvfb
@@ -44,6 +46,7 @@ jobs:
         - cd ${TRAVIS_BUILD_DIR}
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
     - name: "Python 3 on macOS"
       os: osx
       osx_image: xcode11.4
@@ -51,6 +54,7 @@ jobs:
         homebrew:
           packages:
             - swig
+            - unrar
       language: shell
 
 
