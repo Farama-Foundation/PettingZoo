@@ -195,7 +195,6 @@ To cite this project in publication, please use
 
 The following environments are under active development:
 
-* atari/* (Ben)
 * classic/checkers (Caroline)
 * classic/shogi (Caroline)
 * magent/* (Mario)
