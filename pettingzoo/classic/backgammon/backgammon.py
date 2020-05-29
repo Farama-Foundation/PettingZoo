@@ -1,6 +1,8 @@
 import itertools
 from collections import namedtuple
 
+# Code based on: https://github.com/dellalibera/gym-backgammon
+
 WHITE = 0
 BLACK = 1
 NUM_POINTS = 24
