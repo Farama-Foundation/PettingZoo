@@ -114,10 +114,10 @@ All environments end in something like \_v0.  When changes are made to environme
 
 ```
 import pettingzoo.tests.api_test as api_test
-api_test.api_test(env, render=True, manual_control=None, save_obs=False)
+api_test.api_test(env, render=False, verbose_progress=False)
 ```
 
-This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set `save_obs=True` to save observations as .png images in the directory the command is run in for debugging purposes (this only supports enviornment with image observations). `manual_control` takes the manual control method name for an environment (i.e. `manual_control=pistonball.manual_control`) to run the test.
+This tests the environment for API compliance. If the environment has a custom `render()` method, setting argument `render=True` tests whether there is an accompanying custom `close()` method. If `verbose_progress=True`, progress of the test is printed to the console. 
 
 ### Bombardment Test
 
@@ -136,6 +136,15 @@ performance_benchmark.performance_benchmark(env)
 ```
 
 This randomly steps through the environment for 60 seconds to benchmark it's performance.
+
+### Manual Control Test
+
+```
+import pettingzoo.tests.manual_control_test as manual_control_test
+manual_control_test.test_manual_control(env.manual_control)
+```
+
+If the environment has`manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
 
 ### Manual Control
 
