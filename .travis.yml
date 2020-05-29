@@ -24,8 +24,6 @@ jobs:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
     - name: "Python 3 on macOS"
-      services:
-        - xvfb
       os: osx
       osx_image: xcode11.4
       addons:
@@ -38,6 +36,8 @@ jobs:
 install:
   - pip3 install flake8
   - pip3 install -r requirements.txt
+  - pip3 install AutoROM
+  - AutoROM -v
 
 script:
   - bash test.sh
