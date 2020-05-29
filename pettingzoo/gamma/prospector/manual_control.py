@@ -12,6 +12,7 @@ def manual_control(**kwargs):
     default_scalar = 1
     agent = 0
     done = False
+    quit_while = False
 
     while not done:
         agent_actions = np.array(
@@ -48,6 +49,9 @@ def manual_control(**kwargs):
                         agent_actions[agent][2] = -default_scalar
                 elif event.key == pygame.K_ESCAPE:
                     done = True
+                    quit_while = True
+        if quit_while:
+            break
         for a in agent_actions:
             env.step(a, observe=False)
         env.render()

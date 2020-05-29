@@ -52,7 +52,7 @@ def manual_control(**kwargs):
             total_reward += reward
             initial_iteration[agent] = False
             env.step(action_dict[agent], observe=False)
-        done = all(env.dones)
+        done = all(env.dones.values())
 
         env.render()
         pygame.event.pump()
