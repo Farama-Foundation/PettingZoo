@@ -206,5 +206,5 @@ The following environments are under active development:
 
 * classic/checkers (Caroline)
 * classic/shogi (Caroline)
-* magent/* (Mario)
+* magent/* (Ben)
 * robotics/* (Yiling)
