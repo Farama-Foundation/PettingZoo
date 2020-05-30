@@ -44,6 +44,6 @@ if env_id in all_environments:
 
     if bombardment:
         _env = env_module.env()
-        bombardment_test.bombardment_test(_env)
+        bombardment_test.bombardment_test(_env, cycles=7000)
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))

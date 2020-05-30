@@ -8,7 +8,9 @@ def bombardment_test(env, cycles=10000):
 
     prev_observe = env.reset()
     observation_0 = copy(prev_observe)
-    for _ in range(cycles):
+    for i in range(cycles):
+        if i == cycles / 2:
+            print("\t50% through bombardment test")
         for agent in env.agent_order:  # step through every agent once with observe=True
             if 'legal_moves' in env.infos[agent]:
                 action = random.choice(env.infos[agent]['legal_moves'])
