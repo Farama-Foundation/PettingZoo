@@ -1,3 +1,5 @@
+#!/bin/bash
+
 render=True
 manual_control=True
 bombardment=True
