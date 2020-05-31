@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export AUDIODEV=null
 CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
 mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
