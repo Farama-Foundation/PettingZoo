@@ -11,7 +11,7 @@ import os
 warning_list = []
 
 
-def generate_warning(phase, phase, msg):
+def generate_warning(phase, msg):
     global warning_list
     warning_list.append(phase + ": " + msg)
 
