@@ -54,8 +54,7 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
     style_guide = flake8.get_style_guide(ignore=["E501", "E731", "E741", "E402", "F401", "W503"])
     file_name = "pettingzoo/" + env_id
     report = style_guide.check_files([file_name])
-    for r in report:
-        print(r)
+    print(report.total_errors)
 
 
 if env_id in all_prefixes:
