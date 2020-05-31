@@ -45,6 +45,7 @@ def manual_control(**kwargs):
         # actions should be a dict of numpy arrays
         for a in action_list:
             env.step(a)
+            pygame.event.pump()
 
         env.render()
         done = any(env.dones.values())

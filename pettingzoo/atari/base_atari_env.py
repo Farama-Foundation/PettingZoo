@@ -152,5 +152,6 @@ class BaseAtariEnv(AECEnv):
         return image
 
     def close(self):
-        pygame.display.quit()
-        self._screen = None
+        if self._screen is not None:
+            pygame.display.quit()
+            self._screen = None
