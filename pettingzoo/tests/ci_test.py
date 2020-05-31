@@ -61,6 +61,6 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
 if env_id in all_prefixes:
     for e in all_environments:
         if e.startswith(env_id):
-            perform_ci_test(env_id, render, manual_control, bombardment, performance, save_obs)
+            perform_ci_test(e, render, manual_control, bombardment, performance, save_obs)
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))
