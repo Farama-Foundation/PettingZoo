@@ -7,6 +7,7 @@ jobs:
         - xvfb
       python: 3.6
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=atari
     - name: "Atari with Python 3.7 on Linux"
@@ -14,6 +15,7 @@ jobs:
         - xvfb
       python: 3.7
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=atari
     - name: "Atari with Python 3.8 on Linux"
@@ -21,6 +23,7 @@ jobs:
         - xvfb
       python: 3.8
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=atari
 
@@ -29,6 +32,7 @@ jobs:
         - xvfb
       python: 3.6
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=classic
     - name: "Classic with Python 3.7 on Linux"
@@ -36,6 +40,7 @@ jobs:
         - xvfb
       python: 3.7
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=classic
     - name: "Classic with Python 3.8 on Linux"
@@ -43,6 +48,7 @@ jobs:
         - xvfb
       python: 3.8
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=classic
 
@@ -51,6 +57,7 @@ jobs:
         - xvfb
       python: 3.6
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=gamma
     - name: "Gamma with Python 3.7 on Linux"
@@ -58,6 +65,7 @@ jobs:
         - xvfb
       python: 3.7
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=gamma
     - name: "Gamma with Python 3.8 on Linux"
@@ -65,6 +73,7 @@ jobs:
         - xvfb
       python: 3.8
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=gamma
 
@@ -73,6 +82,7 @@ jobs:
         - xvfb
       python: 3.6
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=mpe
     - name: "mpe with Python 3.7 on Linux"
@@ -80,6 +90,7 @@ jobs:
         - xvfb
       python: 3.7
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=mpe
     - name: "mpe with Python 3.8 on Linux"
@@ -87,6 +98,7 @@ jobs:
         - xvfb
       python: 3.8
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=mpe
 
@@ -95,6 +107,7 @@ jobs:
         - xvfb
       python: 3.6
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=sisl
     - name: "sisl with Python 3.7 on Linux"
@@ -102,6 +115,7 @@ jobs:
         - xvfb
       python: 3.7
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=sisl
     - name: "sisl with Python 3.8 on Linux"
@@ -109,6 +123,7 @@ jobs:
         - xvfb
       python: 3.8
       before_install: 
+        - chmod +x linux_install.sh
         - ./linux_install.sh
         - export pz_module=sisl
 
@@ -181,4 +196,5 @@ install:
   - AutoROM -v
 
 script:
+  - chmod +x test.sh
   - ./test.sh
