@@ -294,7 +294,6 @@ class raw_env(AECEnv):
 
         self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
         self.agent_selection = self._agent_selector.next()
-        pygame.event.pump()
         if observe:
             return self.observe(self.agent_selection)
 
