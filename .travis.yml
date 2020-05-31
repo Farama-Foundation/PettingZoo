@@ -348,3 +348,4 @@ install:
 script:
   - chmod +x test.sh
   - ./test.sh
+  - cat test_output.txt
