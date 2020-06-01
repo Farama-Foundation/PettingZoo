@@ -13,7 +13,8 @@ warning_list = []
 
 def generate_warning(phase, msg):
     global warning_list
-    warning_list.append(phase + ": " + msg)
+    if len(warning_list) < 100:
+        warning_list.append(phase + ": " + msg)
 
 
 def test_observation(observation, observation_0):

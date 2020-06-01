@@ -52,8 +52,6 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         _env = env_module.env()
         bombardment_test.bombardment_test(_env, cycles=7000)
 
-    warning_collected = warning_collected[:50]  # we only want the first 50 elements
-
     # flake8 test
     style_guide = flake8.get_style_guide(ignore=["E501", "E731", "E741", "E402", "F401", "W503"])
     file_name = "pettingzoo/" + env_id
