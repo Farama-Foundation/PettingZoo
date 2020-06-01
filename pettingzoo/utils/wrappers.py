@@ -241,10 +241,10 @@ class OrderEnforcingWrapper(BaseWrapper):
         else:
             obs_res = super().step(action, observe)
 
-        # handle terminating agent order loop when done
-        if self.dones[self.agent_selection]:
-            for i in range(len(self.agent_order)):
-                self.agent_order.pop(len(self.agent_order)-1)
+        # # handle terminating agent order loop when done
+        # if self.dones[self.agent_selection]:
+        #     for i in range(len(self.agent_order)):
+        #         self.agent_order.pop(len(self.agent_order)-1)
 
         return obs_res
 

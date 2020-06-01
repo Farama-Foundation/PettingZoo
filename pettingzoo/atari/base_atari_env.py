@@ -93,12 +93,14 @@ class BaseAtariEnv(AECEnv):
         self.observation_spaces =  {agent: observation_space for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
 
-        self._agent_selector = agent_selector(self.agent_order)
 
         self._screen = None
 
     def reset(self, observe=True):
         self.ale.reset_game()
+
+        self.agent_order = self.agents[:]
+        self._agent_selector = agent_selector(self.agent_order)
         self.agent_selection = self._agent_selector.reset()
 
         self.rewards = {a: 0 for a in self.agents}
@@ -125,9 +127,19 @@ class BaseAtariEnv(AECEnv):
             self.rewards = {a: rew for a, rew in zip(self.agents, rewards)}
             if self.ale.game_over():
                 self.dones = {a: True for a in self.agents}
+            else:
+                lives = self.ale.allLives()
+                # an inactive agent in ale gets a -1 life.
+                dones = [life < 0 for life in lives]
+                assert len(lives) == len(self.agents)
+                self.dones = {a: bool(d) for d,a in zip(dones,self.agents)}
+                self.agent_order = [agent for agent in self.agents if not self.dones[agent]]
+                if self.agent_order:
+                    self._agent_selector = agent_selector(self.agent_order)
+                    self.agent_selection = self._agent_selector.reset()
             self._actions = []
-
-        self.agent_selection = self._agent_selector.next()
+        else:
+            self.agent_selection = self._agent_selector.next()
 
         return self.observe(self.agent_selection) if observe else None
 

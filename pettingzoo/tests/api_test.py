@@ -191,6 +191,19 @@ def test_agent_order(env):
                 agent_selection = _agent_selector.next()
             assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
+    env.reset()
+    for _ in range(500):
+        for agent in env.agent_order:
+            assert agent == env.agent_selection
+            if 'legal_moves' in env.infos[agent]:
+                action = random.choice(env.infos[agent]['legal_moves'])
+            else:
+                action = env.action_spaces[agent].sample()
+            env.step(action, observe=False)
+
+            if all(env.dones.values()):
+                env.reset()
+                break
 
 def api_test(env, render=False, verbose_progress=False):
     def progress_report(msg):
