@@ -26,8 +26,8 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
     print("running game {}".format(env_id))
     env_module = all_environments[env_id]
     _env = env_module.env()
-    warning_list = api_test.api_test(_env, render=render, verbose_progress=True)
-
+    warning_collected = api_test.api_test(_env, render=render, verbose_progress=True)
+    warning_collected = warning_collected[:]
     seed_test(env_module.env)
     # error_test(env_module.env())
 
@@ -42,7 +42,7 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         if manual_control_fn is not None:
             status = test_manual_control.test_manual_control(manual_control_fn)
             if status != 0:
-                warning_list.append("Manual Control test failed")
+                warning_collected.append("Manual Control test failed")
 
     if performance:
         _env = env_module.env()
@@ -52,14 +52,16 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         _env = env_module.env()
         bombardment_test.bombardment_test(_env, cycles=7000)
 
+    warning_collected = warning_collected[:50]  # we only want the first 50 elements
+
     # flake8 test
     style_guide = flake8.get_style_guide(ignore=["E501", "E731", "E741", "E402", "F401", "W503"])
     file_name = "pettingzoo/" + env_id
     report = style_guide.check_files([file_name])
     if report.total_errors > 0:
-        warning_list.append("Flake8 test failed")
+        warning_collected.append("Flake8 test failed")
 
-    return warning_list
+    return warning_collected
 
 
 if env_id in all_prefixes:
@@ -71,10 +73,8 @@ if env_id in all_prefixes:
     for warn in warning_map:
         warn_list = warning_map[warn]
         if len(warn_list) > 0:
-            log = "Env " + warn + " generated the following errors:\n"
-            f.write(log)
             for w in warn_list:
-                f.write(w + "\n")
+                f.write(warn + ": " + w + "\n")
     f.close()
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))
