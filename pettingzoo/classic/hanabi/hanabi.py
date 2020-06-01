@@ -102,8 +102,8 @@ class raw_env(AECEnv):
             from hanabi_learning_environment.rl_env import HanabiEnv, make
 
         except ModuleNotFoundError:
-            print("Hanabi is not installed."
-                  + "Run ´pip3 install hanabi_learning_environment´ from within your project environment."
+            raise ImportError("Hanabi is not installed.\n"
+                  + "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n"
                   + "Consult hanabi/README.md for detailed information.")
 
         else:
