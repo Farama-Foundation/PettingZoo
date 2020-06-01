@@ -22,9 +22,13 @@ def test_manual_control(manual_control):
 
     manual_in_thread.start()
 
+    status = 0
     try:
         manual_control()
     except Exception:
         raise Exception("manual_control() has crashed. Please fix it.")
+        status = 1
 
     manual_in_thread.join()
+    return status
+    
