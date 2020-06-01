@@ -42,6 +42,7 @@ class BaseAtariEnv(AECEnv):
         self.num_players = num_players
         self.np_random = seeding.np_random(seed)
 
+        multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
 
         if seed is None:
