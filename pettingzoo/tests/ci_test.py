@@ -53,11 +53,11 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         bombardment_test.bombardment_test(_env, cycles=7000)
 
     # flake8 test
-    style_guide = flake8.get_style_guide(ignore=["E501", "E731", "E741", "E402", "F401", "W503"])
-    file_name = "pettingzoo/" + env_id
-    report = style_guide.check_files([file_name])
-    if report.total_errors > 0:
-        warning_collected.append("Flake8 test failed")
+    # style_guide = flake8.get_style_guide(ignore=["E501", "E731", "E741", "E402", "F401", "W503"])
+    # file_name = "pettingzoo/" + env_id
+    # report = style_guide.check_files([file_name])
+    # if report.total_errors > 0:
+    #     warning_collected.append("Flake8 test failed")
 
     return warning_collected
 
