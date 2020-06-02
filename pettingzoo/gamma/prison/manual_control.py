@@ -8,6 +8,7 @@ def manual_control(**kwargs):
     env.reset()
     x = 0
     y = 0
+    prisoner_mapping = env.metadata["render.coordinates"]
     while True:
         agent_actions = np.array([1 for _ in range(8)])
         num_actions = 0
@@ -25,12 +26,12 @@ def manual_control(**kwargs):
                     y = min(3, y + 1)
                 elif event.key == pygame.K_j:
                     num_actions += 1
-                    agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = 0
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 0
                 elif event.key == pygame.K_k:
                     num_actions += 1
-                    agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = 2
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 2
                 elif event.key == pygame.K_ESCAPE:
                     test_done = True
 

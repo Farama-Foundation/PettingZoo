@@ -290,6 +290,7 @@ class raw_env(AECEnv):
         self.reinit()
         self.spawn_prisoners()
         self.draw()
+        self.metadata["render.coordinates"] = self.prisoner_mapping
         if observe:
             return self.observe(self.agent_selection)
 
