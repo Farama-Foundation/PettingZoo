@@ -82,8 +82,7 @@ if env_id in all_prefixes:
     process = subprocess.Popen(style_guide, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
     flake8_res = stdout.decode("utf-8")
-    for misform in flake8_res.split("\n"):
-        f.write(misform + "\n")
+    f.write(flake8_res)
     f.close()
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))
