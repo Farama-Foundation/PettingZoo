@@ -19,13 +19,13 @@ Hanabi is a 2-5 player cooperative game where players work together to form fire
 
 #### Observation Space
 
-The observation space of an agent is a 373 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards.
+The observation space of an agent is a 373 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. The observation vector contains the following features, life tokens, information tokens, number of players, deck size, formed fireworks, legal moves, observed hands, discard pile, the hints received from other players, which are then serialized into a bit string.
 
 #### Action Space
 
-The action space is a scalar value, with 14 possible values. The values represent all possible actions a player can make, legal or not. These actions are to either reveal cards of a certain color in another agent's hand, cards of a certain n umber in another agent's hand, discard a card, or to play one of their own cards.
+The action space is a scalar value, which ranges from 0 to the max number of actions. The values represent all possible actions a player can make, legal or not. Each possible move in the environment is mapped to a UUID, which ranges from 0 to the max number of moves. By default the max number of moves is 14. The first range of actions are to discard a card in the agent's hand. If there are k cards in the player's hand, then the first k action values are to discard one of those cards. The next k actions would be to play one of the cards in the player's hand. Finally, the remaining actions are to reveal a color or rank in another players hand. The first set of reveal actions would be revealing all colors or values of cards for the next player in order, and this repeats for all the other players in the environment.
 
 #### Rewards
 
-Rewards are calculated as the difference from the reward of the last state. The score is calculated at a terminal state, based on the highest value of each firework.
+The reward of each step is calculated as the change in game score from the last step. The game score is 0 until the terminal state. Once the game has ended, the total score is calculated as the sum of values in each constructed firework.
 
