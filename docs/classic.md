@@ -9,7 +9,7 @@
 | [Dou Dizhu](classic/dou_dizhu.md)                          | Discrete | 3      | No             | Discrete(309)          | Discrete(309)           | (6, 5, 15)        | [0, 1]             | 10^53 - 10^83 |
 | [Gin Rummy](classic/gin_rummy.md)                          | Discrete | 2      | No             | Discrete(110)          | Discrete(110)           | (5, 52)           | [0, 1]             | 10^52         |
 | [Go](classic/go.md) (N=board size)                         | Discrete | 2      | No             | Discrete(N^2+1)        | Discrete(N^2+1)         | (N, N, 3)         | [0, 1]             | 3^(N^2)       |
-| [Hanabi](classic/hanabi.md)                                | ?        | ?      | No             | ?                      | ?                       | ?                 | ?                  | ?             |
+| [Hanabi](classic/hanabi.md)                                | Discrete | 2      | No             | Discrete(14)           | Discrete(14)            | (373,)            | [0, 1]             | ?             |
 | [Leduc Hold'em](classic/leduc_holdem.md)                   | Discrete | 2      | No             | Discrete(4)            | Discrete(4)             | (36,)             | [0, 1]             | 10^2          |
 | [Mahjong](classic/mahjong.md)                              | Discrete | 4      | No             | Discrete(38)           | Discrete(38)            | (6, 34, 4)        | [0, 1]             | 10^121        |
 | [Rock Paper Scissors](classic/rps.md)                      | ?        | ?      | ?              | ?                      | ?                       | ?                 | ?                  | ?             |
