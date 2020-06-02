@@ -259,7 +259,6 @@ class Pursuit():
         else:
             self.clock.tick(2000)
 
-        pygame.event.pump()
         self.frames = self.frames + 1
 
     def draw_model_state(self):
