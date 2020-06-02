@@ -64,6 +64,7 @@ def manual_control(**kwargs):
         for a in _actions:
             reward, d, info = env.last()
             env.step(a)
+            pygame.event.pump()
             if d:
                 done = True
             total_reward += reward
