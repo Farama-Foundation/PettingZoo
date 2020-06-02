@@ -62,14 +62,6 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         except Exception as e:
             error_collected.append("Bombardment Test: " + str(e))
 
-    # flake8 test
-    file_name = "pettingzoo/" + env_id
-    style_guide = ["flake8", file_name, "E501", "E731", "E741", "E402", "F401", "W503"]
-    process = subprocess.Popen(style_guide, stdout=subprocess.PIPE, sterr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    flake8_res = stdout.decode("utf-8")
-    error_collected = error_collected + flake8_res.split("\n")
-
     return error_collected
 
 
@@ -84,6 +76,14 @@ if env_id in all_prefixes:
         if len(warn_list) > 0:
             for w in warn_list:
                 f.write(warn + ": " + w + "\n")
+    # flake8 test
+    file_name = "pettingzoo/" + env_id
+    style_guide = ["flake8", file_name, "E501", "E731", "E741", "E402", "F401", "W503"]
+    process = subprocess.Popen(style_guide, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    flake8_res = stdout.decode("utf-8")
+    for misform in flake8_res.split("\n"):
+        f.write(misform + "\n")
     f.close()
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))
