@@ -11,7 +11,7 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 `agents= ["prospector_0, "prospector_1", "prospector_2", "prospector_3", "banker_0", "banker_1", "banker_2"]`
 
-*gif*
+![](gamma_prospector.gif)
 
 *AEC diagram*
 

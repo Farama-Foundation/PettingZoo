@@ -11,7 +11,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= ['black_0', 'white_0']`
 
-*gif*
+![](classic_go.gif)
 
 *AEC Diagram*
 

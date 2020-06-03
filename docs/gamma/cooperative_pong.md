@@ -13,7 +13,7 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 Example gameplay:
 
-![](cooperative_pong.gif)
+![](gamma_cooperative_pong.gif)
 
 AEC diagram:
 
