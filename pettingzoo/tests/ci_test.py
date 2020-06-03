@@ -47,9 +47,10 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
     if manual_control:
         manual_control_fn = getattr(env_module, "manual_control", None)
         if manual_control_fn is not None:
-            status = test_manual_control.test_manual_control(manual_control_fn)
-            if status != 0:
-                error_collected.append("Manual Control test failed")
+            try:
+                test_manual_control.test_manual_control(manual_control_fn)
+            except Exception as e:
+                error_collected.append("Manual Control: " + str(e))
 
     if performance:
         _env = env_module.env()
