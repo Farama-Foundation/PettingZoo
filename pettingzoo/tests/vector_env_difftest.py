@@ -10,6 +10,16 @@ from copy import copy
 import numpy as np
 import random
 
+class constr_obj:
+    def __init__(self, env_constr, seed):
+        self.seed = seed
+        self.env_constr = env_constr
+    def __call__(self):
+        if self.seed is None:
+            return self.env_constr()
+        else:
+            return self.env_constr(seed=self.seed)
+
 def assert_states_equal(vec_env1, vec_env2):
     assert all(np.all(np.equal(vec_env1.dones[agent], vec_env2.dones[agent])) for agent in vec_env1.agents)
     assert all(np.all(np.equal(vec_env1.rewards[agent], vec_env2.rewards[agent])) for agent in vec_env1.agents)
@@ -20,8 +30,9 @@ def test_async_vector_env(env_constructor, should_seed):
     NUM_ENVS = 5
     NUM_CPUS = 2
     RNG_SEED = 0x2141 if should_seed else None
-    vecenv = VectorAECWrapper(env_constructor, NUM_ENVS, RNG_SEED)
-    asyncenv = ProcVectorEnv(env_constructor, NUM_ENVS, NUM_CPUS, RNG_SEED)
+    constructors = [constr_obj(env_constructor,RNG_SEED+i if should_seed else None) for i in range(NUM_ENVS)]
+    vecenv = VectorAECWrapper(constructors)
+    asyncenv = ProcVectorEnv(constructors, NUM_CPUS)
     cycles = 200
     vec_obs,vec_pass = vecenv.reset()
     async_obs,asyc_pass = asyncenv.reset()

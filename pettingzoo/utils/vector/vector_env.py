@@ -7,12 +7,12 @@ import ctypes
 import gym
 
 class VectorAECWrapper:
-    def __init__(self, env_constructor, num_envs, seed=None):
-        assert num_envs >= 1
-        assert callable(env_constructor), "env_constructor must be a callable object (i.e function) that create an environment"
+    def __init__(self, env_constructors):
+        assert len(env_constructors) >= 1
+        assert callable(env_constructors[0]), "env_constructor must be a callable object (i.e function) that create an environment"
 
-        self.envs = [(env_constructor(seed=seed+i) if seed is not None else env_constructor()) for i in range(num_envs)]
-        self.num_envs = num_envs
+        self.envs = [env_constructor() for env_constructor in env_constructors]
+        self.num_envs = len(env_constructors)
         self.env = self.envs[0]
         self.num_agents = self.env.num_agents
         self.agents = self.env.agents

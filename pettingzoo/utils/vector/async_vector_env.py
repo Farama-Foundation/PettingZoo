@@ -59,8 +59,8 @@ class EnvSharedData:
 
 
 class _SeperableAECWrapper:
-    def __init__(self, env_constructor, num_envs, seed):
-        self.envs = [(env_constructor(seed=seed+i) if seed is not None else env_constructor()) for i in range(num_envs)]
+    def __init__(self, env_constructors, num_envs):
+        self.envs = [env_constructor() for env_constructor in env_constructors]
         self.env = self.envs[0]
         self.agents = self.env.agents
         self.agent_indexes = {agent:i for i, agent in enumerate(self.env.agents)}
@@ -151,8 +151,8 @@ def decompress_info(agents, num_envs, idx_starts, comp_infos):
     return all_info
 
 
-def env_worker(env_constructor, total_num_envs, idx_start, my_num_envs, agent_arrays, env_arrays, pipe, seed):
-    env = _SeperableAECWrapper(env_constructor, my_num_envs, (seed+idx_start if seed is not None else None))
+def env_worker(env_constructors, total_num_envs, idx_start, my_num_envs, agent_arrays, env_arrays, pipe):
+    env = _SeperableAECWrapper(env_constructors, my_num_envs)
     shared_datas = {agent: AgentSharedData(total_num_envs,
                                 SpaceWrapper(env.env.observation_spaces[agent]),
                                 SpaceWrapper(env.env.action_spaces[agent]),
@@ -203,9 +203,11 @@ def env_worker(env_constructor, total_num_envs, idx_start, my_num_envs, agent_ar
             assert False, "Bad instruction sent to ProcVectorEnv worker"
 
 class ProcVectorEnv(VectorAECWrapper):
-    def __init__(self, env_constructor, num_envs, num_cpus=None, seed=None):
+    def __init__(self, env_constructors, num_cpus=None):
         # set signaling so that crashing is handled gracefully
         init_parallel_env()
+
+        num_envs = len(env_constructors)
 
         if num_cpus is None:
             num_cpus = mp.cpu_count()
@@ -214,9 +216,9 @@ class ProcVectorEnv(VectorAECWrapper):
         assert num_envs > 0
 
         assert num_envs >= 1
-        assert callable(env_constructor), "env_constructor must be a callable object (i.e function) that create an environment"
+        assert callable(env_constructors[0]), "env_constructor must be a callable object (i.e function) that create an environment"
         #self.envs = [env_constructor() for _ in range(num_envs)]
-        self.env = env = env_constructor(seed=seed) if seed is not None else env_constructor()
+        self.env = env = env_constructors[0]()
         self.num_agents = self.env.num_agents
         self.agents = self.env.agents
         self.observation_spaces = copy.copy(self.env.observation_spaces)
@@ -254,7 +256,8 @@ class ProcVectorEnv(VectorAECWrapper):
         for pidx in range(num_cpus):
             envs_left = num_envs - env_counter
             allocated_envs = min(envs_left,(num_envs+num_cpus-1)//num_cpus)
-            proc = mp.Process(target=env_worker,args=(env_constructor, num_envs, env_counter, allocated_envs, all_arrays, env_arrays, self.con_outs[pidx], seed))
+            proc_constructors = env_constructors[env_counter:env_counter+allocated_envs]
+            proc = mp.Process(target=env_worker,args=(proc_constructors, num_envs, env_counter, allocated_envs, all_arrays, env_arrays, self.con_outs[pidx]))
             self.procs.append(proc)
             self.env_starts.append(env_counter)
 
