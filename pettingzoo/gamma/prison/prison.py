@@ -90,6 +90,7 @@ class raw_env(AECEnv):
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
         self.metadata = {'render.modes': ['human']}
+        self.infos = {}
         self.rendering = False
         self.max_frames = max_frames
         pygame.init()
@@ -188,6 +189,10 @@ class raw_env(AECEnv):
             map_tuple_1 = (1, f)
             self.prisoner_mapping[map_tuple_0] = map_count
             self.prisoner_mapping[map_tuple_1] = map_count + 1
+            prisoner0_name = "prisoner_" + str(map_count)
+            prisoner1_name = "prisoner_" + str((map_count + 1))
+            self.infos[prisoner0_name] = map_tuple_0
+            self.infos[prisoner1_name] = map_tuple_1
             map_count += 2
         p_count = 0
         for p in prisoner_spawn_locs:

@@ -8,8 +8,11 @@ def manual_control(**kwargs):
     env.reset()
     x = 0
     y = 0
+    prisoner_mapping = {}
+    for prisoner in env.agents:
+        prisoner_mapping[env.infos[prisoner]] = prisoner
     while True:
-        agent_actions = np.array([1 for _ in range(8)])
+        agent_actions = {agent: 1 for agent in env.agents}
         num_actions = 0
         test_done = False
         for event in pygame.event.get():
@@ -25,23 +28,21 @@ def manual_control(**kwargs):
                     y = min(3, y + 1)
                 elif event.key == pygame.K_j:
                     num_actions += 1
-                    agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = 0
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 0
                 elif event.key == pygame.K_k:
                     num_actions += 1
-                    agent_actions[env.convert_coord_to_prisoner_id(
-                        (x, y))] = 2
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 2
                 elif event.key == pygame.K_ESCAPE:
                     test_done = True
-
-        actions = dict(zip(env.agents, agent_actions))
         for i in env.agents:
             reward, done, info = env.last()
             if reward != 0:
                 print("Agent {} was reward {}".format(i, reward))
             if done:
                 test_done = True
-            action = actions[i]
+            action = agent_actions[i]
             env.step(action, observe=False)
         env.render()
 

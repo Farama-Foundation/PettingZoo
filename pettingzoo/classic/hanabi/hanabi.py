@@ -103,9 +103,13 @@ class raw_env(AECEnv):
             from hanabi_learning_environment.rl_env import HanabiEnv, make
 
         except ModuleNotFoundError:
-            print("Hanabi is not installed."
-                  + "Run ´pip3 install hanabi_learning_environment´ from within your project environment."
-                  + "Consult hanabi/README.md for detailed information.")
+            raise ImportError(
+                (
+                    "Hanabi is not installed.\n",
+                    "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n",
+                    "Consult hanabi/README.md for detailed information."
+                )
+            )
 
         else:
 
@@ -242,7 +246,7 @@ class raw_env(AECEnv):
         agent_on_turn = self.agent_selection
 
         if action not in self.legal_moves:
-            raise ValueError(f'Illegal action. Please choose between legal actions, as documented in dict self.infos')
+            raise ValueError('Illegal action. Please choose between legal actions, as documented in dict self.infos')
 
         else:
             # Iterate agent_selection
@@ -261,7 +265,6 @@ class raw_env(AECEnv):
     def observe(self, agent_name: str):
         return np.array(self.infos[agent_name]['observations_vectorized'], np.float32)
 
-
     def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
 
@@ -271,11 +274,11 @@ class raw_env(AECEnv):
 
         # Here we have to deal with the player index with offset = 1
         self.infos = {player_name: dict(
-                legal_moves=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves_as_int'],
-                legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
-                observations_vectorized=self.latest_observations['player_observations'][int(player_name[-1])]['vectorized'],
-                observations=self.latest_observations['player_observations'][int(player_name[-1])])
-              for player_name in self.agents}
+            legal_moves=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves_as_int'],
+            legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
+            observations_vectorized=self.latest_observations['player_observations'][int(player_name[-1])]['vectorized'],
+            observations=self.latest_observations['player_observations'][int(player_name[-1])])
+            for player_name in self.agents}
 
     def render(self, mode='human'):
         """ Supports console print only. Prints the whole status dictionary.

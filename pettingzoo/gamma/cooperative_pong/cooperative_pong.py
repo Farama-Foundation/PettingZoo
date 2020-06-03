@@ -401,6 +401,9 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.env.reset()
         self.agent_selection = self._agent_selector.reset()
+        self.rewards = self.env.rewards
+        self.dones = self.env.dones
+        self.infos = self.env.infos
         if observe:
             return self.observe(self.agent_selection)
 
@@ -426,7 +429,7 @@ class raw_env(AECEnv):
         # select next agent and observe
         self.agent_selection = self._agent_selector.next()
         self.rewards = self.env.rewards
-        self.dones = self.env.dones
+        self.dones[agent] = self.env.dones[agent]
         self.infos = self.env.infos
 
         self.score = self.env.score

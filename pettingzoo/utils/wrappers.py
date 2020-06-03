@@ -3,7 +3,6 @@ import copy
 from gym.spaces import Box, Discrete
 from gym import spaces
 import warnings
-from skimage import measure
 from pettingzoo import AECEnv
 
 from .env_logger import EnvLogger

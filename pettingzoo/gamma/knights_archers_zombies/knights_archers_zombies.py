@@ -9,7 +9,6 @@ from .src.zombie import Zombie
 from .src.weapons import Arrow, Sword
 from .manual_control import manual_control
 import numpy as np
-from skimage import measure
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from gym.spaces import Box, Discrete
@@ -414,21 +413,6 @@ class raw_env(AECEnv):
         if self._agent_selector.is_last():
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
-
-            # Keyboard input check
-            for event in pygame.event.get():
-                # Quit Game
-                if event.type == pygame.QUIT:
-                    self.run = False
-
-                elif event.type == pygame.KEYDOWN:
-                    # Quit Game
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-
-                    # Reset Environment
-                    if event.key == pygame.K_BACKSPACE:
-                        self.reset(observe=False)
 
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
         action = action + 1

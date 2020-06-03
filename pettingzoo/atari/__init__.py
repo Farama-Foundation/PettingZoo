@@ -1,4 +1,3 @@
-from .games import backgammon as backgammon_v0
 from .games import boxing as boxing_v0
 from .games import combat_tank as combat_tank_v0
 from .games import combat_tankpong as combat_tankpong_v0
@@ -24,6 +23,7 @@ from .games import pong_basketball as pong_basketball_v0
 from .games import space_invaders_easy as space_invaders_easy_v0
 from .games import space_invaders_difficult as space_invaders_difficult_v0
 from .games import space_invaders_alternating as space_invaders_alternating_v0
+from .games import space_war as space_war_v0
 from .games import surround as surround_v0
 from .games import surround_erase as surround_erase_v0
 from .games import tennis as tennis_v0

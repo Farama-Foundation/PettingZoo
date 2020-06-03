@@ -14,6 +14,7 @@ from pettingzoo.classic import dou_dizhu_v0
 from pettingzoo.classic import gin_rummy_v0
 from pettingzoo.classic import go_v0
 from pettingzoo.classic import hanabi_v0
+from pettingzoo.classic import backgammon_v0
 
 from pettingzoo.gamma import knights_archers_zombies_v0
 from pettingzoo.gamma import pistonball_v0
@@ -35,8 +36,9 @@ from pettingzoo.sisl import pursuit_v0
 from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
+all_prefixes = ["atari", "classic", "gamma", "mpe", "sisl"]
+
 all_environments = {
-    "atari/backgammon": backgammon_v0,
     "atari/boxing": boxing_v0,
     "atari/combat_tank": combat_tank_v0,
     "atari/combat_tankpong": combat_tankpong_v0,
@@ -62,6 +64,7 @@ all_environments = {
     "atari/space_invaders_easy": space_invaders_easy_v0,
     "atari/space_invaders_difficult": space_invaders_difficult_v0,
     "atari/space_invaders_alternating": space_invaders_alternating_v0,
+    "atari/space_war": space_war_v0,
     "atari/surround": surround_v0,
     "atari/surround_erase": surround_erase_v0,
     "atari/tennis": tennis_v0,
@@ -86,6 +89,7 @@ all_environments = {
     "classic/gin_rummy": gin_rummy_v0,
     "classic/go": go_v0,
     "classic/hanabi": hanabi_v0,
+    "classic/backgammon": backgammon_v0,
 
     "gamma/knights_archers_zombies": knights_archers_zombies_v0,
     "gamma/pistonball": pistonball_v0,
