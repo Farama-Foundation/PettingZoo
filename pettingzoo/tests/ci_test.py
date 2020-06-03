@@ -14,15 +14,14 @@ import subprocess
 
 render = sys.argv[2] == 'True'
 manual_control = sys.argv[3] == 'True'
-bombardment = sys.argv[4] == 'True'
-performance = sys.argv[5] == 'True'
-save_obs = sys.argv[6] == 'True'
+performance = sys.argv[4] == 'True'
+save_obs = sys.argv[5] == 'True'
 
 
 env_id = sys.argv[1]
 
 
-def perform_ci_test(env_id, render, manual_control, bombardment, performance, save_obs):
+def perform_ci_test(env_id, render, manual_control, performance, save_obs):
     print("running game {}".format(env_id))
     env_module = all_environments[env_id]
     _env = env_module.env()
@@ -56,13 +55,6 @@ def perform_ci_test(env_id, render, manual_control, bombardment, performance, sa
         _env = env_module.env()
         performance_benchmark.performance_benchmark(_env)
 
-    if bombardment:
-        _env = env_module.env()
-        try:
-            bombardment_test.bombardment_test(_env, cycles=7000)
-        except Exception as e:
-            error_collected.append("Bombardment Test: " + str(e))
-
     return error_collected
 
 
@@ -70,7 +62,7 @@ if env_id in all_prefixes:
     warning_map = {}
     for e in all_environments:
         if e.startswith(env_id):
-            warning_map[e] = perform_ci_test(e, render, manual_control, bombardment, performance, save_obs)
+            warning_map[e] = perform_ci_test(e, render, manual_control, performance, save_obs)
     f = open("test_output.txt", "w")
     for warn in warning_map:
         warn_list = warning_map[warn]

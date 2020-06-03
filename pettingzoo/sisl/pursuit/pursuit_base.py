@@ -125,9 +125,9 @@ class Pursuit():
                 n_act_purs) for _ in range(self.n_pursuers)]
 
             self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
+                self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
             self.local_obs = np.zeros(
-                (self.n_pursuers, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+                (self.n_pursuers, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
         else:
             self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
@@ -136,9 +136,9 @@ class Pursuit():
                 n_act_ev) for _ in range(self.n_evaders)]
 
             self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
+                self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
             self.local_obs = np.zeros(
-                (self.n_evaders, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+                (self.n_evaders, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]
         self.pursuers_gone = np.array([False for i in range(self.n_pursuers)])
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
@@ -421,14 +421,23 @@ class Pursuit():
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
         # returns a flattened array of all the observations
-        self.local_obs[agent_idx][0].fill(
-            1.0 / self.layer_norm)  # border walls set to -0.1?
         xp, yp = agent_layer.get_position(agent_idx)
 
         xlo, xhi, ylo, yhi, xolo, xohi, yolo, yohi = self.obs_clip(xp, yp)
 
-        self.local_obs[agent_idx, 0:3, xolo:xohi, yolo:yohi] = np.abs(
+        raw_model_state = np.abs(
             self.model_state[0:3, xlo:xhi, ylo:yhi]) / self.layer_norm
+
+        # need to compile all 3 layers into a single layer
+        # 0 is empty
+        # 1 is a pursuer
+        # 2 is an evader
+        # 3 is both pursuer and evader
+        # 4 is a wall
+        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] = raw_model_state[0] * (-4)
+        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] += raw_model_state[1]
+        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] += raw_model_state[2] * 2
+
         return self.local_obs[agent_idx]
 
     def obs_clip(self, x, y):
