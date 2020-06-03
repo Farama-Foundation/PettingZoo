@@ -414,21 +414,6 @@ class raw_env(AECEnv):
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
-            # Keyboard input check
-            for event in pygame.event.get():
-                # Quit Game
-                if event.type == pygame.QUIT:
-                    self.run = False
-
-                elif event.type == pygame.KEYDOWN:
-                    # Quit Game
-                    if event.key == pygame.K_ESCAPE:
-                        self.run = False
-
-                    # Reset Environment
-                    if event.key == pygame.K_BACKSPACE:
-                        self.reset(observe=False)
-
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
         action = action + 1
         out_of_bounds = agent_name.update(action)

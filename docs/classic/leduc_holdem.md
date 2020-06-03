@@ -11,7 +11,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= ['player_0', 'player_1']`
 
-*gif*
+![](classic_leduc_holdem.gif)
 
 *AEC Diagram*
 

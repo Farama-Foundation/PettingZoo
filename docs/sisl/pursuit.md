@@ -10,7 +10,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["pursuer_0", "pursuer_1", ..., "pursuer_7"]`
 
-*gif*
+![](sisl_pursuit.gif)
 
 *AEC diagram*
 
@@ -45,6 +45,8 @@ n_evaders: Number of evaders
 n_pursuers: Number of pursuers
 
 obs_range: Radius of agent observation view
+
+layer_norm: Scalar value that the observation matrix is divided by
 
 n_catch: Number pursuers required around an evader to be considered caught
 

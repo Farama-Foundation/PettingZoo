@@ -11,7 +11,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["walker_0", "walker_1", "walker_2"]`
 
-*gif*
+![](sisl_multiwalker.gif)
 
 *AEC diagram*
 
