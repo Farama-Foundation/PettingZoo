@@ -414,7 +414,6 @@ class raw_env(AECEnv):
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
 
-
         agent_name = self.agent_list[self.agent_name_mapping[agent]]
         action = action + 1
         out_of_bounds = agent_name.update(action)
