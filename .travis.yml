@@ -290,6 +290,7 @@ jobs:
       before_install: 
         - export pz_module=atari
         - brew update
+        - brew install python3
 
     - name: "Classic with Python 3 on macOS"
       os: osx
@@ -303,6 +304,7 @@ jobs:
       before_install: 
         - export pz_module=classic
         - brew update
+        - brew install python3
 
     - name: "Gamma with Python 3 on macOS"
       os: osx
@@ -316,6 +318,7 @@ jobs:
       before_install: 
         - export pz_module=gamma
         - brew update
+        - brew install python3
 
     - name: "mpe with Python 3 on macOS"
       os: osx
@@ -329,6 +332,7 @@ jobs:
       before_install: 
         - export pz_module=mpe
         - brew update
+        - brew install python3
 
     - name: "sisl with Python 3 on macOS"
       os: osx
@@ -342,6 +346,7 @@ jobs:
       before_install: 
         - export pz_module=sisl
         - brew update
+        - brew install python3
 
 
 install:

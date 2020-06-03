@@ -223,6 +223,7 @@ class raw_env(AECEnv):
         while not self.agents[0] == 'player_' + str(player_number):
             self.agents = self.agents[1:] + [self.agents[0]]
 
+
         # Agent order list, on which the agent selector operates on.
         self.agent_order = list(self.agents)
         self._agent_selector = agent_selector(self.agent_order)
@@ -281,87 +282,18 @@ class raw_env(AECEnv):
             for player_name in self.agents}
 
     def render(self, mode='human'):
-        """ Supports console print only. Prints the whole status dictionary.
+        """ Supports console print only. Prints player's data.
 
          Example:
-                     {'current_player': 0,
-         'player_observations': [{'current_player': 0,
-                            'current_player_offset': 0,
-                            'deck_size': 40,
-                            'discard_pile': [],
-                            'fireworks': {'B': 0,
-                                      'G': 0,
-                                      'R': 0,
-                                      'W': 0,
-                                      'Y': 0},
-                            'information_tokens': 8,
-                            'legal_moves': [{'action_type': 'PLAY',
-                                         'card_index': 0},
-                                        {'action_type': 'PLAY',
-                                         'card_index': 1},
-                                        {'action_type': 'PLAY',
-                                         'card_index': 2},
-                                        {'action_type': 'PLAY',
-                                         'card_index': 3},
-                                        {'action_type': 'PLAY',
-                                         'card_index': 4},
-                                        {'action_type': 'REVEAL_COLOR',
-                                         'color': 'R',
-                                         'target_offset': 1},
-                                        {'action_type': 'REVEAL_COLOR',
-                                         'color': 'G',
-                                         'target_offset': 1},
-                                        {'action_type': 'REVEAL_COLOR',
-                                         'color': 'B',
-                                         'target_offset': 1},
-                                        {'action_type': 'REVEAL_RANK',
-                                         'rank': 0,
-                                         'target_offset': 1},
-                                        {'action_type': 'REVEAL_RANK',
-                                         'rank': 1,
-                                         'target_offset': 1},
-                                        {'action_type': 'REVEAL_RANK',
-                                         'rank': 2,
-                                         'target_offset': 1}],
-                            'life_tokens': 3,
-                            'observed_hands': [[{'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1}],
-                                           [{'color': 'G', 'rank': 2},
-                                            {'color': 'R', 'rank': 0},
-                                            {'color': 'R', 'rank': 1},
-                                            {'color': 'B', 'rank': 0},
-                                            {'color': 'R', 'rank': 1}]],
-                            'num_players': 2,
-                            'vectorized': [ 0, 0, 1, ... ]},
-                           {'current_player': 0,
-                            'current_player_offset': 1,
-                            'deck_size': 40,
-                            'discard_pile': [],
-                            'fireworks': {'B': 0,
-                                      'G': 0,
-                                      'R': 0,
-                                      'W': 0,
-                                      'Y': 0},
-                            'information_tokens': 8,
-                            'legal_moves': [],
-                            'life_tokens': 3,
-                            'observed_hands': [[{'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1},
-                                            {'color': None, 'rank': -1}],
-                                           [{'color': 'W', 'rank': 2},
-                                            {'color': 'Y', 'rank': 4},
-                                            {'color': 'Y', 'rank': 2},
-                                            {'color': 'G', 'rank': 0},
-                                            {'color': 'W', 'rank': 1}]],
-                            'num_players': 2,
-                            'vectorized': [ 0, 0, 1, ... ]}]}
         """
-        print(self.latest_observations)
+        player_data = self.latest_observations['player_observations']
+        print("Active player:",self.agent_order[player_data[0]['current_player_offset']])
+        for i,d in enumerate(player_data):
+            print(self.agent_order[i])
+            print("========")
+            print(d['pyhanabi'])
+            print()
+        #print(self.latest_observations)
 
     def close(self):
         pass
