@@ -6,7 +6,8 @@ from .games import combat_invisible_tankpong as combat_invisible_tankpong_v0
 from .games import combat_biplane as combat_biplane_v0
 from .games import combat_jet as combat_jet_v0
 from .games import double_dunk as double_dunk_v0
-from .games import entombed as entombed_v0
+from .games import entombed_competitive as entombed_competitive_v0
+from .games import entombed_cooperative as entombed_cooperative_v0
 from .games import flag_capture as flag_capture_v0
 from .games import joust as joust_v0
 from .games import ice_hockey as ice_hockey_v0
