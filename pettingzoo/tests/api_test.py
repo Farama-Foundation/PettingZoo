@@ -12,29 +12,29 @@ import os
 def test_observation(observation, observation_0):
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():
-            print("Observation contains infinity (np.inf) or negative infinity (-np.inf)")
+            warnings.warn("Observation contains infinity (np.inf) or negative infinity (-np.inf)")
         if np.isnan(observation).any():
-            print("Observation contains NaNs")
+            warnings.warn("Observation contains NaNs")
         if len(observation.shape) > 3:
-            print("Observation has more than 3 dimensions")
+            warnings.warn("Observation has more than 3 dimensions")
         if observation.shape == (0,):
             assert False, "Observation can not be an empty array"
         if observation.shape == (1,):
-            print("Observation is a single number")
+            warnings.warn("Observation is a single number")
         if not isinstance(observation, observation_0.__class__):
-            print("Observations between agents are different classes")
+            warnings.warn("Observations between agents are different classes")
         if (observation.shape != observation_0.shape) and (len(observation.shape) == len(observation_0.shape)):
-            print("Observations are different shapes")
+            warnings.warn("Observations are different shapes")
         if len(observation.shape) != len(observation_0.shape):
-            print("Observations have different number of dimensions")
+            warnings.warn("Observations have different number of dimensions")
         if not np.can_cast(observation.dtype, np.dtype("float64")):
-            print("Observation numpy array is not a numeric dtype")
+            warnings.warn("Observation numpy array is not a numeric dtype")
         if np.array_equal(observation, np.zeros(observation.shape)):
-            print("Observation numpy array is all zeros.")
+            warnings.warn("Observation numpy array is all zeros.")
         if not np.all(observation >= 0) and ((len(observation.shape) == 2) or (len(observation.shape) == 3 and observation.shape[2] == 1) or (len(observation.shape) == 3 and observation.shape[2] == 3)):
-            print("The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing.")
+            warnings.warn("The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing.")
     else:
-        print("Observation is not NumPy array")
+        warnings.warn("Observation is not NumPy array")
 
 
 def test_observation_action_spaces(env, agent_0):
@@ -46,29 +46,29 @@ def test_observation_action_spaces(env, agent_0):
         assert isinstance(env.observation_spaces[agent], gym.spaces.Space), "Observation space for each agent must extend gym.spaces.Space"
         assert isinstance(env.action_spaces[agent], gym.spaces.Space), "Agent space for each agent must extend gym.spaces.Space"
         if not (isinstance(env.observation_spaces[agent], gym.spaces.Box) or isinstance(env.observation_spaces[agent], gym.spaces.Discrete)):
-            print("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
+            warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_spaces[agent], gym.spaces.Box) or isinstance(env.action_spaces[agent], gym.spaces.Discrete)):
-            print("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
+            warnings.warn("Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if (not isinstance(agent, str)) and agent != 'env':
-            print("Agent's are recommended to have numbered string names, like player_0")
+            warnings.warn("Agent's are recommended to have numbered string names, like player_0")
         if not isinstance(agent, str) or not re.match("[a-z]+_[0-9]+", agent):  # regex for ending in _<integer>
-            print("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
+            warnings.warn("We recommend agents to be named in the format <descriptor>_<number>, like \"player_0\"")
         if not isinstance(env.observation_spaces[agent], env.observation_spaces[agent_0].__class__):
-            print("The class of observation spaces is different between two agents")
+            warnings.warn("The class of observation spaces is different between two agents")
         if not isinstance(env.action_spaces[agent], env.action_spaces[agent_0].__class__):
-            print("The class of action spaces is different between two agents")
+            warnings.warn("The class of action spaces is different between two agents")
         if env.observation_spaces[agent] != env.observation_spaces[agent_0]:
-            print("Agents have different observation space sizes")
+            warnings.warn("Agents have different observation space sizes")
         if env.action_spaces[agent] != env.action_spaces[agent_0]:
-            print("Agents have different action space sizes")
+            warnings.warn("Agents have different action space sizes")
 
         if isinstance(env.action_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.action_spaces[agent].low, -np.inf)):
-                print("Agent's minimum action space value is -infinity. This is probably too low.")
+                warnings.warn("Agent's minimum action space value is -infinity. This is probably too low.")
             if np.any(np.equal(env.action_spaces[agent].high, np.inf)):
-                print("Agent's maxmimum action space value is infinity. This is probably too high")
+                warnings.warn("Agent's maxmimum action space value is infinity. This is probably too high")
             if np.any(np.equal(env.action_spaces[agent].low, env.action_spaces[agent].high)):
-                print("Agent's maximum and minimum action space values are equal")
+                warnings.warn("Agent's maximum and minimum action space values are equal")
             if np.any(np.greater(env.action_spaces[agent].low, env.action_spaces[agent].high)):
                 assert False, "Agent's minimum action space value is greater than it's maximum"
             if env.action_spaces[agent].low.shape != env.action_spaces[agent].shape:
@@ -78,11 +78,11 @@ def test_observation_action_spaces(env, agent_0):
 
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             if np.any(np.equal(env.observation_spaces[agent].low, -np.inf)):
-                print("Agent's minimum observation space value is -infinity. This is probably too low.")
+                warnings.warn("Agent's minimum observation space value is -infinity. This is probably too low.")
             if np.any(np.equal(env.observation_spaces[agent].high, np.inf)):
-                print("Agent's maxmimum observation space value is infinity. This is probably too high")
+                warnings.warn("Agent's maxmimum observation space value is infinity. This is probably too high")
             if np.any(np.equal(env.observation_spaces[agent].low, env.observation_spaces[agent].high)):
-                print("Agent's maximum and minimum observation space values are equal")
+                warnings.warn("Agent's maximum and minimum observation space values are equal")
             if np.any(np.greater(env.observation_spaces[agent].low, env.observation_spaces[agent].high)):
                 assert False, "Agent's minimum observation space value is greater than it's maximum"
             if env.observation_spaces[agent].low.shape != env.observation_spaces[agent].shape:
@@ -93,7 +93,7 @@ def test_observation_action_spaces(env, agent_0):
 
 def test_reward(reward):
     if not (isinstance(reward, int) or isinstance(reward, float)) and not isinstance(np.dtype(reward), np.dtype) and not isinstance(reward, np.ndarray):
-        print("Reward should be int, float, NumPy dtype or NumPy array")
+        warnings.warn("Reward should be int, float, NumPy dtype or NumPy array")
     if isinstance(reward, np.ndarray):
         if isinstance(reward, np.ndarray) and not reward.shape == (1,):
             assert False, "Rewards can only be one number"
@@ -121,12 +121,12 @@ def play_test(env, observation_0):
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
         if not env.observation_spaces[agent].contains(prev_observe):
-            print("Out of bounds observation: ", prev_observe)
+            warnings.warn("Out of bounds observation: ", prev_observe)
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
-            print("The info of each agent should be a dict, use {} if you aren't using info")
+            warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
         assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
@@ -150,10 +150,10 @@ def play_test(env, observation_0):
 def test_agent_order(env):
     env.reset()
     if not hasattr(env, "_agent_selector"):
-        print("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
+        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
 
     elif not isinstance(env._agent_selector, agent_selector):
-        print("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
+        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
 
     assert hasattr(env, "agent_order"), "Env does not have agent_order"
 
@@ -249,6 +249,6 @@ def api_test(env, render=False, verbose_progress=False):
     if base_render != env.__class__.render:
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
     else:
-        print("Environment has not defined a render() method")
+        warnings.warn("Environment has not defined a render() method")
 
     print("Passed API test")
