@@ -11,7 +11,7 @@ This environment is part of the [MPE environments](../mpe.md). Please read that 
 
 `agents= [adversary_0, agent_0,agent_1]`
 
-*gif*
+![](mpe_simple_adversary.gif)
 
 *AEC diagram*
 

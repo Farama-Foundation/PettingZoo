@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![double_dunk gif](../../gifs/atari_double_dunk.gif)
+![double_dunk gif](atari_double_dunk.gif)
 
 *AEC diagram*
 
