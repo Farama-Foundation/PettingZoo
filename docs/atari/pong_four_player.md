@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0", "third_0", "fourth_0"]`
 
-![pong_four_player gif](../../gifs/atari_pong_four_player.gif)
+![pong_four_player gif](atari_pong_four_player.gif)
 
 *AEC diagram*
 

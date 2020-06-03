@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![combat_invisible_tank gif](../../gifs/atari_combat_invisible_tank.gif)
+![combat_invisible_tank gif](atari_combat_invisible_tank.gif)
 
 *AEC diagram*
 

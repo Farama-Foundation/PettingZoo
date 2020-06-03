@@ -245,7 +245,7 @@ class raw_env(AECEnv):
         agent_on_turn = self.agent_selection
 
         if action not in self.legal_moves:
-            raise ValueError(f'Illegal action. Please choose between legal actions, as documented in dict self.infos')
+            raise ValueError('Illegal action. Please choose between legal actions, as documented in dict self.infos')
 
         else:
             # Iterate agent_selection

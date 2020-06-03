@@ -12,7 +12,7 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 `agents= ["prisoner_0", "prisoner_1", ..., "prisoner_7"]`
 
-*gif*
+![](gamma_prison.gif)
 
 *AEC diagram*
 

@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![flag_capture gif](../../gifs/atari_flag_capture.gif)
+![flag_capture gif](atari_flag_capture.gif)
 
 *AEC diagram*
 

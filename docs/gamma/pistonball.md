@@ -11,7 +11,7 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 `agents= ["piston_0", "piston_1", ..., "piston_19"]`
 
-*gif*
+![](gamma_pistonball.gif)
 
 *AEC diagram*
 

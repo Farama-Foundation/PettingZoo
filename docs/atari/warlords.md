@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0", "third_0", "fourth_0"]`
 
-![warlords gif](../../gifs/atari_warlords.gif)
+![warlords gif](atari_warlords.gif)
 
 *AEC diagram*
 

@@ -10,7 +10,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= `
 
-*gif*
+![](classic_rpsls.gif)
 
 *AEC Diagram*
 

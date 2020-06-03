@@ -11,7 +11,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= ['landlord_0', 'peasant_0', 'peasant_1']`
 
-*gif*
+![](classic_dou_dizhu.gif)
 
 *AEC Diagram*
 
