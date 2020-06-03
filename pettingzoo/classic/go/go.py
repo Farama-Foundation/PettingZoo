@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Code from: https://github.com/tensorflow/minigo
+
 """
 A board is a NxN numpy array.
 A Coordinate is a tuple index into the board.

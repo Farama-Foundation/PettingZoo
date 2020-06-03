@@ -16,7 +16,7 @@ PettingZoo includes the following sets of games:
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-To install, use `pip install pettingzoo` 
+To install, use `pip install pettingzoo`
 
 We support Python 3.6, 3.7 and 3.8
 
@@ -114,10 +114,10 @@ All environments end in something like \_v0.  When changes are made to environme
 
 ```
 import pettingzoo.tests.api_test as api_test
-api_test.api_test(env, render=True, manual_control=None, save_obs=False)
+api_test.api_test(env, render=False, verbose_progress=False)
 ```
 
-This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set `save_obs=True` to save observations as .png images in the directory the command is run in for debugging purposes (this only supports enviornment with image observations). `manual_control` takes the manual control method name for an environment (i.e. `manual_control=pistonball.manual_control`) to run the test.
+This tests the environment for API compliance. If the environment has a custom `render()` method, setting argument `render=True` tests whether there is an accompanying custom `close()` method. If `verbose_progress=True`, progress of the test is printed to the console. 
 
 ### Bombardment Test
 
@@ -136,6 +136,15 @@ performance_benchmark.performance_benchmark(env)
 ```
 
 This randomly steps through the environment for 60 seconds to benchmark it's performance.
+
+### Manual Control Test
+
+```
+import pettingzoo.tests.manual_control_test as manual_control_test
+manual_control_test.test_manual_control(env.manual_control)
+```
+
+If the environment has`manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
 
 ### Manual Control
 
@@ -171,19 +180,31 @@ The first function will save the current observation for the specified agent. Th
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
-
+We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
 
 ## Leaderboards
 Our cooperative games have leaderboards for best total (summed over all agents) score. If you'd like to be listed on the leader board, please submit a pull request. Only pull requests that link to code for reproducibility and use environment arguments in the spirit of the competition will be accepted.
+
+## Citation
+
+To cite this project in publication, please use
+
+```
+@misc{pettingZoo2020,
+  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam and Manocha, Dinesh},
+  title = {Petting{Z}oo},
+  year = {2020},
+  publisher = {GitHub},
+  note = {GitHub repository},
+  howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
+}
+```
 
 ## Incomplete Environments
 
 The following environments are under active development:
 
-* atari/* (Ben)
-* classic/backgammon (Caroline)
 * classic/checkers (Caroline)
 * classic/shogi (Caroline)
-* magent/* (Mario)
+* magent/* (Ben)
 * robotics/* (Yiling)

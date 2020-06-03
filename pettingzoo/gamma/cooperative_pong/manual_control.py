@@ -48,13 +48,11 @@ def manual_control(**kwargs):
 
         for _ in env.agents:
             agent = env.agent_selection
-            if not dones[agent]:
-                if not initial_iteration[agent]:
-                    reward, dones[agent], _ = env.last()
-                    total_reward += reward
-                initial_iteration[agent] = False
-                env.step(action_dict[agent], observe=False)
-        done = all(dones.values())
+            reward, dones[agent], _ = env.last()
+            total_reward += reward
+            initial_iteration[agent] = False
+            env.step(action_dict[agent], observe=False)
+        done = all(env.dones.values())
 
         env.render()
         pygame.event.pump()
