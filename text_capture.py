@@ -42,7 +42,10 @@ for name,module in all_environments.items():
 
         #print(text)
         endline_correct = text.replace("\n","\r\n")+"\r\n\r\n"
-        out_line = [step*0.2,'o',shrink_lines(endline_correct,line_height,line_len)]
+        if name != "classic/go":
+            out_line = [step*0.2,'o',shrink_lines(endline_correct,line_height,line_len)]
+        else:
+            out_line = [step*0.2,'o',endline_correct]
         lines.append(json.dumps(out_line))
     nameline = name.replace("/","_")
     with open(f"gif_data/{nameline}.json",'w') as fh:
