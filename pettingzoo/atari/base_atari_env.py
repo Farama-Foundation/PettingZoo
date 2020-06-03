@@ -1,6 +1,5 @@
 import multi_agent_ale_py
 import os
-from pettingzoo.utils import wrappers
 from pettingzoo import AECEnv
 import gym
 from gym.utils import seeding
@@ -86,12 +85,12 @@ class BaseAtariEnv(AECEnv):
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
         self.num_agents = num_players
-        player_names = ["first","second","third","fourth"]
+        player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
         self.agent_order = list(self.agents)
 
         self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
-        self.observation_spaces =  {agent: observation_space for agent in self.agents}
+        self.observation_spaces = {agent: observation_space for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
 
         self._agent_selector = agent_selector(self.agent_order)
@@ -138,13 +137,13 @@ class BaseAtariEnv(AECEnv):
         zoom_factor = 4
         if self._screen is None:
             pygame.init()
-            self._screen = pygame.display.set_mode((screen_width*zoom_factor, screen_height*zoom_factor))
+            self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
 
         image = self.ale.getScreenRGB()
 
         myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
 
-        myImage = pygame.transform.scale(myImage,(screen_width*zoom_factor, screen_height*zoom_factor))
+        myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
 
         self._screen.blit(myImage, (0, 0))
 
@@ -154,5 +153,6 @@ class BaseAtariEnv(AECEnv):
 
     def close(self):
         if self._screen is not None:
+            import pygame
             pygame.display.quit()
             self._screen = None
