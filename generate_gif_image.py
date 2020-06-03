@@ -37,7 +37,7 @@ def generate_data(nameline,module):
         #im  = im.resize(new_shape, Image.ANTIALIAS)
         im.save(f"{dir}{str(step).zfill(3)}.png")
         #print(text)
-
+    env.close()
     render_gif_image(nameline)
     # num_games = 0
     # while num_games < 10000:
