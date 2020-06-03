@@ -46,6 +46,8 @@ n_pursuers: Number of pursuers
 
 obs_range: Radius of agent observation view
 
+layer_norm: Scalar value that the observation matrix is divided by
+
 n_catch: Number pursuers required around an evader to be considered caught
 
 random_opponents: Whether to randomize number of evaders on reset or use argument amount

@@ -10,7 +10,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= ['player_0', 'player_1', 'player_2', 'player_3']`
 
-*gif*
+![](classic_mahjong.gif)
 
 *AEC Diagram*
 

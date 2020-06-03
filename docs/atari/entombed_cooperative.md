@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![entombed_cooperative gif](../../gifs/atari_entombed_cooperative.gif)
+![entombed_cooperative gif](atari_entombed.gif)
 
 *AEC diagram*
 

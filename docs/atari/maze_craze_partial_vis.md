@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![maze_craze_partial_vis gif](../../gifs/atari_maze_craze_partial_vis.gif)
+![maze_craze_partial_vis gif](atari_maze_craze_partial_vis.gif)
 
 *AEC diagram*
 

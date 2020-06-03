@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![boxing gif](../../gifs/atari_boxing.gif)
+![boxing gif](atari_boxing.gif)
 
 *AEC diagram*
 

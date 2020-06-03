@@ -11,7 +11,7 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 `agents= ["archer_0", "archer_1", "knight_0", "knight_1"]`
 
-*gif*
+![](gamma_knights_archers_zombies.gif)
 
 *AEC diagram*
 

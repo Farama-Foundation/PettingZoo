@@ -10,7 +10,7 @@ This environment is part of the [MPE environments](../mpe.md). Please read that 
 
 `agents= [adversary_0, adversary_1, adversary_2, agent_0]`
 
-*gif*
+![](mpe_simple_tag.gif)
 
 *AEC diagram*
 
