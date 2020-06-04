@@ -15,7 +15,6 @@ from .games import maze_craze_fully_seen as maze_craze_fully_seen_v0
 from .games import maze_craze_partial_vis as maze_craze_partial_vis_v0
 from .games import maze_craze_invisible as maze_craze_invisible_v0
 from .games import maze_craze_robbers as maze_craze_robbers_v0
-from .games import maze_craze_capture as maze_craze_capture_v0
 from .games import maze_craze_blockade as maze_craze_blockade_v0
 from .games import mario_bros as mario_bros_v0
 from .games import othello as othello_v0

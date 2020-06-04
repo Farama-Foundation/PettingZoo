@@ -15,10 +15,12 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+Four player team battle.
 
+Get the ball onto your opponent's floor to score. In addition to being able to move left and right, each player can also jump higher to affect the ball's motion above the net.
+
+Scoring a point gives your team +1 reward and your opponent team -1 reward.
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

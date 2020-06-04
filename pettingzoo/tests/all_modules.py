@@ -56,7 +56,6 @@ all_environments = {
     "atari/maze_craze_partial_vis": maze_craze_partial_vis_v0,
     "atari/maze_craze_invisible": maze_craze_invisible_v0,
     "atari/maze_craze_robbers": maze_craze_robbers_v0,
-    "atari/maze_craze_capture": maze_craze_capture_v0,
     "atari/maze_craze_blockade": maze_craze_blockade_v0,
     "atari/mario_bros": mario_bros_v0,
     "atari/othello": othello_v0,

@@ -191,7 +191,7 @@ To cite this project in publication, please use
 
 ```
 @misc{pettingZoo2020,
-  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam and Manocha, Dinesh},
+  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam},
   title = {Petting{Z}oo},
   year = {2020},
   publisher = {GitHub},
