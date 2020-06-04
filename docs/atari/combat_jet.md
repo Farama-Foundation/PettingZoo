@@ -15,10 +15,20 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+
+*Combat*'s jet mode is an adversarial game where timing,
+positioning, and keeping track of your opponent's complex
+movements are key.
+
+The players fly around the map, able to control direction
+but not your speed. You can however, influence the direction of the missile mid flight by rotating your jet, making it easier to hit your opponent than in Biplane mode.
+
+When your opponent is hit by your bullet,
+you score a point.
+
+Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
 
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
