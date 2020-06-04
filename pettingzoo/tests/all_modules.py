@@ -33,6 +33,8 @@ from pettingzoo.mpe import simple_world_comm_v0
 from pettingzoo.mpe import simple_v0
 
 from pettingzoo.magent import battle_v0
+from pettingzoo.magent import adversarial_pursuit_v0
+from pettingzoo.magent import gather_v0
 
 from pettingzoo.sisl import pursuit_v0
 from pettingzoo.sisl import waterworld_v0
@@ -100,6 +102,8 @@ all_environments = {
     "gamma/prospector": prospector_v0,
 
     "magent/battle": battle_v0,
+    "magent/pursuit": adversarial_pursuit_v0,
+    "magent/gather": gather_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,

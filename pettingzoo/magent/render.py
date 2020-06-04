@@ -2,22 +2,23 @@ import math
 import magent
 import numpy as np
 
-animation_total=2
-animation_stop=0
-background_rgb=(255, 255, 255)
-attack_line_rgb=(0, 0, 0)
-attack_dot_rgb=(0, 0, 0)
-attack_dot_size=0.3
-text_rgb=(0, 0, 0)
-text_size=16
-text_spacing=3
-banner_size=32
-banner_spacing=3
-bigscreen_size=72
-bigscreen_spacing=0
-grid_rgba=((0, 0, 0), 30)
-grid_size=7.5
-resolution = (800,600)
+animation_total = 2
+animation_stop = 0
+background_rgb = (255, 255, 255)
+attack_line_rgb = (0, 0, 0)
+attack_dot_rgb = (0, 0, 0)
+attack_dot_size = 0.3
+text_rgb = (0, 0, 0)
+text_size = 16
+text_spacing = 3
+banner_size = 32
+banner_spacing = 3
+bigscreen_size = 72
+bigscreen_spacing = 0
+grid_rgba = ((0, 0, 0), 30)
+grid_size = 7.5
+resolution = (800, 600)
+
 
 def draw_line(surface, color, a, b):
     import pygame
@@ -27,6 +28,7 @@ def draw_line(surface, color, a, b):
         (int(round(b[0])), int(round(b[1])))
     )
 
+
 def draw_rect(surface, color, a, w, h):
     import pygame
     pygame.draw.rect(surface, color, pygame.Rect(*map(int, (
@@ -34,9 +36,11 @@ def draw_rect(surface, color, a, w, h):
         round(w + a[0] - round(a[0])),
         round(h + a[1] - round(a[1]))))))
 
+
 def draw_rect_matrix(matrix, color, a, w, h, resolution):
     x, y, w, h = map(int, (round(a[0]), round(a[1]), round(w + a[0] - round(a[0])), round(h + a[1] - round(a[1]))))
     matrix[max(x, 0):min(x + w, resolution[0]), max(y, 0):min(h + y, resolution[1]), :] = color
+
 
 def draw_line_matrix(matrix, color, a, b, resolution):
     a = (min(max(0, a[0]), resolution[0] - 1), min(max(0, a[1]), resolution[1] - 1))
@@ -56,13 +60,14 @@ def draw_line_matrix(matrix, color, a, b, resolution):
     else:
         raise NotImplementedError
 
+
 class Renderer:
     def __init__(self, env):
         import pygame
         pygame.init()
         pygame.display.init()
         self.env = env
-        self.handles =  self.env.get_handles()
+        self.handles = self.env.get_handles()
 
         self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
 
@@ -71,22 +76,19 @@ class Renderer:
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
 
-
-        self.map_size,self.groups, self.static_info = (125,125),env._get_groups_info(), {'wall': env._get_walls_info()}
+        self.map_size, self.groups, self.static_info = (125, 125), env._get_groups_info(), {'wall': env._get_walls_info()}
 
         self.frame_id = 0
 
-        self.walls  = self.static_info['wall']
+        self.walls = self.static_info['wall']
 
         self.old_data = None
         self.new_data = None
 
         self.need_static_update = True
-        #show_grid = False
         self.animation_progress = 0
 
     def get_banners(self, frame_id, resolution):
-        #print(self.env.get_num(self.handles[0]))
         red = '{}'.format(np.sum(self.env.get_alive(self.handles[0]).astype(np.int32))), (200, 0, 0)
         vs = ' vs ', (0, 0, 0)
         blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
@@ -116,8 +118,7 @@ class Renderer:
         groups = self.groups
         text_formatter = self.text_formatter
         banner_formatter = self.banner_formatter
-        done = False
-        status = True#server.get_status(self.frame_id)
+        status = True
         triggered = False
         # x_range: which vertical gridlines should be shown on the display
         # y_range: which horizontal gridlines should be shown on the display
@@ -134,28 +135,27 @@ class Renderer:
         self.canvas.fill(background_rgb)
 
         if self.need_static_update or True:
-           grids = pygame.Surface(resolution)
-           #grids.set_alpha(grid_rgba[1])
-           grids.fill(background_rgb)
+            grids = pygame.Surface(resolution)
+            grids.fill(background_rgb)
 
-           for i in range(x_range[0], x_range[1] + 1):
-               draw_line(
-                   self.canvas, grid_rgba[0],
-                   (i * grid_size - view_position[0], max(0, view_position[1]) - view_position[1]),
-                   (
-                       i * grid_size - view_position[0],
-                       min(view_position[1] + resolution[1], self.map_size[1] * grid_size) - view_position[1]
-                   )
-               )
-           for i in range(y_range[0], y_range[1] + 1):
-               draw_line(
-                   self.canvas, grid_rgba[0],
-                   (max(0, view_position[0]) - view_position[0], i * grid_size - view_position[1]),
-                   (
-                       min(view_position[0] + resolution[0], self.map_size[0] * grid_size) - view_position[0],
-                       i * grid_size - view_position[1]
-                   )
-               )
+            for i in range(x_range[0], x_range[1] + 1):
+                draw_line(
+                    self.canvas, grid_rgba[0],
+                    (i * grid_size - view_position[0], max(0, view_position[1]) - view_position[1]),
+                    (
+                        i * grid_size - view_position[0],
+                        min(view_position[1] + resolution[1], self.map_size[1] * grid_size) - view_position[1]
+                    )
+                )
+            for i in range(y_range[0], y_range[1] + 1):
+                draw_line(
+                    self.canvas, grid_rgba[0],
+                    (max(0, view_position[0]) - view_position[0], i * grid_size - view_position[1]),
+                    (
+                        min(view_position[0] + resolution[0], self.map_size[0] * grid_size) - view_position[0],
+                        i * grid_size - view_position[1]
+                    )
+                )
 
         if self.new_data is None or self.animation_progress > animation_total + animation_stop:
             pos, event = env._get_render_info(x_range, y_range)
@@ -182,6 +182,7 @@ class Renderer:
             pygame.pixelcopy.array_to_surface(self.canvas, grid_map)
 
             rate = min(1.0, self.animation_progress / animation_total)
+            print(len(self.new_data[0]))
             for key in self.new_data[0]:
                 new_prop = self.new_data[0][key]
                 old_prop = self.old_data[0][key] if self.old_data is not None and key in self.old_data[0] else None
@@ -203,7 +204,7 @@ class Renderer:
                 )
 
             for key, event_x, event_y in self.new_data[1]:
-                if not key in self.new_data[0]:
+                if key not in self.new_data[0]:
                     continue
                 new_prop = self.new_data[0][key]
                 old_prop = self.old_data[0][key] if self.old_data is not None and key in self.old_data[0] else None
@@ -250,17 +251,17 @@ class Renderer:
 
             self.canvas.blit(text_window, (0, (text_size + text_spacing) / 1.5))
             self.canvas.blit(text_grids, (0, (text_size + text_spacing) / 1.5 * 2))
-            #self.canvas.blit(text_mouse, (0, (text_size + text_spacing) / 1.5 * 3))
+            # self.canvas.blit(text_mouse, (0, (text_size + text_spacing) / 1.5 * 3))
 
             height_now = 0
             for texts in self.get_banners(self.frame_id, resolution):
                 content = []
                 width, height = 0, 0
                 for text in texts:
-                     text = banner_formatter.render(text[0], True, pygame.Color(*text[1]))
-                     content.append((text, width))
-                     width += text.get_width()
-                     height = max(height, text.get_height())
+                    text = banner_formatter.render(text[0], True, pygame.Color(*text[1]))
+                    content.append((text, width))
+                    width += text.get_width()
+                    height = max(height, text.get_height())
                 start = (resolution[0] - width) / 2.0
                 for b in content:
                     self.canvas.blit(b[0], (start + b[1], height_now))
@@ -268,5 +269,5 @@ class Renderer:
 
         if self.need_static_update:
             self.need_static_update = False
-        #print("rendered")
+
         pygame.display.update()
