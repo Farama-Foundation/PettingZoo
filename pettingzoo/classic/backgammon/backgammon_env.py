@@ -88,7 +88,7 @@ class raw_env(AECEnv):
             return self.observe(self.game.get_opponent(self.colors[self.agent_selection]))
 
     def observe(self, agent):
-        return np.array(self.game.get_board_features(agent),dtype=np.float32).reshape(198,)
+        return np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198,)
 
     def reset(self, observe=True):
         self.dones = {i: False for i in self.agents}

@@ -79,7 +79,6 @@ class SimpleEnv(AECEnv):
         self.current_actions = [None] * self.num_agents
 
         if observe:
-            agent = self.world.agents[0]
             return self.observe(self.agent_selection)
         else:
             return
@@ -160,7 +159,6 @@ class SimpleEnv(AECEnv):
                 for a in self.agents:
                     self.dones[a] = True
 
-        next_agent = self.world.agents[next_idx]
         if observe:
             next_observation = self.observe(self.agent_selection)
         else:
