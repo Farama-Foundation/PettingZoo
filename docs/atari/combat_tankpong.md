@@ -15,10 +15,15 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+*Combat*'s classic tank pong is an adversarial game where prediction, and positioning are key.
+
+The players move around the map. When your opponent is hit by your bullet,
+you score a point. Note that your opponent gets blasted through obstacles when it is hit, potentially putting it in a good position to hit you back.
+
+Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
+
 
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
