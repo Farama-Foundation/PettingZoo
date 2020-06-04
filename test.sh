@@ -1,6 +1,6 @@
 #!/bin/bash
 
-render=True
+render=${pz_render:-True}
 manual_control=True
 performance=True
 save_obs=True
