@@ -1,102 +1,87 @@
-from gym.spaces import Discrete
+from gym.spaces import Discrete, Box
 import numpy as np
 import warnings
 import magent
 from pettingzoo import AECEnv
+import math
+from pettingzoo.magent.render import Renderer
+from pettingzoo.utils import agent_selector
 
 
-class env(AECEnv):
-    metadata = {'render.modes': ['human']}
-    '''
-    Parent Class Methods
-    '''
-    def __init__(self, config, **kwargs):
-        self.env = magent.GridWorld(config, **kwargs)
-        self.num_agents = 2
-        self.agents = ["predator", "prey"]
-        self.dones = {agent: False for agent in self.agents}
-        self.agent_order = self.agents[:]
+class markov_env:
+    def __init__(self, env, map_size=45):
+        self.map_size = map_size
+        self.env = env
+        self.handles = handles = env.get_handles()
+        env.reset()
+        self.generate_map()
 
-        self.action_spaces = {agent: Discrete(3) for agent in self.agents}
-        self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
+        self.team_sizes = team_sizes = [env.get_num(handle) for handle in self.handles]
+        self.agents = [f"team{j}_{i}" for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        self.num_agents = sum(team_sizes)
 
-        self.display_wait = 0.0
-        self.rewards = {agent: 0 for agent in self.agents}
-        self.dones = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
-        self.num_moves = 0
+        num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
+        self.action_spaces = [ Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        # may change depending on environment config? Not sure.
+        team_obs_shapes = self._calc_obs_shapes()
+        self.observation_spaces = [ Box(low=-500.,high=500.,shape=team_obs_shapes[j],dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
 
-    def step(self, action, observe=True):
-        self.env.step()
+        self._renderer = None
+        #self._observations_uniform = all(team_obs_shapes[0] == obs_shape for obs_shape in team_obs_shapes)
 
-    def reset(self, observe=True):
-        self.env.reset()
+    def _calc_obs_shapes(self):
+        view_spaces = [self.env.get_view_space(handle) for handle in self.handles]
+        feature_spaces = [self.env.get_feature_space(handle) for handle in self.handles]
+        assert all(len(tup) == 3 for tup in view_spaces)
+        assert all(len(tup) == 1 for tup in feature_spaces)
+        obs_spaces = [(view_space[:2]+(view_space[2]+feature_space[0],)) for view_space,feature_space in zip(view_spaces, feature_spaces)]
+        return obs_spaces
 
-    def observe(self, agent):
-        return self.env.get_observation(agent)
-
-    def last(self):
-        pass
-
-    def render(self, mode='human'):
-        self.env.render()
+    def render(self):
+        if self._renderer is None:
+            self._renderer = Renderer(self.env)
+        self._renderer.render()
 
     def close(self):
-        pass
+        pygame.quit()
 
-    '''
-    Child Class Methods
-    '''
-    def add_walls(self, method, **kwargs):
-        self.env.add_walls(method, **kwargs)
+    def reset(self):
+        print("reset")
+        self.env.reset()
+        self.generate_map()
+        return self._observe_all()
 
-    def new_group(self, name):
-        return self.env.new_group(name)
+    def _observe_all(self):
+        observes = []
+        for handle in self.handles:
+            view,features = self.env.get_observation(handle)
 
-    def add_agents(self, handle, method, **kwargs):
-        return self.env.add_agents(handle, method, **kwargs)
+            feat_reshape = np.expand_dims(np.expand_dims(features,1),1)
+            feat_img = np.tile(feat_reshape,(1,view.shape[1],view.shape[2],1))
+            fin_obs = np.concatenate([view,feat_img],axis=-1)
+            split_obs = np.split(fin_obs,len(fin_obs))
+            observes += split_obs
 
-    def set_action(self, handle, actions):
-        self.env.set_action(handle, actions)
+        observes = [np.squeeze(arr) for arr in observes]
 
-    def get_reward(self, handle):
-        self.env.get_reward(handle)
+        return observes
 
-    def clear_dead(self):
-        self.env.clear_dead()
+    def _all_rewards(self):
+        return np.concatenate([self.env.get_reward(handle) for handle in self.handles],axis=0)
 
-    def get_handles(self):
-        return self.env.get_handles()
+    def _all_dones(self):
+        return (~np.concatenate([self.env.get_alive(handle) for handle in self.handles],axis=0)).tolist()
 
-    def get_num_agents(self, handle):
-        return self.env.get_num(handle)
+    def step(self, all_actions):
+        #print("step")
+        all_actions = np.asarray(all_actions,dtype=np.int32)
+        assert len(all_actions) == self.num_agents
+        start_point = 0
+        for i in range(len(self.handles)):
+            size = self.team_sizes[i]
+            self.env.set_action(self.handles[i], all_actions[start_point:start_point+size])
+            start_point += size
 
-    def get_action_space(self, handle):
-        return self.env.get_action_space(handle)
-
-    def get_view_space(self, handle):
-        return self.env.get_view_space(handle)
-
-    def get_feature_space(self, handle):
-        return self.env.get_feature_space(handle)
-
-    def get_agent_id(self, handle):
-        return self.env.get_agent_id(handle)
-
-    def get_alive(self, handle):
-        return self.env.get_alive(handle)
-
-    def get_pos(self, handle):
-        return self.env.get_pos(handle)
-
-    def get_view2attack(self, handle):
-        return self.env.get_view2attack(handle)
-
-    def get_global_minimap(self, height, width):
-        return self.env.get_global_minimap(height, width)
-
-    def set_seed(self, seed):
-        self.env.set_seed(seed)
-
-    def set_render_dir(self, name):
-        self.env.set_render_dir(name)
+        done = self.env.step()
+        all_infos = [{}]*self.num_agents
+        return self._observe_all(), self._all_rewards(), self._all_dones(), all_infos
