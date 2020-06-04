@@ -15,10 +15,13 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+Classic two player competitive game of timing.
+
+Get the ball past the opponent.
+
+Scoring a point gives you +1 reward and your opponent -1 reward. 
 
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
