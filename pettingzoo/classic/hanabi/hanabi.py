@@ -285,7 +285,7 @@ class raw_env(AECEnv):
          Example:
         """
         player_data = self.latest_observations['player_observations']
-        print("Active player:",self.agent_order[player_data[0]['current_player_offset']])
+        print("Active player:", self.agent_order[player_data[0]['current_player_offset']])
         for i, d in enumerate(player_data):
             print(self.agent_order[i])
             print("========")
