@@ -40,7 +40,7 @@ from pettingzoo.sisl import pursuit_v0
 from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
-all_prefixes = ["atari", "classic", "gamma", "mpe", "sisl"]
+all_prefixes = ["atari", "classic", "gamma", "magent", "mpe", "sisl"]
 
 all_environments = {
     "atari/boxing": boxing_v0,
