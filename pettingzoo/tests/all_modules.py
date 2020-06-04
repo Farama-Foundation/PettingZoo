@@ -32,6 +32,8 @@ from pettingzoo.mpe import simple_tag_v0
 from pettingzoo.mpe import simple_world_comm_v0
 from pettingzoo.mpe import simple_v0
 
+from pettingzoo.magent import battle_v0
+
 from pettingzoo.sisl import pursuit_v0
 from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
@@ -96,6 +98,8 @@ all_environments = {
     "gamma/cooperative_pong": cooperative_pong_v0,
     "gamma/prison": prison_v0,
     "gamma/prospector": prospector_v0,
+
+    "magent/battle": battle_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,
