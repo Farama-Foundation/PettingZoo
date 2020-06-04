@@ -15,10 +15,12 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+A competitive game of planning.
 
+It is a race to exit the maze.
+
+The first player to leave the maze scores +1, the other player scores -1.
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
