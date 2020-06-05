@@ -291,7 +291,6 @@ class raw_env(AECEnv):
             print("========")
             print(d['pyhanabi'])
             print()
-        # print(self.latest_observations)
 
     def close(self):
         pass

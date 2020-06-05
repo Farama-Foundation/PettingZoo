@@ -53,16 +53,16 @@ class raw_env(AECEnv):
 
     def _encode_player_plane(self, agent):
         if agent == self.agents[0]:
-            return np.zeros([self._N, self._N], dtype=np.uint8)
+            return np.zeros([self._N, self._N], dtype=np.bool)
         else:
-            return np.ones([self._N, self._N], dtype=np.uint8)
+            return np.ones([self._N, self._N], dtype=np.bool)
 
     def _encode_board_planes(self, agent):
         agent_factor = -1 if agent == self.agents[0] else 1
         current_agent_plane_idx = np.where(self._go.board == agent_factor)
         opponent_agent_plane_idx = np.where(self._go.board == -agent_factor)
-        current_agent_plane = np.zeros([self._N, self._N], dtype=np.uint8)
-        opponent_agent_plane = np.zeros([self._N, self._N], dtype=np.uint8)
+        current_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
+        opponent_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
         current_agent_plane[current_agent_plane_idx] = 1
         opponent_agent_plane[opponent_agent_plane_idx] = 1
         return current_agent_plane, opponent_agent_plane
