@@ -467,7 +467,7 @@ class MultiWalkerEnv():
 
     def observe(self, agent):
         o = self.last_obs[agent]
-        o = np.array(o)
+        o = np.array(o, dtype=np.float32)
         return o
 
     def render(self, mode='human', close=False):
