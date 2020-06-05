@@ -10,8 +10,8 @@ from .magent_env import markov_env
 from .markov_env_wrapper import markov_env_wrapper
 
 
-def env(map_size=45):
-    return markov_env_wrapper(battle_markov_env(map_size))
+def env(map_size=45, seed=None):
+    return markov_env_wrapper(battle_markov_env(map_size, seed))
 
 
 def get_config(map_size):
@@ -44,12 +44,12 @@ def get_config(map_size):
 
 
 class battle_markov_env(markov_env):
-    def __init__(self, map_size):
+    def __init__(self, map_size, seed):
         env = magent.GridWorld(get_config(map_size), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         names = ["red", "blue"]
-        super().__init__(env, env.get_handles(), names, map_size)
+        super().__init__(env, env.get_handles(), names, map_size, seed)
 
     def generate_map(self):
         env, map_size, handles = self.env, self.map_size, self.handles

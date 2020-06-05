@@ -76,11 +76,9 @@ class Renderer:
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
 
-        self.map_size, self.groups, self.static_info = (125, 125), env._get_groups_info(), {'wall': env._get_walls_info()}
+        self.map_size, self.groups = (125, 125), env._get_groups_info()
 
         self.frame_id = 0
-
-        self.walls = self.static_info['wall']
 
         self.old_data = None
         self.new_data = None
@@ -173,7 +171,7 @@ class Renderer:
 
             if self.need_static_update or True:
                 pygame.pixelcopy.surface_to_array(grid_map, self.canvas)
-                for wall in self.walls:
+                for wall in env._get_walls_info():
                     x, y = wall[0], wall[1]
                     if x >= x_range[0] and x <= x_range[1] and y >= y_range[0] and y <= y_range[1]:
                         draw_rect_matrix(grid_map, (127, 127, 127),

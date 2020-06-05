@@ -10,8 +10,8 @@ from .magent_env import markov_env
 from .markov_env_wrapper import markov_env_wrapper
 
 
-def env(map_size=200):
-    return markov_env_wrapper(gather_markov_env(map_size))
+def env(map_size=200, seed=None):
+    return markov_env_wrapper(gather_markov_env(map_size, seed))
 
 
 def load_config(size):
@@ -47,12 +47,12 @@ def load_config(size):
 
 
 class gather_markov_env(markov_env):
-    def __init__(self, map_size):
+    def __init__(self, map_size, seed):
         env = magent.GridWorld(load_config(size=map_size))
         handles = env.get_handles()
 
         names = ["herbavore"]
-        super().__init__(env, handles[1:], names, map_size)
+        super().__init__(env, handles[1:], names, map_size, seed)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size
