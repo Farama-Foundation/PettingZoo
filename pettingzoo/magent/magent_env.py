@@ -6,13 +6,17 @@ from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
+from gym.utils import seeding
 
 
 class markov_env:
-    def __init__(self, env, active_handles, names, map_size):
+    def __init__(self, env, active_handles, names, map_size, seed=None):
         self.map_size = map_size
         self.env = env
         self.handles = active_handles
+        if seed is None:
+            seed = seeding.create_seed(seed, max_bytes=4)
+        env.set_seed(seed)
         env.reset()
         self.generate_map()
 
@@ -72,8 +76,10 @@ class markov_env:
             rewards[ids] = self.env.get_reward(handle)
         return rewards
 
-    def _all_dones(self):
+    def _all_dones(self, step_done=False):
         dones = np.ones(self.num_agents, dtype=np.bool)
+        if step_done:
+            return dones
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
             dones[ids] = ~self.env.get_alive(handle)
@@ -88,8 +94,8 @@ class markov_env:
             self.env.set_action(self.handles[i], all_actions[start_point:(start_point + size)])
             start_point += size
 
-        self.env.step()
+        done = self.env.step()
         all_infos = [{}] * self.num_agents
-        result = self._observe_all(), self._all_rewards(), self._all_dones(), all_infos
+        result = self._observe_all(), self._all_rewards(), self._all_dones(done), all_infos
         self.env.clear_dead()
         return result
