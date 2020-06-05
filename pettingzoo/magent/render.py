@@ -17,7 +17,7 @@ bigscreen_size = 72
 bigscreen_spacing = 0
 grid_rgba = ((0, 0, 0), 30)
 grid_size = 7.5
-resolution = (800, 600)
+resolution = (1200, 800)
 
 
 def draw_line(surface, color, a, b):

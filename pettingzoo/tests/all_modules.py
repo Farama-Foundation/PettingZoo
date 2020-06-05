@@ -1,44 +1,14 @@
 from pettingzoo.atari import *
 
-from pettingzoo.classic import chess_v0
-from pettingzoo.classic import rps_v0
-from pettingzoo.classic import rpsls_v0
-from pettingzoo.classic import connect_four_v0
-from pettingzoo.classic import tictactoe_v0
-from pettingzoo.classic import leduc_holdem_v0
-from pettingzoo.classic import mahjong_v0
-from pettingzoo.classic import texas_holdem_v0
-from pettingzoo.classic import texas_holdem_no_limit_v0
-from pettingzoo.classic import uno_v0
-from pettingzoo.classic import dou_dizhu_v0
-from pettingzoo.classic import gin_rummy_v0
-from pettingzoo.classic import go_v0
-from pettingzoo.classic import hanabi_v0
-from pettingzoo.classic import backgammon_v0
+from pettingzoo.classic import *
 
-from pettingzoo.gamma import knights_archers_zombies_v0
-from pettingzoo.gamma import pistonball_v0
-from pettingzoo.gamma import cooperative_pong_v0
-from pettingzoo.gamma import prison_v0
-from pettingzoo.gamma import prospector_v0
+from pettingzoo.gamma import *
 
-from pettingzoo.mpe import simple_adversary_v0
-from pettingzoo.mpe import simple_crypto_v0
-from pettingzoo.mpe import simple_push_v0
-from pettingzoo.mpe import simple_reference_v0
-from pettingzoo.mpe import simple_speaker_listener_v0
-from pettingzoo.mpe import simple_spread_v0
-from pettingzoo.mpe import simple_tag_v0
-from pettingzoo.mpe import simple_world_comm_v0
-from pettingzoo.mpe import simple_v0
+from pettingzoo.mpe import *
 
-from pettingzoo.magent import battle_v0
-from pettingzoo.magent import adversarial_pursuit_v0
-from pettingzoo.magent import gather_v0
+from pettingzoo.magent import *
 
-from pettingzoo.sisl import pursuit_v0
-from pettingzoo.sisl import waterworld_v0
-from pettingzoo.sisl import multiwalker_v0
+from pettingzoo.sisl import *
 
 all_prefixes = ["atari", "classic", "gamma", "magent", "mpe", "sisl"]
 
@@ -104,6 +74,9 @@ all_environments = {
     "magent/battle": battle_v0,
     "magent/pursuit": adversarial_pursuit_v0,
     "magent/gather": gather_v0,
+    "magent/multi": multi_battle_v0,
+    "magent/tiger": tiger_deer_v0,
+    "magent/battle_game": battle_game_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,
