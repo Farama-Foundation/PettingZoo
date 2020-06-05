@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![entombed_cooperative gif](atari_entombed.gif)
+![entombed_cooperative gif](atari_entombed_cooperative.gif)
 
 *AEC diagram*
 
@@ -30,4 +30,3 @@ In addition, there dangerous zombies lurking around to avoid.
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

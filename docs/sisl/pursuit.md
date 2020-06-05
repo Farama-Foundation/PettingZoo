@@ -10,7 +10,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["pursuer_0", "pursuer_1", ..., "pursuer_7"]`
 
-*gif*
+![](sisl_pursuit.gif)
 
 *AEC diagram*
 

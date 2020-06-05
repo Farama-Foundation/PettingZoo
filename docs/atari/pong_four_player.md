@@ -15,10 +15,12 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+Four player team battle.
 
+Pong, with two players on each team. Each player controls a paddle.
+
+Scoring a point gives your team +1 reward and your opponent -1 reward.
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-render=True
-manual_control=True
+render=${pz_render:-True}
+manual_control=$render
 performance=True
-save_obs=True
+save_obs=$render
 
 python3 -m pettingzoo.tests.ci_test $pz_module $render $manual_control $performance $save_obs
 

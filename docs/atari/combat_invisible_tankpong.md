@@ -15,10 +15,14 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+*Combat*'s invisible tank pong mode is an adversarial game where prediction, memory, and positioning are key.
+
+The players move around the map invisibly. They are only visible when firing or when running into the sides of the map. The bullet bounces off obstacles, allowing you to shoot around corners. When your opponent is hit by your bullet,
+you score a point.
+
+Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
 
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

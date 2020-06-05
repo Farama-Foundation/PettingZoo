@@ -15,10 +15,12 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+A mixed-sum game of control and timing.
 
+Collect points and avoid obstacles with another player in the same space.
+
+Rewards are received by completing various tasks that give either 500 or 800 points.
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
