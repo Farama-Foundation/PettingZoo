@@ -33,7 +33,7 @@ class raw_env(AECEnv):
         self.num_agents = len(self.agents)
         self.has_reset = False
 
-        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(72,), dtype=np.bool) for _ in range(self.num_agents)])
+        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=(72,), dtype=np.float64) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
         self.agent_order = self.agents

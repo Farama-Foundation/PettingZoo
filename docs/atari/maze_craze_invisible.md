@@ -15,10 +15,13 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 *AEC diagram*
 
-*BLRB NEEDED!!!*
+A competitive game of memory and planning. 
+
+It is a race to exit the maze. But the maze is completely invisible most of the time! Both players have the ability to reveal the maze from time to time, but note that the maze is shown to both players, and this ability has a significant cooldown anyways, so this ability should be used carefully.
+
+The first player to leave the maze scores +1, the other player scores -1.
 
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

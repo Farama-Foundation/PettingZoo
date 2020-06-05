@@ -49,7 +49,7 @@ class raw_env(AECEnv):
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
-        return obs['obs']
+        return obs['obs'].astype(np.bool)
 
     def step(self, action, observe=True):
         obs, next_player_id = self.env.step(action)
@@ -69,7 +69,7 @@ class raw_env(AECEnv):
             self.infos[self._int_to_name(next_player_id)]['legal_moves'] = obs['legal_actions']
         self.agent_selection = self._agent_selector.next()
         if observe:
-            return obs['obs'] if obs else self._last_obs
+            return obs['obs'].astype(np.bool) if obs else self._last_obs.astype(np.bool)
 
     def reset(self, observe=True):
         self.has_reset = True
@@ -83,7 +83,7 @@ class raw_env(AECEnv):
         self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
         self._last_obs = obs['obs']
         if observe:
-            return obs['obs']
+            return obs['obs'].astype(np.bool)
         else:
             return
 
