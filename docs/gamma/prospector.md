@@ -17,9 +17,13 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at 
 the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river 
-and pan from it, and get a gold nugget (visibly held by them). They take a 3 element vector of 
-continuous values (the first for forward/backward, the second for left/right movement, the third 
-for clockwise/counter-clockwise rotation). They can only hold 1 nugget at a time.
+and pan from it, and get a gold nugget (visibly held by them). Prospectors can
+only hold one nugget at a time, and nuggets stay in the same position relative to the prospector's
+orientation.
+
+Prospector agents take a 3-element vector of continuous values between -1 and 1, inclusive. 
+The action space is `(y, x, r)`, where `y` is used for forward/backward movement, 
+`x` is used for left/right movement, and `r` is used for clockwise/counter-clockwise rotation.
 
 There are a handful of bank chests at the top of the screen. The prospector agents can hand their 
 held gold nugget to the 3 "banker" agents, to get a reward. The banker agents can't rotate, 
@@ -27,10 +31,10 @@ and the prospector agents must give the nuggets (which are held in the same
 position relative to the prospector's position and rotation) to the 
 front of the bankers (within a plus or minus 45 degree tolerance). 
 The bankers then get the gold, and can deposit it into the chests to recieve a reward. 
-They take a 3 element vector of continuous values 
-(the first for forward/backward, the second for left/right movement, the
-third value is not used since bankers can't rotate). They can only hold 1 
-nugget at a time. 
+
+Bankers take a 3-element vector of continuous values between -1 and 1, inclusive.
+The third value is not used. The action space is `(y, x, _)`, where
+`y` is used for forward/backward movement and `x` is used for left/right movement.
 
 The observation space size for prospectors
 is `(150, 150, 3)` and the size for
@@ -50,6 +54,9 @@ a nugget off to a banker, a banker receiving a nugget from a prospector,
 and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
+
+By default, individual rewards give 0.8 points, group rewards give
+0.1 points, and other group rewards give 0.1 points.
 
 If a prospector retrives a nugget from the water, then 
 that prospector receives a reward of
