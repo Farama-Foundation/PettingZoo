@@ -29,7 +29,20 @@ class AECIterable:
     def __init__(self, env):
         self.env = env
     def __iter__(self):
-        return AECIterator(self.env)
+        if getattr(self.env, "_has_updated", None) is None:
+            return AECIterator(self.env)
+        else:
+            return AECOrderEnforcingIterator(self.env)
+
+class AECOrderEnforcingIterator:
+    def __init__(self, env):
+        self.env = env
+    def __next__(self):
+        assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`!"
+        self.env._has_updated = False
+        if all(self.env.dones.values()):
+            raise StopIteration
+        return self.env.agent_selection
 
 class AECIterator:
     def __init__(self, env):
