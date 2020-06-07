@@ -20,3 +20,21 @@ class AECEnv(object):
 
     def close(self):
         pass
+
+    @property
+    def agent_iter(self):
+        return AECIterable(self)
+
+class AECIterable:
+    def __init__(self, env):
+        self.env = env
+    def __iter__(self):
+        return AECIterator(self.env)
+
+class AECIterator:
+    def __init__(self, env):
+        self.env = env
+    def __next__(self):
+        if all(self.env.dones.values()):
+            raise StopIteration
+        return self.env.agent_selection

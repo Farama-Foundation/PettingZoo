@@ -42,16 +42,15 @@ Environments can be interacted with in a manner very similar to Gym:
 
 ```
 observation = env.reset()
-while True:
-    for _ in env.agent_order:
-        reward, done, info = env.last()
-        action = policy(observation)
-        observation = env.step(action)
+for agent in env.agent_iter:
+    reward, done, info = env.last()
+    action = policy(observation)
+    observation = env.step(action)
 ```
 
 The commonly used methods are:
 
-`agent_order` is a list of agent names in the order they act. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
+`agent_iter` is an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done. Note that if step() or reset() is not called in the loop over the agent_iter, it will be an infinite loop.
 
 `last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
@@ -117,7 +116,7 @@ import pettingzoo.tests.api_test as api_test
 api_test.api_test(env, render=False, verbose_progress=False)
 ```
 
-This tests the environment for API compliance. If the environment has a custom `render()` method, setting argument `render=True` tests whether there is an accompanying custom `close()` method. If `verbose_progress=True`, progress of the test is printed to the console. 
+This tests the environment for API compliance. If the environment has a custom `render()` method, setting argument `render=True` tests whether there is an accompanying custom `close()` method. If `verbose_progress=True`, progress of the test is printed to the console.
 
 ### Bombardment Test
 
