@@ -58,8 +58,8 @@ class battle_markov_env(markov_env):
         n = init_num
         side = int(math.sqrt(n)) * 2
         pos = []
-        for x in range(width//2 - gap - side, width//2 - gap - side + side, 2):
-            for y in range((height - side)//2, (height - side)//2 + side, 2):
+        for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
+            for y in range((height - side) // 2, (height - side) // 2 + side, 2):
                 pos.append([x, y, 0])
         env.add_agents(handles[leftID], method="custom", pos=pos)
 
@@ -67,7 +67,7 @@ class battle_markov_env(markov_env):
         n = init_num
         side = int(math.sqrt(n)) * 2
         pos = []
-        for x in range(width//2 + gap, width//2 + gap + side, 2):
-            for y in range((height - side)//2, (height - side)//2 + side, 2):
+        for x in range(width // 2 + gap, width // 2 + gap + side, 2):
+            for y in range((height - side) // 2, (height - side) // 2 + side, 2):
                 pos.append([x, y, 0])
         env.add_agents(handles[rightID], method="custom", pos=pos)
