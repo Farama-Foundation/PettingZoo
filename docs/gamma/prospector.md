@@ -32,11 +32,55 @@ They take a 3 element vector of continuous values
 third value is not used since bankers can't rotate). They can only hold 1 
 nugget at a time. 
 
+The observation space size for prospectors
+is `(150, 150, 3)` and the size for
+bankers is slightly bigger at
+`(154, 154, 3)`. The diameter of both
+prospector and banker agents is 30 pixels, so
+the observation space sizes are about 5 times larger
+than the diameter of each agent. There are fewer
+bankers, so they're given a slightly
+larger observation space to give them more
+information on their surroundings.
+
+**Rewards:**
+
 Rewards are issued for a prospector retrieving a nugget, a prospector handing
 a nugget off to a banker, a banker receiving a nugget from a prospector, 
 and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
+
+If a prospector retrives a nugget from the water, then 
+that prospector receives a reward of
+`ind_reward * prospec_find_gold_reward`, other
+prospectors will
+receive a reward of `group_reward * prospec_find_gold_reward` and
+all bankers receive a reward of 
+`other_group_reward * prospec_find_gold_reward`. 
+
+When a prospector
+hands off a gold nugget to a banker (so the banker receives a gold nugget
+from a prospector), there are two rewards that are processed:
+the handing-off prospector gets `ind_reward * prospec_handoff_gold_reward`,
+the other prospectors get `group_reward * prospec_handoff_gold_reward`, and
+all of the bankers get `other_group_reward * prospec_handoff_gold_reward`.
+Similarly, the banker receiving the gold nugget gets
+`ind_reward * banker_receive_gold_reward`, the other bankers
+get `group_reward * banker_receive_gold_reward`, and
+all of the prospectors get 
+`other_group_reward * banker_receive_gold_reward`. 
+
+Finally, when a banker deposits gold in the bank, 
+that banker receives a reward of
+`ind_reward * banker_deposit_gold_reward`, the other bankers
+receive rewards of `group_reward * banker_deposit_gold_reward`, and
+all of the prospectors receive
+`other_group_reward * banker_deposit_gold_reward`.
+
+These parameters may be adjusted when you're creating your
+environment if you want to change the score impact
+of certain objects during the game.
 
 Manual Control:
 

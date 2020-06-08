@@ -13,6 +13,7 @@ def check_save_obs(env):
 
 
 def test_save_obs(env):
+    env.reset()
     try:
         check_save_obs(env)
         for agent in env.agent_order:
