@@ -36,12 +36,12 @@ def get_config(map_size):
          'damage': 1, 'step_recover': -0.2,
          })
 
-    deer_group  = cfg.add_group(deer)
+    deer_group = cfg.add_group(deer)
     tiger_group = cfg.add_group(tiger)
 
     a = gw.AgentSymbol(tiger_group, index='any')
     b = gw.AgentSymbol(tiger_group, index='any')
-    c = gw.AgentSymbol(deer_group,  index='any')
+    c = gw.AgentSymbol(deer_group, index='any')
 
     # tigers get reward when they attack a deer simultaneously
     e1 = gw.Event(a, 'attack', c)
@@ -64,6 +64,6 @@ class tiger_markov_env(markov_env):
         env, map_size = self.env, self.map_size
         handles = env.get_handles()
 
-        env.add_walls(method="random", n=map_size*map_size*0.04)
-        env.add_agents(handles[0], method="random", n=map_size*map_size*0.05)
-        env.add_agents(handles[1], method="random", n=map_size*map_size*0.01)
+        env.add_walls(method="random", n=map_size * map_size * 0.04)
+        env.add_agents(handles[0], method="random", n=map_size * map_size * 0.05)
+        env.add_agents(handles[1], method="random", n=map_size * map_size * 0.01)
