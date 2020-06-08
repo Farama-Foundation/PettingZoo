@@ -17,7 +17,6 @@ bigscreen_size = 72
 bigscreen_spacing = 0
 grid_rgba = ((0, 0, 0), 30)
 grid_size = 7.5
-resolution = (1200, 800)
 
 
 def draw_line(surface, color, a, b):
@@ -62,13 +61,18 @@ def draw_line_matrix(matrix, color, a, b, resolution):
 
 
 class Renderer:
-    def __init__(self, env):
+    def __init__(self, env, map_size):
         import pygame
         pygame.init()
         pygame.display.init()
         self.env = env
         self.handles = self.env.get_handles()
 
+        base_resolution = (map_size*8, map_size*8)
+
+        infoObject = pygame.display.Info()
+        screen_size = (infoObject.current_w-50, infoObject.current_h-50)
+        self.resolution = resolution = np.min([screen_size,base_resolution],axis=0)
         self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
 
         pygame.display.set_caption('MAgent Renderer Window')
@@ -76,7 +80,7 @@ class Renderer:
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
 
-        self.map_size, self.groups = (125, 125), env._get_groups_info()
+        self.map_size = (map_size, map_size)
 
         self.frame_id = 0
 
@@ -109,7 +113,11 @@ class Renderer:
 
     def render(self):
         import pygame
+
         env = self.env
+        self.groups = env._get_groups_info()
+        resolution = self.resolution
+
         grid_map = np.zeros((resolution[0], resolution[1], 3), dtype=np.int16)
         view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
                          self.map_size[1] / 2 * grid_size - resolution[1] / 2]
@@ -180,7 +188,7 @@ class Renderer:
             pygame.pixelcopy.array_to_surface(self.canvas, grid_map)
 
             rate = min(1.0, self.animation_progress / animation_total)
-            print(len(self.new_data[0]))
+
             for key in self.new_data[0]:
                 new_prop = self.new_data[0][key]
                 old_prop = self.old_data[0][key] if self.old_data is not None and key in self.old_data[0] else None
@@ -190,7 +198,6 @@ class Renderer:
                             zip(old_prop, new_prop)] if old_prop is not None else new_prop
                 now_group = [a * (1 - rate) + b * rate for a, b in
                              zip(old_group, new_group)] if old_group is not None else new_group
-
                 draw_rect(
                     self.canvas, (int(now_group[2]), int(now_group[3]), int(now_group[4])),
                     (

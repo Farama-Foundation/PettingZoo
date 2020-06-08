@@ -7,7 +7,7 @@ from .seed_test import seed_test
 from .render_test import test_render
 
 
-@pytest.mark.parametrize("env_module", [value for key,value in all_environments.items() if "magent" in key])
+@pytest.mark.parametrize("env_module", list(all_environments.values()))
 def test_module(env_module):
     _env = env_module.env()
     api_test.api_test(_env)
