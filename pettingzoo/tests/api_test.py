@@ -121,6 +121,8 @@ def play_test(env, observation_0):
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+        if isinstance(env.observation_spaces[agent], gym.spaces.Box):
+            assert env.observation_spaces[agent].dtype == prev_observe.dtype
         if not env.observation_spaces[agent].contains(prev_observe):
             print("Out of bounds observation: ", prev_observe)
 

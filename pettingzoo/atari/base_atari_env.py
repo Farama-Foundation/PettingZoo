@@ -125,6 +125,12 @@ class BaseAtariEnv(AECEnv):
             self.rewards = {a: rew for a, rew in zip(self.agents, rewards)}
             if self.ale.game_over():
                 self.dones = {a: True for a in self.agents}
+            else:
+                lives = self.ale.allLives()
+                # an inactive agent in ale gets a -1 life.
+                dones = [life < 0 for life in lives]
+                assert len(lives) == len(self.agents)
+                self.dones = {a: d for d, a in zip(dones, self.agents)}
             self._actions = []
 
         self.agent_selection = self._agent_selector.next()
