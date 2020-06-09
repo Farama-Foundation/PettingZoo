@@ -42,7 +42,7 @@ class markov_env:
 
     def render(self):
         if self._renderer is None:
-            self._renderer = Renderer(self.env)
+            self._renderer = Renderer(self.env, self.map_size)
         self._renderer.render()
 
     def close(self):
@@ -50,7 +50,6 @@ class markov_env:
         pygame.quit()
 
     def reset(self):
-        print("reset")
         self.env.reset()
         self.generate_map()
         return self._observe_all()

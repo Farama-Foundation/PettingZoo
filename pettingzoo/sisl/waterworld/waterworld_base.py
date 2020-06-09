@@ -552,7 +552,7 @@ class MAWaterWorld():
         return self.observe(agent_id)
 
     def observe(self, agent):
-        return np.array(self.last_obs[agent])
+        return np.array(self.last_obs[agent], dtype=np.float32)
 
     def render(self, screen_size=900, rate=5, mode='human'):
         if not self.renderOn:

@@ -115,14 +115,17 @@ def test_rewards_dones(env, agent_0):
 def play_test(env, observation_0):
     prev_observe = env.reset()
     for agent in env.agent_order:  # step through every agent once with observe=True
+        assert agent == env.agent_selection
         if 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+        if isinstance(env.observation_spaces[agent], gym.spaces.Box):
+            assert env.observation_spaces[agent].dtype == prev_observe.dtype
         if not env.observation_spaces[agent].contains(prev_observe):
             print("Out of bounds observation: ", prev_observe)
-            
+
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
         prev_observe = next_observe
