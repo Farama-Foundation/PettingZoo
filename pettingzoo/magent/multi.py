@@ -13,6 +13,7 @@ from .markov_env_wrapper import markov_env_wrapper
 def env(map_size=45, seed=None):
     return markov_env_wrapper(battle_markov_env(map_size, seed))
 
+
 def load_config(map_size):
     gw = magent.gridworld
     cfg = gw.Config()
@@ -27,8 +28,7 @@ def load_config(map_size):
         {'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
          'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1),
          'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-
-         'step_reward': -0.01,  'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
+         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
          })
 
     ranged = cfg.register_agent_type(
@@ -36,8 +36,7 @@ def load_config(map_size):
         {'width': 1, 'length': 1, 'hp': 3, 'speed': 2,
          'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(2),
          'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-
-         'step_reward': -0.01,  'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
+         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
          })
 
     g0 = cfg.add_group(melee)
@@ -87,8 +86,8 @@ def generate_map(env, map_size, handles):
     side = int(math.sqrt(n)) * 2
     pos = [[], []]
     ct = 0
-    for x in range(width//2 - gap - side, width//2 - gap - side + side, 2):
-        for y in range((height - side)//2, (height - side)//2 + side, 2):
+    for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
+        for y in range((height - side) // 2, (height - side) // 2 + side, 2):
             pos[ct % 2].append([x, y])
         ct += 1
     env.add_agents(handles[0], method="custom", pos=pos[0])
@@ -99,8 +98,8 @@ def generate_map(env, map_size, handles):
     side = int(math.sqrt(n)) * 2
     pos = [[], []]
     ct = 0
-    for x in range(width//2 + gap, width//2 + gap + side, 2):
-        for y in range((height - side)//2, (height - side)//2 + side, 2):
+    for x in range(width // 2 + gap, width // 2 + gap + side, 2):
+        for y in range((height - side) // 2, (height - side) // 2 + side, 2):
             pos[ct % 2].append([x, y])
         ct += 1
     env.add_agents(handles[2], method="custom", pos=pos[0])
@@ -110,7 +109,6 @@ def generate_map(env, map_size, handles):
 class battle_markov_env(markov_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(load_config(map_size))
-        print(env.get_handles())
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
         super().__init__(env, env.get_handles(), names, map_size, seed)
 

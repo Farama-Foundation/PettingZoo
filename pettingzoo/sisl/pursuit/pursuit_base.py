@@ -125,7 +125,7 @@ class Pursuit():
                 n_act_purs) for _ in range(self.n_pursuers)]
 
             self.observation_space = [spaces.Box(low=0, high=5, shape=(
-                self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
+                self.obs_range, self.obs_range), dtype=np.float32) for _ in range(self.n_pursuers)]
             self.local_obs = np.zeros(
                 (self.n_pursuers, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
@@ -136,7 +136,7 @@ class Pursuit():
                 n_act_ev) for _ in range(self.n_evaders)]
 
             self.observation_space = [spaces.Box(low=0, high=5, shape=(
-                self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
+                self.obs_range, self.obs_range), dtype=np.float32) for _ in range(self.n_evaders)]
             self.local_obs = np.zeros(
                 (self.n_evaders, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]

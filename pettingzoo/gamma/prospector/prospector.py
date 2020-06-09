@@ -316,6 +316,7 @@ def env(**kwargs):
 class raw_env(AECEnv):
     def __init__(
         self,
+        seed=None,
         ind_reward=0.8,
         group_reward=0.1,
         other_group_reward=0.1,
@@ -324,7 +325,6 @@ class raw_env(AECEnv):
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
         max_frames=900,
-        seed=None,
     ):
         if ind_reward + group_reward + other_group_reward != 1.0:
             raise ValueError(
