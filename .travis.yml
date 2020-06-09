@@ -286,6 +286,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=atari
@@ -301,6 +302,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=classic
@@ -316,6 +318,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=gamma
@@ -331,6 +334,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=mpe
@@ -346,6 +350,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=sisl
