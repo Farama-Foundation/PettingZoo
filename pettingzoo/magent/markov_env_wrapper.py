@@ -51,7 +51,7 @@ class markov_env_wrapper(AECEnv):
             self.agent_selection = self._agent_selector.next()
         return self.observe(self.agent_selection) if observe else None
 
-    def render(self):
+    def render(self, mode="human"):
         self.env.render()
 
     def close(self):
