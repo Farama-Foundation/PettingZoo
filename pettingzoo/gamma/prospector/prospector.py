@@ -31,10 +31,10 @@ class Prospector(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
         # self.image = load_image(['prospec.png'])
-        self.image = utils.load_image(["prospector-pickaxe-big.png"])
-        self.image = pg.transform.scale(
-            self.image, (int(const.AGENT_RADIUS * 2), int(const.AGENT_RADIUS * 2))
-        )
+        self.image = utils.load_image(["prospector-pickaxe.png"])
+        # self.image = pg.transform.scale(
+        #     self.image, (int(const.AGENT_RADIUS * 2), int(const.AGENT_RADIUS * 2))
+        # )
 
         self.id = num
 
@@ -107,7 +107,7 @@ class Prospector(pg.sprite.Sprite):
 class Banker(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        self.image = utils.load_image(["bankers", "%s-big.png" % num])
+        self.image = utils.load_image(["bankers", "%s.png" % num])
         self.image = pg.transform.scale(
             self.image, (int(const.AGENT_RADIUS * 2), int(const.AGENT_RADIUS * 2))
         )
@@ -308,7 +308,7 @@ class Gold(pg.sprite.Sprite):
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.ClipOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, [0, 0, 0], "setting action to 0")
+    env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -398,7 +398,7 @@ class raw_env(AECEnv):
             self.action_spaces[p] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
 
         for b in self.bankers:
-            self.action_spaces[b] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
+            self.action_spaces[b] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(2,))
 
         self.observation_spaces = {}
         self.last_observation = {}

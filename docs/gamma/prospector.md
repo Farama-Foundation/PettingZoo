@@ -3,9 +3,9 @@
 
 This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
 
-| Actions    | Agents  | Manual Control | Action Shape    | Action Values       | Observation Shape              | Observation Values        | Num States |
-|------------|---------|----------------|-----------------|---------------------|--------------------------------|---------------------------|------------|
-| Continuous | 7 (+/-) | Yes            | (3,)            | [-1, 1]             | (150, 150, 3) or (154, 154, 3) | (0, 255)                  | ?          |
+| Actions    | Agents  | Manual Control | Action Shape          | Action Values       | Observation Shape              | Observation Values        | Num States |
+|------------|---------|----------------|-----------------------|---------------------|--------------------------------|---------------------------|------------|
+| Continuous | 7 (+/-) | Yes            | (3,) or (2,)          | [-1, 1]             | (150, 150, 3) or (154, 154, 3) | (0, 255)                  | ?          |
 
 `from pettingzoo.gamma import prospector_v0`
 
@@ -32,8 +32,8 @@ position relative to the prospector's position and rotation) to the
 front of the bankers (within a plus or minus 45 degree tolerance). 
 The bankers then get the gold, and can deposit it into the chests to recieve a reward. 
 
-Bankers take a 3-element vector of continuous values between -1 and 1, inclusive.
-The third value is not used. The action space is `(y, x, _)`, where
+Bankers take a 2-element vector of continuous values between -1 and 1, inclusive.
+The action space is `(y, x)`, where
 `y` is used for forward/backward movement and `x` is used for left/right movement.
 
 The observation space size for prospectors
@@ -55,39 +55,32 @@ and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
 
-By default, individual rewards give 0.8 points, group rewards give
-0.1 points, and other group rewards give 0.1 points.
-
 If a prospector retrives a nugget from the water, then 
 that prospector receives a reward of
-`ind_reward * prospec_find_gold_reward`, other
+0.8, other
 prospectors will
-receive a reward of `group_reward * prospec_find_gold_reward` and
+receive a reward of 0.1 and
 all bankers receive a reward of 
-`other_group_reward * prospec_find_gold_reward`. 
+0.1. 
 
 When a prospector
 hands off a gold nugget to a banker (so the banker receives a gold nugget
 from a prospector), there are two rewards that are processed:
-the handing-off prospector gets `ind_reward * prospec_handoff_gold_reward`,
-the other prospectors get `group_reward * prospec_handoff_gold_reward`, and
-all of the bankers get `other_group_reward * prospec_handoff_gold_reward`.
+the handing-off prospector gets 0.8,
+the other prospectors get 0.1, and
+all of the bankers get 0.1.
 Similarly, the banker receiving the gold nugget gets
-`ind_reward * banker_receive_gold_reward`, the other bankers
-get `group_reward * banker_receive_gold_reward`, and
+0.8, the other bankers
+get 0.1, and
 all of the prospectors get 
-`other_group_reward * banker_receive_gold_reward`. 
+0.1. 
 
 Finally, when a banker deposits gold in the bank, 
 that banker receives a reward of
-`ind_reward * banker_deposit_gold_reward`, the other bankers
-receive rewards of `group_reward * banker_deposit_gold_reward`, and
+0.8, the other bankers
+receive rewards of 0.1, and
 all of the prospectors receive
-`other_group_reward * banker_deposit_gold_reward`.
-
-These parameters may be adjusted when you're creating your
-environment if you want to change the score impact
-of certain objects during the game.
+0.1.
 
 Manual Control:
 
