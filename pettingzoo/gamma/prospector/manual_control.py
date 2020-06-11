@@ -1,7 +1,6 @@
 import pygame
 import numpy as np
 from . import constants as const
-# from prospector import constants as const
 
 
 def manual_control(**kwargs):
