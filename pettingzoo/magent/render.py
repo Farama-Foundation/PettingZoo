@@ -92,9 +92,12 @@ class Renderer:
 
     def get_banners(self, frame_id, resolution):
         red = '{}'.format(np.sum(self.env.get_alive(self.handles[0]).astype(np.int32))), (200, 0, 0)
-        vs = ' vs ', (0, 0, 0)
-        blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
-        result = [(red, vs, blue)]
+        if len(self.handles) > 1:
+            vs = ' vs ', (0, 0, 0)
+            blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
+            result = [(red, vs, blue)]
+        else:
+            result = [(red, )]
 
         # tmp = '{} chance(s) remained'.format(
         #     max(0, add_counter)), (0, 0, 0)

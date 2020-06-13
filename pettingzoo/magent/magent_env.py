@@ -5,8 +5,19 @@ import magent
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
-from pettingzoo.utils import agent_selector
+from pettingzoo.utils import agent_selector, wrappers
 from gym.utils import seeding
+
+
+def make_env(raw_env):
+    def env_fn(**kwargs):
+        env = raw_env(**kwargs)
+        env = wrappers.AssertOutOfBoundsWrapper(env)
+        backup_policy = "taking zero action (no movement, no attack)"
+        env = wrappers.NanNoOpWrapper(env, 0, backup_policy)
+        env = wrappers.OrderEnforcingWrapper(env)
+        return env
+    return env_fn
 
 
 class markov_env:
