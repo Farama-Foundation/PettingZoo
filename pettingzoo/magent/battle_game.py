@@ -5,14 +5,17 @@ import magent
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
-from pettingzoo.utils import agent_selector
-from .magent_env import markov_env
+from pettingzoo.utils import agent_selector, wrappers
+from .magent_env import markov_env, make_env
 from .markov_env_wrapper import markov_env_wrapper
 from .battle import get_config
 
 
-def env(map_size=80, seed=None):
+def raw_env(map_size=80, seed=None):
     return markov_env_wrapper(battle_markov_env(map_size, seed))
+
+
+env = make_env(raw_env)
 
 
 class battle_markov_env(markov_env):

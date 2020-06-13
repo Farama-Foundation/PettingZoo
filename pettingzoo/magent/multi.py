@@ -6,12 +6,15 @@ from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
-from .magent_env import markov_env
+from .magent_env import markov_env, make_env
 from .markov_env_wrapper import markov_env_wrapper
 
 
-def env(map_size=45, seed=None):
+def raw_env(map_size=45, seed=None):
     return markov_env_wrapper(battle_markov_env(map_size, seed))
+
+
+env = make_env(raw_env)
 
 
 def load_config(map_size):
