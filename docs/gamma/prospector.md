@@ -55,7 +55,7 @@ and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
 
-If a prospector retrives a nugget from the water, then 
+By default, if a prospector retrives a nugget from the water, then 
 that prospector receives a reward of
 0.8, other
 prospectors will
@@ -63,7 +63,7 @@ receive a reward of 0.1 and
 all bankers receive a reward of 
 0.1. 
 
-When a prospector
+By default, if a prospector
 hands off a gold nugget to a banker (so the banker receives a gold nugget
 from a prospector), there are two rewards that are processed:
 the handing-off prospector gets 0.8,
@@ -75,7 +75,7 @@ get 0.1, and
 all of the prospectors get 
 0.1. 
 
-Finally, when a banker deposits gold in the bank, 
+Finally, by default when a banker deposits gold in the bank, 
 that banker receives a reward of
 0.8, the other bankers
 receive rewards of 0.1, and
