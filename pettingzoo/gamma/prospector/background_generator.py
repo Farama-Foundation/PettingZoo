@@ -3,12 +3,6 @@ from PIL import Image
 
 from random import randint, choice
 
-# im = Image.open('./data/bank-2.png')
-
-# a = np.asarray(im)
-
-# print(a.shape)
-
 colors = [
     [222, 193, 158],
     [206, 181, 146],
@@ -58,4 +52,4 @@ print(array)
 
 im = Image.fromarray(array)
 
-im.save('./data/background.png')
+im.save("./data/background.png")
