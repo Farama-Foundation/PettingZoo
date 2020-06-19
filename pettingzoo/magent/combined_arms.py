@@ -11,7 +11,7 @@ from .markov_env_wrapper import markov_env_wrapper
 
 
 def raw_env(map_size=45, seed=None):
-    return markov_env_wrapper(battle_markov_env(map_size, seed))
+    return markov_env_wrapper(markov_env(map_size, seed))
 
 
 env = make_env(raw_env)
@@ -109,7 +109,7 @@ def generate_map(env, map_size, handles):
     env.add_agents(handles[3], method="custom", pos=pos[1])
 
 
-class combined_arms_markov_env(markov_env):
+class markov_env(markov_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(load_config(map_size))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
