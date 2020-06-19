@@ -12,13 +12,13 @@ from .battle import get_config
 
 
 def raw_env(map_size=80, seed=None):
-    return markov_env_wrapper(battle_markov_env(map_size, seed))
+    return markov_env_wrapper(markov_env(map_size, seed))
 
 
 env = make_env(raw_env)
 
 
-class battle_markov_env(markov_env):
+class markov_env(markov_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(get_config(map_size), map_size=map_size)
         self.leftID = 0

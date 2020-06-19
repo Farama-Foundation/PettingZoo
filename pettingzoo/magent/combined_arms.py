@@ -109,7 +109,7 @@ def generate_map(env, map_size, handles):
     env.add_agents(handles[3], method="custom", pos=pos[1])
 
 
-class battle_markov_env(markov_env):
+class combined_arms_markov_env(markov_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(load_config(map_size))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
