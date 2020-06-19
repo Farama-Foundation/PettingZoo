@@ -3,9 +3,9 @@
 
 This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
 
-| Actions    | Agents  | Manual Control | Action Shape    | Action Values       | Observation Shape              | Observation Values        | Num States |
-|------------|---------|----------------|-----------------|---------------------|--------------------------------|---------------------------|------------|
-| Continuous | 7 (+/-) | Yes            | (3,)            | [-1, 1]             | (150, 150, 3) or (154, 154, 3) | (0, 255)                  | ?          |
+| Actions    | Agents  | Manual Control | Action Shape          | Action Values       | Observation Shape              | Observation Values        | Num States |
+|------------|---------|----------------|-----------------------|---------------------|--------------------------------|---------------------------|------------|
+| Continuous | 7 (+/-) | Yes            | (3,) or (2,)          | [-1, 1]             | (150, 150, 3) or (154, 154, 3) | (0, 255)                  | ?          |
 
 `from pettingzoo.gamma import prospector_v0`
 
@@ -17,9 +17,13 @@ This environment is part of the [gamma environments](../gamma.md). Please read t
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at 
 the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river 
-and pan from it, and get a gold nugget (visibly held by them). They take a 3 element vector of 
-continuous values (the first for forward/backward, the second for left/right movement, the third 
-for clockwise/counter-clockwise rotation). They can only hold 1 nugget at a time.
+and pan from it, and get a gold nugget (visibly held by them). Prospectors can
+only hold one nugget at a time, and nuggets stay in the same position relative to the prospector's
+orientation.
+
+Prospector agents take a 3-element vector of continuous values between -1 and 1, inclusive. 
+The action space is `(y, x, r)`, where `y` is used for forward/backward movement, 
+`x` is used for left/right movement, and `r` is used for clockwise/counter-clockwise rotation.
 
 There are a handful of bank chests at the top of the screen. The prospector agents can hand their 
 held gold nugget to the 3 "banker" agents, to get a reward. The banker agents can't rotate, 
@@ -27,10 +31,10 @@ and the prospector agents must give the nuggets (which are held in the same
 position relative to the prospector's position and rotation) to the 
 front of the bankers (within a plus or minus 45 degree tolerance). 
 The bankers then get the gold, and can deposit it into the chests to recieve a reward. 
-They take a 3 element vector of continuous values 
-(the first for forward/backward, the second for left/right movement, the
-third value is not used since bankers can't rotate). They can only hold 1 
-nugget at a time. 
+
+Bankers take a 2-element vector of continuous values between -1 and 1, inclusive.
+The action space is `(y, x)`, where
+`y` is used for forward/backward movement and `x` is used for left/right movement.
 
 The observation space size for prospectors
 is `(150, 150, 3)` and the size for
@@ -51,36 +55,32 @@ and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
 
-If a prospector retrives a nugget from the water, then 
+By default, if a prospector retrives a nugget from the water, then 
 that prospector receives a reward of
-`ind_reward * prospec_find_gold_reward`, other
+0.8, other
 prospectors will
-receive a reward of `group_reward * prospec_find_gold_reward` and
+receive a reward of 0.1 and
 all bankers receive a reward of 
-`other_group_reward * prospec_find_gold_reward`. 
+0.1. 
 
-When a prospector
+By default, if a prospector
 hands off a gold nugget to a banker (so the banker receives a gold nugget
 from a prospector), there are two rewards that are processed:
-the handing-off prospector gets `ind_reward * prospec_handoff_gold_reward`,
-the other prospectors get `group_reward * prospec_handoff_gold_reward`, and
-all of the bankers get `other_group_reward * prospec_handoff_gold_reward`.
+the handing-off prospector gets 0.8,
+the other prospectors get 0.1, and
+all of the bankers get 0.1.
 Similarly, the banker receiving the gold nugget gets
-`ind_reward * banker_receive_gold_reward`, the other bankers
-get `group_reward * banker_receive_gold_reward`, and
+0.8, the other bankers
+get 0.1, and
 all of the prospectors get 
-`other_group_reward * banker_receive_gold_reward`. 
+0.1. 
 
-Finally, when a banker deposits gold in the bank, 
+Finally, by default when a banker deposits gold in the bank, 
 that banker receives a reward of
-`ind_reward * banker_deposit_gold_reward`, the other bankers
-receive rewards of `group_reward * banker_deposit_gold_reward`, and
+0.8, the other bankers
+receive rewards of 0.1, and
 all of the prospectors receive
-`other_group_reward * banker_deposit_gold_reward`.
-
-These parameters may be adjusted when you're creating your
-environment if you want to change the score impact
-of certain objects during the game.
+0.1.
 
 Manual Control:
 
