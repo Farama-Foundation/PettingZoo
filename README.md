@@ -42,7 +42,7 @@ Environments can be interacted with in a manner very similar to Gym:
 
 ```
 observation = env.reset()
-for agent in env.agent_iter:
+for agent in env.agent_iter():
     reward, done, info = env.last()
     action = policy(observation)
     observation = env.step(action)
@@ -50,7 +50,7 @@ for agent in env.agent_iter:
 
 The commonly used methods are:
 
-`agent_iter` is an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done. Note that if step() or reset() is not called in the loop over the agent_iter, it will be an infinite loop.
+`agent_iter(max_steps=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_steps` number of steps have been executed. Note that if `step()` or `reset()` is not called in the loop over the `agent_iter()`, the environment may crash or yield an infinite loop. So only use it like the above example.
 
 `last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
 
