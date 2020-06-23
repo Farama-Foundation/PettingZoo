@@ -203,7 +203,6 @@ To cite this project in publication, please use
 
 The following environments are under active development:
 
-* classic/checkers (Caroline)
-* classic/shogi (Caroline)
-* magent/* (Ben)
+* classic/checkers (?)
+* classic/shogi (?)
 * robotics/* (Yiling)

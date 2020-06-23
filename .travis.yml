@@ -277,6 +277,61 @@ jobs:
         - sudo apt-get install unrar
         - export pz_module=sisl
 
+    - name: "MAgent with Python 3.6 on Linux"
+      services:
+        - xvfb
+      python: 3.6
+      before_install: 
+        
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=magent
+    - name: "MAgent with Python 3.7 on Linux"
+      services:
+        - xvfb
+      python: 3.7
+      before_install: 
+        
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=magent
+    - name: "MAgent with Python 3.8 on Linux"
+      services:
+        - xvfb
+      python: 3.8
+      before_install: 
+        
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=magent
+
 
     - name: "Atari with Python 3 on macOS"
       os: osx
@@ -286,6 +341,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=atari
@@ -298,6 +354,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=classic
@@ -310,6 +367,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=gamma
@@ -323,6 +381,7 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=mpe
@@ -335,9 +394,24 @@ jobs:
           packages:
             - swig
             - unrar
+            - llvm
       language: shell
       before_install: 
         - export pz_module=sisl
+        - export pz_render=False
+
+    - name: "MAgent with Python 3 on macOS"
+      os: osx
+      osx_image: xcode11.4
+      addons:
+        homebrew:
+          packages:
+            - swig
+            - unrar
+            - llvm
+      language: shell
+      before_install: 
+        - export pz_module=magent
         - export pz_render=False
 
 
