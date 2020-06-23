@@ -114,7 +114,7 @@ def test_rewards_dones(env, agent_0):
 
 def play_test(env, observation_0):
     prev_observe = env.reset()
-    for agent in env.agent_order:  # step through every agent once with observe=True
+    for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
         if 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
@@ -132,8 +132,9 @@ def play_test(env, observation_0):
         assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
-    reward_0 = env.rewards[env.agent_order[0]]
-    for agent in env.agent_order:  # step through every agent once with observe=False
+    reward_0 = env.rewards[env.agent_selection]
+    for _ in range(env.num_agents):
+        agent = env.agent_selection
         if 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
@@ -147,50 +148,6 @@ def play_test(env, observation_0):
         test_reward(reward)
         observation = env.step(action, observe=False)
         assert observation is None, "step(observe=False) must not return anything"
-
-
-def test_agent_order(env):
-    env.reset()
-    if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
-
-    elif not isinstance(env._agent_selector, agent_selector):
-        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
-
-    assert hasattr(env, "agent_order"), "Env does not have agent_order"
-
-    env.reset(observe=False)
-    agent_order = copy(env.agent_order)
-    _agent_selector = agent_selector(agent_order)
-    agent_selection = _agent_selector.next()
-
-    if hasattr(env, "_agent_selector"):
-        assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
-
-    assert env.agent_selection == agent_selection, "env.agent_selection is not the same as the first agent in agent_order"
-
-    for _ in range(200):
-        agent = agent_selection
-        if 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
-        else:
-            action = env.action_spaces[agent].sample()
-        env.step(action, observe=False)
-
-        if all(env.dones.values()):
-            break
-
-        if agent_order == env.agent_order:
-            agent_selection = _agent_selector.next()
-            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
-        else:
-            previous_agent_selection_index = agent_order.index(agent_selection)
-            agent_order = copy(env.agent_order)
-            _agent_selector.reinit(agent_order)
-            skips = (previous_agent_selection_index + 1) % len(env.agents)
-            for _ in range(skips + 1):
-                agent_selection = _agent_selector.next()
-            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
 
 
 def api_test(env, render=False, verbose_progress=False):
@@ -219,9 +176,7 @@ def api_test(env, render=False, verbose_progress=False):
 
     progress_report("Finished test_observation")
 
-    assert isinstance(env.agent_order, list), "agent_order must be a list"
-
-    agent_0 = env.agent_order[0]
+    agent_0 = env.agent_selection
 
     test_observation_action_spaces(env, agent_0)
 
@@ -240,10 +195,6 @@ def api_test(env, render=False, verbose_progress=False):
     test_rewards_dones(env, agent_0)
 
     progress_report("Finished test_rewards_dones")
-
-    test_agent_order(env_agent_sel)
-
-    progress_report("Finished test_agent_order")
 
     # test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
