@@ -37,8 +37,6 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
-        # self.agent_order = self.env.agent_order
-
     def close(self):
         self.env.close()
 
@@ -49,7 +47,6 @@ class BaseWrapper(AECEnv):
         observation = self.env.reset(observe)
 
         self.agent_selection = self.env.agent_selection
-        self.agent_order = self.env.agent_order
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
@@ -63,7 +60,6 @@ class BaseWrapper(AECEnv):
         next_obs = self.env.step(action, observe=observe)
 
         self.agent_selection = self.env.agent_selection
-        self.agent_order = self.env.agent_order
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
@@ -193,7 +189,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     '''
     check all orders:
 
-    * error on getting rewards, dones, infos, agent_selection, agent_order before reset
+    * error on getting rewards, dones, infos, agent_selection before reset
     * error on calling step, observe before reset
     * warn on calling close before render or reset
     * warn on calling step after environment is done
@@ -208,7 +204,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value in {"rewards", "dones", "infos", "agent_selection", "agent_order"}:
+        if value in {"rewards", "dones", "infos", "agent_selection"}:
             EnvLogger.error_field_before_reset(value)
             return None
         else:

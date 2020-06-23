@@ -19,7 +19,6 @@ class env(AECEnv):
         self.ch = CheckersRules()
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
-        self.agent_order = list(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}

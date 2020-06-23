@@ -37,9 +37,7 @@ class SimpleEnv(AECEnv):
         self.agents = [agent.name for agent in self.world.agents]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
-        self.agent_order = list(self.agents)
-
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
 
         # set spaces
         self.action_spaces = dict()
