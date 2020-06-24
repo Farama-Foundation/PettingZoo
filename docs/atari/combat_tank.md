@@ -25,4 +25,18 @@ Whenever you score a point, you are rewarded +1 and your opponent is penalized -
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+
+Parameters specific to combat-tank are
+
+```
+combat_tank.env(has_maze=False, is_invisible=False, billiard_hit=False)
+```
+
+```
+has_maze: Set to true to have the map be a maze instead of an open field
+
+is_invisible: If true, tanks are invisible unless they are firing or are running into a wall.
+
+billiard_hit: If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
+```

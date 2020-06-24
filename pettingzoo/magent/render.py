@@ -68,11 +68,11 @@ class Renderer:
         self.env = env
         self.handles = self.env.get_handles()
 
-        base_resolution = (map_size*8, map_size*8)
+        base_resolution = (map_size * 8, map_size * 8)
 
         infoObject = pygame.display.Info()
-        screen_size = (infoObject.current_w-50, infoObject.current_h-50)
-        self.resolution = resolution = np.min([screen_size,base_resolution],axis=0)
+        screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
+        self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
         self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
 
         pygame.display.set_caption('MAgent Renderer Window')
@@ -92,9 +92,12 @@ class Renderer:
 
     def get_banners(self, frame_id, resolution):
         red = '{}'.format(np.sum(self.env.get_alive(self.handles[0]).astype(np.int32))), (200, 0, 0)
-        vs = ' vs ', (0, 0, 0)
-        blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
-        result = [(red, vs, blue)]
+        if len(self.handles) > 1:
+            vs = ' vs ', (0, 0, 0)
+            blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
+            result = [(red, vs, blue)]
+        else:
+            result = [(red, )]
 
         # tmp = '{} chance(s) remained'.format(
         #     max(0, add_counter)), (0, 0, 0)

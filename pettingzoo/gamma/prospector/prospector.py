@@ -31,10 +31,7 @@ class Prospector(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
         # self.image = load_image(['prospec.png'])
-        self.image = utils.load_image(["prospector-pickaxe-big.png"])
-        self.image = pg.transform.scale(
-            self.image, (int(const.AGENT_RADIUS * 2), int(const.AGENT_RADIUS * 2))
-        )
+        self.image = utils.load_image(["prospector-pickaxe.png"])
 
         self.id = num
 
@@ -82,9 +79,8 @@ class Prospector(pg.sprite.Sprite):
         self.body.velocity = Vec2d(x_vel, y_vel).rotated(self.body.angle)
 
         self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotozoom(
-            self.orig_image, math.degrees(self.body.angle), 1
-        )
+        self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
+
         self.rect = self.image.get_rect(center=self.rect.center)
 
         curr_vel = self.body.velocity
@@ -107,10 +103,7 @@ class Prospector(pg.sprite.Sprite):
 class Banker(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        self.image = utils.load_image(["bankers", "%s-big.png" % num])
-        self.image = pg.transform.scale(
-            self.image, (int(const.AGENT_RADIUS * 2), int(const.AGENT_RADIUS * 2))
-        )
+        self.image = utils.load_image(["bankers", "%s.png" % num])
 
         self.id = num
 
@@ -160,9 +153,8 @@ class Banker(pg.sprite.Sprite):
         self.body.velocity = Vec2d(x_vel, y_vel)
 
         self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotozoom(
-            self.orig_image, math.degrees(self.body.angle), 1
-        )
+        self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
+
         self.rect = self.image.get_rect(center=self.rect.center)
 
         curr_vel = self.body.velocity
@@ -308,7 +300,7 @@ class Gold(pg.sprite.Sprite):
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.ClipOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, [0, 0, 0], "setting action to 0")
+    env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -365,7 +357,8 @@ class raw_env(AECEnv):
 
         # Generate random positions for each prospector agent
         prospector_info = [
-            (i, utils.rand_pos("prospector", self.rng)) for i in range(const.NUM_PROSPECTORS)
+            (i, utils.rand_pos("prospector", self.rng))
+            for i in range(const.NUM_PROSPECTORS)
         ]
         self.prospectors = {}
         for num, pos in prospector_info:
@@ -374,7 +367,9 @@ class raw_env(AECEnv):
             self.prospectors[identifier] = prospector
             self.agents.append(identifier)
 
-        banker_info = [(i, utils.rand_pos("banker", self.rng)) for i in range(const.NUM_BANKERS)]
+        banker_info = [
+            (i, utils.rand_pos("banker", self.rng)) for i in range(const.NUM_BANKERS)
+        ]
         self.bankers = {}
         for num, pos in banker_info:
             banker = Banker(pos, self.space, num, self.all_sprites)
@@ -395,10 +390,14 @@ class raw_env(AECEnv):
 
         self.action_spaces = {}
         for p in self.prospectors:
-            self.action_spaces[p] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
+            self.action_spaces[p] = spaces.Box(
+                low=np.float32(-1.0), high=np.float32(1.0), shape=(3,)
+            )
 
         for b in self.bankers:
-            self.action_spaces[b] = spaces.Box(low=np.float32(-1.), high=np.float32(1.), shape=(3,))
+            self.action_spaces[b] = spaces.Box(
+                low=np.float32(-1.0), high=np.float32(1.0), shape=(2,)
+            )
 
         self.observation_spaces = {}
         self.last_observation = {}
@@ -511,7 +510,6 @@ class raw_env(AECEnv):
                 for k, v in self.bankers.items():
                     if v.body is banker_body:
                         self.rewards[k] += banker_deposit_gold_reward
-                        # banker_sprite = v
                     else:
                         self.rewards[k] += group_reward * banker_deposit_gold_reward
 
@@ -553,22 +551,34 @@ class raw_env(AECEnv):
 
         delta = side_len // 2
         x, y = ag.center  # Calculated property added to prospector and banker classes
-        sub_screen = np.array(capture[
-            max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
-            max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :], dtype=np.uint8)
+        sub_screen = np.array(
+            capture[
+                max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
+                max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :,
+            ],
+            dtype=np.uint8,
+        )
 
         s_x, s_y, _ = sub_screen.shape
         pad_x = side_len - s_x
         if x > const.SCREEN_WIDTH - delta:  # Right side of the screen
-            sub_screen = np.pad(sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode='constant')
+            sub_screen = np.pad(
+                sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode="constant"
+            )
         elif x < 0 + delta:
-            sub_screen = np.pad(sub_screen, pad_width=((pad_x, 0), (0, 0), (0, 0)), mode='constant')
+            sub_screen = np.pad(
+                sub_screen, pad_width=((pad_x, 0), (0, 0), (0, 0)), mode="constant"
+            )
 
         pad_y = side_len - s_y
         if y > const.SCREEN_HEIGHT - delta:  # Bottom of the screen
-            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode='constant')
+            sub_screen = np.pad(
+                sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode="constant"
+            )
         elif y < 0 + delta:
-            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode='constant')
+            sub_screen = np.pad(
+                sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode="constant"
+            )
 
         sub_screen = np.rot90(sub_screen, k=3)
         sub_screen = np.fliplr(sub_screen).astype(np.uint8)
@@ -667,5 +677,6 @@ class raw_env(AECEnv):
                 pg.event.pump()
                 pg.display.quit()
             pg.quit()
+
 
 # Except for the gold png images, all other sprite art was created by Yashas Lokesh

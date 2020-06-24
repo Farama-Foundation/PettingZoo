@@ -6,12 +6,15 @@ from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
-from .magent_env import markov_env
+from .magent_env import markov_env, make_env
 from .markov_env_wrapper import markov_env_wrapper
 
 
-def env(map_size=45, seed=None):
-    return markov_env_wrapper(battle_markov_env(map_size, seed))
+def raw_env(map_size=45, seed=None):
+    return markov_env_wrapper(markov_env(map_size, seed))
+
+
+env = make_env(raw_env)
 
 
 def get_config(map_size):
@@ -43,7 +46,7 @@ def get_config(map_size):
     return cfg
 
 
-class battle_markov_env(markov_env):
+class markov_env(markov_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(get_config(map_size), map_size=map_size)
         self.leftID = 0
