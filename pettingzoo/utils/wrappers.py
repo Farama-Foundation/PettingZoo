@@ -37,8 +37,6 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
-        # self.agent_order = self.env.agent_order
-
     def close(self):
         self.env.close()
 
@@ -49,7 +47,6 @@ class BaseWrapper(AECEnv):
         observation = self.env.reset(observe)
 
         self.agent_selection = self.env.agent_selection
-        self.agent_order = self.env.agent_order
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
@@ -63,7 +60,6 @@ class BaseWrapper(AECEnv):
         next_obs = self.env.step(action, observe=observe)
 
         self.agent_selection = self.env.agent_selection
-        self.agent_order = self.env.agent_order
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
@@ -193,7 +189,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     '''
     check all orders:
 
-    * error on getting rewards, dones, infos, agent_selection, agent_order before reset
+    * error on getting rewards, dones, infos, agent_selection before reset
     * error on calling step, observe before reset
     * warn on calling close before render or reset
     * warn on calling step after environment is done
@@ -201,6 +197,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     def __init__(self, env):
         self._has_reset = False
         self._has_rendered = False
+        self._has_updated = False
         super().__init__(env)
 
     def __getattr__(self, value):
@@ -208,7 +205,9 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value in {"rewards", "dones", "infos", "agent_selection", "agent_order"}:
+        if value == "agent_order":
+            raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
+        if value in {"rewards", "dones", "infos", "agent_selection"}:
             EnvLogger.error_field_before_reset(value)
             return None
         else:
@@ -231,6 +230,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         self._has_reset = False
 
     def step(self, action, observe=True):
+        self._has_updated = True
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
         elif self.dones[self.agent_selection]:
@@ -247,5 +247,6 @@ class OrderEnforcingWrapper(BaseWrapper):
         return super().observe(agent)
 
     def reset(self, observe=True):
+        self._has_updated = True
         self._has_reset = True
         return super().reset(observe)
