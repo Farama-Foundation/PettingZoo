@@ -130,7 +130,7 @@ class BaseAtariEnv(AECEnv):
                 # an inactive agent in ale gets a -1 life.
                 dones = [life < 0 for life in lives]
                 assert len(lives) == len(self.agents)
-                self.dones = {a: d for d, a in zip(dones, self.agents)}
+                self.dones = {a: bool(d) for d, a in zip(dones, self.agents)}
             self._actions = []
 
         self.agent_selection = self._agent_selector.next()
