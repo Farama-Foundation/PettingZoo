@@ -50,13 +50,13 @@ for agent in env.agent_iter():
 
 The commonly used methods are:
 
-`agent_iter(max_steps=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_steps` number of steps have been executed. Note that if `step()` or `reset()` is not called in the loop over the `agent_iter()`, the environment may crash or yield an infinite loop. So only use it like the above example.
+`agent_iter(max_steps=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_steps` (totalhave been executed.
 
-`last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
+`last()` returns the total reward the agent has recieved since it's last step and present, if the agent is done, anything in info associated with the selected agent. 
 
-`reset(observe=True)` is the same as in Gym- it resets the environment (and set's it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
+`reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
-`step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
+`step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent, and *returns the observation for the next agent* (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
 
 
 ## Additional Environment API
