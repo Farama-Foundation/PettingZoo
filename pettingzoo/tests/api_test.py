@@ -157,8 +157,6 @@ def api_test(env, render=False, verbose_progress=False):
             print(msg)
 
     print("Starting API test")
-    env_agent_sel = copy(env)
-
     env.reset()
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
