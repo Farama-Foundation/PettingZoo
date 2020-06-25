@@ -14,7 +14,11 @@
 | [Maze Craze](atari/maze_craze.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Mario Bros](atari/mario_bros.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Othello](atari/othello.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
-| [Pong](atari/pong.md)   | Graphical    | Discrete  | 2-4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Pong: Classic](atari/pong_classic.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Pong: Basketball](atari/pong_basketball.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Pong: Foozpong](atari/pong_foozpong.md)   | Graphical    | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Pong: Quadrapong](atari/pong_quadrapong.md)   | Graphical    | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| [Pong: Team Volleyball](atari/pong_volleyball.md)   | Graphical    | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Space Invaders](atari/space_invaders.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Space War](atari/space_war.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 | [Surround: Original](atari/surround.md)   | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
