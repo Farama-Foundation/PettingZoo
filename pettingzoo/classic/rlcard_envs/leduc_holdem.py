@@ -24,7 +24,7 @@ class raw_env(RLCardBase):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None):
-        super().__init__("leduc-holdem", 2, (36,))
+        super().__init__("leduc-holdem", 2, (36,), seed)
 
     def render(self, mode='human'):
         for player in self.agents:

@@ -27,7 +27,7 @@ class raw_env(RLCardBase):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0):
-        super().__init__("gin-rummy", 2, (5, 52))
+        super().__init__("gin-rummy", 2, (5, 52), seed)
         self._knock_reward = knock_reward
         self._gin_reward = gin_reward
 
