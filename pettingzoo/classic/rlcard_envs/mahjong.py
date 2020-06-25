@@ -21,7 +21,7 @@ class raw_env(RLCardBase):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None):
-        super().__init__("mahjong", 4, (6, 34, 4))
+        super().__init__("mahjong", 4, (6, 34, 4), seed)
 
     def render(self, mode='human'):
         for player in self.agents:

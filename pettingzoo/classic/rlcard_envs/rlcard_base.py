@@ -10,7 +10,7 @@ class RLCardBase(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, name, num_players, obs_shape, seed=None):
+    def __init__(self, name, num_players, obs_shape, seed):
         super().__init__()
         self.env = rlcard.make(name, config={"seed": seed})
         self.agents = [f'player_{i}' for i in range(num_players)]
