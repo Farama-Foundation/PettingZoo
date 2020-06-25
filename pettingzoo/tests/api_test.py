@@ -134,8 +134,7 @@ def play_test(env, observation_0):
 
     env.reset()
     reward_0 = env.rewards[env.agent_selection]
-    for _ in range(env.num_agents):
-        agent = env.agent_selection
+    for agent in env.agent_iter(env.num_agents):
         if 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:

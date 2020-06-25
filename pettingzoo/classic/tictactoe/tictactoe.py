@@ -28,8 +28,6 @@ class raw_env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_1", "player_2"]
 
-        self.agent_order = list(self.agents)
-
         self.action_spaces = {i: spaces.Discrete(9) for i in self.agents}
         self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8) for i in self.agents}
 
@@ -37,7 +35,7 @@ class raw_env(AECEnv):
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': list(range(0, 9))} for i in self.agents}
 
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
     # Key

@@ -31,8 +31,6 @@ class raw_env(AECEnv):
         self.num_agents = 2
         self.agents = ['player_0', 'player_1']
 
-        self.agent_order = list(self.agents)
-
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
         self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8) for i in self.agents}
 
