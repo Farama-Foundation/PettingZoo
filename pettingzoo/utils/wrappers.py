@@ -197,6 +197,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     def __init__(self, env):
         self._has_reset = False
         self._has_rendered = False
+        self._has_updated = False
         super().__init__(env)
 
     def __getattr__(self, value):
@@ -204,7 +205,9 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value in {"rewards", "dones", "infos", "agent_selection"}:
+        if value == "agent_order":
+            raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
+        elif value in {"rewards", "dones", "infos", "agent_selection"}:
             EnvLogger.error_field_before_reset(value)
             return None
         else:
@@ -227,6 +230,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         self._has_reset = False
 
     def step(self, action, observe=True):
+        self._has_updated = True
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
         elif self.dones[self.agent_selection]:
@@ -243,5 +247,6 @@ class OrderEnforcingWrapper(BaseWrapper):
         return super().observe(agent)
 
     def reset(self, observe=True):
+        self._has_updated = True
         self._has_reset = True
         return super().reset(observe)
