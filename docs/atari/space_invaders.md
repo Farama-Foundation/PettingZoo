@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![space_invaders_easy gif](atari_space_invaders_easy.gif)
+![space_invaders_easy gif](atari_space_invaders.gif)
 
 *AEC diagram*
 
