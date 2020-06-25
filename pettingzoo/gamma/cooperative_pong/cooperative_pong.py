@@ -377,8 +377,7 @@ class raw_env(AECEnv):
 
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
