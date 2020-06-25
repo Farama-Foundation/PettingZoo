@@ -11,17 +11,17 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![combat_jet gif](atari_combat_jet.gif)
+![combat_jet gif](atari_combat_plane.gif)
 
 *AEC diagram*
 
 
-*Combat*'s jet mode is an adversarial game where timing,
+*Combat*'s plane mode is an adversarial game where timing,
 positioning, and keeping track of your opponent's complex
 movements are key.
 
-The players fly around the map, able to control direction
-but not your speed. You can however, influence the direction of the missile mid flight by rotating your jet, making it easier to hit your opponent than in Biplane mode.
+The players fly around the map, able to control flight direction
+but not your speed.
 
 When your opponent is hit by your bullet,
 you score a point.
@@ -31,4 +31,16 @@ Whenever you score a point, you are rewarded +1 and your opponent is penalized -
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+
+Parameters specific to combat-plane are
+
+```
+combat_plane.env(is_jet=False, guided_missile=False)
+```
+
+```
+is_jet: Whether the plane is a bi-plane or a jet. (Jets move faster)
+
+guided_missile: Whether the missile can be directed after being fired, or whether it is on a fixed path.
+```

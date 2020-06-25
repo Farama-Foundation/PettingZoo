@@ -22,4 +22,14 @@ Try to get the ball in your opponents hoop. But you cannot move on their side of
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+
+Parameters specific to Pong Basketball are
+
+```
+pong_classic.env(num_players=2)
+```
+
+```
+num_players: Number of players (must be either 2 or 4)
+```

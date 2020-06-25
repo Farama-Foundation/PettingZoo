@@ -1,5 +1,5 @@
 
-### Maze Craze: Full visibility
+### Pong: Classic
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
@@ -7,20 +7,31 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 
-`from pettingzoo.atari import maze_craze_fully_seen_v0`
+`from pettingzoo.atari import pong_classic_v0`
 
 `agents= ["first_0", "second_0"]`
 
-![maze_craze_fully_seen gif](atari_maze_craze_fully_seen.gif)
+![pong gif](atari_pong_classic.gif)
 
 *AEC diagram*
 
-A competitive game of planning.
+Classic two player competitive game of timing.
 
-It is a race to exit the maze.
+Get the ball past the opponent.
 
-The first player to leave the maze scores +1, the other player scores -1.
+Scoring a point gives you +1 reward and your opponent -1 reward.
+
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+
+Parameters specific to Pong Classic are
+
+```
+pong_classic.env(num_players=2)
+```
+
+```
+num_players: Number of players (must be either 2 or 4)
+```
