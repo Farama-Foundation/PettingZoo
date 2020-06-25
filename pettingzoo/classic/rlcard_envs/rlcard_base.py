@@ -13,7 +13,8 @@ class RLCardBase(AECEnv):
     def __init__(self, name, num_players, obs_shape, seed):
         super().__init__()
         self.env = rlcard.make(name, config={"seed": seed})
-        self.agents = [f'player_{i}' for i in range(num_players)]
+        if not hasattr(self, "agents"):
+            self.agents = [f'player_{i}' for i in range(num_players)]
         self.num_agents = len(self.agents)
 
         dtype = self.env.reset()[0]['obs'].dtype
