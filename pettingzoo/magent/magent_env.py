@@ -1,102 +1,111 @@
-from gym.spaces import Discrete
+from gym.spaces import Discrete, Box
 import numpy as np
 import warnings
 import magent
 from pettingzoo import AECEnv
+import math
+from pettingzoo.magent.render import Renderer
+from pettingzoo.utils import agent_selector, wrappers
+from gym.utils import seeding
 
 
-class env(AECEnv):
-    metadata = {'render.modes': ['human']}
-    '''
-    Parent Class Methods
-    '''
-    def __init__(self, config, **kwargs):
-        self.env = magent.GridWorld(config, **kwargs)
-        self.num_agents = 2
-        self.agents = ["predator", "prey"]
-        self.dones = {agent: False for agent in self.agents}
-        self.agent_order = self.agents[:]
+def make_env(raw_env):
+    def env_fn(**kwargs):
+        env = raw_env(**kwargs)
+        env = wrappers.AssertOutOfBoundsWrapper(env)
+        backup_policy = "taking zero action (no movement, no attack)"
+        env = wrappers.NanNoOpWrapper(env, 0, backup_policy)
+        env = wrappers.OrderEnforcingWrapper(env)
+        return env
+    return env_fn
 
-        self.action_spaces = {agent: Discrete(3) for agent in self.agents}
-        self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
 
-        self.display_wait = 0.0
-        self.rewards = {agent: 0 for agent in self.agents}
-        self.dones = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
-        self.num_moves = 0
+class markov_env:
+    def __init__(self, env, active_handles, names, map_size, seed=None):
+        self.map_size = map_size
+        self.env = env
+        self.handles = active_handles
+        if seed is None:
+            seed = seeding.create_seed(seed, max_bytes=4)
+        env.set_seed(seed)
+        env.reset()
+        self.generate_map()
 
-    def step(self, action, observe=True):
-        self.env.step()
+        self.team_sizes = team_sizes = [env.get_num(handle) for handle in self.handles]
+        self.agents = [f"{names[j]}_{i}" for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        self.num_agents = sum(team_sizes)
 
-    def reset(self, observe=True):
-        self.env.reset()
+        num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
+        self.action_spaces = [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        # may change depending on environment config? Not sure.
+        team_obs_shapes = self._calc_obs_shapes()
+        self.observation_spaces = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
 
-    def observe(self, agent):
-        return self.env.get_observation(agent)
+        self._renderer = None
 
-    def last(self):
-        pass
+    def _calc_obs_shapes(self):
+        view_spaces = [self.env.get_view_space(handle) for handle in self.handles]
+        feature_spaces = [self.env.get_feature_space(handle) for handle in self.handles]
+        assert all(len(tup) == 3 for tup in view_spaces)
+        assert all(len(tup) == 1 for tup in feature_spaces)
+        obs_spaces = [(view_space[:2] + (view_space[2] + feature_space[0],)) for view_space, feature_space in zip(view_spaces, feature_spaces)]
+        return obs_spaces
 
-    def render(self, mode='human'):
-        self.env.render()
+    def render(self):
+        if self._renderer is None:
+            self._renderer = Renderer(self.env, self.map_size)
+        self._renderer.render()
 
     def close(self):
-        pass
+        import pygame
+        pygame.quit()
 
-    '''
-    Child Class Methods
-    '''
-    def add_walls(self, method, **kwargs):
-        self.env.add_walls(method, **kwargs)
+    def reset(self):
+        self.env.reset()
+        self.generate_map()
+        return self._observe_all()
 
-    def new_group(self, name):
-        return self.env.new_group(name)
+    def _observe_all(self):
+        observes = [None] * self.num_agents
+        for handle in self.handles:
+            ids = self.env.get_agent_id(handle)
+            view, features = self.env.get_observation(handle)
 
-    def add_agents(self, handle, method, **kwargs):
-        return self.env.add_agents(handle, method, **kwargs)
+            feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1)
+            feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
+            fin_obs = np.concatenate([view, feat_img], axis=-1)
+            for id, obs in zip(ids, fin_obs):
+                observes[id] = obs
 
-    def set_action(self, handle, actions):
-        self.env.set_action(handle, actions)
+        return observes
 
-    def get_reward(self, handle):
-        self.env.get_reward(handle)
+    def _all_rewards(self):
+        rewards = np.zeros(self.num_agents)
+        for handle in self.handles:
+            ids = self.env.get_agent_id(handle)
+            rewards[ids] = self.env.get_reward(handle)
+        return rewards
 
-    def clear_dead(self):
+    def _all_dones(self, step_done=False):
+        dones = np.ones(self.num_agents, dtype=np.bool)
+        if step_done:
+            return dones
+        for handle in self.handles:
+            ids = self.env.get_agent_id(handle)
+            dones[ids] = ~self.env.get_alive(handle)
+        return [bool(done) for done in dones]
+
+    def step(self, all_actions):
+        all_actions = np.asarray(all_actions, dtype=np.int32)
+        assert len(all_actions) == self.num_agents
+        start_point = 0
+        for i in range(len(self.handles)):
+            size = self.team_sizes[i]
+            self.env.set_action(self.handles[i], all_actions[start_point:(start_point + size)])
+            start_point += size
+
+        done = self.env.step()
+        all_infos = [{}] * self.num_agents
+        result = self._observe_all(), self._all_rewards(), self._all_dones(done), all_infos
         self.env.clear_dead()
-
-    def get_handles(self):
-        return self.env.get_handles()
-
-    def get_num_agents(self, handle):
-        return self.env.get_num(handle)
-
-    def get_action_space(self, handle):
-        return self.env.get_action_space(handle)
-
-    def get_view_space(self, handle):
-        return self.env.get_view_space(handle)
-
-    def get_feature_space(self, handle):
-        return self.env.get_feature_space(handle)
-
-    def get_agent_id(self, handle):
-        return self.env.get_agent_id(handle)
-
-    def get_alive(self, handle):
-        return self.env.get_alive(handle)
-
-    def get_pos(self, handle):
-        return self.env.get_pos(handle)
-
-    def get_view2attack(self, handle):
-        return self.env.get_view2attack(handle)
-
-    def get_global_minimap(self, height, width):
-        return self.env.get_global_minimap(height, width)
-
-    def set_seed(self, seed):
-        self.env.set_seed(seed)
-
-    def set_render_dir(self, name):
-        self.env.set_render_dir(name)
+        return result
