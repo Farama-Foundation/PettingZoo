@@ -23,8 +23,8 @@ class raw_env(RLCardBase):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None):
-        super().__init__("doudizhu", 3, (6, 5, 15), seed)
         self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
+        super().__init__("doudizhu", 3, (6, 5, 15), seed)
 
     def _scale_rewards(self, reward):
         # Maps 1 to 1 and 0 to -1
