@@ -10,7 +10,11 @@ from .games import ice_hockey as ice_hockey_v0
 from .games import maze_craze as maze_craze_v0
 from .games import mario_bros as mario_bros_v0
 from .games import othello as othello_v0
-from .games import pong as pong_v0
+from .games import pong_basketball as pong_basketball_v0
+from .games import pong_classic as pong_classic_v0
+from .games import pong_foozpong as pong_foozpong_v0
+from .games import pong_quadrapong as pong_quadrapong_v0
+from .games import pong_volleyball as pong_volleyball_v0
 from .games import space_invaders as space_invaders_v0
 from .games import space_war as space_war_v0
 from .games import surround as surround_v0
