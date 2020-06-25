@@ -57,7 +57,7 @@ def render_gif_image(name):
 
 def render_all():
     for name,module in all_environments.items():
-        if "classic" not in name and "magent" in name:
+        if "classic" not in name and "foozpong" in name:
             nameline = name.replace("/","_")
             generate_data(nameline,module)
             #render_gif_image(nameline)
