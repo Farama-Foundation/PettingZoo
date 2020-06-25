@@ -1,7 +1,10 @@
 from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+import warnings
 
 
 def raw_env(has_maze=False, is_invisible=False, billiard_hit=False, **kwargs):
+    if has_maze is Fase and is_invisible is False and billiard_hit is False:
+        warnings.warn("combat_tank has interesting parameters to consider overriding including is_invisible, billiard_hit and has_maze")
     start_mapping = {
         (False, False): 1,
         (False, True): 8,
