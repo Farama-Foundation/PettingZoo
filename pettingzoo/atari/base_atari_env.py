@@ -18,8 +18,10 @@ def base_env_wrapper_fn(raw_env_fn):
         return env
     return env_fn
 
+
 def BaseAtariEnv(**kwargs):
     return markov_env_wrapper(MarkovAtariEnv(**kwargs))
+
 
 class MarkovAtariEnv:
 
