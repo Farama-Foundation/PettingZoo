@@ -6,6 +6,7 @@ from gym.utils import seeding
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
+from pettingzoo.utils.markov_env_wrapper import markov_env_wrapper
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -17,8 +18,10 @@ def base_env_wrapper_fn(raw_env_fn):
         return env
     return env_fn
 
+def BaseAtariEnv(**kwargs):
+    return markov_env_wrapper(MarkovAtariEnv(**kwargs))
 
-class BaseAtariEnv(AECEnv):
+class MarkovAtariEnv:
 
     metadata = {'render.modes': ['human']}
 
@@ -88,27 +91,17 @@ class BaseAtariEnv(AECEnv):
         player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
 
-        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
-        self.observation_spaces = {agent: observation_space for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
-
-        self._agent_selector = agent_selector(self.agents)
+        self.action_spaces = [gym.spaces.Discrete(action_size)] * self.num_agents
+        self.observation_spaces = [observation_space] * self.num_agents
 
         self._screen = None
 
-    def reset(self, observe=True):
+    def reset(self):
         self.ale.reset_game()
-        self.agent_selection = self._agent_selector.reset()
 
-        self.rewards = {a: 0 for a in self.agents}
-        self.dones = {a: False for a in self.agents}
-        self.infos = {a: {} for a in self.agents}
+        return [self._observe()] * self.num_agents
 
-        self._actions = []
-
-        return self.observe(self.agent_selection) if observe else None
-
-    def observe(self, agent):
+    def _observe(self):
         if self.obs_type == 'ram':
             bytes = self.ale.getRAM()
             return bytes
@@ -117,26 +110,20 @@ class BaseAtariEnv(AECEnv):
         elif self.obs_type == 'grayscale_image':
             return self.ale.getScreenGrayscale()
 
-    def step(self, action, observe=True):
-        self._actions.append(action)
-        if len(self._actions) == self.num_players:
-            rewards = self.ale.act(self._actions)
-            self.rewards = {a: rew for a, rew in zip(self.agents, rewards)}
-            if self.ale.game_over():
-                self.dones = {a: True for a in self.agents}
-            else:
-                lives = self.ale.allLives()
-                # an inactive agent in ale gets a -1 life.
-                dones = [life < 0 for life in lives]
-                assert len(lives) == len(self.agents)
-                self.dones = {a: bool(d) for d, a in zip(dones, self.agents)}
-            self._actions = []
+    def step(self, actions):
+        rewards = self.ale.act(np.asarray(actions))
+        if self.ale.game_over():
+            dones = [True] * self.num_agents
+        else:
+            lives = self.ale.allLives()
+            # an inactive agent in ale gets a -1 life.
+            dones = [int(life) < 0 for life in lives]
 
-        self.agent_selection = self._agent_selector.next()
+        observations = [self._observe()] * self.num_agents
+        infos = [{}] * self.num_agents
+        return observations, rewards, dones, infos
 
-        return self.observe(self.agent_selection) if observe else None
-
-    def render(self, mode='human'):
+    def render(self):
         import pygame
         (screen_width, screen_height) = self.ale.getScreenDims()
         zoom_factor = 4
