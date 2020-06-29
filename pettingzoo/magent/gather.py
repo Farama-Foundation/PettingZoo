@@ -7,7 +7,7 @@ import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import markov_env, make_env
-from .markov_env_wrapper import markov_env_wrapper
+from pettingzoo.utils.markov_env_wrapper import markov_env_wrapper
 
 
 def raw_env(map_size=200, seed=None):
