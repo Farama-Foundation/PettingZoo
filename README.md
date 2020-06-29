@@ -50,9 +50,9 @@ for agent in env.agent_iter():
 
 The commonly used methods are:
 
-`agent_iter(max_steps=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_steps` (totalhave been executed.
+`agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns the total reward the agent has recieved since it's last step and present, if the agent is done, anything in info associated with the selected agent. 
+`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent.
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 

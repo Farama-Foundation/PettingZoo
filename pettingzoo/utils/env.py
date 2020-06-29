@@ -21,7 +21,7 @@ class AECEnv(object):
     def close(self):
         pass
 
-    def agent_iter(self, max_iters=2**63):
+    def agent_iter(self, max_agent_iter=2**63):
         return AECIterable(self, max_iters)
 
 
