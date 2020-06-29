@@ -203,5 +203,5 @@ To cite this project in publication, please use
 
 The following environments are under active development:
 
-* classic/shogi (?)
+* classic/shogi (Ben)
 * robotics/* (Yiling)
