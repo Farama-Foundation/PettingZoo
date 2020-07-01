@@ -21,26 +21,26 @@ class AECEnv(object):
     def close(self):
         pass
 
-    def agent_iter(self, max_iters=2**63):
-        return AECIterable(self, max_iters)
+    def agent_iter(self, max_agent_iter=2**63):
+        return AECIterable(self, max_agent_iter)
 
 
 class AECIterable:
-    def __init__(self, env, max_iters):
+    def __init__(self, env, max_agent_iter):
         self.env = env
-        self.max_iters = max_iters
+        self.max_agent_iter = max_agent_iter
 
     def __iter__(self):
         if getattr(self.env, "_has_updated", None) is None:
-            return AECIterator(self.env, self.max_iters)
+            return AECIterator(self.env, self.max_agent_iter)
         else:
-            return AECOrderEnforcingIterator(self.env, self.max_iters)
+            return AECOrderEnforcingIterator(self.env, self.max_agent_iter)
 
 
 class AECIterator:
-    def __init__(self, env, max_iters):
+    def __init__(self, env, max_agent_iter):
         self.env = env
-        self.iters_til_term = max_iters
+        self.iters_til_term = max_agent_iter
 
     def __next__(self):
         if all(self.env.dones.values()) or self.iters_til_term <= 0:
