@@ -2,13 +2,49 @@ from pettingzoo.utils import agent_selector
 from pettingzoo import AECEnv
 
 
-class markov_env_wrapper(AECEnv):
+class base_parallel_env:
+    def __init__(self):
+        '''
+        sets the following attributes:
+
+        agents: list of agent names
+        num_agents: number of agent names
+        action_spaces: list of action spaces corresponding to each agent
+        observation_spaces: list of observation spaces corresponding to each agent
+        '''
+
+    def render(self):
+        '''
+        render the environment.
+        '''
+
+    def close(self):
+        '''
+        release rendering or other resources
+        '''
+
+    def reset(self):
+        '''
+        resets environment
+        return observations for all agents
+        '''
+
+    def step(self, all_actions):
+        '''
+        step using list of actions for all agents,
+        including those that are already done (those actions are ignored)
+
+        return observations, rewards, dones, infos
+        '''
+        return result
+
+
+class _parallel_env_wrapper(AECEnv):
+
     metadata = {'render.modes': ['human']}
-    '''
-    Parent Class Methods
-    '''
-    def __init__(self, markov_env):
-        self.env = markov_env
+
+    def __init__(self, parallel_env):
+        self.env = parallel_env
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
 
