@@ -6,7 +6,7 @@ from gym.utils import seeding
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
-from pettingzoo.utils.markov_env_wrapper import markov_env_wrapper
+from pettingzoo.utils._parallel_env import parallel_env_wrapper
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -20,10 +20,10 @@ def base_env_wrapper_fn(raw_env_fn):
 
 
 def BaseAtariEnv(**kwargs):
-    return markov_env_wrapper(MarkovAtariEnv(**kwargs))
+    return parallel_env_wrapper(ParallelAtariEnv(**kwargs))
 
 
-class MarkovAtariEnv:
+class ParallelAtariEnv:
 
     metadata = {'render.modes': ['human']}
 
