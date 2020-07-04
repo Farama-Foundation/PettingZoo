@@ -10,7 +10,7 @@ def manual_control(**kwargs):
     y = 0
     prisoner_mapping = {}
     for prisoner in env.agents:
-        prisoner_mapping[env.infos[prisoner]] = prisoner
+        prisoner_mapping[env.infos[prisoner]['map_tuple']] = prisoner
     while True:
         agent_actions = {agent: 1 for agent in env.agents}
         num_actions = 0
