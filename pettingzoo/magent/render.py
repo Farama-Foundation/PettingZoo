@@ -122,9 +122,8 @@ class Renderer:
         resolution = self.resolution
 
         grid_map = np.zeros((resolution[0], resolution[1], 3), dtype=np.int16)
-        # view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
-        #                  self.map_size[1] / 2 * grid_size - resolution[1] / 2]
-        view_position = [0,0]
+        view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
+                         self.map_size[1] / 2 * grid_size - resolution[1] / 2]
         groups = self.groups
         text_formatter = self.text_formatter
         banner_formatter = self.banner_formatter
@@ -133,13 +132,13 @@ class Renderer:
         # x_range: which vertical gridlines should be shown on the display
         # y_range: which horizontal gridlines should be shown on the display
         x_range = (
-            0,
-            self.map_size[0]
+            max(0, int(math.floor(max(0, view_position[0]) / grid_size))),
+            min(self.map_size[0], int(math.ceil(max(0, view_position[0] + resolution[0]) / grid_size)))
         )
 
         y_range = (
-            0,
-            self.map_size[1]
+            max(0, int(math.floor(max(0, view_position[1]) / grid_size))),
+            min(self.map_size[1], int(math.ceil(max(0, view_position[1] + resolution[1]) / grid_size)))
         )
 
         self.canvas.fill(background_rgb)
@@ -190,8 +189,6 @@ class Renderer:
                                          (x * grid_size - view_position[0], y * grid_size - view_position[1]),
                                          grid_size, grid_size, resolution)
             pygame.pixelcopy.array_to_surface(self.canvas, grid_map)
-
-            rate = min(1.0, self.animation_progress / animation_total)
 
             for key in self.new_data[0]:
                 new_prop = self.new_data[0][key]

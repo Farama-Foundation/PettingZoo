@@ -6,12 +6,12 @@ from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
-from .magent_env import markov_env, make_env
-from .markov_env_wrapper import markov_env_wrapper
+from .magent_env import magent_parallel_env, make_env
+from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
 def raw_env(map_size=45, seed=None):
-    return markov_env_wrapper(markov_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
 env = make_env(raw_env)
@@ -109,7 +109,7 @@ def generate_map(env, map_size, handles):
     env.add_agents(handles[3], method="custom", pos=pos[1])
 
 
-class markov_env(markov_env):
+class _parallel_env(magent_parallel_env):
     def __init__(self, map_size, seed):
         env = magent.GridWorld(load_config(map_size))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
