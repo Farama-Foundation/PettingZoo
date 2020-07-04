@@ -39,7 +39,7 @@ class base_parallel_env:
         return result
 
 
-class parallel_env_wrapper(AECEnv):
+class _parallel_env_wrapper(AECEnv):
 
     metadata = {'render.modes': ['human']}
 

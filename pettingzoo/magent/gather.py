@@ -7,11 +7,11 @@ import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import magent_parallel_env, make_env
-from pettingzoo.utils._parallel_env import parallel_env_wrapper
+from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
 def raw_env(map_size=200, seed=None):
-    return parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
 env = make_env(raw_env)
