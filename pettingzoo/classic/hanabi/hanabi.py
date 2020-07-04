@@ -224,8 +224,7 @@ class raw_env(AECEnv):
             self.agents = self.agents[1:] + [self.agents[0]]
 
         # Agent order list, on which the agent selector operates on.
-        self.agent_order = list(self.agents)
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
 
         # Reset agent_selection
         self.agent_selection = self._agent_selector.reset()
@@ -286,9 +285,9 @@ class raw_env(AECEnv):
          Example:
         """
         player_data = self.latest_observations['player_observations']
-        print("Active player:", self.agent_order[player_data[0]['current_player_offset']])
+        print("Active player:", self.agents[player_data[0]['current_player_offset']])
         for i, d in enumerate(player_data):
-            print(self.agent_order[i])
+            print(self.agents[i])
             print("========")
             print(d['pyhanabi'])
             print()

@@ -139,8 +139,7 @@ class raw_env(AECEnv):
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
 
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.num_agents = len(self.agents)
         self.reinit()
 
@@ -500,9 +499,7 @@ class raw_env(AECEnv):
                 self.rewards.pop(k, None)
                 self.infos.pop(k, None)
 
-            # reinit agent_order from agents
-            self.agent_order = self.agents[:]
-            self._agent_selector.reinit(self.agent_order)
+            self._agent_selector.reinit(self.agents)
             self.num_agents = len(self.agents)
 
             # reset the kill list
@@ -610,13 +607,11 @@ class raw_env(AECEnv):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        self.agent_order = self.agents[:]
-
         self.frames = 0
 
     def reset(self, observe=True):
         self.has_reset = True
-        self._agent_selector.reinit(self.agent_order)
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))

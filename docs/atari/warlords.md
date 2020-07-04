@@ -17,7 +17,11 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 Four player last man standing!
 
+Defend your fortress from the ball and hit it towards your opponents.
 
+If you are the last player standing, you receive +1 reward.
+
+Note that due to a standing bug in the implementation, the players are not done when their fortress is destroyed and cannot move, nor is their reward penalized. 
 
 #### Environment parameters
 
