@@ -15,8 +15,8 @@ def manual_control(**kwargs):
 
     while not done:
         agent_actions = (
-            [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)] + 
-            [np.array([0, 0]) for _ in range(const.NUM_BANKERS)]
+            [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)]
+            + [np.array([0, 0]) for _ in range(const.NUM_BANKERS)]
         )
         for event in pygame.event.get():
             # Use left/right arrow keys to switch between agents
