@@ -190,8 +190,6 @@ class Renderer:
                                          grid_size, grid_size, resolution)
             pygame.pixelcopy.array_to_surface(self.canvas, grid_map)
 
-            rate = min(1.0, self.animation_progress / animation_total)
-
             for key in self.new_data[0]:
                 new_prop = self.new_data[0][key]
                 new_group = groups[new_prop[2]]
