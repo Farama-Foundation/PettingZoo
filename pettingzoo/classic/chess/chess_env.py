@@ -28,8 +28,7 @@ class raw_env(AECEnv):
 
         self.agents = ["player_{}".format(i) for i in range(2)]
 
-        self.agent_order = list(self.agents)
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.bool) for name in self.agents}

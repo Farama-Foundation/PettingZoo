@@ -37,8 +37,7 @@ class raw_env(AECEnv):
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
-        self.agent_order = self.agents
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size

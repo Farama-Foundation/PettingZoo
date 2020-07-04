@@ -18,15 +18,15 @@ def generate_data(nameline,module):
     #env = gin_rummy_v0.env()
     env.reset()
     for step in range(100):
-        for agent in env.agent_order:  # step through every agent once with observe=True
-            if env.dones[agent]:
-                env.reset()
-                break
+        for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
             if 'legal_moves' in env.infos[agent]:
                 action = random.choice(env.infos[agent]['legal_moves'])
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)
+
+        if env.dones[agent]:
+            env.reset()
 
         ndarray = env.render()
         tot_size = max(ndarray.shape)

@@ -413,8 +413,7 @@ class raw_env(AECEnv):
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
 
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.reset()
 
@@ -642,8 +641,7 @@ class raw_env(AECEnv):
         self.rendering = False
         self.frame = 0
 
-        self.agent_order = self.agents[:]
-        self._agent_selector.reinit(self.agent_order)
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.draw()
         if observe:

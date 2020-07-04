@@ -87,13 +87,12 @@ class BaseAtariEnv(AECEnv):
         self.num_agents = num_players
         player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
-        self.agent_order = list(self.agents)
 
         self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
         self.observation_spaces = {agent: observation_space for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
 
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
 
         self._screen = None
 

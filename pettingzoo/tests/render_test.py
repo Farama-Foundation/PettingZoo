@@ -8,7 +8,7 @@ def test_render(env):
     env.reset(observe=False)
     for mode in render_modes:
         for _ in range(10):
-            for agent in env.agent_order:
+            for agent in env.agent_iter(env.num_agents):
                 if 'legal_moves' in env.infos[agent]:
                     action = random.choice(env.infos[agent]['legal_moves'])
                 else:
@@ -16,6 +16,3 @@ def test_render(env):
                 env.step(action, observe=False)
                 res = env.render(mode=mode)
                 assert isinstance(res,np.ndarray) or isinstance(res,str), "render must return numpy array containing image or a string, got {}".format(res)
-                if all(env.dones.values()):
-                    env.reset()
-                    break

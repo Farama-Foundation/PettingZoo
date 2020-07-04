@@ -19,8 +19,8 @@ class markov_env_wrapper(AECEnv):
     def reset(self, observe=True):
         self._actions = [None] * self.num_agents
 
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
+        self._live_agents = self.agents[:]
+        self._agent_selector = agent_selector(self._live_agents)
         self.agent_selection = self._agent_selector.reset()
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
@@ -43,9 +43,9 @@ class markov_env_wrapper(AECEnv):
             self.infos = {agent: info for agent, info in zip(self.agents, infos)}
             self.rewards = {agent: reward for agent, reward in zip(self.agents, rews)}
 
-            self.agent_order = [agent for done, agent in zip(dones, self.agents) if not done]
-            if len(self.agent_order):
-                self._agent_selector = agent_selector(self.agent_order)
+            self._live_agents = [agent for done, agent in zip(dones, self.agents) if not done]
+            if len(self._live_agents):
+                self._agent_selector = agent_selector(self._live_agents)
                 self.agent_selection = self._agent_selector.reset()
         else:
             self.agent_selection = self._agent_selector.next()

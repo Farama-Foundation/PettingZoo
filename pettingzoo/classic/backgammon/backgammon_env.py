@@ -27,8 +27,8 @@ class raw_env(AECEnv):
 
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(2)]
-        self.agent_order = list(self.agents)
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_order = list(self.agents)
+        self._agent_selector = agent_selector(self._agent_order)
         self.infos = {i: {'legal_moves': []} for i in self.agents}
 
         self.action_spaces = {name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents}
@@ -94,8 +94,8 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': []} for i in self.agents}
-        self.agent_order = list(self.agents)
-        self._agent_selector.reinit(self.agent_order)
+        self._agent_order = list(self.agents)
+        self._agent_selector.reinit(self._agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {i: 0 for i in self.agents}
         self.colors = {}
@@ -133,9 +133,9 @@ class raw_env(AECEnv):
 
     def handle_double_roll(self):
         if self.double_roll == 1:
-            a = self.agent_order[0]
-            self.agent_order[0] = self.agent_order[1]
-            self.agent_order[1] = a
-            self._agent_selector.reinit(self.agent_order)
-            if self.agent_selection == self.agent_order[0]:
+            a = self._agent_order[0]
+            self._agent_order[0] = self._agent_order[1]
+            self._agent_order[1] = a
+            self._agent_selector.reinit(self._agent_order)
+            if self.agent_selection == self._agent_order[0]:
                 self._agent_selector.next()

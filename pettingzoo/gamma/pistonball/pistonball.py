@@ -41,8 +41,7 @@ class raw_env(AECEnv):
         super().__init__()
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
@@ -197,7 +196,7 @@ class raw_env(AECEnv):
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
-        self._agent_selector.reinit(self.agent_order)
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
         self.done = False
