@@ -18,7 +18,6 @@ def manual_control(**kwargs):
             [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)] + 
             [np.array([0, 0]) for _ in range(const.NUM_BANKERS)]
         )
-        print(agent_actions)
         for event in pygame.event.get():
             # Use left/right arrow keys to switch between agents
             # Use WASD to control bankers
