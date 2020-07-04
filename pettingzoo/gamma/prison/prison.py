@@ -190,8 +190,8 @@ class raw_env(AECEnv):
             self.prisoner_mapping[map_tuple_1] = map_count + 1
             prisoner0_name = "prisoner_" + str(map_count)
             prisoner1_name = "prisoner_" + str((map_count + 1))
-            self.infos[prisoner0_name] = map_tuple_0
-            self.infos[prisoner1_name] = map_tuple_1
+            self.infos[prisoner0_name] = {"map_tuple": map_tuple_0}
+            self.infos[prisoner1_name] = {"map_tuple": map_tuple_1}
             map_count += 2
         p_count = 0
         for p in prisoner_spawn_locs:
