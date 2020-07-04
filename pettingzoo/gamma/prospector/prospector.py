@@ -256,7 +256,7 @@ class Gold(pg.sprite.Sprite):
         super().__init__(sprite_groups)
         self.id = next(self.ids)
 
-        self.image = utils.load_image(["gold"])
+        self.image = utils.load_image(["gold.png"])
         self.image = pg.transform.scale(self.image, (16, 16))
         self.orig_image = self.image
 
