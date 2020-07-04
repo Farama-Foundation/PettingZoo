@@ -30,7 +30,6 @@ class CollisionTypes(IntEnum):
 class Prospector(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        # self.image = load_image(['prospec.png'])
         self.image = utils.load_image(["prospector-pickaxe.png"])
 
         self.id = num
@@ -232,7 +231,7 @@ class Bank(pg.sprite.Sprite):
     def __init__(self, pos, verts, space, *sprite_groups):
         super().__init__(sprite_groups)
 
-        self.image = utils.load_image(["bank-2.png"])
+        self.image = utils.load_image(["bank.png"])
         self.image = pg.transform.scale(self.image, (184, 100))
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -257,7 +256,7 @@ class Gold(pg.sprite.Sprite):
         super().__init__(sprite_groups)
         self.id = next(self.ids)
 
-        self.image = utils.load_image(["gold", "6.png"])
+        self.image = utils.load_image(["gold"])
         self.image = pg.transform.scale(self.image, (16, 16))
         self.orig_image = self.image
 
