@@ -5,7 +5,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
  Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
 ----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
- Discrete | 2      | No             | Discrete(N^2+1) | Discrete(N^2+1) | (N, N, 3)         | [0, 1]             | 3^(N^2)    |
+ Discrete | 2      | No             | Discrete(170) | Discrete(170) | (170, 170, 3)         | [0, 1]             | 3^(13^2), ~4.3 * 10^80    |
 
 `from pettingzoo.classic import go_v0`
 
@@ -64,7 +64,7 @@ Similar to the observation space, the action space is dependent on the board siz
 | N^2-N ~ N^2-1 | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
 |      N^2      | Pass                                                                                                          |
 
-For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass.
+For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. The total action space is N^2+1.
 
 #### Rewards
 
