@@ -52,5 +52,6 @@ class AECIterator:
 class AECOrderEnforcingIterator(AECIterator):
     def __next__(self):
         assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`!"
+        agent = super().__next__()
         self.env._has_updated = False
-        return super().__next__()
+        return agent
