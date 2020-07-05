@@ -1,4 +1,4 @@
-from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn
 
 
 def raw_env(is_jet=False, guided_missile=False, **kwargs):
