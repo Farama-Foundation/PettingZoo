@@ -199,9 +199,6 @@ To cite this project in publication, please use
 }
 ```
 
-## Incomplete Environments
+## Reward Program
 
-The following environments are under active development:
-
-* classic/shogi (Ben)
-* robotics/* (Yiling)
+We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can recieve a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing adress or PayPal adress. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.
