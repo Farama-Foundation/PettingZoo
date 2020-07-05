@@ -2,7 +2,7 @@ import numpy as np
 import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
-from .. import Agent
+from .._utils import Agent
 import cv2
 
 
