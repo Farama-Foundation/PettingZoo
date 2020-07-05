@@ -1,5 +1,5 @@
 
-### Entombed_Cooperative
+### Entombed: Cooperative
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
