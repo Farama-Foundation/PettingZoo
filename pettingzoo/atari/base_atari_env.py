@@ -34,7 +34,7 @@ class ParallelAtariEnv:
             mode_num=None,
             seed=None,
             obs_type='rgb_image',
-            frameskip=4,
+            frameskip=3,
             repeat_action_probability=0.25,
             full_action_space=True):
         """Frameskip should be either a tuple (indicating a random range to
