@@ -198,10 +198,3 @@ To cite this project in publication, please use
   howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
 }
 ```
-
-## Incomplete Environments
-
-The following environments are under active development:
-
-* classic/shogi (Ben)
-* robotics/* (Yiling)
