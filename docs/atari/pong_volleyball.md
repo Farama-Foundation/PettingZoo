@@ -1,5 +1,5 @@
 
-### Pong_Volleyball
+### Pong: Volleyball
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
