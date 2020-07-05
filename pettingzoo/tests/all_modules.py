@@ -1,14 +1,70 @@
-from pettingzoo.atari import *
+from pettingzoo.atari import boxing_v0
+from pettingzoo.atari import combat_tank_v0
+from pettingzoo.atari import combat_plane_v0
+from pettingzoo.atari import double_dunk_v0
+from pettingzoo.atari import entombed_competitive_v0
+from pettingzoo.atari import entombed_cooperative_v0
+from pettingzoo.atari import flag_capture_v0
+from pettingzoo.atari import joust_v0
+from pettingzoo.atari import ice_hockey_v0
+from pettingzoo.atari import maze_craze_v0
+from pettingzoo.atari import mario_bros_v0
+from pettingzoo.atari import othello_v0
+from pettingzoo.atari import pong_basketball_v0
+from pettingzoo.atari import pong_classic_v0
+from pettingzoo.atari import pong_foozpong_v0
+from pettingzoo.atari import pong_quadrapong_v0
+from pettingzoo.atari import pong_volleyball_v0
+from pettingzoo.atari import space_invaders_v0
+from pettingzoo.atari import space_war_v0
+from pettingzoo.atari import surround_v0
+from pettingzoo.atari import tennis_v0
+from pettingzoo.atari import video_checkers_v0
+from pettingzoo.atari import wizard_of_wor_v0
+from pettingzoo.atari import warlords_v0
 
-from pettingzoo.classic import *
+from pettingzoo.classic import chess_v0
+from pettingzoo.classic import rps_v0
+from pettingzoo.classic import rpsls_v0
+from pettingzoo.classic import connect_four_v0
+from pettingzoo.classic import tictactoe_v0
+from pettingzoo.classic import leduc_holdem_v0
+from pettingzoo.classic import mahjong_v0
+from pettingzoo.classic import texas_holdem_v0
+from pettingzoo.classic import texas_holdem_no_limit_v0
+from pettingzoo.classic import uno_v0
+from pettingzoo.classic import dou_dizhu_v0
+from pettingzoo.classic import gin_rummy_v0
+from pettingzoo.classic import go_v0
+from pettingzoo.classic import hanabi_v0
+from pettingzoo.classic import backgammon_v0
 
-from pettingzoo.gamma import *
+from pettingzoo.gamma import knights_archers_zombies_v0
+from pettingzoo.gamma import pistonball_v0
+from pettingzoo.gamma import cooperative_pong_v0
+from pettingzoo.gamma import prison_v0
+from pettingzoo.gamma import prospector_v0
 
-from pettingzoo.mpe import *
+from pettingzoo.magent import battle_v0
+from pettingzoo.magent import adversarial_pursuit_v0
+from pettingzoo.magent import gather_v0
+from pettingzoo.magent import combined_arms_v0
+from pettingzoo.magent import tiger_deer_v0
+from pettingzoo.magent import battlefield_v0
 
-from pettingzoo.magent import *
+from pettingzoo.mpe import simple_adversary_v0
+from pettingzoo.mpe import simple_crypto_v0
+from pettingzoo.mpe import simple_push_v0
+from pettingzoo.mpe import simple_reference_v0
+from pettingzoo.mpe import simple_speaker_listener_v0
+from pettingzoo.mpe import simple_spread_v0
+from pettingzoo.mpe import simple_tag_v0
+from pettingzoo.mpe import simple_world_comm_v0
+from pettingzoo.mpe import simple_v0
 
-from pettingzoo.sisl import *
+from pettingzoo.sisl import pursuit_v0
+from pettingzoo.sisl import waterworld_v0
+from pettingzoo.sisl import multiwalker_v0
 
 all_prefixes = ["atari", "classic", "gamma", "magent", "mpe", "sisl"]
 
