@@ -1,5 +1,5 @@
 
-### Pong: Classic
+### Pong_Classic
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
