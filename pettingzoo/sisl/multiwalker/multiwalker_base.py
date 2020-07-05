@@ -6,7 +6,7 @@ from gym.utils import seeding
 import Box2D
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
-from .. import Agent
+from .._utils import Agent
 
 MAX_AGENTS = 40
 
