@@ -2,7 +2,7 @@ from pettingzoo.atari import *
 
 from pettingzoo.classic import *
 
-from pettingzoo.gamma import *
+from pettingzoo.butterfly import *
 
 from pettingzoo.mpe import *
 
@@ -10,7 +10,7 @@ from pettingzoo.magent import *
 
 from pettingzoo.sisl import *
 
-all_prefixes = ["atari", "classic", "gamma", "magent", "mpe", "sisl"]
+all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
 all_environments = {
     "atari/boxing": boxing_v0,
@@ -54,11 +54,11 @@ all_environments = {
     "classic/hanabi": hanabi_v0,
     "classic/backgammon": backgammon_v0,
 
-    "gamma/knights_archers_zombies": knights_archers_zombies_v0,
-    "gamma/pistonball": pistonball_v0,
-    "gamma/cooperative_pong": cooperative_pong_v0,
-    "gamma/prison": prison_v0,
-    "gamma/prospector": prospector_v0,
+    "butterfly/knights_archers_zombies": knights_archers_zombies_v0,
+    "butterfly/pistonball": pistonball_v0,
+    "butterfly/cooperative_pong": cooperative_pong_v0,
+    "butterfly/prison": prison_v0,
+    "butterfly/prospector": prospector_v0,
 
     "magent/battle": battle_v0,
     "magent/pursuit": adversarial_pursuit_v0,
