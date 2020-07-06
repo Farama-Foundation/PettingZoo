@@ -44,5 +44,5 @@ def random_demo(env, render=True):
         time.sleep(2)
 
     env.close()
-    
+
     return total_reward
