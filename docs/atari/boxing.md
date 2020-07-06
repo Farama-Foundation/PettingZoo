@@ -5,7 +5,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 | Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
 
 `from pettingzoo.atari import boxing_v0`
 
