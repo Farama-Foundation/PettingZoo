@@ -1,17 +1,17 @@
 
 ### Knights Archers Zombies ('KAZ')
 
-This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
 
 | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Discrete | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           | ?          |
 
-`from pettingzoo.gamma import knights_archers_zombies_v0`
+`from pettingzoo.butterfly import knights_archers_zombies_v0`
 
 `agents= ["archer_0", "archer_1", "knight_0", "knight_1"]`
 
-![](gamma_knights_archers_zombies.gif)
+![](butterfly_knights_archers_zombies.gif)
 
 *AEC diagram*
 
