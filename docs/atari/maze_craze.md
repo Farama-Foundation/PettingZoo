@@ -25,7 +25,7 @@ Its a race to leave the maze. There are 3 main versions of the game.
 
 The first player to leave the maze scores +1, the other player scores -1 (unless that other player has already been captured in Robbers mode).
 
-[Official Maze craze manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=295)
+[Official Maze craze manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=295). Note that the table of modes has some inaccuracies. In particular, game mode 12 has Blockade enabled, not mode 11.
 
 #### Environment parameters
 

@@ -17,9 +17,9 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 Four player team battle.
 
-Get the ball past your opponent's defenders to the scoring area. Like foozball, you have alternating layers of players from each team, meaning you need to pass the ball past the defenders to your own team's paddles.
+Get the ball past your opponent's defenders to the scoring area. Like traditional foozball, the board has alternating layers of paddles from each team between the goal areas. To succeed at this game, the two players on each side must coordinate to allow the ball to be passed between these layers up the board and into your opponent's scoring area.
 
-Scoring a point gives your team +1 reward and your opponent team -1 reward.
+Scoring a point gives your team +1 reward and your opponent's team -1 reward.
 
 [Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
