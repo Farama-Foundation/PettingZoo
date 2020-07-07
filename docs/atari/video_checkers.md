@@ -21,7 +21,9 @@ Capture all of your opponents pieces by jumping over them. To move a piece, you 
 
 If you win by capturing all your opponent's pieces, you are rewarded +1 and your opponent -1.
 
-Note that this is an extremely difficult game to learn, due to the extremely sparse reward, and the fact that doing nothing is a good strategy to never lose. 
+Note that this is an extremely difficult game to learn, due to the extremely sparse reward, and the fact that doing nothing is a good strategy to never lose.
+
+[Official video checkers manual](https://atariage.com/manual_html_page.php?SoftwareID=1427)
 
 #### Environment parameters
 

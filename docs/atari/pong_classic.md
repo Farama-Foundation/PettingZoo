@@ -21,6 +21,7 @@ Get the ball past the opponent.
 
 Scoring a point gives you +1 reward and your opponent -1 reward.
 
+[Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
 #### Environment parameters
 

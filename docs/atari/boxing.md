@@ -27,8 +27,8 @@ and 100 points for a KO (which also will end the game).
 Whenever you score a number of points, you are rewarded by
 that number and your opponent is penalized by that number.
 
+[Official Boxing manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=45)
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

@@ -24,8 +24,9 @@ Note you can easily find yourself in a dead-end excapable only through the use o
 In addition, there dangerous zombies lurking around to avoid.
 Whenever your opponent dies, you get +1 reward, and your opponent gets -1 reward.
 
+[Official Entombed manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=165)
+
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

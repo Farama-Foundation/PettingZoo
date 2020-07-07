@@ -24,6 +24,8 @@ If you get hit by a bullet, you lose a life. When both players lose 3 lives, the
 
 Note that in addition to the competitive aspect where you benefit from attacking the other player, there is a cooperative aspect to the game where clearing levels means that both players will have more opportunities to score.
 
+[Official Warlords manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=593)
+
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .

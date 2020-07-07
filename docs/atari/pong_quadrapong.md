@@ -21,6 +21,7 @@ Each player controls a paddle and defends a vulnerability.
 
 Scoring a point gives your team +1 reward and your opponent team -1 reward.
 
+[Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
 #### Environment parameters
 
