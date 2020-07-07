@@ -28,6 +28,8 @@ you score a point.
 
 Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
 
+[Official Combat manual](https://atariage.com/manual_html_page.php?SoftwareID=935)
+
 
 #### Environment parameters
 

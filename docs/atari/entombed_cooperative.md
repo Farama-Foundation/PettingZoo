@@ -26,6 +26,8 @@ Note you can easily find yourself in a dead-end excapable only through the use o
 If players help each other by the use of these powerups, they can last longer.
 In addition, there dangerous zombies lurking around to avoid.
 
+[Official Entombed manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=165)
+
 
 #### Environment parameters
 

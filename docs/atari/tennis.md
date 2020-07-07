@@ -19,7 +19,9 @@ A competitive game of positioning and prediction.
 
 Goal: Get the ball past your opponent. Don't let the ball get past you.
 
-When a point is scored (by the ball exiting the area), you get +1 reward and your opponent gets -1 reward. Unlike normal tennis matches, the number of games won is not directly rewarded. 
+When a point is scored (by the ball exiting the area), you get +1 reward and your opponent gets -1 reward. Unlike normal tennis matches, the number of games won is not directly rewarded.
+
+[Official tennis manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=555)
 
 #### Environment parameters
 

@@ -23,6 +23,8 @@ However, there is also a competitive aspect where a player receives a 200 point 
 
 The number of lives is shared between the ships, i.e. the game ends when a ship has been hit 3 times.
 
+[Official Space Invaders manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=460)
+
 #### Environment parameters
 
 Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).

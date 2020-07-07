@@ -21,6 +21,8 @@ Collect points and avoid obstacles with another player in the same space.
 
 Rewards are received by completing various tasks that give either 500 or 800 points.
 
+[Official mario bros manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=286)
+
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .

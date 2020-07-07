@@ -25,6 +25,7 @@ In a game, there are a variety of waves with different enemies
 and different point scoring systems. However, expect that you can earn
 around 3000 points per wave.
 
+[Official joust manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=253)
 
 #### Environment parameters
 
