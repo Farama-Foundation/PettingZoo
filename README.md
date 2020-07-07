@@ -11,7 +11,7 @@ PettingZoo includes the following sets of games:
 
 * atari: Multi-player Atari 2600 games (both cooperative and competitive)
 * classic: Classical games including card games, board games, etc.
-* gamma: Cooperative graphical games developed by us, requiring a high degree of coordination
+* butterfly: Cooperative graphical games developed by us, requiring a high degree of coordination
 * magent: Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
@@ -26,7 +26,7 @@ We support Python 3.6, 3.7 and 3.8
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.gamma import pistonball_v0
+from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 ```
 
@@ -150,7 +150,7 @@ If the environment has`manual_control` functionality included (explained below),
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```
-from pettingzoo.gamma import prison
+from pettingzoo.butterfly import prison
 prison.manual_control([environment specs])
 ```
 

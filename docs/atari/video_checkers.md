@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import video_checkers_v0`
 
@@ -21,7 +21,9 @@ Capture all of your opponents pieces by jumping over them. To move a piece, you 
 
 If you win by capturing all your opponent's pieces, you are rewarded +1 and your opponent -1.
 
-Note that this is an extremely difficult game to learn, due to the extremely sparse reward, and the fact that doing nothing is a good strategy to never lose. 
+Note that this is an extremely difficult game to learn, due to the extremely sparse reward, and the fact that doing nothing is a good strategy to never lose.
+
+[Official video checkers manual](https://atariage.com/manual_html_page.php?SoftwareID=1427)
 
 #### Environment parameters
 

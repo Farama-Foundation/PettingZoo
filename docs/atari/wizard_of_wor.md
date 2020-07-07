@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import wizard_of_wor_v0`
 
@@ -23,6 +23,8 @@ You score points by hitting the opponent and NPCs with your bullets. Hitting an 
 If you get hit by a bullet, you lose a life. When both players lose 3 lives, the game is over.
 
 Note that in addition to the competitive aspect where you benefit from attacking the other player, there is a cooperative aspect to the game where clearing levels means that both players will have more opportunities to score.
+
+[Official Warlords manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=593)
 
 #### Environment parameters
 

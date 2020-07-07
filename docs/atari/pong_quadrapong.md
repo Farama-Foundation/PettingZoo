@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import pong_quadrapong_v0`
 
@@ -17,10 +17,11 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 Four player team battle.
 
-Each player controls a paddle and defends a vulnerability.
+Each player controls a paddle and defends a scoring area. However, this is a team game, and so two of the 4 scoring areas belong to the same team. So a given team must try to coordinate to get the ball away from their scoring areas towards their opponent's.
 
 Scoring a point gives your team +1 reward and your opponent team -1 reward.
 
+[Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
 #### Environment parameters
 
