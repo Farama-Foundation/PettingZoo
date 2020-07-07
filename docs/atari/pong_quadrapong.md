@@ -17,7 +17,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 Four player team battle.
 
-Each player controls a paddle and defends a vulnerability.
+Each player controls a paddle and defends a scoring area. However, this is a team game, and so two of the 4 scoring areas belong to the same team. So a given team must try to coordinate to get the ball away from their scoring areas towards their opponent's.
 
 Scoring a point gives your team +1 reward and your opponent team -1 reward.
 

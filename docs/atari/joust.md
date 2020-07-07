@@ -16,7 +16,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 *AEC diagram*
 
 
-Scoring points in an unforgiving world (mixed-sum game). Careful positioning, timing,
+Mixed sum game involving scoring points in an unforgiving world. Careful positioning, timing,
 and control is essential, as well as awareness of your opponent.
 
 In Joust, you score points by hitting the opponent and NPCs when
