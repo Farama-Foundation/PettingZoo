@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import maze_craze_blockade_v0`
 
@@ -25,6 +25,7 @@ Its a race to leave the maze. There are 3 main versions of the game.
 
 The first player to leave the maze scores +1, the other player scores -1 (unless that other player has already been captured in Robbers mode).
 
+[Official Maze craze manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=295). Note that the table of modes has some inaccuracies. In particular, game mode 12 has Blockade enabled, not mode 11.
 
 #### Environment parameters
 

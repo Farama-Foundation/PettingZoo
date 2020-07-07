@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import boxing_v0`
 
@@ -27,8 +27,8 @@ and 100 points for a KO (which also will end the game).
 Whenever you score a number of points, you are rewarded by
 that number and your opponent is penalized by that number.
 
+[Official Boxing manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=45)
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-

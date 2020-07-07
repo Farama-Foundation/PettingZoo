@@ -14,14 +14,14 @@ with open("README.md", "r") as fh:
 extras = {
     "atari": ["multi_agent_ale_py", "pygame==2.0.0.dev10"],
     "classic": ["python-chess", "rlcard >= 0.2.5", "python-shogi", "hanabi_learning_environment"],
-    "gamma": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
+    "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
     "magent": ["magent"],
     "mpe": [],
     "sisl": ["pygame==2.0.0.dev10", "opencv-python", "scikit-image>=0.16.2", "gym[box2d]>=0.17.2", "box2d-py"],
     "tests": ["pynput"]
 }
 
-extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["gamma"], extras["magent"], extras["mpe"], extras["sisl"]))
+extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["butterfly"], extras["magent"], extras["mpe"], extras["sisl"]))
 
 
 setup(

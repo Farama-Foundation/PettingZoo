@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import warlords_v0`
 
@@ -21,7 +21,9 @@ Defend your fortress from the ball and hit it towards your opponents.
 
 If you are the last player standing, you receive +1 reward.
 
-Note that due to a standing bug in the implementation, the players are not done when their fortress is destroyed and cannot move, nor is their reward penalized. 
+Note that due to a standing bug in the implementation, the players are not done when their fortress is destroyed and cannot move, nor is their reward penalized.
+
+[Official wizard_of_wor manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=598)
 
 #### Environment parameters
 

@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import space_war_v0`
 
@@ -18,10 +18,11 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 *Space war* is an competitive game where prediction and positioning are key.
 
 The players move around the map. When your opponent is hit by your bullet,
-you score a point. The game is similar to combat, but with a more advanced physics system where acceleration and momentum need to be taken into account. 
+you score a point. The game is similar to combat, but with a more advanced physics system where acceleration and momentum need to be taken into account.
 
 Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
 
+[Official space war manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=470)
 
 #### Environment parameters
 

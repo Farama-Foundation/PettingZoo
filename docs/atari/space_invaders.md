@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import space_invaders_v0`
 
@@ -22,6 +22,8 @@ This game has a cooperative aspect where the players can choose to maximize thei
 However, there is also a competitive aspect where a player receives a 200 point bonus when the other player is hit by the aliens. So sabotaging the other player somehow is a possible strategy.
 
 The number of lives is shared between the ships, i.e. the game ends when a ship has been hit 3 times.
+
+[Official Space Invaders manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=460)
 
 #### Environment parameters
 

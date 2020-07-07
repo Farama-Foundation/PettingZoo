@@ -3,9 +3,9 @@
 
 This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
 
-| Observations | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Graphical    | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            | ?          |
+| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
+| Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import entombed_cooperative_v0`
 
@@ -25,6 +25,8 @@ maze you can only see part of. If you get stuck, you lose.
 Note you can easily find yourself in a dead-end excapable only through the use of rare power-ups.
 If players help each other by the use of these powerups, they can last longer.
 In addition, there dangerous zombies lurking around to avoid.
+
+[Official Entombed manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=165)
 
 
 #### Environment parameters

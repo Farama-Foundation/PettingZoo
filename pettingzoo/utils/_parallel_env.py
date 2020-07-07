@@ -17,17 +17,20 @@ class base_parallel_env:
         '''
         render the environment.
         '''
+        raise NotImplementedError()
 
     def close(self):
         '''
         release rendering or other resources
         '''
+        raise NotImplementedError()
 
     def reset(self):
         '''
         resets environment
         return observations for all agents
         '''
+        raise NotImplementedError()
 
     def step(self, all_actions):
         '''
@@ -36,7 +39,7 @@ class base_parallel_env:
 
         return observations, rewards, dones, infos
         '''
-        return result
+        raise NotImplementedError()
 
 
 class _parallel_env_wrapper(AECEnv):
