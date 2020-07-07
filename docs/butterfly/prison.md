@@ -2,17 +2,17 @@
 
 ### Prison
 
-This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information. 
+This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information. 
 
 | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape    | Observation Values     | Num States |
 |---------|--------|----------------|--------------|---------------|----------------------|------------------------|------------|
 | Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3) or (1,)| (0, 255) or (-300, 300)| ?          |
 
-`from pettingzoo.gamma import prison_v0`
+`from pettingzoo.butterfly import prison_v0`
 
 `agents= ["prisoner_0", "prisoner_1", ..., "prisoner_7"]`
 
-![](gamma_prison.gif)
+![](butterfly_prison.gif)
 
 *AEC diagram*
 

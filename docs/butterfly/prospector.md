@@ -1,17 +1,17 @@
 
 ### Prospector
 
-This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
 
 | Actions    | Agents  | Manual Control | Action Shape          | Action Values       | Observation Shape              | Observation Values        | Num States |
 |------------|---------|----------------|-----------------------|---------------------|--------------------------------|---------------------------|------------|
 | Continuous | 7 (+/-) | Yes            | (3,) or (2,)          | [-1, 1]             | (150, 150, 3) or (154, 154, 3) | (0, 255)                  | ?          |
 
-`from pettingzoo.gamma import prospector_v0`
+`from pettingzoo.butterfly import prospector_v0`
 
 `agents= ["prospector_0, "prospector_1", "prospector_2", "prospector_3", "banker_0", "banker_1", "banker_2"]`
 
-![](gamma_prospector.gif)
+![](butterfly_prospector.gif)
 
 *AEC diagram*
 

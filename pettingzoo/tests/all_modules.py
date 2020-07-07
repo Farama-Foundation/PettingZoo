@@ -39,11 +39,11 @@ from pettingzoo.classic import go_v0
 from pettingzoo.classic import hanabi_v0
 from pettingzoo.classic import backgammon_v0
 
-from pettingzoo.gamma import knights_archers_zombies_v0
-from pettingzoo.gamma import pistonball_v0
-from pettingzoo.gamma import cooperative_pong_v0
-from pettingzoo.gamma import prison_v0
-from pettingzoo.gamma import prospector_v0
+from pettingzoo.butterfly import knights_archers_zombies_v0
+from pettingzoo.butterfly import pistonball_v0
+from pettingzoo.butterfly import cooperative_pong_v0
+from pettingzoo.butterfly import prison_v0
+from pettingzoo.butterfly import prospector_v0
 
 from pettingzoo.magent import battle_v0
 from pettingzoo.magent import adversarial_pursuit_v0
@@ -66,7 +66,7 @@ from pettingzoo.sisl import pursuit_v0
 from pettingzoo.sisl import waterworld_v0
 from pettingzoo.sisl import multiwalker_v0
 
-all_prefixes = ["atari", "classic", "gamma", "magent", "mpe", "sisl"]
+all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
 all_environments = {
     "atari/boxing": boxing_v0,
@@ -110,11 +110,11 @@ all_environments = {
     "classic/hanabi": hanabi_v0,
     "classic/backgammon": backgammon_v0,
 
-    "gamma/knights_archers_zombies": knights_archers_zombies_v0,
-    "gamma/pistonball": pistonball_v0,
-    "gamma/cooperative_pong": cooperative_pong_v0,
-    "gamma/prison": prison_v0,
-    "gamma/prospector": prospector_v0,
+    "butterfly/knights_archers_zombies": knights_archers_zombies_v0,
+    "butterfly/pistonball": pistonball_v0,
+    "butterfly/cooperative_pong": cooperative_pong_v0,
+    "butterfly/prison": prison_v0,
+    "butterfly/prospector": prospector_v0,
 
     "magent/battle": battle_v0,
     "magent/pursuit": adversarial_pursuit_v0,

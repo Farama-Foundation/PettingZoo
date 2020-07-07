@@ -1,19 +1,19 @@
 
 ### Cooperative Pong
 
-This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
 
 | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
 | Discrete | 2      | Yes            |      --      |   [0, 1]      |  (560, 480, 3)    |   [0, 255]         | ?          |
 
-`from pettingzoo.gamma import cooperative_pong_v0`
+`from pettingzoo.butterfly import cooperative_pong_v0`
 
 `agents= ["paddle_0", "paddle_1"]`
 
 Example gameplay:
 
-![](gamma_cooperative_pong.gif)
+![](butterfly_cooperative_pong.gif)
 
 AEC diagram:
 

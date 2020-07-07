@@ -1,17 +1,17 @@
 
 ### Pistonball
 
-This environment is part of the [gamma environments](../gamma.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
 
 | Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |---------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
 | Either  | 20     | Yes            | (1,)         | [0, 2]        | (200, 120, 3)     | (0, 255)           | ?          |
 
-`from pettingzoo.gamma import pistonball_v0`
+`from pettingzoo.butterfly import pistonball_v0`
 
 `agents= ["piston_0", "piston_1", ..., "piston_19"]`
 
-![](gamma_pistonball.gif)
+![](butterfly_pistonball.gif)
 
 *AEC diagram*
 
