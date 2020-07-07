@@ -1,7 +1,7 @@
 nav:
-  - title: "Services"
-    section: services
+  - title: "Documentation"
+    url: "documentation"
 
-  - title: "Portfolio"
-    section: portfolio
+  - title: "Environments"
+    url: "environments"
     

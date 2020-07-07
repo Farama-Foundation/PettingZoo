@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/classic/texas_holdem_no_limit.html">
+
+  <title>Texas Hold’em | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="environments">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+
+<h3 id="texas-holdem">Texas Hold’em</h3>
+
+<p>This game part of the <a href="/classic.html">classic games</a>, please visit that page first for general information about these games.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>Discrete(4)</td>
+      <td>Discrete(4)</td>
+      <td>(72,)</td>
+      <td>[0, 1]</td>
+      <td>10^14</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.classic import texas_holdem_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ['player_0', 'player_1']</code></p>
+
+<p><img src="/classic/classic_texas_holdem_no_limit.gif" alt="" /></p>
+
+<p><em>AEC Diagram</em></p>
+
+<p>Texas Hold’em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold’m, sometimes referred to as ‘Limit Texas Hold’em’.</p>
+
+<p>Our implementation wraps <a href="http://rlcard.org/games.html#limit-texas-hold-em">RLCard</a> and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</p>
+
+<h3 id="environment-arguments">Environment arguments</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>texas_holdem_no_limit.env(seed=None)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+</code></pre></div></div>
+
+<h4 id="observation-space">Observation Space</h4>
+
+<p>The observation space is a vector of 72 boolean integers. The first 52 entries depict the current player’s hand plus any community cards as follows</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Index</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0 - 12</td>
+      <td>Spades<br /><em><code class="language-plaintext highlighter-rouge">0</code>: A, <code class="language-plaintext highlighter-rouge">1</code>: 2, …, <code class="language-plaintext highlighter-rouge">12</code>: K</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">13 - 25</td>
+      <td>Hearts<br /><em><code class="language-plaintext highlighter-rouge">13</code>: A, <code class="language-plaintext highlighter-rouge">14</code>: 2, …, <code class="language-plaintext highlighter-rouge">25</code>: K</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">26 - 38</td>
+      <td>Diamonds<br /><em><code class="language-plaintext highlighter-rouge">26</code>: A, <code class="language-plaintext highlighter-rouge">27</code>: 2, …, <code class="language-plaintext highlighter-rouge">38</code>: K</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">39 - 51</td>
+      <td>Clubs<br /><em><code class="language-plaintext highlighter-rouge">39</code>: A, <code class="language-plaintext highlighter-rouge">40</code>: 2, …, <code class="language-plaintext highlighter-rouge">51</code>: K</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">52 - 56</td>
+      <td>Chips raised in Round 1<br /><em><code class="language-plaintext highlighter-rouge">52</code>: 0, <code class="language-plaintext highlighter-rouge">53</code>: 1, …, <code class="language-plaintext highlighter-rouge">56</code>: 4</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">57 - 61</td>
+      <td>Chips raised in Round 2<br /><em><code class="language-plaintext highlighter-rouge">57</code>: 0, <code class="language-plaintext highlighter-rouge">58</code>: 1, …, <code class="language-plaintext highlighter-rouge">61</code>: 4</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">62 - 66</td>
+      <td>Chips raised in Round 3<br /><em><code class="language-plaintext highlighter-rouge">62</code>: 0, <code class="language-plaintext highlighter-rouge">63</code>: 1, …, <code class="language-plaintext highlighter-rouge">66</code>: 4</em></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">67 - 71</td>
+      <td>Chips raised in Round 4<br /><em><code class="language-plaintext highlighter-rouge">67</code>: 0, <code class="language-plaintext highlighter-rouge">68</code>: 1, …, <code class="language-plaintext highlighter-rouge">71</code>: 4</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="action-space">Action Space</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Action ID</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td>Call</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td>Raise</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td>Fold</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td>Check</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="rewards">Rewards</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Winner</th>
+      <th style="text-align: center">Loser</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">+raised chips/2</td>
+      <td style="text-align: center">-raised chips/2</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="legal-moves">Legal Moves</h4>
+
+<p>The legal moves available for each agent, found in <code class="language-plaintext highlighter-rouge">env.infos[agent]['legal_moves']</code>, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

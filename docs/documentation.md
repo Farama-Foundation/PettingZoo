@@ -1,3 +1,5 @@
 ---
-layout: page
+layout: docu
 ---
+
+{% include_relative development.md %}
