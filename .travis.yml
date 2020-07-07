@@ -6,8 +6,8 @@ jobs:
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -24,8 +24,8 @@ jobs:
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -42,8 +42,8 @@ jobs:
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -61,8 +61,8 @@ jobs:
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -79,8 +79,8 @@ jobs:
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -97,8 +97,8 @@ jobs:
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -112,12 +112,12 @@ jobs:
         - sudo apt-get install unrar
         - export pz_module=classic
 
-    - name: "Gamma with Python 3.6 on Linux"
+    - name: "Butterfly with Python 3.6 on Linux"
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -129,13 +129,13 @@ jobs:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
         - sudo apt-get install unrar
-        - export pz_module=gamma
-    - name: "Gamma with Python 3.7 on Linux"
+        - export pz_module=butterfly
+    - name: "Butterfly with Python 3.7 on Linux"
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -147,13 +147,13 @@ jobs:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
         - sudo apt-get install unrar
-        - export pz_module=gamma
-    - name: "Gamma with Python 3.8 on Linux"
+        - export pz_module=butterfly
+    - name: "Butterfly with Python 3.8 on Linux"
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -165,14 +165,14 @@ jobs:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
         - sudo apt-get install unrar
-        - export pz_module=gamma
+        - export pz_module=butterfly
 
     - name: "mpe with Python 3.6 on Linux"
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -189,8 +189,8 @@ jobs:
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -207,8 +207,8 @@ jobs:
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -226,8 +226,8 @@ jobs:
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -244,8 +244,8 @@ jobs:
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -262,8 +262,8 @@ jobs:
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -281,8 +281,8 @@ jobs:
       services:
         - xvfb
       python: 3.6
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -299,8 +299,8 @@ jobs:
       services:
         - xvfb
       python: 3.7
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -317,8 +317,8 @@ jobs:
       services:
         - xvfb
       python: 3.8
-      before_install: 
-        
+      before_install:
+
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -343,7 +343,7 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
+      before_install:
         - export pz_module=atari
 
     - name: "Classic with Python 3 on macOS"
@@ -356,10 +356,10 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
+      before_install:
         - export pz_module=classic
 
-    - name: "Gamma with Python 3 on macOS"
+    - name: "Butterfly with Python 3 on macOS"
       os: osx
       osx_image: xcode11.4
       addons:
@@ -369,8 +369,8 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
-        - export pz_module=gamma
+      before_install:
+        - export pz_module=butterfly
         - export pz_render=False
 
     - name: "mpe with Python 3 on macOS"
@@ -383,7 +383,7 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
+      before_install:
         - export pz_module=mpe
 
     - name: "sisl with Python 3 on macOS"
@@ -396,7 +396,7 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
+      before_install:
         - export pz_module=sisl
         - export pz_render=False
 
@@ -410,7 +410,7 @@ jobs:
             - unrar
             - llvm
       language: shell
-      before_install: 
+      before_install:
         - export pz_module=magent
         - export pz_render=False
 
