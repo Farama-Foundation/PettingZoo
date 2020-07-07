@@ -1,0 +1,31 @@
+.docnavi {
+    text-align: center;
+    font-size: 90%;
+    font-weight: 400;
+    padding: 0.75em 0;
+    letter-spacing: 1px;
+    color: white;
+    @include heading-font;
+    &.active,
+    &:hover {
+      color: $primary;
+    }
+  }
+
+
+.doccontainer {
+  padding-top: 80px;
+  padding-bottom: 10px;
+  width: 100%;
+  background-color: $gray-900;;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+@media(min-width:768px) {
+  .doccontainer {
+        padding-top: 80px;
+        padding-bottom: 15px;
+    }
+  
+}

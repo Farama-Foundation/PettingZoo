@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/web_mpe.html">
+
+  <title>PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="environments">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+<header></header>
+
+<section class="page-section">
+<div class="doccontainer">
+    <div class="row">
+      <div class="docnavi col">
+        <a href="environments"> Development</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_atari"> Atari</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_classic"> Classic</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_gamma"> Gamma</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_magent"> MAgent</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_mpe"> MPE</a>
+      </div>
+      <div class="col docnavi">
+        <a href="web_sisl"> SISL</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="container" id="pagecontainer">
+    <h2 id="mpe-environments">MPE environments</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Environment</th>
+      <th>Observations</th>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="mpe/simple.md">simple</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>1</td>
+      <td>No</td>
+      <td>(5)</td>
+      <td>Discrete(5)</td>
+      <td>(4)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_adversary.md">simple_adversary</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>3</td>
+      <td>No</td>
+      <td>(5)</td>
+      <td>Discrete(5)</td>
+      <td>(8),(10)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_crypto.md">simple_crypto</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(4)</td>
+      <td>Discrete(4)</td>
+      <td>(4),(8)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_push.md">simple_push</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(5)</td>
+      <td>Discrete(5)</td>
+      <td>(8),(19)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_reference.md">simple_reference</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(50)</td>
+      <td>Discrete(50)</td>
+      <td>(21)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_speaker_listener.md">simple_speaker_listener</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(3),(5)</td>
+      <td>Discrete(3),(5)</td>
+      <td>(3),(11)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_spread.md">simple_spread</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>3</td>
+      <td>No</td>
+      <td>(5)</td>
+      <td>Discrete(5)</td>
+      <td>(18)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_tag.md">simple_tag</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>4</td>
+      <td>No</td>
+      <td>(5)</td>
+      <td>Discrete(5)</td>
+      <td>(14),(16)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+    <tr>
+      <td><a href="mpe/simple_world_comm.md">simple_world_comm</a></td>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>6</td>
+      <td>No</td>
+      <td>(5),(20)</td>
+      <td>Discrete(5),(20)</td>
+      <td>(28),(34)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">pip install pettingzoo[mpe]</code></p>
+
+<p>Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.</p>
+
+<p>These environments are from <a href="https://github.com/openai/multiagent-particle-envs">OpenAI’s MPE</a> codebase, with several minor fixes, mostly related to making the action space discrete, making the rewards consistent and cleaning up the observation space of certain environments.</p>
+
+<h3 id="types-of-environments">Types of Environments</h3>
+
+<p>The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adversarial- a “good” agent being rewarded means an “adversary” agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are “good” agents rendered in green and a “adversary” team rendered in red.</p>
+
+<p>The simple_reference, simple_speaker_listener, and simple_spread environments are cooperative in nature: agents must work together to achieve their goals, and received a mixture of rewards based on their own success and the success of the other agents.</p>
+
+<h3 id="key-concepts">Key Concepts</h3>
+
+<ul>
+  <li>
+    <p>Landmarks: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more details for each environment.</p>
+  </li>
+  <li>
+    <p>Visibility: When an agent is visible to another, the other agent’s observation contains the agent’s relative position (and in simple_world_comm and simple_tag, the agent’s velocity). If the agent is temporarily hidden (only possible in simple_world_comm) the agent’s position and velocity is set to zero.</p>
+  </li>
+  <li>
+    <p>Communication: Some agents in some environments can broadcast a message as part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In simple_crypto, this message is also used to signal that Bob and Eve have reconstructed the message.</p>
+  </li>
+  <li>
+    <p>Color: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments. The color is not observed by the agents.</p>
+  </li>
+  <li>
+    <p>Distances: The landmarks and agents typically start out uniformly randomly placed from -1. to 1. on the map. This means they are typically around 1-2 units distance apart, so keep that in mind when reasoning about the scale of the rewards, which often depend on distance, and the observation space, which contain relative and absolute positions.</p>
+  </li>
+</ul>
+
+<h3 id="termination">Termination</h3>
+
+<p>The game terminates after a number of cycles specified by the <code class="language-plaintext highlighter-rouge">max_frames</code> environment argument is executed. The default for all environments is 100 cycles. Note that in the original source code, the default value was 25, not 100.</p>
+
+<h3 id="observation-space">Observation Space</h3>
+
+<p>The observation space of an agent is a vector generally composed of the agent’s position and velocity, other agent’s relative position and velocity, the landmarks relative positions, the landmark’s and agent’s types, and communications it received from other agents. The exact form of this is detailed in the environments.</p>
+
+<p>If an agent_1 cannot see or observe the communication of agent_2, then agent_2 is not included in agent_1’s observation space, resulting in varying observation space sizes in certain environments.</p>
+
+<h3 id="action-space">Action Space</h3>
+
+<p>The action space is a discrete action space representing the combinations of the movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions and do nothing. Agents that can communicate choose between 2 and 10 environment dependent options, and the message is broadcast all agents which can hear it.</p>
+
+<h3 id="rendering">Rendering</h3>
+
+<p>Rendering displays the scene in a window that automatically grows if agents wander beyond its border. Communication is rendered at the bottom of the scene. Render also method returns the pixel map of the rendered area.</p>
+
+<h3 id="citation">Citation</h3>
+
+<p>The MPE environments were originally described in the following work:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@article{mordatch2017emergence,
+  title={Emergence of Grounded Compositional Language in Multi-Agent Populations},
+  author={Mordatch, Igor and Abbeel, Pieter},
+  journal={arXiv preprint arXiv:1703.04908},
+  year={2017}
+}
+</code></pre></div></div>
+
+<p>But were first released as a part of this work:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@article{lowe2017multi,
+  title={Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments},
+  author={Lowe, Ryan and Wu, Yi and Tamar, Aviv and Harb, Jean and Abbeel, Pieter and Mordatch, Igor},
+  journal={Neural Information Processing Systems (NIPS)},
+  year={2017}
+}
+</code></pre></div></div>
+
+<p>Please cite one or both of these if you use these environments in your research.</p>
+
+</div>
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>
