@@ -2,15 +2,15 @@
 
 | Environment             | Observations | Actions  | Agents | Manual Control | Action Shape | Action Values    | Observation Shape | Observation Values | Num States |
 |-------------------------|--------------|----------|--------|----------------|--------------|------------------|-------------------|--------------------|------------|
-| [simple](mpe/simple.md)                  | Vector       | Discrete | 1      | No             | (5)          | Discrete(5)      | (4)               | (-inf,inf)         | ?          |
-| [simple_adversary](mpe/simple_adversary.md)        | Vector       | Discrete | 3      | No             | (5)          | Discrete(5)      | (8),(10)          | (-inf,inf)         | ?          |
-| [simple_crypto](mpe/simple_crypto.md)           | Vector       | Discrete | 2      | No             | (4)          | Discrete(4)      | (4),(8)           | (-inf,inf)         | ?          |
-| [simple_push](mpe/simple_push.md)             | Vector       | Discrete | 2      | No             | (5)          | Discrete(5)      | (8),(19)          | (-inf,inf)         | ?          |
-| [simple_reference](mpe/simple_reference.md)        | Vector       | Discrete | 2      | No             | (50)         | Discrete(50)     | (21)              | (-inf,inf)         | ?          |
-| [simple_speaker_listener](mpe/simple_speaker_listener.md) | Vector       | Discrete | 2      | No             | (3),(5)      | Discrete(3),(5)  | (3),(11)          | (-inf,inf)         | ?          |
-| [simple_spread](mpe/simple_spread.md)           | Vector       | Discrete | 3      | No             | (5)          | Discrete(5)      | (18)              | (-inf,inf)         | ?          |
-| [simple_tag](mpe/simple_tag.md)              | Vector       | Discrete | 4      | No             | (5)          | Discrete(5)      | (14),(16)         | (-inf,inf)         | ?          |
-| [simple_world_comm](mpe/simple_world_comm.md)       | Vector       | Discrete | 6      | No             | (5),(20)     | Discrete(5),(20) | (28),(34)         | (-inf,inf)         | ?          |
+| [simple](simple)                  | Vector       | Discrete | 1      | No             | (5)          | Discrete(5)      | (4)               | (-inf,inf)         | ?          |
+| [simple_adversary](simple_adversary)        | Vector       | Discrete | 3      | No             | (5)          | Discrete(5)      | (8),(10)          | (-inf,inf)         | ?          |
+| [simple_crypto](simple_crypto)           | Vector       | Discrete | 2      | No             | (4)          | Discrete(4)      | (4),(8)           | (-inf,inf)         | ?          |
+| [simple_push](simple_push)             | Vector       | Discrete | 2      | No             | (5)          | Discrete(5)      | (8),(19)          | (-inf,inf)         | ?          |
+| [simple_reference](simple_reference)        | Vector       | Discrete | 2      | No             | (50)         | Discrete(50)     | (21)              | (-inf,inf)         | ?          |
+| [simple_speaker_listener](simple_speaker_listener) | Vector       | Discrete | 2      | No             | (3),(5)      | Discrete(3),(5)  | (3),(11)          | (-inf,inf)         | ?          |
+| [simple_spread](simple_spread)           | Vector       | Discrete | 3      | No             | (5)          | Discrete(5)      | (18)              | (-inf,inf)         | ?          |
+| [simple_tag](simple_tag)              | Vector       | Discrete | 4      | No             | (5)          | Discrete(5)      | (14),(16)         | (-inf,inf)         | ?          |
+| [simple_world_comm](simple_world_comm)       | Vector       | Discrete | 6      | No             | (5),(20)     | Discrete(5),(20) | (28),(34)         | (-inf,inf)         | ?          |
 
 
 `pip install pettingzoo[mpe]`

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/prospector.html">
+
+  <title>PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+<header></header>
+
+<section class="page-section">
+<div class="docnavcontainer">
+    <div class="row">
+      <div class="col docnavi">
+        <a href="atari"> Atari</a>
+      </div>
+      <div class="col docnavi">
+        <a href="butterfly"> Butterfly</a>
+      </div>
+      <div class="col docnavi">
+        <a href="classic"> Classic</a>
+      </div>
+      <div class="col docnavi">
+        <a href="magent"> MAgent</a>
+      </div>
+      <div class="col docnavi">
+        <a href="mpe"> MPE</a>
+      </div>
+      <div class="col docnavi">
+        <a href="sisl"> SISL</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="container" id="pagecontainer">
+    
+<h3 id="prospector">Prospector</h3>
+
+<p>This environment is part of the <a href="butterfly">butterfly environments</a>. Please read that page first for general information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Continuous</td>
+      <td>7 (+/-)</td>
+      <td>Yes</td>
+      <td>(3,) or (2,)</td>
+      <td>[-1, 1]</td>
+      <td>(150, 150, 3) or (154, 154, 3)</td>
+      <td>(0, 255)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.butterfly import prospector_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ["prospector_0, "prospector_1", "prospector_2", "prospector_3", "banker_0", "banker_1", "banker_2"]</code></p>
+
+<p><img src="docs/butterfly/butterfly_prospector.gif" alt="" /></p>
+
+<p><em>AEC diagram</em></p>
+
+<p>This game is inspired by gold panning in the American “wild west” movies. There’s a blue river at 
+the bottom of the screen, which contains gold. 4 “prospector” agents can move and touch the river 
+and pan from it, and get a gold nugget (visibly held by them). Prospectors can
+only hold one nugget at a time, and nuggets stay in the same position relative to the prospector’s
+orientation.</p>
+
+<p>Prospector agents take a 3-element vector of continuous values between -1 and 1, inclusive. 
+The action space is <code class="language-plaintext highlighter-rouge">(y, x, r)</code>, where <code class="language-plaintext highlighter-rouge">y</code> is used for forward/backward movement, 
+<code class="language-plaintext highlighter-rouge">x</code> is used for left/right movement, and <code class="language-plaintext highlighter-rouge">r</code> is used for clockwise/counter-clockwise rotation.</p>
+
+<p>There are a handful of bank chests at the top of the screen. The prospector agents can hand their 
+held gold nugget to the 3 “banker” agents, to get a reward. The banker agents can’t rotate, 
+and the prospector agents must give the nuggets (which are held in the same
+position relative to the prospector’s position and rotation) to the 
+front of the bankers (within a plus or minus 45 degree tolerance). 
+The bankers then get the gold, and can deposit it into the chests to recieve a reward.</p>
+
+<p>Bankers take a 2-element vector of continuous values between -1 and 1, inclusive.
+The action space is <code class="language-plaintext highlighter-rouge">(y, x)</code>, where
+<code class="language-plaintext highlighter-rouge">y</code> is used for forward/backward movement and <code class="language-plaintext highlighter-rouge">x</code> is used for left/right movement.</p>
+
+<p>The observation space size for prospectors
+is <code class="language-plaintext highlighter-rouge">(150, 150, 3)</code> and the size for
+bankers is slightly bigger at
+<code class="language-plaintext highlighter-rouge">(154, 154, 3)</code>. The diameter of both
+prospector and banker agents is 30 pixels, so
+the observation space sizes are about 5 times larger
+than the diameter of each agent. There are fewer
+bankers, so they’re given a slightly
+larger observation space to give them more
+information on their surroundings.</p>
+
+<p><strong>Rewards:</strong></p>
+
+<p>Rewards are issued for a prospector retrieving a nugget, a prospector handing
+a nugget off to a banker, a banker receiving a nugget from a prospector, 
+and a banker depositing the gold into a bank. There is
+an individual reward, a group reward (for agents of the same type), and
+an other-group reward (for agents of the other type).</p>
+
+<p>By default, if a prospector retrives a nugget from the water, then 
+that prospector receives a reward of
+0.8, other
+prospectors will
+receive a reward of 0.1 and
+all bankers receive a reward of 
+0.1.</p>
+
+<p>By default, if a prospector
+hands off a gold nugget to a banker (so the banker receives a gold nugget
+from a prospector), there are two rewards that are processed:
+the handing-off prospector gets 0.8,
+the other prospectors get 0.1, and
+all of the bankers get 0.1.
+Similarly, the banker receiving the gold nugget gets
+0.8, the other bankers
+get 0.1, and
+all of the prospectors get 
+0.1.</p>
+
+<p>Finally, by default when a banker deposits gold in the bank, 
+that banker receives a reward of
+0.8, the other bankers
+receive rewards of 0.1, and
+all of the prospectors receive
+0.1.</p>
+
+<p>Manual Control:</p>
+
+<p><code class="language-plaintext highlighter-rouge">"prospector_0"</code> is the first sprite you control. Use the left and
+right arrow keys to switch between the agents.</p>
+
+<p>Move prospectors using the ‘WASD’ keys for forward/left/backward/right movement.
+Rotate using ‘QE’ for counter-clockwise/clockwise rotation.</p>
+
+<p>Move the bankers using the ‘WASD’ keys for forward/left/backward/right movement.</p>
+
+<p>The game lasts for 900 frames by default.</p>
+
+<p><strong>Arguments:</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>prospector_v0.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1, 
+prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
+banker_deposit_gold_reward=1, max_frames=900, seed=None)
+</code></pre></div></div>
+
+<p><strong>About arguments:</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">ind_reward</code>: The reward multiplier for a single agent completing an objective.</p>
+
+<p><code class="language-plaintext highlighter-rouge">group_reward</code>: The reward multiplier that agents of the same type
+as the scoring agent will earn.</p>
+
+<p><code class="language-plaintext highlighter-rouge">other_group_reward</code>: The reward multiplier that agents of the other type
+as the scoring agent will earn. If the scoring agent is a prospector,
+then this is the reward that the bankers get, and vice versa.</p>
+
+<p>Constraint: <code class="language-plaintext highlighter-rouge">ind_reward + group_reward + other_group_reward == 1.0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">prospec_find_gold_reward</code>: The reward for a prospector
+retrieving gold from the water at the bottom of the screen.</p>
+
+<p><code class="language-plaintext highlighter-rouge">prospec_handoff_gold_reward</code>: The reward for a prospector
+handing off gold to a banker.</p>
+
+<p><code class="language-plaintext highlighter-rouge">banker_receive_gold_reward</code>: The reward for a banker receiving
+gold from a prospector.</p>
+
+<p><code class="language-plaintext highlighter-rouge">banker_deposit_gold_reward</code>: The reward for a banker depositing
+gold into a bank.</p>
+
+<p><code class="language-plaintext highlighter-rouge">max_frames</code>: The number of frames the game should run for.</p>
+
+<p><code class="language-plaintext highlighter-rouge">seed</code>: Non-negative integer or None, sets the seed for the random
+number generator. This generator is used to determine
+agent starting locations.</p>
+
+<p>Leaderboard:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Average Total Reward</th>
+      <th>Method</th>
+      <th>Institution</th>
+      <th>Paper</th>
+      <th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

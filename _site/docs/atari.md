@@ -2,30 +2,30 @@
 
 | Environment | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
-| [Boxing](atari/boxing.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Combat: Tank](atari/combat_tank.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Combat: Plane](atari/combat_plane.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Double Dunk](atari/double_dunk.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Entombed: Competitive](atari/entombed_competitive.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Entombed: Cooperative](atari/entombed_cooperative.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Flag Capture](atari/flag_capture.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Joust](atari/joust.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Ice Hockey](atari/ice_hockey.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Maze Craze](atari/maze_craze.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Mario Bros](atari/mario_bros.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Othello](atari/othello.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Classic](atari/pong_classic.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Basketball](atari/pong_basketball.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Foozpong](atari/pong_foozpong.md)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Quadrapong](atari/pong_quadrapong.md)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Team Volleyball](atari/pong_volleyball.md)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Space Invaders](atari/space_invaders.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Space War](atari/space_war.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Surround: Original](atari/surround.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Tennis](atari/tennis.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Video Checkers](atari/video_checkers.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Wizard of Wor](atari/wizard_of_wor.md)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Warlords](atari/warlords.md)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Boxing](boxing)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Combat: Tank](combat_tank)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Combat: Plane](combat_plane)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Double Dunk](double_dunk)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Entombed: Competitive](entombed_competitive)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Entombed: Cooperative](entombed_cooperative)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Flag Capture](flag_capture)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Joust](joust)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Ice Hockey](ice_hockey)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Maze Craze](maze_craze)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Mario Bros](mario_bros)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Othello](othello)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Classic](pong_classic)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Basketball](pong_basketball)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Foozpong](pong_foozpong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Quadrapong](pong_quadrapong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Team Volleyball](pong_volleyball)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Space Invaders](space_invaders)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Space War](space_war)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Surround: Original](surround)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Tennis](tennis)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Video Checkers](video_checkers)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Wizard of Wor](wizard_of_wor)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Warlords](warlords)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 
 The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/PettingZoo-Team/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.

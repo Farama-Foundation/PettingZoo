@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/simple_crypto.html">
+
+  <title>PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+<header></header>
+
+<section class="page-section">
+<div class="docnavcontainer">
+    <div class="row">
+      <div class="col docnavi">
+        <a href="atari"> Atari</a>
+      </div>
+      <div class="col docnavi">
+        <a href="butterfly"> Butterfly</a>
+      </div>
+      <div class="col docnavi">
+        <a href="classic"> Classic</a>
+      </div>
+      <div class="col docnavi">
+        <a href="magent"> MAgent</a>
+      </div>
+      <div class="col docnavi">
+        <a href="mpe"> MPE</a>
+      </div>
+      <div class="col docnavi">
+        <a href="sisl"> SISL</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="container" id="pagecontainer">
+    
+<h3 id="simple-crypto">Simple Crypto</h3>
+
+<p>This environment is part of the <a href="mpe">MPE environments</a>. Please read that page first for general information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Observations</th>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(4)</td>
+      <td>Discrete(4)</td>
+      <td>(4),(8)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">pettingzoo.mpe import simple_crypto_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= [eve_0, bob_0, alice_0]</code></p>
+
+<p><img src="docs/mpe/mpe_simple_crypto.gif" alt="" /></p>
+
+<p><em>AEC diagram</em></p>
+
+<p>In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams recontruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message.</p>
+
+<p>Alice observation space: <code class="language-plaintext highlighter-rouge">[message, private_key]</code></p>
+
+<p>Bob observation space: <code class="language-plaintext highlighter-rouge">[private_key, alices_comm]</code></p>
+
+<p>Eve observation space: <code class="language-plaintext highlighter-rouge">[alices_comm]</code></p>
+
+<p>Alice action space: <code class="language-plaintext highlighter-rouge">[say_0, say_1, say_2, say_3]</code></p>
+
+<p>Bob action space: <code class="language-plaintext highlighter-rouge">[say_0, say_1, say_2, say_3]</code></p>
+
+<p>Eve action space: <code class="language-plaintext highlighter-rouge">[say_0, say_1, say_2, say_3]</code></p>
+
+<p>For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>simple_crypto.env(seed=None, max_frames=100)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
+max_frames: number of frames (a step for each agent) until game terminates
+</code></pre></div></div>
+
+
+</div>
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

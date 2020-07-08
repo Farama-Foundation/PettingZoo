@@ -1,7 +1,7 @@
 
 ### Double Dunk
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![double_dunk gif](atari_double_dunk.gif)
+![double_dunk gif](docs/atari/atari_double_dunk.gif)
 
 *AEC diagram*
 
@@ -30,5 +30,5 @@ Scoring should be familar to basketball fans (2-3 points per successful shot).
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](atari) .
 

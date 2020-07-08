@@ -1,7 +1,7 @@
 
 ### Flag Capture
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![flag_capture gif](atari_flag_capture.gif)
+![flag_capture gif](docs/atari/atari_flag_capture.gif)
 
 *AEC diagram*
 
@@ -33,5 +33,5 @@ narrow down the location of the flag quickly and effectively.
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](atari) .
 

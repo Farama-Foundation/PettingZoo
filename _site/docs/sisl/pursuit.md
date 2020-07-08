@@ -1,6 +1,6 @@
 ### Pursuit
 
-This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
+This environment is part of the [SISL environments](sisl). Please read that page first for general information.
 
 | Observations | Actions | Agents  | Manual Control | Action Shape | Action Values |  Num States |
 |--------------|---------|---------|----------------|--------------|---------------|-------------|
@@ -10,7 +10,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["pursuer_0", "pursuer_1", ..., "pursuer_7"]`
 
-![](sisl_pursuit.gif)
+![](docs/sisl/sisl_pursuit.gif)
 
 *AEC diagram*
 

@@ -1,7 +1,7 @@
 
 ### Simple
 
-This environment is part of the [MPE environments](../mpe.md). Please read that page first for general information.
+This environment is part of the [MPE environments](mpe). Please read that page first for general information.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
@@ -11,7 +11,7 @@ This environment is part of the [MPE environments](../mpe.md). Please read that 
 
 `agents= [agent_0]`
 
-![](mpe_simple.gif)
+![](docs/mpe/mpe_simple.gif)
 
 *AEC diagram*
 
