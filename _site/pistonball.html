@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/pistonball.html">
+
+  <title>PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+<header></header>
+
+<section class="page-section">
+<div class="docnavcontainer">
+    <div class="row">
+      <div class="col docnavi">
+        <a href="atari"> Atari</a>
+      </div>
+      <div class="col docnavi">
+        <a href="butterfly"> Butterfly</a>
+      </div>
+      <div class="col docnavi">
+        <a href="classic"> Classic</a>
+      </div>
+      <div class="col docnavi">
+        <a href="magent"> MAgent</a>
+      </div>
+      <div class="col docnavi">
+        <a href="mpe"> MPE</a>
+      </div>
+      <div class="col docnavi">
+        <a href="sisl"> SISL</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="container" id="pagecontainer">
+    
+<h3 id="pistonball">Pistonball</h3>
+
+<p>This environment is part of the <a href="butterfly">butterfly environments</a>. Please read that page first for general information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Either</td>
+      <td>20</td>
+      <td>Yes</td>
+      <td>(1,)</td>
+      <td>[0, 2]</td>
+      <td>(200, 120, 3)</td>
+      <td>(0, 255)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.butterfly import pistonball_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ["piston_0", "piston_1", ..., "piston_19"]</code></p>
+
+<p><img src="docs/butterfly/butterfly_pistonball.gif" alt="" /></p>
+
+<p><em>AEC diagram</em></p>
+
+<p>This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them.
+Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get’s a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball’s x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.</p>
+
+<p>Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.</p>
+
+<p>Keys <em>a</em> and <em>d</em> control which piston is selected to move (initially the rightmost piston is selected) and keys <em>w</em> and <em>s</em> move the piston in the vertical direction.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
+starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
+ball_elasticity=1.5, max_frames=900)
+</code></pre></div></div>
+
+<p><em>about arguments</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+
+continuous: If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
+
+random_drop: If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
+
+starting_angular_moment: If True, ball will spawn with a random angular momentum
+
+ball_mass: Sets the mass of the ball physics object
+
+ball_friction: Sets the friction of the ball physics object
+
+ball_elasticity: Sets the elasticity of the ball physics object
+</code></pre></div></div>
+
+<p>Discrete Leaderboard:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Average Total Reward</th>
+      <th>Method</th>
+      <th>Institution</th>
+      <th>Paper</th>
+      <th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Continuous Leaderboard:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Average Total Reward</th>
+      <th>Method</th>
+      <th>Institution</th>
+      <th>Paper</th>
+      <th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+      <td>x</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

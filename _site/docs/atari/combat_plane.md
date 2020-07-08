@@ -1,7 +1,7 @@
 
 ### Combat: Jet
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![combat_jet gif](atari_combat_plane.gif)
+![combat_jet gif](docs/atari/atari_combat_plane.gif)
 
 *AEC diagram*
 
@@ -31,7 +31,7 @@ Whenever you score a point, you are rewarded +1 and your opponent is penalized -
 
 #### Environment parameters
 
-Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](atari).
 
 Parameters specific to combat-plane are
 

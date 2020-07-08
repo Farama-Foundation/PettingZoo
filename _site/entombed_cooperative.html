@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Site description">
   <meta name="author" content="Your Name">
-  <link rel="canonical" href="http://localhost:4000/web_sisl.html">
+  <link rel="canonical" href="http://localhost:4000/entombed_cooperative.html">
 
   <title>PettingZoo</title>
 
@@ -43,7 +43,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
-		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
 		
           </li>
         </ul>
@@ -58,22 +58,22 @@
 <div class="docnavcontainer">
     <div class="row">
       <div class="col docnavi">
-        <a href="web_atari"> Atari</a>
+        <a href="atari"> Atari</a>
       </div>
       <div class="col docnavi">
-        <a href="web_butterfly"> Butterfly</a>
+        <a href="butterfly"> Butterfly</a>
       </div>
       <div class="col docnavi">
-        <a href="web_classic"> Classic</a>
+        <a href="classic"> Classic</a>
       </div>
       <div class="col docnavi">
-        <a href="web_magent"> MAgent</a>
+        <a href="magent"> MAgent</a>
       </div>
       <div class="col docnavi">
-        <a href="web_mpe"> MPE</a>
+        <a href="mpe"> MPE</a>
       </div>
       <div class="col docnavi">
-        <a href="web_sisl"> SISL</a>
+        <a href="sisl"> SISL</a>
       </div>
     </div>
   </div>
@@ -81,72 +81,58 @@
 
 
 <div class="container" id="pagecontainer">
-    <h2 id="sisl-enviroments">SISL Enviroments</h2>
+    
+<h3 id="entombed-cooperative">Entombed: Cooperative</h3>
+
+<p>This environment is part of the <a href="atari">Atari environments</a>. Please read that page first for general information.</p>
 
 <table>
   <thead>
     <tr>
-      <th>Environment</th>
-      <th>Observations</th>
       <th>Actions</th>
       <th>Agents</th>
       <th>Manual Control</th>
       <th>Action Shape</th>
       <th>Action Values</th>
-      <th>Num States</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><a href="sisl/multiwalker.md">Multiwalker</a></td>
-      <td>Vector (viewable)</td>
       <td>Discrete</td>
-      <td>3 (+/-)</td>
+      <td>2</td>
       <td>No</td>
-      <td>(4)</td>
-      <td>(-1, 1)</td>
-      <td>?</td>
-    </tr>
-    <tr>
-      <td><a href="sisl/pursuit.md">Pursuit</a></td>
-      <td>Graphical</td>
-      <td>Either</td>
-      <td>8 (+/-)</td>
-      <td>Yes</td>
       <td>(1,)</td>
-      <td>[0,4]</td>
-      <td>?</td>
-    </tr>
-    <tr>
-      <td><a href="sisl/waterworld.md">Waterworld</a></td>
-      <td>Vector (viewable)</td>
-      <td>Either</td>
-      <td>3 (+/-)</td>
-      <td>No</td>
-      <td>(2,)</td>
-      <td>(-1, 1)</td>
-      <td>?</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
     </tr>
   </tbody>
 </table>
 
-<p><code class="language-plaintext highlighter-rouge">pip install pettingzoo[sisl]</code></p>
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.atari import entombed_cooperative_v0</code></p>
 
-<p>The SISL environments are a set of three cooperative multi-agent benchmark environments, created at SISL and released as part of “Cooperative multi-agent control using deep reinforcement learning.” The code was originally released at: https://github.com/sisl/MADRL.</p>
+<p><code class="language-plaintext highlighter-rouge">agents= ["first_0", "second_0"]</code></p>
 
-<p>Please note that we’ve made major bug fixes to waterworld and pursuit, and minor bug fixes to multiwalker. As such, we discourage directly comparing results on these environments to those in the original paper.</p>
+<p><img src="docs/atari/atari_entombed_cooperative.gif" alt="entombed_cooperative gif" /></p>
 
-<p>Please additionally cite:</p>
+<p><em>AEC diagram</em></p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@inproceedings{gupta2017cooperative,
-  title={Cooperative multi-agent control using deep reinforcement learning},
-  author={Gupta, Jayesh K and Egorov, Maxim and Kochenderfer, Mykel},
-  booktitle={International Conference on Autonomous Agents and Multiagent Systems},
-  pages={66--83},
-  year={2017},
-  organization={Springer}
-}
-</code></pre></div></div>
+<p>Entomb’s cooperative version is an exploration game
+where you need to work with your teammate to make it
+as far as possible into the maze.</p>
+
+<p>You both need to quickly navigate down a constantly generating
+maze you can only see part of. If you get stuck, you lose.
+Note you can easily find yourself in a dead-end excapable only through the use of rare power-ups.
+If players help each other by the use of these powerups, they can last longer.
+In addition, there dangerous zombies lurking around to avoid.</p>
+
+<h4 id="environment-parameters">Environment parameters</h4>
+
+<p>Environment parameters are common to all Atari environments and are described in the <a href="atari">base Atari documentation</a> .</p>
+
 
 </div>
 
@@ -161,46 +147,6 @@
         <div class="col-md-4">
           <ul class="list-inline social-buttons">
 		  
-            <li class="list-inline-item">
-			  
-              <a href="https://twitter.com">
-                <i class="fab fa-twitter"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://facebook.com">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://linkedin.com">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://github.com/raviriley/agency-jekyll-theme">
-                <i class="fab fa-github"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://instagram.com">
-                <i class="fab fa-instagram"></i>
-              </a>
-			  
-            </li>
-			
           </ul>
         </div>
 		<!-- Legal -->

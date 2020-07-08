@@ -1,7 +1,7 @@
 
 ### Simple World Comm
 
-This environment is part of the [MPE environments](../mpe.md). Please read that page first for general information.
+This environment is part of the [MPE environments](mpe). Please read that page first for general information.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
 |--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
@@ -11,7 +11,7 @@ This environment is part of the [MPE environments](../mpe.md). Please read that 
 
 `agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]`
 
-![](mpe_simple_world_comm.gif)
+![](docs/mpe/mpe_simple_world_comm.gif)
 
 *AEC diagram*
 

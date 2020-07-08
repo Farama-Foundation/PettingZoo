@@ -1,7 +1,7 @@
 
 ### Multiwalker
 
-This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
+This environment is part of the [SISL environments](sisl). Please read that page first for general information.
 
 | Observations | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States |
 |--------------|----------|---------|----------------|--------------|---------------|-------------|
@@ -11,7 +11,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["walker_0", "walker_1", "walker_2"]`
 
-![](sisl_multiwalker.gif)
+![](docs/sisl/sisl_multiwalker.gif)
 
 *AEC diagram*
 

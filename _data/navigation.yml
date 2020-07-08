@@ -3,5 +3,5 @@ nav:
     url: "documentation"
 
   - title: "Environments"
-    url: "web_atari"
+    url: "atari"
     

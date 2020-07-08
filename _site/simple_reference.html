@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Site description">
   <meta name="author" content="Your Name">
-  <link rel="canonical" href="http://localhost:4000/web_magent.html">
+  <link rel="canonical" href="http://localhost:4000/simple_reference.html">
 
   <title>PettingZoo</title>
 
@@ -43,7 +43,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
-		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
 		
           </li>
         </ul>
@@ -58,22 +58,22 @@
 <div class="docnavcontainer">
     <div class="row">
       <div class="col docnavi">
-        <a href="web_atari"> Atari</a>
+        <a href="atari"> Atari</a>
       </div>
       <div class="col docnavi">
-        <a href="web_butterfly"> Butterfly</a>
+        <a href="butterfly"> Butterfly</a>
       </div>
       <div class="col docnavi">
-        <a href="web_classic"> Classic</a>
+        <a href="classic"> Classic</a>
       </div>
       <div class="col docnavi">
-        <a href="web_magent"> MAgent</a>
+        <a href="magent"> MAgent</a>
       </div>
       <div class="col docnavi">
-        <a href="web_mpe"> MPE</a>
+        <a href="mpe"> MPE</a>
       </div>
       <div class="col docnavi">
-        <a href="web_sisl"> SISL</a>
+        <a href="sisl"> SISL</a>
       </div>
     </div>
   </div>
@@ -82,6 +82,67 @@
 
 <div class="container" id="pagecontainer">
     
+<h3 id="simple-reference">Simple Reference</h3>
+
+<p>This environment is part of the <a href="mpe">MPE environments</a>. Please read that page first for general information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Observations</th>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Vector</td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(50)</td>
+      <td>Discrete(50)</td>
+      <td>(21)</td>
+      <td>(-inf,inf)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">pettingzoo.mpe import simple_reference_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= [agent_0, agent_1]</code></p>
+
+<p><img src="docs/mpe/mpe_simple_reference.gif" alt="" /></p>
+
+<p><em>AEC diagram</em></p>
+
+<p>This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.</p>
+
+<p>Locally, the agents are rewarded by their distance to their target landmark. Globally, all agents are rewarded by the average distance of all the agents to their respective landmarks. The relative weight of these rewards is controlled by the <code class="language-plaintext highlighter-rouge">local_ratio</code> parameter.</p>
+
+<p>Agent observation space: <code class="language-plaintext highlighter-rouge">[self_vel, all_landmark_rel_positions, landmark_ids, goal_id, communication]</code></p>
+
+<p>Agent action space: <code class="language-plaintext highlighter-rouge">[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, say_8, say_9] X [no_action, move_left, move_right, move_down, move_up]</code></p>
+
+<p>Where X is the Cartesian product (giving a total action space of 50).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>simple_reference.env(seed=None, local_ratio=0.5, max_frames=100)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
+local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+
+max_frames: number of frames (a step for each agent) until game terminates
+</code></pre></div></div>
+
 
 </div>
 
@@ -96,46 +157,6 @@
         <div class="col-md-4">
           <ul class="list-inline social-buttons">
 		  
-            <li class="list-inline-item">
-			  
-              <a href="https://twitter.com">
-                <i class="fab fa-twitter"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://facebook.com">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://linkedin.com">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://github.com/raviriley/agency-jekyll-theme">
-                <i class="fab fa-github"></i>
-              </a>
-			  
-            </li>
-			
-            <li class="list-inline-item">
-			  
-              <a href="https://instagram.com">
-                <i class="fab fa-instagram"></i>
-              </a>
-			  
-            </li>
-			
           </ul>
         </div>
 		<!-- Legal -->

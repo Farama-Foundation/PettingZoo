@@ -1,7 +1,7 @@
 
 ### Boxing
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -11,7 +11,7 @@ This environment is part of the [Atari environments](../atari.md). Please read t
 
 `agents= ["first_0", "second_0"]`
 
-![boxing gif](atari_boxing.gif)
+![boxing gif](docs/atari/atari_boxing.gif)
 
 *AEC diagram*
 
@@ -30,5 +30,5 @@ that number and your opponent is penalized by that number.
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](atari) .
 

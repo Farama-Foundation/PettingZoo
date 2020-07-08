@@ -1,7 +1,7 @@
 
 ### Leduc Hold'em
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](classic), please visit that page first for general information about these games.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
@@ -11,7 +11,7 @@ This game part of the [classic games](../classic.md), please visit that page fir
 
 `agents= ['player_0', 'player_1']`
 
-![](classic_leduc_holdem.gif)
+![](docs/classic/classic_leduc_holdem.gif)
 
 *AEC Diagram*
 

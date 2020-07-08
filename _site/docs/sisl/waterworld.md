@@ -1,7 +1,7 @@
 
 ### Waterworld
 
-This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
+This environment is part of the [SISL environments](sisl). Please read that page first for general information.
 
 | Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values |  Num States |
 |-------------------|---------|---------|----------------|--------------|---------------|-------------|
@@ -12,7 +12,7 @@ This environment is part of the [SISL environments](../sisl.md). Please read tha
 
 `agents= ["pursuer_0", "pursuer_1", ..., "pursuer_4"]`
 
-![](sisl_waterworld.gif)
+![](docs/sisl/sisl_waterworld.gif)
 
 *AEC diagram*
 
