@@ -32,7 +32,11 @@ Gather is a survival game where agents must try to keep alive either by gatherin
 
 * Feature vector: The feature vector contains <agent_id, action, last_reward>
 
+* Observation concatenates the 1d feature vector with 3d observation view by repeating the value of the feature across an entire image channel.
+
 * Minimap Mode: For the battle games (battle, battlefield, combined_arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and appended onto the agent's observation view. Their own absolute position on the global map is appended to the feature vector.
+
+* An action can either be an attack or a move, not both. So the action space is the concatenations of all possible moves and all possible attacks.  
 
 ### Termination
 
