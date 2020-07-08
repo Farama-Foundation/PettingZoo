@@ -66,6 +66,10 @@ img::-moz-selection { background: transparent; }
   #mainNav .navbar-nav .nav-item .nav-link { padding: 1.1em 1em !important; }
   #mainNav.navbar-shrink { padding-top: 0; padding-bottom: 0; background-color: #212529; }
   #mainNav.navbar-shrink .navbar-brand { font-size: 1.25em; padding: 12px 0; } }
+table { margin-bottom: 10%; }
+
+td, th { width: 10%; border-bottom: 1px solid #ddd; padding-bottom: 1%; }
+
 #scrolling-clients { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
 
 #col-md-3 col-sm-6 { flex: 0 0 auto; }
