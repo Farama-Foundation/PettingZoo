@@ -158,7 +158,7 @@ Look at the [documentation] for individual environments to see which supports ma
 
 ### Random Demo
 
-For all renderable games games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
+For all renderable games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
 
 ```
 from pettingzoo.utils import random_demo
