@@ -116,12 +116,12 @@ all_environments = {
     "butterfly/prison": prison_v0,
     "butterfly/prospector": prospector_v0,
 
+    "magent/adversarial_pursuit": adversarial_pursuit_v0,
     "magent/battle": battle_v0,
-    "magent/pursuit": adversarial_pursuit_v0,
-    "magent/gather": gather_v0,
-    "magent/combined_arms": combined_arms_v0,
-    "magent/tiger": tiger_deer_v0,
     "magent/battlefield": battlefield_v0,
+    "magent/combined_arms": combined_arms_v0,
+    "magent/gather": gather_v0,
+    "magent/tiger": tiger_deer_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,
