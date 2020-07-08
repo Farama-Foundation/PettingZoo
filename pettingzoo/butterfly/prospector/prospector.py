@@ -345,8 +345,8 @@ class raw_env(AECEnv):
 
         self.background = utils.load_image(["background-debris.png"])
         self.background_sf = pg.Surface(self.background.get_size())
-        self.background_sf.blit(self.background, (0,0))
-        self.screen.blit(self.background, (0,0))
+        self.background_sf.blit(self.background, (0, 0))
+        self.screen.blit(self.background, (0, 0))
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
@@ -624,7 +624,7 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.screen = pg.Surface(const.SCREEN_SIZE)
-        self.screen.blit(self.background, (0,0))
+        self.screen.blit(self.background, (0, 0))
         self.done = False
 
         for p in self.prospectors.values():
@@ -651,7 +651,7 @@ class raw_env(AECEnv):
             pg.display.init()
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
             self.background = self.background.convert_alpha()
-            self.screen.blit(self.background, (0,0))
+            self.screen.blit(self.background, (0, 0))
             for s in self.all_sprites.sprites():
                 s.convert_img()
             self.rendering = True
@@ -659,7 +659,7 @@ class raw_env(AECEnv):
         pg.display.flip()
 
     def draw(self):
-        self.screen.blit(self.background_sf, (0,0))
+        self.screen.blit(self.background_sf, (0, 0))
         self.all_sprites.draw(self.screen)
 
     def close(self):

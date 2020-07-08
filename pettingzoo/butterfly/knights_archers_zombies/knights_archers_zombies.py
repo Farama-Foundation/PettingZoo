@@ -384,9 +384,9 @@ class raw_env(AECEnv):
             endx = 512 + upper_x_bound - max_x
             endy = 512 + upper_y_bound - max_y
             cropped = np.zeros_like(self.observation_spaces[agent].low)
-            cropped[startx:endx,starty:endy,:] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
+            cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
 
-        return np.swapaxes(cropped,1,0)
+        return np.swapaxes(cropped, 1, 0)
 
     def step(self, action, observe=True):
         agent = self.agent_selection
@@ -424,7 +424,6 @@ class raw_env(AECEnv):
         self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
 
         if self._agent_selector.is_last():
-
 
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
