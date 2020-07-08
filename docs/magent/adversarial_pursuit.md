@@ -15,6 +15,8 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+The red agents must navigate the obstacles and try to 
+
 ```
 adversarial_pursuit_v0.env(seed=None, map_size=100)
 ```
