@@ -1,0 +1,47 @@
+<!-- About -->
+  <section class="page-section" id="{{ site.data.sitetext.timeline.section | default: "about" }}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">{{ site.data.sitetext.timeline.title | markdownify | default: "About" }}</h2>
+          <h3 class="section-subheading text-muted">{{ site.data.sitetext.timeline.text | default: "timeline"}}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="timeline">
+		  {%- for event in site.data.sitetext.timeline.events -%}
+            {% if event.align == "right" %}
+			<li class="timeline-inverted">
+			{% else %}
+			<li>
+			{% endif %}
+              <div class="timeline-image">
+                <img class="img-fluid" src="{{ event.image }}" alt="{{ event.alt | default: ""}}">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>{{ event.year | markdownify }}</h4>
+                  <h4 class="subheading">{{ event.title }}</h4>
+                </div>
+                <div class="timeline-body">
+                  <div class="text-muted">{{ event.desc | markdownify }}</div>
+                </div>
+              </div>
+            </li>
+		  {% endfor %}	
+            
+		  {% if site.data.sitetext.timeline.end %}	
+			<li class="timeline-inverted">
+              <div class="timeline-image">
+                <h4>{{ site.data.sitetext.timeline.end }}</h4>
+              </div>
+            </li>
+		  {% endif %}
+			
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- End About -->

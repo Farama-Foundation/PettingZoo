@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/docs/atari.html">
+
+  <title>Atari Environments | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+<h2 id="atari-environments">Atari Environments</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Environment</th>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="/docs/atari/boxing.html">Boxing</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/combat_tank.html">Combat: Tank</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/combat_plane.html">Combat: Plane</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/double_dunk.html">Double Dunk</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/entombed_competitive.html">Entombed: Competitive</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/entombed_cooperative.html">Entombed: Cooperative</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/flag_capture.html">Flag Capture</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/joust.html">Joust</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/ice_hockey.html">Ice Hockey</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/maze_craze.html">Maze Craze</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/mario_bros.html">Mario Bros</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/othello.html">Othello</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/pong_classic.html">Pong: Classic</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/pong_basketball.html">Pong: Basketball</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/pong_foozpong.html">Pong: Foozpong</a></td>
+      <td>Discrete</td>
+      <td>4</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/pong_quadrapong.html">Pong: Quadrapong</a></td>
+      <td>Discrete</td>
+      <td>4</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/pong_volleyball.html">Pong: Team Volleyball</a></td>
+      <td>Discrete</td>
+      <td>4</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/space_invaders.html">Space Invaders</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/space_war.html">Space War</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/surround.html">Surround: Original</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/tennis.html">Tennis</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/video_checkers.html">Video Checkers</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/wizard_of_wor.html">Wizard of Wor</a></td>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+    <tr>
+      <td><a href="/docs/atari/warlords.html">Warlords</a></td>
+      <td>Discrete</td>
+      <td>4</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>[0,17]</td>
+      <td>(210, 160, 3)</td>
+      <td>(0,255)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The Atari environments are based off the <a href="https://github.com/mgbellemare/Arcade-Learning-Environment">Arcade Learning Environment</a>. This environment was instrumental in the development of modern reinforcement learning, and so we hope that our <a href="https://github.com/PettingZoo-Team/Multi-Agent-ALE">multi-agent version</a> of it will be useful in the development of multi-agent reinforcement learning.</p>
+
+<h3 id="games-overview">Games overview</h3>
+
+<p>Most games are two player, with the exception of Warlords and a couple of Pong variations which are four player.</p>
+
+<p>There are three types of games:</p>
+
+<h3 id="environment-details">Environment details</h3>
+
+<p>The ALE environment has been studied extensively and examined for various flaws and how to fix them.</p>
+
+<ul>
+  <li>Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we enable <em>sticky actions</em>, controlled by the <code class="language-plaintext highlighter-rouge">repeat_action_probability</code> environment parameter, by default. This is the recommended approach of  <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></li>
+</ul>
+
+<h3 id="common-parameters">Common Parameters</h3>
+
+<p>All the Atari environments have the following environment parameters:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;atar_game&gt;.env(seed=None, obs_type='rgb_image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>seed: Set to specific value for deterministic, reproducible behavior.
+
+obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
+
+frameskip: number of frames to skip each time you take an action.
+
+repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
+
+full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. This shrinks the action space to this smaller space.
+</code></pre></div></div>
+
+<h3 id="citation">Citation</h3>
+
+<p>If you use the Atari environments in your research please cite the following paper:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Article{bellemare13arcade,
+  author = { {Bellemare}, M.~G. and {Naddaf}, Y. and {Veness}, J. and {Bowling}, M.},
+  title = {The Arcade Learning Environment: An Evaluation Platform for General Agents},
+  journal = {Journal of Artificial Intelligence Research},
+  year = "2013",
+  month = "jun",
+  volume = "47",
+  pages = "253--279",
+}
+</code></pre></div></div>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/docs/sisl/waterworld.html">
+
+  <title>Waterworld | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+
+<h3 id="waterworld">Waterworld</h3>
+
+<p>This environment is part of the <a href="/docs/sisl.html">SISL environments</a>. Please read that page first for general information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Observations</th>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Vector (viewable)</td>
+      <td>Either</td>
+      <td>5 (+/-)</td>
+      <td>No</td>
+      <td>(2,)</td>
+      <td>(-1, 1)</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.sisl import waterworld_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ["pursuer_0", "pursuer_1", ..., "pursuer_4"]</code></p>
+
+<p><img src="/docs/sisl/sisl_waterworld.gif" alt="" /></p>
+
+<p><em>AEC diagram</em></p>
+
+<p>By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents, food and poison targets, resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a small negative reward when two agents collide based on the force of the collision. The enviroment runs for 500 frames by default. Observation shape takes the full form of ((4 + 3<em>speed_features)</em>n_sensors+2,).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
+obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
+poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
+poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
+reward_mech='local', speed_features=True, max_frames=500)
+</code></pre></div></div>
+
+<p><em>about arguments</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n_pursuers: number of pursuing archea
+
+n_evaders: number of evaders
+
+n_coop: how many archea touching food at same time for food to be considered consumed
+
+n_poison: number of poison objects
+
+radius: pursuer archea radius
+
+obstacle_radius: radius of obstacle object
+
+obstacle_loc: coordinate of obstacle object
+
+ev_speed: evading archea speed
+
+poison_speed: speed of poison object
+
+n_sensors: number of sensor dendrites on all archea
+
+sensor_range: length of sensor dendrite on all archea
+
+action_scale: scaling factor applied to all input actions
+
+poison_reward: reward for pursuer consuming a poison object
+
+food_reward: reward for pursuers consuming an evading archea
+
+encounter_reward: reward for a pursuer colliding with another archea
+
+control_penalty: reward added to pursuer in each step
+
+reward_mech: controls whether all pursuers are rewarded equally or individually
+
+speed_features: toggles whether archea sensors detect speed of other objects
+
+max_frames: after max_frames steps all agents will return done
+
+</code></pre></div></div>
+
+<p>Leaderboard:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Average Total Reward</th>
+      <th>Method</th>
+      <th>Institution</th>
+      <th>Paper</th>
+      <th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>x</td>
+      <td>PPO</td>
+      <td>UMD</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Add Gupta et al and DDPG paper results too</p>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

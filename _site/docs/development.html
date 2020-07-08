@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/docs/development.html">
+
+  <title>Development Documentation | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+<h1 id="development-documentation">Development Documentation</h1>
+
+<p>So you’ve decided you want to create your own PettingZoo environment. Congratulations! Here are two pieces of documentation that are hopefully helpful:</p>
+
+<h2 id="template-environment">Template Environment</h2>
+<p>Creating a custom environment with PettingZoo should roughly look like the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
+from gym import spaces
+
+
+class env(AECEnv):
+    metadata = {'render.modes': ['human']} # only add if environment supports rendering
+
+    def __init__(self, arg1, arg2, ...):
+        super(env, self).__init__()
+
+        self.agents = [0, 1 ... n] # agent names
+        self.agent_order = # list of agent names in the order they act in a cycle. Usually this will be the same as the agents list.
+        self.observation_spaces = # dict of observation spaces for each agent, from gym.spaces
+        self.action_spaces = # dict of action spaces for each agent, from gym.spaces
+        self.rewards = {0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}
+        self.dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}
+        self.infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}
+
+        # agent selection stuff
+        self._agent_selector = agent_selector(self.agent_order)
+        
+        self.num_agents = len(self.agents)
+
+        # Initialize game stuff
+
+    def observe(self, agent):
+        # return observation of an agent
+        return observation
+
+    def step(self, action, observe=True):
+        # Do game stuff on the selected agent
+
+        # Switch selection to next agents
+        self.agent_selection = self._agent_selector.next()
+
+        if observe:
+            return self.observe(self.agent_selection)
+        else:
+            return
+
+    # last is added as a part of the AECEnv class, don't write it yourself
+
+    def reset(self, observe=True):
+        # reset environment
+
+        # selects the first agent
+        self._agent_selector.reinit(self.agent_order)
+        self.agent_selection = self._agent_selector.next()
+        if observe:
+            return self.observe(self.agent_selection)
+        else:
+            return
+
+    def render(self, mode='human'): # not all environments will support rendering
+        ...
+
+    def close(self):
+        ...
+</code></pre></div></div>
+
+<h2 id="agent-selector">Agent selector</h2>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.utils.agent_selector import agent_selector</code></p>
+
+<p>The agent selector class (along with the agent_order list in your environment) provides all the functionality that you should need to cycle through different agents in your environment without having to write it yourself. It’s not part of the official API, but we highly encourage you to use it.</p>
+
+<h3 id="methods">Methods</h3>
+
+<p><code class="language-plaintext highlighter-rouge">reset()</code>: Resets the agent selector object. It uses the <code class="language-plaintext highlighter-rouge">agent_order</code> list that is already present in the object. Returns the first agent id of the order as the selected agent.</p>
+
+<p><code class="language-plaintext highlighter-rouge">reinit(agent_order)</code>: If the agent order changes (for example, if a ‘Reverse’ card is played in Uno), reinitialize the agent selector object with the new <code class="language-plaintext highlighter-rouge">agent_order</code>. Does not return anything.</p>
+
+<p><code class="language-plaintext highlighter-rouge">next()</code>: Returns the id (say, <em>x</em>) of the next agent in the <code class="language-plaintext highlighter-rouge">agent_order</code>. Auto-increments the internal agent counter so that next time <code class="language-plaintext highlighter-rouge">next()</code> is called, id of the agent next to <em>x</em> in the order is returned.</p>
+
+<p><code class="language-plaintext highlighter-rouge">is_last()</code>: Checks if the previous agent that was returned in the last agent in the <code class="language-plaintext highlighter-rouge">agent_order</code>. Returns True if yes, False otherwise. Note this method serves little purpose if the <code class="language-plaintext highlighter-rouge">agent_order</code> might change in the game.</p>
+
+<h3 id="usage-in-game-environments">Usage in game environments</h3>
+
+<p>Import this class into your environment as <code class="language-plaintext highlighter-rouge">from pettingzoo.utils import agent_selector</code> at the top of the module.</p>
+
+<p>Define an agent selector object in the env as <code class="language-plaintext highlighter-rouge">self._agent_selector = self.agent_selector(self.agent_order)</code>.</p>
+
+<p>In <code class="language-plaintext highlighter-rouge">reset()</code> method of your env, do <code class="language-plaintext highlighter-rouge">self.agent_selection = self._agent_selector.reset()</code>.</p>
+
+<p>If you want to select the next agent, do <code class="language-plaintext highlighter-rouge">self.agent_selection = self._agent_selector.next()</code>.</p>
+
+<p>If the agent order ever changes, reinitialize the object as <code class="language-plaintext highlighter-rouge">self._agent_selector.reinit(self.agent_order)</code>.</p>
+
+<p>Finally, for a static agent order, you can check if the previous agent id that was output by the selector is the last agent in the order, by performing a truth value check on <code class="language-plaintext highlighter-rouge">self._agent_selector.is_last()</code>.</p>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

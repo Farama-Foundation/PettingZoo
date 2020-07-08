@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/">
+
+  <title>PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  
+</head>
+
+  <body id="page-top">
+
+        <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="#page-top">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		  <li class="nav-item"><a class="nav-link js-scroll-trigger" href="web_atari">Environments</a></li>
+		  
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+  <!-- Header -->
+  <header class="masthead">
+    <div class="particles-js" id="particles-js"></div>
+    <div class="container">
+      <div class="intro-text"><div class="intro-lead-in"><p>PettingZoo</p>
+</div><div class="intro-heading text-uppercase"><p>PettingZoo is a Python library for conducting research in multi-agent reinforcement learning</p>
+</div><div style="margin-bottom: 10px; margin-top: 10px">
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="https://github.com/PettingZoo-Team/PettingZoo">View on Github</a>
+         </div><div>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="documentation">Documentation</a>
+      </div></div>
+    </div>
+  </header>
+  <!-- End Header -->
+
+<!-- Services -->
+  <section class="page-section" id="services">
+    <div class="container">
+	
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">Interface</h2>
+          
+		  <h3 class="section-subheading text-muted">Environments can be interacted with in a manner very similar to Gym:</h3>
+		  
+        </div>
+      </div>
+	  
+      <div class="row text-center">
+	  
+      </div>
+      <div class="service-code row">
+        <pre>
+          <code>
+  import pettingzoo                                              
+  env = pettingzoo.knights_archers_zombies_v0.env()              
+  observation = env.reset()                                      
+  for agent in env.agent_iter():                                 
+    reward, done, info = env.last()                              
+    action = policy(observation)                                 
+    observation = env.step(action)                               
+          </code>
+        </pre>
+      </div>
+    </div>
+
+  </section>
+<!-- End Services -->
+<!-- About -->
+  <section class="page-section" id="timeline">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase"><p>Environments</p>
+</h2>
+          <h3 class="section-subheading text-muted">We provide a variety of environments with different objectives</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <ul class="timeline">
+			<li>
+			
+              <div class="timeline-image">
+                <img class="img-fluid" src="assets/img/environments/gamma_cooperative_pong.gif" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>
+</h4>
+                  <h4 class="subheading">Cooperative Pong</h4>
+                </div>
+                <div class="timeline-body">
+                  <div class="text-muted"><p>Lorem ipsum</p>
+</div>
+                </div>
+              </div>
+            </li>
+		  
+			<li>
+			
+              <div class="timeline-image">
+                <img class="img-fluid" src="assets/img/environments/atari_space_invaders.gif" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>
+</h4>
+                  <h4 class="subheading">Atari Space Invaders</h4>
+                </div>
+                <div class="timeline-body">
+                  <div class="text-muted"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+</div>
+                </div>
+              </div>
+            </li>
+		  
+			<li>
+			
+              <div class="timeline-image">
+                <img class="img-fluid" src="assets/img/environments/magent_pursuit.gif" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>
+</h4>
+                  <h4 class="subheading">MAgent Pursuit</h4>
+                </div>
+                <div class="timeline-body">
+                  <div class="text-muted"><p>Your description here, <strong>Markdown</strong> is fully supported.</p>
+</div>
+                </div>
+              </div>
+            </li>
+		  
+			<li>
+			
+              <div class="timeline-image">
+                <img class="img-fluid" src="assets/img/environments/sisl_multiwalker.gif" alt="">
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4>
+</h4>
+                  <h4 class="subheading">Multiwalker</h4>
+                </div>
+                <div class="timeline-body">
+                  <div class="text-muted"><p>Lorem ipsum</p>
+</div>
+                </div>
+              </div>
+            </li>
+		  	
+            
+		  
+			
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- End About -->
+<!-- Team -->
+<section class="bg-light page-section" id="team">
+<div class="container">
+  <div class="row">
+	<div class="col-lg-12 text-center">
+	  <h2 class="section-heading text-uppercase">Get Started</h2>
+	  <h3 class="section-subheading text-muted"></h3>
+	</div>
+  </div>
+  <div class="row">
+  
+	<div class="col-sm-4">
+	  <div class="team-member">
+		<img class="mx-auto rounded-circle" src="assets/img/team/500x500.jpg" alt="">
+		<h4>Kay Garland</h4>
+		<p class="text-muted">Lead Designer</p>
+		<ul class="list-inline social-buttons">
+		
+		  <li class="list-inline-item">
+			<a href="https://twitter.com">
+			  <i class="fab fa-twitter"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://facebook.com">
+			  <i class="fab fa-facebook-f"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://linkedin.com">
+			  <i class="fab fa-linkedin-in"></i>
+			</a>
+		  </li>
+		
+		</ul>
+	  </div>
+	</div>
+  
+	<div class="col-sm-4">
+	  <div class="team-member">
+		<img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="">
+		<h4>Larry Parker</h4>
+		<p class="text-muted">Lead Marketer</p>
+		<ul class="list-inline social-buttons">
+		
+		  <li class="list-inline-item">
+			<a href="https://twitter.com">
+			  <i class="fab fa-twitter"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://facebook.com">
+			  <i class="fab fa-facebook-f"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://linkedin.com">
+			  <i class="fab fa-linkedin-in"></i>
+			</a>
+		  </li>
+		
+		</ul>
+	  </div>
+	</div>
+  
+	<div class="col-sm-4">
+	  <div class="team-member">
+		<img class="mx-auto rounded-circle" src="assets/img/team/500x500.jpg" alt="">
+		<h4>Diana Perterson</h4>
+		<p class="text-muted">Lead Developer</p>
+		<ul class="list-inline social-buttons">
+		
+		  <li class="list-inline-item">
+			<a href="https://twitter.com">
+			  <i class="fab fa-twitter"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://facebook.com">
+			  <i class="fab fa-facebook-f"></i>
+			</a>
+		  </li>
+		
+		  <li class="list-inline-item">
+			<a href="https://linkedin.com">
+			  <i class="fab fa-linkedin-in"></i>
+			</a>
+		  </li>
+		
+		</ul>
+	  </div>
+	</div>
+  
+  </div>
+  <div class="row">
+	<div class="col-lg-8 mx-auto text-center">
+	  <div class="large text-muted">
+</div>
+	</div>
+  </div>
+</div>
+</section>
+<!-- End Team -->
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+            <li class="list-inline-item">
+			  
+              <a href="https://twitter.com">
+                <i class="fab fa-twitter"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://facebook.com">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://linkedin.com">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://github.com/raviriley/agency-jekyll-theme">
+                <i class="fab fa-github"></i>
+              </a>
+			  
+            </li>
+			
+            <li class="list-inline-item">
+			  
+              <a href="https://instagram.com">
+                <i class="fab fa-instagram"></i>
+              </a>
+			  
+            </li>
+			
+          </ul>
+        </div>
+		<!-- Legal -->
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="legal">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>
