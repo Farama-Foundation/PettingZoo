@@ -13,7 +13,6 @@ import pygame
 KERNEL_WINDOW_LENGTH = 1
 
 
-
 def get_image(path):
     image = pygame.image.load(path)
     return image
@@ -209,7 +208,7 @@ class CooperativePong(gym.Env):
         self.num_agents = 2
 
         # Display screen
-        self.s_width, self.s_height = 960//RENDER_RATIO, 560//RENDER_RATIO
+        self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
         self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
 
@@ -230,16 +229,16 @@ class CooperativePong(gym.Env):
         self.max_frames = max_frames
 
         # paddles
-        self.p0 = PaddleSprite((20//RENDER_RATIO, 80//RENDER_RATIO), left_paddle_speed)
+        self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
-            self.p1 = PaddleSprite((20//RENDER_RATIO, 100//RENDER_RATIO), right_paddle_speed)
+            self.p1 = PaddleSprite((20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed)
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
-        self.ball = BallSprite(randomizer, (20//RENDER_RATIO, 20//RENDER_RATIO), ball_speed, bounce_randomness)
+        self.ball = BallSprite(randomizer, (20 // RENDER_RATIO, 20 // RENDER_RATIO), ball_speed, bounce_randomness)
         self.randomizer = randomizer
 
         self.reinit()
