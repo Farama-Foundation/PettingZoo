@@ -1,7 +1,7 @@
 import numpy as np
 
 from gym import spaces
-from ... import Agent
+from ..._utils import Agent
 
 
 #################################################################
