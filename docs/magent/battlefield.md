@@ -16,7 +16,7 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 *AEC diagram*
 
 ```
-battlefield_v0.env(seed=None, map_size=100)
+battlefield_v0.env(seed=None, map_size=80)
 ```
 
 ```
