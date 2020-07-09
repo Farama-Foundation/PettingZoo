@@ -106,7 +106,7 @@
       <td style="text-align: center">Yes</td>
       <td style="text-align: center">–</td>
       <td style="text-align: center">[0, 1]</td>
-      <td style="text-align: center">(560, 480, 3)</td>
+      <td style="text-align: center">(280, 240, 3)</td>
       <td style="text-align: center">[0, 255]</td>
       <td style="text-align: center">?</td>
     </tr>
@@ -131,8 +131,8 @@
 
 <p>Move the left paddle using the ‘W’ and ‘S’ keys. Move the right paddle using ‘UP’ and ‘DOWN’ arrow keys.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cooperative_pong.env(ball_speed=9, left_paddle_speed=12,
+right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False)
 </code></pre></div></div>
 
 <p>The speed of the ball (<code class="language-plaintext highlighter-rouge">ball_speed</code> )is held constant throughout the game, while the initial direction of the ball is randomized when <code class="language-plaintext highlighter-rouge">reset()</code> method is called. The speed of left and right paddles are controlled by <code class="language-plaintext highlighter-rouge">left_paddle_speed</code> and <code class="language-plaintext highlighter-rouge">right_paddle_speed</code> respectively. If <code class="language-plaintext highlighter-rouge">cake_paddle</code> is <code class="language-plaintext highlighter-rouge">True</code>, the right paddle has the shape of a 4-tiered wedding cake. <code class="language-plaintext highlighter-rouge">done</code> of all agents are set to <code class="language-plaintext highlighter-rouge">True</code> after <code class="language-plaintext highlighter-rouge">max_frames</code> number of frames elapse. If <code class="language-plaintext highlighter-rouge">bounce_randomness</code> is <code class="language-plaintext highlighter-rouge">True</code>, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.</p>
