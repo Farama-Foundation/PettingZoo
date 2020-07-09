@@ -10,7 +10,8 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(map_size=200, seed=None):
+def raw_env(seed=None):
+    map_size = 200
     return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
@@ -54,7 +55,7 @@ class _parallel_env(magent_parallel_env):
         env = magent.GridWorld(load_config(size=map_size))
         handles = env.get_handles()
 
-        names = ["herbavore"]
+        names = ["omnivore"]
         super().__init__(env, handles[1:], names, map_size, seed)
 
     def generate_map(self):
