@@ -1,0 +1,25 @@
+<!-- About -->
+  <section class="page-section" id="{{ site.data.sitetext.timeline.section | default: "about" }}">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">{{ site.data.sitetext.timeline.title | markdownify | default: "About" }}</h2>
+          <h3 class="section-subheading text-muted">{{ site.data.sitetext.timeline.text | default: "timeline"}}</h3>
+        </div>
+      </div>
+      <div class="row">
+        {%- for event in site.data.sitetext.timeline.events -%}
+        <div class="col-sm" style="max-width: 35%; max-height: 50%;">
+          <div class="timecard card">
+            <img class="card-img-top" src="{{ event.image }}" alt="Card image">
+            <div class="card-body">
+              <h5 class="card-title"> {{ event.title }} </h5>
+              <a href="{{ event.link }}" class="btn btn-primary">View</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}	
+      </div>
+    </div>
+  </section>
+<!-- End About -->

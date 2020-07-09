@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/docs/classic/connect_four.html">
+
+  <title>Connect Four | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+
+<h3 id="connect-four">Connect Four</h3>
+
+<p>This game part of the <a href="classic">classic games</a>, please visit that page first for general information about these games.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Discrete</td>
+      <td>2</td>
+      <td>No</td>
+      <td>(1,)</td>
+      <td>Discrete(7)</td>
+      <td>(6, 7, 2)</td>
+      <td>[0,1]</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.classic import connect_four_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ['player_0', 'player_0']</code></p>
+
+<p><img src="docs/classic/classic_connect_four.gif" alt="" /></p>
+
+<p><em>AEC Diagram</em></p>
+
+<p>Connect Four is a 2 player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a standing grid, where each token will fall as far down into its column as possible. Players cannot fill up a column with more than 6 token, and the game ends when either a player has made a sequence of 4 token, or when all 7 columns have been filled.</p>
+
+<h4 id="observation-space">Observation Space</h4>
+
+<p>The observation space is 2 stacks of a 6x7 grid. Each stack represents the placement of the corresponding agent’s token, where 1 indicates that the agent has a token placed in that cell, and 0 means they do not have a token in that cell. 0 can be interpreted as either the cell being empty, or the other agent may have a token in that cell.</p>
+
+<h4 id="action-space">Action Space</h4>
+
+<p>The action space is integers from 0 to 6, where the action represents which column a token should be dropped in. If a token is dropped in a column that is full, the game will terminate with an illegal move error. The possible actions each agent can make is stored in infos[agent], and is updated on every step.</p>
+
+<h4 id="rewards">Rewards</h4>
+
+<p>If an agent successfully connects four of their tokens, they will be rewarded 1 point. At the same time, the opponent agent will be awarded -1 points. If the game ends in a draw, both players are rewarded 0.</p>
+
+<h4 id="legal-moves">Legal Moves</h4>
+
+<p>The legal moves available for each agent, found in <code class="language-plaintext highlighter-rouge">env.infos[agent]['legal_moves']</code>, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+          </ul>
+        </div>
+		<!-- Legal -->
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>

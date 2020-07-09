@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Site description">
+  <meta name="author" content="Your Name">
+  <link rel="canonical" href="http://localhost:4000/docs/classic/dou_dizhu.html">
+
+  <title>Dou Dizhu | PettingZoo</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="assets/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this theme -->
+  <!--<link href="assets/css/agency.min.css" rel="stylesheet">-->
+  <link href="assets/css/agency.css" rel="stylesheet">
+  <script src="assets/js/particles.js"></script>
+  <!-- Page container change top padding when nav shrinks -->
+  
+  <style>
+    #pagecontainer {padding-top: 150px;}
+	@media only screen and (max-width: 991px) {
+	  #pagecontainer {padding-top: 100px;}
+	}
+  </style>
+  
+  
+</head>
+
+  <body id="page-top">
+
+      <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:#212529">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="/#">PettingZoo</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto"><li class="nav-item"><a class="nav-link js-scroll-trigger" href="documentation">Documentation</a></li>
+		<li class="nav-item"><a class="nav-link js-scroll-trigger" href="atari">Environments</a></li>
+		
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navigation -->
+
+
+
+<div class="container" id="pagecontainer">
+
+<h3 id="dou-dizhu">Dou Dizhu</h3>
+
+<p>This game part of the <a href="classic">classic games</a>, please visit that page first for general information about these games.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Agents</th>
+      <th>Manual Control</th>
+      <th>Action Shape</th>
+      <th>Action Values</th>
+      <th>Observation Shape</th>
+      <th>Observation Values</th>
+      <th>Num States</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Discrete</td>
+      <td>3</td>
+      <td>No</td>
+      <td>Discrete(309)</td>
+      <td>Discrete(309)</td>
+      <td>(6, 5, 15)</td>
+      <td>[0,1]</td>
+      <td>10^53 - 10^83</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">from pettingzoo.classic import dou_dizhu_v0</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">agents= ['landlord_0', 'peasant_0', 'peasant_1']</code></p>
+
+<p><img src="docs/classic/classic_dou_dizhu.gif" alt="" /></p>
+
+<p><em>AEC Diagram</em></p>
+
+<p>Dou Dizhu, or <em>Fighting the Landlord</em>, is a shedding game involving 3 players and a deck of cards plus 2 jokers with suits being irrelevant. Heuristically, one player is designated the “Landlord” and the others become the “Peasants”. The objective of the game is to be the first one to have no cards left. If the first person to have no cards left is part of the “Peasant” team, then all members of the “Peasant” team receive a reward (+1). If the “Landlord” wins, then only the “Landlord” receives a reward (+1).</p>
+
+<p>The “Landlord” plays first by putting down a combination of cards. The next player, may pass or put down a higher combination of cards that beat the previous play. There are many legal combinations of cards, outlined in detail in Dou Dizhu’s <a href="https://en.wikipedia.org/wiki/Dou_dizhu">Wikipedia article</a>.</p>
+
+<p>Our implementation wraps <a href="http://rlcard.org/games.html#dou-dizhu">RLCard</a> and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</p>
+
+<h3 id="environment-arguments">Environment arguments</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dou_dizhu.env(seed=None)
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+</code></pre></div></div>
+
+<h4 id="observation-space">Observation Space</h4>
+
+<p>The <em>Observation Space</em> is encoded in 6 planes with 5x15 entries each. For each plane, the 5 rows represent 0, 1, 2, 3, or 4 cards of the same rank and the 15 columns represents all possible ranks (“3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, Black Joker, and Red Joker”). The first plane, Plane 0, is the current player while Plane 1, Plane 2-4, and Plane 5 correspond to the union of the other two players’ hand, the recent three actions, and the union of all played cards, respectively.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Plane</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td>Current Player’s hand</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td>Union of the other players’ hand</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2 - 4</td>
+      <td>Recent three actions</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5</td>
+      <td>Union of all played card</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="encoding-per-plane">Encoding per Plane</h5>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Plane Row Index</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td>0 matching cards of same rank</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td>1 matching cards of same rank</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td>2 matching cards of same rank</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td>3 matching cards of same rank</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td>4 matching cards of same rank</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Plane Column Index</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">…</td>
+      <td>…</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">7</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8</td>
+      <td>Jack</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">9</td>
+      <td>Queen</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">10</td>
+      <td>King</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">11</td>
+      <td>Ace</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">13</td>
+      <td>Black Joker</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">14</td>
+      <td>Red Joker</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="action-space">Action Space</h4>
+
+<p>The raw size of the action space of Dou Dizhu is 33,676. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below. The core idea is to abstract actions by only focusing on the major combination and ignoring the kicker (e.g. a trio with single “4445” would be “444&amp;ast;”). As a reminder, suits are irrelevant in Dou Dizhu.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Action Type</th>
+      <th>Description</th>
+      <th>Number of Actions</th>
+      <th>Number of Actions after Abstraction</th>
+      <th>Action ID</th>
+      <th>Example</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Solo</td>
+      <td>Any single card</td>
+      <td>15</td>
+      <td>15</td>
+      <td>0-14</td>
+      <td><code class="language-plaintext highlighter-rouge">0</code>: 3, <code class="language-plaintext highlighter-rouge">1</code>: 4, …, <code class="language-plaintext highlighter-rouge">12</code>: 2, <code class="language-plaintext highlighter-rouge">13</code>: Black Joker, <code class="language-plaintext highlighter-rouge">14</code>: Red Joker</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Pair</td>
+      <td>Two matching cards of equal rank</td>
+      <td>13</td>
+      <td>13</td>
+      <td>15-27</td>
+      <td><code class="language-plaintext highlighter-rouge">15</code>: 33, <code class="language-plaintext highlighter-rouge">16</code>: 44, …, <code class="language-plaintext highlighter-rouge">25</code>: KK, <code class="language-plaintext highlighter-rouge">26</code>: AA, <code class="language-plaintext highlighter-rouge">27</code>: 22</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Trio</td>
+      <td>Three matching cards of equal rank</td>
+      <td>13</td>
+      <td>13</td>
+      <td>28-40</td>
+      <td><code class="language-plaintext highlighter-rouge">28</code>: 333, <code class="language-plaintext highlighter-rouge">29</code>: 444, …, <code class="language-plaintext highlighter-rouge">38</code>: KKK, <code class="language-plaintext highlighter-rouge">39</code>: AAA, <code class="language-plaintext highlighter-rouge">40</code>: 222</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Trio with single</td>
+      <td>Three matching cards of equal rank + single card of next higher rank (e.g. 3334)</td>
+      <td>182</td>
+      <td>13</td>
+      <td>41-53</td>
+      <td><code class="language-plaintext highlighter-rouge">41</code>: 333&amp;ast;, <code class="language-plaintext highlighter-rouge">42</code>: 444&amp;ast;, …, <code class="language-plaintext highlighter-rouge">51</code>: KKK&amp;ast;, <code class="language-plaintext highlighter-rouge">52</code>: AAA&amp;ast;, <code class="language-plaintext highlighter-rouge">53</code>: 222&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Trio with pair</td>
+      <td>Three matching cards of equal rank + pair of cards of next higher rank (e.g. 33344)</td>
+      <td>156</td>
+      <td>13</td>
+      <td>54-66</td>
+      <td><code class="language-plaintext highlighter-rouge">54</code>: 333&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">55</code>: 444&amp;ast;&amp;ast;, …, <code class="language-plaintext highlighter-rouge">64</code>: KKK&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">65</code>: AAA&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">66</code>: 222&amp;ast;&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Chain of solo</td>
+      <td>At least five consecutive solo cards</td>
+      <td>36</td>
+      <td>36</td>
+      <td>67-102</td>
+      <td><code class="language-plaintext highlighter-rouge">67</code>: 34567, <code class="language-plaintext highlighter-rouge">68</code>: 45678, …, <code class="language-plaintext highlighter-rouge">100</code>: 3456789TJQK, <code class="language-plaintext highlighter-rouge">101</code>: 456789TJQKA, <code class="language-plaintext highlighter-rouge">102</code>: 3456789TJQKA</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Chain of pair</td>
+      <td>At least three consecutive pairs</td>
+      <td>52</td>
+      <td>52</td>
+      <td>103-154</td>
+      <td><code class="language-plaintext highlighter-rouge">103</code>: 334455, <code class="language-plaintext highlighter-rouge">104</code>: 445566, …, <code class="language-plaintext highlighter-rouge">152</code>: 33445566778899TTJJQQ, <code class="language-plaintext highlighter-rouge">153</code>: 445566778899TTJJQQKK, <code class="language-plaintext highlighter-rouge">154</code>: 5566778899TTJJQQKKAA</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Chain of trio</td>
+      <td>At least two consecutive trios</td>
+      <td>45</td>
+      <td>45</td>
+      <td>155-199</td>
+      <td><code class="language-plaintext highlighter-rouge">155</code>: 333444, <code class="language-plaintext highlighter-rouge">156</code>: 444555, …, <code class="language-plaintext highlighter-rouge">197</code>: 777888999TTTJJJQQQ, <code class="language-plaintext highlighter-rouge">198</code>: 888999TTTJJJQQQKKK, <code class="language-plaintext highlighter-rouge">199</code>: 999TTTJJJQQQKKKAAA</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Plane with solo</td>
+      <td>Two consecutive trios + 2 consecutive solo cards (e.g. 33344456)</td>
+      <td>24721</td>
+      <td>38</td>
+      <td>200-237</td>
+      <td><code class="language-plaintext highlighter-rouge">200</code>: 333444&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">201</code>: 444555&amp;ast;&amp;ast;, …, <code class="language-plaintext highlighter-rouge">235</code>: 888999TTTJJJQQQ&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">236</code>: 999TTTJJJQQQKKK&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">237</code>: TTTJJJQQQKKKAAA&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Plane with pair</td>
+      <td>Two consecutive trios + 2 consecutive pairs (e.g. 3334445566)</td>
+      <td>6552</td>
+      <td>30</td>
+      <td>238-267</td>
+      <td><code class="language-plaintext highlighter-rouge">238</code>: 333444&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">239</code>: 444555&amp;ast;&amp;ast;&amp;ast;&amp;ast;, …, <code class="language-plaintext highlighter-rouge">265</code>: 999TTTJJJQQQ&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">266</code>: TTTJJJQQQKKK&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">267</code>: JJJQQQKKKAAA&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Quad with solo</td>
+      <td>Four matching cards of equal rank + 2 consecutive solo cards (e.g 333345)</td>
+      <td>1339</td>
+      <td>13</td>
+      <td>268-280</td>
+      <td><code class="language-plaintext highlighter-rouge">268</code>: 3333&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">269</code>: 4444&amp;ast;&amp;ast;, …, <code class="language-plaintext highlighter-rouge">278</code>: KKKK&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">279</code>: AAAA&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">280</code>: 2222&amp;ast;&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Quad with pair</td>
+      <td>Four matching cards of equal rank + 2 consecutive pair (e.g 33334455)</td>
+      <td>1014</td>
+      <td>13</td>
+      <td>281-293</td>
+      <td><code class="language-plaintext highlighter-rouge">281</code>: 3333&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">282</code>: 4444&amp;ast;&amp;ast;&amp;ast;&amp;ast;, …, <code class="language-plaintext highlighter-rouge">291</code>: KKKK&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">292</code>: AAAA&amp;ast;&amp;ast;&amp;ast;&amp;ast;, <code class="language-plaintext highlighter-rouge">293</code>: 2222&amp;ast;&amp;ast;&amp;ast;&amp;ast;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Bomb</td>
+      <td>Four matching cards of equal rank</td>
+      <td>13</td>
+      <td>13</td>
+      <td>294-306</td>
+      <td><code class="language-plaintext highlighter-rouge">294</code>: 3333, <code class="language-plaintext highlighter-rouge">295</code>: 4444, …, <code class="language-plaintext highlighter-rouge">304</code>: KKKK, <code class="language-plaintext highlighter-rouge">305</code>: AAAA, <code class="language-plaintext highlighter-rouge">306</code>: 2222</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Rocket</td>
+      <td>Black Joker + Red Joker</td>
+      <td>1</td>
+      <td>1</td>
+      <td>307</td>
+      <td><code class="language-plaintext highlighter-rouge">307</code>: Black Joker (B) + Red Joker (R)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Pass</td>
+      <td>Pass</td>
+      <td>1</td>
+      <td>1</td>
+      <td>308</td>
+      <td><code class="language-plaintext highlighter-rouge">308</code>: Pass</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Total</td>
+      <td> </td>
+      <td>33676</td>
+      <td>309</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>For example, you would use action <code class="language-plaintext highlighter-rouge">0</code> to play a single “3” card or action <code class="language-plaintext highlighter-rouge">30</code> to play a trio of “5”.</p>
+
+<h4 id="rewards">Rewards</h4>
+
+<p>We modified the reward structure compared to RLCard. Instead of rewarding <code class="language-plaintext highlighter-rouge">0</code> to the losing player, we assigned a <code class="language-plaintext highlighter-rouge">-1</code> reward to the losing agent.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Winner</th>
+      <th style="text-align: center">Loser</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">+1</td>
+      <td style="text-align: center">-1</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="legal-moves">Legal Moves</h4>
+
+<p>The legal moves available for each agent, found in <code class="language-plaintext highlighter-rouge">env.infos[agent]['legal_moves']</code>, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+
+</div>
+
+
+	    <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; PettingZoo 2020</span>
+        </div>
+		<!-- Social Media -->
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+		  
+          </ul>
+        </div>
+		<!-- Legal -->
+      </div>
+    </div>
+  </footer>
+
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+
+  <!-- End Footer -->
+
+
+	  <!-- Bootstrap core JavaScript -->
+	  <script src="assets/js/jquery.min.js"></script>
+	  <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+	  <!-- Plugin JavaScript -->
+	  <script src="assets/js/jquery.easing.min.js"></script>
+
+	  <!-- Contact form JavaScript -->
+	  <script src="assets/js/jqBootstrapValidation.js"></script>
+	  <script src="assets/js/contact_me.js"></script>
+
+	  <!-- Custom scripts for this template -->
+	  <script src="assets/js/agency.min.js"></script>
+	  <script src="assets/js/app.js"></script>
+
+  </body>
+</html>
