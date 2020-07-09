@@ -29,7 +29,7 @@ def get_config(map_size):
         {'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
          'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
          'step_recover': 0.2,
-         'kill_supply': 8,
+         'kill_supply': 8, 'dead_penalty': -1.,
          })
 
     tiger = cfg.register_agent_type(

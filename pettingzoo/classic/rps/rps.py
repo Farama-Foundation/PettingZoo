@@ -79,7 +79,7 @@ class raw_env(AECEnv):
                 (scissors, rock): (-1, 1),
                 (scissors, paper): (1, -1),
                 (scissors, scissors): (0, 0),
-            }[(self.state[self.agents[0]], self.state[self.agents[0]])]
+            }[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
             self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
