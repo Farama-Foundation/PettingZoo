@@ -17,25 +17,29 @@ timeline:
     section: timeline
     events:
       - title: "Cooperative Pong"
-        desc: "Lorem ipsum"
+        desc: "View Butterfly environments"
         image: assets/img/environments/gamma_cooperative_pong.gif
         alt: 
         align: left
+        link: cooperative_pong
       - title: "Atari Space Invaders"
-        desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+        desc: "View Atari Games"
         image: assets/img/environments/atari_space_invaders.gif
         alt: 
         align: left    
+        link: space_invaders
       - title: "MAgent Pursuit"
-        desc: "Your description here, **Markdown** is fully supported."
+        desc: "View MAgent Games"
         image: assets/img/environments/magent_pursuit.gif
         alt: 
         align: left
+        link: atari
       - title: "Multiwalker"
-        desc: "Lorem ipsum"
+        desc: "View SISL Games"
         image: assets/img/environments/sisl_multiwalker.gif
         alt: 
         align: left
+        link: multiwalker
 
 about:
     title: "About Us"
@@ -67,13 +71,13 @@ team:
     section: team
     people:
       - name: "Docs"
-        image: assets/img/team/500x500.jpg
+        image: assets/img/doc_icon.svg
         imglink: documentation
       - name: "Github"
-        image: assets/img/team/2.jpg
+        image: assets/img/github_icon.svg
         imglink: https://github.com/PettingZoo-Team/PettingZoo
       - name: "Environments"
-        image: assets/img/team/500x500.jpg
+        image: assets/img/environment_icon.svg
         imglink: atari
           
 contact:
