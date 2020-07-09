@@ -42,6 +42,19 @@ The ALE environment has been studied extensively and examined for various flaws 
 
 * Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we enable *sticky actions*, controlled by the `repeat_action_probability` environment parameter, by default. This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
 
+### Preprocessing
+
+We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. This library can be installed with `pip install supersuit`.
+
+Here is some example usage for the Atari preprocessing that is default in gym.
+
+```
+from supersuit import down_scale, frame_skip
+from pettingzoo.atari import space_invaders_v0
+env = space_invaders_v0.env()
+env = frame_skip(env, (2,5))
+env = down_scale(env, ???)
+```
 
 ### Common Parameters
 
