@@ -39,7 +39,7 @@ def load_config(map_size):
         {'width': 1, 'length': 1, 'hp': 3, 'speed': 2,
          'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(2),
          'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
+         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -1, 'attack_penalty': -1,
          })
 
     g0 = cfg.add_group(melee)

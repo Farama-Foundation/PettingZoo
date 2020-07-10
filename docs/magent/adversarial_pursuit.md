@@ -15,7 +15,27 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
-The red agents must navigate the obstacles and try to
+The red agents must navigate the obstacles and try to trap the blue agents.
+
+Predator action options:
+
+* doing nothing
+* Moving to any of the 4 closest squares
+* attacking any of the 8 closest squares.
+
+Predator's reward is given as:
+
+* -0.2 reward for attacking
+* 1 reward for attacking a prey
+
+Prey action options:
+
+* doing nothing
+* moving to any of the 8 nearest squares
+
+Prey's reward is given as:
+
+* -1 reward for being attacked
 
 ```
 adversarial_pursuit_v0.env(seed=None, map_size=45)

@@ -15,6 +15,22 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+In gather, the agents must survive by eating food or each other.
+
+Action options:
+
+* doing nothing
+* moving to any of the 28 closest squares
+* attacking any of the 4 closest squares.
+
+Reward is given as:
+
+* -0.01 reward every step
+* -0.1 reward for attacking
+* 0.5 reward for attacking an agent
+* 5 reward for eating a food (requires multiple attacks)
+* -1 reward for dying
+
 ```
 gather_v0.env(seed=None)
 ```
