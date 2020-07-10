@@ -41,6 +41,4 @@ battle_v0.env(seed=None)
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
-
-map_size: size of each dimension of the map. Also affects the number of players on each team.
 ```
