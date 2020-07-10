@@ -36,7 +36,7 @@ Reward is given as:
 If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.095 reward)
 
 ```
-battle_v0.env(seed=None, map_size=45)
+battle_v0.env(seed=None)
 ```
 
 ```

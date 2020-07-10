@@ -38,7 +38,7 @@ Deer's reward is given as:
 
 
 ```
-tiger_deer_v0.env(seed=None, map_size=45)
+tiger_deer_v0.env(seed=None)
 ```
 
 ```
