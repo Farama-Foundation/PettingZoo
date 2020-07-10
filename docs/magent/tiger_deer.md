@@ -15,12 +15,32 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting eaten.  
+
+Tiger action options:
+
+* doing nothing
+* c to any of the 4 closest squares
+* attacking any of the 4 closest squares.
+
+Tiger's reward is given as:
+
+* 1 reward for attacking a deer alongside another tiger
+
+Deer action options:
+
+* doing nothing
+* moving to any of the 4 nearest squares
+
+Deer's reward is given as:
+
+* -1 reward for dying
+
+
 ```
-tiger_deer_v0.env(seed=None, map_size=45)
+tiger_deer_v0.env(seed=None)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
-
-map_size: size of each dimension of the map. Also affects the number of players on each team.
 ```
