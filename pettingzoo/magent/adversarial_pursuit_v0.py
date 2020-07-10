@@ -55,7 +55,7 @@ class _parallel_env(magent_parallel_env):
 
         handles = env.get_handles()
 
-        names = ["predetor", "prey"]
+        names = ["predator", "prey"]
         super().__init__(env, handles, names, map_size, seed)
 
     def generate_map(self):
