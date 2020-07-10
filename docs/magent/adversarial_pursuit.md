@@ -38,7 +38,7 @@ Prey's reward is given as:
 * -1 reward for being attacked
 
 ```
-adversarial_pursuit_v0.env(seed=None, map_size=45)
+adversarial_pursuit_v0.env(seed=None)
 ```
 
 ```

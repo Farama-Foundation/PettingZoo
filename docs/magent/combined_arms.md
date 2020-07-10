@@ -40,7 +40,7 @@ Reward is given as:
 If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.99 reward)
 
 ```
-combined_arms_v0.env(seed=None, map_size=45)
+combined_arms_v0.env(seed=None)
 ```
 
 ```
