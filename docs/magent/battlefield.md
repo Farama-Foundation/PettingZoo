@@ -15,6 +15,8 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+Same as [battle](./battle.md) but with fewer agents arrayed in a larger space with obstacles. 
+
 ```
 battlefield_v0.env(seed=None, map_size=80)
 ```
