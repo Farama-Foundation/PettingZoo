@@ -15,12 +15,12 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+Same as [battle](./battle.md) but with fewer agents arrayed in a larger space with obstacles.
+
 ```
-battlefield_v0.env(seed=None, map_size=80)
+battlefield_v0.env(seed=None)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
-
-map_size: size of each dimension of the map. Also affects the number of players on each team.
 ```

@@ -30,6 +30,7 @@ def check_environment_deterministic(env1, env2):
                     break
                 next_obs = new_env.step(actions[new_env.agent_selection])
                 cur_hashes.append(hash_obsevation(next_obs))
+                cur_hashes.append(float(rew))
 
         hashes.append(hash(tuple(cur_hashes)))
 

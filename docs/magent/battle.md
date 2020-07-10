@@ -15,12 +15,30 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
+A large-scale team battle.
+
+Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
+
+Action options:
+
+* doing nothing
+* moving to any of the 12 closest squares
+* attacking any of the 8 closest squares.
+
+Reward is given as:
+
+* -0.005 reward every step
+* -0.1 reward for attacking
+* 0.2 reward for attacking an opponent
+* 5 reward for killing an opponent
+* -0.1 reward for dying
+
+If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.095 reward)
+
 ```
-battle_v0.env(seed=None, map_size=45)
+battle_v0.env(seed=None)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
-
-map_size: size of each dimension of the map. Also affects the number of players on each team.
 ```
