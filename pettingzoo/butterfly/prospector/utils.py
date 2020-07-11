@@ -32,7 +32,7 @@ def rand_pos(sprite, rng):
 
 
 def normalize_angle(angle):
-    if angle > math.pi:
+    if angle > const.TWO_PI:
         return angle - const.TWO_PI
     elif angle < 0.0:
         return angle + const.TWO_PI
