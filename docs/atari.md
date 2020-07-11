@@ -42,6 +42,19 @@ The ALE environment has been studied extensively and examined for various flaws 
 
 * Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we enable *sticky actions*, controlled by the `repeat_action_probability` environment parameter, by default. This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
 
+### Preprocessing
+
+We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. This library can be installed with `pip install supersuit`.
+
+Here is some example usage for the Atari preprocessing that is default in gym.
+
+```
+from supersuit import down_scale, frame_skip
+from pettingzoo.atari import space_invaders_v0
+env = space_invaders_v0.env()
+env = frame_skip(env, (2,5))
+env = down_scale(env, ???)
+```
 
 ### Common Parameters
 
@@ -54,13 +67,11 @@ All the Atari environments have the following environment parameters:
 ```
 seed: Set to specific value for deterministic, reproducible behavior.
 
-obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
-
-frameskip: number of frames to skip each time you take an action.
+obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
 
 repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
 
-full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. This shrinks the action space to this smaller space.
+full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
 ```
 
 ### Citation

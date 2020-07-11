@@ -34,7 +34,6 @@ class ParallelAtariEnv:
             mode_num=None,
             seed=None,
             obs_type='rgb_image',
-            frameskip=3,
             repeat_action_probability=0.25,
             full_action_space=True):
         """Frameskip should be either a tuple (indicating a random range to
@@ -53,7 +52,6 @@ class ParallelAtariEnv:
             seed = seeding.create_seed(seed, max_bytes=4)
 
         self.ale.setInt(b"random_seed", seed)
-        self.ale.setInt(b"frame_skip", frameskip)
         self.ale.setFloat(b'repeat_action_probability', repeat_action_probability)
 
         pathstart = os.path.dirname(multi_agent_ale_py.__file__)
@@ -76,8 +74,12 @@ class ParallelAtariEnv:
 
         if full_action_space:
             action_size = 18
+            action_mapping = np.arange(action_size)
         else:
-            action_size = len(self.ale.getMinimalActionSet())
+            action_mapping = self.ale.getMinimalActionSet()
+            action_size = len(action_mapping)
+
+        self.action_mapping = action_mapping
 
         if obs_type == 'ram':
             observation_space = gym.spaces.Box(low=0, high=255, dtype=np.uint8, shape=(128,))
@@ -113,7 +115,9 @@ class ParallelAtariEnv:
             return self.ale.getScreenGrayscale()
 
     def step(self, actions):
-        rewards = self.ale.act(np.asarray(actions))
+        actions = np.asarray(actions)
+        actions = self.action_mapping[actions]
+        rewards = self.ale.act(actions)
         if self.ale.game_over():
             dones = [True] * self.num_agents
         else:

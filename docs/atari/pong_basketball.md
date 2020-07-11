@@ -19,6 +19,7 @@ A competitive game of control.
 
 Try to get the ball in your opponents hoop. But you cannot move on their side of the court. Scoring a point also gives your opponent -1 reward.
 
+[Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
 #### Environment parameters
 
