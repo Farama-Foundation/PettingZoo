@@ -22,6 +22,8 @@ you score a point. Note that your opponent gets blasted through obstacles when i
 
 Whenever you score a point, you are rewarded +1 and your opponent is penalized -1.
 
+[Official Combat manual](https://atariage.com/manual_html_page.php?SoftwareID=935)
+
 
 #### Environment parameters
 

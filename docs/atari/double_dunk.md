@@ -27,8 +27,9 @@ Once play begins, each team has two players. You only control
 one at a time, and and which one you control depends on the selected play.
 Scoring should be familar to basketball fans (2-3 points per successful shot).
 
+[Official double dunk manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=153)
+
 
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
-
