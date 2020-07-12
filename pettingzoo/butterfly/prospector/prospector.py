@@ -159,7 +159,7 @@ class Banker(pg.sprite.Sprite):
         curr_vel = self.body.velocity
 
         if self.body.nugget is not None:
-            self.body.nugget.update(self.body.position, self.body.angle, False)
+            self.body.nugget.update(self.body.position, self.body.angle + (math.pi / 2), True)
 
         self.body.velocity = curr_vel
 
@@ -456,9 +456,11 @@ class raw_env(AECEnv):
                 if g.id == gold_shape.id:
                     gold_sprite = g
 
+            # gold_sprite is None if gold was handed off to the bank right before
+            # calling this collision handler
             # This collision handler is only for prospector -> banker gold handoffs
-            if gold_sprite.parent_body.sprite_type != "prospector":
-                return True
+            if gold_sprite is None or gold_sprite.parent_body.sprite_type != "prospector":
+                return False
 
             banker_body = banker_shape.body
             prospec_body = gold_sprite.parent_body
@@ -480,9 +482,10 @@ class raw_env(AECEnv):
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
             corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
+            normalized_normal = utils.normalize_angle(normal.angle)
             if (
                 corrected - const.BANKER_HANDOFF_TOLERANCE
-                <= normal.angle
+                <= normalized_normal
                 <= corrected + const.BANKER_HANDOFF_TOLERANCE
             ):
                 gold_sprite.parent_body.nugget = None
@@ -520,6 +523,10 @@ class raw_env(AECEnv):
 
             return False
 
+        # Prevent prospector motion lag from colliding with gold nugget
+        def prospec_gold_handler(arbiter, space, data):
+            return False
+
         # Create the collision event generators
         gold_dispenser = self.space.add_collision_handler(
             CollisionTypes.PROSPECTOR, CollisionTypes.WATER
@@ -538,6 +545,12 @@ class raw_env(AECEnv):
         )
 
         gold_score.begin = gold_score_handler
+
+        prospec_gold_collision = self.space.add_collision_handler(
+            CollisionTypes.PROSPECTOR, CollisionTypes.GOLD
+        )
+
+        prospec_gold_collision.begin = prospec_gold_handler
 
     def observe(self, agent):
         capture = pg.surfarray.pixels3d(self.screen)
