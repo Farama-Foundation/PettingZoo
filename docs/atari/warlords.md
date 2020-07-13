@@ -1,11 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 4
+manual-control: No
+action-shape: (1,)
+action-values: [0,17]
+observation-shape: (210, 160, 3)
+observation-values: (0,255)
+---
 
 ### Warlords
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
-| Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
-|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
-| Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 `from pettingzoo.atari import warlords_v0`
 
@@ -27,4 +34,4 @@ Note that due to a standing bug in the implementation, the players are not done 
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .

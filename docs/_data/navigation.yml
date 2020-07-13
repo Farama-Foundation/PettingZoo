@@ -1,0 +1,6 @@
+nav:
+  - title: "Documentation"
+    url: "/documentation"
+
+  - title: "Environments"
+    url: "/atari"

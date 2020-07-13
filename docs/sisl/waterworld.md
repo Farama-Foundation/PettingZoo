@@ -1,11 +1,11 @@
+---
+layout: docu
+---
 
 ### Waterworld
 
-This environment is part of the [SISL environments](../sisl.md). Please read that page first for general information.
+This environment is part of the [SISL environments](../sisl). Please read that page first for general information.
 
-| Observations      | Actions | Agents  | Manual Control | Action Shape | Action Values |  Num States |
-|-------------------|---------|---------|----------------|--------------|---------------|-------------|
-| Vector (viewable) | Either  | 5 (+/-) | No             | (2,)         | (-1, 1)       |  ?          |
 
 
 `from pettingzoo.sisl import waterworld_v0`

@@ -1,10 +1,18 @@
+---
+layout: docu
+actions: 5
+agents: 2
+manual-control: No
+action-shape: Discrete(5)
+action-values: Discrete(5)
+observation-shape: Discrete(6)
+observation-values: Discrete(6)
+num-states: ?
+---
 ### Rock Paper Scissors Lizard Spock
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| 5        | 2       | No             | Discrete(5)  | Discrete(5)   | Discrete(6)       | Discrete(6)        | ?          |
 
 `from pettingzoo.classic import rpsls_v0`
 
