@@ -11,7 +11,8 @@ from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from .battle_v0 import get_config
 
 
-def raw_env(map_size=80, seed=None):
+def raw_env(seed=None):
+    map_size = 80
     return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
