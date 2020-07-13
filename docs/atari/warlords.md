@@ -28,9 +28,7 @@ Four player last man standing!
 
 Defend your fortress from the ball and hit it towards your opponents.
 
-If you are the last player standing, you receive +1 reward.
-
-Note that due to a standing bug in the implementation, the players are not done when their fortress is destroyed and cannot move, nor is their reward penalized.
+When your fortress falls, you receive -1 reward and are done. If you are the last player standing, you receive +1 reward.
 
 [Official wizard_of_wor manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=598)
 
