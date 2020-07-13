@@ -18,25 +18,25 @@ timeline:
     events:
       - title: "Cooperative Pong"
         desc: "View Butterfly environments"
-        image: /assets/img/environments/gamma_cooperative_pong.gif
+        image: /PettingZoo/assets/img/environments/gamma_cooperative_pong.gif
         alt:
         align: left
         link: butterfly/cooperative_pong
       - title: "Atari Space Invaders"
         desc: "View Atari Games"
-        image: /assets/img/environments/atari_space_invaders.gif
+        image: /PettingZoo/assets/img/environments/atari_space_invaders.gif
         alt:
         align: left
         link: atari/space_invaders
       - title: "MAgent Pursuit"
         desc: "View MAgent Games"
-        image: /assets/img/environments/magent_pursuit.gif
+        image: /PettingZoo/assets/img/environments/magent_pursuit.gif
         alt:
         align: left
         link: magent/adversarial_pursuit
       - title: "Multiwalker"
         desc: "View SISL Games"
-        image: /assets/img/environments/sisl_multiwalker.gif
+        image: /PettingZoo/assets/img/environments/sisl_multiwalker.gif
         alt:
         align: left
         link: sisl/multiwalker
@@ -53,16 +53,16 @@ clients:
     list:
       - title: "envato"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /assets/img/clients/envato.jpg
+        logo: /PettingZoo/assets/img/clients/envato.jpg
       - title: "designmodo"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /assets/img/clients/designmodo.jpg
+        logo: /PettingZoo/assets/img/clients/designmodo.jpg
       - title: "themeforest"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /assets/img/clients/themeforest.jpg
+        logo: /PettingZoo/assets/img/clients/themeforest.jpg
       - title: "Creative Market"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /assets/img/clients/creative-market.jpg
+        logo: /PettingZoo/assets/img/clients/creative-market.jpg
 
 team:
     title: "Get Started"
@@ -71,13 +71,13 @@ team:
     section: team
     people:
       - name: "Docs"
-        image: /assets/img/doc_icon.svg
+        image: /PettingZoo/assets/img/doc_icon.svg
         imglink: documentation
       - name: "Github"
-        image: /assets/img/github_icon.svg
+        image: /PettingZoo/assets/img/github_icon.svg
         imglink: https://github.com/PettingZoo-Team/PettingZoo
       - name: "Environments"
-        image: /assets/img/environment_icon.svg
+        image: /PettingZoo/assets/img/environment_icon.svg
         imglink: atari
 
 contact:
