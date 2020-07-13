@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Discrete
-agents: 2
-manual-control: No
-action-shape: (1,)
-action-values: Discrete(7)
-observation-shape: (6, 7, 2)
-observation-values: [0,1]
-num-states: ?
+layout: "docu"
+actions: "Discrete"
+agents: "2"
+manual-control: "No"
+action-shape: "(1,)"
+action-values: "Discrete(7)"
+observation-shape: "(6, 7, 2)"
+observation-values: "[0,1]"
+num-states: "?"
 ---
 
 ### Connect Four
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
 
 
 `from pettingzoo.classic import connect_four_v0`

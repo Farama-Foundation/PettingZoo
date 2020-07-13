@@ -1,17 +1,19 @@
 ---
-layout: docu
-actions: Discrete
-agents: 162
-manual-control: No
-action-shape: (9),(25)
-action-values: Discrete(9),(25)
-observation-shape: (13,13,35), (13,13,51)
-observation-values: [0,2]
+layout: "docu"
+actions: "Discrete"
+agents: "162"
+manual-control: "No"
+action-shape: "(9),(25)"
+action-values: "Discrete(9),(25)"
+observation-shape: "(13,13,35), (13,13,51)"
+observation-values: "[0,2]"
 ---
 
 ### Combined Arms
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `pettingzoo.magent import combined_arms_v0`

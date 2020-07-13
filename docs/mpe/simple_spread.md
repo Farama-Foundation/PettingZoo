@@ -1,19 +1,21 @@
 ---
-layout: docu
-observations: Vector
-actions: Discrete
-agents: 3
-manual-control: No
-action-shape: (5)
-action-values: Discrete(5)
-observation-shape: (18)
-observation-values: (-inf,inf)
-num-states: ?
+layout: "docu"
+observations: "Vector"
+actions: "Discrete"
+agents: "3"
+manual-control: "No"
+action-shape: "(5)"
+action-values: "Discrete(5)"
+observation-shape: "(18)"
+observation-values: "(-inf,inf)"
+num-states: "?"
 ---
 
 ### Simple Spread
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `pettingzoo.mpe import simple_spread_v0`

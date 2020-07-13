@@ -1,17 +1,19 @@
 ---
-layout: docu
-observations: Vector
-actions: Discrete
-agents: 3 (+/-)
-manual-control: No
-action-shape: (4)
-action-values: (-1, 1)
-num-states: ?
+layout: "docu"
+observations: "Vector"
+actions: "Discrete"
+agents: "3 (+/-)"
+manual-control: "No"
+action-shape: "(4)"
+action-values: "(-1, 1)"
+num-states: "?"
 ---
 
 ### Multiwalker
 
 This environment is part of the [SISL environments](../sisl). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `from pettingzoo.sisl import multiwalker_v0`

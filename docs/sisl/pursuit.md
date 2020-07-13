@@ -1,17 +1,19 @@
 ---
-layout: docu
-observations: Graphical
-actions: Either
-agents: 8 (+/-)
-manual-control: Yes
-action-shape: (1,)
-action-values: [0,4]
-num-states: ?
+layout: "docu"
+observations: "Graphical"
+actions: "Either"
+agents: "8 (+/-)"
+manual-control: "Yes"
+action-shape: "(1,)"
+action-values: "[0,4]"
+num-states: "?"
 ---
 ### Pursuit
 
 This environment is part of the [SISL environments](../sisl). Please read that page first for general information.
 
+
+{% include table.md %}
 
 `from pettingzoo.sisl import pursuit_v0`
 
