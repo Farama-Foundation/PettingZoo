@@ -2,30 +2,30 @@
 
 | Environment | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |--------------|---------|---------|----------------|--------------|---------------|-------------------|--------------------|
-| [Boxing](boxing)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Combat: Tank](combat_tank)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Combat: Plane](combat_plane)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Double Dunk](double_dunk)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Entombed: Competitive](entombed_competitive)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Entombed: Cooperative](entombed_cooperative)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Flag Capture](flag_capture)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Joust](joust)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Ice Hockey](ice_hockey)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Maze Craze](maze_craze)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Mario Bros](mario_bros)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Othello](othello)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Classic](pong_classic)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Basketball](pong_basketball)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Foozpong](pong_foozpong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Quadrapong](pong_quadrapong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Pong: Team Volleyball](pong_volleyball)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Space Invaders](space_invaders)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Space War](space_war)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Surround: Original](surround)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Tennis](tennis)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Video Checkers](video_checkers)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Wizard of Wor](wizard_of_wor)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
-| [Warlords](warlords)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Boxing](atari/boxing)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Combat: Tank](atari/combat_tank)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Combat: Plane](atari/combat_plane)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Double Dunk](atari/double_dunk)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Entombed: Competitive](atari/entombed_competitive)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Entombed: Cooperative](atari/entombed_cooperative)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Flag Capture](atari/flag_capture)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Joust](atari/joust)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Ice Hockey](atari/ice_hockey)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Maze Craze](atari/maze_craze)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Mario Bros](atari/mario_bros)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Othello](atari/othello)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Classic](atari/pong_classic)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Basketball](atari/pong_basketball)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Foozpong](atari/pong_foozpong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Quadrapong](atari/pong_quadrapong)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Pong: Team Volleyball](atari/pong_volleyball)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Space Invaders](atari/space_invaders)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Space War](atari/space_war)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Surround: Original](atari/surround)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Tennis](atari/tennis)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Video Checkers](atari/video_checkers)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Wizard of Wor](atari/wizard_of_wor)   | Discrete  | 2 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
+| [Warlords](atari/warlords)   | Discrete  | 4 | No      | (1,)    | [0,17]         | (210, 160, 3)         | (0,255)            |
 
 
 The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/PettingZoo-Team/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
@@ -46,14 +46,24 @@ The ALE environment has been studied extensively and examined for various flaws 
 
 We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. This library can be installed with `pip install supersuit`.
 
-Here is some example usage for the Atari preprocessing that is default in gym.
+Here is some example usage for the Atari preprocessing.
 
 ```
-from supersuit import down_scale, frame_skip
+from supersuit import resize, frame_skip, frame_stack
 from pettingzoo.atari import space_invaders_v0
+
 env = space_invaders_v0.env()
-env = frame_skip(env, (2,5))
-env = down_scale(env, ???)
+
+# downscale observation for faster processing
+env = resize(env, (84, 84))
+
+# to allow agent to see everything on the screen despite atari's flickering screen problem
+env = frame_stack(env, 4)
+
+# skip frames for faster processing and less control
+# to be compatable with gym, do frame_skip(env, (2,5))
+# and set environment parameter repeat_action_probability=0.0 instead
+env = frame_skip(env, 4)
 ```
 
 ### Common Parameters
