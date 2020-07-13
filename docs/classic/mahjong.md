@@ -1,10 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 4
+manual-control: No
+action-shape: Discrete(38)
+action-values: Discrete(38)
+observation-shape: (6, 34, 4)
+observation-values: [0, 1]
+num-states: 10^121
+---
 ### Mahjong
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|--------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete | 4      | No             | Discrete(38) | Discrete(38)  | (6, 34, 4)        | [0, 1]             | 10^121     |
 
 `from pettingzoo.classic import mahjong_v0`
 

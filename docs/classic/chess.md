@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: No
+action-shape: Discrete(4672)
+action-values: Discrete(4672)
+observation-shape: (8,8,20)
+observation-values: [0,1]
+num-states: ?
+---
 
 ### Chess
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents | Manual Control | Action Shape                           | Action Values  | Observation Shape | Observation Values | Num States |
-|----------|--------|----------------|----------------------------------------|----------------|-------------------|--------------------|------------|
-| Discrete | 2      | No             | Discrete(4672) | Discrete(4672) | (8,8,20)          | [0,1]              | ?          |
 
 `pettingzoo.classic.chess_v0`
 
