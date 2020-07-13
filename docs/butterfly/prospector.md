@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Continuous
-agents: 7 (+/-)
-manual-control: Yes
-action-shape: (3,) or (2,)
-action-values: [-1, 1]
-observation-shape: (150, 150, 3) or (154, 154, 3)
-observation-values: (0, 255)
-num-states: ?
+layout: "docu"
+actions: "Continuous"
+agents: "7 (+/-)"
+manual-control: "Yes"
+action-shape: "(3,) or (2,)"
+action-values: "[-1, 1]"
+observation-shape: "(150, 150, 3) or (154, 154, 3)"
+observation-values: "(0, 255)"
+num-states: "?"
 ---
 
 ### Prospector
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `from pettingzoo.butterfly import prospector_v0`

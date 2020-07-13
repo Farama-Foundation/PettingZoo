@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Either
-agents: 8
-manual-control: Yes
-action-shape: (1,)
-action-values: [0, 2]
-observation-shape: (100, 300, 3) or (1,)
-observation-values: (0, 255) or (-300, 300)
-num-states: ?
+layout: "docu"
+actions: "Either"
+agents: "8"
+manual-control: "Yes"
+action-shape: "(1,)"
+action-values: "[0, 2]"
+observation-shape: "(100, 300, 3) or (1,)"
+observation-values: "(0, 255) or (-300, 300)"
+num-states: "?"
 ---
 
 
 ### Prison
 
+
+{% include table.md %}
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information. 
 
 

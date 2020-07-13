@@ -1,17 +1,19 @@
 ---
-layout: docu
-actions: Discrete
-agents: 4
-manual-control: No
-action-shape: (1,)
-action-values: [0,17]
-observation-shape: (210, 160, 3)
-observation-values: (0,255)
+layout: "docu"
+actions: "Discrete"
+agents: "4"
+manual-control: "No"
+action-shape: "(1,)"
+action-values: "[0,17]"
+observation-shape: "(210, 160, 3)"
+observation-values: "(0,255)"
 ---
 
 ### Pong: Quadrapong
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `from pettingzoo.atari import pong_quadrapong_v0`

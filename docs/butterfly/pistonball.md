@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Either
-agents: 20
-manual-control: Yes
-action-shape: (1,)
-action-values: [0, 2]
-observation-shape: (200, 120, 3)
-observation-values: (0, 255)
-num-states: ?
+layout: "docu"
+actions: "Either"
+agents: "20"
+manual-control: "Yes"
+action-shape: "(1,)"
+action-values: "[0, 2]"
+observation-shape: "(200, 120, 3)"
+observation-values: "(0, 255)"
+num-states: "?"
 ---
 
 ### Pistonball
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `from pettingzoo.butterfly import pistonball_v0`

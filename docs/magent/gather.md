@@ -1,17 +1,19 @@
 ---
-layout: docu
-actions: Discrete
-agents: 495
-manual-control: No
-action-shape: (33)
-action-values: Discrete(33)
-observation-shape: (15,15,43)
-observation-values: [0,2]
+layout: "docu"
+actions: "Discrete"
+agents: "495"
+manual-control: "No"
+action-shape: "(33)"
+action-values: "Discrete(33)"
+observation-shape: "(15,15,43)"
+observation-values: "[0,2]"
 ---
 
 ### Gather
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `pettingzoo.magent import gather_v0`

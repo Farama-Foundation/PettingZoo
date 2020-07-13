@@ -1,19 +1,21 @@
 ---
-layout: docu
-observations: Vector
-actions: Discrete
-agents: 6
-manual-control: No
-action-shape: (5),(20)
-action-values: Discrete(5),(20)
-observation-shape: (28),(34)
-observation-values: (-inf,inf)
-num-states: ?
+layout: "docu"
+observations: "Vector"
+actions: "Discrete"
+agents: "6"
+manual-control: "No"
+action-shape: "(5),(20)"
+action-values: "Discrete(5),(20)"
+observation-shape: "(28),(34)"
+observation-values: "(-inf,inf)"
+num-states: "?"
 ---
 
 ### Simple World Comm
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `pettingzoo.mpe import simple_world_comm_v0`

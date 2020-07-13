@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Discrete
-agents: 2
-manual-control: No
-action-shape: Discrete(4672)
-action-values: Discrete(4672)
-observation-shape: (8,8,20)
-observation-values: [0,1]
-num-states: ?
+layout: "docu"
+actions: "Discrete"
+agents: "2"
+manual-control: "No"
+action-shape: "Discrete(4672)"
+action-values: "Discrete(4672)"
+observation-shape: "(8,8,20)"
+observation-values: "[0,1]"
+num-states: "?"
 ---
 
 ### Chess
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
 
 
 `pettingzoo.classic.chess_v0`

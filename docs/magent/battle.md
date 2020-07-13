@@ -1,17 +1,19 @@
 ---
-layout: docu
-actions: Discrete
-agents: 162
-manual-control: No
-action-shape: (21)
-action-values: Discrete(21)
-observation-shape: (13,13,41)
-observation-values: [0,2]
+layout: "docu"
+actions: "Discrete"
+agents: "162"
+manual-control: "No"
+action-shape: "(21)"
+action-values: "Discrete(21)"
+observation-shape: "(13,13,41)"
+observation-values: "[0,2]"
 ---
 
 ### Battle
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
+
+{% include table.md %}
 
 
 `pettingzoo.magent import battle_v0`

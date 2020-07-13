@@ -1,10 +1,19 @@
 ---
-layout: docu
+layout: "docu"
+observations: "Vector (viewable)"
+actions: "Either"
+agents: "3 (+/-)"
+manual-control: "No"
+action-shape: "(2,)"
+action-values: "(-1, 1)"
+num-states: "?"
 ---
 
 ### Waterworld
 
 This environment is part of the [SISL environments](../sisl). Please read that page first for general information.
+
+{% include table.md %}
 
 
 

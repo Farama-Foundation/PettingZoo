@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: Discrete
-agents: 3
-manual-control: No
-action-shape: Discrete(309)
-action-values: Discrete(309)
-observation-shape: (6, 5, 15)
-observation-values: [0,1]
-num-states: 10^53 - 10^83
+layout: "docu"
+actions: "Discrete"
+agents: "3"
+manual-control: "No"
+action-shape: "Discrete(309)"
+action-values: "Discrete(309)"
+observation-shape: "(6, 5, 15)"
+observation-values: "[0,1]"
+num-states: "10^53 - 10^83"
 ---
 
 ### Dou Dizhu
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
 
 
 `from pettingzoo.classic import dou_dizhu_v0`

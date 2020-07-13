@@ -1,18 +1,20 @@
 ---
-layout: docu
-actions: 3
-agents: 2
-manual-control: No
-action-shape: Discrete(3)
-action-values: Discrete(3)
-observation-shape: Discrete(4)
-observation-values: Discrete(4)
-num-states: ?
+layout: "docu"
+actions: "3"
+agents: "2"
+manual-control: "No"
+action-shape: "Discrete(3)"
+action-values: "Discrete(3)"
+observation-shape: "Discrete(4)"
+observation-values: "Discrete(4)"
+num-states: "?"
 ---
 
 ### Rock Paper Scissors
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
 
 
 `from pettingzoo.classic import rps_v0`

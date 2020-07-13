@@ -1,18 +1,20 @@
 ---
-layout: docu
-observations: Discrete
-actions: 2
-agents: No
-manual-control: Discrete(4)
-action-shape: Discrete(4)
-action-values: (36,)
-observation-shape: [0, 1]
-observation-values: 10^2
+layout: "docu"
+observations: "Discrete"
+actions: "2"
+agents: "No"
+manual-control: "Discrete(4)"
+action-shape: "Discrete(4)"
+action-values: "(36,)"
+observation-shape: "[0, 1]"
+observation-values: "10^2"
 ---
 
 ### Leduc Hold'em
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
 
 
 `from pettingzoo.classic import leduc_holdem_v0`
