@@ -35,6 +35,8 @@ Note you can easily find yourself in a dead-end excapable only through the use o
 If players help each other by the use of these powerups, they can last longer.
 In addition, there dangerous zombies lurking around to avoid.
 
+The after a 5 second hiatus after starting or restarting due to dying, players get 1 reward every 5 seconds (1 second = 60 frames, 5 seconds = 300 frames). Note that this is similar, but not exactly equal to the single player version of entombed, so the rewards should not be compared directly.
+
 [Official Entombed manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=165)
 
 
