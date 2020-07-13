@@ -1,11 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 24
+manual-control: No
+action-shape: (21)
+action-values: Discrete(21)
+observation-shape: (13,13,41)
+observation-values: [0,2]
+---
 
 ### Battlefield
 
-This environment is part of the [MAgent environments](../magent.md). Please read that page first for general information.
+This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
-| Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values |
-|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|
-| Discrete | 24     | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
 
 `pettingzoo.magent import battlefield_v0`
 
@@ -15,7 +22,7 @@ This environment is part of the [MAgent environments](../magent.md). Please read
 
 *AEC diagram*
 
-Same as [battle](./battle.md) but with fewer agents arrayed in a larger space with obstacles.
+Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 
 ```
 battlefield_v0.env(seed=None)

@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: No
+action-shape: Discrete(110)
+action-values: Discrete(110)
+observation-shape: (5, 52)
+observation-values: [0,1]
+num-states: 10^52
+---
 
 ### Gin Rummy
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
-|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
-| Discrete | 2      | No             | Discrete(110) | Discrete(110)  | (5, 52)           | [0,1]              | 10^52      |
 
 `from pettingzoo.classic import gin_rummy_v0`
 

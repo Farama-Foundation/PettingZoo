@@ -1,11 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 495
+manual-control: No
+action-shape: (33)
+action-values: Discrete(33)
+observation-shape: (15,15,43)
+observation-values: [0,2]
+---
 
 ### Gather
 
-This environment is part of the [MAgent environments](../magent.md). Please read that page first for general information.
+This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
-| Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values |
-|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|
-| Discrete | 495    | No             | (33)         | Discrete(33)     | (15,15,43)             | [0,2]              |
 
 `pettingzoo.magent import gather_v0`
 

@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: No
+action-shape: Discrete(103)
+action-values: Discrete(103)
+observation-shape: (54,)
+observation-values: [0, 100]
+num-states: 10^162
+---
 
 ### Texas Hold'em No Limit
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents | Manual Control | Action Shape  | Action Values | Observation Shape | Observation Values | Num States |
-|----------|--------|----------------|---------------|---------------|-------------------|--------------------|------------|
-| Discrete | 2      | No             | Discrete(103) | Discrete(103) | (54,)             | [0, 100]           | 10^162     |
 
 `from pettingzoo.classic import texas_holdem_no_limit_v0`
 

@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: Yes
+action-shape: --
+action-values: [0, 1]
+observation-shape: (280, 240, 3)
+observation-values: [0, 255]
+num-states: ?
+---
 
 ### Cooperative Pong
 
-This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
-| Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|:---------|:------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|:----------:|
-| Discrete | 2      | Yes            |      --      |   [0, 1]      |  (280, 240, 3)    |   [0, 255]         | ?          |
 
 `from pettingzoo.butterfly import cooperative_pong_v0`
 

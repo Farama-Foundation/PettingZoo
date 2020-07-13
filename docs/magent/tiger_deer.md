@@ -1,11 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 121
+manual-control: No
+action-shape: (5),(9)
+action-values: Discrete(5),(9)
+observation-shape: (3,3,21), (9,9,25)
+observation-values: [0,2]
+---
 
 ### Tiger-Deer
 
-This environment is part of the [MAgent environments](../magent.md). Please read that page first for general information.
+This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
-| Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values |
-|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|
-| Discrete | 121    | No             | (5),(9)      | Discrete(5),(9)  | (3,3,21), (9,9,25)      | [0,2]              |
 
 `pettingzoo.magent import tiger_deer_v0`
 
