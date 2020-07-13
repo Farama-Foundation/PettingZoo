@@ -10,7 +10,8 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(map_size=45, seed=None):
+def raw_env(seed=None):
+    map_size = 45
     return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
@@ -39,7 +40,7 @@ def load_config(map_size):
         {'width': 1, 'length': 1, 'hp': 3, 'speed': 2,
          'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(2),
          'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
+         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -1, 'attack_penalty': -1,
          })
 
     g0 = cfg.add_group(melee)

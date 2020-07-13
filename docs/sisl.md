@@ -2,9 +2,9 @@
 
 | Environment                       | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States |
 |-----------------------------------|-------------------|----------|---------|----------------|--------------|---------------|-------------|
-| [Multiwalker](multiwalker)| Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | ?           |
-| [Pursuit](pursuit)        | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | ?           |
-| [Waterworld](waterworld)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ?           |
+| [Multiwalker](sisl/multiwalker)| Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | ?           |
+| [Pursuit](sisl/pursuit)        | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | ?           |
+| [Waterworld](sisl/waterworld)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ?           |
 
 `pip install pettingzoo[sisl]`
 
