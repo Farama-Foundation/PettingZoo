@@ -1,12 +1,5 @@
 ---
 layout: docu
-observations: Vector (viewable)
-actions: Either
-agents: 5 (+/-)
-manual-control: No
-action-shape: (2,)
-action-values: (-1, 1)
-num-states: ?
 ---
 
 ### Waterworld

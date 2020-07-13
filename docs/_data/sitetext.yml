@@ -12,34 +12,34 @@ services:
     section: services
 
 timeline:
-    title: "Environments" 
+    title: "Environments"
     text: "We provide a variety of environments with different objectives"
     section: timeline
     events:
       - title: "Cooperative Pong"
         desc: "View Butterfly environments"
-        image: assets/img/environments/gamma_cooperative_pong.gif
-        alt: 
+        image: /assets/img/environments/gamma_cooperative_pong.gif
+        alt:
         align: left
-        link: cooperative_pong
+        link: butterfly/cooperative_pong
       - title: "Atari Space Invaders"
         desc: "View Atari Games"
-        image: assets/img/environments/atari_space_invaders.gif
-        alt: 
-        align: left    
-        link: space_invaders
+        image: /assets/img/environments/atari_space_invaders.gif
+        alt:
+        align: left
+        link: atari/space_invaders
       - title: "MAgent Pursuit"
         desc: "View MAgent Games"
-        image: assets/img/environments/magent_pursuit.gif
-        alt: 
+        image: /assets/img/environments/magent_pursuit.gif
+        alt:
         align: left
-        link: atari
+        link: magent/adversarial_pursuit
       - title: "Multiwalker"
         desc: "View SISL Games"
-        image: assets/img/environments/sisl_multiwalker.gif
-        alt: 
+        image: /assets/img/environments/sisl_multiwalker.gif
+        alt:
         align: left
-        link: multiwalker
+        link: sisl/multiwalker
 
 about:
     title: "About Us"
@@ -53,17 +53,17 @@ clients:
     list:
       - title: "envato"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: assets/img/clients/envato.jpg
+        logo: /assets/img/clients/envato.jpg
       - title: "designmodo"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: assets/img/clients/designmodo.jpg
+        logo: /assets/img/clients/designmodo.jpg
       - title: "themeforest"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: assets/img/clients/themeforest.jpg
+        logo: /assets/img/clients/themeforest.jpg
       - title: "Creative Market"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: assets/img/clients/creative-market.jpg
-    
+        logo: /assets/img/clients/creative-market.jpg
+
 team:
     title: "Get Started"
     text: ""
@@ -71,20 +71,20 @@ team:
     section: team
     people:
       - name: "Docs"
-        image: assets/img/doc_icon.svg
+        image: /assets/img/doc_icon.svg
         imglink: documentation
       - name: "Github"
-        image: assets/img/github_icon.svg
+        image: /assets/img/github_icon.svg
         imglink: https://github.com/PettingZoo-Team/PettingZoo
       - name: "Environments"
-        image: assets/img/environment_icon.svg
+        image: /assets/img/environment_icon.svg
         imglink: atari
-          
+
 contact:
     title: "Contact Us"
     text: "Lorem ipsum or call 123456789"
     section: contact
-    
+
 footer:
     easter_egg: "boo"
 
