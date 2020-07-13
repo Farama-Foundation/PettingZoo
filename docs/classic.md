@@ -2,21 +2,21 @@
 
 | Environment                                                | Actions  | Agents | Manual Control | Action Shape           | Action Values           | Observation Shape | Observation Values | Num States    |
 |------------------------------------------------------------|----------|--------|----------------|------------------------|-------------------------|-------------------|--------------------|---------------|
-| [Backgammon](classic/backgammon.md)                        | Discrete | 2      | No             | Discrete(1353) | Discrete(1353) | (198,)            | [0, 7.5]           | 10^26         |
-| [Chess](classic/chess.md)                                  | Discrete | 2      | No             | Discrete(4672)         | Discrete(4672)          | (8,8,20)          | [0, 1]             | ?             |
-| [Connect Four](classic/connect_four.md)                    | Discrete | 2      | No             | Discrete(7)            | Discrete(7)             | (6, 7, 2)         | [0, 1]             | ?             |
-| [Dou Dizhu](classic/dou_dizhu.md)                          | Discrete | 3      | No             | Discrete(309)          | Discrete(309)           | (6, 5, 15)        | [0, 1]             | 10^53 - 10^83 |
-| [Gin Rummy](classic/gin_rummy.md)                          | Discrete | 2      | No             | Discrete(110)          | Discrete(110)           | (5, 52)           | [0, 1]             | 10^52         |
-| [Go](classic/go.md)                         | Discrete | 2      | No             | Discrete(170)        | Discrete(170)         | (170, 170, 3)         | [0, 1]             | 3^(13^2)~4.3 * 10^80       |
-| [Hanabi](classic/hanabi.md)                                | Discrete | 2      | No             | Discrete(14)           | Discrete(14)            | (373,)            | [0, 1]             | ?             |
-| [Leduc Hold'em](classic/leduc_holdem.md)                   | Discrete | 2      | No             | Discrete(4)            | Discrete(4)             | (36,)             | [0, 1]             | 10^2          |
-| [Mahjong](classic/mahjong.md)                              | Discrete | 4      | No             | Discrete(38)           | Discrete(38)            | (6, 34, 4)        | [0, 1]             | 10^121        |
-| [Rock Paper Scissors](classic/rps.md)                      | ?        | ?      | ?              | ?                      | ?                       | ?                 | ?                  | ?             |
-| [Rock Paper Scissors Lizard Spock](classic/rpsls.md)       | ?        | ?      | ?              | ?                      | ?                       | ?                 | ?                  | ?             |
-| [Texas Hold'em](classic/texas_holdem.md)                   | Discrete | 2      | No             | Discrete(4)            | Discrete(4)             | (72,)             | [0, 1]             | 10^14         |
-| [Texas Hold'em No Limit](classic/texas_holdem_no_limit.md) | Discrete | 2      | No             | Discrete(103)          | Discrete(103)           | (54,)             | [0, 100]           | 10^162        |
-| [Tic Tac Toe](classic/tictactoe.md)                        | Discrete | 2      | No             | Discrete(9)            | Discrete(9)             | (3, 3, 2)         | [0, 1]             | ?             |
-| [Uno](classic/uno.md)                                      | Discrete | 2      | No             | Discrete(61)           | Discrete(61)            | (7, 4, 15)        | [0, 1]             | 10^163        |
+| [Backgammon](classic/backgammon)                        | Discrete | 2      | No             | Discrete(1353) | Discrete(1353) | (198,)            | [0, 7.5]           | 10^26         |
+| [Chess](classic/chess)                                  | Discrete | 2      | No             | Discrete(4672)         | Discrete(4672)          | (8,8,20)          | [0, 1]             | ?             |
+| [Connect Four](classic/connect_four)                    | Discrete | 2      | No             | Discrete(7)            | Discrete(7)             | (6, 7, 2)         | [0, 1]             | ?             |
+| [Dou Dizhu](classic/dou_dizhu)                          | Discrete | 3      | No             | Discrete(309)          | Discrete(309)           | (6, 5, 15)        | [0, 1]             | 10^53 - 10^83 |
+| [Gin Rummy](classic/gin_rummy)                          | Discrete | 2      | No             | Discrete(110)          | Discrete(110)           | (5, 52)           | [0, 1]             | 10^52         |
+| [Go](classic/go)                         | Discrete | 2      | No             | Discrete(170)        | Discrete(170)         | (170, 170, 3)         | [0, 1]             | 3^(13^2)~4.3 * 10^80       |
+| [Hanabi](classic/hanabi)                                | Discrete | 2      | No             | Discrete(14)           | Discrete(14)            | (373,)            | [0, 1]             | ?             |
+| [Leduc Hold'em](classic/leduc_holdem)                   | Discrete | 2      | No             | Discrete(4)            | Discrete(4)             | (36,)             | [0, 1]             | 10^2          |
+| [Mahjong](classic/mahjong)                              | Discrete | 4      | No             | Discrete(38)           | Discrete(38)            | (6, 34, 4)        | [0, 1]             | 10^121        |
+| [Rock Paper Scissors](classic/rps)                      | ?        | ?      | ?              | ?                      | ?                       | ?                 | ?                  | ?             |
+| [Rock Paper Scissors Lizard Spock](classic/rpsls)       | ?        | ?      | ?              | ?                      | ?                       | ?                 | ?                  | ?             |
+| [Texas Hold'em](classic/texas_holdem)                   | Discrete | 2      | No             | Discrete(4)            | Discrete(4)             | (72,)             | [0, 1]             | 10^14         |
+| [Texas Hold'em No Limit](classic/texas_holdem_no_limit) | Discrete | 2      | No             | Discrete(103)          | Discrete(103)           | (54,)             | [0, 100]           | 10^162        |
+| [Tic Tac Toe](classic/tictactoe)                        | Discrete | 2      | No             | Discrete(9)            | Discrete(9)             | (3, 3, 2)         | [0, 1]             | ?             |
+| [Uno](classic/uno)                                      | Discrete | 2      | No             | Discrete(61)           | Discrete(61)            | (7, 4, 15)        | [0, 1]             | 10^163        |
 
 
 `pip install pettingzoo[classic]`

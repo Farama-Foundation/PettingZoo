@@ -1,7 +1,7 @@
 
 ### Joust
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -29,4 +29,4 @@ around 3000 points per wave.
 
 #### Environment parameters
 
-Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md) .
+Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .

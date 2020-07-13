@@ -1,7 +1,7 @@
 
 ### Knights Archers Zombies ('KAZ')
 
-This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information.
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 | Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
 |----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|

@@ -1,7 +1,7 @@
 
 ### Pong: Basketball
 
-This environment is part of the [Atari environments](../atari.md). Please read that page first for general information.
+This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 | Actions | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
 |---------|---------|----------------|--------------|---------------|-------------------|--------------------|
@@ -23,7 +23,7 @@ Try to get the ball in your opponents hoop. But you cannot move on their side of
 
 #### Environment parameters
 
-Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari.md).
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari).
 
 Parameters specific to Pong Basketball are
 

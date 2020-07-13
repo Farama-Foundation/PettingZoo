@@ -1,7 +1,7 @@
 
 ### Leduc Hold'em
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
 | Observations | Actions  | Agents | Manual Control | Action Shape  | Action Values  | Observation Shape | Observation Values | Num States |
 |--------------|----------|--------|----------------|---------------|----------------|-------------------|--------------------|------------|
@@ -32,7 +32,7 @@ seed: seed for random values. Set to None to use machine random source. Set to f
 
 #### Observation Space
 
-As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games.md#leduc-holdem), the first 3 entries correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
+As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
 
 |  Index  | Description                                                                  |
 |:-------:|------------------------------------------------------------------------------|
