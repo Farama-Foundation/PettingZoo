@@ -1,7 +1,7 @@
 
 ### Combined Arms
 
-This environment is part of the [MAgent environments](../magent.md). Please read that page first for general information.
+This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
 | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values |
 |----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|
