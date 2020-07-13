@@ -1,10 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: No
+action-shape: Discrete(26^2 * 2 + 1)
+action-values: Discrete( 26^2 * 2 + 1)
+observation-shape: (198,)
+observation-values: [0, 7.5]
+num-states: 10^26
+---
 ### Backgammon
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete           | 2       | No      | Discrete(26^2 * 2 + 1)              | Discrete( 26^2 * 2 + 1)            | (198,)             | [0, 7.5]                 | 10^26                  |
 
 `from pettingzoo.classic import backgammon_v0`
 

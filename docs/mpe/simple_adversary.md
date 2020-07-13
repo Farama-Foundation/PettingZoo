@@ -1,11 +1,20 @@
+---
+layout: docu
+observations: Vector
+actions: Discrete
+agents: 3
+manual-control: No
+action-shape: (5)
+action-values: Discrete(5)
+observation-shape: (8),(10)
+observation-values: (-inf,inf)
+num-states: ?
+---
 
 ### Simple Adversary
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
-| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
-|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 3      | No             | (5)             | Discrete(5)             | (8),(10) | (-inf,inf)         | ?          |
 
 `pettingzoo.mpe.simple_adversary_v0`
 

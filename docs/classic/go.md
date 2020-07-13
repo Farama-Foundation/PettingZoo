@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 2
+manual-control: No
+action-shape: Discrete(170)
+action-values: Discrete(170)
+observation-shape: (170, 170, 3)
+observation-values: [0, 1]
+num-states: 3^(13^2), ~4.3 * 10^80
+---
 
 ### Go
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
- Actions  | Agents | Manual Control | Action Shape    | Action Values   | Observation Shape | Observation Values | Num States |
-----------|--------|----------------|-----------------|-----------------|-------------------|--------------------|------------|
- Discrete | 2      | No             | Discrete(170) | Discrete(170) | (170, 170, 3)         | [0, 1]             | 3^(13^2), ~4.3 * 10^80    |
 
 `from pettingzoo.classic import go_v0`
 

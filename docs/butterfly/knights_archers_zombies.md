@@ -1,11 +1,19 @@
+---
+layout: docu
+actions: Discrete
+agents: 4 (+/-)
+manual-control: Yes
+action-shape: (1,)
+action-values: [0, 5]
+observation-shape: (512, 512, 3)
+observation-values: (0, 255)
+num-states: ?
+---
 
 ### Knights Archers Zombies ('KAZ')
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
-| Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           | ?          |
 
 `from pettingzoo.butterfly import knights_archers_zombies_v0`
 

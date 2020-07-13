@@ -1,11 +1,18 @@
+---
+layout: docu
+actions: Discrete
+agents: 75
+manual-control: No
+action-shape: (9),(13)
+action-values: Discrete(9),(13)
+observation-shape: (10,10,19), (9,9,15)
+observation-values: [0,2]
+---
 
 ### Adversarial Pursuit
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
-| Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values |
-|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|
-| Discrete | 75     | No             | (9),(13)     | Discrete(9),(13) | (10,10,19), (9,9,15)    | [0,2]              |
 
 `pettingzoo.magent import adversarial_pursuit_v0`
 
