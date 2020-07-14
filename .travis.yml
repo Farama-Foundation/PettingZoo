@@ -17,7 +17,7 @@ jobs:
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
         - export pz_module=atari
-        - pip install multi_agent_ale_py pygame==2.0.0.dev10
+        - pip3 install multi_agent_ale_py pygame==2.0.0.dev10
         - sudo apt-get install unrar
         - pip3 install AutoROM
         - AutoROM -v
@@ -35,7 +35,7 @@ jobs:
         - mv cmake-3.17.3-Linux-x86_64 cmake-install
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
-        - pip install multi_agent_ale_py pygame==2.0.0.dev10
+        - pip3 install multi_agent_ale_py pygame==2.0.0.dev10
         - export pz_module=atari
         - sudo apt-get install unrar
         - pip3 install AutoROM
@@ -54,7 +54,7 @@ jobs:
         - mv cmake-3.17.3-Linux-x86_64 cmake-install
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
-        - pip install multi_agent_ale_py pygame==2.0.0.dev10
+        - pip3 install multi_agent_ale_py pygame==2.0.0.dev10
         - sudo apt-get install unrar
         - export pz_module=atari
         - pip3 install AutoROM
@@ -65,21 +65,21 @@ jobs:
         - xvfb
       python: 3.6
       before_install:
-        - pip install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
+        - pip3 install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
         - export pz_module=classic
     - name: "Classic with Python 3.7 on Linux"
       services:
         - xvfb
       python: 3.7
       before_install:
-        - pip install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
+        - pip3 install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
         - export pz_module=classic
     - name: "Classic with Python 3.8 on Linux"
       services:
         - xvfb
       python: 3.8
       before_install:
-        - pip install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
+        - pip3 install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
         - export pz_module=classic
 
     - name: "Butterfly with Python 3.6 on Linux"
@@ -87,21 +87,21 @@ jobs:
         - xvfb
       python: 3.6
       before_install:
-        - pip install pygame==2.0.0.dev10 pymunk==5.6.0
+        - pip3 install pygame==2.0.0.dev10 pymunk==5.6.0
         - export pz_module=butterfly
     - name: "Butterfly with Python 3.7 on Linux"
       services:
         - xvfb
       python: 3.7
       before_install:
-        - pip install pygame==2.0.0.dev10 pymunk==5.6.0
+        - pip3 install pygame==2.0.0.dev10 pymunk==5.6.0
         - export pz_module=butterfly
     - name: "Butterfly with Python 3.8 on Linux"
       services:
         - xvfb
       python: 3.8
       before_install:
-        - pip install pygame==2.0.0.dev10 pymunk==5.6.0
+        - pip3 install pygame==2.0.0.dev10 pymunk==5.6.0
         - export pz_module=butterfly
 
     - name: "mpe with Python 3.6 on Linux"
@@ -111,7 +111,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install pyglet
+        - pip3 install pyglet
         - export pz_module=mpe
     - name: "mpe with Python 3.7 on Linux"
       services:
@@ -120,7 +120,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install pyglet
+        - pip3 install pyglet
         - export pz_module=mpe
     - name: "mpe with Python 3.8 on Linux"
       services:
@@ -129,7 +129,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install pyglet
+        - pip3 install pyglet
         - export pz_module=mpe
     - name: "sisl with Python 3.6 on Linux"
       services:
@@ -138,7 +138,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
+        - pip3 install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
     - name: "sisl with Python 3.7 on Linux"
       services:
         - xvfb
@@ -146,7 +146,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
+        - pip3 install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
     - name: "sisl with Python 3.8 on Linux"
       services:
         - xvfb
@@ -154,7 +154,7 @@ jobs:
       before_install:
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
-        - pip install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
+        - pip3 install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
     - name: "MAgent with Python 3.6 on Linux"
       services:
         - xvfb
@@ -168,7 +168,7 @@ jobs:
         - mv cmake-3.17.3-Linux-x86_64 cmake-install
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
-        - pip install magent pygame==2.0.0.dev10
+        - pip3 install magent pygame==2.0.0.dev10
         - export pz_module=magent
     - name: "MAgent with Python 3.7 on Linux"
       services:
@@ -183,7 +183,7 @@ jobs:
         - mv cmake-3.17.3-Linux-x86_64 cmake-install
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
-        - pip install magent pygame==2.0.0.dev10
+        - pip3 install magent pygame==2.0.0.dev10
         - export pz_module=magent
     - name: "MAgent with Python 3.8 on Linux"
       services:
@@ -199,7 +199,7 @@ jobs:
         - mv cmake-3.17.3-Linux-x86_64 cmake-install
         - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
         - cd ${TRAVIS_BUILD_DIR}
-        - pip install magent pygame==2.0.0.dev10
+        - pip3 install magent pygame==2.0.0.dev10
         - export pz_module=magent
 
 
@@ -215,7 +215,7 @@ jobs:
       language: shell
       before_install:
         - export pz_module=atari
-        - pip install multi_agent_ale_py pygame==2.0.0.dev10
+        - pip3 install multi_agent_ale_py pygame==2.0.0.dev10
 
     - name: "Classic with Python 3 on macOS"
       os: osx
@@ -223,7 +223,7 @@ jobs:
       language: shell
       before_install:
         - export pz_module=classic
-        - pip install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
+        - pip3 install python-chess rlcard>=0.2.5  python-shogi  hanabi_learning_environment
 
     - name: "Butterfly with Python 3 on macOS"
       os: osx
@@ -232,7 +232,7 @@ jobs:
       before_install:
         - export pz_module=butterfly
         - export pz_render=False
-        - pip install pygame==2.0.0.dev10 pymunk==5.6.0
+        - pip3 install pygame==2.0.0.dev10 pymunk==5.6.0
 
     - name: "mpe with Python 3 on macOS"
       os: osx
@@ -240,7 +240,7 @@ jobs:
       language: shell
       before_install:
         - export pz_module=mpe
-        - pip install pyglet
+        - pip3 install pyglet
 
     - name: "sisl with Python 3 on macOS"
       os: osx
@@ -253,7 +253,7 @@ jobs:
       before_install:
         - export pz_module=sisl
         - export pz_render=False
-        - pip install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
+        - pip3 install  pygame==2.0.0.dev10 opencv-python scikit-image>=0.16.2 gym[box2d]>=0.17.2 box2d-py
 
     - name: "MAgent with Python 3 on macOS"
       os: osx
@@ -267,11 +267,12 @@ jobs:
       language: shell
       before_install:
         - export pz_module=magent
-        - pip install magent pygame==2.0.0.dev10
+        - pip3 install magent pygame==2.0.0.dev10
 
 
 install:
   - pip3 install flake8
+  - pip3 install gym numpy
 
 script:
   - chmod +x test.sh
