@@ -103,6 +103,12 @@ Full documentation of each environment is available [here].
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
+Environments are by default wrapped in a small number of wrappers that ensure good error messages and behavior with incorrect usage (such as playing illegal moves or stepping before resetting). However, the addition of these wrappers may be undesired. If you want to create an environment without this, you can do so by using the raw_env constructor contained within each module
+
+```
+env = prospector_v0.raw_env(<environment parameters>)
+```
+
 ## SuperSuit
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
