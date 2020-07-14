@@ -46,9 +46,9 @@ killable_knights=True, killable_archers=True, black_death=True, line_death=True,
 ```
 spawn_rate: how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
 
-knights: how many knight agents initially spawn.
+num_knights: how many knight agents initially spawn.
 
-archers: how many archer agents initially spawn.
+num_archers: how many archer agents initially spawn.
 
 killable_knights: if set to False, knight agents cannot be killed by zombies.
 
