@@ -1,6 +1,8 @@
 <img src="PettingZoo.svg" width="100px"/>
 
-# -> PettingZoo <-
+<p style="text-align: center;">
+# PettingZoo
+</p>
 
 [![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
 
