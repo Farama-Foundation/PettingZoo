@@ -69,13 +69,5 @@ if env_id in all_prefixes:
         if len(warn_list) > 0:
             for w in warn_list:
                 f.write(warn + ": " + w + "\n")
-    # flake8 test
-    file_name = "pettingzoo/" + env_id
-    style_guide = ["flake8", "--ignore", "E501,E731,E74,E402,F401,W503", file_name]
-    process = subprocess.Popen(style_guide, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
-    flake8_res = stdout.decode("utf-8")
-    f.write(flake8_res)
-    f.close()
 else:
     print("Environment: '{}' not in the 'all_environments' list".format(env_id))

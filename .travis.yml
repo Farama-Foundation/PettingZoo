@@ -2,12 +2,56 @@ language: python
 
 jobs:
   include:
-    - name: "Atari with Python 3.6 on Linux"
+    - name: "Python 3.6 on Linux"
       services:
         - xvfb
       python: 3.6
       before_install:
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest pettingzoo/test/pytest_runner.py
+    - name: "Python 3.7 on Linux"
+      services:
+        - xvfb
+      python: 3.7
+      before_install:
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest pettingzoo/test/pytest_runner.py
 
+    - name: "Python 3.8 on Linux"
+      services:
+        - xvfb
+      python: 3.8
+      before_install:
         - export AUDIODEV=null
         - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
         - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
@@ -20,373 +64,14 @@ jobs:
         - sudo apt install freeglut3-dev
         - sudo apt-get install unrar
         - export pz_module=atari
-    - name: "Atari with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest pettingzoo/test/pytest_runner.py
 
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=atari
-    - name: "Atari with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=atari
-
-    - name: "Classic with Python 3.6 on Linux"
-      services:
-        - xvfb
-      python: 3.6
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=classic
-    - name: "Classic with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=classic
-    - name: "Classic with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=classic
-
-    - name: "Butterfly with Python 3.6 on Linux"
-      services:
-        - xvfb
-      python: 3.6
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=butterfly
-    - name: "Butterfly with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=butterfly
-    - name: "Butterfly with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=butterfly
-
-    - name: "mpe with Python 3.6 on Linux"
-      services:
-        - xvfb
-      python: 3.6
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=mpe
-    - name: "mpe with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=mpe
-    - name: "mpe with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=mpe
-
-    - name: "sisl with Python 3.6 on Linux"
-      services:
-        - xvfb
-      python: 3.6
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=sisl
-    - name: "sisl with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=sisl
-    - name: "sisl with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=sisl
-
-    - name: "MAgent with Python 3.6 on Linux"
-      services:
-        - xvfb
-      python: 3.6
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=magent
-    - name: "MAgent with Python 3.7 on Linux"
-      services:
-        - xvfb
-      python: 3.7
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=magent
-    - name: "MAgent with Python 3.8 on Linux"
-      services:
-        - xvfb
-      python: 3.8
-      before_install:
-
-        - export AUDIODEV=null
-        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
-        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
-        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
-        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
-        - mv cmake-3.17.3-Linux-x86_64 cmake-install
-        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
-        - cd ${TRAVIS_BUILD_DIR}
-        - sudo apt-get install swig
-        - sudo apt install freeglut3-dev
-        - sudo apt-get install unrar
-        - export pz_module=magent
-
-
-    - name: "Atari with Python 3 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-            - unrar
-            - llvm
-      language: shell
-      before_install:
-        - export pz_module=atari
-
-    - name: "Classic with Python 3 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-            - unrar
-            - llvm
-      language: shell
-      before_install:
-        - export pz_module=classic
-
-    - name: "Butterfly with Python 3 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-            - unrar
-            - llvm
-      language: shell
-      before_install:
-        - export pz_module=butterfly
-        - export pz_render=False
-
-    - name: "mpe with Python 3 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-            - unrar
-            - llvm
-      language: shell
-      before_install:
-        - export pz_module=mpe
-
-    - name: "sisl with Python 3 on macOS"
+    - name: "Python 3 on macOS"
       os: osx
       osx_image: xcode11.4
       addons:
@@ -399,29 +84,48 @@ jobs:
       before_install:
         - export pz_module=sisl
         - export pz_render=False
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest pettingzoo/test/pytest_runner.py
 
-    - name: "MAgent with Python 3 on macOS"
-      os: osx
-      osx_image: xcode11.4
-      addons:
-        homebrew:
-          packages:
-            - swig
-            - unrar
-            - llvm
-      language: shell
+    - name: "Full CI tests"
+      services:
+        - xvfb
+      python: 3.6
       before_install:
-        - export pz_module=magent
-        - export pz_render=False
 
+        - export AUDIODEV=null
+        - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmk"
+        - mkdir ${CMAKE_DIR} && cd ${CMAKE_DIR}
+        - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3-Linux-x86_64.tar.gz
+        - tar -xvf cmake-3.17.3-Linux-x86_64.tar.gz > /dev/null
+        - mv cmake-3.17.3-Linux-x86_64 cmake-install
+        - PATH=${CMAKE_DIR}/cmake-install:${CMAKE_DIR}/cmake-install/bin:$PATH
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=classic
 
-install:
-  - pip3 install flake8
-  - pip3 install -r requirements.txt
-  - pip3 install AutoROM
-  - AutoROM -v
-
-script:
-  - chmod +x test.sh
-  - ./test.sh
-  - cat test_output.txt
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - python3 -m pettingzoo.tests.ci_test atari True True True False
+        - python3 -m pettingzoo.tests.ci_test classic True True True False
+        - python3 -m pettingzoo.tests.ci_test butterfly True True True False
+        - python3 -m pettingzoo.tests.ci_test mpe True True True False
+        - python3 -m pettingzoo.tests.ci_test magent True True True False
+        - python3 -m pettingzoo.tests.ci_test sisl True True True False
+    - name: "Flake 8 tests"
+      install:
+        - pip3 install flake8
+      script:
+        - bash check_style.sh
+    - name: "Print tests"
+      script:
+        - python3 -m pettingzoo.tests.print_test
