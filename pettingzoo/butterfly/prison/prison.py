@@ -80,7 +80,7 @@ def env(**kwargs):
     else:
         default_val = 0
         env = wrappers.AssertOutOfBoundsWrapper(env)
-        
+
     env = wrappers.NanNoOpWrapper(env, default_val, "setting action to 0")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
