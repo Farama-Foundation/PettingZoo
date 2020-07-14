@@ -1,6 +1,6 @@
 <img src="PettingZoo.svg" width="100px"/>
 
-# PettingZoo
+-> # PettingZoo <-
 
 [![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
 
