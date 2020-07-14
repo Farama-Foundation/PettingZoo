@@ -106,7 +106,7 @@ Full documentation of each environment is available [here].
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
-Environments are by default wrapped in a small number of wrappers that ensure good error messages and behavior with incorrect usage (such as playing illegal moves or stepping before resetting). However, the addition of these wrappers may be undesired. If you want to create an environment without this, you can do so by using the raw_env constructor contained within each module
+Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and reasonable behaviors with incorrect usage (such as playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
 
 ```
 env = prospector_v0.raw_env(<environment parameters>)
