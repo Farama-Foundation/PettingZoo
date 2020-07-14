@@ -15,7 +15,7 @@ extras = {
     "atari": ["multi_agent_ale_py", "pygame==2.0.0.dev10"],
     "classic": ["python-chess", "rlcard >= 0.2.5", "python-shogi", "hanabi_learning_environment"],
     "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
-    "magent": ["magent"],
+    "magent": ["magent", "pygame==2.0.0.dev10"],
     "mpe": [],
     "sisl": ["pygame==2.0.0.dev10", "opencv-python", "scikit-image>=0.16.2", "gym[box2d]>=0.17.2", "box2d-py"],
     "tests": ["pynput"]
