@@ -10,8 +10,9 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None, shape_reward=True):
+def raw_env(seed=None):
     map_size = 45
+    shape_reward = True # option not used
     return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
 
 
@@ -39,7 +40,7 @@ def get_config(map_size, shape_reward):
     options = {
         'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
         'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-        'damage': 1, 'step_recover': -0.2, 'step_reward': 1
+        'damage': 1, 'step_recover': -0.2
     }
     tiger = cfg.register_agent_type(
         "tiger",
@@ -56,7 +57,7 @@ def get_config(map_size, shape_reward):
     if shape_reward:
         e1 = gw.Event(a, 'attack', c)
         e2 = gw.Event(b, 'attack', c)
-        cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[10, 10])
+        cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[1, 1])
 
     return cfg
 
