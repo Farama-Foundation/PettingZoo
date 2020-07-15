@@ -159,7 +159,7 @@ class Banker(pg.sprite.Sprite):
         curr_vel = self.body.velocity
 
         if self.body.nugget is not None:
-            self.body.nugget.update(self.body.position, self.body.angle, False)
+            self.body.nugget.update(self.body.position, self.body.angle + (math.pi / 2), True)
 
         self.body.velocity = curr_vel
 
@@ -344,8 +344,9 @@ class raw_env(AECEnv):
         self.closed = False
 
         self.background = utils.load_image(["background-debris.png"])
-        self.background_rect = pg.Rect(0, 0, *const.SCREEN_SIZE)
-        self.screen.blit(self.background, self.background_rect)
+        self.background_sf = pg.Surface(self.background.get_size())
+        self.background_sf.blit(self.background, (0, 0))
+        self.screen.blit(self.background, (0, 0))
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
@@ -455,9 +456,11 @@ class raw_env(AECEnv):
                 if g.id == gold_shape.id:
                     gold_sprite = g
 
+            # gold_sprite is None if gold was handed off to the bank right before
+            # calling this collision handler
             # This collision handler is only for prospector -> banker gold handoffs
-            if gold_sprite.parent_body.sprite_type != "prospector":
-                return True
+            if gold_sprite is None or gold_sprite.parent_body.sprite_type != "prospector":
+                return False
 
             banker_body = banker_shape.body
             prospec_body = gold_sprite.parent_body
@@ -479,9 +482,10 @@ class raw_env(AECEnv):
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
             corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
+            normalized_normal = utils.normalize_angle(normal.angle)
             if (
                 corrected - const.BANKER_HANDOFF_TOLERANCE
-                <= normal.angle
+                <= normalized_normal
                 <= corrected + const.BANKER_HANDOFF_TOLERANCE
             ):
                 gold_sprite.parent_body.nugget = None
@@ -519,6 +523,10 @@ class raw_env(AECEnv):
 
             return False
 
+        # Prevent prospector motion lag from colliding with gold nugget
+        def prospec_gold_handler(arbiter, space, data):
+            return False
+
         # Create the collision event generators
         gold_dispenser = self.space.add_collision_handler(
             CollisionTypes.PROSPECTOR, CollisionTypes.WATER
@@ -537,6 +545,12 @@ class raw_env(AECEnv):
         )
 
         gold_score.begin = gold_score_handler
+
+        prospec_gold_collision = self.space.add_collision_handler(
+            CollisionTypes.PROSPECTOR, CollisionTypes.GOLD
+        )
+
+        prospec_gold_collision.begin = prospec_gold_handler
 
     def observe(self, agent):
         capture = pg.surfarray.pixels3d(self.screen)
@@ -580,7 +594,6 @@ class raw_env(AECEnv):
 
         sub_screen = np.rot90(sub_screen, k=3)
         sub_screen = np.fliplr(sub_screen).astype(np.uint8)
-
         self.last_observation[agent] = sub_screen
 
         return sub_screen
@@ -624,7 +637,7 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.screen = pg.Surface(const.SCREEN_SIZE)
-        self.screen.blit(self.background, self.background_rect)
+        self.screen.blit(self.background, (0, 0))
         self.done = False
 
         for p in self.prospectors.values():
@@ -651,7 +664,7 @@ class raw_env(AECEnv):
             pg.display.init()
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
             self.background = self.background.convert_alpha()
-            self.screen.blit(self.background, self.background_rect)
+            self.screen.blit(self.background, (0, 0))
             for s in self.all_sprites.sprites():
                 s.convert_img()
             self.rendering = True
@@ -664,7 +677,7 @@ class raw_env(AECEnv):
 
 
     def draw(self):
-        self.screen.blit(self.background, self.background_rect)
+        self.screen.blit(self.background_sf, (0, 0))
         self.all_sprites.draw(self.screen)
 
     def close(self):

@@ -2,18 +2,20 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
+RENDER_RATIO = 2
+
 
 class CakePaddle(pygame.sprite.Sprite):
 
-    def __init__(self, speed=25):
+    def __init__(self, speed=12):
         # surf is the right-most (largest) tier of the cake
-        self.surf = pygame.Surface((30, 120))
+        self.surf = pygame.Surface((30 // RENDER_RATIO, 120 // RENDER_RATIO))
         self.rect = self.surf.get_rect()
-        self.surf2 = pygame.Surface((30, 80))
+        self.surf2 = pygame.Surface((30 // RENDER_RATIO, 80 // RENDER_RATIO))
         self.rect2 = self.surf2.get_rect()
-        self.surf3 = pygame.Surface((30, 40))
+        self.surf3 = pygame.Surface((30 // RENDER_RATIO, 40 // RENDER_RATIO))
         self.rect3 = self.surf3.get_rect()
-        self.surf4 = pygame.Surface((30, 10))
+        self.surf4 = pygame.Surface((30 // RENDER_RATIO, 10 // RENDER_RATIO))
         self.rect4 = self.surf4.get_rect()
 
         self.speed = speed

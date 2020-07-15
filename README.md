@@ -1,4 +1,5 @@
-# PettingZoo
+<img src="PettingZoo_Text.svg" width="500px"/>
+
 [![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
@@ -103,6 +104,12 @@ Full documentation of each environment is available [here].
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
+Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and reasonable behaviors with incorrect usage (such as playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
+
+```
+env = prospector_v0.raw_env(<environment parameters>)
+```
+
 ## SuperSuit
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
@@ -158,7 +165,7 @@ Look at the [documentation] for individual environments to see which supports ma
 
 ### Random Demo
 
-For all renderable games games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
+For all renderable games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
 
 ```
 from pettingzoo.utils import random_demo

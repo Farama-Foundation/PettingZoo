@@ -1,0 +1,58 @@
+// Styling for the masthead
+header.masthead {
+  text-align: center;
+  color: white;
+  background-image: url("#{$header-image}");
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  .intro-text {
+    padding-top: 150px;
+    padding-bottom: 100px;
+    .intro-lead-in {
+      font-size: 40px;
+      line-height: 40px;
+      margin-bottom: 25px;
+      @include heading-font;
+    }
+    .intro-heading {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 22px;
+      margin-bottom: 25px;
+      @include heading-font;
+    }
+  }
+  .particles-js {
+    width: 100%;
+    height: 90%;
+    z-index: 1;
+    top: 0;
+    position: absolute;
+  }
+}
+@media(min-width:768px) {
+  header.masthead {
+    .intro-text {
+      padding-top: 150px;
+      padding-bottom: 150px;
+      .intro-lead-in {
+        font-size: 60px;
+        line-height: 60px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        @include heading-font;
+      }
+      .intro-heading {
+        font-size: 30px;
+        font-weight: 300;
+        line-height: 30px;
+        margin-bottom: 10px;
+        @include heading-font;
+      }
+    }
+  }
+}

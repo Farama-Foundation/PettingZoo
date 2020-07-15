@@ -101,7 +101,7 @@ class raw_env(AECEnv):
         self.background_append = get_image('background_append.png')
         self.dynamic_background = get_image('blit_background.png')
         self.dynamic_background_append = get_image('blit_background_append.png')
-        self.velocity = 8
+        self.velocity = 24
         self.continuous = continuous
         self.vector_obs = vector_observation
         self.synchronized_start = synchronized_start

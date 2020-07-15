@@ -39,6 +39,7 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.has_reset = True
         self.steps = 0
+        self.env.reset()
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(

@@ -1,12 +1,22 @@
+---
+layout: "docu"
+actions: "Either"
+agents: "8"
+manual-control: "Yes"
+action-shape: "(1,)"
+action-values: "[0, 2]"
+observation-shape: "(100, 300, 3) or (1,)"
+observation-values: "(0, 255) or (-300, 300)"
+num-states: "?"
+---
 
 
 ### Prison
 
-This environment is part of the [butterfly environments](../butterfly.md). Please read that page first for general information. 
 
-| Actions | Agents | Manual Control | Action Shape | Action Values | Observation Shape    | Observation Values     | Num States |
-|---------|--------|----------------|--------------|---------------|----------------------|------------------------|------------|
-| Either  | 8      | Yes            | (1,)         | [0, 2]        | (100, 300, 3) or (1,)| (0, 255) or (-300, 300)| ?          |
+{% include table.md %}
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information. 
+
 
 `from pettingzoo.butterfly import prison_v0`
 

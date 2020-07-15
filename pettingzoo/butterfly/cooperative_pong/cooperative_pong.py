@@ -2,7 +2,7 @@ import os
 import numpy as np
 import gym
 from gym.utils import seeding
-from .cake_paddle import CakePaddle
+from .cake_paddle import CakePaddle, RENDER_RATIO
 from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -201,15 +201,14 @@ class CooperativePong(gym.Env):
 
     metadata = {'render.modes': ['human']}
 
-    # ball_speed = [3,3], left_paddle_speed = 3, right_paddle_speed = 3
-    def __init__(self, randomizer, ball_speed=18, left_paddle_speed=25, right_paddle_speed=25, cake_paddle=True, max_frames=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
         self.num_agents = 2
 
         # Display screen
-        self.s_width, self.s_height = 960, 560
+        self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
         self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
 
@@ -230,16 +229,16 @@ class CooperativePong(gym.Env):
         self.max_frames = max_frames
 
         # paddles
-        self.p0 = PaddleSprite((20, 80), left_paddle_speed)
+        self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
-            self.p1 = PaddleSprite((20, 100), right_paddle_speed)
+            self.p1 = PaddleSprite((20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed)
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
-        self.ball = BallSprite(randomizer, (20, 20), ball_speed, bounce_randomness)
+        self.ball = BallSprite(randomizer, (20 // RENDER_RATIO, 20 // RENDER_RATIO), ball_speed, bounce_randomness)
         self.randomizer = randomizer
 
         self.reinit()
