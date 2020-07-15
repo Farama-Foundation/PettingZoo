@@ -23,7 +23,7 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - pytest pettingzoo/test/pytest_runner.py
+        - pytest ./pettingzoo/test/pytest_runner.py
     - name: "Python 3.7 on Linux"
       services:
         - xvfb
@@ -45,7 +45,7 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - pytest pettingzoo/test/pytest_runner.py
+        - pytest ./pettingzoo/test/pytest_runner.py
 
     - name: "Python 3.8 on Linux"
       services:
@@ -69,7 +69,7 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - pytest pettingzoo/test/pytest_runner.py
+        - pytest ./pettingzoo/test/pytest_runner.py
 
     - name: "Python 3 on macOS"
       os: osx
@@ -89,7 +89,7 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - pytest pettingzoo/test/pytest_runner.py
+        - pytest ./pettingzoo/test/pytest_runner.py
 
     - name: "Full CI tests"
       services:
@@ -125,7 +125,7 @@ jobs:
       install:
         - pip3 install flake8
       script:
-        - bash check_style.sh
+        - bash ./check_style.sh
     - name: "Print tests"
       script:
         - python3 -m pettingzoo.tests.print_test
