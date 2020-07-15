@@ -1,11 +1,22 @@
+---
+layout: "docu"
+observations: "Vector"
+actions: "Discrete"
+agents: "2"
+manual-control: "No"
+action-shape: "(50)"
+action-values: "Discrete(50)"
+observation-shape: "(21)"
+observation-values: "(-inf,inf)"
+num-states: "?"
+---
 
 ### Simple Reference
 
-This environment is part of the [MPE environments](../mpe.md). Please read that page first for general information.
+This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
-| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
-|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (50)            | Discrete(50)            | (21)                     | (-inf,inf)         | ?          |
+{% include table.md %}
+
 
 `pettingzoo.mpe import simple_reference_v0`
 

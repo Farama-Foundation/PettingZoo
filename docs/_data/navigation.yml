@@ -1,0 +1,6 @@
+nav:
+  - title: "Documentation"
+    url: "/PettingZoo/documentation"
+
+  - title: "Environments"
+    url: "/PettingZoo/atari"

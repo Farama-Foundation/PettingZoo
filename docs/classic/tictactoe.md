@@ -1,11 +1,21 @@
+---
+layout: "docu"
+actions: "Discrete"
+agents: "2"
+manual-control: "No"
+action-shape: "(1)"
+action-values: "[0, 8]"
+observation-shape: "(3, 3, 2)"
+observation-values: "[0,1]"
+num-states: "?"
+---
 
 ### Tic Tac Toe
 
-This game part of the [classic games](../classic.md), please visit that page first for general information about these games.
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-| Actions  | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|----------|---------|----------------|--------------|---------------|-------------------|--------------------|------------|
-| Discrete | 2       | No             | (1)          | [0, 8]        | (3, 3, 2)         | [0,1]              | ?          |
+{% include table.md %}
+
 
 `from pettingzoo.classic import tictactoe_v0`
 

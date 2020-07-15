@@ -379,29 +379,14 @@ class raw_env(AECEnv):
             upper_y_bound = min(max_y, self.HEIGHT)
             lower_x_bound = max(min_x, 0)
             upper_x_bound = min(max_x, self.WIDTH)
-            cropped = np.array(screen)
-            cropped = cropped[lower_x_bound:upper_x_bound, :, :]
-            cropped = cropped[:, lower_y_bound:upper_y_bound, :]
-            if self.pad_observation:
-                # Add blackness to the left side of the window
-                if min_x < 0:
-                    pad = np.zeros((abs(min_x), cropped.shape[1], 3))
-                    cropped = np.vstack((pad, cropped))
-                # Add blackness to the right side of the window
-                if max_x > self.WIDTH:
-                    pad = np.zeros(((max_x - self.WIDTH), cropped.shape[1], 3))
-                    cropped = np.vstack((cropped, pad))
-                # Add blackness to the top side of the window
-                if min_y < 0:
-                    pad = np.zeros((cropped.shape[0], abs(min_y), 3))
-                    cropped = np.hstack((pad, cropped))
-                # Add blackness to the bottom side of the window
-                if max_y > self.HEIGHT:
-                    pad = np.zeros((cropped.shape[0], (max_y - self.HEIGHT), 3))
-                    cropped = np.hstack((cropped, pad))
-            cropped = np.rot90(cropped, k=3)
-            cropped = np.fliplr(cropped).astype(np.uint8)
-        return cropped
+            startx = lower_x_bound - min_x
+            starty = lower_y_bound - min_y
+            endx = 512 + upper_x_bound - max_x
+            endy = 512 + upper_y_bound - max_y
+            cropped = np.zeros_like(self.observation_spaces[agent].low)
+            cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
+
+        return np.swapaxes(cropped, 1, 0)
 
     def step(self, action, observe=True):
         agent = self.agent_selection
@@ -439,6 +424,7 @@ class raw_env(AECEnv):
         self.arrow_spawn_rate, self.archer_killed, self.archer_dict, self.archer_list, self.archer_player_num, self.all_sprites, self.arrow_dict, self.arrow_list = sw.spawnArrow()
 
         if self._agent_selector.is_last():
+
             # Spawning Zombies at Random Location at every 100 iterations
             self.zombie_spawn_rate, self.zombie_list, self.all_sprites = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
 

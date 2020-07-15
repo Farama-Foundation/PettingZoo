@@ -82,7 +82,6 @@ class SimpleEnv(AECEnv):
             return
 
     def _execute_world_step(self):
-        self.steps += 1
         # set action for each agent
         for i, agent in enumerate(self.world.agents):
             action = self.current_actions[i]
@@ -156,6 +155,7 @@ class SimpleEnv(AECEnv):
             if self.steps > self.max_frames:
                 for a in self.agents:
                     self.dones[a] = True
+            self.steps += 1
 
         if observe:
             next_observation = self.observe(self.agent_selection)

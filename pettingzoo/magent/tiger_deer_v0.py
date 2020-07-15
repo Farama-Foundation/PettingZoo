@@ -10,7 +10,8 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(map_size=45, seed=None):
+def raw_env(seed=None):
+    map_size = 45
     return _parallel_env_wrapper(_parallel_env(map_size, seed))
 
 
@@ -29,7 +30,7 @@ def get_config(map_size):
         {'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
          'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
          'step_recover': 0.2,
-         'kill_supply': 8,
+         'kill_supply': 8, 'dead_penalty': -1.,
          })
 
     tiger = cfg.register_agent_type(

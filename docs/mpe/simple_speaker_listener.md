@@ -1,11 +1,22 @@
+---
+layout: "docu"
+observations: "Vector"
+actions: "Discrete"
+agents: "2"
+manual-control: "No"
+action-shape: "(3),(5)"
+action-values: "Discrete(3),(5)"
+observation-shape: "(3),(11)"
+observation-values: "(-inf,inf)"
+num-states: "?"
+---
 
 ### Simple Speaker Listener
 
-This environment is part of the [MPE environments](../mpe.md). Please read that page first for general information.
+This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
-| Observations | Actions  | Agents | Manual Control | Action Shape    | Action Values           | Observation Shape        | Observation Values | Num States |
-|--------------|----------|--------|----------------|-----------------|-------------------------|--------------------------|--------------------|------------|
-| Vector       | Discrete | 2      | No             | (3),(5) | Discrete(3),(5)  | (3),(11) | (-inf,inf)         | ?          |
+{% include table.md %}
+
 
 `pettingzoo.mpe import simple_speaker_listener_v0`
 
