@@ -1,4 +1,4 @@
-<img src="PettingZoo.svg" width="100px"/>
+<img src="PettingZoo_Text.svg" width="100px"/>
 
 # PettingZoo
 
