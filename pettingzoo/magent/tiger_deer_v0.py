@@ -10,35 +10,40 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, shape_reward=True):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size):
+def get_config(map_size, shape_reward):
     gw = magent.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
     cfg.set({"embedding_size": 10})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
+        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
+        'step_recover': 0.2,
+        'kill_supply': 8, 'dead_penalty': -1.,
+    }
+
     deer = cfg.register_agent_type(
         "deer",
-        {'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
-         'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-         'step_recover': 0.2,
-         'kill_supply': 8, 'dead_penalty': -1.,
-         })
+        options)
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
+        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
+        'damage': 1, 'step_recover': -0.2, 'step_reward': 1
+    }
     tiger = cfg.register_agent_type(
         "tiger",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
-         'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-         'damage': 1, 'step_recover': -0.2,
-         })
+        options)
 
     deer_group = cfg.add_group(deer)
     tiger_group = cfg.add_group(tiger)
@@ -48,16 +53,17 @@ def get_config(map_size):
     c = gw.AgentSymbol(deer_group, index='any')
 
     # tigers get reward when they attack a deer simultaneously
-    e1 = gw.Event(a, 'attack', c)
-    e2 = gw.Event(b, 'attack', c)
-    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[1, 1])
+    if shape_reward:
+        e1 = gw.Event(a, 'attack', c)
+        e2 = gw.Event(b, 'attack', c)
+        cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[10, 10])
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
-        env = magent.GridWorld(get_config(map_size), map_size=map_size)
+    def __init__(self, map_size, shape_reward, seed):
+        env = magent.GridWorld(get_config(map_size, shape_reward), map_size=map_size)
 
         handles = env.get_handles()
 
