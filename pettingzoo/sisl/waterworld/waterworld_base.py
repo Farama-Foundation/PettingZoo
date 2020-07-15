@@ -544,7 +544,8 @@ class MAWaterWorld():
             obs_list = self.observe_list(
                 sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
             self.last_obs = obs_list
-            self.last_rewards[agent_id] = rewards[agent_id]
+            for i,agent in enumerate(self.agents):
+                self.last_rewards[agent] = rewards[agent]
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1
