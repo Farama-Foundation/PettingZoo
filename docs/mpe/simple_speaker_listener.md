@@ -9,6 +9,7 @@ action-values: "Discrete(3),(5)"
 observation-shape: "(3),(11)"
 observation-values: "(-inf,inf)"
 num-states: "?"
+average-total-reward: "-561.56"
 ---
 
 ### Simple Speaker Listener

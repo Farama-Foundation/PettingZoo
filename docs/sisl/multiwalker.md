@@ -7,6 +7,7 @@ manual-control: "No"
 action-shape: "(4)"
 action-values: "(-1, 1)"
 num-states: "?"
+average-total-reward: "-43.44"
 ---
 
 ### Multiwalker

@@ -1,10 +1,10 @@
 ## SISL Enviroments
 
-| Environment                       | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States |
-|-----------------------------------|-------------------|----------|---------|----------------|--------------|---------------|-------------|
-| [Multiwalker](sisl/multiwalker)| Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | ?           |
-| [Pursuit](sisl/pursuit)        | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | ?           |
-| [Waterworld](sisl/waterworld)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ?           |
+| Environment                       | Observations      | Actions  | Agents  | Manual Control | Action Shape | Action Values |  Num States | Average Total Reward |
+|-----------------------------------|-------------------|----------|---------|----------------|--------------|---------------|-------------|----------------|
+| [Multiwalker](sisl/multiwalker)| Vector (viewable) | Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       | ?           | -43.44 |
+| [Pursuit](sisl/pursuit)        | Graphical         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         | ?           | 3.07 |
+| [Waterworld](sisl/waterworld)  | Vector (viewable) | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       | ?           | -0.54 |
 
 `pip install pettingzoo[sisl]`
 

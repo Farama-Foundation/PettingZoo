@@ -8,6 +8,7 @@ action-values: "[0, 2]"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
 num-states: "?"
+average-total-reward: "0.39"
 ---
 
 ### Pistonball

@@ -9,6 +9,7 @@ action-values: "Discrete(50)"
 observation-shape: "(21)"
 observation-values: "(-inf,inf)"
 num-states: "?"
+average-total-reward: "-296.25"
 ---
 
 ### Simple Reference

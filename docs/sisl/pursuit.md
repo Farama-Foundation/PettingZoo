@@ -7,6 +7,7 @@ manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0,4]"
 num-states: "?"
+average-total-reward: "3.07"
 ---
 ### Pursuit
 

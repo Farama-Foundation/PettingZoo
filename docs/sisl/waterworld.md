@@ -7,6 +7,7 @@ manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
 num-states: "?"
+average-total-reward: "-0.54"
 ---
 
 ### Waterworld

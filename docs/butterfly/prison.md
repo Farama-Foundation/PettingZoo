@@ -8,6 +8,7 @@ action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
 num-states: "?"
+average-total-reward: "0.0"
 ---
 
 
@@ -15,7 +16,7 @@ num-states: "?"
 
 
 {% include table.md %}
-This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information. 
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 
 `from pettingzoo.butterfly import prison_v0`

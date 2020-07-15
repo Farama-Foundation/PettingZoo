@@ -9,6 +9,7 @@ action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
 num-states: "?"
+average-total-reward: "-543.63"
 ---
 
 ### Simple Spread
