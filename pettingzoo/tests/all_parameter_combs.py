@@ -6,7 +6,7 @@ import pettingzoo.tests.api_test as api_test
 
 from .error_tests import error_test
 from .seed_test import seed_test, check_environment_deterministic
-from .render_test import test_render
+from .render_test import render_test
 
 
 
@@ -95,6 +95,7 @@ parameterized_envs = [
     (pursuit_v0.env, dict(random_opponents=True)),
     (pursuit_v0.env, dict(random_opponents=True, max_opponents=15)),
     (pursuit_v0.env, dict(freeze_evaders=True)),
+    (pursuit_v0.env, dict(train_pursuit=True)),
     # what is up with the ally_layer and opponent_layer parameters?
 
     (waterworld_v0.env, dict(n_pursuers=3,n_evaders=6)),
