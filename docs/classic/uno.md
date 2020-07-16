@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,7 +6,6 @@ action-shape: "Discrete(61)"
 action-values: "Discrete(61)"
 observation-shape: "(7, 4, 15)"
 observation-values: "[0, 1]"
-num-states: "10^163"
 ---
 
 ### Uno

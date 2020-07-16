@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,7 +6,6 @@ action-shape: "Discrete(103)"
 action-values: "Discrete(103)"
 observation-shape: "(54,)"
 observation-values: "[0, 100]"
-num-states: "10^162"
 ---
 
 ### Texas Hold'em No Limit

@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 observations: "Discrete"
 actions: "2"
 agents: "No"

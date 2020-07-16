@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,7 +6,6 @@ action-shape: "(1,)"
 action-values: "Discrete(14)"
 observation-shape: "(373,)"
 observation-values: "[0,1]"
-num-states: "?"
 ---
 
 ### Hanabi
