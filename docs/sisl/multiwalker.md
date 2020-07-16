@@ -1,8 +1,8 @@
 ---
-actions: "Discrete"
-agents: "3 (+/-)"
+actions: "Continuous"
+agents: "3"
 manual-control: "No"
-action-shape: "(4)"
+action-shape: "(4,)"
 action-values: "(-1, 1)"
 observation-shape: ""
 observation-values: ""
