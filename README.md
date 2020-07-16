@@ -1,4 +1,4 @@
-<img src="PettingZoo_Text.svg" width="500px"/>
+<img src="PettingZoo_Text.png" width="500px"/>
 
 [![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
 
