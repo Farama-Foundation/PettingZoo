@@ -1,12 +1,11 @@
 ---
-layout: "docu"
-observations: "Vector (viewable)"
 actions: "Either"
 agents: "3 (+/-)"
 manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
-num-states: "?"
+observation-shape: ""
+observation-values: ""
 ---
 
 ### Waterworld
@@ -77,11 +76,3 @@ speed_features: toggles whether archea sensors detect speed of other objects
 max_frames: after max_frames steps all agents will return done
 
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | PPO    | UMD         |       |      |
-
-Add Gupta et al and DDPG paper results too
