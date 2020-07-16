@@ -23,7 +23,7 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - pytest ./pettingzoo/test/pytest_runner.py
+        - pytest ./pettingzoo/tests/pytest_runner.py
     - name: "Python 3.7 on Linux"
       services:
         - xvfb
