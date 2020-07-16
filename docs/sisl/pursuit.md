@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Either"
 agents: "8 (+/-)"
 manual-control: "Yes"
@@ -83,9 +82,3 @@ ally_layer: Initial pursuers in world
 
 opponent_layer: Initial evader in world
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | PPO    | UMD         |       |      |
