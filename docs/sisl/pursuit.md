@@ -1,6 +1,5 @@
 ---
 layout: "docu"
-observations: "Graphical"
 actions: "Either"
 agents: "8 (+/-)"
 manual-control: "Yes"
