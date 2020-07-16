@@ -34,10 +34,14 @@ Manual Control:
 
 Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.
 
+*Arguments*
+
 ```
 cooperative_pong.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
+
+*About Arguments*
 
 ```
 ball_speed: Speed of ball
