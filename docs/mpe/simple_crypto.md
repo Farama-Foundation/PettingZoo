@@ -1,6 +1,4 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -8,7 +6,6 @@ action-shape: "(4)"
 action-values: "Discrete(4)"
 observation-shape: "(4),(8)"
 observation-values: "(-inf,inf)"
-num-states: "?"
 ---
 
 ### Simple Crypto
