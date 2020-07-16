@@ -10,34 +10,41 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, shape_reward=True):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size):
+def get_config(map_size, shape_reward):
     gw = magent.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
 
-    predator = cfg.register_agent_type(
-        "predator",
-        {
-            'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
-            'view_range': gw.CircleRange(5), 'attack_range': gw.CircleRange(2),
+    options = {
+        'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
+        'view_range': gw.CircleRange(5), 'attack_range': gw.CircleRange(2),
+    }
+    if shape_reward:
+        options.update({
             'attack_penalty': -0.2
         })
+    predator = cfg.register_agent_type(
+        "predator",
+        options
+    )
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 1, 'speed': 1.5,
+        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(0)
+    }
     prey = cfg.register_agent_type(
         "prey",
-        {
-            'width': 1, 'length': 1, 'hp': 1, 'speed': 1.5,
-            'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(0)
-        })
+        options
+    )
 
     predator_group = cfg.add_group(predator)
     prey_group = cfg.add_group(prey)
@@ -51,8 +58,8 @@ def get_config(map_size):
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
-        env = magent.GridWorld(get_config(map_size), map_size=map_size)
+    def __init__(self, map_size, shape_reward, seed):
+        env = magent.GridWorld(get_config(map_size, shape_reward), map_size=map_size)
 
         handles = env.get_handles()
 

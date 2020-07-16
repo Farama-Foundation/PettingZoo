@@ -34,7 +34,7 @@ Predator action options:
 
 Predator's reward is given as:
 
-* -0.2 reward for attacking
+* -0.2 reward for attacking (shaped)
 * 1 reward for attacking a prey
 
 Prey action options:
@@ -47,9 +47,11 @@ Prey's reward is given as:
 * -1 reward for being attacked
 
 ```
-adversarial_pursuit_v0.env(seed=None)
+adversarial_pursuit_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```

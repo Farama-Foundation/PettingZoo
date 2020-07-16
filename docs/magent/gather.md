@@ -24,7 +24,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 *AEC diagram*
 
-In gather, the agents must survive by eating food or each other.
+In gather, the agents must gain reward by eating food or fighting each other.
 
 Action options:
 
@@ -34,16 +34,18 @@ Action options:
 
 Reward is given as:
 
-* -0.01 reward every step
-* -0.1 reward for attacking
-* 0.5 reward for attacking an agent
+* -0.01 reward every step (shaped)
+* -0.1 reward for attacking (shaped)
+* -1 reward for dying (shaped)
+* 1 reward for attacking an agent
 * 5 reward for eating a food (requires multiple attacks)
-* -1 reward for dying
 
 ```
-gather_v0.env(seed=None)
+gather_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```
