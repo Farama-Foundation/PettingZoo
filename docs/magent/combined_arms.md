@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "162"
 manual-control: "No"
