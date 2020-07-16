@@ -3,12 +3,12 @@
 
 | Environment                                       | Actions  | Agents | Manual Control | Action Shape | Action Values    | Observation Shape      | Observation Values |
 |---------------------------------------------------|----------|--------|----------------|--------------|------------------|------------------------|--------------------|
-| [adversarial pursuit](magent/adversarial_pursuit) | Discrete | 75     | No             | (9),(13)     | Discrete(9),(13) | (10,10,19), (9,9,15)   | [0,2]              |
-| [battle](magent/battle)                           | Discrete | 162    | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [battlefield](magent/battlefield)                 | Discrete | 24     | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [combined arms](magent/combined_arms)             | Discrete | 162    | No             | (9),(25)     | Discrete(9),(25) | (13,13,35), (13,13,51) | [0,2]              |
-| [gather](magent/gather)                           | Discrete | 495    | No             | (33)         | Discrete(33)     | (15,15,43)             | [0,2]              |
-| [tiger_deer](magent/tiger_deer)                   | Discrete | 121    | No             | (5),(9)      | Discrete(5),(9)  | (3,3,21), (9,9,25)     | [0,2]              |
+| [Adversarial Pursuit](magent/adversarial_pursuit) | Discrete | 75     | No             | (9),(13)     | Discrete(9),(13) | (10,10,19), (9,9,15)   | [0,2]              |
+| [Battle](magent/battle)                           | Discrete | 162    | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
+| [Battlefield](magent/battlefield)                 | Discrete | 24     | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
+| [Combined Arms](magent/combined_arms)             | Discrete | 162    | No             | (9),(25)     | Discrete(9),(25) | (13,13,35), (13,13,51) | [0,2]              |
+| [Gather](magent/gather)                           | Discrete | 495    | No             | (33)         | Discrete(33)     | (15,15,43)             | [0,2]              |
+| [Tiger Deer](magent/tiger_deer)                   | Discrete | 121    | No             | (5),(9)      | Discrete(5),(9)  | (3,3,21), (9,9,25)     | [0,2]              |
 
 
 
@@ -25,7 +25,7 @@ Gather is a survival game where agents must try to keep alive either by gatherin
 
 ### Key Concepts
 
-* HP decay: In gather and the tigers in tiger_deer, the HP decays over time, so the agents slowly lose HP until they die. The only way to prevent this is to eat something.
+* HP decay: In gather and the tigers in Tiger Deer, the HP decays over time, so the agents slowly lose HP until they die. The only way to prevent this is to eat something.
 
 * HP recovery: In battle games, agents recover HP over time, so low HP agents can hide or be protected until they heal.
 
