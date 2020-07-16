@@ -163,14 +163,14 @@ class raw_env(AECEnv):
         # possible sprite configurations are, identical_aliens, random_aliens or neither
         if self.identical_aliens:
             # randomly chosen sprite used for all aliens
-            sprite_id = self.np_random.random_integers(0, len(self.sprite_list) - 1)
+            sprite_id = self.np_random.randint(0, len(self.sprite_list))
             for s in range(self.num_agents):
                 chosen_sprites_imgs.append(self.sprite_list[sprite_id])
                 chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
         elif self.random_aliens:
             # randomly choose sprite for each agent
             for s in range(self.num_agents):
-                sprite_id = self.np_random.random_integers(0, len(self.sprite_list) - 1)
+                sprite_id = self.np_random.randint(0, len(self.sprite_list))
                 chosen_sprites_imgs.append(self.sprite_list[sprite_id])
                 chosen_sprites_heights.append(self.sprite_img_heights[sprite_id])
         else:
@@ -206,7 +206,7 @@ class raw_env(AECEnv):
             x_pos, y_pos, l_bound, r_bound, view_window = p
             x_noise = 0
             if not self.synchronized_start:
-                x_noise = self.np_random.random_integers(-20, 20)
+                x_noise = self.np_random.randint(-20, 20 + 1)
             self.prisoners[agent_name] = self.create_prisoner(
                 x_pos + x_noise, y_pos - chosen_sprites_heights[p_count], l_bound, r_bound, view_window, agent_name)
             self.prisoners[agent_name].set_sprite(chosen_sprites_imgs[p_count])
