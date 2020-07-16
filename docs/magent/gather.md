@@ -14,6 +14,8 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 {% include table.md %}
 
+[generally same fixes as all the others]
+
 
 `pettingzoo.magent import gather_v0`
 
@@ -23,7 +25,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 *AEC diagram*
 
-In gather, the agents must gain reward by eating food or fighting each other.
+In gather, the agents must gain reward by eating food or fighting each other. [talk about HP decay etc here like you did elsewhere]
 
 Action options:
 
