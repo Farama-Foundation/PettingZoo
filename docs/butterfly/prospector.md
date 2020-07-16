@@ -38,7 +38,7 @@ held gold nugget to the 3 "banker" agents, to get a reward. The banker agents ca
 and the prospector agents must give the nuggets (which are held in the same
 position relative to the prospector's position and rotation) to the 
 front of the bankers (within a plus or minus 45 degree tolerance). 
-The bankers then get the gold, and can deposit it into the chests to recieve a reward. 
+The bankers then get the gold, and can deposit it into the chests to receive a reward. 
 
 Bankers take a 2-element vector of continuous values between -1 and 1, inclusive.
 The action space is `(y, x)`, where
