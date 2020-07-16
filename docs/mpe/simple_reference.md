@@ -1,6 +1,4 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -8,7 +6,6 @@ action-shape: "(50)"
 action-values: "Discrete(50)"
 observation-shape: "(21)"
 observation-values: "(-inf,inf)"
-num-states: "?"
 ---
 
 ### Simple Reference
