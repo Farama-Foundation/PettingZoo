@@ -58,9 +58,3 @@ line_death: if set to False, agents do not die when they touch the top or bottom
 
 pad_observation: if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |
