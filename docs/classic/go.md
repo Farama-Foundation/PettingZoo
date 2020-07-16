@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,7 +6,6 @@ action-shape: "Discrete(170)"
 action-values: "Discrete(170)"
 observation-shape: "(170, 170, 3)"
 observation-values: "[0, 1]"
-num-states: "3^(13^2), ~4.3 * 10^80"
 ---
 
 ### Go

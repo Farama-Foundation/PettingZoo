@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "4"
 manual-control: "No"
@@ -7,7 +6,6 @@ action-shape: "Discrete(38)"
 action-values: "Discrete(38)"
 observation-shape: "(6, 34, 4)"
 observation-values: "[0, 1]"
-num-states: "10^121"
 ---
 ### Mahjong
 
