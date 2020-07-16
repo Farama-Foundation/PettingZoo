@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "2"
 manual-control: "Yes"
@@ -7,7 +6,6 @@ action-shape: "--"
 action-values: "[0, 1]"
 observation-shape: "(280, 240, 3)"
 observation-values: "[0, 255]"
-num-states: "?"
 ---
 
 ### Cooperative Pong
