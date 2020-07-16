@@ -1,5 +1,5 @@
 ---
-actions: "Discrete"
+action-type: "Discrete"
 agents: "2"
 manual-control: "Yes"
 action-shape: "--"
@@ -39,10 +39,10 @@ cooperative_pong.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-The speed of the ball (`ball_speed` )is held constant throughout the game, while the initial direction of the ball is randomized when `reset()` method is called. The speed of left and right paddles are controlled by `left_paddle_speed` and `right_paddle_speed` respectively. If `cake_paddle` is `True`, the right paddle has the shape of a 4-tiered wedding cake. `done` of all agents are set to `True` after `max_frames` number of frames elapse. If `bounce_randomness` is `True`, each collision of the ball with the paddles adds a small random angle to the direction of the ball, while the speed of the ball remains unchanged.
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |
+```
+ball_speed: Speed of ball
+left_paddle_speed: Speed of left paddle
+right_paddle_speed: Speed of right paddle
+cake_paddle: If True, the right paddle cakes the shape of a 4 tiered wedding cake
+max_frames: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
+bounce_randomness: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
