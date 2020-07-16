@@ -1,6 +1,6 @@
 ---
-actions: "Either"
-agents: "3 (+/-)"
+actions: "Continuous"
+agents: "3"
 manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
