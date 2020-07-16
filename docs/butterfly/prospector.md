@@ -2,9 +2,9 @@
 actions: "Continuous"
 agents: "7"
 manual-control: "Yes"
-action-shape: "(3,) or (2,)"
+action-shape: "(3,), (2,)"
 action-values: "[-1, 1]"
-observation-shape: "(150, 150, 3) or (154, 154, 3)"
+observation-shape: "(150, 150, 3), (154, 154, 3)"
 observation-values: "(0, 255)"
 ---
 
