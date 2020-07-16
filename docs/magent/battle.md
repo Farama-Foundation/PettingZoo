@@ -36,18 +36,20 @@ Action options:
 
 Reward is given as:
 
-* -0.005 reward every step
-* -0.1 reward for attacking
-* 0.2 reward for attacking an opponent
+* -0.005 reward every step (shaped)
+* -0.1 reward for attacking (shaped)
+* 0.2 reward for attacking an opponent (shaped)
+* -0.1 reward for dying (shaped)
 * 5 reward for killing an opponent
-* -0.1 reward for dying
 
 If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.095 reward)
 
 ```
-battle_v0.env(seed=None)
+battle_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```

@@ -40,18 +40,20 @@ Ranged action options:
 
 Reward is given as:
 
-* -0.01 reward for not attacking
-* -1 reward for attacking nothing
-* 2 reward for attacking an opponent
+* -0.01 reward for not attacking (shaped)
+* -1 reward for attacking nothing (shaped)
+* 2 reward for attacking an opponent (shaped)
+* -1 reward for dying (shaped)
 * 100 reward for killing an opponent
-* -1 reward for dying
 
 If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.99 reward)
 
 ```
-combined_arms_v0.env(seed=None)
+combined_arms_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```
