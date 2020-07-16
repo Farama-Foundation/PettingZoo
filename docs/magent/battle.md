@@ -17,7 +17,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import battle_v0`
 
-`agents= [ red_[0-80], blue_[0-80] ]`
+`agents= [red_[0-80], blue_[0-80]]`
 
 ![](magent_battle.gif)
 
@@ -33,7 +33,7 @@ Action options:
 * moving to any of the 12 closest squares
 * attacking any of the 8 closest squares.
 
-Reward is given as:
+Reward is given as: [make these rewards each values to a specific argument]
 
 * -0.005 reward every step (shaped)
 * -0.1 reward for attacking (shaped)
@@ -41,7 +41,9 @@ Reward is given as:
 * -0.1 reward for dying (shaped)
 * 5 reward for killing an opponent
 
-If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.095 reward)
+If multiple options apply, rewards are added together.
+
+[map size?]
 
 ```
 battle_v0.env(seed=None, shape_reward=True)

@@ -17,26 +17,26 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import adversarial_pursuit_v0`
 
-`agents= [ predator_[0-24], prey_[0-49] ]`
+`agents= [predator_[0-24], prey_[0-49]]`
 
 ![](magent_adversarial_pursuit.gif)
 
 *AEC diagram*
 
-The red agents must navigate the obstacles and try to trap the blue agents.
+The red agents must navigate the obstacles and try to trap the blue agents. [what does trapping look like?]
 
-Predator action options:
+Predator action options: [do a vector here, like MPE]
 
 * doing nothing
 * Moving to any of the 4 closest squares
 * attacking any of the 8 closest squares.
 
-Predator's reward is given as:
+Predator's reward is given as: [make shaped rewards a specific argument]
 
 * -0.2 reward for attacking (shaped)
 * 1 reward for attacking a prey
 
-Prey action options:
+Prey action options: [Vector]
 
 * doing nothing
 * moving to any of the 8 nearest squares
@@ -44,6 +44,8 @@ Prey action options:
 Prey's reward is given as:
 
 * -1 reward for being attacked
+
+[whats the observation space? How many attacks results in a death? map size?]
 
 ```
 adversarial_pursuit_v0.env(seed=None, shape_reward=True)
