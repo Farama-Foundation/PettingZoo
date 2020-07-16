@@ -9,4 +9,5 @@ class raw_env(SimpleEnv):
         world = scenario.make_world()
         super().__init__(scenario, world, max_frames, seed)
 
+
 env = make_env(raw_env)
