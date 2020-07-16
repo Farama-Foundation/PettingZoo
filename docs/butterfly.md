@@ -1,12 +1,12 @@
 ## Butterfly Environments
 
-| Environment             | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | Num States |
-|:------------------------|:-----------|:-------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|----------:|
-| [Cooperative Pong](butterfly/cooperative_pong)        | Discrete   | 2       | Yes            | ?            | ?             | ?                 | ?                  | ?          |
-| [Knights Archers Zombies](butterfly/knights_archers_zombies) | Discrete   | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           | ?          |
-| [Pistonball](butterfly/pistonball)              | Either     | 20      | Yes            | (1,)         | [0, 2]        | (200, 120, 3)     | (0, 255)           | ?          |
-| [Prison](butterfly/prison)                  | Either     | 8 (+/-) | Yes            | (1,)         | [0, 2]        | (100, 300, 3)     | (0, 255)           | ?          |
-| [Prospector](butterfly/prospector)              | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  | ?          |
+| Environment             | Actions    | Agents  | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|:------------------------|:-----------|:-------:|:--------------:|:------------:|:-------------:|:-----------------:|:------------------:|
+| [Cooperative Pong](butterfly/cooperative_pong)        | Discrete   | 2       | Yes            | ?            | ?             | ?                 | ?                  |
+| [Knights Archers Zombies](butterfly/knights_archers_zombies) | Discrete   | 4 (+/-) | Yes            | (1,)         | [0, 5]        | (512, 512, 3)     | (0, 255)           |
+| [Pistonball](butterfly/pistonball)              | Either     | 20      | Yes            | (1,)         | [0, 2]        | (200, 120, 3)     | (0, 255)           |
+| [Prison](butterfly/prison)                  | Either     | 8 (+/-) | Yes            | (1,)         | [0, 2]        | (100, 300, 3)     | (0, 255)           | 
+| [Prospector](butterfly/prospector)              | Continuous | 7 (+/-) | Yes            | ?            | ?             | ?                 | ?                  |
 
 `pip install pettingzoo[butterfly]`
 
