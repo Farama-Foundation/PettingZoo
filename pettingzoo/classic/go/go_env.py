@@ -7,8 +7,8 @@ import numpy as np
 from pettingzoo.utils import wrappers
 
 
-def env():
-    env = raw_env()
+def env(**kwargs):
+    env = raw_env(**kwargs)
     pass_move = env._N * env._N
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
