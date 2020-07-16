@@ -1,7 +1,7 @@
 ## SISL Enviroments
 
 | Environment                       | Actions  | Agents  | Manual Control | Action Shape | Action Values |
-|-----------------------------------|-------------------|----------|---------|----------------|--------------|---------------|
+|-----------------------------------|---------|----------|----------------|--------------|---------------|
 | [Multiwalker](sisl/multiwalker)| Discrete | 3 (+/-) | No             | (4)          | (-1, 1)       |
 | [Pursuit](sisl/pursuit)         | Either   | 8 (+/-) | Yes            | (1,)         | [0,4]         |
 | [Waterworld](sisl/waterworld)  | Either   | 3 (+/-) | No             | (2,)         | (-1, 1)       |
