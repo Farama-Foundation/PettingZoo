@@ -71,7 +71,7 @@ env = frame_skip(env, 4)
 All the Atari environments have the following environment parameters:
 
 ```
-<atar_game>.env(seed=None, obs_type='rgb_image', frameskip=3, repeat_action_probability=0.25, full_action_space=True)
+<atar_game>.env(seed=None, obs_type='rgb_image', repeat_action_probability=0.25, full_action_space=True)
 ```
 
 ```

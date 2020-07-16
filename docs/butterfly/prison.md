@@ -15,7 +15,7 @@ num-states: "?"
 
 
 {% include table.md %}
-This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information. 
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 
 `from pettingzoo.butterfly import prison_v0`
@@ -35,18 +35,20 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 Arguments:
 
 ```
-prison.env(graphical_output=True, discrete_input=True, synchronized_start=False,
-identical_aliens=False, max_frames=900, random_aliens=False)
+prison.env(vector_observation=False, continuous=False, synchronized_start=False,
+identical_aliens=False, max_frames=900, num_floors=4, random_aliens=False)
 ```
 
 *about arguments*
 
 ```
-graphics_output: If set to True an image of the prisoner's cell is observed. If set to False, the distance to the left side wall is returned.
+vector_observation: If set to False an image of the prisoner's cell is observed. If set to True, the distance to the left side wall is returned.
 
-discrete_input: If True, each agent action is a discrete value indicating whether to move left or right one unit. If False, each agent action represents a real value that is added to the agent's x position
+continuous: If False, each agent action is a discrete value indicating whether to move left or right one unit. If True, each agent action represents a real value that is added to the agent's x position
 
 synchronized_start: If set to true, all aliens will start in the same x position, relative to their cells. Otherwise, their position is random.
+
+num_floors: A floor contains two aliens. Add more or fewer floor to increase or decrease the number of agents in the environment. 
 
 identical_aliens: If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
 
