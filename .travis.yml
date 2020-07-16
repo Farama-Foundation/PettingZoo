@@ -85,6 +85,7 @@ jobs:
         - export pz_module=sisl
         - export pz_render=False
       install:
+        - pip3 install pytest
         - pip3 install -r requirements.txt
         - pip3 install AutoROM
         - AutoROM -v
