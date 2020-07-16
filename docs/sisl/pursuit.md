@@ -1,9 +1,11 @@
 ---
-actions: "Either"
+actions: "Discrete"
 agents: "8 (+/-)"
 manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0,4]"
+observation-shape: ""
+observation-values: ""
 ---
 ### Pursuit
 
