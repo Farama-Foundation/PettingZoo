@@ -12,7 +12,7 @@ from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 def raw_env(seed=None):
     map_size = 45
-    shape_reward = True # option not used
+    shape_reward = True  # option not used
     return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
 
 
