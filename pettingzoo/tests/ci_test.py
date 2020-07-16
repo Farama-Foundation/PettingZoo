@@ -6,7 +6,7 @@ import pettingzoo.tests.manual_control_test as test_manual_control
 import sys
 from .all_modules import all_environments
 from .all_modules import all_prefixes
-from .render_test import test_render
+from .render_test import render_test
 from .error_tests import error_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
@@ -39,7 +39,7 @@ def perform_ci_test(env_id, render, manual_control, performance, save_obs):
 
     if render:
         try:
-            test_render(_env)
+            render_test(_env)
         except Exception as e:
             error_collected.append("Render Test:" + str(e))
 

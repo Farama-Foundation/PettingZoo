@@ -4,7 +4,7 @@ import pettingzoo.tests.api_test as api_test
 
 from .error_tests import error_test
 from .seed_test import seed_test
-from .render_test import test_render
+from .render_test import render_test
 
 
 @pytest.mark.parametrize("env_module", list(all_environments.values()))
@@ -13,5 +13,5 @@ def test_module(env_module):
     api_test.api_test(_env)
 
     seed_test(env_module.env)
-    # test_render(_env)
+    # render_test(_env)
     # error_test(env_module.env())
