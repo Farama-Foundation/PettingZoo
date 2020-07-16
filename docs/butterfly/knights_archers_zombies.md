@@ -1,13 +1,11 @@
 ---
-layout: "docu"
-actions: "Discrete"
-agents: "4 (+/-)"
+action type: "Discrete"
+agents: "4"
 manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
-num-states: "?"
 ---
 
 ### Knights Archers Zombies ('KAZ')
