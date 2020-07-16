@@ -1,13 +1,11 @@
 ---
-layout: "docu"
 actions: "Continuous"
-agents: "7 (+/-)"
+agents: "7"
 manual-control: "Yes"
 action-shape: "(3,) or (2,)"
 action-values: "[-1, 1]"
 observation-shape: "(150, 150, 3) or (154, 154, 3)"
 observation-values: "(0, 255)"
-num-states: "?"
 ---
 
 ### Prospector
@@ -142,9 +140,3 @@ gold into a bank.
 `seed`: Non-negative integer or None, sets the seed for the random
 number generator. This generator is used to determine
 agent starting locations.
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |

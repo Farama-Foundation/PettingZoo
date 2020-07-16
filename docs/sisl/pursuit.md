@@ -1,12 +1,11 @@
 ---
-layout: "docu"
-observations: "Graphical"
-actions: "Either"
+actions: "Discrete"
 agents: "8 (+/-)"
 manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0,4]"
-num-states: "?"
+observation-shape: ""
+observation-values: ""
 ---
 ### Pursuit
 
@@ -23,7 +22,9 @@ This environment is part of the [SISL environments](../sisl). Please read that p
 
 *AEC diagram*
 
-By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default. Observation shape takes the full form of `(3, obs_range, obs_range)`. Note that this environment has already had the reward pruning optimization described in the *Agent Environment Cycle Games* paper applied.
+By default there are 30 blue evaders and 8 red pursuer agents, in a 16 x 16 grid with an obstacle in the center, shown in white. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader, each of the surrounding agents receives a reward of 5, and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The enviroment runs for 500 frames by default.  Note that this environment has already had the reward pruning optimization described in the *Agent Environment Cycle Games* paper applied.
+
+Observation shape takes the full form of `(obs_range, obs_range)` (a flattening of the default), taking 0, 1, 2, 3 and 4 values for empty, pursuer only, evader only, both pursuer & evader, and obstacle, respectively.
 
 Manual Control:
 
@@ -83,9 +84,3 @@ ally_layer: Initial pursuers in world
 
 opponent_layer: Initial evader in world
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | PPO    | UMD         |       |      |
