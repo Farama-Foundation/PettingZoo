@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Either"
 agents: "8"
 manual-control: "Yes"
@@ -7,7 +6,6 @@ action-shape: "(1,)"
 action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
-num-states: "?"
 ---
 
 
@@ -54,15 +52,3 @@ identical_aliens: If set to true, each alien will have the some randomly chosen 
 
 random_aliens: If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
 ```
-
-Discrete Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |
-
-Continuous Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |
