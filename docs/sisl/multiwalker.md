@@ -1,12 +1,11 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
 agents: "3 (+/-)"
 manual-control: "No"
 action-shape: "(4)"
 action-values: "(-1, 1)"
-num-states: "?"
+observation-shape: ""
+observation-values: ""
 ---
 
 ### Multiwalker
@@ -54,11 +53,3 @@ terminate_on_fall: toggles whether agent is done if it falls down
 max_frames: after max_frames steps all agents will return done
 
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | PPO    | UMD         |       |      |
-
-Add Gupta et al and DDPG paper results too
