@@ -55,7 +55,7 @@ class Prisoner:
         elif self.last_sprite_movement == -1:
             return self.left_sprite
         else:
-            print("INVALID STATE", self.state)
+            assert False, ("INVALID STATE", self.state)
             return self.still_sprite
 
     def update_sprite(self, movement):
