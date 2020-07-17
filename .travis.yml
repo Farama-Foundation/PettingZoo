@@ -122,6 +122,7 @@ jobs:
         - python3 -m pettingzoo.tests.ci_test mpe True True True False
         - python3 -m pettingzoo.tests.ci_test magent True True True False
         - python3 -m pettingzoo.tests.ci_test sisl True True True False
+        - pytest ./pettingzoo/tests/all_parameter_combs.py
     - name: "Flake 8 tests"
       install:
         - pip3 install flake8
