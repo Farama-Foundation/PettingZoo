@@ -90,7 +90,6 @@ parameterized_envs = [
     (pursuit_v0.env, dict(reward_mech="global")),
     (pursuit_v0.env, dict(n_evaders=5,n_pursuers=16)),
     (pursuit_v0.env, dict(obs_range=15)),
-    (pursuit_v0.env, dict(layer_norm=17)),
     (pursuit_v0.env, dict(n_catch=3)),
     (pursuit_v0.env, dict(random_opponents=True)),
     (pursuit_v0.env, dict(random_opponents=True, max_opponents=15)),
