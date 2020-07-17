@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple Tag"
 agents: "4"
 manual-control: "No"
 action-shape: "(5)"

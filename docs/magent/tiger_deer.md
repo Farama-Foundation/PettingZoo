@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Tiger-Deer"
 actions: "Discrete"
 agents: "121"
 manual-control: "No"

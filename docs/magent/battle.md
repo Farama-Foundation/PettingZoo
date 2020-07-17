@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Battle"
 agents: "162"
 manual-control: "No"
 action-shape: "(21)"

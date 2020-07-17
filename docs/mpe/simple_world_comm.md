@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple World Comm"
 agents: "6"
 manual-control: "No"
 action-shape: "(5),(20)"

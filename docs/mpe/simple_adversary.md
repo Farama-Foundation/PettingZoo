@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple Adversary"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"
