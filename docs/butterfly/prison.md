@@ -24,7 +24,7 @@ This environment is part of the [butterfly environments](../butterfly). Please r
 
 *AEC diagram*
 
-In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task, this is an environment primarily intended for debugging purposes- it's multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible, it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of it's cell instead of the normal graphical output.
+In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task this is an environment primarily intended for debugging purposes - its multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of its cell instead of the normal graphical output.
 
 Manual Control:
 

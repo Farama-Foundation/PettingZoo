@@ -1,10 +1,11 @@
 ## SISL Enviroments
 
-| Environment                       | Actions  | Agents  | Manual Control | Action Shape | Action Values |
-|-----------------------------------|---------|----------|----------------|--------------|---------------|
-| [Multiwalker](sisl/multiwalker)| Continuous | 3 (+/-) | No             | (4)          | (-1, 1)       |
+| Environment                     | Actions    | Agents  | Manual Control | Action Shape | Action Values |
+|---------------------------------|------------|---------|----------------|--------------|---------------|
+| [Multiwalker](sisl/multiwalker) | Continuous | 3 (+/-) | No             | (4)          | (-1, 1)       |
 | [Pursuit](sisl/pursuit)         | Discrete   | 8 (+/-) | Yes            | (1,)         | [0,4]         |
-| [Waterworld](sisl/waterworld)  | Continuous   | 3 (+/-) | No             | (2,)         | (-1, 1)       |
+| [Waterworld](sisl/waterworld)   | Continuous | 3 (+/-) | No             | (2,)         | (-1, 1)       |
+
 
 `pip install pettingzoo[sisl]`
 
