@@ -103,6 +103,7 @@ parameterized_envs = [
     (waterworld_v0.env, dict(n_coop=1)),
     (waterworld_v0.env, dict(n_poison=4)),
     (waterworld_v0.env, dict(n_sensors=4)),
+    (waterworld_v0.env, dict(terminate_on_fall=False)),
     (waterworld_v0.env, dict(reward_mech="global")),
     (waterworld_v0.env, dict(speed_features=False)),
 ]
