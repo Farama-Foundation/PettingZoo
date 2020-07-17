@@ -15,6 +15,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 {% include table.md %}
 
+[same fixes as all the others]
 
 `pettingzoo.magent import tiger_deer_v0`
 

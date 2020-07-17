@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "24"
 manual-control: "No"
@@ -18,18 +17,24 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import battlefield_v0`
 
-`agents= [ red_[0-11], blue_[0-11] ]`
+`agents= [red_[0-11], blue_[0-11]]`
 
 ![](magent_battlefield.gif)
 
 *AEC diagram*
 
-Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
+Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles. 
+
+[copy over the info from battlefield, give specific of differences, make shaping arguments]
+
+
 
 ```
-battlefield_v0.env(seed=None)
+battlefield_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```

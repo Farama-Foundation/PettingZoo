@@ -1,5 +1,4 @@
 ---
-layout: "docu"
 actions: "Discrete"
 agents: "162"
 manual-control: "No"
@@ -18,7 +17,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import battle_v0`
 
-`agents= [ red_[0-80], blue_[0-80] ]`
+`agents= [red_[0-80], blue_[0-80]]`
 
 ![](magent_battle.gif)
 
@@ -34,20 +33,24 @@ Action options:
 * moving to any of the 12 closest squares
 * attacking any of the 8 closest squares.
 
-Reward is given as:
+Reward is given as: [make these rewards each values to a specific argument]
 
-* -0.005 reward every step
-* -0.1 reward for attacking
-* 0.2 reward for attacking an opponent
+* -0.005 reward every step (shaped)
+* -0.1 reward for attacking (shaped)
+* 0.2 reward for attacking an opponent (shaped)
+* -0.1 reward for dying (shaped)
 * 5 reward for killing an opponent
-* -0.1 reward for dying
 
-If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.095 reward)
+If multiple options apply, rewards are added together.
+
+[map size?]
 
 ```
-battle_v0.env(seed=None)
+battle_v0.env(seed=None, shape_reward=True)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
 ```

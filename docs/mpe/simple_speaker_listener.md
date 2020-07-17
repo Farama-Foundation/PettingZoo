@@ -1,6 +1,4 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -8,7 +6,6 @@ action-shape: "(3),(5)"
 action-values: "Discrete(3),(5)"
 observation-shape: "(3),(11)"
 observation-values: "(-inf,inf)"
-num-states: "?"
 ---
 
 ### Simple Speaker Listener
