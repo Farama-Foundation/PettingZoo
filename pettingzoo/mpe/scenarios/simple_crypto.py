@@ -137,24 +137,24 @@ class Scenario(BaseScenario):
 
         key = world.agents[2].key
 
-        prnt = False
+        # prnt = False
         # speaker
         if agent.speaker:
-            if prnt:
-                print('speaker')
-                print(agent.state.c)
-                print(np.concatenate([goal_color] + [key]))
+            # if prnt:
+            #     print('speaker')
+            #     print(agent.state.c)
+            #     print(np.concatenate([goal_color] + [key]))
             return np.concatenate([goal_color] + [key])
         # listener
         if not agent.speaker and not agent.adversary:
-            if prnt:
-                print('listener')
-                print(agent.state.c)
-                print(np.concatenate([key] + comm))
+            # if prnt:
+            #     print('listener')
+            #     print(agent.state.c)
+            #     print(np.concatenate([key] + comm))
             return np.concatenate([key] + comm)
         if not agent.speaker and agent.adversary:
-            if prnt:
-                print('adversary')
-                print(agent.state.c)
-                print(np.concatenate(comm))
+            # if prnt:
+            #     print('adversary')
+            #     print(agent.state.c)
+            #     print(np.concatenate(comm))
             return np.concatenate(comm)
