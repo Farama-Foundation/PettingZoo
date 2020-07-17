@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Joust"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

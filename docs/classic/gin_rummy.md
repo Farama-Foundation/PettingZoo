@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Gin Rummy"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

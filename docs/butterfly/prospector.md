@@ -1,5 +1,6 @@
 ---
 actions: "Continuous"
+title: "Prospector"
 agents: "7"
 manual-control: "Yes"
 action-shape: "(3,), (2,)"

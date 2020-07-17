@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Pursuit"
 agents: "8 (+/-)"
 manual-control: "Yes"
 action-shape: "(1,)"

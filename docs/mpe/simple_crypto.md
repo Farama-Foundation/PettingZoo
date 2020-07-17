@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple Crypto"
 agents: "2"
 manual-control: "No"
 action-shape: "(4)"

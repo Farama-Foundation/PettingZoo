@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Adversarial Pursuit"
 agents: "75"
 manual-control: "No"
 action-shape: "(9),(13)"

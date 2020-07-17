@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Tic Tac Toe"
 agents: "2"
 manual-control: "No"
 action-shape: "(1)"
