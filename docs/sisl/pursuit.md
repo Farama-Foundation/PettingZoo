@@ -2,8 +2,8 @@
 actions: "Discrete"
 agents: "8 (+/-)"
 manual-control: "Yes"
-action-shape: "(1,)"
-action-values: "[0,4]"
+action-shape: "(5)"
+action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
 ---
