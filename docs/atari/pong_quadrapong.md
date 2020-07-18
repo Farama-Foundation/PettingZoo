@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Pong: Quadrapong"
 actions: "Discrete"
 agents: "4"
 manual-control: "No"

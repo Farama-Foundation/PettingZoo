@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Rock Paper Scissors Lizard Spock"
 agents: "2"
 manual-control: "No"
 action-shape: "Discrete(5)"
