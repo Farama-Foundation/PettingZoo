@@ -5,8 +5,8 @@ agents: "3"
 manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
-observation-shape: ""
-observation-values: ""
+observation-shape: "(212,)"
+observation-values: "[-10,10]"
 ---
 
 ### Waterworld
