@@ -1,0 +1,4 @@
+| Environment                                         | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values |
+|-----------------------------------------------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|
+{% for page in site.pages %}{% if page.url contains include.group %}{% assign url_arr = page.url | split: "/" %}{% if url_arr.size > 2 %}{% assign underscore_name = url_arr[2] | split: "." %}[{{page.title}}]({{underscore_name[0]}}) | {{page.actions}} | {{page.agents}} | {{page.manual-control}} | {{ page.action-shape }} | {{page.action-values}} | {{page.observation-shape}} | {{page.observation-values}}
+{% endif %}{% endif %}{% endfor %}

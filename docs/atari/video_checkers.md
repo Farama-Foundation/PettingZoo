@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Video Checkers"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

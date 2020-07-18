@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Combined Arms"
 agents: "162"
 manual-control: "No"
 action-shape: "(9),(25)"

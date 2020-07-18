@@ -1,5 +1,7 @@
 ---
 action-type: "Discrete"
+title: "Cooperative Pong"
+actions: Discrete
 agents: "2"
 manual-control: "Yes"
 action-shape: "Discrete(3)"

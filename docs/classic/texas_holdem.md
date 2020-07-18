@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Texas Hold'em No Limit"
 agents: "2"
 manual-control: "No"
 action-shape: "Discrete(103)"

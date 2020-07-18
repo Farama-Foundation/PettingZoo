@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Gather"
 agents: "495"
 manual-control: "No"
 action-shape: "(33)"

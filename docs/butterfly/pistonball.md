@@ -1,5 +1,7 @@
 ---
 action-type: "either"
+title: "Pistonball"
+actions: Either
 agents: "20"
 manual-control: "Yes"
 action-shape: "(1,)"

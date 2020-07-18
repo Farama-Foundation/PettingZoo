@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Connect Four"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
