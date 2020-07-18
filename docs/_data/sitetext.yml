@@ -1,10 +1,14 @@
 header:
     title: PettingZoo
-    text: PettingZoo is a Python library for conducting research in multi-agent reinforcement learning
-    button1: View on Github
-    button1link: https://github.com/PettingZoo-Team/PettingZoo
-    button2: Documentation
-    button2link: documentation
+    #text: PettingZoo is a Python library for conducting research in multi-agent reinforcement learning
+    headerGif: /PettingZoo/atari/atari_warlords.gif
+    buttons:
+      - button: Github
+        buttonlink: https://github.com/PettingZoo-Team/PettingZoo
+      - button: Documentation
+        buttonlink: /PettingZoo/documentation
+      - button: Environments
+        button3link: /PettingZoo/atari
 
 services:
     title: "Interface"
