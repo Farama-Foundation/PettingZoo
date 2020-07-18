@@ -1,5 +1,7 @@
 ---
 action type: "Discrete"
+title: "Knights Archers Zombies ('KAZ')"
+actions: Discrete
 agents: "4"
 manual-control: "Yes"
 action-shape: "(1,)"

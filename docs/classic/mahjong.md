@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Mahjong"
 agents: "4"
 manual-control: "No"
 action-shape: "Discrete(38)"
