@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple Spread"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"

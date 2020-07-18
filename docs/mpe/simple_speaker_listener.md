@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple Speaker Listener"
 agents: "2"
 manual-control: "No"
 action-shape: "(3),(5)"

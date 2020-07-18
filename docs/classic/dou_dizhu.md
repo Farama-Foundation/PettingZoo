@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Dou Dizhu"
 agents: "3"
 manual-control: "No"
 action-shape: "Discrete(309)"

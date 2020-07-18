@@ -1,5 +1,6 @@
 ---
 actions: "Either"
+title: "Prison"
 agents: "8"
 manual-control: "Yes"
 action-shape: "(1,)"

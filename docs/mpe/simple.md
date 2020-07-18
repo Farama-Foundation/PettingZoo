@@ -1,5 +1,6 @@
 ---
 actions: "Discrete"
+title: "Simple"
 agents: "1"
 manual-control: "No"
 action-shape: "(5)"

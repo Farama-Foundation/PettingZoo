@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Entombed: Cooperative"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
