@@ -15,12 +15,13 @@ url    : "" # the base hostname & protocol for your site, e.g. http://example.co
 baseurl: "/PettingZoo" # the subpath of your site, e.g. /blog
 
 title      : PettingZoo
-email      : your-email@example.com #this is also the email contact forms will go to
-description: "Site description"
+email      : justinkterry@gmail.com #this is also the email contact forms will go to
+description: "Multi-Agent Reinforcement Learning Environments"
 author     : Your Name
-# logo:     #optional, defaults to site title
-  # path: assets\img\clients\creative-market.jpg
-  # height: 60 #height in px, defaults to 52px
+copyright  : Justin Terry
+logo:     #optional, defaults to site title
+  path: /PettingZoo/assets/img/PettingZoo_White.svg
+  height: 180 #height in px, defaults to 52px
 
 analytics:
   google: #Google Analytics tracking code here
