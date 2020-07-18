@@ -2,7 +2,8 @@
 action-type: "Discrete"
 agents: "2"
 manual-control: "Yes"
-action-shape: "--"
+action-shape: "Discrete(3)"
+action-values: "[0, 5]"
 action-values: "[0, 1]"
 observation-shape: "(280, 240, 3)"
 observation-values: "[0, 255]"
@@ -44,9 +45,9 @@ right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False
 *About Arguments*
 
 ```
-ball_speed: Speed of ball
-left_paddle_speed: Speed of left paddle
-right_paddle_speed: Speed of right paddle
+ball_speed: Speed of ball (in pixels)
+left_paddle_speed: Speed of left paddle (in pixels)
+right_paddle_speed: Speed of right paddle (in pixels)
 cake_paddle: If True, the right paddle cakes the shape of a 4 tiered wedding cake
 max_frames: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
 bounce_randomness: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
