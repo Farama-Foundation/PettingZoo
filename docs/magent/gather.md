@@ -25,11 +25,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 In gather, the agents must gain reward by eating food or fighting each other. Their HP decays over time, so agents die if they don't eat food or each other. You expect to see that agents coordinate by not attacking each other until food is scarce.
 
-Action options:
-
-* doing nothing
-* moving to any of the 28 closest squares
-* attacking any of the 4 closest squares.
+Action options: `[do_nothing, move_28, attack_4]`
 
 Reward is given as:
 

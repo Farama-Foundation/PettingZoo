@@ -16,7 +16,6 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 {% include table.md %}
 
-[same fixes as all the others]
 
 `pettingzoo.magent import tiger_deer_v0`
 
@@ -28,20 +27,13 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting attacked.  
 
-Tiger action options:
-
-* doing nothing
-* c to any of the 4 closest squares
-* attacking any of the 4 closest squares.
+Tiger action options: `[do_nothing, move_4, attack_4]`
 
 Tiger's reward is given as:
 
 * 1 reward for attacking a deer alongside another tiger
 
-Deer action options:
-
-* doing nothing
-* moving to any of the 4 nearest squares
+Deer action options: `[do_nothing, move_4]`
 
 Deer's reward is given as:
 
