@@ -11,10 +11,6 @@ class AECEnv(object):
     def observe(self, agent):
         raise NotImplementedError
 
-    def last(self):
-        agent = self.agent_selection
-        return self.rewards[agent], self.dones[agent], self.infos[agent]
-
     def render(self, mode='human'):
         raise NotImplementedError
 
