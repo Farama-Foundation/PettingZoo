@@ -208,8 +208,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         if value == "agent_order":
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {"rewards", "dones", "infos", "agent_selection"}:
-            EnvLogger.error_field_before_reset(value)
-            return None
+            raise AttributeError("{} cannot be accessed before reset".format(value))
         else:
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
 
