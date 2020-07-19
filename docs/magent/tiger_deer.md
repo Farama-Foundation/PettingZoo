@@ -26,7 +26,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 *AEC diagram*
 
-In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting eaten.  
+In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting attacked.  
 
 Tiger action options:
 
@@ -47,6 +47,9 @@ Deer's reward is given as:
 
 * -1 reward for dying
 
+Observation space: `[empty, obstacle, deer, tigers, binary_agent_id(10), one_hot_action, last_reward]`
+
+Map size: 45x45
 
 ```
 tiger_deer_v0.env(seed=None)

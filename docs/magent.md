@@ -22,13 +22,13 @@ Gather is a survival game where agents must try to keep alive either by gatherin
 
 * HP recovery: In battle games, agents recover HP over time, so low HP agents can hide or be protected until they heal.
 
-* Observation view: All agents observe a box around themselves. They see whether the coordinates is empty, an obstacle, or if there is an agent as entries in different channels. It signals an agent's HP by labeling the observation with the fraction of total HP.
+* Observation view: All agents observe a box around themselves. They see whether the coordinates is empty, an obstacle, or if there is an agent as entries in different channels. If an agent in on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
 * Feature vector: The feature vector contains <agent_id, action, last_reward>
 
 * Observation concatenates the 1d feature vector with 3d observation view by repeating the value of the feature across an entire image channel.
 
-* Minimap mode: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and appended onto the agent's observation view. Their own absolute position on the global map is appended to the feature vector.
+* Minimap mode: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and concatenated onto the agent's observation view (concatenated in the channel dimension, axis=2). Their own absolute position on the global map is appended to the feature vector.
 
 * Moving and attacking: An agent can only act or move with a single action, so the action space is the concatenations of all possible moves and all possible attacks.
 
