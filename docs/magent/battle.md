@@ -28,30 +28,34 @@ A large-scale team battle.
 
 Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
-Action options:
+Action options: `[do_nothing, move_12, attack_8]`
 
-* doing nothing
-* moving to any of the 12 closest squares
-* attacking any of the 8 closest squares.
+Reward is given as:
 
-Reward is given as: [make these rewards each values to a specific argument]
-
-* -0.005 reward every step (shaped)
-* -0.1 reward for attacking (shaped)
-* 0.2 reward for attacking an opponent (shaped)
-* -0.1 reward for dying (shaped)
 * 5 reward for killing an opponent
+* -0.005 reward every step (step_reward option)
+* -0.1 reward for attacking (attack_penalty option)
+* 0.2 reward for attacking an opponent (attack_opponent_reward option)
+* -0.1 reward for dying (dead_penalty option)
 
 If multiple options apply, rewards are added together.
 
-[map size?]
+Observation space: `[empty, obstacle, red, blue, minimap_red, minimap_blue, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
+
+Map size: 45x45
 
 ```
-battle_v0.env(seed=None, shape_reward=True)
+battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
 
-shape_reward: Set to False to remove all shaped reward (as shown in the lists above). This should be set when evaluating your agent.
+step_reward: reward added unconditionally
+
+dead_penalty: reward added when killed
+
+attack_penalty: reward added for attacking
+
+attack_opponent_reward: Reward added for attacking an opponent
 ```
