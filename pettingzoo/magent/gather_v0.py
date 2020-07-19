@@ -10,15 +10,15 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None, shape_reward=True):
+def raw_env(seed=None, **reward_args):
     map_size = 200
-    return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, seed))
 
 
 env = make_env(raw_env)
 
 
-def load_config(size, shape_reward):
+def load_config(size, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -28,13 +28,10 @@ def load_config(size, shape_reward):
     options = {
         'width': 1, 'length': 1, 'hp': 3, 'speed': 3,
         'view_range': gw.CircleRange(7), 'attack_range': gw.CircleRange(1),
-        'damage': 6, 'step_recover': 0, 'attack_in_group': 1
+        'damage': 6, 'step_recover': 0, 'attack_in_group': 1,
+        'step_reward': step_reward, 'attack_penalty': attack_penalty, 'dead_penalty': dead_penalty
     }
 
-    if shape_reward:
-        options.update({
-            'step_reward': -0.01, 'attack_penalty': -0.1, 'dead_penalty': -1
-        })
     agent = cfg.register_agent_type(
         name="agent",
         attr=options)
@@ -53,15 +50,14 @@ def load_config(size, shape_reward):
     a = gw.AgentSymbol(g_s, index='any')
     b = gw.AgentSymbol(g_f, index='any')
 
-    if shape_reward:
-        cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=0.5)
+    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=attack_food_reward)
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, shape_reward, seed):
-        env = magent.GridWorld(load_config(map_size, shape_reward))
+    def __init__(self, map_size, reward_args, seed):
+        env = magent.GridWorld(load_config(map_size, **reward_args))
         handles = env.get_handles()
 
         names = ["omnivore"]

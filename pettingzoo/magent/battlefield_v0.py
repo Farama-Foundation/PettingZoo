@@ -11,17 +11,17 @@ from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from .battle_v0 import get_config
 
 
-def raw_env(seed=None, shape_reward=True):
+def raw_env(seed=None, **reward_args):
     map_size = 80
-    return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, seed))
 
 
 env = make_env(raw_env)
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, shape_reward, seed):
-        env = magent.GridWorld(get_config(map_size, shape_reward), map_size=map_size)
+    def __init__(self, map_size, reward_args, seed):
+        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         names = ["red", "blue"]
