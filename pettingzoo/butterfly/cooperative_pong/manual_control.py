@@ -13,8 +13,7 @@ def manual_control(**kwargs):
 
     total_reward = 0
     initial_iteration = {agent: True for agent in env.agents}
-    dones = {agent: False for agent in env.agents}
-    done = all(dones.values())
+    done = False
 
     while not done:
 
@@ -48,8 +47,6 @@ def manual_control(**kwargs):
 
         for _ in env.agents:
             agent = env.agent_selection
-            reward, dones[agent], _ = env.last()
-            total_reward += reward
             initial_iteration[agent] = False
             env.step(action_dict[agent], observe=False)
         done = all(env.dones.values())

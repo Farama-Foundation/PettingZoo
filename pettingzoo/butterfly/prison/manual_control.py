@@ -37,7 +37,6 @@ def manual_control(**kwargs):
                 elif event.key == pygame.K_ESCAPE:
                     test_done = True
         for i in env.agents:
-            reward, done, info = env.last()
             # if reward != 0:
             #     print("Agent {} was reward {}".format(i, reward))
             if done:

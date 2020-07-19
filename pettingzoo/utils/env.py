@@ -12,8 +12,14 @@ class AECEnv(object):
         raise NotImplementedError
 
     def last(self):
-        agent = self.agent_selection
-        return self.rewards[agent], self.dones[agent], self.infos[agent]
+        raise NotImplementedError("last() has been removed. Please use final() instead.")
+
+    def final(self):
+        updates = [self.agent_selection]
+        if hasattr(self,"_was_dones"):
+            updates += [agent for agent in self.agents if self.dones[agent] and not self._was_dones[agent] and agent != self.agent_selection]
+        self._was_dones = self.dones
+        return [(agent, self.rewards[agent], self.dones[agent], self.infos[agent]) for agent in updates]
 
     def render(self, mode='human'):
         raise NotImplementedError
@@ -41,10 +47,12 @@ class AECIterator:
     def __init__(self, env, max_agent_iter):
         self.env = env
         self.iters_til_term = max_agent_iter
+        self._was_done = False
 
     def __next__(self):
-        if all(self.env.dones.values()) or self.iters_til_term <= 0:
+        if self._was_done or self.iters_til_term <= 0:
             raise StopIteration
+        self._was_done = all(self.env.dones.values())
         self.iters_til_term -= 1
         return self.env.agent_selection
 
