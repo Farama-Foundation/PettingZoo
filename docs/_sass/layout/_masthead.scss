@@ -10,19 +10,18 @@ header.masthead {
   overflow: hidden;
   position: relative;
   background-color: #353535;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
   .intro-text {
     padding-bottom: 10px;
     padding-right: 25%;
-    padding-top: 5%;
     .intro-lead-in {
-      font-size: 40px;
+      font-size: 30px;
       line-height: 40px;
       margin-bottom: 25px;
       @include heading-font;
     }
     .intro-heading {
-      font-size: 22px;
+      font-size: 15px;
       font-weight: 700;
       line-height: 22px;
       margin-bottom: 25px;
@@ -43,14 +42,20 @@ header.masthead {
   .nestedrow {
     padding-top: 0px;
   }
-  img {
-    height: 100%;
-  }
   .logobox {
-    text-align: left;
+    text-align: right;
     img {
-      width: 100%;
+      width: 60px;
     }
+  }
+  .headerbox {
+    text-align: center;
+    img {
+      height: 150px;
+    }
+  }
+  .btn-circle {
+    border-radius: 35px;
   }
 }
 @media(min-width:768px) {
@@ -58,19 +63,91 @@ header.masthead {
     .intro-text {
       padding-bottom: 10px;
       .intro-lead-in {
-        font-size: 60px;
+        font-size: 45px;
         line-height: 60px;
         font-weight: 600;
         margin-bottom: 25px;
         @include heading-font;
       }
       .intro-heading {
-        font-size: 30px;
+        font-size: 20px;
         font-weight: 300;
         line-height: 30px;
         margin-bottom: 10px;
         @include heading-font;
       }
+    }
+    .headerbox {
+      img {
+        height: 300px;
+      }
+    }
+    .logobox {
+      img {
+        width: 100px;
+      }
+    }
+  }
+}
+
+@media(min-width:992px) {
+  header.masthead {
+    .headerbox {
+      img {
+        height: 390px;
+      }
+    }
+    .logobox {
+      img {
+        width: 130px;
+      }
+    }
+  }
+}
+
+@media(min-width:1200px) {
+  header.masthead {
+    .headerbox {
+      img {
+        height: 440px;
+      }
+    }
+    .logobox {
+      img {
+        width: 180px;
+      }
+    }
+  }
+}
+
+.circlebutton {
+  width: 50%;
+  display: inline-block;
+  p {
+    font-size: x-small;
+  }
+}
+
+@media(min-width: 768px) {
+  .circlebutton {
+    p {
+      font-size: small;
+    }
+  }
+}
+
+@media(min-width: 992px) {
+  .circlebutton {
+    p {
+      font-size: small;
+    }
+  }
+}
+
+@media(min-width: 1200px) {
+  .circlebutton {
+    p {
+      font-size: medium;
     }
   }
 }

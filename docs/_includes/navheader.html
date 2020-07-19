@@ -36,7 +36,7 @@
   <header class="masthead">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm">
+        <div class="col-4 headerbox">
           <img src="{{site.data.sitetext.header.headerGif}}">  </img>
         </div>
         <div class="col" style="padding-right: 10px">
@@ -55,11 +55,18 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" style="margin-left: 10%; margin-right: 10%;">
             {%- for but in site.data.sitetext.header.buttons -%}
               <div class="col">
-                <div style="margin-bottom: 10px; margin-top: 10px; margin-right: 5px;">
-                  <a class="btn btn-primary btn-block text-uppercase js-scroll-trigger" href="{{ but.buttonlink }}">{{ but.button }}</a>
+                <div style="margin-bottom: 10px; margin-top: 10px; margin-right: 5px; margin-left: 5px;">
+                  <a class="btn btn-primary btn-circle btn-sm text-uppercase js-scroll-trigger circlebutton" href="{{ but.buttonlink }}">
+                    <div class="row-sm">
+                      <img src="{{ but.icon }}" width="90%"></img>
+                    </div>
+                    <div class="row-sm">
+                        {{ but.button }}
+                    </div>
+                  </a>
                 </div>
               </div>
             {% endfor %}
