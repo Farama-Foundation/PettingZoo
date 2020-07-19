@@ -21,7 +21,7 @@ author     : Your Name
 copyright  : Justin Terry
 logo:     #optional, defaults to site title
   path: /PettingZoo/assets/img/PettingZoo_White.svg
-  height: 180 #height in px, defaults to 52px
+  height: 100 #height in px, defaults to 52px
 
 analytics:
   google: #Google Analytics tracking code here
