@@ -13,7 +13,8 @@ def performance_benchmark(env):
     while True:
         cycles += 1
         for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
-            if 'legal_moves' in env.infos[agent]:
+            reward, done, info = env.last()
+            if not done and 'legal_moves' in env.infos[agent]:
                 action = random.choice(env.infos[agent]['legal_moves'])
             else:
                 action = env.action_spaces[agent].sample()

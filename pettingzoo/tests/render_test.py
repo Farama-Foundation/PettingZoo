@@ -8,7 +8,8 @@ def render_test(env):
     for mode in render_modes:
         for _ in range(10):
             for agent in env.agent_iter(env.num_agents):
-                if 'legal_moves' in env.infos[agent]:
+                reward, done, info = env.last()
+                if not done and 'legal_moves' in env.infos[agent]:
                     action = random.choice(env.infos[agent]['legal_moves'])
                 else:
                     action = env.action_spaces[agent].sample()
