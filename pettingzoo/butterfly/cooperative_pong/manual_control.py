@@ -11,7 +11,6 @@ def manual_control(**kwargs):
 
     pygame.key.set_repeat(20, 0)
 
-    total_reward = 0
     initial_iteration = {agent: True for agent in env.agents}
     done = False
 
@@ -29,7 +28,6 @@ def manual_control(**kwargs):
                     break
                 if event.key == pygame.K_BACKSPACE:
                     env.reset()
-                    total_reward = 0
                 if event.key == pygame.K_w:
                     # player1.moveup()
                     action_dict[env.agents[0]] = 1

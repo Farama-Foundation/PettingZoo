@@ -39,7 +39,7 @@ def manual_control(**kwargs):
         for i in env.agents:
             # if reward != 0:
             #     print("Agent {} was reward {}".format(i, reward))
-            if done:
+            if env.dones[i]:
                 test_done = True
             action = agent_actions[i]
             env.step(action, observe=False)
