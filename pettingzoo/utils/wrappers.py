@@ -80,6 +80,10 @@ class AgentIterWrapper(BaseWrapper):
         self._was_dones = {agent: done for agent, done in self.dones.items()}
         return obs
 
+    def last(self):
+        agent = self.agent_selection
+        return self.rewards[agent], self.dones[agent], self.infos[agent]
+
     def step(self, action, observe=True):
         self._has_updated = True
 
