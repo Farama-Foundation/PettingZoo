@@ -140,8 +140,9 @@ def play_test(env, observation_0):
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        reward, done, info = env.final()[0]
+        rew_agent, reward, done, info = env.final()[0]
         assert isinstance(done, bool), "Done from final is not True or False"
+        assert rew_agent == agent, "first agent of final must be current agent"
         assert reward == env.rewards[agent], "Reward from final() and rewards[agent] do not match"
         assert done == env.dones[agent], "Done from final() and rewards[agent] do not match"
         assert info == env.infos[agent], "Info from final() and infos[agent] do not match"

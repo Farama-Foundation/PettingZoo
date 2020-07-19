@@ -47,10 +47,10 @@ Environments can be interacted with in a manner very similar to Gym:
 observation = env.reset()
 total_reward = 0
 for agent in env.agent_iter():
-    for fin_agent, reward, done, info in env.final():
-        total_reward += reward
     action = policy(observation)
     observation = env.step(action)
+    for fin_agent, reward, done, info in env.final():
+        total_reward += reward
 ```
 
 The commonly used methods are:

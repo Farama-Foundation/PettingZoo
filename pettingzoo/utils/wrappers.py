@@ -50,13 +50,21 @@ class BaseWrapper(AECEnv):
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
+        self._was_dones = {agent:done for agent, done in self.env.dones.items()}
 
         return observation
+
+    def final(self):
+        updates = [self.agent_selection]
+        updates += [agent for agent in self.agents if self.dones[agent] and not self._was_dones[agent] and agent != self.agent_selection]
+        return [(agent, self.rewards[agent], self.dones[agent], self.infos[agent]) for agent in updates]
 
     def observe(self, agent):
         return self.env.observe(agent)
 
     def step(self, action, observe=True):
+        self._was_dones = {agent:done for agent, done in self.env.dones.items()}
+
         next_obs = self.env.step(action, observe=observe)
 
         self.agent_selection = self.env.agent_selection

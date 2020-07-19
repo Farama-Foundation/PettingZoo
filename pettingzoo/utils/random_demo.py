@@ -25,14 +25,14 @@ def random_demo(env, render=True):
             time.sleep(display_wait)
 
         # for _ in env.agents:
-        for reward, done, info in env.final():
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
+        else:
+            action = env.action_spaces[agent].sample()
+        env.step(action, observe=False)
+
+        for rew_agent, reward, done, info in env.final():
             total_reward += reward
-        if not env.dones[env.agent_selection]:
-            if 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
-            else:
-                action = env.action_spaces[agent].sample()
-            env.step(action, observe=False)
 
     print("Total reward", total_reward, "done", done)
 
