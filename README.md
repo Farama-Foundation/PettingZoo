@@ -55,7 +55,7 @@ The commonly used methods are:
 
 `agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent.
+`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent. Note that a particular agent being done does not mean the environment is over!
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
@@ -76,15 +76,15 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last`. This looks like:
+`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is accessed by `last`. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last`. This looks like:
+`dones`: A dict of the done state of every agent at the time called, by name. This is accessed by `last`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
+`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is accessed by `last`. This looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
