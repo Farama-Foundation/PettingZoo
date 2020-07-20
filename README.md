@@ -1,6 +1,6 @@
-<img src="PettingZoo.svg" width="100px"/>
-
-# PettingZoo
+<p align="center">
+    <img src="PettingZoo_Text.png" width="500px"/>
+</p>
 
 [![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
 
@@ -55,7 +55,7 @@ The commonly used methods are:
 
 `agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent.
+`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent. Note that a particular agent being done does not mean the environment is over!
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
@@ -76,15 +76,15 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last`. This looks like:
+`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is accessed by `last`. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last`. This looks like:
+`dones`: A dict of the done state of every agent at the time called, by name. This is accessed by `last`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
+`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is accessed by `last`. This looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
@@ -96,7 +96,7 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 ## Environment Actions
 
-In this API, when the environment acts following an agents action, they're treated as happening at the same time. There are cases where breaking these apart can be very helpful. Our API supports this by treating the environment as an "agent". While initially odd, having an environment agent that can act on the state of the game is actually a common modeling practice in game theory.
+In this API when the environment acts following an agents action they're treated as happening at the same time. There are cases where breaking these apart can be very helpful. Our API supports this by treating the environment as an "agent". While initially odd, having an environment agent that can act on the state of the game is actually a common modeling practice in game theory.
 
 We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
 
@@ -176,7 +176,7 @@ random_demo(env)
 
 ### Observation Saving
 
-If the agents in a game make observations that are images, the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no agent is specified, the current selected agent for the environment is chosen. If all_agents is passed in as True, then the observations of all agents in the environment is saved. By default the images are saved to the current working directory, in a folder matching the environment name. The saved image will match the name of the observing agent. If save_dir is passed in, a new folder is created where images will be saved to.
+If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no agent is specified then the current selected agent for the environment is chosen. If all_agents is passed in as True, then the observations of all agents in the environment is saved. By default the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If save_dir is passed in, a new folder is created where images will be saved to.
 
 ```
 from pettingzoo.utils import save_observation
@@ -210,4 +210,4 @@ To cite this project in publication, please use
 
 ## Reward Program
 
-We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can recieve a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing adress or PayPal adress. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.
+We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can receive a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing address or PayPal address. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.

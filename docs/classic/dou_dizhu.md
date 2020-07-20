@@ -1,13 +1,12 @@
 ---
-layout: "docu"
 actions: "Discrete"
+title: "Dou Dizhu"
 agents: "3"
 manual-control: "No"
 action-shape: "Discrete(309)"
 action-values: "Discrete(309)"
 observation-shape: "(6, 5, 15)"
 observation-values: "[0,1]"
-num-states: "10^53 - 10^83"
 ---
 
 ### Dou Dizhu

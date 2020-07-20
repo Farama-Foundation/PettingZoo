@@ -10,34 +10,39 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, **reward_args):
     map_size = 200
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, seed))
 
 
 env = make_env(raw_env)
 
 
-def load_config(size):
+def load_config(size, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5):
     gw = magent.gridworld
     cfg = gw.Config()
 
     cfg.set({"map_width": size, "map_height": size})
     cfg.set({"minimap_mode": True})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 3, 'speed': 3,
+        'view_range': gw.CircleRange(7), 'attack_range': gw.CircleRange(1),
+        'damage': 6, 'step_recover': 0, 'attack_in_group': 1,
+        'step_reward': step_reward, 'attack_penalty': attack_penalty, 'dead_penalty': dead_penalty
+    }
+
     agent = cfg.register_agent_type(
         name="agent",
-        attr={'width': 1, 'length': 1, 'hp': 3, 'speed': 3,
-              'view_range': gw.CircleRange(7), 'attack_range': gw.CircleRange(1),
-              'damage': 6, 'step_recover': 0,
-              'step_reward': -0.01, 'dead_penalty': -1, 'attack_penalty': -0.1,
-              'attack_in_group': 1})
+        attr=options)
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 25, 'speed': 0,
+        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
+        'kill_reward': 5}
     food = cfg.register_agent_type(
         name='food',
-        attr={'width': 1, 'length': 1, 'hp': 25, 'speed': 0,
-              'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-              'kill_reward': 5})
+        attr=options)
 
     g_f = cfg.add_group(food)
     g_s = cfg.add_group(agent)
@@ -45,14 +50,14 @@ def load_config(size):
     a = gw.AgentSymbol(g_s, index='any')
     b = gw.AgentSymbol(g_f, index='any')
 
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=0.5)
+    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=attack_food_reward)
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
-        env = magent.GridWorld(load_config(size=map_size))
+    def __init__(self, map_size, reward_args, seed):
+        env = magent.GridWorld(load_config(map_size, **reward_args))
         handles = env.get_handles()
 
         names = ["omnivore"]

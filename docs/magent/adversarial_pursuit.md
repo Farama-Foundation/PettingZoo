@@ -1,11 +1,11 @@
 ---
-layout: "docu"
 actions: "Discrete"
+title: "Adversarial Pursuit"
 agents: "75"
 manual-control: "No"
 action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
-observation-shape: "(10,10,19), (9,9,15)"
+observation-shape: "(9,9,15), (10,10,19)"
 observation-values: "[0,2]"
 ---
 
@@ -18,38 +18,37 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import adversarial_pursuit_v0`
 
-`agents= [ predator_[0-24], prey_[0-49] ]`
+`agents= [predator_[0-24], prey_[0-49]]`
 
 ![](magent_adversarial_pursuit.gif)
 
 *AEC diagram*
 
-The red agents must navigate the obstacles and try to trap the blue agents.
+The red agents must navigate the obstacles and attack the blue agents. The blue agents should try to avoid being attacked. Since the red agents are slower (but larger) than the blue agents, they must work together to trap the blue agents, so they can attack them continually (note that they blue agent's won't die if attacked, so they can be used as an infinite source of reward).
 
-Predator action options:
-
-* doing nothing
-* Moving to any of the 4 closest squares
-* attacking any of the 8 closest squares.
+Predator action options: `[do_nothing, move_4, attack_8]`
 
 Predator's reward is given as:
 
-* -0.2 reward for attacking
 * 1 reward for attacking a prey
+* -0.2 reward for attacking (attack_penalty option)
 
-Prey action options:
-
-* doing nothing
-* moving to any of the 8 nearest squares
+Prey action options: `[do_nothing, move_8]`
 
 Prey's reward is given as:
 
 * -1 reward for being attacked
 
+Observation space: `[empty, obstacle, predators, prey, one_hot_action, last_reward]`
+
+Map size: 45x45
+
 ```
-adversarial_pursuit_v0.env(seed=None)
+adversarial_pursuit_v0.env(seed=None, attack_penalty=-0.2)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+attack_penalty: Adds the following value to the reward whenever an attacking action is taken
 ```

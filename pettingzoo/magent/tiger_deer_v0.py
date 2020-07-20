@@ -25,20 +25,25 @@ def get_config(map_size):
     cfg.set({"map_width": map_size, "map_height": map_size})
     cfg.set({"embedding_size": 10})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
+        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
+        'step_recover': 0.2,
+        'kill_supply': 8, 'dead_penalty': -1.,
+    }
+
     deer = cfg.register_agent_type(
         "deer",
-        {'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
-         'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-         'step_recover': 0.2,
-         'kill_supply': 8, 'dead_penalty': -1.,
-         })
+        options)
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
+        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
+        'damage': 1, 'step_recover': -0.2
+    }
     tiger = cfg.register_agent_type(
         "tiger",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
-         'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-         'damage': 1, 'step_recover': -0.2,
-         })
+        options)
 
     deer_group = cfg.add_group(deer)
     tiger_group = cfg.add_group(tiger)

@@ -206,6 +206,7 @@ class raw_env(AECEnv):
         # Reset agent and agent_selection
         self._reset_agents(player_number=obs['current_player'])
 
+        self.rewards = {agent: 0 for agent in self.agents}
         # Reset internal state
         self._process_latest_observations(obs=obs)
 
@@ -253,6 +254,9 @@ class raw_env(AECEnv):
             # Apply action
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
+            # sets current reward for 0 to intialize reward accumulation
+            self.rewards[agent_on_turn] = 0
+
             # Update internal state
             self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
@@ -267,7 +271,8 @@ class raw_env(AECEnv):
         """Updates internal state"""
 
         self.latest_observations = obs
-        self.rewards = {player_name: reward for player_name in self.agents}
+        for agent, agent_rew in self.rewards.items():
+            self.rewards[agent] = reward + agent_rew
         self.dones = {player_name: done for player_name in self.agents}
 
         # Here we have to deal with the player index with offset = 1

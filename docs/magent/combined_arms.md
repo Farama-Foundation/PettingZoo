@@ -1,6 +1,6 @@
 ---
-layout: "docu"
 actions: "Discrete"
+title: "Combined Arms"
 agents: "162"
 manual-control: "No"
 action-shape: "(9),(25)"
@@ -18,7 +18,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 `pettingzoo.magent import combined_arms_v0`
 
-`agents= [ redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35], ]`
+`agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]`
 
 ![](magent_combined_arms.gif)
 
@@ -26,32 +26,37 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack father and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so).
 
-Melee action options:
+Melee action options: `[do_nothing, move_4, attack_4]`
 
-* doing nothing
-* moving to any of the 4 closest squares
-* attacking any of the 4 closest squares.
-
-Ranged action options:
-
-* doing nothing
-* moving to any of the 12 closest squares
-* attacking any of the 12 closest squares.
+Ranged action options: `[do_nothing, move_12, attack_12]`
 
 Reward is given as:
 
-* -0.01 reward for not attacking
-* -1 reward for attacking nothing
-* 2 reward for attacking an opponent
 * 100 reward for killing an opponent
-* -1 reward for dying
+* -0.01 reward every step (step_reward option)
+* -0.1 reward for attacking (attack_penalty option)
+* 2 reward for attacking an opponent (attack_opponent_reward option)
+* -1 reward for dying (dead_penalty option)
 
-If multiple options apply, the rewards are simply added together (so for example, attacking an opponent that does not die will give 0.99 reward)
+
+If multiple options apply, rewards are added together
+
+Observation space: `[empty, obstacle, agent_maps, agent_minimaps, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
+
+Map size: 45x45
 
 ```
-combined_arms_v0.env(seed=None)
+combined_arms_v0.env(seed=None, step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2)
 ```
 
 ```
 seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
+step_reward: reward added unconditionally
+
+dead_penalty: reward added when killed
+
+attack_penalty: reward added for attacking
+
+attack_opponent_reward: Reward added for attacking an opponent
 ```

@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Combat: Tank"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
