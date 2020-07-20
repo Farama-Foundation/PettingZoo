@@ -1,7 +1,7 @@
 ## Classic Environments
 
 
-{% include bigtable.md group="classic" %}
+{% include bigtable.md group="classic/" %}
 
 `pip install pettingzoo[classic]`
 

@@ -1,7 +1,7 @@
 ## Butterfly Environments
 
 
-{% include bigtable.md group="butterfly" %}
+{% include bigtable.md group="butterfly/" %}
 
 `pip install pettingzoo[butterfly]`
 

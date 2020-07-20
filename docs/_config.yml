@@ -30,3 +30,9 @@ collections:
   portfolio:
 
 markdown: kramdown
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: docu

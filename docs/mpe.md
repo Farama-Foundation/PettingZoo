@@ -1,7 +1,7 @@
 ## MPE environments
 
 
-{% include bigtable.md group="mpe" %}
+{% include bigtable.md group="mpe/" %}
 
 `pip install pettingzoo[mpe]`
 
