@@ -219,7 +219,8 @@ class Pursuit():
             opponent_layer = self.pursuer_layer
             opponent_controller = self.pursuer_controller
 
-        self.latest_reward_state = self.reward()
+        if is_last:
+            self.latest_reward_state = self.reward()
 
         # actual action application
         agent_layer.move_agent(agent_id, action)
