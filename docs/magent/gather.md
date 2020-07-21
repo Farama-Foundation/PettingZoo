@@ -41,7 +41,7 @@ Observation space: `[empty, obstacle, omnivore, food, omnivore_minimap, food_min
 Map size: 200x200
 
 ```
-gather_v0.env(seed=None, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5)
+gather_v0.env(seed=None, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
 ```
 
 ```
@@ -54,4 +54,6 @@ dead_penalty: reward added when killed
 attack_penalty: reward added for attacking
 
 attack_food_reward: Reward added for attacking a food
+
+max_frames: number of frames (a step for each agent) until game terminates
 ```

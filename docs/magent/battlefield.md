@@ -47,7 +47,7 @@ Observation space: `[empty, obstacle, red, blue, minimap_red, minimap_blue, bina
 Map size: 80x80
 
 ```
-battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
+battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
 ```
 
 ```
@@ -60,4 +60,6 @@ dead_penalty: reward added when killed
 attack_penalty: reward added for attacking
 
 attack_opponent_reward: Reward added for attacking an opponent
+
+max_frames: number of frames (a step for each agent) until game terminates
 ```
