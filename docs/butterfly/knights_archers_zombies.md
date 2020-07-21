@@ -8,6 +8,7 @@ action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
+average-total-reward: "250.6"
 ---
 
 ### Knights Archers Zombies ('KAZ')

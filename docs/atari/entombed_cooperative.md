@@ -8,6 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+average-total-reward: "0.0082"
 ---
 
 ### Entombed: Cooperative

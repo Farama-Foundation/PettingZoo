@@ -7,6 +7,7 @@ action-shape: "(2,)"
 action-values: "(-1, 1)"
 observation-shape: "(212,)"
 observation-values: "[-10,10]"
+average-total-reward: "-0.533"
 ---
 
 ### Waterworld
