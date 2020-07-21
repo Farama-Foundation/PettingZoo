@@ -7,7 +7,9 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
+average-total-reward: "3.11"
 ---
+
 ### Pursuit
 
 This environment is part of the [SISL environments](../sisl). Please read that page first for general information.

@@ -7,6 +7,7 @@ action-shape: "(1,)"
 action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
+average-total-reward: "1.456"
 ---
 
 
@@ -47,7 +48,7 @@ continuous: If False, each agent action is a discrete value indicating whether t
 
 synchronized_start: If set to true, all aliens will start in the same x position, relative to their cells. Otherwise, their position is random.
 
-num_floors: A floor contains two aliens. Add more or fewer floor to increase or decrease the number of agents in the environment. 
+num_floors: A floor contains two aliens. Add more or fewer floor to increase or decrease the number of agents in the environment.
 
 identical_aliens: If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
 

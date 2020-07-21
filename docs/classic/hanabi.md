@@ -7,6 +7,7 @@ action-shape: "(1,)"
 action-values: "Discrete(14)"
 observation-shape: "(373,)"
 observation-values: "[0,1]"
+average-total-reward: "0.0"
 ---
 
 ### Hanabi
