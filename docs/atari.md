@@ -24,7 +24,7 @@ We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/Super
 
 Here is some example usage for the Atari preprocessing.
 
-```
+```python
 from supersuit import resize, frame_skip, frame_stack
 from pettingzoo.atari import space_invaders_v0
 
