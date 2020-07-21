@@ -38,8 +38,8 @@
 
 .doccontainer {
   table {
-    table-layout: fixed;
-    width: 100%;
+    /*table-layout: fixed;
+    width: 100%;*/
     overflow-x: scroll;
   }
 
@@ -52,3 +52,17 @@
     max-width: 40%;
   }
 }
+
+.bigtable{
+  overflow-x: scroll;
+  padding-bottom: 1em;
+}
+  table {
+    margin-bottom: 10%;
+  }
+
+  td,th {
+    width: 10%;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
+  }
