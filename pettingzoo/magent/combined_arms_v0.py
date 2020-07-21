@@ -10,9 +10,9 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None, **reward_args):
+def raw_env(seed=None, max_frames=1000, **reward_args):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames, seed))
 
 
 env = make_env(raw_env)
@@ -119,10 +119,10 @@ def generate_map(env, map_size, handles):
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, reward_args, seed):
+    def __init__(self, map_size, reward_args, max_frames, seed):
         env = magent.GridWorld(load_config(map_size, **reward_args))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
-        super().__init__(env, env.get_handles(), names, map_size, seed)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames, seed)
 
     def generate_map(self):
         generate_map(self.env, self.map_size, self.handles)
