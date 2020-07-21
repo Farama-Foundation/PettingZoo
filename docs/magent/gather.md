@@ -23,7 +23,7 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 *AEC diagram*
 
-In gather, the agents must gain reward by eating food or fighting each other. Their HP decays over time, so agents die if they don't eat food or each other. You expect to see that agents coordinate by not attacking each other until food is scarce.
+In gather, the agents must gain reward by eating food or fighting each other. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce.
 
 Action options: `[do_nothing, move_28, attack_4]`
 
