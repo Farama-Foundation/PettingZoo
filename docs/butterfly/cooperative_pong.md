@@ -9,6 +9,7 @@ action-values: "[0, 5]"
 action-values: "[0, 1]"
 observation-shape: "(280, 240, 3)"
 observation-values: "[0, 255]"
+average-total-reward: "-92.8"
 ---
 
 ### Cooperative Pong

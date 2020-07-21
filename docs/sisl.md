@@ -1,6 +1,6 @@
 ## SISL Enviroments
 
-{% include bigtable.md group="sisl/" %}
+{% include bigtable.md group="sisl/" avg_rew=1 %}
 
 `pip install pettingzoo[sisl]`
 

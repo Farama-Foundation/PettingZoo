@@ -7,6 +7,7 @@ action-shape: "(4,)"
 action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-5.333,5.333]"
+average-total-reward: "-109.7"
 ---
 
 ### Multiwalker
