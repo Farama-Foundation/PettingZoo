@@ -35,7 +35,8 @@ class ParallelAtariEnv:
             seed=None,
             obs_type='rgb_image',
             repeat_action_probability=0.25,
-            full_action_space=True):
+            full_action_space=True,
+            max_frames=100000):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
 
@@ -44,6 +45,7 @@ class ParallelAtariEnv:
         self.full_action_space = full_action_space
         self.num_players = num_players
         self.np_random = seeding.np_random(seed)
+        self.max_frames = max_frames
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -102,6 +104,7 @@ class ParallelAtariEnv:
 
     def reset(self):
         self.ale.reset_game()
+        self.frame = 0
 
         return [self._observe()] * self.num_agents
 
@@ -118,13 +121,14 @@ class ParallelAtariEnv:
         actions = np.asarray(actions)
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
-        if self.ale.game_over():
+        if self.ale.game_over() or self.frame >= self.max_frames:
             dones = [True] * self.num_agents
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
             dones = [int(life) < 0 for life in lives]
 
+        self.frame += 1
         observations = [self._observe()] * self.num_agents
         infos = [{}] * self.num_agents
         return observations, rewards, dones, infos
