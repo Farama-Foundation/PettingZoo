@@ -163,7 +163,7 @@ from pettingzoo.butterfly import prison
 prison.manual_control([environment specs])
 ```
 
-Look at the [documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
+Environemnts say if they support this functionality in their documentation, and what the specific controls are.
 
 ### Random Demo
 
