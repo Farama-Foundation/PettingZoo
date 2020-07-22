@@ -100,9 +100,7 @@ In this API when the environment acts following an agents action they're treated
 
 We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
 
-## Environment Documentation
-
-Full documentation of each environment is available [here].
+## Raw Environments
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
@@ -160,7 +158,7 @@ Often, you want to be able to play before trying to learn it to get a better fee
 
 ```
 from pettingzoo.butterfly import prison
-prison.manual_control([environment specs])
+prison.manual_control(<environment parameters>)
 ```
 
 Environemnts say if they support this functionality in their documentation, and what the specific controls are.
