@@ -152,7 +152,7 @@ import pettingzoo.tests.manual_control_test as manual_control_test
 manual_control_test.test_manual_control(env.manual_control)
 ```
 
-If the environment has`manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
+If the environment has `manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
 
 ### Manual Control
 
