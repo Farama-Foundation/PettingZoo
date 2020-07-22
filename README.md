@@ -190,9 +190,6 @@ The first function will save the current observation for the specified agent. Th
 
 We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
 
-## Leaderboards
-Our cooperative games have leaderboards for best total (summed over all agents) score. If you'd like to be listed on the leader board, please submit a pull request. Only pull requests that link to code for reproducibility and use environment arguments in the spirit of the competition will be accepted.
-
 ## Citation
 
 To cite this project in publication, please use
