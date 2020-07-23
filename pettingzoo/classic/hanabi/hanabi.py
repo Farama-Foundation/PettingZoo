@@ -241,6 +241,7 @@ class raw_env(AECEnv):
             By default a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
+        action = int(action)
 
         agent_on_turn = self.agent_selection
 
