@@ -1,14 +1,12 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
+title: "Simple Push"
 agents: "2"
 manual-control: "No"
 action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(8),(19)"
 observation-values: "(-inf,inf)"
-num-states: "?"
 ---
 
 ### Simple Push

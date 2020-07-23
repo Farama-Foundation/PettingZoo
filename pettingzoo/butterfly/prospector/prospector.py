@@ -689,4 +689,4 @@ class raw_env(AECEnv):
             pg.quit()
 
 
-# Except for the gold png images, all other sprite art was created by Yashas Lokesh
+# Art by Keira Wentworth

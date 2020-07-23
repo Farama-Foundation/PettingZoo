@@ -76,5 +76,5 @@ class raw_env(AECEnv):
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
-        o = np.array(self.env.safely_observe(self.agent_name_mapping[agent]), np.float32)
-        return o
+        o = self.env.safely_observe(self.agent_name_mapping[agent])
+        return np.swapaxes(o, 2, 0)

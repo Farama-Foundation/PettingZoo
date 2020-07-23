@@ -76,7 +76,7 @@ class raw_env(AECEnv):
         for r in self.rewards:
             self.rewards[r] = self.env.get_last_rewards()[self.agent_name_mapping[r]]
         for d in self.dones:
-            self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[r]]
+            self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
         self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_frames:

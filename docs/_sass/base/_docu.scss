@@ -3,22 +3,22 @@ body {
     overflow-x: hidden;
     @include body-font;
   }
-  
+
   p {
     line-height: 1.75;
   }
-  
+
   a {
     color: $primary;
     &:hover {
       color: darken($primary, 10%);
     }
   }
-  
+
   .text-primary {
     color: $primary !important;
   }
-  
+
   h1,
   h2,
   h3,
@@ -28,7 +28,7 @@ body {
     font-weight: 700;
     @include heading-font;
   }
-  
+
   .page-section {
     padding: 50px 0;
     h2.section-heading {
@@ -50,23 +50,22 @@ body {
       padding: 150px 0;
     }
   }
-  
+
   // Highlight color customization
   ::-moz-selection {
     background: $primary;
     text-shadow: none;
   }
-  
+
   ::selection {
     background: $primary;
     text-shadow: none;
   }
-  
+
   img::selection {
     background: transparent;
   }
-  
+
   img::-moz-selection {
     background: transparent;
   }
-  

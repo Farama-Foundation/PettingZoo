@@ -1,6 +1,6 @@
 ---
-layout: "docu"
 observations: "Discrete"
+title: "Leduc Hold'em"
 actions: "2"
 agents: "No"
 manual-control: "Discrete(4)"

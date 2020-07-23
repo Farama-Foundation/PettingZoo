@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Combat: Jet"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

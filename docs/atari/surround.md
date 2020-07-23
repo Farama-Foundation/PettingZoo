@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Surround: Original"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

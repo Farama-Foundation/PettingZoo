@@ -10,9 +10,9 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, max_frames=300):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, max_frames, seed))
 
 
 env = make_env(raw_env)
@@ -25,20 +25,25 @@ def get_config(map_size):
     cfg.set({"map_width": map_size, "map_height": map_size})
     cfg.set({"embedding_size": 10})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
+        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
+        'step_recover': 0.2,
+        'kill_supply': 8, 'dead_penalty': -1.,
+    }
+
     deer = cfg.register_agent_type(
         "deer",
-        {'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
-         'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-         'step_recover': 0.2,
-         'kill_supply': 8, 'dead_penalty': -1.,
-         })
+        options)
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
+        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
+        'damage': 1, 'step_recover': -0.2
+    }
     tiger = cfg.register_agent_type(
         "tiger",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
-         'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-         'damage': 1, 'step_recover': -0.2,
-         })
+        options)
 
     deer_group = cfg.add_group(deer)
     tiger_group = cfg.add_group(tiger)
@@ -56,13 +61,13 @@ def get_config(map_size):
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
+    def __init__(self, map_size, max_frames, seed):
         env = magent.GridWorld(get_config(map_size), map_size=map_size)
 
         handles = env.get_handles()
 
         names = ["deer", "tiger"]
-        super().__init__(env, handles, names, map_size, seed)
+        super().__init__(env, handles, names, map_size, max_frames, seed)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size

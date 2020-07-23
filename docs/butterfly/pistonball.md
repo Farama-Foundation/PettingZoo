@@ -1,13 +1,14 @@
 ---
-layout: "docu"
-actions: "Either"
+action-type: "either"
+title: "Pistonball"
+actions: Either
 agents: "20"
 manual-control: "Yes"
 action-shape: "(1,)"
-action-values: "[0, 2]"
+action-values: "discrete (2)"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
-num-states: "?"
+average-total-reward: "0.419"
 ---
 
 ### Pistonball
@@ -25,10 +26,10 @@ This environment is part of the [butterfly environments](../butterfly). Please r
 
 *AEC diagram*
 
-This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves, and the two pistons next to them.
-Thus, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent get's a reward that is a combination of how much the ball moved left overall, and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
+This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves and the two pistons next to them.
+Thus pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
 
-Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as Angry Birds.
+Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.
 
 Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
 
@@ -55,15 +56,3 @@ ball_friction: Sets the friction of the ball physics object
 
 ball_elasticity: Sets the elasticity of the ball physics object
 ```
-
-Discrete Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |
-
-Continuous Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |

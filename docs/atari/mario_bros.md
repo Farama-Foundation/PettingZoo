@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Mario Bros"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
