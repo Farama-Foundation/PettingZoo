@@ -12,7 +12,7 @@ header:
         icon: /PettingZoo/assets/img/doc_icon.svg
         iconsize: 80%
       - button: Environments
-        buttonlink: /PettingZoo/atari
+        buttonlink: /PettingZoo/atari/
         icon: /PettingZoo/assets/img/environment_icon.svg
         iconsize: 80%
 
