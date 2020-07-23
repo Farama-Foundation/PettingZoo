@@ -1,6 +1,6 @@
 header:
     title: PettingZoo
-    text: A Python library for conducting research in multi-agent reinforcement learning
+    text: multi-agent reinforcement learning environments 
     headerGif: /PettingZoo/atari/atari_warlords.gif
     buttons:
       - button: Github
@@ -17,7 +17,7 @@ header:
         iconsize: 80%
 
 services:
-    title: "Interface"
+    title: "Useage"
     text: "Environments can be interacted with in a manner very similar to Gym:"
     section: services
 
