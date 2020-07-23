@@ -152,6 +152,22 @@ def play_test(env, observation_0):
         observation = env.step(action, observe=False)
         assert observation is None, "step(observe=False) must not return anything"
 
+def test_action_flexibility(env):
+    env.reset()
+    agent = env.agent_selection
+    action_space = env.action_spaces[agent]
+    if isinstance(action_space, gym.spaces.Discrete):
+        if 'legal_moves' in env.infos[agent]:
+            action = env.infos[agent]['legal_moves'][0]
+        else:
+            action = 0
+        env.step(action)
+        env.reset()
+        env.step(np.int32(action))
+    elif isinstance(action_space, gym.spaces.Box):
+        env.step(np.zeros_like(action_space.low))
+        env.reset()
+        env.step(np.zeros_like(action_space.low).tolist())
 
 def api_test(env, render=False, verbose_progress=False):
     def progress_report(msg):
@@ -194,6 +210,8 @@ def api_test(env, render=False, verbose_progress=False):
     assert len(env.rewards) == len(env.dones) == len(env.infos) == len(env.agents), "rewards, dones, infos and agents must have the same length"
 
     test_rewards_dones(env, agent_0)
+
+    test_action_flexibility(env)
 
     progress_report("Finished test_rewards_dones")
 
