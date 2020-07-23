@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Flag Capture"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

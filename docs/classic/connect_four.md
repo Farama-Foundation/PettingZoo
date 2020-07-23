@@ -1,13 +1,12 @@
 ---
-layout: "docu"
 actions: "Discrete"
+title: "Connect Four"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
 action-values: "Discrete(7)"
 observation-shape: "(6, 7, 2)"
 observation-values: "[0,1]"
-num-states: "?"
 ---
 
 ### Connect Four

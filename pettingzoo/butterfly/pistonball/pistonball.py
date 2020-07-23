@@ -26,8 +26,12 @@ def get_image(path):
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    default_val = np.zeros((1,)) if env.continuous else 1
-    env = wrappers.AssertOutOfBoundsWrapper(env)
+    if env.continuous:
+        default_val = np.zeros((1,))
+        env = wrappers.ClipOutOfBoundsWrapper(env)
+    else:
+        default_val = 1
+        env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NanNoOpWrapper(env, default_val, "setting action to {}".format(default_val))
     env = wrappers.OrderEnforcingWrapper(env)
     return env
@@ -91,9 +95,9 @@ class raw_env(AECEnv):
 
         self.offset = 0
         if self.random_drop:
-            self.offset = self.np_random.random_integers(-30, 30)
+            self.offset = self.np_random.randint(-30, 30 + 1)
         self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.random_integers(-15, 15), ball_mass, ball_friction, ball_elasticity)
+            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), ball_mass, ball_friction, ball_elasticity)
         self.lastX = int(self.ball.position[0] - 40)
         self.distance = self.lastX - 80
 
@@ -187,8 +191,8 @@ class raw_env(AECEnv):
 
         self.offset = 0
         if self.random_drop:
-            self.offset = self.np_random.random_integers(-30, 30)
-        self.ball.position = (800 + self.offset, 350 + self.np_random.random_integers(-15, 15))
+            self.offset = self.np_random.randint(-30, 30 + 1)
+        self.ball.position = (800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
         if self.starting_angular_momentum:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         self.lastX = int(self.ball.position[0] - 40)

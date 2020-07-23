@@ -26,25 +26,58 @@
 
 @media(min-width:768px) {
   .docnavcontainer {
-        padding-top: 80px;
+        padding-top: 90px;
         padding-bottom: 15px;
     }
-  
+
+}
+.pagecontainer {padding-top: 180px;}
+@media only screen and (max-width: 991px) {
+  .pagecontainer {padding-top: 150px;}
 }
 
 .doccontainer {
   table {
-    table-layout: fixed;
-    width: 100%;
+    /*table-layout: fixed;
+    width: 100%;*/
     overflow-x: scroll;
   }
 
   th,td {
     word-wrap: break-word;
-    
+
   }
 
   img {
     max-width: 40%;
   }
+}
+
+table{
+margin-bottom: 1em;
+table-layout:auto;
+margin-left: 0.5em;
+}
+
+  td,th {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+.bigtable{
+  overflow-x: auto;
+  margin-bottom: 1em;
+  table{
+  margin-bottom: 0;
+  margin-left: 0;
+  }
+
+    td,th {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1%;
+      padding-left: 1px;
+      padding-right: 1px;
+    }
 }

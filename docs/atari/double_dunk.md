@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Double Dunk"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

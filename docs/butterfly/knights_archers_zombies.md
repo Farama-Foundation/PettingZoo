@@ -1,13 +1,14 @@
 ---
-layout: "docu"
-actions: "Discrete"
-agents: "4 (+/-)"
+action type: "Discrete"
+title: "Knights Archers Zombies ('KAZ')"
+actions: Discrete
+agents: "4"
 manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
-num-states: "?"
+average-total-reward: "250.6"
 ---
 
 ### Knights Archers Zombies ('KAZ')
@@ -46,9 +47,9 @@ killable_knights=True, killable_archers=True, black_death=True, line_death=True,
 ```
 spawn_rate: how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
 
-knights: how many knight agents initially spawn.
+num_knights: how many knight agents initially spawn.
 
-archers: how many archer agents initially spawn.
+num_archers: how many archer agents initially spawn.
 
 killable_knights: if set to False, knight agents cannot be killed by zombies.
 
@@ -60,9 +61,3 @@ line_death: if set to False, agents do not die when they touch the top or bottom
 
 pad_observation: if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 ```
-
-Leaderboard:
-
-| Average Total Reward | Method | Institution | Paper | Code |
-|----------------------|--------|-------------|-------|------|
-| x                    | x      | x           | x     | x    |

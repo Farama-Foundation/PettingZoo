@@ -81,8 +81,6 @@ class Pursuit():
         self.evader_layer = kwargs.pop(
             'opponent_layer', AgentLayer(xs, ys, self.evaders))
 
-        self.layer_norm = kwargs.pop('layer_norm', 10)
-
         self.n_catch = kwargs.pop('n_catch', 2)
 
         self.random_opponents = kwargs.pop('random_opponents', False)
@@ -118,27 +116,19 @@ class Pursuit():
 
         self.train_pursuit = kwargs.pop('train_pursuit', True)
 
+        max_agents_overlap = max(self.n_pursuers, self.n_evaders)
+        obs_space = spaces.Box(low=0, high=max_agents_overlap, shape=(
+            self.obs_range, self.obs_range, 3), dtype=np.float32)
+        act_space = spaces.Discrete(n_act_purs)
         if self.train_pursuit:
-            self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
-            self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            self.action_space = [spaces.Discrete(
-                n_act_purs) for _ in range(self.n_pursuers)]
+            self.action_space = [act_space for _ in range(self.n_pursuers)]
 
-            self.observation_space = [spaces.Box(low=0, high=5, shape=(
-                self.obs_range, self.obs_range), dtype=np.float32) for _ in range(self.n_pursuers)]
-            self.local_obs = np.zeros(
-                (self.n_pursuers, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+            self.observation_space = [obs_space for _ in range(self.n_pursuers)]
             self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
         else:
-            self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
-            self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            self.action_space = [spaces.Discrete(
-                n_act_ev) for _ in range(self.n_evaders)]
+            self.action_space = [act_space for _ in range(self.n_evaders)]
 
-            self.observation_space = [spaces.Box(low=0, high=5, shape=(
-                self.obs_range, self.obs_range), dtype=np.float32) for _ in range(self.n_evaders)]
-            self.local_obs = np.zeros(
-                (self.n_evaders, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
+            self.observation_space = [obs_space for _ in range(self.n_evaders)]
             self.act_dims = [n_act_purs for i in range(self.n_evaders)]
         self.pursuers_gone = np.array([False for i in range(self.n_pursuers)])
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
@@ -229,7 +219,8 @@ class Pursuit():
             opponent_layer = self.pursuer_layer
             opponent_controller = self.pursuer_controller
 
-        self.latest_reward_state = self.reward()
+        if is_last:
+            self.latest_reward_state = self.reward()
 
         # actual action application
         agent_layer.move_agent(agent_id, action)
@@ -404,46 +395,32 @@ class Pursuit():
             agent_layer = self.pursuer_layer
         else:
             agent_layer = self.evader_layer
-        obs = self.collect_obs(agent_layer)
-        return obs[i]
+        obs = self.collect_obs(agent_layer, i)
+        return obs
 
-    def collect_obs(self, agent_layer):
+    def collect_obs(self, agent_layer, i):
         if self.train_pursuit:
             gone_flags = self.pursuers_gone
         else:
             gone_flags = self.evaders_gone
-        obs = []
         nage = 0
         for i in range(self.n_agents()):
-            if gone_flags[i]:
-                obs.append(None)
-            else:
-                o = self.collect_obs_by_idx(agent_layer, nage)
-                obs.append(o)
+            if not gone_flags[i]:
+                if nage == i:
+                    return self.collect_obs_by_idx(agent_layer, nage)
                 nage += 1
-        return obs
+        assert False, "bad index"
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
         # returns a flattened array of all the observations
+        obs = np.zeros((3, self.obs_range, self.obs_range), dtype=np.float32)
+        obs[0].fill(1.0)  # border walls set to -0.1?
         xp, yp = agent_layer.get_position(agent_idx)
 
         xlo, xhi, ylo, yhi, xolo, xohi, yolo, yohi = self.obs_clip(xp, yp)
 
-        raw_model_state = np.abs(
-            self.model_state[0:3, xlo:xhi, ylo:yhi])
-
-        # need to compile all 3 layers into a single layer
-        # 0 is empty
-        # 1 is a pursuer
-        # 2 is an evader
-        # 3 is both pursuer and evader
-        # 4 is a wall
-        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] = raw_model_state[0] * (4)
-        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] += raw_model_state[1]
-        self.local_obs[agent_idx, xolo:xohi, yolo:yohi] += raw_model_state[2] * 2
-        self.local_obs = self.local_obs / self.layer_norm
-
-        return self.local_obs[agent_idx]
+        obs[0:3, xolo:xohi, yolo:yohi] = np.abs(self.model_state[0:3, xlo:xhi, ylo:yhi])
+        return obs
 
     def obs_clip(self, x, y):
         xld = x - self.obs_offset

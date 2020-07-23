@@ -1,13 +1,12 @@
 ---
-layout: "docu"
-actions: "5"
+actions: "Discrete"
+title: "Rock Paper Scissors Lizard Spock"
 agents: "2"
 manual-control: "No"
 action-shape: "Discrete(5)"
 action-values: "Discrete(5)"
 observation-shape: "Discrete(6)"
 observation-values: "Discrete(6)"
-num-states: "?"
 ---
 ### Rock Paper Scissors Lizard Spock
 

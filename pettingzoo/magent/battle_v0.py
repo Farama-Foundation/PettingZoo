@@ -10,15 +10,15 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, max_frames=1000, **reward_args):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames, seed))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size):
+def get_config(map_size, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -26,13 +26,16 @@ def get_config(map_size):
     cfg.set({"minimap_mode": True})
     cfg.set({"embedding_size": 10})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 2,
+        'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1.5),
+        'damage': 2, 'kill_reward': 5, 'step_recover': 0.1,
+        'step_reward': step_reward, 'dead_penalty': dead_penalty, 'attack_penalty': attack_penalty
+    }
     small = cfg.register_agent_type(
         "small",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 2,
-         'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1.5),
-         'damage': 2, 'step_recover': 0.1,
-         'step_reward': -0.005, 'kill_reward': 5, 'dead_penalty': -0.1, 'attack_penalty': -0.1
-         })
+        options
+    )
 
     g0 = cfg.add_group(small)
     g1 = cfg.add_group(small)
@@ -41,19 +44,19 @@ def get_config(map_size):
     b = gw.AgentSymbol(g1, index='any')
 
     # reward shaping to encourage attack
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=0.2)
-    cfg.add_reward_rule(gw.Event(b, 'attack', a), receiver=b, value=0.2)
+    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(b, 'attack', a), receiver=b, value=attack_opponent_reward)
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
-        env = magent.GridWorld(get_config(map_size), map_size=map_size)
+    def __init__(self, map_size, reward_args, max_frames, seed):
+        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         names = ["red", "blue"]
-        super().__init__(env, env.get_handles(), names, map_size, seed)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames, seed)
 
     def generate_map(self):
         env, map_size, handles = self.env, self.map_size, self.handles

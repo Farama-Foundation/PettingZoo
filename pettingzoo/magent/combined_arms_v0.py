@@ -10,15 +10,15 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, max_frames=1000, **reward_args):
     map_size = 45
-    return _parallel_env_wrapper(_parallel_env(map_size, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames, seed))
 
 
 env = make_env(raw_env)
 
 
-def load_config(map_size):
+def load_config(map_size, step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -27,21 +27,29 @@ def load_config(map_size):
 
     cfg.set({"embedding_size": 10})
 
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
+        'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1),
+        'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
+        'step_reward': step_reward, 'dead_penalty': dead_penalty, 'attack_penalty': attack_penalty,
+    }
+
     melee = cfg.register_agent_type(
         "melee",
-        {'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
-         'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1),
-         'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -0.1, 'attack_penalty': -1,
-         })
+        options
+    )
+
+    options = {
+        'width': 1, 'length': 1, 'hp': 3, 'speed': 2,
+        'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(2),
+        'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
+        'step_reward': step_reward, 'dead_penalty': dead_penalty, 'attack_penalty': attack_penalty,
+    }
 
     ranged = cfg.register_agent_type(
         "ranged",
-        {'width': 1, 'length': 1, 'hp': 3, 'speed': 2,
-         'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(2),
-         'damage': 2, 'step_recover': 0.1, 'attack_in_group': True,
-         'step_reward': -0.01, 'kill_reward': 0, 'dead_penalty': -1, 'attack_penalty': -1,
-         })
+        options
+    )
 
     g0 = cfg.add_group(melee)
     g1 = cfg.add_group(ranged)
@@ -54,15 +62,15 @@ def load_config(map_size):
     arm1_1 = gw.AgentSymbol(g3, index='any')
 
     # reward shaping
-    cfg.add_reward_rule(gw.Event(arm0_0, 'attack', arm1_0), receiver=arm0_0, value=2)
-    cfg.add_reward_rule(gw.Event(arm0_0, 'attack', arm1_1), receiver=arm0_0, value=2)
-    cfg.add_reward_rule(gw.Event(arm0_1, 'attack', arm1_0), receiver=arm0_1, value=2)
-    cfg.add_reward_rule(gw.Event(arm0_1, 'attack', arm1_1), receiver=arm0_1, value=2)
+    cfg.add_reward_rule(gw.Event(arm0_0, 'attack', arm1_0), receiver=arm0_0, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm0_0, 'attack', arm1_1), receiver=arm0_0, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm0_1, 'attack', arm1_0), receiver=arm0_1, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm0_1, 'attack', arm1_1), receiver=arm0_1, value=attack_opponent_reward)
 
-    cfg.add_reward_rule(gw.Event(arm1_0, 'attack', arm0_0), receiver=arm1_0, value=2)
-    cfg.add_reward_rule(gw.Event(arm1_0, 'attack', arm0_1), receiver=arm1_0, value=2)
-    cfg.add_reward_rule(gw.Event(arm1_1, 'attack', arm0_0), receiver=arm1_1, value=2)
-    cfg.add_reward_rule(gw.Event(arm1_1, 'attack', arm0_1), receiver=arm1_1, value=2)
+    cfg.add_reward_rule(gw.Event(arm1_0, 'attack', arm0_0), receiver=arm1_0, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm1_0, 'attack', arm0_1), receiver=arm1_0, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm1_1, 'attack', arm0_0), receiver=arm1_1, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(arm1_1, 'attack', arm0_1), receiver=arm1_1, value=attack_opponent_reward)
 
     # kill reward
     cfg.add_reward_rule(gw.Event(arm0_0, 'kill', arm1_0), receiver=arm0_0, value=100)
@@ -111,10 +119,10 @@ def generate_map(env, map_size, handles):
 
 
 class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, seed):
-        env = magent.GridWorld(load_config(map_size))
+    def __init__(self, map_size, reward_args, max_frames, seed):
+        env = magent.GridWorld(load_config(map_size, **reward_args))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
-        super().__init__(env, env.get_handles(), names, map_size, seed)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames, seed)
 
     def generate_map(self):
         generate_map(self.env, self.map_size, self.handles)

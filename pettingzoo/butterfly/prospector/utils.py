@@ -10,8 +10,9 @@ from . import constants as const
 def load_image(path: list) -> pg.Surface:  # All images stored in data/
     cwd = os.path.dirname(__file__)
     img = pg.image.load(os.path.join(cwd, "data", *path))
-    # img = img.convert_alpha()
-    return img
+    sfc = pg.Surface(img.get_size(), flags=pg.SRCALPHA)
+    sfc.blit(img, (0, 0))
+    return sfc
 
 
 # Convert chipmunk coords to pymunk coords, flipping and offsetting y-coordinate

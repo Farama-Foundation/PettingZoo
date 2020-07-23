@@ -1,6 +1,9 @@
 nav:
-  - title: "Documentation"
-    url: "/PettingZoo/documentation"
+  - title: "APi"
+    url: "/PettingZoo/api"
 
   - title: "Environments"
     url: "/PettingZoo/atari"
+
+  - title: "Github"
+    url: "https://github.com/PettingZoo-Team/PettingZoo"

@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Warlords"
 actions: "Discrete"
 agents: "4"
 manual-control: "No"

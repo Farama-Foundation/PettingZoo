@@ -1,14 +1,13 @@
 ---
-layout: "docu"
-observations: "Vector"
 actions: "Discrete"
+title: "Simple Spread"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
-num-states: "?"
+average-total-reward: "-555.4"
 ---
 
 ### Simple Spread

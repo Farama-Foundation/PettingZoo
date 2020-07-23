@@ -479,7 +479,6 @@ class raw_env(AECEnv):
         if self._agent_selector.is_last() and not self.black_death:
             # self.agents must be recreated
             for k in self.kill_list:
-                print("Killed ", k)
                 self.agents.remove(k)
                 self.dones.pop(k, None)
                 self.rewards.pop(k, None)

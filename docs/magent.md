@@ -1,20 +1,14 @@
 
 ## MAgent environments
 
-| Environment                              | Actions  | Agents | Manual Control | Action Shape | Action Values    | Observation Shape      | Observation Values |
-|------------------------------------------|----------|--------|----------------|--------------|------------------|------------------------|--------------------|
-| [adversarial pursuit](magent/adversarial_pursuit)             | Discrete | 75     | No             | (9),(13)     | Discrete(9),(13) | (10,10,19), (9,9,15)    | [0,2]              |
-| [battle](magent/battle)               | Discrete | 162    | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [battlefield](magent/battlefield)     | Discrete | 24     | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [combined arms](magent/combined_arms) | Discrete | 162    | No             | (9),(25)     | Discrete(9),(25) | (13,13,35), (13,13,51) | [0,2]              |
-| [gather](magent/gather)               | Discrete | 495    | No             | (33)         | Discrete(33)     | (15,15,43)             | [0,2]              |
-| [tiger_deer](magent/tiger_deer)       | Discrete | 121    | No             | (5),(9)      | Discrete(5),(9)  | (3,3,21), (9,9,25)      | [0,2]              |
+
+{% include bigtable.md group="magent/" %}
 
 
 `pip install pettingzoo[magent]`
 
-MAgent is a set of environments where large numbers of agents interact in battles or other competitive scenarios.
-These environments are derived from the [MAgent](https://github.com/geek-ai/MAgent) codebase.
+MAgent is a set of environments where large numbers of pixel agents in a gridworld interact in battles or other competitive scenarios.
+These environments were originally derived from the [MAgent](https://github.com/geek-ai/MAgent) codebase.
 
 ### Types of Environments
 
@@ -24,23 +18,23 @@ Gather is a survival game where agents must try to keep alive either by gatherin
 
 ### Key Concepts
 
-* HP decay: In gather and the tigers in tiger_deer, the HP decays over time, so the agents slowly lose HP until they die. The only way to prevent this is to eat something.
+* HP decay: In Gather and for the tigers in Tiger Deer, agent's HP decays over time, so the agents slowly lose HP until they die. The only way to prevent this is to eat something.
 
 * HP recovery: In battle games, agents recover HP over time, so low HP agents can hide or be protected until they heal.
 
-* Observation view: All agents see a certain distance around itself. It sees whether the coordinate is empty, an obstacle, or if there is an agent as entries in different channels. It signals an agent's HP by labeling the observation with the fraction of total HP.
+* Observation view: All agents observe a box around themselves. They see whether the coordinates is empty, an obstacle, or if there is an agent as entries in different channels. If an agent in on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
 * Feature vector: The feature vector contains <agent_id, action, last_reward>
 
 * Observation concatenates the 1d feature vector with 3d observation view by repeating the value of the feature across an entire image channel.
 
-* Minimap Mode: For the battle games (battle, battlefield, combined_arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and appended onto the agent's observation view. Their own absolute position on the global map is appended to the feature vector.
+* Minimap mode: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and concatenated onto the agent's observation view (concatenated in the channel dimension, axis=2). Their own absolute position on the global map is appended to the feature vector.
 
-* An action can either be an attack or a move, not both. So the action space is the concatenations of all possible moves and all possible attacks.  
+* Moving and attacking: An agent can only act or move with a single action, so the action space is the concatenations of all possible moves and all possible attacks.
 
 ### Termination
 
-The game terminates after all agents of either team have died. This means that the battle environments, where HP heals over time instead of decays, the games will go on indefinitely with random actions.
+The game terminates after all agents of either team have died. This means that the battle environments, where HP heals over time instead of decays, the game will go on for a very long time with random actions.
 
 
 ### Citation

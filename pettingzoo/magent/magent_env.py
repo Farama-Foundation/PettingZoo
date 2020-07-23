@@ -21,8 +21,9 @@ def make_env(raw_env):
 
 
 class magent_parallel_env:
-    def __init__(self, env, active_handles, names, map_size, seed=None):
+    def __init__(self, env, active_handles, names, map_size, max_frames, seed=None):
         self.map_size = map_size
+        self.max_frames = max_frames
         self.env = env
         self.handles = active_handles
         if seed is None:
@@ -42,6 +43,7 @@ class magent_parallel_env:
         self.observation_spaces = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
 
         self._renderer = None
+        self.frames = 0
 
     def _calc_obs_shapes(self):
         view_spaces = [self.env.get_view_space(handle) for handle in self.handles]
@@ -62,6 +64,7 @@ class magent_parallel_env:
 
     def reset(self):
         self.env.reset()
+        self.frames = 0
         self.generate_map()
         return self._observe_all()
 
@@ -104,8 +107,11 @@ class magent_parallel_env:
             self.env.set_action(self.handles[i], all_actions[start_point:(start_point + size)])
             start_point += size
 
-        done = self.env.step()
+        done = self.env.step() or self.frames >= self.max_frames
+
         all_infos = [{}] * self.num_agents
         result = self._observe_all(), self._all_rewards(), self._all_dones(done), all_infos
         self.env.clear_dead()
+
+        self.frames += 1
         return result

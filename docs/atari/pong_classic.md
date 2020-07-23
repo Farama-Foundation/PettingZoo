@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Pong: Classic"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

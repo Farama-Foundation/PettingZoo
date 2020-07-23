@@ -19,23 +19,22 @@ def random_demo(env, render=True):
     done = False
 
     # start = time.time()
-    while not done:
+    for agent in env.agent_iter():
         # game should run at 15 FPS when rendering
         if render:
             env.render()
             time.sleep(display_wait)
 
         # for _ in env.agents:
-        agent = env.agent_selection
         reward, done, _ = env.last()
-        if not done:
-            if 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
-            else:
-                action = env.action_spaces[agent].sample()
-            env.step(action, observe=False)
+        total_reward += reward
+        if 'legal_moves' in env.infos[agent]:
+            action = random.choice(env.infos[agent]['legal_moves'])
         else:
-            print("Total reward", total_reward, "done", done)
+            action = env.action_spaces[agent].sample()
+        env.step(action, observe=False)
+
+    print("Total reward", total_reward, "done", done)
 
     # end = time.time()
     # print("FPS = ", 100/(end-start))

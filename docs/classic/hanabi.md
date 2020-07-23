@@ -1,13 +1,13 @@
 ---
-layout: "docu"
 actions: "Discrete"
+title: "Hanabi"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
 action-values: "Discrete(14)"
 observation-shape: "(373,)"
 observation-values: "[0,1]"
-num-states: "?"
+average-total-reward: "0.0"
 ---
 
 ### Hanabi
@@ -31,7 +31,7 @@ Hanabi is a 2-5 player cooperative game where players work together to form fire
 
 The observation space of an agent is a 373 sized vector representing the life and info tokens left, the currently constructed fireworks, the hands of all other agents, the current deck size and the discarded cards. The observation vector contains the following features, life tokens, information tokens, number of players, deck size, formed fireworks, legal moves, observed hands, discard pile, the hints received from other players, which are then serialized into a bit string.
 
-Each card is encoded with a 25 bit one-hot vector, where the encoding of a card is equal to its color*T + rank, where T is the max possible rank. By default this value is 5. The maximum deck size is 50. The remaining deck size is represented with unary encoding. The state of each colored firework is represented with a one-hot encoding. The information tokens remaining are represented with a unary encoding. The life tokens remaining are represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card. That is the least significant bit being set to 1 indicates the lowest rank card of that color has been discarded. 
+Each card is encoded with a 25 bit one-hot vector, where the encoding of a card is equal to its color*T + rank, where T is the max possible rank. By default this value is 5. The maximum deck size is 50. The remaining deck size is represented with unary encoding. The state of each colored firework is represented with a one-hot encoding. The information tokens remaining are represented with a unary encoding. The life tokens remaining are represented with a unary encoding. The discard pile is represented with a thermometer encoding of the ranks of each discarded card. That is the least significant bit being set to 1 indicates the lowest rank card of that color has been discarded.
 
 As players reveal info about their cards, the information revealed per card is also observed. The first 25 bits represent whether or not that specific card could be a specific color. For example if the card could only be red, then the first 25 bits of the observed revealed info would be 11111 followed by 20 zeros. The next 5 bits store whether the color of that card was explicity revealed, so if the card was revealed to be red, then the next 5 bits would be 10000. Finally the last 5 bits are the revealed rank of the card. So if the card was revealed to be of rank 1, then the next 5 bits woudl be 10000. These 25 bits are tracked and observed for all cards in each player's hand.
 
@@ -87,7 +87,7 @@ The action space is a scalar value, which ranges from 0 to the max number of act
 
 #### Rewards
 
-The reward of each step is calculated as the change in game score from the last step. The game score is 0 until the terminal state. Once the game has ended, the total score is calculated as the sum of values in each constructed firework.
+The reward of each step is calculated as the change in game score from the last step. The game score is calculated as the sum of values in each constructed firework. If the game is lost, the score is set to zero, so the final reward will be the negation of all reward received so far.
 
 For example, if fireworks were created as follows:
 
