@@ -7,21 +7,22 @@ action-shape: "(33)"
 action-values: "Discrete(33)"
 observation-shape: "(15,15,43)"
 observation-values: "[0,2]"
+import: "pettingzoo.magent import gather_v0"
+agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
-### Gather
+<div class="floatright" markdown="1">
+
+![](magent_gather.gif)
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
 {% include table.md %}
 
-`pettingzoo.magent import gather_v0`
+</div>
 
-`agents= [ omnivore_[0-494] ]`
+## Gather
 
-![](magent_gather.gif)
-
-*AEC diagram*
 
 In gather, the agents must gain reward by eating food or fighting each other. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce.
 
