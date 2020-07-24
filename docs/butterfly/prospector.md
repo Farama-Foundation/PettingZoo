@@ -8,22 +8,22 @@ action-values: "[-1, 1]"
 observation-shape: "(150, 150, 3), (154, 154, 3)"
 observation-values: "(0, 255)"
 average-total-reward: "14165"
+import: "from pettingzoo.butterfly import prospector_v0"
+agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
-### Prospector
+<div class="floatright" markdown="1">
+
+![](butterfly_prospector.gif)
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.butterfly import prospector_v0`
+## Prospector
 
-`agents= ["prospector_0, "prospector_1", "prospector_2", "prospector_3", "banker_0", "banker_1", "banker_2"]`
-
-![](butterfly_prospector.gif)
-
-*AEC diagram*
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at
 the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river

@@ -9,22 +9,22 @@ action-values: "Discrete(4672)"
 observation-shape: "(8,8,20)"
 observation-values: "[0,1]"
 num-states: "?"
+import: "pettingzoo.classic.chess_v0"
+agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
-### Chess
+<div class="floatright" markdown="1">
+
+![](classic_chess.gif)
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
 {% include table.md %}
 
+</div>
 
-`pettingzoo.classic.chess_v0`
+## Chess
 
-`agents= ['player_1', 'player_2']`
-
-![](classic_chess.gif)
-
-*AEC Diagram*
 
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 

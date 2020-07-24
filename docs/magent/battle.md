@@ -7,22 +7,22 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,41)"
 observation-values: "[0,2]"
+import: "pettingzoo.magent import battle_v0"
+agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
-### Battle
+<div class="floatright" markdown="1">
+
+![](magent_battle.gif)
 
 This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`pettingzoo.magent import battle_v0`
+## Battle
 
-`agents= [red_[0-80], blue_[0-80]]`
-
-![](magent_battle.gif)
-
-*AEC diagram*
 
 A large-scale team battle.
 

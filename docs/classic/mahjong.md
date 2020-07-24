@@ -7,21 +7,21 @@ action-shape: "Discrete(38)"
 action-values: "Discrete(38)"
 observation-shape: "(6, 34, 4)"
 observation-values: "[0, 1]"
+import: "from pettingzoo.classic import mahjong_v0"
+agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 ---
-### Mahjong
-
-This game part of the [classic games](../classic), please visit that page first for general information about these games.
-
-
-{% include table.md %}
-
-`from pettingzoo.classic import mahjong_v0`
-
-`agents= ['player_0', 'player_1', 'player_2', 'player_3']`
+<div class="floatright" markdown="1">
 
 ![](classic_mahjong.gif)
 
-*AEC Diagram*
+This game part of the [classic games](../classic), please visit that page first for general information about these games.
+
+{% include table.md %}
+
+</div>
+
+## Mahjong
+
 
 Mahjong is a tile-based game with 4 players and 136 tiles, which includes 4 identical sets of 34 unique tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
 
