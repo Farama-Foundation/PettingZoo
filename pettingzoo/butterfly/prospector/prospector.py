@@ -158,7 +158,9 @@ class Banker(pg.sprite.Sprite):
         curr_vel = self.body.velocity
 
         if self.body.nugget is not None:
-            self.body.nugget.update(self.body.position, self.body.angle + (math.pi / 2), True)
+            self.body.nugget.update(
+                self.body.position, self.body.angle + (math.pi / 2), True
+            )
 
         self.body.velocity = curr_vel
 
@@ -291,15 +293,17 @@ class Water(object):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = math.ceil(const.WATER_HEIGHT / const.TILE_SIZE)
 
-        self.tile = utils.load_image(['water_tile.png'])
-        self.debris_tile = utils.load_image(['debris', 'seaweed.png'])
+        self.tile = utils.load_image(["water_tile.png"])
+        self.debris_tile = utils.load_image(["debris", "seaweed.png"])
         tile_size = self.tile.get_size()
 
         self.rects = []
         for row in range(self.num_rows):
             new_row = []
             for col in range(self.num_cols):
-                rect = pg.Rect(col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size)
+                rect = pg.Rect(
+                    col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size
+                )
                 new_row.append(rect)
             self.rects.append(new_row)
 
@@ -346,20 +350,23 @@ class Water(object):
 class Background(object):
     def __init__(self, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
-        self.num_rows = math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE)
+        self.num_rows = math.ceil(
+            (const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE
+        )
 
-        self.tile = utils.load_image(['dirt_tile.png'])
+        self.tile = utils.load_image(["dirt_tile.png"])
 
         self.debris_tiles = {
-            0: utils.load_image(['debris', '0.png']),
-            1: utils.load_image(['debris', '1.png']),
-            2: utils.load_image(['debris', '2.png']),
-            3: utils.load_image(['debris', '3.png']),
+            0: utils.load_image(["debris", "0.png"]),
+            1: utils.load_image(["debris", "1.png"]),
+            2: utils.load_image(["debris", "2.png"]),
+            3: utils.load_image(["debris", "3.png"]),
         }
 
         tile_size = self.tile.get_size()
 
-        self.dirty_rects = [] # Used when updating environment and drawing
+        # Used when updating environment and drawing
+        self.dirty_rects = []
         self.rects = []
         for row in range(self.num_rows):
             new_row = []
@@ -477,7 +484,9 @@ class raw_env(AECEnv):
         self.all_sprites = pg.sprite.RenderUpdates()
         self.gold = []
 
-        self.water = Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.rng)
+        self.water = Water(
+            const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.rng
+        )
 
         # Generate random positions for each prospector agent
         prospector_info = [
@@ -584,7 +593,10 @@ class raw_env(AECEnv):
             # gold_sprite is None if gold was handed off to the bank right before
             # calling this collision handler
             # This collision handler is only for prospector -> banker gold handoffs
-            if gold_sprite is None or gold_sprite.parent_body.sprite_type != "prospector":
+            if (
+                gold_sprite is None
+                or gold_sprite.parent_body.sprite_type != "prospector"
+            ):
                 return False
 
             banker_body = banker_shape.body
@@ -734,10 +746,12 @@ class raw_env(AECEnv):
         agent_pos = agent.rect.topleft
         agent_angle = agent.body.angle
         agent_bg_rects = self.background.update(agent.rect, self.dirty_fences)
-        
+
         gold_bg_rects = []
         if agent.body.nugget is not None:
-            gold_bg_rects = self.background.update(agent.body.nugget.rect, self.dirty_fences)
+            gold_bg_rects = self.background.update(
+                agent.body.nugget.rect, self.dirty_fences
+            )
         agent.update(action)
 
         if agent_pos != agent.rect.topleft or agent_angle != agent.body.angle:
@@ -842,6 +856,3 @@ class raw_env(AECEnv):
                 pg.event.pump()
                 pg.display.quit()
             pg.quit()
-
-
-# Except for the gold png images, all other sprite art was created by Yashas Lokesh
