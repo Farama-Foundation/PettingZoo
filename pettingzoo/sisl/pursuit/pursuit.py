@@ -5,6 +5,7 @@ from pettingzoo.utils import agent_selector
 import numpy as np
 import pygame
 from pettingzoo.utils import wrappers
+from gym.utils import EzPickle
 
 
 def env(**kwargs):
@@ -16,12 +17,12 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, *args, **kwargs):
-        super().__init__()
+        EzPickle.__init__(self, seed, *args, **kwargs)
         self.env = _env(*args, seed, **kwargs)
         pygame.init()
         self.num_agents = self.env.num_agents

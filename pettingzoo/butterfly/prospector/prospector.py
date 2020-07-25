@@ -16,6 +16,7 @@ import math
 import os
 from enum import IntEnum, auto
 import itertools as it
+from gym.utils import EzPickle
 
 
 class CollisionTypes(IntEnum):
@@ -304,7 +305,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     def __init__(
         self,
         seed=None,
@@ -317,6 +318,17 @@ class raw_env(AECEnv):
         banker_deposit_gold_reward=1,
         max_frames=900,
     ):
+        EzPickle.__init__(
+            self,
+            seed,
+            ind_reward,
+            group_reward,
+            other_group_reward,
+            prospec_find_gold_reward,
+            prospec_handoff_gold_reward,
+            banker_receive_gold_reward,
+            banker_deposit_gold_reward,
+            max_frames)
         if ind_reward + group_reward + other_group_reward != 1.0:
             raise ValueError(
                 "Individual reward, group reward, and other group reward should "
