@@ -1,27 +1,29 @@
 ---
 actions: "Discrete"
+title: "Simple Spread"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
+average-total-reward: "-555.4"
+import: "pettingzoo.mpe import simple_spread_v0"
+agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
-### Simple Spread
+<div class="floatright" markdown="1">
+
+![](mpe_simple_spread.gif)
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`pettingzoo.mpe import simple_spread_v0`
+## Simple Spread
 
-`agents= [agent_0, agent_1, agent_2]`
-
-![](mpe_simple_spread.gif)
-
-*AEC diagram*
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.
 

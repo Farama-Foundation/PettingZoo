@@ -1,5 +1,6 @@
 ---
 observations: "Discrete"
+title: "Leduc Hold'em"
 actions: "2"
 agents: "No"
 manual-control: "Discrete(4)"
@@ -7,22 +8,22 @@ action-shape: "Discrete(4)"
 action-values: "(36,)"
 observation-shape: "[0, 1]"
 observation-values: "10^2"
+import: "from pettingzoo.classic import leduc_holdem_v0"
+agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-### Leduc Hold'em
+<div class="floatright" markdown="1">
+
+![](classic_leduc_holdem.gif)
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.classic import leduc_holdem_v0`
+## Leduc Hold'em
 
-`agents= ['player_0', 'player_1']`
-
-![](classic_leduc_holdem.gif)
-
-*AEC Diagram*
 
 Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and six cards in total (Jack, Queen, and King). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.   
 

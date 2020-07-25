@@ -1,15 +1,8 @@
 
 ## MAgent environments
 
-| Environment                                       | Actions  | Agents | Manual Control | Action Shape | Action Values    | Observation Shape      | Observation Values |
-|---------------------------------------------------|----------|--------|----------------|--------------|------------------|------------------------|--------------------|
-| [Adversarial Pursuit](magent/adversarial_pursuit) | Discrete | 75     | No             | (9),(13)     | Discrete(9),(13) | (10,10,19), (9,9,15)   | [0,2]              |
-| [Battle](magent/battle)                           | Discrete | 162    | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [Battlefield](magent/battlefield)                 | Discrete | 24     | No             | (21)         | Discrete(21)     | (13,13,41)             | [0,2]              |
-| [Combined Arms](magent/combined_arms)             | Discrete | 162    | No             | (9),(25)     | Discrete(9),(25) | (13,13,35), (13,13,51) | [0,2]              |
-| [Gather](magent/gather)                           | Discrete | 495    | No             | (33)         | Discrete(33)     | (15,15,43)             | [0,2]              |
-| [Tiger Deer](magent/tiger_deer)                   | Discrete | 121    | No             | (5),(9)      | Discrete(5),(9)  | (3,3,21), (9,9,25)     | [0,2]              |
 
+{% include bigtable.md group="magent/" %}
 
 
 `pip install pettingzoo[magent]`
@@ -29,15 +22,15 @@ Gather is a survival game where agents must try to keep alive either by gatherin
 
 * HP recovery: In battle games, agents recover HP over time, so low HP agents can hide or be protected until they heal.
 
-* Observation view: All agents observe a box around themselves. They see whether the coordinates is empty, an obstacle, or if there is an agent as entries in different channels. It signals an agent's HP by labeling the observation with the fraction of total HP.
+* Observation view: All agents observe a box around themselves. They see whether the coordinates is empty, an obstacle, or if there is an agent as entries in different channels. If an agent in on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
 * Feature vector: The feature vector contains <agent_id, action, last_reward>
 
 * Observation concatenates the 1d feature vector with 3d observation view by repeating the value of the feature across an entire image channel.
 
-* Minimap mode: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and appended onto the agent's observation view. Their own absolute position on the global map is appended to the feature vector.
+* Minimap mode: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density map of the team's respective presences on the map binned and concatenated onto the agent's observation view (concatenated in the channel dimension, axis=2). Their own absolute position on the global map is appended to the feature vector.
 
-* Moving and attacking: An agent can only act or move with a single action, so the action space is the concatenations of all possible moves and all possible attacks. 
+* Moving and attacking: An agent can only act or move with a single action, so the action space is the concatenations of all possible moves and all possible attacks.
 
 ### Termination
 

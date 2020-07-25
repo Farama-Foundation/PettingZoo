@@ -37,11 +37,21 @@
       }
     }
   }
+
+  table {
+    margin-bottom: 10%;
+  }
+
+  td,th {
+    width: 10%;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1%;
+  }
 }
 @media(min-width:992px) {
   #mainNav {
     padding-top: 25px;
-    padding-bottom: 25px;
+    padding-bottom: 15px;
     -webkit-transition: padding-top 0.3s, padding-bottom 0.3s;
     -moz-transition: padding-top 0.3s, padding-bottom 0.3s;
     transition: padding-top 0.3s, padding-bottom 0.3s;
@@ -70,14 +80,4 @@
       }
     }
   }
-}
-
-table {
-  margin-bottom: 10%;
-}
-
-td,th {
-  width: 10%;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1%;
 }

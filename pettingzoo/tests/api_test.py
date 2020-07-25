@@ -108,7 +108,7 @@ def test_reward(reward):
 def test_rewards_dones(env, agent_0):
     for agent in env.agents:
         assert isinstance(env.dones[agent], bool), "Agent's values in dones must be True or False"
-        assert isinstance(env.rewards[agent], env.rewards[agent_0].__class__), "Rewards for each agent must be of the same class"
+        float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
         test_reward(env.rewards[agent])
 
 
@@ -116,7 +116,8 @@ def play_test(env, observation_0):
     prev_observe = env.reset()
     for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
         assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
-        if 'legal_moves' in env.infos[agent]:
+        reward, done, info = env.last()
+        if 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
@@ -136,7 +137,8 @@ def play_test(env, observation_0):
     env.reset()
     reward_0 = env.rewards[env.agent_selection]
     for agent in env.agent_iter(env.num_agents):
-        if 'legal_moves' in env.infos[agent]:
+        reward, done, info = env.last()
+        if 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
@@ -145,11 +147,27 @@ def play_test(env, observation_0):
         assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
         assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
         assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
-        assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
+        float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
         test_reward(reward)
         observation = env.step(action, observe=False)
         assert observation is None, "step(observe=False) must not return anything"
 
+def test_action_flexibility(env):
+    env.reset()
+    agent = env.agent_selection
+    action_space = env.action_spaces[agent]
+    if isinstance(action_space, gym.spaces.Discrete):
+        if 'legal_moves' in env.infos[agent]:
+            action = env.infos[agent]['legal_moves'][0]
+        else:
+            action = 0
+        env.step(action)
+        env.reset()
+        env.step(np.int32(action))
+    elif isinstance(action_space, gym.spaces.Box):
+        env.step(np.zeros_like(action_space.low))
+        env.reset()
+        env.step(np.zeros_like(action_space.low).tolist())
 
 def api_test(env, render=False, verbose_progress=False):
     def progress_report(msg):
@@ -192,6 +210,8 @@ def api_test(env, render=False, verbose_progress=False):
     assert len(env.rewards) == len(env.dones) == len(env.infos) == len(env.agents), "rewards, dones, infos and agents must have the same length"
 
     test_rewards_dones(env, agent_0)
+
+    test_action_flexibility(env)
 
     progress_report("Finished test_rewards_dones")
 

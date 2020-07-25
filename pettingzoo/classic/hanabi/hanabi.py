@@ -3,7 +3,7 @@ import numpy as np
 from gym import spaces
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
-from gym.utils import seeding
+from gym.utils import seeding, EzPickle
 
 """
 Wrapper class around google deepmind's hanabi.
@@ -20,7 +20,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
     metadata = {'render.modes': ['human']}
@@ -92,8 +92,18 @@ class raw_env(AECEnv):
                 "observation_type": 1}
 
         """
-
-        super().__init__()
+        EzPickle.__init__(
+            self,
+            colors,
+            ranks,
+            players,
+            hand_size,
+            max_information_tokens,
+            max_life_tokens,
+            observation_type,
+            seed,
+            random_start_player,
+        )
 
         seed = seeding.create_seed(seed, max_bytes=3)
 
@@ -241,6 +251,7 @@ class raw_env(AECEnv):
             By default a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
+        action = int(action)
 
         agent_on_turn = self.agent_selection
 
@@ -278,9 +289,10 @@ class raw_env(AECEnv):
         # Here we have to deal with the player index with offset = 1
         self.infos = {player_name: dict(
             legal_moves=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves_as_int'],
-            legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
+            # legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
             observations_vectorized=self.latest_observations['player_observations'][int(player_name[-1])]['vectorized'],
-            observations=self.latest_observations['player_observations'][int(player_name[-1])])
+            # observations=self.latest_observations['player_observations'][int(player_name[-1])
+        )
             for player_name in self.agents}
 
     def render(self, mode='human'):

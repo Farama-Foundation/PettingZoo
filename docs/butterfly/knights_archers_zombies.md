@@ -1,27 +1,30 @@
 ---
 action type: "Discrete"
+title: "Knights Archers Zombies ('KAZ')"
+actions: Discrete
 agents: "4"
 manual-control: "Yes"
 action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
+average-total-reward: "250.6"
+import: "from pettingzoo.butterfly import knights_archers_zombies_v0"
+agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
 
-### Knights Archers Zombies ('KAZ')
+<div class="floatright" markdown="1">
+
+![](butterfly_knights_archers_zombies.gif)
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.butterfly import knights_archers_zombies_v0`
+## Knights Archers Zombies ('KAZ')
 
-`agents= ["archer_0", "archer_1", "knight_0", "knight_1"]`
-
-![](butterfly_knights_archers_zombies.gif)
-
-*AEC diagram*
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie. Each agent observes the environment as a square region around itself, with its own body in the center of the square. The observation is represented as a 512x512 pixel image around the agent, or in other words, a 16x16 agent sized space around the agent.
 

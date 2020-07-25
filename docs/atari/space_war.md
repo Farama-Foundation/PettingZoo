@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Space War"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import space_war_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Space War
+<div class="floatright" markdown="1">
+
+![space_war gif](atari_space_war.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import space_war_v0`
+## Space War
 
-`agents= ["first_0", "second_0"]`
-
-![space_war gif](atari_space_war.gif)
-
-*AEC diagram*
 
 *Space war* is an competitive game where prediction and positioning are key.
 
