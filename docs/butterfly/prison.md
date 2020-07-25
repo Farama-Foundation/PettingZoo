@@ -8,23 +8,24 @@ action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
 average-total-reward: "1.456"
+import: "from pettingzoo.butterfly import prison_v0"
+agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
-### Prison
-
-
-{% include table.md %}
-This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
-
-
-`from pettingzoo.butterfly import prison_v0`
-
-`agents= ["prisoner_0", "prisoner_1", ..., "prisoner_7"]`
+<div class="floatright" markdown="1">
 
 ![](butterfly_prison.gif)
 
-*AEC diagram*
+This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
+
+{% include table.md %}
+
+</div>
+
+## Prison
+
+
 
 In prison, 8 aliens locked in identical prison cells are controlled by the user. They cannot communicate with each other in any way, and can only pace in their cell. Every time they touch one end of the cell and then the other, they get a reward of 1. Due to the fully independent nature of these agents and the simplicity of the task this is an environment primarily intended for debugging purposes - its multiple individual purely single agent tasks. To make this debugging tool as compatible with as many methods as possible it can accept both discrete and continuous actions and the observation can be automatically turned into a number representing position of the alien from the left of its cell instead of the normal graphical output.
 

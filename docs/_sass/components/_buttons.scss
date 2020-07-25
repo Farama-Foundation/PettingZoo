@@ -12,8 +12,9 @@
 }
 
 .btn-primary {
-  background-color: $primary;
-  border-color: $primary;
+  background-color: rgba(0,0,0,0);
+  border-color: white;
+  border-width: medium;
   &:active,
   &:focus,
   &:hover {

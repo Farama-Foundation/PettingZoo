@@ -7,22 +7,22 @@ action-shape: "Discrete(170)"
 action-values: "Discrete(170)"
 observation-shape: "(170, 170, 3)"
 observation-values: "[0, 1]"
+import: "from pettingzoo.classic import go_v0"
+agent-labels: "agents= ['black_0', 'white_0']"
 ---
 
-### Go
+<div class="floatright" markdown="1">
+
+![](classic_go.gif)
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.classic import go_v0`
+## Go
 
-`agents= ['black_0', 'white_0']`
-
-![](classic_go.gif)
-
-*AEC Diagram*
 
 Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows with the purpuse of surrounding more territory than the opponent or capturing the opponent's stones. The game ends if both players sequentially decide to pass. Refer to [Wikipedia](https://en.wikipedia.org/wiki/Go_(game)) for additional details about the game.
 

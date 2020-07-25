@@ -69,3 +69,19 @@ body {
   img::-moz-selection {
     background: transparent;
   }
+
+@media(min-width:768px) {
+  .floatright{
+    width: 400px;
+    float: right;
+    padding: 1em;
+    margin: 1em;
+    border: 2px;
+    border-style: solid;
+    background-color: white;
+    img{
+    display: block;
+    margin: 0 auto;
+    }
+  }
+}

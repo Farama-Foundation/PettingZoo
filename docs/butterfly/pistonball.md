@@ -9,22 +9,22 @@ action-values: "discrete (2)"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
 average-total-reward: "0.419"
+import: "from pettingzoo.butterfly import pistonball_v0"
+agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
-### Pistonball
+<div class="floatright" markdown="1">
+
+![](butterfly_pistonball.gif)
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.butterfly import pistonball_v0`
+## Pistonball
 
-`agents= ["piston_0", "piston_1", ..., "piston_19"]`
-
-![](butterfly_pistonball.gif)
-
-*AEC diagram*
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Pistons can only see themselves and the two pistons next to them.
 Thus pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100. For each piston, the reward is .02 * local_reward + 0.08 * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
