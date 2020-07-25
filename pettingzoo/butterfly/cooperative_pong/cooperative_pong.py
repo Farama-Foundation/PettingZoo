@@ -9,6 +9,7 @@ from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
+from gym.utils import EzPickle
 
 KERNEL_WINDOW_LENGTH = 1
 
@@ -365,12 +366,12 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, **kwargs):
-        super().__init__()
+        EzPickle.__init__(self, seed, **kwargs)
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **kwargs)
 
