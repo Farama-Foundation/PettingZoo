@@ -30,8 +30,7 @@ class CollisionTypes(IntEnum):
 class Prospector(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        self.image = utils.load_image(["prospector-pickaxe.png"])
-
+        self.image = utils.load_image(["prospector.png"])
         self.id = num
 
         self.rect = self.image.get_rect(topleft=pos)
@@ -93,7 +92,7 @@ class Prospector(pg.sprite.Sprite):
         self.image = self.image.convert_alpha()
 
     def __str__(self):
-        return "prospector_%s" % self.id
+        return f"prospector_{self.id}"
 
     def __repr__(self):
         return self.__str__()
@@ -102,7 +101,7 @@ class Prospector(pg.sprite.Sprite):
 class Banker(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
-        self.image = utils.load_image(["bankers", "%s.png" % num])
+        self.image = utils.load_image(["bankers", f"{num}.png"])
 
         self.id = num
 
@@ -167,7 +166,7 @@ class Banker(pg.sprite.Sprite):
         self.image = self.image.convert_alpha()
 
     def __str__(self):
-        return "banker_%s" % self.id
+        return f"banker_{self.id}"
 
     def __repr__(self):
         return self.__str__()
@@ -177,14 +176,30 @@ class Fence(pg.sprite.Sprite):
     def __init__(self, w_type, sprite_pos, body_pos, verts, space, *sprite_groups):
         super().__init__(sprite_groups)
 
+        self.rects = []
         if w_type == "top":
-            self.image = utils.load_image(["top-down-horiz-fence.png"])
+            self.tile = utils.load_image(["fence_horiz_tile.png"])
+            size = self.tile.get_rect().size
+
+            x = 15
+            y = 0
+            while x <= 1230:
+                rect = pg.Rect(x, y, *size)
+                self.rects.append(rect)
+                x += 50
+
         elif w_type in ["right", "left"]:
-            self.image = utils.load_image(["top-down-vert-fence.png"])
+            self.tile = utils.load_image(["fence_vert_tile.png"])
+            size = self.tile.get_rect().size
+
+            x = 6 if w_type == "left" else 1265
+            y = 0
+            while y <= const.VERT_FENCE_HEIGHT:
+                rect = pg.Rect(x, y, *size)
+                self.rects.append(rect)
+                y += 33
         else:
             raise ValueError("Fence image not found! Check the spelling")
-
-        self.rect = self.image.get_rect(topleft=sprite_pos)
 
         self.body = pm.Body(body_type=pm.Body.STATIC)
 
@@ -197,34 +212,12 @@ class Fence(pg.sprite.Sprite):
         self.body.position = utils.flipy(body_pos)
         space.add(self.shape)
 
-    def convert_img(self):
-        self.image = self.image.convert_alpha()
-
-
-class Water(pg.sprite.Sprite):
-    def __init__(self, pos, verts, space, *sprite_groups):
-        super().__init__(*sprite_groups)
-        # Determine the width and height of the surface.
-        self.image = utils.load_image(["water.png"])
-        self.image = pg.transform.scale(
-            self.image, (const.SCREEN_WIDTH, const.WATER_HEIGHT)
-        )
-
-        self.rect = self.image.get_rect(topleft=pos)
-
-        self.body = pm.Body(body_type=pm.Body.STATIC)
-
-        # Transform pygame vertices to fit Pymunk body
-        invert_verts = utils.invert_y(verts)
-        self.shape = pm.Poly(self.body, invert_verts)
-        self.shape.collision_type = CollisionTypes.WATER
-
-        self.body.position = utils.flipy(pos)
-        self.space = space
-        self.space.add(self.shape)
+    def full_draw(self, screen):
+        for rect in self.rects:
+            screen.blit(self.tile, rect)
 
     def convert_img(self):
-        self.image = self.image.convert_alpha()
+        self.tile = self.tile.convert_alpha()
 
 
 class Bank(pg.sprite.Sprite):
@@ -232,7 +225,6 @@ class Bank(pg.sprite.Sprite):
         super().__init__(sprite_groups)
 
         self.image = utils.load_image(["bank.png"])
-        self.image = pg.transform.scale(self.image, (184, 100))
         self.rect = self.image.get_rect(topleft=pos)
 
         self.body = pm.Body(body_type=pm.Body.STATIC)
@@ -257,12 +249,11 @@ class Gold(pg.sprite.Sprite):
         self.id = next(self.ids)
 
         self.image = utils.load_image(["gold.png"])
-        self.image = pg.transform.scale(self.image, (16, 16))
         self.orig_image = self.image
 
         self.rect = self.image.get_rect()
 
-        self.moment = pm.moment_for_circle(1, 0, 8)
+        self.moment = pm.moment_for_circle(1, 0, 6)
         self.body = pm.Body(1, self.moment)
         self.body.position = body.position
 
@@ -277,7 +268,6 @@ class Gold(pg.sprite.Sprite):
         self.parent_body = body
 
     def update(self, pos, angle, banker: bool):
-
         if banker:
             new_angle = angle
         else:
@@ -294,6 +284,145 @@ class Gold(pg.sprite.Sprite):
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
+
+
+class Water(object):
+    def __init__(self, pos, verts, space, rng):
+        self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
+        self.num_rows = math.ceil(const.WATER_HEIGHT / const.TILE_SIZE)
+
+        self.tile = utils.load_image(['water_tile.png'])
+        self.debris_tile = utils.load_image(['debris', 'seaweed.png'])
+        tile_size = self.tile.get_size()
+
+        self.rects = []
+        for row in range(self.num_rows):
+            new_row = []
+            for col in range(self.num_cols):
+                rect = pg.Rect(col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size)
+                new_row.append(rect)
+            self.rects.append(new_row)
+
+        self.body = pm.Body(body_type=pm.Body.STATIC)
+
+        # Transform pygame vertices to fit Pymunk body
+        invert_verts = utils.invert_y(verts)
+        self.shape = pm.Poly(self.body, invert_verts)
+        self.shape.collision_type = CollisionTypes.WATER
+
+        self.body.position = utils.flipy(pos)
+        self.space = space
+        self.space.add(self.shape)
+
+    def generate_debris(self, rng):
+        self.debris = []
+        for col in range(1, self.num_cols - 1, 3):
+            if rng.random_sample() >= 0.5:
+                y = rng.randint(0, 2)
+                x = col + rng.randint(0, 3)
+                self.debris.append([self.debris_tile, self.rects[y][x]])
+
+    def full_draw(self, screen):
+        for row in self.rects:
+            for rect in row:
+                screen.blit(self.tile, rect)
+
+        for pair in self.debris:
+            screen.blit(pair[0], pair[1])
+
+    def draw(self, screen):
+        for row in self.rects:
+            for rect in row:
+                screen.blit(self.tile, rect)
+
+        for pair in self.debris:
+            screen.blit(pair[0], pair[1])
+
+    def convert_img(self):
+        self.tile = self.tile.convert_alpha()
+        self.debris_tile = self.debris_tile.convert_alpha()
+
+
+class Background(object):
+    def __init__(self, rng):
+        self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
+        self.num_rows = math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE)
+
+        self.tile = utils.load_image(['dirt_tile.png'])
+
+        self.debris_tiles = {
+            0: utils.load_image(['debris', '0.png']),
+            1: utils.load_image(['debris', '1.png']),
+            2: utils.load_image(['debris', '2.png']),
+            3: utils.load_image(['debris', '3.png']),
+        }
+
+        tile_size = self.tile.get_size()
+
+        self.dirty_rects = [] # Used when updating environment and drawing
+        self.rects = []
+        for row in range(self.num_rows):
+            new_row = []
+            for col in range(self.num_cols):
+                rect = pg.Rect(col * const.TILE_SIZE, row * const.TILE_SIZE, *tile_size)
+                new_row.append(rect)
+            self.rects.append(new_row)
+
+    def generate_debris(self, rng):
+        self.debris = []
+        for row in range(1, self.num_rows - 1, 3):
+            for col in range(1, self.num_cols - 1, 3):
+                y = row + rng.randint(0, 3)
+                if y == self.num_rows - 1:
+                    y += -1
+                x = col + rng.randint(0, 3)
+                choice = rng.randint(0, 4)
+                self.debris.append([self.debris_tiles[choice], self.rects[y][x]])
+
+    def full_draw(self, screen):
+        for row in self.rects:
+            for rect in row:
+                screen.blit(self.tile, rect)
+
+        for pair in self.debris:
+            screen.blit(pair[0], pair[1])
+
+    def draw(self, screen):
+        for rect in self.dirty_rects:
+            screen.blit(self.tile, rect)
+
+        for pair in self.debris:
+            screen.blit(pair[0], pair[1])
+
+        self.dirty_rects.clear()
+
+    def update(self, sprite_rect: pg.Rect, dirty_fences):
+        top_y = int(sprite_rect.top // 50)
+        bottom_y = int(sprite_rect.bottom // 50)
+        left_x = int(sprite_rect.left // 50)
+        right_x = int(sprite_rect.right // 50)
+
+        for pair in self.debris:
+            self.dirty_rects.append(pair[1])
+
+        self.dirty_rects.append(self.rects[top_y][left_x])
+        self.dirty_rects.append(self.rects[top_y][right_x])
+        self.dirty_rects.append(self.rects[bottom_y][left_x])
+        self.dirty_rects.append(self.rects[bottom_y][right_x])
+
+        if left_x == 1:
+            dirty_fences[0] = True
+        if top_y == 0:
+            dirty_fences[1] = True
+        if right_x == self.num_cols - 1:
+            dirty_fences[2] = True
+
+        return self.dirty_rects
+
+    def convert_img(self):
+        self.tile = self.tile.convert_alpha()
+        for pair in self.debris:
+            pair[0] = pair[0].convert_alpha()
 
 
 def env(**kwargs):
@@ -327,26 +456,19 @@ class raw_env(AECEnv):
         self.agents = []
 
         self.sprite_list = [
-            "bankers/1-big.png",
-            "bankers/2-big.png",
-            "bankers/3-big.png",
-            "prospector-pickaxe-big.png",
+            "bankers/0.png",
+            "bankers/1.png",
+            "bankers/2.png",
+            "prospector.png",
         ]
-        self.rendering = False
         self.max_frames = max_frames
-        self.frame = 0
 
         pg.init()
         self.rng, seed = seeding.np_random(seed)
-        self.screen = pg.Surface(const.SCREEN_SIZE)
         self.clock = pg.time.Clock()
-        self.done = False
         self.closed = False
 
-        self.background = utils.load_image(["background-debris.png"])
-        self.background_sf = pg.Surface(self.background.get_size())
-        self.background_sf.blit(self.background, (0, 0))
-        self.screen.blit(self.background, (0, 0))
+        self.background = Background(self.rng)
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
@@ -354,6 +476,8 @@ class raw_env(AECEnv):
 
         self.all_sprites = pg.sprite.RenderUpdates()
         self.gold = []
+
+        self.water = Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.rng)
 
         # Generate random positions for each prospector agent
         prospector_info = [
@@ -381,10 +505,10 @@ class raw_env(AECEnv):
         for pos, verts in const.BANK_INFO:
             self.banks.append(Bank(pos, verts, self.space, self.all_sprites))
 
+        self.fences = []
         for w_type, s_pos, b_pos, verts in const.FENCE_INFO:
-            Fence(w_type, s_pos, b_pos, verts, self.space, self.all_sprites)
-
-        Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.all_sprites)
+            f = Fence(w_type, s_pos, b_pos, verts, self.space)
+            self.fences.append(f)
 
         self.metadata = {"render.modes": ["human"]}
 
@@ -401,6 +525,7 @@ class raw_env(AECEnv):
 
         self.observation_spaces = {}
         self.last_observation = {}
+
         for p in self.prospectors:
             self.last_observation[p] = None
             self.observation_spaces[p] = spaces.Box(
@@ -606,7 +731,19 @@ class raw_env(AECEnv):
         else:
             agent = self.bankers[agent_id]
 
+        agent_pos = agent.rect.topleft
+        agent_angle = agent.body.angle
+        agent_bg_rects = self.background.update(agent.rect, self.dirty_fences)
+        
+        gold_bg_rects = []
+        if agent.body.nugget is not None:
+            gold_bg_rects = self.background.update(agent.body.nugget.rect, self.dirty_fences)
         agent.update(action)
+
+        if agent_pos != agent.rect.topleft or agent_angle != agent.body.angle:
+            self.dirty_rects.extend(agent_bg_rects)
+            self.dirty_rects.extend(gold_bg_rects)
+            self.dirty_rects.append(agent.rect)
 
         all_agents_updated = self._agent_selector.is_last()
         # Only take next step in game if all agents have received an action
@@ -637,8 +774,10 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.screen = pg.Surface(const.SCREEN_SIZE)
-        self.screen.blit(self.background, (0, 0))
         self.done = False
+
+        self.background.generate_debris(self.rng)
+        self.water.generate_debris(self.rng)
 
         for p in self.prospectors.values():
             p.reset(utils.rand_pos("prospector", self.rng))
@@ -652,10 +791,12 @@ class raw_env(AECEnv):
         self.metadata = {"render.modes": ["human"]}
         self.rendering = False
         self.frame = 0
+        self.dirty_rects = []
+        self.dirty_fences = [False, False, False]
 
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.draw()
+        self.full_draw()
         if observe:
             return self.observe(self.agent_selection)
 
@@ -663,16 +804,35 @@ class raw_env(AECEnv):
         if not self.rendering:
             pg.display.init()
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
-            self.background = self.background.convert_alpha()
-            self.screen.blit(self.background, (0, 0))
+            self.background.convert_img()
+            self.water.convert_img()
+            for f in self.fences:
+                f.convert_img()
             for s in self.all_sprites.sprites():
                 s.convert_img()
             self.rendering = True
-        self.draw()
-        pg.display.flip()
+            self.full_draw()
+            pg.display.flip()
+        else:
+            self.draw()
+            pg.display.update(self.dirty_rects)
+            self.dirty_rects.clear()
+
+    def full_draw(self):
+        """ Called to draw everything when first rendering """
+        self.background.full_draw(self.screen)
+        for f in self.fences:
+            f.full_draw(self.screen)
+        self.water.full_draw(self.screen)
+        self.all_sprites.draw(self.screen)
 
     def draw(self):
-        self.screen.blit(self.background_sf, (0, 0))
+        """ Called after each frame, all agents updated """
+        self.background.draw(self.screen)
+        for idx, dirty in enumerate(self.dirty_fences):
+            if dirty:
+                self.fences[idx].full_draw(self.screen)
+        self.water.full_draw(self.screen)
         self.all_sprites.draw(self.screen)
 
     def close(self):
