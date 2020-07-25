@@ -8,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import pong_volleyball_v0"
+agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
-### Pong: Volleyball
+<div class="floatright" markdown="1">
+
+![pong_volleyball gif](atari_pong_volleyball.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import pong_volleyball_v0`
+## Pong: Volleyball
 
-`agents= ["first_0", "second_0", "third_0", "fourth_0"]`
-
-![pong_volleyball gif](atari_pong_volleyball.gif)
-
-*AEC diagram*
 
 Four player team battle.
 

@@ -8,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import flag_capture_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Flag Capture
+<div class="floatright" markdown="1">
+
+![flag_capture gif](atari_flag_capture.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import flag_capture_v0`
+## Flag Capture
 
-`agents= ["first_0", "second_0"]`
-
-![flag_capture gif](atari_flag_capture.gif)
-
-*AEC diagram*
 
 
 A battle of memory and information.

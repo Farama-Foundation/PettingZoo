@@ -8,23 +8,22 @@ action-values: "(-1, 1)"
 observation-shape: "(212,)"
 observation-values: "[-10,10]"
 average-total-reward: "-0.533"
+import: "from pettingzoo.sisl import waterworld_v0"
+agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 ---
 
-### Waterworld
+<div class="floatright" markdown="1">
+
+![](sisl_waterworld.gif)
 
 This environment is part of the [SISL environments](../sisl). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
+## Waterworld
 
-`from pettingzoo.sisl import waterworld_v0`
-
-`agents= ["pursuer_0", "pursuer_1", ..., "pursuer_4"]`
-
-![](sisl_waterworld.gif)
-
-*AEC diagram*
 
 By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a -0.5×|action| reward when an agent collides into another. The environment runs for 500 frames by default. Observation shape takes the full form of ((4 + 3×speed_features)×n_sensors+2,).
 
