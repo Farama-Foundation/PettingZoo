@@ -2,6 +2,7 @@ from .multiwalker_base import MultiWalkerEnv as _env
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
+from gym.utils import EzPickle
 from pettingzoo.utils import wrappers
 
 
@@ -13,12 +14,12 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, *args, **kwargs):
-        super().__init__()
+        EzPickle.__init__(self, seed, *args, **kwargs)
         self.env = _env(seed, *args, **kwargs)
 
         self.num_agents = self.env.num_agents

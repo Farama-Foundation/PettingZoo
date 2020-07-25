@@ -2,7 +2,7 @@ import multi_agent_ale_py
 import os
 from pettingzoo import AECEnv
 import gym
-from gym.utils import seeding
+from gym.utils import seeding, EzPickle
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
@@ -23,7 +23,7 @@ def BaseAtariEnv(**kwargs):
     return _parallel_env_wrapper(ParallelAtariEnv(**kwargs))
 
 
-class ParallelAtariEnv:
+class ParallelAtariEnv(EzPickle):
 
     metadata = {'render.modes': ['human']}
 
@@ -39,6 +39,17 @@ class ParallelAtariEnv:
             max_frames=100000):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
+        EzPickle.__init__(
+            self,
+            game,
+            num_players,
+            mode_num,
+            seed,
+            obs_type,
+            repeat_action_probability,
+            full_action_space,
+            max_frames
+        )
 
         assert obs_type in ('ram', 'rgb_image', "grayscale_image"), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
         self.obs_type = obs_type
