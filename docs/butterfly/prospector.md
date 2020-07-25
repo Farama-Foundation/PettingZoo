@@ -12,6 +12,8 @@ import: "from pettingzoo.butterfly import prospector_v0"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
+## Prospector
+
 <div class="floatright" markdown="1">
 
 ![](butterfly_prospector.gif)
@@ -22,7 +24,6 @@ This environment is part of the [butterfly environments](../butterfly). Please r
 
 </div>
 
-## Prospector
 
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at

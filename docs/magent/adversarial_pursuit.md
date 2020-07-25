@@ -11,6 +11,8 @@ import: "pettingzoo.magent import adversarial_pursuit_v0"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
+## Adversarial Pursuit
+
 <div class="floatright" markdown="1">
 
 ![](magent_adversarial_pursuit.gif)
@@ -21,7 +23,6 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 </div>
 
-## Adversarial Pursuit
 
 
 The red agents must navigate the obstacles and attack the blue agents. The blue agents should try to avoid being attacked. Since the red agents are slower (but larger) than the blue agents, they must work together to trap the blue agents, so they can attack them continually (note that they blue agent's won't die if attacked, so they can be used as an infinite source of reward).

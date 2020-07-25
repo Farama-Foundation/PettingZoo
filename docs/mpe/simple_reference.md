@@ -12,6 +12,8 @@ import: "pettingzoo.mpe import simple_reference_v0"
 agent-labels: "agents= [agent_0, agent_1]"
 ---
 
+## Simple Reference
+
 <div class="floatright" markdown="1">
 
 ![](mpe_simple_reference.gif)
@@ -22,7 +24,6 @@ This environment is part of the [MPE environments](../mpe). Please read that pag
 
 </div>
 
-## Simple Reference
 
 
 This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.

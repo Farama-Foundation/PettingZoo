@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import combat_tank_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Combat: Tank
+
 <div class="floatright" markdown="1">
 
 ![combat_tank gif](atari_combat_tank.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Combat: Tank
 
 
 *Combat*'s classic tank mode is an adversarial game where prediction, and positioning are key.

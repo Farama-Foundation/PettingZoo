@@ -13,6 +13,8 @@ import: "pettingzoo.classic.chess_v0"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
+## Chess
+
 <div class="floatright" markdown="1">
 
 ![](classic_chess.gif)
@@ -23,7 +25,6 @@ This game part of the [classic games](../classic), please visit that page first 
 
 </div>
 
-## Chess
 
 
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.

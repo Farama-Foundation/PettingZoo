@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import warlords_v0"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
+## Warlords
+
 <div class="floatright" markdown="1">
 
 ![warlords gif](atari_warlords.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Warlords
 
 
 Four player last man standing!

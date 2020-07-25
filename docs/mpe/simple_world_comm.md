@@ -11,6 +11,8 @@ import: "pettingzoo.mpe import simple_world_comm_v0"
 agent-labels: "agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]"
 ---
 
+## Simple World Comm
+
 <div class="floatright" markdown="1">
 
 ![](mpe_simple_world_comm.gif)
@@ -21,7 +23,6 @@ This environment is part of the [MPE environments](../mpe). Please read that pag
 
 </div>
 
-## Simple World Comm
 
 
 This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are 'forests' that hide agents inside from being seen, and there is a ‘leader adversary' that can see the agents at all times and can communicate with the other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.

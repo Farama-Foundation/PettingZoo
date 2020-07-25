@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import wizard_of_wor_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Wizard of Wor
+
 <div class="floatright" markdown="1">
 
 ![wizard_of_wor gif](atari_wizard_of_wor.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Wizard of Wor
 
 
 Battling both against NPCs and the other player. Careful timing,

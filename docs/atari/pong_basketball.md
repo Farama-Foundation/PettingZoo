@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import pong_basketball_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Pong: Basketball
+
 <div class="floatright" markdown="1">
 
 ![pong_basketball gif](atari_pong_basketball.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Pong: Basketball
 
 
 A competitive game of control.

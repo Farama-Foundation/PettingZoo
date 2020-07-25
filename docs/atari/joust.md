@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import joust_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Joust
+
 <div class="floatright" markdown="1">
 
 ![joust gif](atari_joust.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Joust
 
 
 

@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import video_checkers_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Video Checkers
+
 <div class="floatright" markdown="1">
 
 ![video_checkers gif](atari_video_checkers.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Video Checkers
 
 
 A classical strategy game with arcade style controls.

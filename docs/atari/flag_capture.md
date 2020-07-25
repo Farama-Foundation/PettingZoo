@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import flag_capture_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Flag Capture
+
 <div class="floatright" markdown="1">
 
 ![flag_capture gif](atari_flag_capture.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Flag Capture
 
 
 

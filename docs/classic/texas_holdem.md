@@ -11,6 +11,8 @@ import: "from pettingzoo.classic import texas_holdem_no_limit_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+## Texas Hold'em No Limit
+
 <div class="floatright" markdown="1">
 
 ![](classic_texas_holdem.gif)
@@ -21,7 +23,6 @@ This game part of the [classic games](../classic), please visit that page first 
 
 </div>
 
-## Texas Hold'em No Limit
 
 
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of raise or the number of raises.

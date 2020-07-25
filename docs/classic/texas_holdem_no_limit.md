@@ -11,6 +11,8 @@ import: "from pettingzoo.classic import texas_holdem_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+## Texas Hold'em
+
 <div class="floatright" markdown="1">
 
 ![](classic_texas_holdem_no_limit.gif)
@@ -21,7 +23,6 @@ This game part of the [classic games](../classic), please visit that page first 
 
 </div>
 
-## Texas Hold'em
 
 
 Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.

@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import tennis_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Tennis
+
 <div class="floatright" markdown="1">
 
 ![tennis gif](atari_tennis.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Tennis
 
 
 A competitive game of positioning and prediction.

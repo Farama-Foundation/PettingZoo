@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import othello_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Othello
+
 <div class="floatright" markdown="1">
 
 ![othello gif](atari_othello.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Othello
 
 
 The classic board game of long term strategy.

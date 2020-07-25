@@ -11,6 +11,8 @@ import: "pettingzoo.mpe import simple_push_v0"
 agent-labels: "agents= [adversary_0, agent_0]"
 ---
 
+## Simple Push
+
 <div class="floatright" markdown="1">
 
 ![](mpe_simple_push.gif)
@@ -21,7 +23,6 @@ This environment is part of the [MPE environments](../mpe). Please read that pag
 
 </div>
 
-## Simple Push
 
 
 This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.

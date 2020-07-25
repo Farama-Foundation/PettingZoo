@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import combat_jet_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Combat: Jet
+
 <div class="floatright" markdown="1">
 
 ![combat_jet gif](atari_combat_plane.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Combat: Jet
 
 
 

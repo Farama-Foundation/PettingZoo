@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import boxing_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Boxing
+
 <div class="floatright" markdown="1">
 
 ![boxing gif](atari_boxing.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Boxing
 
 
 

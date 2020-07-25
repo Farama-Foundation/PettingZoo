@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import pong_quadrapong_v0"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
+## Pong: Quadrapong
+
 <div class="floatright" markdown="1">
 
 ![pong_quadrapong gif](atari_pong_quadrapong.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Pong: Quadrapong
 
 
 Four player team battle.

@@ -13,6 +13,8 @@ agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
+## Prison
+
 <div class="floatright" markdown="1">
 
 ![](butterfly_prison.gif)
@@ -23,7 +25,6 @@ This environment is part of the [butterfly environments](../butterfly). Please r
 
 </div>
 
-## Prison
 
 
 

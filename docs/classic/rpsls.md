@@ -10,6 +10,8 @@ observation-values: "Discrete(6)"
 import: "from pettingzoo.classic import rpsls_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
+## Rock Paper Scissors Lizard Spock
+
 <div class="floatright" markdown="1">
 
 ![](classic_rpsls.gif)
@@ -20,7 +22,6 @@ This game part of the [classic games](../classic), please visit that page first 
 
 </div>
 
-## Rock Paper Scissors Lizard Spock
 
 
 Rock Paper Scissors Lizard Spock is a variation of the traditional Rock Paper Scissors game, where the choices lizard and Spock are added as well. The interactions between Rock, Paper and Scissor are the same as the original with Rock beating scissors, scissors beating paper and paper beating rock. However, the new choices interact as follows: rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors beats lizard, lizard eats paper, paper beats Spock and Spock destroys rock. As is in the original, each player reveal their choice at the same time, at which point the winner is determined.

@@ -12,6 +12,8 @@ import: "pettingzoo.magent import tiger_deer_v0"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
+## Tiger-Deer
+
 <div class="floatright" markdown="1">
 
 ![](magent_tiger_deer.gif)
@@ -22,7 +24,6 @@ This environment is part of the [MAgent environments](../magent). Please read th
 
 </div>
 
-## Tiger-Deer
 
 
 In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting attacked.  

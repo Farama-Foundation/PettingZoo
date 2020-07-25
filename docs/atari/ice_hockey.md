@@ -12,6 +12,8 @@ import: "from pettingzoo.atari import ice_hockey_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Ice Hockey
+
 <div class="floatright" markdown="1">
 
 ![ice_hockey gif](atari_ice_hockey.gif)
@@ -22,7 +24,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Ice Hockey
 
 
 Competitive game of control and timing.

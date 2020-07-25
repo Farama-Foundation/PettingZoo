@@ -13,6 +13,8 @@ import: "from pettingzoo.atari import entombed_cooperative_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+## Entombed: Cooperative
+
 <div class="floatright" markdown="1">
 
 ![entombed_cooperative gif](atari_entombed_cooperative.gif)
@@ -23,7 +25,6 @@ This environment is part of the [Atari environments](../atari). Please read that
 
 </div>
 
-## Entombed: Cooperative
 
 
 

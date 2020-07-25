@@ -12,6 +12,8 @@ import: "from pettingzoo.sisl import pursuit_v0"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
+## Pursuit
+
 <div class="floatright" markdown="1">
 
 ![](sisl_pursuit.gif)
@@ -22,7 +24,6 @@ This environment is part of the [SISL environments](../sisl). Please read that p
 
 </div>
 
-## Pursuit
 
 
 By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The environment runs for 500 frames by default.  Note that this environment has already had the reward pruning optimization described in the *Agent Environment Cycle Games* paper applied.

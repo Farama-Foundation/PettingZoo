@@ -13,6 +13,8 @@ import: "from pettingzoo.butterfly import pistonball_v0"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
+## Pistonball
+
 <div class="floatright" markdown="1">
 
 ![](butterfly_pistonball.gif)
@@ -23,7 +25,6 @@ This environment is part of the [butterfly environments](../butterfly). Please r
 
 </div>
 
-## Pistonball
 
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Each piston agents observation is an RGB image of the area the, the two pistons next to them can move in (or the wall for pistons against the wall). Every piston can be acted on in any given time, the action space in discrete mode is 0 for down, 1 for staying still, and 2 for up. In continuous mode, the value is proportional to the amount the pistons are raised or lowered by.
