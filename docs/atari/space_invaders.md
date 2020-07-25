@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Space Invaders"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import space_invaders_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Space Invaders
+<div class="floatright" markdown="1">
+
+![space_invaders_easy gif](atari_space_invaders.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import space_invaders_v0`
+## Space Invaders
 
-`agents= ["first_0", "second_0"]`
-
-![space_invaders_easy gif](atari_space_invaders.gif)
-
-*AEC diagram*
 
 Classic Atari game, but there are two ships controlled by two players that are each trying to maximize their score.
 

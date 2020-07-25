@@ -1,44 +1,46 @@
 ---
 actions: "Continuous"
+title: "Prospector"
 agents: "7"
 manual-control: "Yes"
 action-shape: "(3,), (2,)"
 action-values: "[-1, 1]"
 observation-shape: "(150, 150, 3), (154, 154, 3)"
 observation-values: "(0, 255)"
+average-total-reward: "14165"
+import: "from pettingzoo.butterfly import prospector_v0"
+agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
-### Prospector
+<div class="floatright" markdown="1">
+
+![](butterfly_prospector.gif)
 
 This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.butterfly import prospector_v0`
+## Prospector
 
-`agents= ["prospector_0, "prospector_1", "prospector_2", "prospector_3", "banker_0", "banker_1", "banker_2"]`
 
-![](butterfly_prospector.gif)
-
-*AEC diagram*
-
-This game is inspired by gold panning in the American "wild west" movies. There's a blue river at 
-the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river 
+This game is inspired by gold panning in the American "wild west" movies. There's a blue river at
+the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river
 and pan from it, and get a gold nugget (visibly held by them). Prospectors can
 only hold one nugget at a time, and nuggets stay in the same position relative to the prospector's
 orientation.
 
-Prospector agents take a 3-element vector of continuous values between -1 and 1, inclusive. 
-The action space is `(y, x, r)`, where `y` is used for forward/backward movement, 
+Prospector agents take a 3-element vector of continuous values between -1 and 1, inclusive.
+The action space is `(y, x, r)`, where `y` is used for forward/backward movement,
 `x` is used for left/right movement, and `r` is used for clockwise/counter-clockwise rotation.
 
-There are a handful of bank chests at the top of the screen. The prospector agents can hand their 
-held gold nugget to the 3 "banker" agents, to get a reward. The banker agents can't rotate, 
+There are a handful of bank chests at the top of the screen. The prospector agents can hand their
+held gold nugget to the 3 "banker" agents, to get a reward. The banker agents can't rotate,
 and the prospector agents must give the nuggets (which are held in the same
-position relative to the prospector's position and rotation) to the 
-front of the bankers (within a plus or minus 45 degree tolerance). 
-The bankers then get the gold, and can deposit it into the chests to receive a reward. 
+position relative to the prospector's position and rotation) to the
+front of the bankers (within a plus or minus 45 degree tolerance).
+The bankers then get the gold, and can deposit it into the chests to receive a reward.
 
 Bankers take a 2-element vector of continuous values between -1 and 1, inclusive.
 The action space is `(y, x)`, where
@@ -58,18 +60,18 @@ information on their surroundings.
 **Rewards:**
 
 Rewards are issued for a prospector retrieving a nugget, a prospector handing
-a nugget off to a banker, a banker receiving a nugget from a prospector, 
+a nugget off to a banker, a banker receiving a nugget from a prospector,
 and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
 
-By default, if a prospector retrives a nugget from the water, then 
+By default, if a prospector retrives a nugget from the water, then
 that prospector receives a reward of
 0.8, other
 prospectors will
 receive a reward of 0.1 and
-all bankers receive a reward of 
-0.1. 
+all bankers receive a reward of
+0.1.
 
 By default, if a prospector
 hands off a gold nugget to a banker (so the banker receives a gold nugget
@@ -80,10 +82,10 @@ all of the bankers get 0.1.
 Similarly, the banker receiving the gold nugget gets
 0.8, the other bankers
 get 0.1, and
-all of the prospectors get 
-0.1. 
+all of the prospectors get
+0.1.
 
-Finally, by default when a banker deposits gold in the bank, 
+Finally, by default when a banker deposits gold in the bank,
 that banker receives a reward of
 0.8, the other bankers
 receive rewards of 0.1, and
@@ -105,7 +107,7 @@ The game lasts for 900 frames by default.
 **Arguments:**
 
 ```
-prospector_v0.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1, 
+prospector_v0.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
 prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
 banker_deposit_gold_reward=1, max_frames=900, seed=None)
 ```

@@ -26,25 +26,34 @@
 
 @media(min-width:768px) {
   .docnavcontainer {
-        padding-top: 80px;
+        padding-top: 90px;
         padding-bottom: 15px;
     }
-  
+
+}
+.pagecontainer {padding-top: 180px;}
+@media only screen and (max-width: 991px) {
+  .pagecontainer {padding-top: 150px;}
 }
 
 .doccontainer {
   table {
-    table-layout: fixed;
-    width: 100%;
+    /*table-layout: fixed;
+    width: 100%;*/
     overflow-x: scroll;
   }
 
   th,td {
     word-wrap: break-word;
-    
+
   }
 
   img {
     max-width: 40%;
   }
+}
+
+.bigtable{
+  overflow-x: auto;
+  margin-bottom: 1em;
 }

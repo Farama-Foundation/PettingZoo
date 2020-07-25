@@ -13,6 +13,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
+from gym.utils import EzPickle
 
 _image_library = {}
 
@@ -37,12 +38,12 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        super().__init__()
+        EzPickle.__init__(self, seed, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self._agent_selector = agent_selector(self.agents)

@@ -7,6 +7,7 @@ from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
+from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
@@ -86,10 +87,10 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
 
     def __init__(self, seed=None, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        # super().__init__()
+        EzPickle.__init__(self, seed, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
         self._agent_selector = agent_selector(self.agents)

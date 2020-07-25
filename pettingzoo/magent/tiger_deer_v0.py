@@ -8,18 +8,18 @@ from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from gym.utils import EzPickle
 
 
-def raw_env(seed=None):
+def raw_env(seed=None, max_frames=300):
     map_size = 45
-    shape_reward = True  # option not used
-    return _parallel_env_wrapper(_parallel_env(map_size, shape_reward, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, max_frames, seed))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size, shape_reward):
+def get_config(map_size):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -54,22 +54,22 @@ def get_config(map_size, shape_reward):
     c = gw.AgentSymbol(deer_group, index='any')
 
     # tigers get reward when they attack a deer simultaneously
-    if shape_reward:
-        e1 = gw.Event(a, 'attack', c)
-        e2 = gw.Event(b, 'attack', c)
-        cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[1, 1])
+    e1 = gw.Event(a, 'attack', c)
+    e2 = gw.Event(b, 'attack', c)
+    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[1, 1])
 
     return cfg
 
 
-class _parallel_env(magent_parallel_env):
-    def __init__(self, map_size, shape_reward, seed):
-        env = magent.GridWorld(get_config(map_size, shape_reward), map_size=map_size)
+class _parallel_env(magent_parallel_env, EzPickle):
+    def __init__(self, map_size, max_frames, seed):
+        EzPickle.__init__(self, map_size, max_frames, seed)
+        env = magent.GridWorld(get_config(map_size), map_size=map_size)
 
         handles = env.get_handles()
 
         names = ["deer", "tiger"]
-        super().__init__(env, handles, names, map_size, seed)
+        super().__init__(env, handles, names, map_size, max_frames, seed)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size

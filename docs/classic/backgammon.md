@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Backgammon"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -8,17 +9,20 @@ action-values: "Discrete( 26^2 * 2 + 1)"
 observation-shape: "(198,)"
 observation-values: "[0, 7.5]"
 num-states: "10^26"
+import: "from pettingzoo.classic import backgammon_v0"
+agent-labels: "agents= ['player_0', 'player_1']"
 ---
-### Backgammon
+<div class="floatright" markdown="1">
+
+![](classic_backgammon.gif)
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
-
 {% include table.md %}
 
-`from pettingzoo.classic import backgammon_v0`
+</div>
 
-`agents= ['player_0', 'player_1']`
+## Backgammon
 
 
 Backgammon is a 2-player turn based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.

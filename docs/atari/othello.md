@@ -1,5 +1,6 @@
 ---
 layout: "docu"
+title: "Othello"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
@@ -7,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import othello_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Othello
+<div class="floatright" markdown="1">
+
+![othello gif](atari_othello.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import othello_v0`
+## Othello
 
-`agents= ["first_0", "second_0"]`
-
-![othello gif](atari_othello.gif)
-
-*AEC diagram*
 
 The classic board game of long term strategy.
 

@@ -1,27 +1,28 @@
 ---
 actions: "Discrete"
+title: "Simple Push"
 agents: "2"
 manual-control: "No"
 action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(8),(19)"
 observation-values: "(-inf,inf)"
+import: "pettingzoo.mpe import simple_push_v0"
+agent-labels: "agents= [adversary_0, agent_0]"
 ---
 
-### Simple Push
+<div class="floatright" markdown="1">
+
+![](mpe_simple_push.gif)
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`pettingzoo.mpe import simple_push_v0`
+## Simple Push
 
-`agents= [adversary_0, agent_0]`
-
-![](mpe_simple_push.gif)
-
-*AEC diagram*
 
 This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.
 
