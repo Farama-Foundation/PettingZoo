@@ -293,8 +293,10 @@ class Water(object):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = math.ceil(const.WATER_HEIGHT / const.TILE_SIZE)
 
-        self.tile = utils.load_image(["water_tile.png"])
-        self.debris_tile = utils.load_image(["debris", "seaweed.png"])
+        self.top_tile = utils.load_image(["river_to_sand_tile.png"])
+        self.tile = utils.load_image(["river_tile.png"])
+
+        self.debris_tile = utils.load_image(["debris", "seaweed_water.png"])
         tile_size = self.tile.get_size()
 
         self.rects = []
@@ -324,25 +326,26 @@ class Water(object):
             if rng.random_sample() >= 0.5:
                 y = rng.randint(0, 2)
                 x = col + rng.randint(0, 3)
-                self.debris.append([self.debris_tile, self.rects[y][x]])
+                rect = self.rects[y][x].copy()
+                rect.x += 3
+                rect.y += 9
+                self.debris.append([self.debris_tile, rect])
 
     def full_draw(self, screen):
-        for row in self.rects:
-            for rect in row:
-                screen.blit(self.tile, rect)
+        for rect in self.rects[0]:
+            screen.blit(self.top_tile, rect)
+
+        for rect in self.rects[1]:
+            screen.blit(self.tile, rect)
 
         for pair in self.debris:
             screen.blit(pair[0], pair[1])
 
     def draw(self, screen):
-        for row in self.rects:
-            for rect in row:
-                screen.blit(self.tile, rect)
-
-        for pair in self.debris:
-            screen.blit(pair[0], pair[1])
+        self.full_draw()
 
     def convert_img(self):
+        self.top_tile = self.top_tile.convert_alpha()
         self.tile = self.tile.convert_alpha()
         self.debris_tile = self.debris_tile.convert_alpha()
 
@@ -354,7 +357,7 @@ class Background(object):
             (const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE
         )
 
-        self.tile = utils.load_image(["dirt_tile.png"])
+        self.tile = utils.load_image(["sand_tile.png"])
 
         self.debris_tiles = {
             0: utils.load_image(["debris", "0.png"]),
