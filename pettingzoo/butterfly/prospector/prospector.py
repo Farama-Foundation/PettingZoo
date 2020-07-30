@@ -356,7 +356,7 @@ class Background(object):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = math.ceil(
             (const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE
-        )
+        ) + 1
 
         self.tile = utils.load_image(["sand_tile.png"])
 
@@ -384,7 +384,7 @@ class Background(object):
         for row in range(1, self.num_rows - 1, 3):
             for col in range(1, self.num_cols - 1, 3):
                 y = row + rng.randint(0, 3)
-                if y == self.num_rows - 1:
+                if y == self.num_rows - 2:
                     y += -1
                 x = col + rng.randint(0, 3)
                 choice = rng.randint(0, 4)
@@ -845,6 +845,7 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.draw()
             pg.display.update(self.dirty_rects)
+            self.dirty_fences = [False, False, False]
             self.dirty_rects.clear()
 
     def full_draw(self):
