@@ -1,4 +1,5 @@
 import pytest
+import pickle
 from .all_modules import all_environments
 import pettingzoo.tests.api_test as api_test
 
@@ -13,5 +14,9 @@ def test_module(env_module):
     api_test.api_test(_env)
 
     seed_test(env_module.env)
+
+    # pickle test
+    env2 = pickle.loads(pickle.dumps(_env))
+    api_test.api_test(env2)
     # render_test(_env)
     # error_test(env_module.env())

@@ -8,6 +8,7 @@ from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from gym.utils import EzPickle
 
 
 def raw_env(seed=None, max_frames=1000, **reward_args):
@@ -118,8 +119,9 @@ def generate_map(env, map_size, handles):
     env.add_agents(handles[3], method="custom", pos=pos[1])
 
 
-class _parallel_env(magent_parallel_env):
+class _parallel_env(magent_parallel_env, EzPickle):
     def __init__(self, map_size, reward_args, max_frames, seed):
+        EzPickle.__init__(self, map_size, reward_args, max_frames, seed)
         env = magent.GridWorld(load_config(map_size, **reward_args))
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
         super().__init__(env, env.get_handles(), names, map_size, max_frames, seed)

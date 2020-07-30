@@ -11,6 +11,7 @@ import rlcard.games.gin_rummy.utils.melding as melding
 import numpy as np
 from pettingzoo.utils import wrappers
 from .rlcard_base import RLCardBase
+from gym.utils import EzPickle
 
 
 def env(**kwargs):
@@ -23,12 +24,13 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0):
-        super().__init__("gin-rummy", 2, (5, 52), seed)
+        EzPickle.__init__(self, seed, knock_reward, gin_reward)
+        RLCardBase.__init__(self, "gin-rummy", 2, (5, 52), seed)
         self._knock_reward = knock_reward
         self._gin_reward = gin_reward
 
