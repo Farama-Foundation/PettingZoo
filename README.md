@@ -23,8 +23,7 @@ PettingZoo includes the following sets of games:
 
 To install, use `pip install pettingzoo`
 
-We support Python 3.6, 3.7 and 3.8
-
+We support Python 3.6, 3.7 and 3.8, on Linux and macOS.
 
 ## API
 
@@ -35,7 +34,6 @@ from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 ```
 
-## Interacting With Environments
 Environments can be interacted with in a manner very similar to Gym:
 
 ```
@@ -47,11 +45,6 @@ for agent in env.agent_iter():
 ```
 
 For the complete API documentation, please see https://pettingzoo-team.github.io/PettingZoo/api
-
-
-## OS Support
-
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
 
 ## Citation
 
