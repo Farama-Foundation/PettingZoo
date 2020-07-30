@@ -8,22 +8,22 @@ action-values: "Discrete(3),(5)"
 observation-shape: "(3),(11)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-575.6"
+import: "pettingzoo.mpe import simple_speaker_listener_v0"
+agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
-### Simple Speaker Listener
+<div class="floatright" markdown="1">
+
+![](mpe_simple_speaker_listen.gif)
 
 This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`pettingzoo.mpe import simple_speaker_listener_v0`
+## Simple Speaker Listener
 
-`agents=[speaker_0, listener_0]`
-
-![](mpe_simple_speaker_listen.gif)
-
-*AEC diagram*
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 

@@ -8,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import video_checkers_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Video Checkers
+<div class="floatright" markdown="1">
+
+![video_checkers gif](atari_video_checkers.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import video_checkers_v0`
+## Video Checkers
 
-`agents= ["first_0", "second_0"]`
-
-![video_checkers gif](atari_video_checkers.gif)
-
-*AEC diagram*
 
 A classical strategy game with arcade style controls.
 

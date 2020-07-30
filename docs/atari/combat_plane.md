@@ -8,22 +8,22 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
+import: "from pettingzoo.atari import combat_jet_v0"
+agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-### Combat: Jet
+<div class="floatright" markdown="1">
+
+![combat_jet gif](atari_combat_plane.gif)
 
 This environment is part of the [Atari environments](../atari). Please read that page first for general information.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.atari import combat_jet_v0`
+## Combat: Jet
 
-`agents= ["first_0", "second_0"]`
-
-![combat_jet gif](atari_combat_plane.gif)
-
-*AEC diagram*
 
 
 *Combat*'s plane mode is an adversarial game where timing,

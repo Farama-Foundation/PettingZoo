@@ -14,6 +14,7 @@ from pettingzoo.utils import agent_selector
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
+from gym.utils import EzPickle
 
 
 def get_image(path):
@@ -32,11 +33,12 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
+        EzPickle.__init__(self, seed, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90

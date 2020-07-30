@@ -7,22 +7,22 @@ action-shape: "Discrete(61)"
 action-values: "Discrete(61)"
 observation-shape: "(7, 4, 15)"
 observation-values: "[0, 1]"
+import: "from pettingzoo.classic import uno_v0"
+agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-### Uno
+<div class="floatright" markdown="1">
+
+![](classic_uno.gif)
 
 This game part of the [classic games](../classic), please visit that page first for general information about these games.
 
 {% include table.md %}
 
+</div>
 
-`from pettingzoo.classic import uno_v0`
+## Uno
 
-`agents= ['player_0', 'player_1']`
-
-![](classic_uno.gif)
-
-*AEC Diagram*
 
 Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is determined as the first player with no cards left. In order to get rid of a card, a player must match either the color and number of the card on top of the discard pile. If the player does not have a card to discard, then it will take a card from the Draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild Draw Four, Skip, Reverse).
 
