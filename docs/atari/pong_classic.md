@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import pong_classic_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
-
-![pong gif](atari_pong_classic.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Pong: Classic
 
 
 Classic two player competitive game of timing.

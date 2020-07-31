@@ -11,17 +11,8 @@ import: "from pettingzoo.classic import dou_dizhu_v0"
 agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 
-<div class="floatright" markdown="1">
-
-![](classic_dou_dizhu.gif)
-
-This game part of the [classic games](../classic), please visit that page first for general information about these games.
-
 {% include table.md %}
 
-</div>
-
-## Dou Dizhu
 
 
 Dou Dizhu, or *Fighting the Landlord*, is a shedding game involving 3 players and a deck of cards plus 2 jokers with suits being irrelevant. Heuristically, one player is designated the "Landlord" and the others become the "Peasants". The objective of the game is to be the first one to have no cards left. If the first person to have no cards left is part of the "Peasant" team, then all members of the "Peasant" team receive a reward (+1). If the "Landlord" wins, then only the "Landlord" receives a reward (+1).

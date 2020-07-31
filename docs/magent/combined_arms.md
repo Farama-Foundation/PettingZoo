@@ -11,17 +11,8 @@ import: "pettingzoo.magent import combined_arms_v0"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
-<div class="floatright" markdown="1">
-
-![](magent_combined_arms.gif)
-
-This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Combined Arms
 
 
 A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack father and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so).

@@ -11,17 +11,8 @@ import: "from pettingzoo.classic import tictactoe_v0"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
-<div class="floatright" markdown="1">
-
-![](classic_tictactoe.gif)
-
-This game part of the [classic games](../classic), please visit that page first for general information about these games.
-
 {% include table.md %}
 
-</div>
-
-## Tic Tac Toe
 
 
 Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal row is the winner.

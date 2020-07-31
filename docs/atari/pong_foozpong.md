@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import pong_foozpong"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
-<div class="floatright" markdown="1">
-
-![pong_volleyball gif](atari_pong_foozpong.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Pong: Foozpong
 
 
 Four player team battle.

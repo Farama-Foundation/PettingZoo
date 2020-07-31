@@ -13,17 +13,8 @@ agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
-<div class="floatright" markdown="1">
-
-![](butterfly_prison.gif)
-
-This environment is part of the [butterfly environments](../butterfly). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Prison
 
 
 

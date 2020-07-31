@@ -11,17 +11,8 @@ import: "pettingzoo.magent import gather_v0"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
-<div class="floatright" markdown="1">
-
-![](magent_gather.gif)
-
-This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Gather
 
 
 In gather, the agents must gain reward by eating food or fighting each other. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce.

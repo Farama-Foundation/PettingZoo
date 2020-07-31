@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import mario_bros_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
-
-![mario_bros gif](atari_mario_bros.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Mario Bros
 
 
 A mixed-sum game of planning and control.
