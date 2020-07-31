@@ -27,7 +27,7 @@ def invert_y(points):
 def rand_pos(sprite, rng):
     x = rng.randint(100, const.SCREEN_WIDTH - 100)
     if sprite == "banker":
-        return x, rng.randint(150, 300)
+        return x, rng.randint(153, 300)
     elif sprite == "prospector":
         return x, rng.randint(350, const.SCREEN_HEIGHT - (const.WATER_HEIGHT + 30))
 
