@@ -11,7 +11,7 @@ import: "pettingzoo.magent import battlefield_v0"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

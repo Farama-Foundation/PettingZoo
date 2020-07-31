@@ -10,7 +10,7 @@ observation-values: "(-inf,inf)"
 import: "pettingzoo.mpe import simple_tag_v0"
 agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
-{% include table.md %}
+{% include info_box.md %}
 
 
 

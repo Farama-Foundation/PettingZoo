@@ -12,7 +12,7 @@ import: "pettingzoo.magent import tiger_deer_v0"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

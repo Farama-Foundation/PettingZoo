@@ -11,7 +11,7 @@ import: "pettingzoo.mpe import simple_crypto_v0"
 agent-labels: "agents= [eve_0, bob_0, alice_0]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

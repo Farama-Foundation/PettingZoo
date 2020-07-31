@@ -12,7 +12,7 @@ import: "pettingzoo.mpe import simple_speaker_listener_v0"
 agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

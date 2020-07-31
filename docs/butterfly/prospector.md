@@ -12,7 +12,7 @@ import: "from pettingzoo.butterfly import prospector_v0"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

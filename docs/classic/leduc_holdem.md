@@ -12,7 +12,7 @@ import: "from pettingzoo.classic import leduc_holdem_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

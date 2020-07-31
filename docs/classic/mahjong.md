@@ -10,7 +10,7 @@ observation-values: "[0, 1]"
 import: "from pettingzoo.classic import mahjong_v0"
 agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 ---
-{% include table.md %}
+{% include info_box.md %}
 
 
 

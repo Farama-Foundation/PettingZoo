@@ -11,7 +11,7 @@ import: "from pettingzoo.classic import tictactoe_v0"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

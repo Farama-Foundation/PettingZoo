@@ -12,7 +12,7 @@ import: "pettingzoo.mpe import simple_spread_v0"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

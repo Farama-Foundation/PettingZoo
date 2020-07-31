@@ -13,7 +13,7 @@ agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

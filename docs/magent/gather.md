@@ -11,7 +11,7 @@ import: "pettingzoo.magent import gather_v0"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 
