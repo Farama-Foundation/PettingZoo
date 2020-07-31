@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import surround_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
-
-![surround gif](atari_surround.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Surround: Original
 
 
 A competitive game of planning and strategy.

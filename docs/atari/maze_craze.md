@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import maze_craze_blockade_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
-
-![maze_craze_blockade gif](atari_maze_craze.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
 {% include table.md %}
 
-</div>
-
-## Maze Craze: Blockade
 
 
 A competitive game of memory and planning!
