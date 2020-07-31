@@ -13,7 +13,7 @@ import: "from pettingzoo.butterfly import knights_archers_zombies_v0"
 agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

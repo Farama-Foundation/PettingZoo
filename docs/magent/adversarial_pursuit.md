@@ -11,7 +11,7 @@ import: "pettingzoo.magent import adversarial_pursuit_v0"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

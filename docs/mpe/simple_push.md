@@ -11,7 +11,7 @@ import: "pettingzoo.mpe import simple_push_v0"
 agent-labels: "agents= [adversary_0, agent_0]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

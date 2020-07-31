@@ -12,7 +12,7 @@ import: "from pettingzoo.atari import flag_capture_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

@@ -11,7 +11,7 @@ import: "from pettingzoo.classic import dou_dizhu_v0"
 agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

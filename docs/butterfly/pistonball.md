@@ -13,7 +13,7 @@ import: "from pettingzoo.butterfly import pistonball_v0"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

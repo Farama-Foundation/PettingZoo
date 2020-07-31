@@ -13,7 +13,7 @@ import: "from pettingzoo.atari import entombed_cooperative_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

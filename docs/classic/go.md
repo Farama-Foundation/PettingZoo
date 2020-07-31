@@ -11,7 +11,7 @@ import: "from pettingzoo.classic import go_v0"
 agent-labels: "agents= ['black_0', 'white_0']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

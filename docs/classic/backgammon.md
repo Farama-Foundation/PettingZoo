@@ -12,7 +12,7 @@ num-states: "10^26"
 import: "from pettingzoo.classic import backgammon_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
-{% include table.md %}
+{% include info_box.md %}
 
 
 

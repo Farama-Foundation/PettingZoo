@@ -11,7 +11,7 @@ import: "pettingzoo.magent import combined_arms_v0"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

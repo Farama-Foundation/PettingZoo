@@ -12,7 +12,7 @@ import: "from pettingzoo.sisl import waterworld_v0"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

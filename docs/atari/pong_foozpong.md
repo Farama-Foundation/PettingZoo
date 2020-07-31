@@ -12,7 +12,7 @@ import: "from pettingzoo.atari import pong_foozpong"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

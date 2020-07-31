@@ -12,7 +12,7 @@ import: "from pettingzoo.sisl import multiwalker_v0"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
-{% include table.md %}
+{% include info_box.md %}
 
 
 

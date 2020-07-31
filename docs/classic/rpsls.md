@@ -10,7 +10,7 @@ observation-values: "Discrete(6)"
 import: "from pettingzoo.classic import rpsls_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
-{% include table.md %}
+{% include info_box.md %}
 
 
 
