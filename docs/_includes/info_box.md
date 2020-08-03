@@ -3,6 +3,10 @@
 {% assign underscore_name = underscore_name_list[0] %}
 {% assign category_name = url_arr[1] %}
 
+<div class="appear_small" markdown="1">
+## {{page.title}}
+</div>
+
 <div class="floatright" markdown="1">
 
 <a href="{{category_name}}_{{underscore_name}}.gif">
@@ -31,4 +35,7 @@ Agents | `{{ page.agent-labels }}`
 
 </div>
 
+
+<div class="appear_big" markdown="1">
 ## {{page.title}}
+</div>
