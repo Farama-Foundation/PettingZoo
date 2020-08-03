@@ -24,9 +24,10 @@ Import | `{{ page.import }}`
 Agents | `{{ page.agent-labels }}`
 {% if page.average-total-reward %}Average Total Reward | {{ page.average-total-reward }}{% endif %}
 
-{% if page.aec-diagram %}
-![AEC diagram]({{page.aec-diagram}})
-{% endif %}
+
+<a href="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg">
+<img src="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg" alt="environment aec diagram" />
+</a>
 
 </div>
 
