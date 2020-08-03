@@ -12,17 +12,8 @@ import: "pettingzoo.mpe import simple_spread_v0"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](mpe_simple_spread.gif)
-
-This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Simple Spread
 
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.

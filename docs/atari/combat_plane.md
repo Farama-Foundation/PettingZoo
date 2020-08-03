@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import combat_jet_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![combat_jet gif](atari_combat_plane.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Combat: Jet
 
 
 

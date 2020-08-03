@@ -13,17 +13,8 @@ import: "from pettingzoo.classic import gin_rummy_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](classic_gin_rummy.gif)
-
-This game part of the [classic games](../classic), please visit that page first for general information about these games.
-
-{% include table.md %}
-
-</div>
-
-## Gin Rummy
 
 
 Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit.

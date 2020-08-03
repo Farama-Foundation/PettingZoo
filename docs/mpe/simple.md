@@ -11,17 +11,8 @@ import: "pettingzoo.mpe.simple_v0"
 agent-labels: "agents= [agent_0]"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](mpe_simple.gif)
-
-This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Simple
 
 
 In this environment a single agent sees a landmark position and is rewarded based on how close it gets to the landmark (Euclidian distance). This is not a multiagent environment, and is primarily intended for debugging purposes.

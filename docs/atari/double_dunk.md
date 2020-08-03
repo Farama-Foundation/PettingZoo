@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import double_dunk_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![double_dunk gif](atari_double_dunk.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Double Dunk
 
 
 
