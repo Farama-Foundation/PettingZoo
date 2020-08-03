@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import space_invaders_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![space_invaders_easy gif](atari_space_invaders.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Space Invaders
 
 
 Classic Atari game, but there are two ships controlled by two players that are each trying to maximize their score.

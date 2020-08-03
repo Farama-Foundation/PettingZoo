@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import entombed_competitive_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![entombed_competitive gif](atari_entombed_competitive.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Entombed: Competitive
 
 
 

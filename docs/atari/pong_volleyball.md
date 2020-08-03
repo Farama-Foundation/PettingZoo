@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import pong_volleyball_v0"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![pong_volleyball gif](atari_pong_volleyball.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Pong: Volleyball
 
 
 Four player team battle.

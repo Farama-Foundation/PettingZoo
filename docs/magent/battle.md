@@ -11,17 +11,8 @@ import: "pettingzoo.magent import battle_v0"
 agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](magent_battle.gif)
-
-This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Battle
 
 
 A large-scale team battle.

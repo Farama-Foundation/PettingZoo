@@ -11,17 +11,8 @@ import: "pettingzoo.magent import battlefield_v0"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](magent_battlefield.gif)
-
-This environment is part of the [MAgent environments](../magent). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Battlefield
 
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.

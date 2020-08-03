@@ -12,17 +12,8 @@ import: "from pettingzoo.atari import space_war_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![space_war gif](atari_space_war.gif)
-
-This environment is part of the [Atari environments](../atari). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Space War
 
 
 *Space war* is an competitive game where prediction and positioning are key.

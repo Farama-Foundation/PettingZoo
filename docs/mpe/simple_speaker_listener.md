@@ -12,17 +12,8 @@ import: "pettingzoo.mpe import simple_speaker_listener_v0"
 agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](mpe_simple_speaker_listen.gif)
-
-This environment is part of the [MPE environments](../mpe). Please read that page first for general information.
-
-{% include table.md %}
-
-</div>
-
-## Simple Speaker Listener
 
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).

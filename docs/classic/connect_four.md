@@ -11,17 +11,8 @@ import: "from pettingzoo.classic import connect_four_v0"
 agent-labels: "agents= ['player_0', 'player_0']"
 ---
 
-<div class="floatright" markdown="1">
+{% include info_box.md %}
 
-![](classic_connect_four.gif)
-
-This game part of the [classic games](../classic), please visit that page first for general information about these games.
-
-{% include table.md %}
-
-</div>
-
-## Connect Four
 
 
 Connect Four is a 2 player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a standing grid, where each token will fall as far down into its column as possible. Players cannot fill up a column with more than 6 token, and the game ends when either a player has made a sequence of 4 token, or when all 7 columns have been filled.
