@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="218.2554" cy="-391.5795" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="218.2554" y="-387.8795" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="218.2554" y="-387.8795" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="334.9298" cy="-349.1135" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="334.9298" y="-345.4135" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_0</text>
+<text text-anchor="middle" x="334.9298" y="-345.4135" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_0</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="397.0109" cy="-241.5859" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="397.0109" y="-237.8859" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_1</text>
+<text text-anchor="middle" x="397.0109" y="-237.8859" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_1</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
@@ -43,7 +43,7 @@
 <g id="node4" class="node">
 <title>a3</title>
 <ellipse fill="none" stroke="#000000" cx="375.4503" cy="-119.3099" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="375.4503" y="-115.6099" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_2</text>
+<text text-anchor="middle" x="375.4503" y="-115.6099" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_2</text>
 </g>
 <!-- a2&#45;&gt;a3 -->
 <g id="edge3" class="edge">
@@ -55,7 +55,7 @@
 <g id="node5" class="node">
 <title>a4</title>
 <ellipse fill="none" stroke="#000000" cx="280.3366" cy="-39.5" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="280.3366" y="-35.8" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_3</text>
+<text text-anchor="middle" x="280.3366" y="-35.8" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_3</text>
 </g>
 <!-- a3&#45;&gt;a4 -->
 <g id="edge4" class="edge">
@@ -67,7 +67,7 @@
 <g id="node6" class="node">
 <title>a5</title>
 <ellipse fill="none" stroke="#000000" cx="156.1743" cy="-39.5" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="156.1743" y="-35.8" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_4</text>
+<text text-anchor="middle" x="156.1743" y="-35.8" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_4</text>
 </g>
 <!-- a4&#45;&gt;a5 -->
 <g id="edge5" class="edge">
@@ -79,7 +79,7 @@
 <g id="node7" class="node">
 <title>a6</title>
 <ellipse fill="none" stroke="#000000" cx="61.0605" cy="-119.3099" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="61.0605" y="-115.6099" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_5</text>
+<text text-anchor="middle" x="61.0605" y="-115.6099" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_5</text>
 </g>
 <!-- a5&#45;&gt;a6 -->
 <g id="edge6" class="edge">
@@ -91,7 +91,7 @@
 <g id="node8" class="node">
 <title>a7</title>
 <ellipse fill="none" stroke="#000000" cx="39.5" cy="-241.5859" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="39.5" y="-237.8859" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_6</text>
+<text text-anchor="middle" x="39.5" y="-237.8859" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_6</text>
 </g>
 <!-- a6&#45;&gt;a7 -->
 <g id="edge7" class="edge">
@@ -103,7 +103,7 @@
 <g id="node9" class="node">
 <title>a8</title>
 <ellipse fill="none" stroke="#000000" cx="101.5811" cy="-349.1135" rx="39.5" ry="39.5"/>
-<text text-anchor="middle" x="101.5811" y="-345.4135" font-family="Times,serif" font-size="14.00" fill="#000000">pursuer_7</text>
+<text text-anchor="middle" x="101.5811" y="-345.4135" font-family="Segoe UI" font-size="14.00" fill="#000000">pursuer_7</text>
 </g>
 <!-- a7&#45;&gt;a8 -->
 <g id="edge8" class="edge">

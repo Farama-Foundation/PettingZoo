@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="72" cy="-255.3465" rx="72" ry="72"/>
-<text text-anchor="middle" x="72" y="-251.6465" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="72" y="-251.6465" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="72" cy="-72" rx="72" ry="72"/>
-<text text-anchor="middle" x="72" y="-68.3" font-family="Times,serif" font-size="14.00" fill="#000000">omnivore_[0...494]</text>
+<text text-anchor="middle" x="72" y="-68.3" font-family="Segoe UI" font-size="14.00" fill="#000000">omnivore_[0...494]</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">

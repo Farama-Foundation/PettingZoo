@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="258.5915" cy="-423.7608" rx="75.5" ry="75.5"/>
-<text text-anchor="middle" x="258.5915" y="-420.0608" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="258.5915" y="-420.0608" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="441.683" cy="-290.737" rx="75.5" ry="75.5"/>
-<text text-anchor="middle" x="441.683" y="-287.037" font-family="Times,serif" font-size="14.00" fill="#000000">redmelee_[0...44]</text>
+<text text-anchor="middle" x="441.683" y="-287.037" font-family="Segoe UI" font-size="14.00" fill="#000000">redmelee_[0...44]</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="371.7483" cy="-75.5" rx="75.5" ry="75.5"/>
-<text text-anchor="middle" x="371.7483" y="-71.8" font-family="Times,serif" font-size="14.00" fill="#000000">redranged_[0...35]</text>
+<text text-anchor="middle" x="371.7483" y="-71.8" font-family="Segoe UI" font-size="14.00" fill="#000000">redranged_[0...35]</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
@@ -43,7 +43,7 @@
 <g id="node4" class="node">
 <title>a3</title>
 <ellipse fill="none" stroke="#000000" cx="145.4347" cy="-75.5" rx="75.5" ry="75.5"/>
-<text text-anchor="middle" x="145.4347" y="-71.8" font-family="Times,serif" font-size="14.00" fill="#000000">bluemele_[0...44]</text>
+<text text-anchor="middle" x="145.4347" y="-71.8" font-family="Segoe UI" font-size="14.00" fill="#000000">bluemele_[0...44]</text>
 </g>
 <!-- a2&#45;&gt;a3 -->
 <g id="edge3" class="edge">
@@ -55,7 +55,7 @@
 <g id="node5" class="node">
 <title>a4</title>
 <ellipse fill="none" stroke="#000000" cx="75.5" cy="-290.737" rx="75.5" ry="75.5"/>
-<text text-anchor="middle" x="75.5" y="-287.037" font-family="Times,serif" font-size="14.00" fill="#000000">blueranged_[0...35]</text>
+<text text-anchor="middle" x="75.5" y="-287.037" font-family="Segoe UI" font-size="14.00" fill="#000000">blueranged_[0...35]</text>
 </g>
 <!-- a3&#45;&gt;a4 -->
 <g id="edge4" class="edge">
