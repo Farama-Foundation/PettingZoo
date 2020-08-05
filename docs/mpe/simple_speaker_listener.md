@@ -26,6 +26,8 @@ Speaker action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, 
 
 Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_speaker_listener.env(seed=None, max_frames=100)
 ```

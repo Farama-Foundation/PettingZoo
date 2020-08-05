@@ -25,6 +25,8 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_push.env(seed=None, max_frames=100)
 ```

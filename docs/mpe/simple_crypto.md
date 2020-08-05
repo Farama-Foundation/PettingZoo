@@ -32,6 +32,8 @@ Eve action space: `[say_0, say_1, say_2, say_3]`
 
 For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.
 
+### Arguments
+
 ```
 simple_crypto.env(seed=None, max_frames=100)
 ```

@@ -28,12 +28,14 @@ Move the knight using the 'I', 'J', 'K' and 'L' keys. Stab the Sword using ';' k
 Press 'M' key to spawn a new knight.
 
 
+
+### Arguments
+
 ```
 knights_archers_zombies.env(spawn_rate=20, knights=2, archers=2,
 killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_frames=900)
 ```
 
-*about arguments*
 
 ```
 spawn_rate: how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.

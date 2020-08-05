@@ -25,12 +25,13 @@ In prison, 8 aliens locked in identical prison cells are controlled by the user.
 Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left with 'J' and right with 'K'.
 
 
+### Arguments
+
 ```
 prison.env(vector_observation=False, continuous=False, synchronized_start=False,
 identical_aliens=False, max_frames=900, num_floors=4, random_aliens=False)
 ```
 
-*about arguments*
 
 ```
 vector_observation: If set to False an image of the prisoner's cell is observed. If set to True, the distance to the left side wall is returned.

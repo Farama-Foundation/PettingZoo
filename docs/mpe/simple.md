@@ -19,6 +19,8 @@ In this environment a single agent sees a landmark position and is rewarded base
 
 Observation space: `[self_vel, landmark_rel_position]`
 
+### Arguments
+
 ```
 simple.env(seed=None, max_frames=100)
 ```

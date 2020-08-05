@@ -17,6 +17,7 @@ right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=Fa
 ```
 
 ## Interacting With Environments
+
 Environments can be interacted with in a manner very similar to Gym:
 
 ```

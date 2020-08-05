@@ -35,6 +35,8 @@ Observation space: `[empty, obstacle, red, blue, minimap_red, minimap_blue, bina
 
 Map size: 45x45
 
+### Arguments
+
 ```
 battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
 ```

@@ -24,6 +24,8 @@ Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_re
 
 Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_spread.env(seed=None, N=3, local_ratio=0.5, max_frames=100)
 ```

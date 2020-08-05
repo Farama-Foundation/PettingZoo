@@ -26,6 +26,8 @@ Agent action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, sa
 
 Where X is the Cartesian product (giving a total action space of 50).
 
+### Arguments
+
 
 ```
 simple_reference.env(seed=None, local_ratio=0.5, max_frames=100)
