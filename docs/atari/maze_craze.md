@@ -38,8 +38,7 @@ Parameters specific to Maze Craze are
 maze_craze.env(game_version="robbers", visibilty_level=0)
 ```
 
-```
-game_version: Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
+`game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
 
-visibilty_level: A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
-```
+`visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
+

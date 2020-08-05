@@ -47,20 +47,19 @@ env = frame_skip(env, 4)
 All the Atari environments have the following environment parameters:
 
 ```
-<atar_game>.env(seed=None, obs_type='rgb_image', repeat_action_probability=0.25, full_action_space=True, max_frames=100000)
+<atari_game>.env(seed=None, obs_type='rgb_image', repeat_action_probability=0.25, full_action_space=True, max_frames=100000)
 ```
 
-```
-seed: Set to specific value for deterministic, reproducible behavior.
+`seed`:  Set to specific value for deterministic, reproducible behavior.
 
-obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
+`obs_type`:  default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
 
-repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
+`repeat_action_probability`:  probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
 
-full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
+`full_action_space`:  The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+
 
 ### Citation
 

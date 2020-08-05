@@ -42,8 +42,7 @@ Parameters specific to combat-plane are
 combat_plane.env(game_version="jet", guided_missile=True)
 ```
 
-```
-game_version: Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)
+`game_version`:  Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)
 
-guided_missile: Whether the missile can be directed after being fired, or whether it is on a fixed path.
-```
+`guided_missile`:  Whether the missile can be directed after being fired, or whether it is on a fixed path.
+

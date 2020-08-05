@@ -29,13 +29,12 @@ Gin Rummy takes two optional arguments that define the reward received by a play
 gin_rummy.env(seed=None, knock_reward = 0.5, gin_reward = 1.0)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-knock_reward: reward received by a player who knocks
+`knock_reward`:  reward received by a player who knocks
 
-gin_reward: reward received by a player who goes gin
-```
+`gin_reward`:  reward received by a player who goes gin
+
 
 #### Observation Space
 

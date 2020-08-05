@@ -27,9 +27,8 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) an
 leduc_holdem.env(seed=None)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
-```
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 #### Observation Space
 

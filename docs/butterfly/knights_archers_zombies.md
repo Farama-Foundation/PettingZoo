@@ -37,20 +37,19 @@ killable_knights=True, killable_archers=True, black_death=True, line_death=True,
 ```
 
 
-```
-spawn_rate: how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
+`spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
 
-num_knights: how many knight agents initially spawn.
+`num_knights`:  how many knight agents initially spawn.
 
-num_archers: how many archer agents initially spawn.
+`num_archers`:  how many archer agents initially spawn.
 
-killable_knights: if set to False, knight agents cannot be killed by zombies.
+`killable_knights`:  if set to False, knight agents cannot be killed by zombies.
 
-killable_archers: if set to False, archer agents cannot be killed by zombies.
+`killable_archers`:  if set to False, archer agents cannot be killed by zombies.
 
-black_death: if set to True, agents who die will observe only black. If False, dead agents do not have reward, done, info or observations and are removed from agent list.
+`black_death`:  if set to True, agents who die will observe only black. If False, dead agents do not have reward, done, info or observations and are removed from agent list.
 
-line_death: if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
+`line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
-pad_observation: if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
-```
+`pad_observation`:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
+
