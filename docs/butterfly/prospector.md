@@ -83,7 +83,7 @@ receive rewards of 0.1, and
 all of the prospectors receive
 0.1.
 
-Manual Control:
+### Manual Control
 
 `"prospector_0"` is the first sprite you control. Use the left and
 right arrow keys to switch between the agents.
@@ -95,7 +95,7 @@ Move the bankers using the 'WASD' keys for forward/left/backward/right movement.
 
 The game lasts for 900 frames by default.
 
-**Arguments:**
+### Arguments
 
 ```
 prospector_v0.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,

@@ -20,7 +20,7 @@ By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 1
 
 Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.
 
-Manual Control:
+### Manual Control
 
 Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
 
