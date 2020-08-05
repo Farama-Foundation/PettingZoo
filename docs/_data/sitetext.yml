@@ -11,7 +11,7 @@ header:
         buttonlink: /PettingZoo/envs
         icon: /PettingZoo/assets/img/environment_icon.svg
         iconsize: 80%
-      - button: Github
+      - button: GitHub
         buttonlink: https://github.com/PettingZoo-Team/PettingZoo
         icon: /PettingZoo/assets/img/github_icon.svg
         iconsize: 80%
@@ -23,7 +23,6 @@ services:
 
 timeline:
     title: "Environments"
-    text: "We provide a variety of environments with different objectives"
     section: timeline
     rows:
       - - title: "Atari Space Invaders"
