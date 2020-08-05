@@ -32,9 +32,7 @@ class ParallelAtariEnv(EzPickle):
             game,
             num_players,
             mode_num=None,
-            seed=None,
             obs_type='rgb_image',
-            repeat_action_probability=0.25,
             full_action_space=True,
             max_frames=100000):
         """Frameskip should be either a tuple (indicating a random range to
@@ -44,9 +42,7 @@ class ParallelAtariEnv(EzPickle):
             game,
             num_players,
             mode_num,
-            seed,
             obs_type,
-            repeat_action_probability,
             full_action_space,
             max_frames
         )
@@ -55,17 +51,12 @@ class ParallelAtariEnv(EzPickle):
         self.obs_type = obs_type
         self.full_action_space = full_action_space
         self.num_players = num_players
-        self.np_random = seeding.np_random(seed)
         self.max_frames = max_frames
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
 
-        if seed is None:
-            seed = seeding.create_seed(seed, max_bytes=4)
-
-        self.ale.setInt(b"random_seed", seed)
-        self.ale.setFloat(b'repeat_action_probability', repeat_action_probability)
+        self.ale.setFloat(b'repeat_action_probability', 0.)
 
         pathstart = os.path.dirname(multi_agent_ale_py.__file__)
         final_path = os.path.join(pathstart, "ROM", game, game + ".bin")
