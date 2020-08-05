@@ -6,7 +6,7 @@ agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
 action-values: "[0,17]"
-observation-shape: "(210, 160, 3)"
+observation-shape: "(250, 160, 3)"
 observation-values: "(0,255)"
 import: "from pettingzoo.atari import maze_craze_blockade_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
@@ -41,4 +41,3 @@ maze_craze.env(game_version="robbers", visibilty_level=0)
 `game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
 
 `visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
-
