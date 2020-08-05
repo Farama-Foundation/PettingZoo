@@ -34,18 +34,17 @@ starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
 ball_elasticity=1.5, max_frames=900)
 ```
 
-```
-local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-continuous: If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
+`continuous`:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
 
-random_drop: If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
+`random_drop`:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
 
-starting_angular_moment: If True, ball will spawn with a random angular momentum
+`starting_angular_moment`:  If True, ball will spawn with a random angular momentum
 
-ball_mass: Sets the mass of the ball physics object
+`ball_mass`:  Sets the mass of the ball physics object
 
-ball_friction: Sets the friction of the ball physics object
+`ball_friction`:  Sets the friction of the ball physics object
 
-ball_elasticity: Sets the elasticity of the ball physics object
-```
+`ball_elasticity`:  Sets the elasticity of the ball physics object
+

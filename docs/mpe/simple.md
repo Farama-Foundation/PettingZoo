@@ -25,8 +25,7 @@ Observation space: `[self_vel, landmark_rel_position]`
 simple.env(seed=None, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

@@ -26,23 +26,21 @@ forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=Tr
 max_frames=500)
 ```
 
-```
-n_walkers: number of bipedal walker agents in environment
+`n_walkers`:  number of bipedal walker agents in environment
 
-position_noise: noise applied to agent positional sensor observations
+`position_noise`:  noise applied to agent positional sensor observations
 
-angle_noise: noise applied to agent rotational sensor observations
+`angle_noise`:  noise applied to agent rotational sensor observations
 
-reward_mech: whether all agents are rewarded equal amounts or singular agent is rewarded
+`reward_mech`:  whether all agents are rewarded equal amounts or singular agent is rewarded
 
-forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
+`forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
 
-fall_reward: reward applied when an agent falls down
+`fall_reward`:  reward applied when an agent falls down
 
-drop_reward: reward applied for each fallen walker in environment
+`drop_reward`:  reward applied for each fallen walker in environment
 
-terminate_on_fall: toggles whether agent is done if it falls down
+`terminate_on_fall`:  toggles whether agent is done if it falls down
 
-max_frames: after max_frames steps all agents will return done
+`max_frames`:  after max_frames steps all agents will return done
 
-```
