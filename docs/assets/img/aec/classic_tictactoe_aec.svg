@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="109.3386" cy="-182.6772" rx="36" ry="36"/>
-<text text-anchor="middle" x="109.3386" y="-178.9772" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="109.3386" y="-178.9772" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="182.6772" cy="-109.3386" rx="36" ry="36"/>
-<text text-anchor="middle" x="182.6772" y="-105.6386" font-family="Times,serif" font-size="14.00" fill="#000000">player_1</text>
+<text text-anchor="middle" x="182.6772" y="-105.6386" font-family="Segoe UI" font-size="14.00" fill="#000000">player_1</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="109.3386" cy="-36" rx="36" ry="36"/>
-<text text-anchor="middle" x="109.3386" y="-32.3" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="109.3386" y="-32.3" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
@@ -43,7 +43,7 @@
 <g id="node4" class="node">
 <title>a3</title>
 <ellipse fill="none" stroke="#000000" cx="36" cy="-109.3386" rx="36" ry="36"/>
-<text text-anchor="middle" x="36" y="-105.6386" font-family="Times,serif" font-size="14.00" fill="#000000">player_2</text>
+<text text-anchor="middle" x="36" y="-105.6386" font-family="Segoe UI" font-size="14.00" fill="#000000">player_2</text>
 </g>
 <!-- a2&#45;&gt;a3 -->
 <g id="edge3" class="edge">

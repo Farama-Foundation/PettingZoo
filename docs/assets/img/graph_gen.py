@@ -34,7 +34,7 @@ def generate_graphviz(words):
     max_chars = max(len(w) for w in words)
     node_width = max_chars * 0.1 + 0.2
     innards = ""#"overlap = false;\n"
-    innards += f"node [shape = circle,fixedsize=true,width={node_width}];\n"
+    innards += f'node [shape = circle,fixedsize=true,width={node_width},fontname="Segoe UI"];\n'
     for i,word in enumerate(words):
         theta = 2 * math.pi * i / len(words)
         rad_const = 1. if len(words) <= 3 else 0.8

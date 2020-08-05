@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="123.1864" cy="-201.8385" rx="36" ry="36"/>
-<text text-anchor="middle" x="123.1864" y="-198.1385" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="123.1864" y="-198.1385" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="210.3729" cy="-138.4938" rx="36" ry="36"/>
-<text text-anchor="middle" x="210.3729" y="-134.7938" font-family="Times,serif" font-size="14.00" fill="#000000">first_0</text>
+<text text-anchor="middle" x="210.3729" y="-134.7938" font-family="Segoe UI" font-size="14.00" fill="#000000">first_0</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="177.0706" cy="-36" rx="36" ry="36"/>
-<text text-anchor="middle" x="177.0706" y="-32.3" font-family="Times,serif" font-size="14.00" fill="#000000">second_0</text>
+<text text-anchor="middle" x="177.0706" y="-32.3" font-family="Segoe UI" font-size="14.00" fill="#000000">second_0</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
@@ -43,7 +43,7 @@
 <g id="node4" class="node">
 <title>a3</title>
 <ellipse fill="none" stroke="#000000" cx="69.3023" cy="-36" rx="36" ry="36"/>
-<text text-anchor="middle" x="69.3023" y="-32.3" font-family="Times,serif" font-size="14.00" fill="#000000">third_0</text>
+<text text-anchor="middle" x="69.3023" y="-32.3" font-family="Segoe UI" font-size="14.00" fill="#000000">third_0</text>
 </g>
 <!-- a2&#45;&gt;a3 -->
 <g id="edge3" class="edge">
@@ -55,7 +55,7 @@
 <g id="node5" class="node">
 <title>a4</title>
 <ellipse fill="none" stroke="#000000" cx="36" cy="-138.4938" rx="36" ry="36"/>
-<text text-anchor="middle" x="36" y="-134.7938" font-family="Times,serif" font-size="14.00" fill="#000000">fourth_0</text>
+<text text-anchor="middle" x="36" y="-134.7938" font-family="Segoe UI" font-size="14.00" fill="#000000">fourth_0</text>
 </g>
 <!-- a3&#45;&gt;a4 -->
 <g id="edge4" class="edge">

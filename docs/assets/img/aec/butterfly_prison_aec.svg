@@ -13,13 +13,13 @@
 <g id="node1" class="node">
 <title>a0</title>
 <ellipse fill="none" stroke="#000000" cx="238.0059" cy="-427.0867" rx="43" ry="43"/>
-<text text-anchor="middle" x="238.0059" y="-423.3867" font-family="Times,serif" font-size="14.00" fill="#000000">env</text>
+<text text-anchor="middle" x="238.0059" y="-423.3867" font-family="Segoe UI" font-size="14.00" fill="#000000">env</text>
 </g>
 <!-- a1 -->
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="365.287" cy="-380.7602" rx="43" ry="43"/>
-<text text-anchor="middle" x="365.287" y="-377.0602" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_0</text>
+<text text-anchor="middle" x="365.287" y="-377.0602" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_0</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="433.0119" cy="-263.4573" rx="43" ry="43"/>
-<text text-anchor="middle" x="433.0119" y="-259.7573" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_1</text>
+<text text-anchor="middle" x="433.0119" y="-259.7573" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_1</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
@@ -43,7 +43,7 @@
 <g id="node4" class="node">
 <title>a3</title>
 <ellipse fill="none" stroke="#000000" cx="409.4913" cy="-130.0654" rx="43" ry="43"/>
-<text text-anchor="middle" x="409.4913" y="-126.3654" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_2</text>
+<text text-anchor="middle" x="409.4913" y="-126.3654" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_2</text>
 </g>
 <!-- a2&#45;&gt;a3 -->
 <g id="edge3" class="edge">
@@ -55,7 +55,7 @@
 <g id="node5" class="node">
 <title>a4</title>
 <ellipse fill="none" stroke="#000000" cx="305.7308" cy="-43" rx="43" ry="43"/>
-<text text-anchor="middle" x="305.7308" y="-39.3" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_3</text>
+<text text-anchor="middle" x="305.7308" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_3</text>
 </g>
 <!-- a3&#45;&gt;a4 -->
 <g id="edge4" class="edge">
@@ -67,7 +67,7 @@
 <g id="node6" class="node">
 <title>a5</title>
 <ellipse fill="none" stroke="#000000" cx="170.2811" cy="-43" rx="43" ry="43"/>
-<text text-anchor="middle" x="170.2811" y="-39.3" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_4</text>
+<text text-anchor="middle" x="170.2811" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_4</text>
 </g>
 <!-- a4&#45;&gt;a5 -->
 <g id="edge5" class="edge">
@@ -79,7 +79,7 @@
 <g id="node7" class="node">
 <title>a6</title>
 <ellipse fill="none" stroke="#000000" cx="66.5206" cy="-130.0654" rx="43" ry="43"/>
-<text text-anchor="middle" x="66.5206" y="-126.3654" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_5</text>
+<text text-anchor="middle" x="66.5206" y="-126.3654" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_5</text>
 </g>
 <!-- a5&#45;&gt;a6 -->
 <g id="edge6" class="edge">
@@ -91,7 +91,7 @@
 <g id="node8" class="node">
 <title>a7</title>
 <ellipse fill="none" stroke="#000000" cx="43" cy="-263.4573" rx="43" ry="43"/>
-<text text-anchor="middle" x="43" y="-259.7573" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_6</text>
+<text text-anchor="middle" x="43" y="-259.7573" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_6</text>
 </g>
 <!-- a6&#45;&gt;a7 -->
 <g id="edge7" class="edge">
@@ -103,7 +103,7 @@
 <g id="node9" class="node">
 <title>a8</title>
 <ellipse fill="none" stroke="#000000" cx="110.7249" cy="-380.7602" rx="43" ry="43"/>
-<text text-anchor="middle" x="110.7249" y="-377.0602" font-family="Times,serif" font-size="14.00" fill="#000000">prisoner_7</text>
+<text text-anchor="middle" x="110.7249" y="-377.0602" font-family="Segoe UI" font-size="14.00" fill="#000000">prisoner_7</text>
 </g>
 <!-- a7&#45;&gt;a8 -->
 <g id="edge8" class="edge">
