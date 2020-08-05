@@ -31,6 +31,8 @@ Agent and adversary observations: `[self_vel, self_pos, landmark_rel_positions, 
 
 Agent and adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_tag.env(seed=None, num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=100)
 ```

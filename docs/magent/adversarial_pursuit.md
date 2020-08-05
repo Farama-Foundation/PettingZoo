@@ -34,6 +34,8 @@ Observation space: `[empty, obstacle, predators, prey, one_hot_action, last_rewa
 
 Map size: 45x45
 
+### Arguments
+
 ```
 adversarial_pursuit_v0.env(seed=None, attack_penalty=-0.2, max_frames=500)
 ```

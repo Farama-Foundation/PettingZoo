@@ -25,6 +25,8 @@ Observation shape takes the full form of `(obs_range, obs_range, 3)` where the f
 Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
 
 
+### Arguments
+
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
 obs_range=7, n_catch=2, random_opponents=False, max_opponents=10,
@@ -34,8 +36,6 @@ train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
 opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 ```
-
-*about arguments*
 
 ```
 max_frames: after max_frames steps all agents will return done

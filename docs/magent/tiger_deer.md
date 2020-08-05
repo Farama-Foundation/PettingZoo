@@ -34,6 +34,8 @@ Observation space: `[empty, obstacle, deer, tigers, binary_agent_id(10), one_hot
 
 Map size: 45x45
 
+### Arguments
+
 ```
 tiger_deer_v0.env(seed=None, max_frames=500)
 ```

@@ -103,8 +103,6 @@ prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_r
 banker_deposit_gold_reward=1, max_frames=900, seed=None)
 ```
 
-**About arguments:**
-
 `ind_reward`: The reward multiplier for a single agent completing an objective.
 
 `group_reward`: The reward multiplier that agents of the same type

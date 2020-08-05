@@ -25,13 +25,14 @@ Pistonball uses the chipmunk physics engine, and are thus the physics are about 
 
 Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
 
+
+### Arguments
+
 ```
 pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
 starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
 ball_elasticity=1.5, max_frames=900)
 ```
-
-*about arguments*
 
 ```
 local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
