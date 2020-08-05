@@ -32,6 +32,5 @@ Parameters specific to Pong Basketball are
 pong_classic.env(num_players=2)
 ```
 
-```
-num_players: Number of players (must be either 2 or 4)
-```
+`num_players`:  Number of players (must be either 2 or 4)
+

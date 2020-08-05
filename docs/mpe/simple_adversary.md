@@ -25,14 +25,15 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_adversary.env(seed=None, N=2, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-N: number of good agents and landmarks
+`N`:  number of good agents and landmarks
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

@@ -7,19 +7,22 @@
           <h3 class="section-subheading text-muted">{{ site.data.sitetext.timeline.text | default: "timeline"}}</h3>
         </div>
       </div>
+      {%- for row in site.data.sitetext.timeline.rows -%}
       <div class="row">
-        {%- for event in site.data.sitetext.timeline.events -%}
+        {%- for event in row -%}
         <div class="col-sm" style="max-width: 35%; max-height: 50%;">
-          <div class="timecard card">
+          <div class="timecard " style="margin-bottom:3em">
+            <a href="{{ event.link }}">
             <img class="card-img-top" src="{{ event.image }}" alt="Card image">
-            <div class="card-body">
-              <h5 class="card-title"> {{ event.title }} </h5>
-              <a href="{{ event.link }}" class="btn btn-primary">View</a>
+            </a>
+            <div class="gallery_box">
+              <h3 class="card-title horizontal_center"> {{ event.desc }} </h3>
             </div>
           </div>
         </div>
-        {% endfor %}	
+        {% endfor %}
       </div>
+      {% endfor %}
     </div>
   </section>
 <!-- End About -->
