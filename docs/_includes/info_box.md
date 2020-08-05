@@ -3,6 +3,10 @@
 {% assign underscore_name = underscore_name_list[0] %}
 {% assign category_name = url_arr[1] %}
 
+<div class="appear_small" markdown="1">
+## {{page.title}}
+</div>
+
 <div class="floatright" markdown="1">
 
 <a href="{{category_name}}_{{underscore_name}}.gif">
@@ -24,10 +28,14 @@ Import | `{{ page.import }}`
 Agents | `{{ page.agent-labels }}`
 {% if page.average-total-reward %}Average Total Reward | {{ page.average-total-reward }}{% endif %}
 
-{% if page.aec-diagram %}
-![AEC diagram]({{page.aec-diagram}})
-{% endif %}
+
+<a href="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg">
+<img src="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg" alt="environment aec diagram" />
+</a>
 
 </div>
 
+
+<div class="appear_big" markdown="1">
 ## {{page.title}}
+</div>

@@ -19,12 +19,13 @@ In this environment a single agent sees a landmark position and is rewarded base
 
 Observation space: `[self_vel, landmark_rel_position]`
 
+### Arguments
+
 ```
 simple.env(seed=None, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

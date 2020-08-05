@@ -34,12 +34,13 @@ Observation space: `[empty, obstacle, deer, tigers, binary_agent_id(10), one_hot
 
 Map size: 45x45
 
+### Arguments
+
 ```
 tiger_deer_v0.env(seed=None, max_frames=500)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

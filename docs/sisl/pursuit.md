@@ -20,10 +20,12 @@ By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 1
 
 Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.
 
-Manual Control:
+### Manual Control
 
 Select different pursuers with 'J' and 'K'. The selected pursuer can be moved with the arrow keys.
 
+
+### Arguments
 
 ```
 pursuit.env(max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
@@ -35,44 +37,41 @@ opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 ```
 
-*about arguments*
+`max_frames`:  after max_frames steps all agents will return done
 
-```
-max_frames: after max_frames steps all agents will return done
+`xs, ys`:  size of environment world space
 
-xs, ys: size of environment world space
+`reward_mech`:  Whether a single pursuer is rewarded for an evader being caught, or all pursuers are rewarded
 
-reward_mech: Whether a single pursuer is rewarded for an evader being caught, or all pursuers are rewarded
+`n_evaders`:  Number of evaders
 
-n_evaders: Number of evaders
+`n_pursuers`:  Number of pursuers
 
-n_pursuers: Number of pursuers
+`obs_range`:  Radius of agent observation view
 
-obs_range: Radius of agent observation view
+`n_catch`:  Number pursuers required around an evader to be considered caught
 
-n_catch: Number pursuers required around an evader to be considered caught
+`random_opponents`:  Whether to randomize number of evaders on reset or use argument amount
 
-random_opponents: Whether to randomize number of evaders on reset or use argument amount
+`max_opponents`:  Maximum number of random evaders on reset, if random_opponents specified
 
-max_opponents: Maximum number of random evaders on reset, if random_opponents specified
+`freeze_evaders`:  Toggles if evaders can move or not
 
-freeze_evaders: Toggles if evaders can move or not
+`catchr`:  Reward for 'tagging' a single evader
 
-catchr: Reward for 'tagging' a single evader
+`caughtr`:  Reward for getting 'tagged' by a pursuer
 
-caughtr: Reward for getting 'tagged' by a pursuer
+`term_pursuit`:  Reward added when a pursuer or pursuers catch an evader
 
-term_pursuit: Reward added when a pursuer or pursuers catch an evader
+`urgency_reward`:  Reward to agent added in each step
 
-urgency_reward: Reward to agent added in each step
+`surround`:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
 
-surround: Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
+`constraint_window`:  Window in which agents can randomly spawn into the environment world
 
-constraint_window: Window in which agents can randomly spawn into the environment world
+`train_pursuit`:  Flag indicating if we are simulating pursuers or evaders
 
-train_pursuit: Flag indicating if we are simulating pursuers or evaders
+`ally_layer`:  Initial pursuers in world
 
-ally_layer: Initial pursuers in world
+`opponent_layer`:  Initial evader in world
 
-opponent_layer: Initial evader in world
-```

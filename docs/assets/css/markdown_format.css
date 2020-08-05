@@ -629,7 +629,10 @@
   margin-top: 0;
   margin-bottom: 16px;
 }
-
+.markdown-body > table{
+    max-width: 50%;
+    overflow: auto;
+}
 .markdown-body hr {
   height: .25em;
   padding: 0;

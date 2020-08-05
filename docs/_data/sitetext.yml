@@ -1,6 +1,6 @@
 header:
     title: PettingZoo
-    text: multi-agent reinforcement learning environments 
+    text: multi-agent reinforcement learning environments
     headerGif: /PettingZoo/atari/atari_warlords.gif
     buttons:
       - button: API
@@ -8,7 +8,7 @@ header:
         icon: /PettingZoo/assets/img/doc_icon.svg
         iconsize: 80%
       - button: Environments
-        buttonlink: /PettingZoo/atari
+        buttonlink: /PettingZoo/envs
         icon: /PettingZoo/assets/img/environment_icon.svg
         iconsize: 80%
       - button: Github
@@ -17,7 +17,7 @@ header:
         iconsize: 80%
 
 services:
-    title: "Useage"
+    title: "Usage"
     text: "Environments can be interacted with in a manner very similar to Gym:"
     section: services
 
@@ -25,31 +25,43 @@ timeline:
     title: "Environments"
     text: "We provide a variety of environments with different objectives"
     section: timeline
-    events:
-      - title: "Cooperative Pong"
-        desc: "View Butterfly environments"
-        image: /PettingZoo/assets/img/environments/gamma_cooperative_pong.gif
-        alt:
-        align: left
-        link: butterfly/cooperative_pong
-      - title: "Atari Space Invaders"
-        desc: "View Atari Games"
-        image: /PettingZoo/assets/img/environments/atari_space_invaders.gif
-        alt:
-        align: left
-        link: atari/space_invaders
-      - title: "MAgent Pursuit"
-        desc: "View MAgent Games"
-        image: /PettingZoo/assets/img/environments/magent_pursuit.gif
-        alt:
-        align: left
-        link: magent/adversarial_pursuit
-      - title: "Multiwalker"
-        desc: "View SISL Games"
-        image: /PettingZoo/assets/img/environments/sisl_multiwalker.gif
-        alt:
-        align: left
-        link: sisl/multiwalker
+    rows:
+      - - title: "Atari Space Invaders"
+          desc: "Atari"
+          image: /PettingZoo/atari/atari_space_invaders.gif
+          alt:
+          align: left
+          link: atari
+        - title: ""
+          desc: "Butterfly"
+          image: /PettingZoo/butterfly/butterfly_pistonball.gif
+          alt:
+          align: left
+          link: butterfly
+        - title: ""
+          desc: "Classic"
+          image: /PettingZoo/classic/classic_go.gif
+          alt:
+          align: left
+          link: classic
+      - - title: "MAgent Pursuit"
+          desc: "MAgent"
+          image: /PettingZoo/magent/magent_adversarial_pursuit.gif
+          alt:
+          align: left
+          link: magent
+        - title: "MPE"
+          desc: "MPE"
+          image: /PettingZoo/mpe/mpe_simple_world_comm.gif
+          alt:
+          align: left
+          link: mpe
+        - title: "Multiwalker"
+          desc: "SISL"
+          image: /PettingZoo/sisl/sisl_multiwalker.gif
+          alt:
+          align: left
+          link: sisl
 
 about:
     title: "About Us"

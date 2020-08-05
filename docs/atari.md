@@ -16,7 +16,8 @@ There are three types of games:
 
 The ALE environment has been studied extensively and examined for various flaws and how to fix them.  
 
-* Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we enable *sticky actions*, controlled by the `repeat_action_probability` environment parameter, by default. This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+* Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/PettingZoo-Team/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+* Frame flickering: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this is a frame stack of the previous 4 observations (see example below for implementation).
 
 ### Preprocessing
 
@@ -25,10 +26,15 @@ We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/Super
 Here is some example usage for the Atari preprocessing.
 
 ```python
-from supersuit import resize, frame_skip, frame_stack
+from supersuit import resize, frame_skip, frame_stack, sticky_actions
 from pettingzoo.atari import space_invaders_v0
 
 env = space_invaders_v0.env()
+
+# repeat_action_probability is set to 0.25 by default to fix the determinism issue
+# set the seed parameter sticky_actions(env, repeat_action_probability=0.25, seed=0)
+# for deterministic evaluation
+env = sticky_actions(env, repeat_action_probability=0.25)
 
 # downscale observation for faster processing
 env = resize(env, (84, 84))
@@ -38,7 +44,6 @@ env = frame_stack(env, 4)
 
 # skip frames for faster processing and less control
 # to be compatable with gym, do frame_skip(env, (2,5))
-# and set environment parameter repeat_action_probability=0.0 instead
 env = frame_skip(env, 4)
 ```
 
@@ -47,20 +52,17 @@ env = frame_skip(env, 4)
 All the Atari environments have the following environment parameters:
 
 ```
-<atar_game>.env(seed=None, obs_type='rgb_image', repeat_action_probability=0.25, full_action_space=True, max_frames=100000)
+<atari_game>.env(seed=None, obs_type='rgb_image', repeat_action_probability=0.25, full_action_space=True, max_frames=100000)
 ```
 
-```
-seed: Set to specific value for deterministic, reproducible behavior.
+`obs_type`:  default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
 
-obs_type: default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
+`repeat_action_probability`:  probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
 
-repeat_action_probability: probability you repeat an action from the previous frame (not step, frame), even after you have chosen a new action. Simulates the joystick getting stuck and not responding 100% quickly to moves.
+`full_action_space`:  The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
 
-full_action_space: The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
+`max_frames`:  number of frames (a step for each agent) until game terminates
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
 
 ### Citation
 

@@ -36,14 +36,13 @@ Parameters specific to Space Invaders are
 space_invaders.env(alternating_control=False, moving_shields=True, zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 ```
 
-```
-alternating_control: Only one of the two players has an option to fire at one time. If you fire, your opponent can then fire. However, you can't hoard the firing ability forever, eventually, control shifts to your opponent anyways.
+`alternating_control`:  Only one of the two players has an option to fire at one time. If you fire, your opponent can then fire. However, you can't hoard the firing ability forever, eventually, control shifts to your opponent anyways.
 
-moving_shields: The shields move back and forth, leaving less reliable protection.
+`moving_shields`:  The shields move back and forth, leaving less reliable protection.
 
-zigzaging_bombs: The invader's bombs move back and forth, making them more difficult to avoid.
+`zigzaging_bombs`:  The invader's bombs move back and forth, making them more difficult to avoid.
 
-fast_bomb: The bombs are much faster, making them more difficult to avoid.
+`fast_bomb`:  The bombs are much faster, making them more difficult to avoid.
 
-invisible_invaders: The invaders are invisible, making them more difficult to hit.
-```
+`invisible_invaders`:  The invaders are invisible, making them more difficult to hit.
+

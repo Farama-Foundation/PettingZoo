@@ -26,15 +26,16 @@ Agent action space: `[say_0, say_1, say_2, say_3, say_4, say_5, say_6, say_7, sa
 
 Where X is the Cartesian product (giving a total action space of 50).
 
+### Arguments
+
 
 ```
 simple_reference.env(seed=None, local_ratio=0.5, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+
