@@ -173,24 +173,38 @@
     }
   }
 }
-
-.timecard {
-  .card-img-top {
-    position: relative;
-    height: 300px;
-    max-width: 200px;
+.env_table{
+  display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.env_row{
+  display: table-row;
+}
+.gallery_entry{
+  text-align: center;
+  width: 33%;
+  padding-left: 1em;
+  padding-right: 1em;
+  display: table-cell;
+}
+.img_entry{
+  vertical-align: bottom;
+}
+.descrip_entry{
+  vertical-align: top;
+  p{
+    margin-bottom: 0;
+  }
+  padding-bottom: 1em;
+}
+.env_entry{
+  a{
     width: 100%;
   }
-  .cardimage{
-  }
-  .at-bottom{
-    position: absolute;
-    bottom: 0;
-    max-height: 300px;
-    width: 100%;
-  }
-
-  .card-title {
-    height: 50px;
+  img{
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 }
