@@ -12,7 +12,7 @@
       {%- for row in site.data.sitetext.timeline.rows -%}
       <div class="env_row">
         {%- for event in row -%}
-        <div class="img_entry gallery_entry">
+        <div class="img_entry gallery_entry env_entry">
             <a href="{{ event.link }}">
             <img  src="{{ event.image }}" alt="Card image">
             </a>
@@ -22,7 +22,7 @@
       <div class="env_row">
         {%- for event in row -%}
         <div class="descrip_entry gallery_entry">
-          <div><h3 class="card-title horizontal_center"> {{ event.title }} </h3></div>
+          <div><h4 class="card-title horizontal_center"> {{ event.title }} </h4></div>
           <p class="card-title horizontal_center"> {{ event.desc }} </p>
           {% if event.url %}<a href="{{event.url}}">{{event.url}}</a>{% endif %}
         </div>
