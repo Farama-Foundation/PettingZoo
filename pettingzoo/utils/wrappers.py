@@ -99,7 +99,7 @@ class AgentIterWrapper(BaseWrapper):
                 self.agent_selection = agent
                 break
 
-        return self.observe(self.agent_selection) if observe else None
+        return super().observe(self.agent_selection) if observe else None
 
     def agent_iter(self, max_agent_iter=2**63):
         return AECIterable(self, max_agent_iter)
