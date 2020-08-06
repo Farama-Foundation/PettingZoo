@@ -46,6 +46,10 @@ for agent in env.agent_iter():
 
 For the complete API documentation, please see https://pettingzoo-team.github.io/PettingZoo/api
 
+## SuperSuit
+
+SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
+
 ## Citation
 
 To cite this project in publication, please use
