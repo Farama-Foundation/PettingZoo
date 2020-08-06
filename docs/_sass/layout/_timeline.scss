@@ -176,11 +176,21 @@
 
 .timecard {
   .card-img-top {
+    position: relative;
     height: 300px;
+    max-width: 200px;
+    width: 100%;
+  }
+  .cardimage{
+  }
+  .at-bottom{
+    position: absolute;
+    bottom: 0;
+    max-height: 300px;
+    width: 100%;
   }
 
   .card-title {
-    height: 70px;
-    margin-bottom: 20px;
+    height: 50px;
   }
 }

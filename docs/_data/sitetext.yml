@@ -39,7 +39,7 @@ timeline:
           link: butterfly
         - title: ""
           desc: "Classic"
-          image: /PettingZoo/classic/classic_go.gif
+          image: /PettingZoo/classic/classic_chess.gif
           alt:
           align: left
           link: classic
