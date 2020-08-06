@@ -25,38 +25,40 @@ timeline:
     title: "Environments"
     section: timeline
     rows:
-      - - title: "Atari Space Invaders"
-          desc: "Atari"
+      - - title: "Atari"
+          desc: "Multi-player Atari 2600 games (both cooperative and competitive)"
           image: /PettingZoo/atari/atari_space_invaders.gif
           alt:
           align: left
           link: atari
-        - title: ""
-          desc: "Butterfly"
+        - title: "Butterfly"
+          desc: "Cooperative graphical games developed by us, requiring a high degree of coordination"
           image: /PettingZoo/butterfly/butterfly_pistonball.gif
           alt:
           align: left
           link: butterfly
-        - title: ""
-          desc: "Classic"
+        - title: "Classic"
+          desc: "Classical games including card games, board games, etc."
           image: /PettingZoo/classic/classic_chess.gif
           alt:
           align: left
           link: classic
-      - - title: "MAgent Pursuit"
-          desc: "MAgent"
+      - - title: "MAgent"
+          desc: "Configurable environments with massive numbers of particle agents"
           image: /PettingZoo/magent/magent_adversarial_pursuit.gif
           alt:
           align: left
           link: magent
         - title: "MPE"
-          desc: "MPE"
+          desc: "A set of simple nongraphical communication tasks originally from"
           image: /PettingZoo/mpe/mpe_simple_world_comm.gif
+          url: "https://github.com/openai/multiagent-particle-envs"
           alt:
           align: left
           link: mpe
-        - title: "Multiwalker"
-          desc: "SISL"
+        - title: "SISL"
+          desc: "3 cooperative environments, originally from "
+          url: "https://github.com/sisl/MADRL"
           image: /PettingZoo/sisl/sisl_multiwalker.gif
           alt:
           align: left
