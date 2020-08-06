@@ -46,6 +46,17 @@ for agent in env.agent_iter():
 
 For the complete API documentation, please see https://pettingzoo-team.github.io/PettingZoo/api
 
+## SuperSuit
+
+SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
+
+## Release History
+
+Version 1.0.0 (August 5th, 2020):
+
+This is the first official stable release of PettingZoo. Any changes to environments after this point will result in incrementing the environment version number. We currently plan to do three more things for PettingZoo beyond general maintenance: write a paper and put it on Arxiv, add Shogi as a classic environment using python-shogi, and add "colosseum"- an online tool for benchmarking competitive environments.
+
+
 ## Citation
 
 To cite this project in publication, please use
