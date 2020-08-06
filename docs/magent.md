@@ -2,7 +2,7 @@
 ## MAgent environments
 
 
-{% include bigtable.md group="magent/" %}
+{% include bigtable.html group="magent/" %}
 
 
 `pip install pettingzoo[magent]`
