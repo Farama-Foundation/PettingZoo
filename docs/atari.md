@@ -2,7 +2,7 @@
 
 
 
-{% include bigtable.html group="atari/" %}
+{% include bigtable.html group="atari/" cols=4 %}
 
 The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/PettingZoo-Team/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
 
