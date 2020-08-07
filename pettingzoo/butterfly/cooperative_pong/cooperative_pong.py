@@ -200,8 +200,6 @@ class BallSprite(pygame.sprite.Sprite):
 
 class CooperativePong(gym.Env):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
@@ -285,14 +283,14 @@ class CooperativePong(gym.Env):
         self.screen = pygame.display.set_mode(self.screen.get_size())
         self.renderOn = True
 
-    def render(self, mode='human'):
+    def render(self):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
         observation = pygame.surfarray.pixels3d(self.screen)
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation, axes=(1, 0, 2))
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
@@ -370,8 +368,6 @@ def env(**kwargs):
 
 
 class raw_env(AECEnv, EzPickle):
-    # class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None, **kwargs):
         EzPickle.__init__(self, seed, **kwargs)
@@ -413,8 +409,8 @@ class raw_env(AECEnv, EzPickle):
     def close(self):
         self.env.close()
 
-    def render(self, mode='human'):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def step(self, action, observe=True):
         agent = self.agent_selection

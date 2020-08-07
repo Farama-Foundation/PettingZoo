@@ -19,8 +19,6 @@ def env():
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self):
         super().__init__()
 
@@ -102,7 +100,7 @@ class raw_env(AECEnv):
             next_observation = None
         return next_observation
 
-    def render(self, mode='human'):
+    def render(self):
         print(self.board)
         return str(self.board)
 

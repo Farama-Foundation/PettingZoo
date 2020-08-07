@@ -18,7 +18,6 @@ def env(**kwargs):
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human']}
 
     def __init__(self, seed=None):
         super().__init__()
@@ -122,11 +121,8 @@ class raw_env(AECEnv):
         if observe:
             return self.observe(self.colors[self.agent_selection])
 
-    def render(self, mode='human'):
-        assert mode in ['human'], print(mode)
-        if mode == 'human':
-            self.game.render()
-            return True
+    def render(self):
+        self.game.render()
 
     def close(self):
         pass

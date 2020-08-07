@@ -44,8 +44,6 @@ class base_parallel_env:
 
 class _parallel_env_wrapper(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, parallel_env):
         self.env = parallel_env
         self.agents = self.env.agents
@@ -90,7 +88,7 @@ class _parallel_env_wrapper(AECEnv):
             self.agent_selection = self._agent_selector.next()
         return self.observe(self.agent_selection) if observe else None
 
-    def render(self, mode="human"):
+    def render(self):
         return self.env.render()
 
     def close(self):

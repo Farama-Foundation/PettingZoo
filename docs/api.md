@@ -67,7 +67,7 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
-`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes.
+`render()`: Displays a rendered frame from the environment, if supported. Classic environments print out their frame to the console and return a string, all other environments renders to the screen and return a numpy array with the rgb values of the screen. 
 
 `close()`: Closes the rendering window.
 

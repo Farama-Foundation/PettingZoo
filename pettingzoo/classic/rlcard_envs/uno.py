@@ -21,12 +21,10 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None):
         super().__init__("uno", 2, (7, 4, 15), seed)
 
-    def render(self, mode='human'):
+    def render(self):
         for player in self.agents:
             state = self.env.game.get_state(self._name_to_int(player))
             print("\n\n=============== {}'s Hand ===============".format(player))

@@ -321,7 +321,7 @@ class Pursuit():
         new_observation = np.copy(observation)
         del observation
         pygame.display.flip()
-        return np.transpose(new_observation,axes=(1,0,2))
+        return np.transpose(new_observation, axes=(1, 0, 2))
 
     def animate(self, act_fn, nsteps, file_name, rate=1.5, verbose=False):
         """

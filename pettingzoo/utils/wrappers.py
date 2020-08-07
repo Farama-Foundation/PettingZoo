@@ -14,7 +14,6 @@ class BaseWrapper(AECEnv):
     Creates a wrapper around `env` parameter. Extend this class
     to create a useful wrapper.
     '''
-    metadata = {'render.modes': ['human']}
 
     def __init__(self, env):
         super().__init__()
@@ -41,8 +40,8 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode='human'):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def reset(self, observe=True):
         observation = self.env.reset(observe)
@@ -221,7 +220,7 @@ class NaNRandomWrapper(BaseWrapper):
 
 
 class CaptureStdoutWrapper(BaseWrapper):
-    def render(self, mode):
+    def render(self):
         with capture_stdout() as stdout:
 
             super().render()
@@ -290,11 +289,11 @@ class OrderEnforcingWrapper(AgentIterWrapper):
         else:
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
 
-    def render(self, mode='human'):
+    def render(self):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
         self._has_rendered = True
-        return super().render(mode)
+        return super().render()
 
     def close(self):
         super().close()

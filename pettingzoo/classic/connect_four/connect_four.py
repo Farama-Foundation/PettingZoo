@@ -18,7 +18,6 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human']}
 
     def __init__(self):
         super().__init__()
@@ -111,7 +110,7 @@ class raw_env(AECEnv):
         else:
             return
 
-    def render(self, mode='human'):
+    def render(self):
         print("{}'s turn'".format(self.agent_selection))
         print(str(np.array(self.board).reshape(6, 7)))
 

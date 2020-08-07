@@ -96,7 +96,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
-        self.metadata = {'render.modes': ['human']}
         self.infos = {}
         self.rendering = False
         self.max_frames = max_frames
@@ -342,7 +341,7 @@ class raw_env(AECEnv, EzPickle):
         if observe:
             return observation
 
-    def render(self, mode='human'):
+    def render(self):
         if not self.rendering:
             pygame.display.init()
             old_screen = self.screen
@@ -358,7 +357,7 @@ class raw_env(AECEnv, EzPickle):
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation, axes=(1, 0, 2))
 
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven

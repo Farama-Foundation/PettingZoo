@@ -40,8 +40,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         EzPickle.__init__(self, seed, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
         self.agents = ["piston_" + str(r) for r in range(20)]
@@ -253,14 +251,14 @@ class raw_env(AECEnv, EzPickle):
         local_reward = .5 * (prev_position - curr_position)
         return local_reward * self.local_reward_weight
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation, axes=(1, 0, 2))
 
     def step(self, action, observe=True):
         agent = self.agent_selection

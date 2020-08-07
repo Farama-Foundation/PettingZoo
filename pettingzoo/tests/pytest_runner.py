@@ -18,5 +18,5 @@ def test_module(env_module):
     # pickle test
     env2 = pickle.loads(pickle.dumps(_env))
     api_test.api_test(env2)
-    # render_test(_env)
+    render_test(_env)
     # error_test(env_module.env())

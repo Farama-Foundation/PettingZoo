@@ -26,8 +26,6 @@ def env(**kwargs):
 
 class raw_env(RLCardBase, EzPickle):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0):
         EzPickle.__init__(self, seed, knock_reward, gin_reward)
         RLCardBase.__init__(self, "gin-rummy", 2, (5, 52), seed)
@@ -51,7 +49,7 @@ class raw_env(RLCardBase, EzPickle):
             payoff = -deadwood_count / 100
         return payoff
 
-    def render(self, mode='human'):
+    def render(self):
         for player in self.agents:
             state = self.env.game.round.players[self._name_to_int(player)].hand
             print("\n===== {}'s Hand =====".format(player))

@@ -24,8 +24,6 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
-    metadata = {'render.modes': ['human']}
-
     # set of all required params
     required_keys: set = {
         'colors',
@@ -296,7 +294,7 @@ class raw_env(AECEnv, EzPickle):
         )
             for player_name in self.agents}
 
-    def render(self, mode='human'):
+    def render(self):
         """ Supports console print only. Prints player's data.
 
          Example:

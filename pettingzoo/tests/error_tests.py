@@ -24,14 +24,13 @@ def test_bad_close(env):
     # test that closing twice does not crash
 
     e2 = copy(env)
-    if "render.modes" in e2.metadata and len(e2.metadata["render.modes"]) > 0:
-        e2.reset()
-        e2.render()
+    e2.reset()
+    e2.render()
+    e2.close()
+    try:
         e2.close()
-        try:
-            e2.close()
-        except Exception as e:
-            warnings.warn("Closing an already closed environment should not crash with {}".format(e))
+    except Exception as e:
+        warnings.warn("Closing an already closed environment should not crash with {}".format(e))
     EnvLogger.unsuppress_output()
 
 
@@ -95,9 +94,8 @@ def test_requires_reset(env):
         warnings.warn("env.step should call EnvLogger.error_step_before_reset if it is called before reset")
     if not check_asserts(lambda: env.observe(first_agent), "reset() needs to be called before observe"):
         warnings.warn("env.observe should call EnvLogger.error_observe_before_reset if it is called before reset")
-    if "render.modes" in env.metadata and len(env.metadata["render.modes"]) > 0:
-        if not check_asserts(lambda: env.render(), "reset() needs to be called before render"):
-            warnings.warn("env.render should call EnvLogger.error_render_before_reset if it is called before reset")
+    if not check_asserts(lambda: env.render(), "reset() needs to be called before render"):
+        warnings.warn("env.render should call EnvLogger.error_render_before_reset if it is called before reset")
     if not check_warns(lambda: env.close(), "reset() needs to be called before close"):
         warnings.warn("env should warn_close_before_reset() if closing before reset()")
 

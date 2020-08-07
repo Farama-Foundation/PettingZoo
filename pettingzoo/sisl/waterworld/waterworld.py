@@ -15,8 +15,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, *args, **kwargs):
         super().__init__()
         self.env = _env(seed, *args, **kwargs)
@@ -53,7 +51,7 @@ class raw_env(AECEnv):
         if self.has_reset:
             self.env.close()
 
-    def render(self, mode="human"):
+    def render(self):
         return self.env.render()
 
         # import pyglet

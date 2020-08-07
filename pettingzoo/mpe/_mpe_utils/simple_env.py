@@ -19,8 +19,6 @@ def make_env(raw_env):
 
 class SimpleEnv(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, scenario, world, max_frames, seed, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
@@ -163,7 +161,7 @@ class SimpleEnv(AECEnv):
             next_observation = None
         return next_observation
 
-    def render(self, mode='human'):
+    def render(self):
         from . import rendering
 
         if self.viewer is None:

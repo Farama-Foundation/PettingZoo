@@ -250,9 +250,6 @@ class BipedalWalker(Agent):
 
 class MultiWalkerEnv():
 
-    metadata = {'render.modes': [
-        'human', 'rgb_array'], 'video.frames_per_second': FPS}
-
     hardcore = False
 
     def __init__(self, seed=None, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
@@ -470,13 +467,7 @@ class MultiWalkerEnv():
         o = np.array(o, dtype=np.float32)
         return o
 
-    def render(self, mode='human', close=False):
-        if close:
-            if self.viewer is not None:
-                self.viewer.close()
-                self.viewer = None
-            return
-
+    def render(self):
         render_scale = 0.75
 
         from gym.envs.classic_control import rendering
@@ -541,7 +532,7 @@ class MultiWalkerEnv():
         self.viewer.draw_polygon(f, color=(0.9, 0.2, 0))
         self.viewer.draw_polyline(f + [f[0]], color=(0, 0, 0), linewidth=2)
 
-        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+        return self.viewer.render(return_rgb_array=True)
 
     def _generate_package(self):
         init_x = np.mean(self.start_x)

@@ -555,7 +555,7 @@ class MAWaterWorld():
     def observe(self, agent):
         return np.array(self.last_obs[agent], dtype=np.float32)
 
-    def render(self, screen_size=900, rate=5, mode='human'):
+    def render(self, screen_size=900, rate=5):
         if not self.renderOn:
             self.renderOn = True
             cv2.startWindowThread()

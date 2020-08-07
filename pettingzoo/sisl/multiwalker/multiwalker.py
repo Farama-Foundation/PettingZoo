@@ -16,8 +16,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, *args, **kwargs):
         EzPickle.__init__(self, seed, *args, **kwargs)
         self.env = _env(seed, *args, **kwargs)
@@ -55,7 +53,7 @@ class raw_env(AECEnv, EzPickle):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
+    def render(self):
         self.env.render()
 
         import pyglet
@@ -65,7 +63,6 @@ class raw_env(AECEnv, EzPickle):
         arr = arr.reshape(buffer.height, buffer.width, 4)
         arr = arr[::-1, :, 0:3]
         return arr
-
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

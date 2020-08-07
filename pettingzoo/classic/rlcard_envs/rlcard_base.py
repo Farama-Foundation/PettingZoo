@@ -8,8 +8,6 @@ from pettingzoo.utils import wrappers
 
 class RLCardBase(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, name, num_players, obs_shape, seed):
         super().__init__()
         self.env = rlcard.make(name, config={"seed": seed})
@@ -71,7 +69,7 @@ class RLCardBase(AECEnv):
         else:
             return
 
-    def render(self, mode='human'):
+    def render(self):
         raise NotImplementedError()
 
     def close(self):

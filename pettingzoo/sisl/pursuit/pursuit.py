@@ -19,8 +19,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, *args, **kwargs):
         EzPickle.__init__(self, seed, *args, **kwargs)
         self.env = _env(*args, seed, **kwargs)
@@ -57,7 +55,7 @@ class raw_env(AECEnv, EzPickle):
             self.closed = True
             self.env.close()
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.closed:
             return self.env.render()
 

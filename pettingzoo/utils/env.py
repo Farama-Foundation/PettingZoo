@@ -11,7 +11,7 @@ class AECEnv(object):
     def observe(self, agent):
         raise NotImplementedError
 
-    def render(self, mode='human'):
+    def render(self):
         raise NotImplementedError
 
     def close(self):

@@ -26,8 +26,6 @@ class raw_env(AECEnv):
     """Two-player environment for rock paper scissors lizard spock.
     The observation is simply the last opponent action."""
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self):
         self.num_agents = 2
         self.agents = ["player_" + str(r) for r in range(self.num_agents)]
@@ -49,7 +47,7 @@ class raw_env(AECEnv):
         self.observations = {agent: none for agent in self.agents}
         self.num_moves = 0
 
-    def render(self, mode="human"):
+    def render(self):
         string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
         print(string)
         return string

@@ -20,8 +20,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
@@ -116,7 +114,7 @@ class raw_env(AECEnv):
         else:
             return
 
-    def render(self, mode='human'):
+    def render(self):
         print(self._go)
 
     def close(self):

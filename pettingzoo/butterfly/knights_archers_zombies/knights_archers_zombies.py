@@ -35,8 +35,6 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
         EzPickle.__init__(self, seed, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
         # Game Constants
@@ -502,14 +500,14 @@ class raw_env(AECEnv, EzPickle):
         self.render_on = True
         self.reset()
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.render_on:
             # sets self.render_on to true and initializes display
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation, axes=(1, 0, 2))
 
     def close(self):
         if not self.closed:

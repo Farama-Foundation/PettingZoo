@@ -24,9 +24,6 @@ def BaseAtariEnv(**kwargs):
 
 
 class ParallelAtariEnv(EzPickle):
-
-    metadata = {'render.modes': ['human']}
-
     def __init__(
             self,
             game,

@@ -534,8 +534,6 @@ class raw_env(AECEnv, EzPickle):
             f = Fence(w_type, s_pos, b_pos, verts, self.space)
             self.fences.append(f)
 
-        self.metadata = {"render.modes": ["human"]}
-
         self.action_spaces = {}
         for p in self.prospectors:
             self.action_spaces[p] = spaces.Box(
@@ -817,7 +815,6 @@ class raw_env(AECEnv, EzPickle):
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        self.metadata = {"render.modes": ["human"]}
         self.rendering = False
         self.frame = 0
         self.dirty_rects = []
@@ -829,7 +826,7 @@ class raw_env(AECEnv, EzPickle):
         if observe:
             return self.observe(self.agent_selection)
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.rendering:
             pg.display.init()
             self.screen = pg.display.set_mode(const.SCREEN_SIZE)
@@ -851,7 +848,7 @@ class raw_env(AECEnv, EzPickle):
             self.dirty_fences = [False, False, False]
             self.dirty_rects.clear()
 
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation, axes=(1, 0, 2))
 
     def full_draw(self):
         """ Called to draw everything when first rendering """
