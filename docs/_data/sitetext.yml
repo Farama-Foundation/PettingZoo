@@ -1,6 +1,6 @@
 header:
     title: PettingZoo
-    text: multi-agent reinforcement learning environments 
+    text: multi-agent reinforcement learning environments
     headerGif: /PettingZoo/atari/atari_warlords.gif
     buttons:
       - button: API
@@ -8,48 +8,61 @@ header:
         icon: /PettingZoo/assets/img/doc_icon.svg
         iconsize: 80%
       - button: Environments
-        buttonlink: /PettingZoo/atari
+        buttonlink: /PettingZoo/envs
         icon: /PettingZoo/assets/img/environment_icon.svg
         iconsize: 80%
-      - button: Github
+      - button: GitHub
         buttonlink: https://github.com/PettingZoo-Team/PettingZoo
         icon: /PettingZoo/assets/img/github_icon.svg
         iconsize: 80%
 
 services:
-    title: "Useage"
+    title: "Usage"
     text: "Environments can be interacted with in a manner very similar to Gym:"
     section: services
 
 timeline:
     title: "Environments"
-    text: "We provide a variety of environments with different objectives"
     section: timeline
-    events:
-      - title: "Cooperative Pong"
-        desc: "View Butterfly environments"
-        image: /PettingZoo/assets/img/environments/gamma_cooperative_pong.gif
-        alt:
-        align: left
-        link: butterfly/cooperative_pong
-      - title: "Atari Space Invaders"
-        desc: "View Atari Games"
-        image: /PettingZoo/assets/img/environments/atari_space_invaders.gif
-        alt:
-        align: left
-        link: atari/space_invaders
-      - title: "MAgent Pursuit"
-        desc: "View MAgent Games"
-        image: /PettingZoo/assets/img/environments/magent_pursuit.gif
-        alt:
-        align: left
-        link: magent/adversarial_pursuit
-      - title: "Multiwalker"
-        desc: "View SISL Games"
-        image: /PettingZoo/assets/img/environments/sisl_multiwalker.gif
-        alt:
-        align: left
-        link: sisl/multiwalker
+    rows:
+      - - title: "Atari"
+          desc: "Multi-player Atari 2600 games (both cooperative and competitive)"
+          image: /PettingZoo/atari/atari_space_invaders.gif
+          alt:
+          align: left
+          link: atari
+        - title: "Butterfly"
+          desc: "Cooperative graphical games developed by us, requiring a high degree of coordination"
+          image: /PettingZoo/butterfly/butterfly_pistonball.gif
+          alt:
+          align: left
+          link: butterfly
+        - title: "Classic"
+          desc: "Classical games including card games, board games, etc."
+          image: /PettingZoo/classic/classic_chess.gif
+          alt:
+          align: left
+          link: classic
+      - - title: "MAgent"
+          desc: "Configurable environments with massive numbers of particle agents"
+          image: /PettingZoo/magent/magent_adversarial_pursuit.gif
+          alt:
+          align: left
+          link: magent
+        - title: "MPE"
+          desc: "A set of simple nongraphical communication tasks originally from"
+          image: /PettingZoo/mpe/mpe_simple_world_comm.gif
+          url: "https://github.com/openai/multiagent-particle-envs"
+          alt:
+          align: left
+          link: mpe
+        - title: "SISL"
+          desc: "3 cooperative environments, originally from "
+          url: "https://github.com/sisl/MADRL"
+          image: /PettingZoo/sisl/sisl_multiwalker.gif
+          alt:
+          align: left
+          link: sisl
 
 about:
     title: "About Us"

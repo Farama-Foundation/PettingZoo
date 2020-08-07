@@ -32,12 +32,13 @@ Eve action space: `[say_0, say_1, say_2, say_3]`
 
 For Bob and Eve, their communication is checked to be the 1 bit of information that Alice is trying to convey.
 
+### Arguments
+
 ```
 simple_crypto.env(seed=None, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

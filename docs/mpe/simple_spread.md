@@ -24,16 +24,17 @@ Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_re
 
 Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 
+### Arguments
+
 ```
 simple_spread.env(seed=None, N=3, local_ratio=0.5, max_frames=100)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
-N: number of agents and landmarks
+`N`:  number of agents and landmarks
 
-local_ratio: Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

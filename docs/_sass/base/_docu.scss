@@ -70,18 +70,36 @@ body {
     background: transparent;
   }
 
+.appear_small {
+  display: block;
+}
+.appear_big {
+  display: none;
+}
 @media(min-width:768px) {
   .floatright{
-    width: 400px;
+    width: 350px;
     float: right;
     padding: 1em;
     margin: 1em;
     border: 2px;
     border-style: solid;
     background-color: white;
+    p{
+      text-align: center;
+    }
+    h4{
+      text-align: center;
+    }
     img{
     display: block;
     margin: 0 auto;
     }
+  }
+  .appear_small {
+    display: none;
+  }
+  .appear_big {
+    display: block;
   }
 }

@@ -10,7 +10,6 @@
   font-size: 18px;
   padding: 20px 40px;
 }
-
 .btn-primary {
   background-color: rgba(0,0,0,0);
   border-color: white;
@@ -26,4 +25,15 @@
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(254, 209, 55,.5) !important;
   }
+}
+.gallery_box{
+  text-align: center;
+}
+.horizontal_center{
+  display: inline-block;
+}
+.btn-env{
+  background-color: $primary;
+  border-color: $primary;
+  border-width: medium;
 }

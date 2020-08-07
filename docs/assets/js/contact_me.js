@@ -1,5 +1,3 @@
----
----
 $(function() {
 
   $("#contactForm input,#contactForm textarea").jqBootstrapValidation({
@@ -32,7 +30,7 @@ $(function() {
           message: message
         },
         cache: false,
-        
+
 		success: function() {
           // Success message
           $('#success').html("<div class='alert alert-success'>");
@@ -45,7 +43,7 @@ $(function() {
           //clear all fields
           $('#contactForm').trigger("reset");
         },
-		
+
         error: function() {
           // Fail message
           $('#success').html("<div class='alert alert-danger'>");
@@ -56,7 +54,7 @@ $(function() {
           //clear all fields
           $('#contactForm').trigger("reset");
         },
-		
+
         complete: function() {
           setTimeout(function() {
             $this.prop("disabled", false); // Re-enable submit button when AJAX call is complete

@@ -56,6 +56,7 @@ header.masthead {
   }
   .btn-circle {
     border-radius: 350px;
+    padding: 10%;
   }
 }
 @media(min-width:768px) {
@@ -121,33 +122,29 @@ header.masthead {
 }
 
 .circlebutton {
-  width: 50%;
+  width: 10vw;
   display: inline-block;
   p {
     font-size: x-small;
   }
 }
-
+.buttonfont{
+  font-size: x-small;
+}
 @media(min-width: 768px) {
-  .circlebutton {
-    p {
-      font-size: small;
-    }
+  .buttonfont {
+    font-size: small;
   }
 }
 
 @media(min-width: 992px) {
-  .circlebutton {
-    p {
+  .buttonfont {
       font-size: small;
-    }
   }
 }
 
 @media(min-width: 1200px) {
-  .circlebutton {
-    p {
+  .buttonfont {
       font-size: medium;
-    }
   }
 }
