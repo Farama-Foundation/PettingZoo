@@ -15,15 +15,19 @@
   {% endif %}
 {% endfor %}
 
+{% if include.cols %}
+{% assign cols = include.cols %}
+{% else %}
+{% assign cols = 3 %}
+{% endif %}
 
 <div class="env_table">
 {% assign cur_idx = 0 %}
 {% assign max_idx = page_infos | size %}
 
 {% for page_info in page_infos %}
-  {% assign iter_arr = "1,2,3" | split: ',' %}
   {% if cur_idx < max_idx %} <div class="env_row"> {% endif %}
-  {% for page_info in iter_arr %}
+  {% for page_info in (1..cols) %}
 
     {% if cur_idx < max_idx %}
     {% assign item_arr = page_infos[cur_idx] | split: "1" %}
@@ -38,10 +42,10 @@
     {% assign cur_idx = cur_idx | plus: 1 %}
   {% endfor %}
 
-  {% assign cur_idx = cur_idx | minus: 3 %}
+  {% assign cur_idx = cur_idx | minus: cols %}
   {% if cur_idx < max_idx %}   </div> <div class="env_row"> {% endif %}
 
-  {% for page_info in iter_arr %}
+  {% for page_info in (1..cols) %}
     {% if cur_idx < max_idx %}
     {% assign item_arr = page_infos[cur_idx] | split: "1" %}
       <div class="descrip_entry gallery_entry">
