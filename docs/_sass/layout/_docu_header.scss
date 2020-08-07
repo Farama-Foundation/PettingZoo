@@ -1,10 +1,10 @@
-.docnavi {
+.docnavi > a {
     text-align: center;
     font-size: 90%;
     font-weight: 400;
     padding: 0.75em 0;
-    letter-spacing: 1px;
     color: white;
+    letter-spacing: 1px;
     @include heading-font;
     &.active,
     &:hover {
@@ -26,7 +26,7 @@
 
 @media(min-width:768px) {
   .docnavcontainer {
-        padding-top: 90px;
+        padding-top: 100px;
         padding-bottom: 15px;
     }
 
@@ -40,7 +40,6 @@
   table {
     /*table-layout: fixed;
     width: 100%;*/
-    overflow-x: scroll;
   }
 
   th,td {
@@ -49,7 +48,6 @@
   }
 
   img {
-    max-width: 40%;
   }
 }
 

@@ -121,7 +121,7 @@ all_environments = {
     "magent/battlefield": battlefield_v0,
     "magent/combined_arms": combined_arms_v0,
     "magent/gather": gather_v0,
-    "magent/tiger": tiger_deer_v0,
+    "magent/tiger_deer": tiger_deer_v0,
 
     "mpe/simple_adversary": simple_adversary_v0,
     "mpe/simple_crypto": simple_crypto_v0,

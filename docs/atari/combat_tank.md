@@ -6,7 +6,7 @@ agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
 action-values: "[0,17]"
-observation-shape: "(210, 160, 3)"
+observation-shape: "(256, 160, 3)"
 observation-values: "(0,255)"
 import: "from pettingzoo.atari import combat_tank_v0"
 agent-labels: "agents= ['first_0', 'second_0']"
@@ -36,10 +36,8 @@ Parameters specific to combat-tank are
 combat_tank.env(has_maze=False, is_invisible=False, billiard_hit=False)
 ```
 
-```
-has_maze: Set to true to have the map be a maze instead of an open field
+`has_maze`:  Set to true to have the map be a maze instead of an open field
 
-is_invisible: If true, tanks are invisible unless they are firing or are running into a wall.
+`is_invisible`:  If true, tanks are invisible unless they are firing or are running into a wall.
 
-billiard_hit: If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
-```
+`billiard_hit`:  If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.

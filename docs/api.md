@@ -1,43 +1,26 @@
----
-layout: "page"
----
-
-## Environment Types and Installation
-
-PettingZoo includes the following sets of games:
-
-* atari: Multi-player Atari 2600 games (both cooperative and competitive)
-* classic: Classical games including card games, board games, etc.
-* butterfly: Cooperative graphical games developed by us, requiring a high degree of coordination
-* magent: Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
-* mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
-
-To install, use `pip install pettingzoo`
-
-We support Python 3.6, 3.7 and 3.8
-
+# API
 
 ## Initializing Environments
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
-```python
+```
 from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
-```python
+```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
 ## Interacting With Environments
+
 Environments can be interacted with in a manner very similar to Gym:
 
-```python
+```
 observation = env.reset()
 for agent in env.agent_iter():
     reward, done, info = env.last()
@@ -49,7 +32,7 @@ The commonly used methods are:
 
 `agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent.
+`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent. Note that a particular agent being done does not mean the environment is over!
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
@@ -70,15 +53,15 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `action_spaces`: A dict of the gym action spaces of every agent, by name.
 
-`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last`. This looks like:
+`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is accessed by `last`. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last`. This looks like:
+`dones`: A dict of the done state of every agent at the time called, by name. This is accessed by `last`. This looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
+`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is accessed by `last`. This looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
@@ -94,15 +77,13 @@ In this API when the environment acts following an agents action they're treated
 
 We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
 
-## Environment Documentation
-
-Full documentation of each environment is available [here].
+## Raw Environments
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and reasonable behaviors with incorrect usage (such as playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
 
-```python
+```
 env = prospector_v0.raw_env(<environment parameters>)
 ```
 
@@ -114,7 +95,7 @@ env = prospector_v0.raw_env(<environment parameters>)
 
 ### API Test
 
-```python
+```
 import pettingzoo.tests.api_test as api_test
 api_test.api_test(env, render=False, verbose_progress=False)
 ```
@@ -123,7 +104,7 @@ This tests the environment for API compliance. If the environment has a custom `
 
 ### Bombardment Test
 
-```python
+```
 import pettingzoo.tests.bombardment_test as bombardment_test
 bombardment_test.bombardment_test(env, cycles=10000)
 ```
@@ -132,7 +113,7 @@ This randomly plays through the environment `cycles` times, to test for stabilit
 
 ### Performance Benchmark
 
-```python
+```
 import pettingzoo.tests.performance_benchmark as performance_benchmark
 performance_benchmark.performance_benchmark(env)
 ```
@@ -141,29 +122,29 @@ This randomly steps through the environment for 60 seconds to benchmark it's per
 
 ### Manual Control Test
 
-```python
+```
 import pettingzoo.tests.manual_control_test as manual_control_test
 manual_control_test.test_manual_control(env.manual_control)
 ```
 
-If the environment has`manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
+If the environment has `manual_control` functionality included (explained below), this test makes sure the method does not creash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
 
 ### Manual Control
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
-```python
+```
 from pettingzoo.butterfly import prison
-prison.manual_control([environment specs])
+prison.manual_control(<environment parameters>)
 ```
 
-Look at the [documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
+Environemnts say if they support this functionality in their documentation, and what the specific controls are.
 
 ### Random Demo
 
 For all renderable games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
 
-```python
+```
 from pettingzoo.utils import random_demo
 random_demo(env)
 ```
@@ -172,35 +153,10 @@ random_demo(env)
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no agent is specified then the current selected agent for the environment is chosen. If all_agents is passed in as True, then the observations of all agents in the environment is saved. By default the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If save_dir is passed in, a new folder is created where images will be saved to.
 
-```python
+```
 from pettingzoo.utils import save_observation
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
+
 ```
 
 The first function will save the current observation for the specified agent. The second function will save the current observation based on the currently selected agent. The last function will save the current observations of all agents in the environment.
-
-## OS Support
-
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
-
-## Leaderboards
-Our cooperative games have leaderboards for best total (summed over all agents) score. If you'd like to be listed on the leader board, please submit a pull request. Only pull requests that link to code for reproducibility and use environment arguments in the spirit of the competition will be accepted.
-
-## Citation
-
-To cite this project in publication, please use
-
-```
-@misc{pettingZoo2020,
-  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam},
-  title = {Petting{Z}oo},
-  year = {2020},
-  publisher = {GitHub},
-  note = {GitHub repository},
-  howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
-}
-```
-
-## Reward Program
-
-We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can receive a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing address or PayPal address. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.

@@ -32,20 +32,21 @@ Observation space: `[empty, obstacle, omnivore, food, omnivore_minimap, food_min
 
 Map size: 200x200
 
+### Arguments
+
 ```
 gather_v0.env(seed=None, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
 ```
 
-```
-seed: seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
 
-step_reward: reward added unconditionally
+`step_reward`:  reward added unconditionally
 
-dead_penalty: reward added when killed
+`dead_penalty`:  reward added when killed
 
-attack_penalty: reward added for attacking
+`attack_penalty`:  reward added for attacking
 
-attack_food_reward: Reward added for attacking a food
+`attack_food_reward`:  Reward added for attacking a food
 
-max_frames: number of frames (a step for each agent) until game terminates
-```
+`max_frames`:  number of frames (a step for each agent) until game terminates
+

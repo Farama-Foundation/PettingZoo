@@ -173,14 +173,37 @@
     }
   }
 }
-
-.timecard {
-  .card-img-top {
-    height: 300px;
+.env_table{
+  display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.env_row{
+  display: table-row;
+}
+.gallery_entry{
+  text-align: center;
+  width: 33%;
+  padding-left: 1em;
+  padding-right: 1em;
+  display: table-cell;
+}
+.img_entry{
+  vertical-align: bottom;
+}
+.descrip_entry{
+  vertical-align: top;
+  p{
+    margin-bottom: 0;
   }
-
-  .card-title {
-    height: 70px;
-    margin-bottom: 20px;
+  padding-bottom: 1em;
+}
+.env_entry{
+  a{
+  }
+  img{
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 200px;
   }
 }
