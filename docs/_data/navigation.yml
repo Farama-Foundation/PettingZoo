@@ -1,9 +1,9 @@
 nav:
   - title: "APi"
-    url: "/PettingZoo/api"
+    url: "/api"
 
   - title: "Environments"
-    url: "/PettingZoo/envs"
+    url: "/envs"
 
   - title: "Github"
     url: "https://github.com/PettingZoo-Team/PettingZoo"

@@ -30,8 +30,8 @@ Agents | `{{ page.agent-labels }}`
 
 #### Agent Environment Cycle
 
-<a href="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg">
-<img src="/PettingZoo/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg" alt="environment aec diagram" />
+<a href="/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg">
+<img src="/assets/img/aec/{{category_name}}_{{underscore_name}}_aec.svg" alt="environment aec diagram" />
 </a>
 
 </div>
