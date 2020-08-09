@@ -8,18 +8,18 @@ PettingZoo is a Python library for conducting research in multi-agent reinforcem
 
 We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
 
-Our website with comprehensive documentation is https://www.pettingzoo.ml/
+Our website with comprehensive documentation is http://www.pettingzoo.ml/
 
 ## Environment Types and Installation
 
 PettingZoo includes the following sets of games:
 
-* [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
-* [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
-* [Classic](https://www.pettingzoo.ml/classic): Classical games including card games, board games, etc.
-* [MAgent](https://www.pettingzoo.ml/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
-* [MPE](https://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* [SISL](https://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+* [Atari](http://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
+* [Butterfly](http://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
+* [Classic](http://www.pettingzoo.ml/classic): Classical games including card games, board games, etc.
+* [MAgent](http://www.pettingzoo.ml/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
+* [MPE](http://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
+* [SISL](http://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
 To install, use `pip install pettingzoo`
 
@@ -44,7 +44,7 @@ for agent in env.agent_iter():
     observation = env.step(action)
 ```
 
-For the complete API documentation, please see https://www.pettingzoo.ml/api
+For the complete API documentation, please see http://www.pettingzoo.ml/api
 
 ## SuperSuit
 
