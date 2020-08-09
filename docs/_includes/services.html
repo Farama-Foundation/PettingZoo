@@ -25,15 +25,14 @@
       <div class="service-code">
         <pre>
           <code>
-  import pettingzoo
-  env = pettingzoo.knights_archers_zombies_v0.env()
-  observation = env.reset()
-  for agent in env.agent_iter():
-    reward, done, info = env.last()
-    action = policy(observation)
-    observation = env.step(action)
-          </code>
-        </pre>
+import pettingzoo
+env = pettingzoo.knights_archers_zombies_v0.env()
+observation = env.reset()
+for agent in env.agent_iter():
+  reward, done, info = env.last()
+  action = policy(observation)
+  observation = env.step(action)
+ </code> </pre>
       </div>
     </div>
 
