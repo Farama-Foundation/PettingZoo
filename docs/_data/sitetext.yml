@@ -1,19 +1,19 @@
 header:
     title: PettingZoo
     text: multi-agent reinforcement learning environments
-    headerGif: /PettingZoo/atari/atari_warlords.gif
+    headerGif: /atari/atari_warlords.gif
     buttons:
       - button: API
-        buttonlink: /PettingZoo/api
-        icon: /PettingZoo/assets/img/doc_icon.svg
+        buttonlink: /api
+        icon: /assets/img/doc_icon.svg
         iconsize: 80%
       - button: Environments
-        buttonlink: /PettingZoo/envs
-        icon: /PettingZoo/assets/img/environment_icon.svg
+        buttonlink: /envs
+        icon: /assets/img/environment_icon.svg
         iconsize: 80%
       - button: GitHub
         buttonlink: https://github.com/PettingZoo-Team/PettingZoo
-        icon: /PettingZoo/assets/img/github_icon.svg
+        icon: /assets/img/github_icon.svg
         iconsize: 80%
 
 services:
@@ -27,31 +27,31 @@ timeline:
     rows:
       - - title: "Atari"
           desc: "Multi-player Atari 2600 games (both cooperative and competitive)"
-          image: /PettingZoo/atari/atari_space_invaders.gif
+          image: /atari/atari_space_invaders.gif
           alt:
           align: left
           link: atari
         - title: "Butterfly"
           desc: "Cooperative graphical games developed by us, requiring a high degree of coordination"
-          image: /PettingZoo/butterfly/butterfly_pistonball.gif
+          image: /butterfly/butterfly_pistonball.gif
           alt:
           align: left
           link: butterfly
         - title: "Classic"
           desc: "Classical games including card games, board games, etc."
-          image: /PettingZoo/classic/classic_chess.gif
+          image: /classic/classic_chess.gif
           alt:
           align: left
           link: classic
       - - title: "MAgent"
           desc: "Configurable environments with massive numbers of particle agents"
-          image: /PettingZoo/magent/magent_adversarial_pursuit.gif
+          image: /magent/magent_adversarial_pursuit.gif
           alt:
           align: left
           link: magent
         - title: "MPE"
           desc: "A set of simple nongraphical communication tasks originally from"
-          image: /PettingZoo/mpe/mpe_simple_world_comm.gif
+          image: /mpe/mpe_simple_world_comm.gif
           url: "https://github.com/openai/multiagent-particle-envs"
           alt:
           align: left
@@ -59,7 +59,7 @@ timeline:
         - title: "SISL"
           desc: "3 cooperative environments, originally from "
           url: "https://github.com/sisl/MADRL"
-          image: /PettingZoo/sisl/sisl_multiwalker.gif
+          image: /sisl/sisl_multiwalker.gif
           alt:
           align: left
           link: sisl
@@ -76,16 +76,16 @@ clients:
     list:
       - title: "envato"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /PettingZoo/assets/img/clients/envato.jpg
+        logo: /assets/img/clients/envato.jpg
       - title: "designmodo"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /PettingZoo/assets/img/clients/designmodo.jpg
+        logo: /assets/img/clients/designmodo.jpg
       - title: "themeforest"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /PettingZoo/assets/img/clients/themeforest.jpg
+        logo: /assets/img/clients/themeforest.jpg
       - title: "Creative Market"
         url: https://github.com/raviriley/agency-jekyll-theme
-        logo: /PettingZoo/assets/img/clients/creative-market.jpg
+        logo: /assets/img/clients/creative-market.jpg
 
 team:
     title: "Get Started"
@@ -94,13 +94,13 @@ team:
     section: team
     people:
       - name: "Docs"
-        image: /PettingZoo/assets/img/doc_icon.svg
+        image: /assets/img/doc_icon.svg
         imglink: documentation
       - name: "Github"
-        image: /PettingZoo/assets/img/github_icon.svg
+        image: /assets/img/github_icon.svg
         imglink: https://github.com/PettingZoo-Team/PettingZoo
       - name: "Environments"
-        image: /PettingZoo/assets/img/environment_icon.svg
+        image: /assets/img/environment_icon.svg
         imglink: atari
 
 contact:
