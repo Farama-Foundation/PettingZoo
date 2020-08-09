@@ -8,7 +8,7 @@ PettingZoo is a Python library for conducting research in multi-agent reinforcem
 
 We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
 
-Our website with comprehensive documentation is http://www.pettingzoo.ml/
+Our website with comprehensive documentation is pettingzoo.ml
 
 ## Environment Types and Installation
 
