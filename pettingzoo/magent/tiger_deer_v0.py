@@ -7,7 +7,7 @@ import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import magent_parallel_env, make_env
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.parallel_env import _parallel_env_wrapper
 from gym.utils import EzPickle
 
 

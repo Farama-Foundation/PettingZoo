@@ -6,7 +6,7 @@ from gym.utils import seeding, EzPickle
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.parallel_env import _parallel_env_wrapper
 
 
 def base_env_wrapper_fn(raw_env_fn):
