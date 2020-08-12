@@ -124,7 +124,7 @@ class raw_env(AECEnv, EzPickle):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=np.NINF, high=np.Inf, shape=(1,), dtype=np.float32)
+                self.action_spaces[a] = spaces.Box(low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
                 self.action_spaces[a] = spaces.Discrete(3)
