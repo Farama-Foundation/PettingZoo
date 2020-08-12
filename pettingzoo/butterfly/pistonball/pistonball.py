@@ -260,6 +260,7 @@ class raw_env(AECEnv, EzPickle):
         pygame.display.flip()
 
     def step(self, action, observe=True):
+        action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
