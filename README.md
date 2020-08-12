@@ -52,6 +52,10 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.0.1 (August 12, 2020):
+
+Fixes to continuous made on pistonball and prison environments, along with a bad test that let the problems slip through. Versions bumped on both games.
+
 Version 1.0.0 (August 5th, 2020):
 
 This is the first official stable release of PettingZoo. Any changes to environments after this point will result in incrementing the environment version number. We currently plan to do three more things for PettingZoo beyond general maintenance: write a paper and put it on Arxiv, add Shogi as a classic environment using python-shogi, and add "colosseum"- an online tool for benchmarking competitive environments.
