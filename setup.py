@@ -26,7 +26,7 @@ extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["but
 
 setup(
     name='PettingZoo',
-    version="1.0.0",
+    version="1.0.1",
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
