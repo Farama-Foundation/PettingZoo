@@ -7,6 +7,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.to_parallel import to_parallel
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -17,6 +18,14 @@ def base_env_wrapper_fn(raw_env_fn):
         env = wrappers.OrderEnforcingWrapper(env)
         return env
     return env_fn
+
+
+def parallel_wrapper_fn(env_fn):
+    def par_fn(**kwargs):
+        env = env_fn(**kwargs)
+        env = to_parallel(env)
+        return env
+    return par_fn
 
 
 def BaseAtariEnv(**kwargs):
