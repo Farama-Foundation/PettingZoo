@@ -7,6 +7,7 @@ from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
@@ -85,6 +86,9 @@ def env(**kwargs):
     env = wrappers.NanNoOpWrapper(env, default_val, "setting action to 0")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

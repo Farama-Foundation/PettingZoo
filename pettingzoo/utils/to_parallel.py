@@ -1,4 +1,6 @@
 from pettingzoo.utils.env import AECEnv
+from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+
 
 class ParallelEnv:
     def reset(self):
@@ -29,6 +31,7 @@ class ParallelEnv:
         releases resources (typically just closes the rendering window)
         '''
 
+
 class to_parallel(ParallelEnv):
     def __init__(self, aec_env):
         self.aec_env = aec_env
@@ -38,7 +41,8 @@ class to_parallel(ParallelEnv):
 
     def reset(self):
         self.aec_env.reset(observe=False)
-        observations = {agent:self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        self._was_dones = {agent: False for agent in self.agents}
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
 
     def step(self, actions):
@@ -47,14 +51,16 @@ class to_parallel(ParallelEnv):
         infos = {}
 
         for agent in self.agents:
-            if not self.aec_env.dones[agent]:
+            if not self._was_dones[agent]:
                 assert agent == self.aec_env.agent_selection, f"environment has a nontrivial ordering, and cannot be used with the to_parallel wrapper\nCurrent agent: {self.aec_env.agent_selection}\nExpected agent: {agent}"
+                assert agent in actions, "Live environment agent is not in actions dictionary"
+                self._was_dones[agent] = self.aec_env.dones[agent]
                 self.aec_env.step(actions[agent], observe=False)
                 rewards[agent] = self.aec_env.rewards[agent]
                 dones[agent] = self.aec_env.dones[agent]
                 infos[agent] = self.aec_env.infos[agent]
 
-        observations = {agent:self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self._was_dones[agent]}
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):
@@ -63,21 +69,46 @@ class to_parallel(ParallelEnv):
     def close(self):
         return self.aec_env.close()
 
-class from_parallel(AECEnv):
+
+def parallel_wrapper_fn(env_fn):
+    def par_fn(**kwargs):
+        env = env_fn(**kwargs)
+        env = to_parallel(env)
+        return env
+    return par_fn
+
+
+class Sequentialize:
     def __init__(self, par_env):
-        pass
+        self.agents = par_env.agents
+        self.observation_spaces = [par_env.observation_spaces[agent] for agent in self.agents]
+        self.action_spaces = [par_env.action_spaces[agent] for agent in self.agents]
+        self.par_env = par_env
 
-    def step(self, action, observe=True):
-        raise NotImplementedError
+    def _sequentialize(self, d):
+        return [d.get(agent, None) for agent in self.agents]
 
-    def reset(self, observe=True):
-        raise NotImplementedError
+    def reset(self):
+        obs_dict = self.par_env.reset()
 
-    def observe(self, agent):
-        raise NotImplementedError
+        return self._sequentialize(obs_dict)
 
-    def render(self, mode='human'):
-        raise NotImplementedError
+    def step(self, actions):
+        act_list = {agent:actions[i] for i, agent in enumerate(self.agents) if actions[i] is not None}
+        obs, rew, done, info = self.par_env.step(act_list)
+        obs = self._sequentialize(obs)
+        rew = self._sequentialize(rew)
+        done = self._sequentialize(done)
+        info = self._sequentialize(info)
+        return obs, rew, done, info
+
+    def render(self, mode="human"):
+        return self.par_env.render(mode)
 
     def close(self):
-        pass
+        self.par_env.close()
+
+
+class from_parallel(_parallel_env_wrapper):
+    def __init__(self, par_env):
+        super().__init__(Sequentialize(par_env))
