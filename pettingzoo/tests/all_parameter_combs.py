@@ -14,7 +14,6 @@ parameterized_envs = [
     # generic atari parameters
     (boxing_v0.env, dict(obs_type="grayscale_image")),
     (boxing_v0.env, dict(obs_type="ram")),
-    (boxing_v0.env, dict(repeat_action_probability=0.1)),
     (boxing_v0.env, dict(full_action_space=False)),
 
     (combat_plane_v0.env, dict(game_version="jet")),
@@ -66,12 +65,18 @@ parameterized_envs = [
     (go_v0.env, dict(board_size = 13, komi = 2.5)),
     (go_v0.env, dict(board_size = 9, komi = 0.)),
 
-    (hanabi_v0.env, dict(colors = 3, ranks = 3, players=4, hand_size=5, max_information_tokens=3, max_life_tokens=2)),
+    (hanabi_v0.env, dict(colors = 3)),
+    (hanabi_v0.env, dict(ranks = 3)),
+    (hanabi_v0.env, dict(players=4)),
+    (hanabi_v0.env, dict(hand_size=5)),
+    (hanabi_v0.env, dict(max_information_tokens=3)),
+    (hanabi_v0.env, dict(max_life_tokens=2)),
+    (hanabi_v0.env, dict(colors = 5, ranks = 3, players=4, hand_size=5, max_information_tokens=3, max_life_tokens=2)),
     (hanabi_v0.env, dict(observation_type=0)),
     (hanabi_v0.env, dict(observation_type=1)),
     (hanabi_v0.env, dict(random_start_player=False)),
     (hanabi_v0.env, dict(random_start_player=True)),
-
+    
     (simple_adversary_v0.env, dict(N=4)),
     (simple_reference_v0.env, dict(local_ratio=0.2)),
     (simple_spread_v0.env, dict(N=5)),
@@ -109,7 +114,8 @@ parameterized_envs = [
 
 @pytest.mark.parametrize(("env_constr", "kwargs"), parameterized_envs)
 def test_module(env_constr, kwargs):
-    _env = env_constr()
+    _env = env_constr(**kwargs)
+    print(kwargs)
     api_test.api_test(_env)
 
     # seed_test

@@ -172,6 +172,9 @@ class raw_env(AECEnv, EzPickle):
         elif not (2 <= players <= 5):
             raise ValueError(f'Config parameter {players} is out of bounds. See description in hanabi.py.')
 
+        elif not (players <= colors):
+            raise ValueError(f'Config parameter colors: {colors} is smaller than players: {players}, which is not allowed. See description in hanabi.py.')
+
         elif not (2 <= hand_size <= 5):
             raise ValueError(f'Config parameter {hand_size} is out of bounds. See description in hanabi.py.')
 
