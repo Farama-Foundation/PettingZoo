@@ -71,6 +71,7 @@ class AgentIterWrapper(BaseWrapper):
     def __init__(self, env):
         super().__init__(env)
         self._has_updated = False
+        self._agent_idxs = {agent: i for i, agent in enumerate(env.agents)}
         # self._was_dones = {agent: False for agent in self.agents}
 
     def reset(self, observe=True):
@@ -94,7 +95,9 @@ class AgentIterWrapper(BaseWrapper):
         else:
             super().step(action, False)
 
-        for agent in self.agents:
+        next_agent = self.agent_selection
+        for i in range(self._agent_idxs[cur_agent] + 1, self._agent_idxs[next_agent]):
+            agent = self.agents[i]
             if self.dones[agent] and not self._was_dones[agent]:
                 self.agent_selection = agent
                 break
