@@ -4,6 +4,7 @@ from pettingzoo.utils import agent_selector
 import numpy as np
 from gym.utils import EzPickle
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def env(**kwargs):
@@ -12,6 +13,9 @@ def env(**kwargs):
     env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

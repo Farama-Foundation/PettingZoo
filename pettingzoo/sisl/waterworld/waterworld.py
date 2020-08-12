@@ -3,6 +3,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 import numpy as np
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def env(**kwargs):
@@ -11,6 +12,9 @@ def env(**kwargs):
     env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv):

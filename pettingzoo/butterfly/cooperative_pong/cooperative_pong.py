@@ -7,6 +7,7 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
@@ -364,6 +365,9 @@ def env(**kwargs):
     env = wrappers.NanNoOpWrapper(env, 0, "doing nothing")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

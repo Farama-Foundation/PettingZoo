@@ -1,1 +1,1 @@
-from .prospector.prospector import env, raw_env
+from .prospector.prospector import env, raw_env, parallel_env

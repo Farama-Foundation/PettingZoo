@@ -1,1 +1,1 @@
-from .pistonball.pistonball import env, raw_env
+from .pistonball.pistonball import env, raw_env, parallel_env
