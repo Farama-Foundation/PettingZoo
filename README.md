@@ -46,6 +46,25 @@ for agent in env.agent_iter():
 
 For the complete API documentation, please see https://www.pettingzoo.ml/api
 
+### Parallel API
+
+To support algorithms and code which assumes that actions take many steps at the same time, we offer a secondary API. For the environments which support it, you can initialize the environment with:
+
+```
+from pettingzoo.butterfly import pistonball_v0
+parallel_env = pistonball_v0.parallel_env()
+```
+
+Environments can be interacted with in a manner very similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical):
+
+```
+observations = parallel_env.reset()
+max_frames = 500
+for step in range(max_frames):
+    actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
+    observations, rewards, dones, infos = parallel_env.step(actions)
+```
+
 ## SuperSuit
 
 SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
