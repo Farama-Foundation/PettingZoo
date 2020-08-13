@@ -4,7 +4,7 @@ def parallel_play_test(par_env):
     assert isinstance(obs, dict)
     assert set(obs.keys()).issubset(set(par_env.agents))
 
-    for i in range(5):
+    for i in range(1000):
         actions = {agent:space.sample() for agent, space in par_env.action_spaces.items()}
         obs, rew, done, info = par_env.step(actions)
         assert isinstance(obs, dict)

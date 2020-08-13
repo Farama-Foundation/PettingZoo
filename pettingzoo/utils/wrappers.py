@@ -93,10 +93,11 @@ class AgentIterWrapper(BaseWrapper):
             self._was_dones[cur_agent] = True
             self.agent_selection = self.env.agent_selection
         else:
+            self._was_dones[cur_agent] = self.env.dones[cur_agent]
             super().step(action, False)
 
         next_agent = self.agent_selection
-        for i in range(self._agent_idxs[cur_agent] + 1, self._agent_idxs[next_agent]):
+        for i in range((self._agent_idxs[cur_agent] + 1) % self.num_agents, self._agent_idxs[next_agent]):
             agent = self.agents[i]
             if self.dones[agent] and not self._was_dones[agent]:
                 self.agent_selection = agent
