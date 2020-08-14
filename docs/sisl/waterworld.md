@@ -23,12 +23,14 @@ This has been fixed from the reference environments to keep items floating off s
 ### Arguments
 
 ```
-waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
+waterworld.env(seed=None, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
 obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
 poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
 poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
 reward_mech='local', speed_features=True, max_frames=500)
 ```
+
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
 `n_pursuers`:  number of pursuing archea
 

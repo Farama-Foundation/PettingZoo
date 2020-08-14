@@ -21,10 +21,12 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 ### Arguments
 
 ```
-multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+multiwalker.env(seed=None, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
 max_frames=500)
 ```
+
+`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
 
 `n_walkers`:  number of bipedal walker agents in environment
 
@@ -43,4 +45,3 @@ max_frames=500)
 `terminate_on_fall`:  toggles whether agent is done if it falls down
 
 `max_frames`:  after max_frames steps all agents will return done
-
