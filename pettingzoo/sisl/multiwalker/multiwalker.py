@@ -16,7 +16,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, seed=None, *args, **kwargs):
         EzPickle.__init__(self, seed, *args, **kwargs)

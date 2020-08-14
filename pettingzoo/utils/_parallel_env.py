@@ -44,9 +44,8 @@ class base_parallel_env:
 
 class _parallel_env_wrapper(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, parallel_env):
+        self.metadata = parallel_env.metadata
         self.env = parallel_env
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
