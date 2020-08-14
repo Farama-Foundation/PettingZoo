@@ -16,6 +16,7 @@ from gym.utils import EzPickle
 
 def env(**kwargs):
     env = raw_env(**kwargs)
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)

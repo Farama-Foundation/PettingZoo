@@ -289,7 +289,10 @@ class CooperativePong(gym.Env):
         if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
+
+        observation = pygame.surfarray.pixels3d(self.screen)
         pygame.display.flip()
+        return np.transpose(observation,axes=(1,0,2))
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
@@ -411,7 +414,7 @@ class raw_env(AECEnv, EzPickle):
         self.env.close()
 
     def render(self, mode='human'):
-        self.env.render(mode)
+        return self.env.render(mode)
 
     def step(self, action, observe=True):
         agent = self.agent_selection

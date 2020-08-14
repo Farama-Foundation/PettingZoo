@@ -56,7 +56,7 @@ class magent_parallel_env:
     def render(self):
         if self._renderer is None:
             self._renderer = Renderer(self.env, self.map_size)
-        self._renderer.render()
+        return self._renderer.render()
 
     def close(self):
         import pygame
