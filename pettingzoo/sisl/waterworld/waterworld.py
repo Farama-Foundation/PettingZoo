@@ -15,7 +15,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, seed=None, *args, **kwargs):
         super().__init__()

@@ -14,7 +14,6 @@ class BaseWrapper(AECEnv):
     Creates a wrapper around `env` parameter. Extend this class
     to create a useful wrapper.
     '''
-    metadata = {'render.modes': ['human']}
 
     def __init__(self, env):
         super().__init__()
@@ -24,6 +23,7 @@ class BaseWrapper(AECEnv):
         self.agents = self.env.agents
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = self.env.action_spaces
+        self.metadata = self.env.metadata
 
         # we don't want these defined as we don't want them used before they are gotten
 
@@ -228,6 +228,10 @@ class NaNRandomWrapper(BaseWrapper):
 
 
 class CaptureStdoutWrapper(BaseWrapper):
+    def __init__(self, env):
+        super().__init__(env)
+        self.metadata['render.modes'].append("ansi")
+
     def render(self, mode):
         with capture_stdout() as stdout:
 

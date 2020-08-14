@@ -19,7 +19,7 @@ def make_env(raw_env):
 
 class SimpleEnv(AECEnv):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', 'rgb_array']}
 
     def __init__(self, scenario, world, max_frames, seed, local_ratio=None):
         super(SimpleEnv, self).__init__()
@@ -224,7 +224,7 @@ class SimpleEnv(AECEnv):
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
         # render to display or array
-        return self.viewer.render(return_rgb_array=True)
+        return self.viewer.render(return_rgb_array=mode=='rgb_array')
 
     # reset rendering assets
     def _reset_render(self):

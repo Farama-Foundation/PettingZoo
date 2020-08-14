@@ -25,7 +25,7 @@ def BaseAtariEnv(**kwargs):
 
 class ParallelAtariEnv(EzPickle):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', 'rgb_array']}
 
     def __init__(
             self,
@@ -141,25 +141,28 @@ class ParallelAtariEnv(EzPickle):
         infos = [{}] * self.num_agents
         return observations, rewards, dones, infos
 
-    def render(self):
-        import pygame
+    def render(self, mode="human"):
         (screen_width, screen_height) = self.ale.getScreenDims()
-        zoom_factor = 4
-        if self._screen is None:
-            pygame.init()
-            self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
-
         image = self.ale.getScreenRGB()
+        if mode == "human":
+            import pygame
+            zoom_factor = 4
+            if self._screen is None:
+                pygame.init()
+                self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
 
-        myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
 
-        myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
+            myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
 
-        self._screen.blit(myImage, (0, 0))
+            myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
 
-        pygame.display.flip()
+            self._screen.blit(myImage, (0, 0))
 
-        return image
+            pygame.display.flip()
+        elif mode == "rgb_array":
+            return image
+        else:
+            raise ValueError("bad value for render mode")
 
     def close(self):
         if self._screen is not None:

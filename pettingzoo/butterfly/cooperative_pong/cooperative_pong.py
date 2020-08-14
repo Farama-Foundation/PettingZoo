@@ -200,7 +200,7 @@ class BallSprite(pygame.sprite.Sprite):
 
 class CooperativePong(gym.Env):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
