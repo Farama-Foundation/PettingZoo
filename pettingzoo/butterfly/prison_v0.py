@@ -5,5 +5,5 @@ def env(*args, **kwargs):
     raise DeprecatedEnv("prison_v0 is now depreciated, use prison_v1 instead")
 
 
-def raw_env(*args, **kwargs):
-    raise DeprecatedEnv("prison_v0 is now depreciated, use prison_v1 instead")
+raw_env = env
+manual_control = env
