@@ -38,6 +38,7 @@ class to_parallel(ParallelEnv):
         self.observation_spaces = aec_env.observation_spaces
         self.action_spaces = aec_env.action_spaces
         self.agents = aec_env.agents
+        self._was_dones = {agent: False for agent in self.agents}
 
     def reset(self):
         self.aec_env.reset(observe=False)
@@ -56,10 +57,11 @@ class to_parallel(ParallelEnv):
                 assert agent in actions, "Live environment agent is not in actions dictionary"
                 self._was_dones[agent] = self.aec_env.dones[agent]
                 self.aec_env.step(actions[agent], observe=False)
-                rewards[agent] = self.aec_env.rewards[agent]
-                dones[agent] = self.aec_env.dones[agent]
-                infos[agent] = self.aec_env.infos[agent]
+                agent = self.aec_env.agent_selection
 
+        rewards = self.aec_env.rewards
+        dones = self.aec_env.dones
+        infos = self.aec_env.infos
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self._was_dones[agent]}
         return observations, rewards, dones, infos
 
