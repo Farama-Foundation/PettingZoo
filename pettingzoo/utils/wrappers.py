@@ -96,8 +96,12 @@ class AgentIterWrapper(BaseWrapper):
             super().step(action, False)
 
         next_agent = self.agent_selection
-        for i in range(self._agent_idxs[cur_agent] + 1, self._agent_idxs[next_agent]):
-            agent = self.agents[i]
+        start_idx = self._agent_idxs[cur_agent]
+        end_idx = self._agent_idxs[next_agent]
+        idx = (start_idx + 1) % self.env.num_agents
+        while idx != end_idx:
+            agent = self.agents[idx]
+            idx = (idx + 1) % self.env.num_agents
             if self.dones[agent] and not self._was_dones[agent]:
                 self.agent_selection = agent
                 break
