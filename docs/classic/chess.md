@@ -38,7 +38,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 From the AlphaZero chess paper:
 
->> [In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
+> [In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
 Each of the 8×8
 positions identifies the square from which to “pick up” a piece. The first 56 planes encode
 possible ‘queen moves’ for any piece: a number of squares [1..7] in which the piece will be
@@ -49,6 +49,8 @@ rook respectively. Other pawn moves or captures from the seventh rank are promot
 queen.
 
 We instead flatten this into 8×8×73 = 4672 discrete action space.
+
+You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a/(8*73), (a/73)%8, a%(8*8))`
 
 #### Rewards
 
