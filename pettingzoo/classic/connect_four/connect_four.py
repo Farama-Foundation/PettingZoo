@@ -9,6 +9,7 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 def env():
     env = raw_env()
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
@@ -110,7 +111,7 @@ class raw_env(AECEnv):
         else:
             return
 
-    def render(self, mode='ansi'):
+    def render(self, mode='human'):
         print("{}'s turn'".format(self.agent_selection))
         print(str(np.array(self.board).reshape(6, 7)))
 

@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 
 def render_test(env):
@@ -13,5 +14,6 @@ def render_test(env):
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action, observe=False)
-            env.render(mode=mode)
+            res = env.render(mode=mode)
+            assert isinstance(res,np.ndarray) or isinstance(res,str), "render must return numpy array containing image or a string, got {}".format(res)
         env.reset()

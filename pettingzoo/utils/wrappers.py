@@ -6,6 +6,7 @@ import warnings
 from pettingzoo import AECEnv
 
 from .env_logger import EnvLogger
+from .capture_stdout import capture_stdout
 
 
 class BaseWrapper(AECEnv):
@@ -41,7 +42,7 @@ class BaseWrapper(AECEnv):
         self.env.close()
 
     def render(self, mode='human'):
-        self.env.render(mode)
+        return self.env.render(mode)
 
     def reset(self, observe=True):
         observation = self.env.reset(observe)
@@ -226,6 +227,17 @@ class NaNRandomWrapper(BaseWrapper):
         return super().step(action, observe)
 
 
+class CaptureStdoutWrapper(BaseWrapper):
+    def render(self, mode):
+        with capture_stdout() as stdout:
+
+            super().render()
+
+            val = stdout.getvalue()
+        print(val)
+        return val
+
+
 class AssertOutOfBoundsWrapper(BaseWrapper):
     '''
     this wrapper crashes for out of bounds actions
@@ -289,7 +301,7 @@ class OrderEnforcingWrapper(AgentIterWrapper):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
         self._has_rendered = True
-        super().render(mode)
+        return super().render(mode)
 
     def close(self):
         super().close()
