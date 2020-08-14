@@ -1,1 +1,1 @@
-from .prospector.prospector import env, raw_env
+from .prospector.prospector import env, raw_env, manual_control
