@@ -1,5 +1,6 @@
 from pettingzoo.utils.env import AECEnv
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 
 
 class ParallelEnv:
@@ -38,6 +39,7 @@ class to_parallel(ParallelEnv):
         self.observation_spaces = aec_env.observation_spaces
         self.action_spaces = aec_env.action_spaces
         self.agents = aec_env.agents
+        self.num_agents = aec_env.num_agents
         self._was_dones = {agent: False for agent in self.agents}
 
     def reset(self):
@@ -111,6 +113,11 @@ class Sequentialize:
         self.par_env.close()
 
 
-class from_parallel(_parallel_env_wrapper):
-    def __init__(self, par_env):
-        super().__init__(Sequentialize(par_env))
+def from_parallel(par_env):
+    if isinstance(par_env, to_parallel):
+        return par_env.aec_env
+    else:
+        sequ_env = Sequentialize(par_env)
+        aec_env = _parallel_env_wrapper(sequ_env)
+        ordered_env = OrderEnforcingWrapper(aec_env)
+        return ordered_env
