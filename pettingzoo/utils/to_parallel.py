@@ -96,7 +96,7 @@ class Sequentialize:
         return self._sequentialize(obs_dict)
 
     def step(self, actions):
-        act_list = {agent:actions[i] for i, agent in enumerate(self.agents) if actions[i] is not None}
+        act_list = {agent: actions[i] for i, agent in enumerate(self.agents) if actions[i] is not None}
         obs, rew, done, info = self.par_env.step(act_list)
         obs = self._sequentialize(obs)
         rew = self._sequentialize(rew)
