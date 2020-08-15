@@ -1,12 +1,14 @@
-# Gym Contribution Guidelines
+# PettingZoo Contribution Guidelines
 
-We will welcome:
+We welcome:
 
-- Bug reports (keep in mind that changing environment behavior should be minimized as that requires releasing a new version of the environment and makes results hard to compare across versions)
+- Bug reports
 - Pull requests for bug fixes
 - Documentation improvements
 
-We are not actively looking to add new environments (other than for classic), or add API extensions, so please raise an issue or contact us directly to start a discussion before making a PR for new environments.
+We have a bug bounty of sorts for PRs, outlined in the readme
+
+We are not actively looking to add new environments (other than for classic) or other additional functionality. Please raise an issue or contact us directly before starting on a new classic environment.
 
 ## Contributing
 
@@ -15,11 +17,12 @@ We are not actively looking to add new environments (other than for classic), or
 Contributing code is done through standard github methods:
 
 1. Fork this repo
-1. Commit you code
-1. Submit a pull request. It will be reviewed by maintainers and they'll give you proper feedback so you can iterate over it.
+1. Commit your code
+1. Submit a pull request. It will be reviewed by maintainers and they'll give feedback or make requests as applicable
 
 #### Considerations
 - Make sure existing tests pass (run `pytest pettingzoo/tests/pytest_runner.py`)
 - Make sure linter passes (run `check_style.sh`)
 - Make sure your new code is properly tested and fully-covered
 - Any fixes to environments should include fixes to the appropriate documentation
+- Changes to environment functionality should be avoided when reasonable, and when they occur the environment version must be bumped.
