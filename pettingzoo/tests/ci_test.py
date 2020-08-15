@@ -4,7 +4,7 @@ import pettingzoo.tests.performance_benchmark as performance_benchmark
 import pettingzoo.tests.manual_control_test as test_manual_control
 
 import sys
-from .all_modules import all_environments
+from .all_modules import all_environments, manual_environments
 from .all_modules import all_prefixes
 from .render_test import render_test
 from .error_tests import error_test
@@ -43,13 +43,12 @@ def perform_ci_test(env_id, render, manual_control, performance, save_obs):
         except Exception as e:
             error_collected.append("Render Test:" + str(e))
 
-    if manual_control:
-        manual_control_fn = getattr(env_module, "manual_control", None)
-        if manual_control_fn is not None:
-            try:
-                test_manual_control.test_manual_control(manual_control_fn)
-            except Exception as e:
-                error_collected.append("Manual Control: " + str(e))
+    if manual_control and env_id in manual_environments:
+        try:
+            manual_control_fn = env_module.manual_control
+            test_manual_control.test_manual_control(manual_control_fn)
+        except Exception as e:
+            error_collected.append("Manual Control: " + str(e))
 
     if performance:
         _env = env_module.env()
