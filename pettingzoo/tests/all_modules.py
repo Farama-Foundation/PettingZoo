@@ -68,6 +68,15 @@ from pettingzoo.sisl import multiwalker_v0
 
 all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
+manual_environments = {
+    "butterfly/knights_archers_zombies",
+    "butterfly/pistonball",
+    "butterfly/cooperative_pong",
+    "butterfly/prison",
+    "butterfly/prospector",
+    "sisl/pursuit"
+}
+
 all_environments = {
     "atari/boxing": boxing_v0,
     "atari/combat_tank": combat_tank_v0,
