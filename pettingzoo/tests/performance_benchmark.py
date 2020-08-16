@@ -1,13 +1,14 @@
+import sys
 import time
 import random
+import numpy as np
 
 
-def performance_benchmark(env):
-    print("Starting performance benchmark")
+def _performance_benchmark(env, test_sample_time):
     cycles = 0
     turn = 0
     _ = env.reset()
-    start = time.time()
+    start = time.process_time()
     end = 0
 
     while True:
@@ -24,14 +25,59 @@ def performance_benchmark(env):
             if all(env.dones.values()):
                 _ = env.reset()
 
-        if time.time() - start > 5:
-            end = time.time()
+        if time.process_time() - start > test_sample_time:
+            end = time.process_time()
             break
 
     length = end - start
 
     turns_per_time = turn / length
     cycles_per_time = cycles / length
-    print(str(turns_per_time) + " turns per second")
-    print(str(cycles_per_time) + " cycles per second")
-    print("Finished performance benchmark")
+
+    return cycles_per_time, turns_per_time
+
+
+def check_stability(name, arr):
+    # Stability check based on the pyperf standard at
+    # https://pyperf.readthedocs.io/en/latest/cli.html#pyperf-check
+    mean = arr.mean()
+    std = arr.std()
+
+    if (std > mean / 10):
+        # Warn if the standard deviation is greater than 10% of the mean
+        print(f"[WARNING] for {name} Standard deviation is greater than 10% of mean", file=sys.stderr)
+
+    if (arr.min() < mean / 2):
+        # Warn if the minimum is 50% smaller than the mean
+        print(f"[WARNING] for {name} minimum is 50% smaller than the mean", file=sys.stderr)
+
+    if (arr.max() > 1.5 * mean):
+        # Warn if the maximum is 50% greater than the mean
+        print(f"[WARNING] for {name} maximum is 50% greater than the mean", file=sys.stderr)
+
+
+def performance_benchmark(env):
+    print("Starting performance benchmark")
+
+    test_time = 5
+    test_sample_time = 1
+    check_benchmark_stability = True
+
+    assert test_time % test_sample_time == 0, "'test_time' should be a multiple of 'test_sample_time'"
+
+    cycles_times = []
+    turns_times = []
+    for test_idx in range(int(test_time / test_sample_time)):
+        cycle_time, turns_time = _performance_benchmark(env, test_sample_time)
+        turns_times.append(turns_time)
+        cycles_times.append(cycle_time)
+
+    turns_times = np.array(turns_times)
+    cycles_times = np.array(cycles_times)
+
+    if (check_benchmark_stability):
+        check_stability("turns", turns_times)
+        check_stability("cycles", turns_times)
+
+    print("{0:.2f} +- {1:.2f} turns  per second".format(turns_times.mean(), turns_times.std()))
+    print("{0:.2f} +- {1:.2f} cycles per second".format(cycles_times.mean(), cycles_times.std()))
