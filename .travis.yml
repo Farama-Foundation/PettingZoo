@@ -1,5 +1,7 @@
 language: python
 
+cache: pip
+
 jobs:
   include:
     - name: "Python 3.6 on Linux"
