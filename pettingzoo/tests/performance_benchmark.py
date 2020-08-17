@@ -4,7 +4,7 @@ import random
 import numpy as np
 
 
-def _performance_benchmark(env, test_sample_time):
+def _performance_benchmark(env, single_run_time):
     cycles = 0
     turn = 0
     _ = env.reset()
@@ -25,7 +25,7 @@ def _performance_benchmark(env, test_sample_time):
             if all(env.dones.values()):
                 _ = env.reset()
 
-        if time.process_time() - start > test_sample_time:
+        if time.process_time() - start > single_run_time:
             end = time.process_time()
             break
 
@@ -56,15 +56,15 @@ def _check_benchmark_stability(name, arr):
         print(f"[WARNING] for {name} maximum is 50% greater than the mean", file=sys.stderr)
 
 
-def performance_benchmark(env, test_time=5, test_sample_time=1, check_benchmark_stability=True):
+def performance_benchmark(env, overall_test_time=5, single_run_time=1, check_benchmark_stability=True):
     print("Starting performance benchmark")
 
-    assert test_time % test_sample_time == 0, "'test_time' should be a multiple of 'test_sample_time'"
+    assert overall_test_time % single_run_time == 0, "'overall_test_time' should be a multiple of 'single_run_time'"
 
     cycles_times = []
     turns_times = []
-    for test_idx in range(int(test_time / test_sample_time)):
-        cycle_time, turns_time = _performance_benchmark(env, test_sample_time)
+    for test_idx in range(int(overall_test_time / single_run_time)):
+        cycle_time, turns_time = _performance_benchmark(env, single_run_time)
         turns_times.append(turns_time)
         cycles_times.append(cycle_time)
 
