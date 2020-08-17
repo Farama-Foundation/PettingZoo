@@ -115,10 +115,10 @@ This randomly plays through the environment `cycles` times, to test for stabilit
 
 ```
 import pettingzoo.tests.performance_benchmark as performance_benchmark
-performance_benchmark.performance_benchmark(env)
+performance_benchmark.performance_benchmark(env, overall_test_time=5, single_run_time=1, check_benchmark_stability=True)
 ```
 
-This randomly steps through the environment for 60 seconds to benchmark it's performance.
+This randomly steps through the environment for 5 seconds to benchmark it's performance. The performance benchmark is composed of multiple runs, you can set the overall time for which the benchmark runs through the `overall_test_time` argument in seconds. You may also fine-tune your benchmark by controlling the execution time for which each run through the `single_run_time` argument. Note that `overall_test_time` must be a multiple of `single_run_time`. If `check_benchmark_stability=True`, the benchmark results are checked for stability.
 
 ### Manual Control Test
 
