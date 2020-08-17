@@ -37,7 +37,7 @@ def _performance_benchmark(env, test_sample_time):
     return cycles_per_time, turns_per_time
 
 
-def check_stability(name, arr):
+def _check_benchmark_stability(name, arr):
     # Stability check based on the pyperf standard at
     # https://pyperf.readthedocs.io/en/latest/cli.html#pyperf-check
     mean = arr.mean()
@@ -56,12 +56,8 @@ def check_stability(name, arr):
         print(f"[WARNING] for {name} maximum is 50% greater than the mean", file=sys.stderr)
 
 
-def performance_benchmark(env):
+def performance_benchmark(env, test_time=5, test_sample_time=1, check_benchmark_stability=True):
     print("Starting performance benchmark")
-
-    test_time = 5
-    test_sample_time = 1
-    check_benchmark_stability = True
 
     assert test_time % test_sample_time == 0, "'test_time' should be a multiple of 'test_sample_time'"
 
@@ -76,8 +72,8 @@ def performance_benchmark(env):
     cycles_times = np.array(cycles_times)
 
     if (check_benchmark_stability):
-        check_stability("turns", turns_times)
-        check_stability("cycles", turns_times)
+        _check_benchmark_stability("turns", turns_times)
+        _check_benchmark_stability("cycles", cycles_times)
 
     print("{0:.2f} +- {1:.2f} turns  per second".format(turns_times.mean(), turns_times.std()))
     print("{0:.2f} +- {1:.2f} cycles per second".format(cycles_times.mean(), cycles_times.std()))
