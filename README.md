@@ -10,9 +10,9 @@ We model environments as *Agent Environment Cycle* (AEC) games, in order to be a
 
 Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
 
-## Environment Types and Installation
+## Environments and Installation
 
-PettingZoo includes the following families of environments
+PettingZoo includes the following families of environments:
 
 * [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
 * [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
