@@ -1,4 +1,4 @@
----\
+---
 actions: "Discrete"
 title: "Texas Hold'em"
 agents: "2"
