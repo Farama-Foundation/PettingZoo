@@ -12,7 +12,7 @@ Our website with comprehensive documentation is [pettingzoo.ml](https://www.pett
 
 ## Environment Types and Installation
 
-PettingZoo includes the following sets of games:
+PettingZoo includes the following families of environments
 
 * [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
 * [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
@@ -21,13 +21,11 @@ PettingZoo includes the following sets of games:
 * [MPE](https://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * [SISL](https://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-To install pettingzoo and all of its dependencies, use `pip install pettingzoo[all]`
+To install the pettingzoo base library, use `pip install pettingzoo`.
 
-To just install the base requirements of pettingzoo use `pip install pettingzoo`
+This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install pettingzoo[atari]` or use `pip install pettingzoo[all]` to install all dependencies.
 
-To install pettingzoo base and the requirements for a specific group of environments (say atari) only put the name of the group as an extra, for example `pip install pettingzoo[atari]`
-
-We support Python 3.6, 3.7 and 3.8, on Linux and macOS.
+We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
 
 ## API
 
