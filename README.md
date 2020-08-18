@@ -21,7 +21,11 @@ PettingZoo includes the following sets of games:
 * [MPE](https://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * [SISL](https://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-To install, use `pip install pettingzoo`
+To install pettingzoo and all of its dependencies, use `pip install pettingzoo[all]`
+
+To just install the base requirements of pettingzoo use `pip install pettingzoo`
+
+To install pettingzoo base and the requirements for a specific group of environments (say atari) only put the name of the group as an extra, for example `pip install pettingzoo[atari]`
 
 We support Python 3.6, 3.7 and 3.8, on Linux and macOS.
 

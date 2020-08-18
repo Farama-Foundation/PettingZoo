@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+from pettingzoo import __version__
 
 with open("README.md", "r") as fh:
     long_description = ""
@@ -26,7 +27,7 @@ extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["but
 
 setup(
     name='PettingZoo',
-    version="1.0.1",
+    version=__version__,
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
