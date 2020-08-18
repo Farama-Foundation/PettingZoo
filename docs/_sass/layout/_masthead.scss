@@ -58,6 +58,13 @@ header.masthead {
     border-radius: 350px;
     padding: 20px;
   }
+
+  .nav-button {
+    width: 0;
+    padding-left: 0px;
+    padding-right: 0px;
+
+  }
 }
 @media(min-width:768px) {
   header.masthead {
@@ -145,5 +152,13 @@ header.masthead {
 @media(min-width: 1200px) {
   .buttonfont {
       font-size: medium;
+  }
+}
+
+@media(max-width:768px) {
+  header.masthead {
+    .headerbox {
+        display: none;
+    }
   }
 }
