@@ -2,7 +2,7 @@ from pettingzoo.atari import boxing_v0
 from pettingzoo.atari import combat_tank_v0
 from pettingzoo.atari import combat_plane_v0
 from pettingzoo.atari import double_dunk_v0
-from pettingzoo.atari import entombed_competitive_v0
+from pettingzoo.atari import entombed_competitive_v1
 from pettingzoo.atari import entombed_cooperative_v0
 from pettingzoo.atari import flag_capture_v0
 from pettingzoo.atari import joust_v0
@@ -83,7 +83,7 @@ all_environments = {
     "atari/combat_plane": combat_plane_v0,
     "atari/double_dunk": double_dunk_v0,
     "atari/entombed_cooperative": entombed_cooperative_v0,
-    "atari/entombed_competitive": entombed_competitive_v0,
+    "atari/entombed_competitive": entombed_competitive_v1,
     "atari/flag_capture": flag_capture_v0,
     "atari/joust": joust_v0,
     "atari/ice_hockey": ice_hockey_v0,
