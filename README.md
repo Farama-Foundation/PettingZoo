@@ -48,24 +48,7 @@ For the complete API documentation, please see https://www.pettingzoo.ml/api
 
 ### Parallel API
 
-To support algorithms and code which computes actions simultaneously (by assuming that agents take their action at the same time), we offer a secondary API. For the environments which support it, you can initialize the environment with:
-
-```
-from pettingzoo.butterfly import pistonball_v0
-parallel_env = pistonball_v0.parallel_env()
-```
-
-Right now all environments support it except the classic environments.
-
-Environments can be interacted with in a manner very similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical):
-
-```
-observations = parallel_env.reset()
-max_frames = 500
-for step in range(max_frames):
-    actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
-    observations, rewards, dones, infos = parallel_env.step(actions)
-```
+To support algorithms and code which computes actions simultaneously (by assuming that agents take their action at the same time), we offer a secondary API. How to create and use these environments is documented at https://www.pettingzoo.ml/api#parallel-api
 
 ## SuperSuit
 

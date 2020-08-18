@@ -89,7 +89,30 @@ env = prospector_v0.raw_env(<environment parameters>)
 
 ## Parallel Actions
 
-In addition to the main API, we have a secondary API to support simultaneous actions and observations. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agent.
+In addition to the main API, we have a secondary API to support simultaneous actions and observations. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agents.
+
+### Initializing
+
+```
+from pettingzoo.butterfly import pistonball_v0
+parallel_env = pistonball_v0.parallel_env()
+```
+
+Right now all environments support it except the classic environments.
+
+### Example
+
+Environments can be interacted with in a manner very similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical):
+
+```
+observations = parallel_env.reset()
+max_frames = 500
+for step in range(max_frames):
+    actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
+    observations, rewards, dones, infos = parallel_env.step(actions)
+```
+
+### Parallel API
 
 `agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
 
