@@ -6,7 +6,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from gym.utils import seeding, EzPickle
 
 """
-Wrapper class around google deepmind's hanabi.
+Wrapper class around Deepmind's Hanabi Learning Environment.
 """
 
 

@@ -20,7 +20,9 @@ def performance_benchmark(env):
                 action = env.action_spaces[agent].sample()
             _ = env.step(action)
             turn += 1
-        _ = env.reset()
+
+            if all(env.dones.values()):
+                _ = env.reset()
 
         if time.time() - start > 5:
             end = time.time()

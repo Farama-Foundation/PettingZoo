@@ -167,8 +167,8 @@ If the environment has `manual_control` functionality included (explained below)
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```
-from pettingzoo.butterfly import prison
-prison.manual_control(<environment parameters>)
+from pettingzoo.butterfly import prison_v1
+prison_v1.manual_control(<environment parameters>)
 ```
 
 Environemnts say if they support this functionality in their documentation, and what the specific controls are.
