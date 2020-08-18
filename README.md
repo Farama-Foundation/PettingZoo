@@ -48,12 +48,14 @@ For the complete API documentation, please see https://www.pettingzoo.ml/api
 
 ### Parallel API
 
-To support algorithms and code which assumes that actions take many steps at the same time, we offer a secondary API. For the environments which support it, you can initialize the environment with:
+To support algorithms and code which computes actions simultaneously (by assuming that agents take their action at the same time), we offer a secondary API. For the environments which support it, you can initialize the environment with:
 
 ```
 from pettingzoo.butterfly import pistonball_v0
 parallel_env = pistonball_v0.parallel_env()
 ```
+
+Right now all environments support it except the classic environments.
 
 Environments can be interacted with in a manner very similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical):
 

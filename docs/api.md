@@ -87,6 +87,16 @@ Environments are by default wrapped in a handful of lightweight wrappers that ha
 env = prospector_v0.raw_env(<environment parameters>)
 ```
 
+## Parallel Actions
+
+In addition to the main API, we have a secondary API to support simultaneous actions and observations. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agent.
+
+`agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
+
+`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns observations dictionary, reward dictionary, done dictionary, info dictionary, where each dictionary is keyed by the agent. Note that agents which have already been terminated previously will not have an entry in these dictionaries.
+
+`reset()`: resets the environment, returns a dictionary of observations (keyed by the agent name)
+
 ## SuperSuit
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
