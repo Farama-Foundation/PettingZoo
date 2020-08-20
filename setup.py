@@ -1,5 +1,4 @@
 from setuptools import find_packages, setup
-from pettingzoo import __version__
 
 with open("README.md", "r") as fh:
     long_description = ""
@@ -11,6 +10,16 @@ with open("README.md", "r") as fh:
             long_description += line
         else:
             break
+
+def get_version():
+    path = "pettingzoo/__init__.py"
+    with open(path) as file:
+        lines = file.readlines()
+
+    for line in lines:
+        if line.startswith("__version__"):
+            return line.strip().split()[-1].strip().strip('"')
+    raise RuntimeError("bad version data in __init__.py")
 
 extras = {
     "atari": ["multi_agent_ale_py", "pygame==2.0.0.dev10"],
@@ -27,7 +36,7 @@ extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["but
 
 setup(
     name='PettingZoo',
-    version=__version__,
+    version=get_version(),
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
