@@ -11,6 +11,16 @@ with open("README.md", "r") as fh:
         else:
             break
 
+def get_version():
+    path = "pettingzoo/__init__.py"
+    with open(path) as file:
+        lines = file.readlines()
+
+    for line in lines:
+        if line.startswith("__version__"):
+            return line.strip().split()[-1].strip().strip('"')
+    raise RuntimeError("bad version data in __init__.py")
+
 extras = {
     "atari": ["multi_agent_ale_py", "pygame==2.0.0.dev10"],
     "classic": ["python-chess", "rlcard >= 0.2.5", "python-shogi", "hanabi_learning_environment"],
@@ -26,7 +36,7 @@ extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["but
 
 setup(
     name='PettingZoo',
-    version="1.0.1",
+    version=get_version(),
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
@@ -39,7 +49,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        "gym>=0.17.2",
         "numpy>=1.18.0",
         "gym>=0.17.2"
     ],
