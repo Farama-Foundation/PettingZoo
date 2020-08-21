@@ -89,13 +89,14 @@ env = prospector_v0.raw_env(<environment parameters>)
 
 ## Parallel Actions
 
-In addition to the main API, we have a secondary parallel API for environments with where all agents have simultaneous actions and observations. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agents.
+In addition to the main API, we have a secondary parallel API for environments with where all agents have simultaneous actions and observations. An environment with a parallel API can be created by `<game>.parallel_env()` for those games that support it. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agents.
 
 ### Example Usage
 
 Environments can be interacted with in a manner very similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical):
 
 ```
+parallel_env = pistonball_v0.parallel_env()
 observations = parallel_env.reset()
 max_frames = 500
 for step in range(max_frames):
