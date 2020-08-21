@@ -2,7 +2,7 @@ from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_
 
 
 def raw_env(**kwargs):
-    return BaseAtariEnv(game="space_war", num_players=2, mode_num=None, **kwargs)
+    return BaseAtariEnv(game="entombed", num_players=2, mode_num=2, **kwargs)
 
 
 env = base_env_wrapper_fn(raw_env)

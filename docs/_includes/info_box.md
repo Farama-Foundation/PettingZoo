@@ -19,6 +19,7 @@ Name | Value
 --- | ---
 Actions | {{ page.actions }}
 Agents | {{ page.agents }}
+Parallel API | {{page.is_parallel}}
 Manual Control | {{ page.manual-control }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}

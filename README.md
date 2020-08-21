@@ -48,6 +48,10 @@ for agent in env.agent_iter():
 
 For the complete API documentation, please see https://www.pettingzoo.ml/api
 
+### Parallel API
+
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://www.pettingzoo.ml/api#parallel-api
+
 ## SuperSuit
 
 SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit

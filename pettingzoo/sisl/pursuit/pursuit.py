@@ -6,6 +6,7 @@ import numpy as np
 import pygame
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def env(**kwargs):
@@ -15,6 +16,9 @@ def env(**kwargs):
     env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape, dtype=example_space.dtype), "taking all zeros action")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

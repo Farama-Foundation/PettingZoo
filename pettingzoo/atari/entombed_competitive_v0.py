@@ -1,8 +1,10 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+from pettingzoo.utils.error import DeprecatedEnv
 
 
-def raw_env(**kwargs):
-    return BaseAtariEnv(game="entombed", num_players=2, mode_num=2, **kwargs)
+def env(*args, **kwargs):
+    raise DeprecatedEnv("entombed_competitive_v0 is now depreciated, use entombed_competitive_v1 instead")
 
 
-env = base_env_wrapper_fn(raw_env)
+raw_env = env
+parallel_env = env
+manual_control = env
