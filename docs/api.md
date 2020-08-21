@@ -84,7 +84,7 @@ All environments end in something like \_v0.  When changes are made to environme
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and reasonable behaviors with incorrect usage (such as playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
 
 ```
-env = prospector_v0.raw_env(<environment parameters>)
+env = prospector_v1.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
