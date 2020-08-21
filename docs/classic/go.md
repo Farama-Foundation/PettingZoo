@@ -64,7 +64,7 @@ Similar to the observation space, the action space is dependent on the board siz
 | N^2-N ~ N^2-1 | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
 |      N^2      | Pass                                                                                                          |
 
-For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. The total action space is N^2+1.
+For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)` The total action space is N^2+1.
 
 #### Rewards
 
