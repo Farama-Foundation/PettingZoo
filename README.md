@@ -48,7 +48,7 @@ For the complete API documentation, please see https://www.pettingzoo.ml/api
 
 ### Parallel API
 
-To support algorithms and code which computes actions simultaneously (by assuming that agents take their action at the same time), we offer a secondary API. How to create and use these environments is documented at https://www.pettingzoo.ml/api#parallel-api
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://www.pettingzoo.ml/api#parallel-api
 
 ## SuperSuit
 
