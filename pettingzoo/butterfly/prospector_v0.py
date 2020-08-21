@@ -2,7 +2,7 @@ from pettingzoo.utils.error import DeprecatedEnv
 
 
 def env(*args, **kwargs):
-    raise DeprecatedEnv("prison_v0 is now depreciated, use prison_v1 instead")
+    raise DeprecatedEnv("prospector_v0 is now depreciated, use prospector_v1 instead")
 
 
 raw_env = env
