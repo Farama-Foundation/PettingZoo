@@ -64,7 +64,7 @@ class to_parallel(ParallelEnv):
         rewards = self.aec_env.rewards
         dones = self.aec_env.dones
         infos = self.aec_env.infos
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self._was_dones[agent]}
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):
