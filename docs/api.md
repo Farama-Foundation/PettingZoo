@@ -89,7 +89,7 @@ env = prospector_v0.raw_env(<environment parameters>)
 
 ## Parallel Actions
 
-In addition to the main API, we have a secondary parallel API for environments with where all agents have simultaneous actions and observations. An environment with a parallel API can be created by `<game>.parallel_env()` for those games that support it. This API is designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agents.
+In addition to the main API, we have a secondary parallel API for environments with where all agents have simultaneous actions and observations. An environment with a parallel API can be created by `<game>.parallel_env()` for those games that support it. This API is based around the paradigm of Partially Observable Stochastic Games (POSG) and the details are designed to be similar to [RLLib's MultiAgent environment](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we also allow for different observation and action spaces between the agents.
 
 ### Example Usage
 
@@ -108,7 +108,7 @@ for step in range(max_frames):
 
 `agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
 
-`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns observations dictionary, reward dictionary, done dictionary, info dictionary, where each dictionary is keyed by the agent. Note that agents which have already been terminated previously will not have an entry in these dictionaries.
+`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns observations dictionary, reward dictionary, done dictionary, info dictionary, where each dictionary is keyed by the agent.
 
 `reset()`: resets the environment, returns a dictionary of observations (keyed by the agent name)
 
