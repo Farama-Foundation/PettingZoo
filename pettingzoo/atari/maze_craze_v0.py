@@ -1,4 +1,4 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 import warnings
 
 
@@ -20,3 +20,4 @@ def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
 
 
 env = base_env_wrapper_fn(raw_env)
+parallel_env = parallel_wrapper_fn(env)

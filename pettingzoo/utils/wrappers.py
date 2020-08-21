@@ -93,6 +93,7 @@ class AgentIterWrapper(BaseWrapper):
             self._was_dones[cur_agent] = True
             self.agent_selection = self.env.agent_selection
         else:
+            self._was_dones[cur_agent] = self.env.dones[cur_agent]
             super().step(action, False)
 
         next_agent = self.agent_selection

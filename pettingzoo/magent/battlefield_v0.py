@@ -8,6 +8,7 @@ from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector, wrappers
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from .battle_v0 import get_config
 from gym.utils import EzPickle
 
@@ -18,6 +19,7 @@ def raw_env(seed=None, max_frames=1000, **reward_args):
 
 
 env = make_env(raw_env)
+parallel_env = parallel_wrapper_fn(env)
 
 
 class _parallel_env(magent_parallel_env, EzPickle):

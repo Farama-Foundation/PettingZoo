@@ -6,4 +6,5 @@ def env(*args, **kwargs):
 
 
 raw_env = env
+parallel_env = env
 manual_control = env

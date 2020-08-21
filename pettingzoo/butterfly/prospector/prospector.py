@@ -11,6 +11,7 @@ from pettingzoo.utils import wrappers
 from . import constants as const
 from . import utils
 from .manual_control import manual_control
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 import math
 import os
@@ -442,6 +443,9 @@ def env(**kwargs):
     env = wrappers.NanZerosWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

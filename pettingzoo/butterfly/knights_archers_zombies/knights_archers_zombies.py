@@ -15,6 +15,7 @@ from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def get_image(path):
@@ -31,6 +32,9 @@ def env(**kwargs):
     env = wrappers.NanNoOpWrapper(env, default_val, "setting action to 1")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):

@@ -87,6 +87,31 @@ Environments are by default wrapped in a handful of lightweight wrappers that ha
 env = prospector_v0.raw_env(<environment parameters>)
 ```
 
+## Parallel API
+
+In addition to the main API, we have a secondary parallel API for environments with where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLLib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
+
+### Example Usage
+
+Environments can be interacted with as follows:
+
+```
+parallel_env = pistonball_v0.parallel_env()
+observations = parallel_env.reset()
+max_frames = 500
+for step in range(max_frames):
+    actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
+    observations, rewards, dones, infos = parallel_env.step(actions)
+```
+
+### Full API
+
+`agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
+
+`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns observations dictionary, reward dictionary, done dictionary, info dictionary, where each dictionary is keyed by the agent.
+
+`reset()`: resets the environment and returns a dictionary of observations (keyed by the agent name)
+
 ## SuperSuit
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
