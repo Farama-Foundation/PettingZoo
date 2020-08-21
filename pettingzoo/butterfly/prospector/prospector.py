@@ -758,7 +758,7 @@ class raw_env(AECEnv, EzPickle):
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
         if all_agents_updated:
-            self.rewards = {agent:0 for agent in self.agents}
+            self.rewards = {agent: 0 for agent in self.agents}
 
         if agent_id in self.prospectors:
             agent = self.prospectors[agent_id]
