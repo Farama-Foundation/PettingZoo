@@ -8,7 +8,7 @@ action-values: "[-1, 1]"
 observation-shape: "(150, 150, 3), (154, 154, 3)"
 observation-values: "(0, 255)"
 average-total-reward: "14165"
-import: "from pettingzoo.butterfly import prospector_v0"
+import: "from pettingzoo.butterfly import prospector_v1"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
@@ -98,7 +98,7 @@ The game lasts for 900 frames by default.
 ### Arguments
 
 ```
-prospector_v0.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
+prospector_v1.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
 prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
 banker_deposit_gold_reward=1, max_frames=900, seed=None)
 ```
