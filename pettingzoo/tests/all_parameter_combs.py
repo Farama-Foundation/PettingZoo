@@ -58,7 +58,7 @@ parameterized_envs = [
     (prison_v1.env, dict(random_aliens=True)),
     (prison_v1.env, dict(random_aliens=False)),
 
-    (prospector_v0.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
+    (prospector_v1.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
     prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
     banker_deposit_gold_reward=1, max_frames=900)),
 
@@ -76,7 +76,7 @@ parameterized_envs = [
     (hanabi_v0.env, dict(observation_type=1)),
     (hanabi_v0.env, dict(random_start_player=False)),
     (hanabi_v0.env, dict(random_start_player=True)),
-    
+
     (simple_adversary_v0.env, dict(N=4)),
     (simple_reference_v0.env, dict(local_ratio=0.2)),
     (simple_spread_v0.env, dict(N=5)),
