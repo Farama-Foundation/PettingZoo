@@ -8,7 +8,7 @@ action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
 average-total-reward: "1.456"
-import: "from pettingzoo.butterfly import prison_v0"
+import: "from pettingzoo.butterfly import prison_v1"
 agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
@@ -44,4 +44,3 @@ identical_aliens=False, max_frames=900, num_floors=4, random_aliens=False)
 `identical_aliens`:  If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
 
 `random_aliens`:  If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
-
