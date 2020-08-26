@@ -57,7 +57,7 @@ All the Atari environments have the following environment parameters:
 
 `seed`: Set to specific value for deterministic, reproducible behavior.
 
-`obs_type`:  default value of 'rgb_image' leads to (210, 160, 3) image pixel observations like you see as a human, 'grayscale_image' leads to a black and white (210, 160, 1) image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
+`obs_type`:  default value of 'rgb_image' leads to RGB image like you see as a human, 'grayscale_image' leads to a grayscale image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
 
 `full_action_space`:  The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
 
