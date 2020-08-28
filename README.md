@@ -58,6 +58,10 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.2.0 (August 27, 2020):
+
+Large fix to quadrapong, version bumped to v1.
+
 Version 1.1.0 (August 20, 2020):
 
 Added [ParallelEnv](https://www.pettingzoo.ml/api#parallel-api) API where all agents step at once. Fixed entombed_competitive rewards and bumped environment version to entombed_competitive_v1. Fixed prospector rewards and bumped version to prospector_v1.
