@@ -1,11 +1,10 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from pettingzoo.utils.error import DeprecatedEnv
 
 
-def raw_env(**kwargs):
-    mode = 32
-    num_players = 4
-    return BaseAtariEnv(game="pong", num_players=num_players, mode_num=mode, **kwargs)
+def env(*args, **kwargs):
+    raise DeprecatedEnv("pong_quadrapong_v0 is now depreciated, use pong_quadrapong_v1 instead")
 
 
-env = base_env_wrapper_fn(raw_env)
-parallel_env = parallel_wrapper_fn(env)
+raw_env = env
+parallel_env = env
+manual_control = env
