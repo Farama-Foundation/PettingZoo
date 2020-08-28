@@ -13,7 +13,7 @@ from pettingzoo.atari import othello_v0
 from pettingzoo.atari import pong_basketball_v0
 from pettingzoo.atari import pong_classic_v0
 from pettingzoo.atari import pong_foozpong_v0
-from pettingzoo.atari import pong_quadrapong_v0
+from pettingzoo.atari import pong_quadrapong_v1
 from pettingzoo.atari import pong_volleyball_v0
 from pettingzoo.atari import space_invaders_v0
 from pettingzoo.atari import space_war_v0
@@ -93,7 +93,7 @@ all_environments = {
     "atari/pong_classic": pong_classic_v0,
     "atari/pong_basketball": pong_basketball_v0,
     "atari/pong_foozpong": pong_foozpong_v0,
-    "atari/pong_quadrapong": pong_quadrapong_v0,
+    "atari/pong_quadrapong": pong_quadrapong_v1,
     "atari/pong_volleyball": pong_volleyball_v0,
     "atari/space_invaders": space_invaders_v0,
     "atari/space_war": space_war_v0,
