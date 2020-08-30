@@ -1,7 +1,7 @@
 from pettingzoo.atari import boxing_v0
 from pettingzoo.atari import combat_tank_v0
 from pettingzoo.atari import combat_plane_v0
-from pettingzoo.atari import double_dunk_v0
+from pettingzoo.atari import double_dunk_v1
 from pettingzoo.atari import entombed_competitive_v1
 from pettingzoo.atari import entombed_cooperative_v0
 from pettingzoo.atari import flag_capture_v0
@@ -9,7 +9,7 @@ from pettingzoo.atari import joust_v0
 from pettingzoo.atari import ice_hockey_v0
 from pettingzoo.atari import maze_craze_v0
 from pettingzoo.atari import mario_bros_v0
-from pettingzoo.atari import othello_v0
+from pettingzoo.atari import othello_v1
 from pettingzoo.atari import pong_basketball_v0
 from pettingzoo.atari import pong_classic_v0
 from pettingzoo.atari import pong_foozpong_v0
@@ -18,8 +18,8 @@ from pettingzoo.atari import pong_volleyball_v0
 from pettingzoo.atari import space_invaders_v0
 from pettingzoo.atari import space_war_v0
 from pettingzoo.atari import surround_v0
-from pettingzoo.atari import tennis_v0
-from pettingzoo.atari import video_checkers_v0
+from pettingzoo.atari import tennis_v1
+from pettingzoo.atari import video_checkers_v1
 from pettingzoo.atari import wizard_of_wor_v0
 from pettingzoo.atari import warlords_v0
 
@@ -81,7 +81,7 @@ all_environments = {
     "atari/boxing": boxing_v0,
     "atari/combat_tank": combat_tank_v0,
     "atari/combat_plane": combat_plane_v0,
-    "atari/double_dunk": double_dunk_v0,
+    "atari/double_dunk": double_dunk_v1,
     "atari/entombed_cooperative": entombed_cooperative_v0,
     "atari/entombed_competitive": entombed_competitive_v1,
     "atari/flag_capture": flag_capture_v0,
@@ -89,7 +89,7 @@ all_environments = {
     "atari/ice_hockey": ice_hockey_v0,
     "atari/maze_craze": maze_craze_v0,
     "atari/mario_bros": mario_bros_v0,
-    "atari/othello": othello_v0,
+    "atari/othello": othello_v1,
     "atari/pong_classic": pong_classic_v0,
     "atari/pong_basketball": pong_basketball_v0,
     "atari/pong_foozpong": pong_foozpong_v0,
@@ -98,8 +98,8 @@ all_environments = {
     "atari/space_invaders": space_invaders_v0,
     "atari/space_war": space_war_v0,
     "atari/surround": surround_v0,
-    "atari/tennis": tennis_v0,
-    "atari/video_checkers": video_checkers_v0,
+    "atari/tennis": tennis_v1,
+    "atari/video_checkers": video_checkers_v1,
     "atari/wizard_of_wor": wizard_of_wor_v0,
     "atari/warlords": warlords_v0,
 
