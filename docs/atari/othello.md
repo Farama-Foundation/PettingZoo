@@ -30,7 +30,7 @@ Note that following this reward greedily is known to be a bad long-term strategy
 
 When one player cannot move, the tokens on both sides are tallied, and the player with the most tokens wins! (receives +1 reward, and their opponent -1).
 
-Note that since this is an untimed turn based game, a player can choose to do nothing, which is a good strategy to never lose. 
+This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets.
 
 [Official othello manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=335)
 

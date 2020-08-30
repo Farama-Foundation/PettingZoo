@@ -22,6 +22,8 @@ Goal: Get the ball past your opponent. Don't let the ball get past you.
 
 When a point is scored (by the ball exiting the area), you get +1 reward and your opponent gets -1 reward. Unlike normal tennis matches, the number of games won is not directly rewarded.
 
+Serves are timed: If the player does not serve within 3 seconds of receiving the ball, they receive -1 points, and the timer resets.
+
 [Official tennis manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=555)
 
 #### Environment parameters
