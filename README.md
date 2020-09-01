@@ -58,6 +58,10 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.2.1 (August 31, 2020):
+
+Fixed ability to indefinitely stall in Double Dunk, Othello, Tennis and Video Checkers Atari environments, bumped versions to v1.
+
 Version 1.2.0 (August 27, 2020):
 
 Large fix to quadrapong, version bumped to v1.
@@ -68,7 +72,7 @@ Added [ParallelEnv](https://www.pettingzoo.ml/api#parallel-api) API where all ag
 
 Version 1.0.1 (August 12, 2020):
 
-Fixes to continuous made on pistonball and prison environments, along with a bad test that let the problems slip through. Versions bumped on both games.
+Fixes to continuous mode on pistonball and prison butterfly environments, along with a bad test that let the problems slip through. Versions bumped on both games.
 
 Version 1.0.0 (August 5th, 2020):
 
