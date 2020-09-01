@@ -1,9 +1,10 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from pettingzoo.utils.error import DeprecatedEnv
 
 
-def raw_env(**kwargs):
-    return BaseAtariEnv(game="video_checkers", num_players=2, mode_num=None, **kwargs)
+def env(*args, **kwargs):
+    raise DeprecatedEnv("video_checkers_v0 is now depreciated, use video_checkers_v1 instead")
 
 
-env = base_env_wrapper_fn(raw_env)
-parallel_env = parallel_wrapper_fn(env)
+raw_env = env
+parallel_env = env
+manual_control = env

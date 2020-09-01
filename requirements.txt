@@ -10,6 +10,6 @@ pynput
 opencv-python
 box2d-py
 python-shogi
-hanabi_learning_environment
-multi_agent_ale_py
-magent
+hanabi_learning_environment==0.0.1
+multi_agent_ale_py==0.1.8
+magent==0.1.12

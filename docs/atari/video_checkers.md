@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import video_checkers_v0"
+import: "from pettingzoo.atari import video_checkers_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -22,7 +22,7 @@ Capture all of your opponents pieces by jumping over them. To move a piece, you 
 
 If you win by capturing all your opponent's pieces, you are rewarded +1 and your opponent -1.
 
-Note that this is an extremely difficult game to learn, due to the extremely sparse reward, and the fact that doing nothing is a good strategy to never lose.
+This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets. This prevents one player from indefinitely stalling the game.
 
 [Official video checkers manual](https://atariage.com/manual_html_page.php?SoftwareID=1427)
 
