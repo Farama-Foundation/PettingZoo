@@ -1,0 +1,15 @@
+gym>=0.17.2
+pygame==2.0.0.dev10
+scikit-image>=0.16.2
+numpy>=1.18.0
+pymunk>=5.6.0
+gym[box2d]>=0.17.2
+python-chess
+rlcard >= 0.2.1
+pynput
+opencv-python
+box2d-py
+python-shogi
+hanabi_learning_environment==0.0.1
+multi_agent_ale_py==0.1.8
+magent==0.1.12
