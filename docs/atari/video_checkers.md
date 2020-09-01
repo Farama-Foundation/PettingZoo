@@ -22,7 +22,7 @@ Capture all of your opponents pieces by jumping over them. To move a piece, you 
 
 If you win by capturing all your opponent's pieces, you are rewarded +1 and your opponent -1.
 
-This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets.
+This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets. This prevents one player from indefinitely stalling the game.
 
 [Official video checkers manual](https://atariage.com/manual_html_page.php?SoftwareID=1427)
 
