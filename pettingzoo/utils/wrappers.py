@@ -77,7 +77,7 @@ class AgentIterWrapper(BaseWrapper):
 
     def reset(self, observe=True):
         self._has_updated = True
-        self._final_rewards = {agent:0 for agent in self.agents}
+        self._final_rewards = {agent: 0 for agent in self.agents}
         self.old_observation = None
         obs = super().reset(observe)
         self._was_dones = {agent: done for agent, done in self.dones.items()}
