@@ -54,10 +54,9 @@ class to_parallel(ParallelEnv):
         infos = {}
 
         for agent in self.agents:
-            if not self._was_dones[agent]:
+            if not self.aec_env.dones[agent]:
                 assert agent == self.aec_env.agent_selection, f"environment has a nontrivial ordering, and cannot be used with the to_parallel wrapper\nCurrent agent: {self.aec_env.agent_selection}\nExpected agent: {agent}"
                 assert agent in actions, "Live environment agent is not in actions dictionary"
-                self._was_dones[agent] = self.aec_env.dones[agent]
                 self.aec_env.step(actions[agent], observe=False)
                 agent = self.aec_env.agent_selection
 
