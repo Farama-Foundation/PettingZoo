@@ -20,15 +20,6 @@ Uno is shedding game involving 2 players. At the beginning, each player receives
 Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 
-### Environment arguments
-
-```
-uno.env(seed=None)
-```
-
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
-
-
 #### Observation Space
 
 The observation space has a shape of (7, 4, 15). The first index represent the plane, the second index the color, and the last index the card number (including any special card).

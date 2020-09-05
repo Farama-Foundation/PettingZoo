@@ -255,7 +255,7 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, seed=None, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
                  forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
         # reward_mech is 'global' for cooperative game (same reward for every agent)
         """
@@ -278,8 +278,8 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
-        self.seed_val = seed
-        self.seed(seed=seed)
+        self.seed_val = None
+        self.seed()
         self.setup()
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
@@ -334,6 +334,9 @@ class MultiWalkerEnv():
 
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
+        self.seed_val = seed_
+        for walker in getattr(self, "walkers", []):
+            walker._seed(seed_)
         return [seed_]
 
     def _destroy(self):

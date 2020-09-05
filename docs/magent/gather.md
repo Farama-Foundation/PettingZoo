@@ -35,10 +35,10 @@ Map size: 200x200
 ### Arguments
 
 ```
-gather_v0.env(seed=None, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
+gather_v0.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
 
 `step_reward`:  reward added unconditionally
 

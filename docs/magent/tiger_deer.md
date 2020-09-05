@@ -37,10 +37,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-tiger_deer_v0.env(seed=None, max_frames=500)
+tiger_deer_v0.env(max_frames=500)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
 
 `max_frames`:  number of frames (a step for each agent) until game terminates
 
