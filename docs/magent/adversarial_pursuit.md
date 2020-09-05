@@ -37,12 +37,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-adversarial_pursuit_v0.env(seed=None, attack_penalty=-0.2, max_frames=500)
+adversarial_pursuit_v0.env(attack_penalty=-0.2, max_frames=500)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
 
 `attack_penalty`:  Adds the following value to the reward whenever an attacking action is taken
 
 `max_frames`:  number of frames (a step for each agent) until game terminates
-

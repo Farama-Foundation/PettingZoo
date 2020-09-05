@@ -46,8 +46,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        EzPickle.__init__(self, seed, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
+    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
+        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self._agent_selector = agent_selector(self.agents)
@@ -61,7 +61,6 @@ class raw_env(AECEnv, EzPickle):
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
         self.clock = pygame.time.Clock()
-        self.np_random, seed = seeding.np_random(seed)
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
@@ -93,6 +92,7 @@ class raw_env(AECEnv, EzPickle):
         self.velocity = 4
         self.resolution = 16
 
+        self.seed(0)
         for i in range(20):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
             piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
@@ -120,6 +120,9 @@ class raw_env(AECEnv, EzPickle):
         self.num_agents = len(self.agents)
         self.has_reset = False
         self.closed = False
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)

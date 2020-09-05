@@ -10,6 +10,11 @@ class ParallelEnv:
         observations a dictionary {"agent_1":obs_1, ..., "agent_n": obs_n}
         '''
 
+    def seed(self, seed=None):
+        '''
+        Seeds the environment. Reset must be the first thing called after seed
+        '''
+
     def step(self, actions):
         '''
         parameters:
@@ -41,6 +46,9 @@ class to_parallel(ParallelEnv):
         self.agents = aec_env.agents
         self.num_agents = aec_env.num_agents
         self._was_dones = {agent: False for agent in self.agents}
+
+    def seed(self, seed=None):
+        return self.aec_env.seed(seed)
 
     def reset(self):
         self.aec_env.reset(observe=False)
@@ -88,6 +96,9 @@ class Sequentialize:
         self.observation_spaces = [par_env.observation_spaces[agent] for agent in self.agents]
         self.action_spaces = [par_env.action_spaces[agent] for agent in self.agents]
         self.par_env = par_env
+
+    def seed(self, seed=None):
+        return self.par_env.seed(seed)
 
     def _sequentialize(self, d):
         return [d.get(agent, None) for agent in self.agents]

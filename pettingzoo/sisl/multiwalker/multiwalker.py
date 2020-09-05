@@ -22,9 +22,9 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, *args, **kwargs):
-        EzPickle.__init__(self, seed, *args, **kwargs)
-        self.env = _env(seed, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        EzPickle.__init__(self, *args, **kwargs)
+        self.env = _env(*args, **kwargs)
 
         self.num_agents = self.env.num_agents
         self.agents = ["walker_" + str(r) for r in range(self.num_agents)]
@@ -39,6 +39,9 @@ class raw_env(AECEnv, EzPickle):
         self.observations = self.env.get_last_obs()
 
         self.has_reset = False
+
+    def seed(self, seed=None):
+        self.env.seed(seed)
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))

@@ -28,10 +28,10 @@ Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_push.env(seed=None, max_frames=100)
+simple_push.env(max_frames=100)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 `max_frames`:  number of frames (a step for each agent) until game terminates
 

@@ -37,6 +37,9 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
+    def seed(self, seed=None):
+        self.env.seed(seed)
+
     def close(self):
         self.env.close()
 
@@ -285,6 +288,10 @@ class OrderEnforcingWrapper(AgentIterWrapper):
             raise AttributeError("{} cannot be accessed before reset".format(value))
         else:
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
+
+    def seed(self, seed=None):
+        self._has_reset = False
+        super().seed(seed)
 
     def render(self, mode='human'):
         if not self._has_reset:

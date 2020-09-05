@@ -59,10 +59,6 @@ class ParallelAtariEnv(EzPickle):
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
 
-        # if seed is None:
-        #     seed = seeding.create_seed(seed, max_bytes=4)
-
-        #self.ale.setInt(b"random_seed", seed)
         self.ale.setFloat(b'repeat_action_probability', 0.)
 
         pathstart = os.path.dirname(multi_agent_ale_py.__file__)

@@ -39,10 +39,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-combined_arms_v0.env(seed=None, step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2, max_frames=1000)
+combined_arms_v0.env(step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2, max_frames=1000)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
 
 `step_reward`:  reward added unconditionally
 
