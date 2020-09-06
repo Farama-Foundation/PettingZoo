@@ -374,10 +374,11 @@ class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, **kwargs):
-        EzPickle.__init__(self, seed, **kwargs)
-        self.randomizer, seed = seeding.np_random(seed)
-        self.env = CooperativePong(self.randomizer, **kwargs)
+    def __init__(self, **kwargs):
+        EzPickle.__init__(self, **kwargs)
+        self._kwargs = kwargs
+
+        self.seed()
 
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
@@ -397,6 +398,9 @@ class raw_env(AECEnv, EzPickle):
 
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
+    def seed(self, seed=None):
+        self.randomizer, seed = seeding.np_random(seed)
+        self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(self, observe=True):
         self.env.reset()

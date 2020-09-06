@@ -18,7 +18,7 @@ from .utils import two_d_maps
 
 class Pursuit():
 
-    def __init__(self, seed=0, **kwargs):
+    def __init__(self, **kwargs):
         """
         In evade purusit a set of pursuers must 'tag' a set of evaders
         Required arguments:
@@ -55,7 +55,7 @@ class Pursuit():
         ys = self.ys
         self.map_matrix = two_d_maps.rectangle_map(self.xs, self.ys)
         self.max_frames = kwargs.pop("max_frames", 500)
-        self.seed(seed)
+        self.seed()
 
         self._reward_mech = kwargs.pop('reward_mech', 'local')
 
@@ -168,6 +168,16 @@ class Pursuit():
 
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
+        try:
+            policies = [self.evader_controller, self.pursuer_controller]
+            for policy in policies:
+                try:
+                    policy.set_rng(self.np_random)
+                except AttributeError:
+                    pass
+        except AttributeError:
+            pass
+
         return [seed_]
 
     def get_param_values(self):

@@ -19,14 +19,6 @@ Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. A
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-### Environment arguments
-
-```
-texas_holdem_no_limit.env(seed=None)
-```
-
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
-
 
 #### Observation Space
 

@@ -34,10 +34,10 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 ### Arguments
 
 ```
-simple_tag.env(seed=None, num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=100)
+simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=100)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 `num_good`:  number of good agents
 

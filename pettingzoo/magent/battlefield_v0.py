@@ -13,9 +13,9 @@ from .battle_v0 import get_config
 from gym.utils import EzPickle
 
 
-def raw_env(seed=None, max_frames=1000, **reward_args):
+def raw_env(max_frames=1000, **reward_args):
     map_size = 80
-    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames, seed))
+    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames))
 
 
 env = make_env(raw_env)
@@ -23,13 +23,13 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, reward_args, max_frames, seed):
-        EzPickle.__init__(self, map_size, reward_args, max_frames, seed)
+    def __init__(self, map_size, reward_args, max_frames):
+        EzPickle.__init__(self, map_size, reward_args, max_frames)
         env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         names = ["red", "blue"]
-        super().__init__(env, env.get_handles(), names, map_size, max_frames, seed)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames)
 
     def generate_map(self):
         env, map_size, handles = self.env, self.map_size, self.handles

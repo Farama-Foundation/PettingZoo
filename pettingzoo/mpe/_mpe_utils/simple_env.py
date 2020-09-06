@@ -21,10 +21,10 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, scenario, world, max_frames, seed, local_ratio=None):
+    def __init__(self, scenario, world, max_frames, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
-        self.np_random, seed = seeding.np_random(seed)
+        self.seed()
 
         self.max_frames = max_frames
         self.scenario = scenario
@@ -58,6 +58,9 @@ class SimpleEnv(AECEnv):
         self.current_actions = [None] * self.num_agents
 
         self.viewer = None
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)

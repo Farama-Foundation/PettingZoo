@@ -25,9 +25,9 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, *args, **kwargs):
-        EzPickle.__init__(self, seed, *args, **kwargs)
-        self.env = _env(*args, seed, **kwargs)
+    def __init__(self, *args, **kwargs):
+        EzPickle.__init__(self, *args, **kwargs)
+        self.env = _env(*args, **kwargs)
         pygame.init()
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
@@ -42,6 +42,9 @@ class raw_env(AECEnv, EzPickle):
         self.steps = 0
         self.display_wait = 0.0
         self.closed = False
+
+    def seed(self, seed=None):
+        self.env.seed(seed)
 
     def reset(self, observe=True):
         self.has_reset = True
