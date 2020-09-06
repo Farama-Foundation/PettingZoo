@@ -100,7 +100,7 @@ The game lasts for 900 frames by default.
 ```
 prospector_v1.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
 prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
-banker_deposit_gold_reward=1, max_frames=900, seed=None)
+banker_deposit_gold_reward=1, max_frames=900)
 ```
 
 `ind_reward`: The reward multiplier for a single agent completing an objective.
@@ -127,7 +127,3 @@ gold from a prospector.
 gold into a bank.
 
 `max_frames`: The number of frames the game should run for.
-
-`seed`: Non-negative integer or None, sets the seed for the random
-number generator. This generator is used to determine
-agent starting locations.

@@ -32,10 +32,14 @@ cooperative_pong.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
 
-```
-ball_speed: Speed of ball (in pixels)
-left_paddle_speed: Speed of left paddle (in pixels)
-right_paddle_speed: Speed of right paddle (in pixels)
-cake_paddle: If True, the right paddle cakes the shape of a 4 tiered wedding cake
-max_frames: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
-bounce_randomness: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
+`ball_speed`: Speed of ball (in pixels)
+
+`left_paddle_speed`: Speed of left paddle (in pixels)
+
+`right_paddle_speed`: Speed of right paddle (in pixels)
+
+`cake_paddle`: If True, the right paddle cakes the shape of a 4 tiered wedding cake
+
+`max_frames`: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
+
+`bounce_randomness`: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.

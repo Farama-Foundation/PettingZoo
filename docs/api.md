@@ -67,6 +67,8 @@ PettingZoo models games as AEC games, and thus can support any game multi-agent 
 
 `observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
 
+`seed(seed=None)`: Reseeds the environment. Reset must be called after seed, before stepping.
+
 `render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes.
 
 `close()`: Closes the rendering window.
@@ -107,6 +109,8 @@ for step in range(max_frames):
 ### Full API
 
 `agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
+
+`render(mode='human')`, `seed(seed=None)`, `close()` are methods as described above in the main API description.
 
 `step(actions)`: receives a dictionary of actions keyed by the agent name. Returns observations dictionary, reward dictionary, done dictionary, info dictionary, where each dictionary is keyed by the agent.
 

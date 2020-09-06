@@ -59,10 +59,6 @@ class ParallelAtariEnv(EzPickle):
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
 
-        if seed is None:
-            seed = seeding.create_seed(seed, max_bytes=4)
-
-        self.ale.setInt(b"random_seed", seed)
         self.ale.setFloat(b'repeat_action_probability', 0.)
 
         pathstart = os.path.dirname(multi_agent_ale_py.__file__)
@@ -70,7 +66,8 @@ class ParallelAtariEnv(EzPickle):
         if not os.path.exists(final_path):
             raise IOError("rom {} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM)".format(game))
 
-        self.ale.loadROM(final_path)
+        self.rom_path = final_path
+        self.ale.loadROM(self.rom_path)
 
         all_modes = self.ale.getAvailableModes(num_players)
 
@@ -80,7 +77,8 @@ class ParallelAtariEnv(EzPickle):
             mode = mode_num
             assert mode in all_modes, "mode_num parameter is wrong. Mode {} selected, only {} modes are supported".format(mode_num, str(list(all_modes)))
 
-        self.ale.setMode(mode)
+        self.mode = mode
+        self.ale.setMode(self.mode)
         assert num_players == self.ale.numPlayersActive()
 
         if full_action_space:
@@ -110,6 +108,14 @@ class ParallelAtariEnv(EzPickle):
         self.observation_spaces = [observation_space] * self.num_agents
 
         self._screen = None
+        self.seed(seed)
+
+    def seed(self, seed=None):
+        if seed is None:
+            seed = seeding.create_seed(seed, max_bytes=4)
+        self.ale.setInt(b"random_seed", seed)
+        self.ale.loadROM(self.rom_path)
+        self.ale.setMode(self.mode)
 
     def reset(self):
         self.ale.reset_game()

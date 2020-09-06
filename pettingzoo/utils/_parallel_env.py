@@ -55,6 +55,9 @@ class _parallel_env_wrapper(AECEnv):
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, self.env.observation_spaces)}
         self._agent_mapper = {agent: i for i, agent in enumerate(self.agents)}
 
+    def seed(self, seed=None):
+        self.env.seed(seed)
+
     def reset(self, observe=True):
         self._actions = [None] * self.num_agents
 

@@ -10,9 +10,10 @@ class RLCardBase(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, name, num_players, obs_shape, seed):
+    def __init__(self, name, num_players, obs_shape):
         super().__init__()
-        self.env = rlcard.make(name, config={"seed": seed})
+        self.name = name
+        self.env = rlcard.make(name)
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
         self.num_agents = len(self.agents)
@@ -27,6 +28,9 @@ class RLCardBase(AECEnv):
 
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0.0, high=1.0, shape=obs_shape, dtype=self._dtype) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
+
+    def seed(self, seed=None):
+        self.env = rlcard.make(self.name, config={"seed": seed})
 
     def _scale_rewards(self, reward):
         return reward

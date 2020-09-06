@@ -71,7 +71,7 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, seed=0, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
+    def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
@@ -121,7 +121,7 @@ class MAWaterWorld():
         self._reward_mech = reward_mech
         self._speed_features = speed_features
         self.max_frames = max_frames
-        self.seed(seed)
+        self.seed()
         self._pursuers = [
             Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu],
                    speed_features=self._speed_features) for npu in range(self.n_pursuers)

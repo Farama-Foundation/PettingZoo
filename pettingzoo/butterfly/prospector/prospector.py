@@ -451,7 +451,6 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
     def __init__(
         self,
-        seed=None,
         ind_reward=0.8,
         group_reward=0.1,
         other_group_reward=0.1,
@@ -463,7 +462,6 @@ class raw_env(AECEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            seed,
             ind_reward,
             group_reward,
             other_group_reward,
@@ -490,7 +488,7 @@ class raw_env(AECEnv, EzPickle):
         self.max_frames = max_frames
 
         pg.init()
-        self.rng, seed = seeding.np_random(seed)
+        self.seed()
         self.clock = pg.time.Clock()
         self.closed = False
 
@@ -707,6 +705,9 @@ class raw_env(AECEnv, EzPickle):
         )
 
         prospec_gold_collision.begin = prospec_gold_handler
+
+    def seed(self, seed=None):
+        self.rng, seed = seeding.np_random(seed)
 
     def observe(self, agent):
         capture = pg.surfarray.pixels3d(self.screen)
