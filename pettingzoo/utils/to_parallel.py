@@ -1,41 +1,7 @@
 from pettingzoo.utils.env import AECEnv
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
-
-
-class ParallelEnv:
-    def reset(self):
-        '''
-        returns:
-        observations a dictionary {"agent_1":obs_1, ..., "agent_n": obs_n}
-        '''
-
-    def seed(self, seed=None):
-        '''
-        Seeds the environment. Reset must be the first thing called after seed
-        '''
-
-    def step(self, actions):
-        '''
-        parameters:
-        - actions: {"agent_1": action1, ..., "agent_n": action_n}
-
-        returns:
-        (observations, rewards, dones, infos)
-
-        steps all active agents in the environment, returns all observations, rewards, infos of those active agentts
-        which are all dictionaries
-        '''
-
-    def render(self, mode="human"):
-        '''
-        renders environment by printing text or through a window
-        '''
-
-    def close(self):
-        '''
-        releases resources (typically just closes the rendering window)
-        '''
+from pettingzoo.utils.env import ParallelEnv
 
 
 class to_parallel(ParallelEnv):
