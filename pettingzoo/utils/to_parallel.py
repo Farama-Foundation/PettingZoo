@@ -61,13 +61,13 @@ class to_parallel(ParallelEnv):
         dones = {}
         infos = {}
 
-        for agent in self.agents:
-            if not self._was_dones[agent]:
-                assert agent == self.aec_env.agent_selection, f"environment has a nontrivial ordering, and cannot be used with the to_parallel wrapper\nCurrent agent: {self.aec_env.agent_selection}\nExpected agent: {agent}"
-                assert agent in actions, "Live environment agent is not in actions dictionary"
-                self._was_dones[agent] = self.aec_env.dones[agent]
-                self.aec_env.step(actions[agent], observe=False)
-                agent = self.aec_env.agent_selection
+        stepped_agents = set()
+        while self.aec_env.agent_selection not in stepped_agents:
+            agent = self.aec_env.agent_selection
+            assert agent in actions, "Live environment agent is not in actions dictionary"
+            self.aec_env.step(actions[agent], observe=False)
+            stepped_agents.add(agent)
+        assert all(agent in stepped_agents or self.aec_env.dones[agent] for agent in stepped_agents), "environment must step each live agent exactly once per cycle"
 
         rewards = self.aec_env.rewards
         dones = self.aec_env.dones
