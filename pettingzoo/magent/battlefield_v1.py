@@ -9,7 +9,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from pettingzoo.utils.to_parallel import parallel_wrapper_fn
-from .battle_v0 import get_config
+from .battle_v1 import get_config
 from gym.utils import EzPickle
 
 

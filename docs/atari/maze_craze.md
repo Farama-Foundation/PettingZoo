@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(250, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import maze_craze_blockade_v0"
+import: "from pettingzoo.atari import maze_craze_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
