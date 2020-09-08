@@ -8,6 +8,7 @@ from gym import spaces
 import numpy as np
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.env import ParallelEnv
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -24,7 +25,7 @@ def BaseAtariEnv(**kwargs):
     return _parallel_env_wrapper(ParallelAtariEnv(**kwargs))
 
 
-class ParallelAtariEnv(EzPickle):
+class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
@@ -104,8 +105,8 @@ class ParallelAtariEnv(EzPickle):
         player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
 
-        self.action_spaces = [gym.spaces.Discrete(action_size)] * self.num_agents
-        self.observation_spaces = [observation_space] * self.num_agents
+        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
+        self.observation_spaces = {agent: observation_space for agent in self.agents}
 
         self._screen = None
         self.seed(seed)
@@ -121,7 +122,8 @@ class ParallelAtariEnv(EzPickle):
         self.ale.reset_game()
         self.frame = 0
 
-        return [self._observe()] * self.num_agents
+        obs = self._observe()
+        return {agent: obs for agent in self.agents}
 
     def _observe(self):
         if self.obs_type == 'ram':
@@ -132,20 +134,25 @@ class ParallelAtariEnv(EzPickle):
         elif self.obs_type == 'grayscale_image':
             return self.ale.getScreenGrayscale()
 
-    def step(self, actions):
-        actions = np.asarray(actions)
+    def step(self, action_dict):
+        actions = np.zeros(self.num_agents,dtype=np.int32)
+        for i, agent in enumerate(self.agents):
+            actions[i] = action_dict[agent]
+
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
         if self.ale.game_over() or self.frame >= self.max_frames:
-            dones = [True] * self.num_agents
+            dones = {agent: True for agent in self.agents}
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
-            dones = [int(life) < 0 for life in lives]
+            dones = {agent: int(life) < 0 for agent, life in zip(self.agents, lives)}
 
         self.frame += 1
-        observations = [self._observe()] * self.num_agents
-        infos = [{}] * self.num_agents
+        obs = self._observe()
+        observations = {agent: obs for agent in self.agents}
+        rewards = {agent: rew for agent, rew in zip(self.agents, rewards)}
+        infos = {agent: {} for agent in self.agents}
         return observations, rewards, dones, infos
 
     def render(self):
