@@ -135,7 +135,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             return self.ale.getScreenGrayscale()
 
     def step(self, action_dict):
-        actions = np.zeros(self.num_agents,dtype=np.int32)
+        actions = np.zeros(self.num_agents, dtype=np.int32)
         for i, agent in enumerate(self.agents):
             actions[i] = action_dict[agent]
 
