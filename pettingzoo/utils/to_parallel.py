@@ -56,45 +56,10 @@ def parallel_wrapper_fn(env_fn):
     return par_fn
 
 
-class Sequentialize:
-    def __init__(self, par_env):
-        self.agents = par_env.agents
-        self.observation_spaces = [par_env.observation_spaces[agent] for agent in self.agents]
-        self.action_spaces = [par_env.action_spaces[agent] for agent in self.agents]
-        self.par_env = par_env
-
-    def seed(self, seed=None):
-        return self.par_env.seed(seed)
-
-    def _sequentialize(self, d):
-        return [d.get(agent, None) for agent in self.agents]
-
-    def reset(self):
-        obs_dict = self.par_env.reset()
-
-        return self._sequentialize(obs_dict)
-
-    def step(self, actions):
-        act_list = {agent: actions[i] for i, agent in enumerate(self.agents) if actions[i] is not None}
-        obs, rew, done, info = self.par_env.step(act_list)
-        obs = self._sequentialize(obs)
-        rew = self._sequentialize(rew)
-        done = self._sequentialize(done)
-        info = self._sequentialize(info)
-        return obs, rew, done, info
-
-    def render(self, mode="human"):
-        return self.par_env.render(mode)
-
-    def close(self):
-        self.par_env.close()
-
-
 def from_parallel(par_env):
     if isinstance(par_env, to_parallel):
         return par_env.aec_env
     else:
-        sequ_env = Sequentialize(par_env)
-        aec_env = _parallel_env_wrapper(sequ_env)
+        aec_env = _parallel_env_wrapper(par_env)
         ordered_env = OrderEnforcingWrapper(aec_env)
         return ordered_env
