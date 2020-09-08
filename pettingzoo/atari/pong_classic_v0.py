@@ -16,7 +16,7 @@ avaliable_4p_versions = {
     "soccer": 16,
     "foozpong": 21,
     "hockey": 29,
-    "quadrapong": 32,
+    "quadrapong": 33,
     "handball": 37,
     "volleyball": 41,
     "basketball": 49,

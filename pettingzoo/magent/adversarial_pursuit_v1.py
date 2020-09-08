@@ -12,13 +12,19 @@ from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from gym.utils import EzPickle
 
 
-def raw_env(max_frames=500, **reward_args):
-    map_size = 45
+map_size = 45
+max_frames_default = 500
+
+
+def parallel_env(max_frames=max_frames_default, **reward_args):
+    return _parallel_env(map_size, reward_args, max_frames)
+
+
+def raw_env(max_frames=max_frames_default, **reward_args):
     return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames))
 
 
 env = make_env(raw_env)
-parallel_env = parallel_wrapper_fn(env)
 
 
 def get_config(map_size, attack_penalty=-0.2):

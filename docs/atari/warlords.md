@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import warlords_v0"
+import: "from pettingzoo.atari import warlords_v1"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
