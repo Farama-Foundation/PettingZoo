@@ -35,7 +35,7 @@ class magent_parallel_env(ParallelEnv):
         self.num_agents = sum(team_sizes)
 
         num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
-        action_spaces_list= [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        action_spaces_list = [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
