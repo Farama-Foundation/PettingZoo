@@ -7,7 +7,7 @@ action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
 observation-shape: "(9,9,15), (10,10,19)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import adversarial_pursuit_v0"
+import: "pettingzoo.magent import adversarial_pursuit_v1"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
@@ -37,7 +37,7 @@ Map size: 45x45
 ### Arguments
 
 ```
-adversarial_pursuit_v0.env(attack_penalty=-0.2, max_frames=500)
+adversarial_pursuit_v1.env(attack_penalty=-0.2, max_frames=500)
 ```
 
 
