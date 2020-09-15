@@ -30,14 +30,14 @@ parameterized_envs = [
 
     (space_invaders_v0.env, dict(alternating_control=True,moving_shields=True,zigzaging_bombs=True,fast_bomb=True,invisible_invaders=True)),
 
-    (knights_archers_zombies_v1.env, dict(spawn_rate=50)),
-    (knights_archers_zombies_v1.env, dict(num_knights=4,num_archers=5)),
-    (knights_archers_zombies_v1.env, dict(killable_knights=True, killable_archers=True)),
-    (knights_archers_zombies_v1.env, dict(killable_knights=False, killable_archers=False)),
-    (knights_archers_zombies_v1.env, dict(black_death=False)),
-    (knights_archers_zombies_v1.env, dict(line_death=False)),
-    (knights_archers_zombies_v1.env, dict(pad_observation=False)),
-    (knights_archers_zombies_v1.env, dict(max_frames=100)),
+    (knights_archers_zombies_v2.env, dict(spawn_rate=50)),
+    (knights_archers_zombies_v2.env, dict(num_knights=4,num_archers=5)),
+    (knights_archers_zombies_v2.env, dict(killable_knights=True, killable_archers=True)),
+    (knights_archers_zombies_v2.env, dict(killable_knights=False, killable_archers=False)),
+    (knights_archers_zombies_v2.env, dict(black_death=False)),
+    (knights_archers_zombies_v2.env, dict(line_death=False)),
+    (knights_archers_zombies_v2.env, dict(pad_observation=False)),
+    (knights_archers_zombies_v2.env, dict(max_frames=100)),
 
     (pistonball_v0.env, dict(local_ratio=0.7)),
     (pistonball_v0.env, dict(continuous=True)),

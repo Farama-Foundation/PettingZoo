@@ -433,7 +433,7 @@ class raw_env(AECEnv, EzPickle):
         # select next agent and observe
         self.agent_selection = self._agent_selector.next()
         self.rewards = self.env.rewards
-        self.dones[agent] = self.env.dones[agent]
+        self.dones = self.env.dones
         self.infos = self.env.infos
 
         self.score = self.env.score
