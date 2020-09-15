@@ -85,10 +85,10 @@ parameterized_envs = [
     (simple_world_comm_v0.env, dict(num_good=5,num_adversaries=10,num_obstacles=4,num_food=3)),
     (simple_world_comm_v0.env, dict(num_good=1,num_adversaries=1,num_obstacles=1,num_food=1)),
 
-    (multiwalker_v1.env, dict(n_walkers=10)),
-    (multiwalker_v1.env, dict(reward_mech="global")),
-    (multiwalker_v1.env, dict(terminate_on_fall=True)),
-    (multiwalker_v1.env, dict(terminate_on_fall=False)),
+    (multiwalker_v2.env, dict(n_walkers=10)),
+    (multiwalker_v2.env, dict(reward_mech="global")),
+    (multiwalker_v2.env, dict(terminate_on_fall=True)),
+    (multiwalker_v2.env, dict(terminate_on_fall=False)),
 
     (pursuit_v0.env, dict(xs=8,ys=19)),
     (pursuit_v0.env, dict(reward_mech="local")),
