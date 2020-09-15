@@ -378,7 +378,7 @@ class raw_env(AECEnv, EzPickle):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            cropped = np.zeros((512, 512, 3),dtype=np.uint8)
+            cropped = np.zeros((512, 512, 3), dtype=np.uint8)
         else:
             min_x = agent_position[0] - 256
             max_x = agent_position[0] + 256
