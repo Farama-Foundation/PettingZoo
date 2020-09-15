@@ -52,5 +52,5 @@ setup(
         "numpy>=1.18.0",
         "gym>=0.17.2"
     ],
-    extras_requires=extras,
+    extras_require=extras,
 )
