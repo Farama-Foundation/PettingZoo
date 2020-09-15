@@ -378,7 +378,7 @@ class raw_env(AECEnv, EzPickle):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            cropped = np.zeros((512, 512, 3))
+            cropped = np.zeros((512, 512, 3),dtype=np.uint8)
         else:
             min_x = agent_position[0] - 256
             max_x = agent_position[0] + 256
@@ -483,15 +483,16 @@ class raw_env(AECEnv, EzPickle):
             self.frames += 1
 
         self.rewards[agent] = agent_name.score
-        self.dones[agent] = not self.run or self.frames >= self.max_frames
+        done = not self.run or self.frames >= self.max_frames
+        self.dones = {agent: done for agent in self.agents}
 
         if self._agent_selector.is_last() and not self.black_death:
             # self.agents must be recreated
             for k in self.kill_list:
                 self.agents.remove(k)
-                self.dones.pop(k, None)
-                self.rewards.pop(k, None)
-                self.infos.pop(k, None)
+                # self.dones.pop(k, None)
+                # self.rewards.pop(k, None)
+                # self.infos.pop(k, None)
 
             self._agent_selector.reinit(self.agents)
             self.num_agents = len(self.agents)
