@@ -126,6 +126,7 @@ class Pursuit():
         self.clock = pygame.time.Clock()
         self.frames = 0
         self.reset()
+        assert not kwargs, f"gave arguments {list(kwargs.keys())} that are not valid pursuit arguments"
 
     def close(self):
         if self.renderOn:

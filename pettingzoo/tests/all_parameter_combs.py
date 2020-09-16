@@ -90,15 +90,12 @@ parameterized_envs = [
     (multiwalker_v2.env, dict(terminate_on_fall=True)),
     (multiwalker_v2.env, dict(terminate_on_fall=False)),
 
-    (pursuit_v1.env, dict(xs=8,ys=19)),
+    (pursuit_v1.env, dict(x_size=8,y_size=19)),
     (pursuit_v1.env, dict(local_ratio=0.5)),
     (pursuit_v1.env, dict(n_evaders=5,n_pursuers=16)),
     (pursuit_v1.env, dict(obs_range=15)),
     (pursuit_v1.env, dict(n_catch=3)),
-    (pursuit_v1.env, dict(random_opponents=True)),
-    (pursuit_v1.env, dict(random_opponents=True, max_opponents=15)),
     (pursuit_v1.env, dict(freeze_evaders=True)),
-    (pursuit_v1.env, dict(train_pursuit=True)),
     # what is up with the ally_layer and opponent_layer parameters?
 
     (waterworld_v1.env, dict(n_pursuers=3,n_evaders=6)),
