@@ -23,7 +23,7 @@ class Pursuit():
         In evade purusit a set of pursuers must 'tag' a set of evaders
         Required arguments:
             xs, ys: World size
-            reward_mech: local or global reward mechanism
+            local_ratio: proportion of reward allocated locally vs distributed among all agents
             n_evaders
             n_pursuers
             obs_range: how far each agent can see
@@ -50,7 +50,7 @@ class Pursuit():
         self.max_frames = kwargs.pop("max_frames", 500)
         self.seed()
 
-        self._reward_mech = kwargs.pop('reward_mech', 'local')
+        self.local_ratio = kwargs.pop('local_ratio', 1.0)
 
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
@@ -141,10 +141,6 @@ class Pursuit():
     def agents(self):
         return self.pursuers
 
-    @property
-    def reward_mech(self):
-        return self._reward_mech
-
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
         try:
@@ -218,10 +214,10 @@ class Pursuit():
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
-        if self.reward_mech == 'global' and is_last:
-            meanVal = self.latest_reward_state.mean()
-            self.latest_reward_state = [
-                meanVal for _ in range(len(self.latest_reward_state))]
+        if is_last:
+            global_val = self.latest_reward_state.mean()
+            local_val = self.latest_reward_state
+            self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
 
         if self.renderOn:
             self.clock.tick(15)
