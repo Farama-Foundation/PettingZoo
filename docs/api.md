@@ -4,14 +4,14 @@
 
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
-```
+```python
 from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
-```
+```python
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
 ```
@@ -20,7 +20,7 @@ right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=Fa
 
 Environments can be interacted with using a similar interface to Gym:
 
-```
+```python
 observation = env.reset()
 for agent in env.agent_iter():
     reward, done, info = env.last()
@@ -85,7 +85,7 @@ All environments end in a suffix like "\_v0".  When changes are made to environm
 
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
-```
+```python
 env = prospector_v1.raw_env(<environment parameters>)
 ```
 
@@ -97,7 +97,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 
 Environments can be interacted with as follows:
 
-```
+```python
 parallel_env = pistonball_v0.parallel_env()
 observations = parallel_env.reset()
 max_frames = 500
@@ -124,7 +124,7 @@ for step in range(max_frames):
 
 ### API Test
 
-```
+```python
 import pettingzoo.tests.api_test as api_test
 api_test.api_test(env, render=False, verbose_progress=False)
 ```
@@ -133,7 +133,7 @@ This tests the environment for API compliance. If the environment has a custom `
 
 ### Bombardment Test
 
-```
+```python
 import pettingzoo.tests.bombardment_test as bombardment_test
 bombardment_test.bombardment_test(env, cycles=10000)
 ```
@@ -142,7 +142,7 @@ This randomly plays through the environment `cycles` times, to test for stabilit
 
 ### Performance Benchmark
 
-```
+```python
 import pettingzoo.tests.performance_benchmark as performance_benchmark
 performance_benchmark.performance_benchmark(env)
 ```
@@ -151,7 +151,7 @@ This randomly steps through the environment for 60 seconds to benchmark its perf
 
 ### Manual Control Test
 
-```
+```python
 import pettingzoo.tests.manual_control_test as manual_control_test
 manual_control_test.test_manual_control(env.manual_control)
 ```
@@ -162,7 +162,7 @@ If the environment has `manual_control` functionality included (explained below)
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
-```
+```python
 from pettingzoo.butterfly import prison_v1
 prison_v1.manual_control(<environment parameters>)
 ```
@@ -173,7 +173,7 @@ Environments say if they support this functionality in their documentation, and 
 
 For all renderable games, including those that can't be played by humans, you can easily get a quick impression of them by watching a random policy control all the actions:
 
-```
+```python
 from pettingzoo.utils import random_demo
 random_demo(env)
 ```
@@ -182,12 +182,11 @@ random_demo(env)
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to.
 
-```
+```python
 from pettingzoo.utils import save_observation
 save_observation(env, agent=agent, all_agents=False, save_dir=os.getcwd())
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
 save_observation(env, agent=None, all_agents=True, save_dir=os.getcwd())
-
 ```
 
 The first function will save the current observation for the specified agent. The second function will save the current observation based on the currently selected agent. The last function will save the current observations of all agents in the environment.
