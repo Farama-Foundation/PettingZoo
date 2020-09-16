@@ -109,3 +109,6 @@ jobs:
     - name: "Print tests"
       script:
         - python3 -m pettingzoo.tests.print_test
+    - name: "source distribution test"
+        - python setup.py sdist
+        - pip install dist/*.tar.gz --user
