@@ -449,7 +449,7 @@ class MultiWalkerEnv():
             self.last_obs[agent_id] = mod_obs[agent_id]
             global_reward = rewards.mean()
             local_reward = rewards * self.local_ratio
-            self.last_rewards = global_reward * (1. - self.local_ratio)
+            self.last_rewards = global_reward * (1. - self.local_ratio) + local_reward * self.local_ratio
             self.last_dones = [done for _ in range(self.n_walkers)]
 
     def get_last_rewards(self):
