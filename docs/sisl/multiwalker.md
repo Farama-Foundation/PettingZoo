@@ -34,7 +34,7 @@ max_frames=500)
 
 `angle_noise`:  noise applied to agent rotational sensor observations
 
-`reward_mech`:  whether all agents are rewarded equal amounts or singular agent is rewarded
+`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
 `forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
 
