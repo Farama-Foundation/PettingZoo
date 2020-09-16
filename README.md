@@ -60,7 +60,7 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 Version 1.3.1 (September 16, 2020)
 
-Various fixes and parameter changes for sisl environments. Fixed dones in knights_archers_zombies and cooperative_pong. Fixed install extras.
+Various fixes and parameter changes for all SISL environments, bumped versions. Fixed dones computations in knights_archers_zombies and cooperative_pong, bumped versions. Fixed install extras.
 
 Version 1.3.0 (September 8, 2020):
 
