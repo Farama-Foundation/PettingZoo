@@ -28,13 +28,13 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ```
-pursuit.env(max_frames=500, xs=16, ys=16, reward_mech=1.0, n_evaders=30, n_pursuers=8,
-obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01, term_pursuit=5.0,
+pursuit.env(max_frames=500, x_size=16, y_size=16, reward_mech=1.0, n_evaders=30, n_pursuers=8,
+obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01, catch_reward=5.0,
 urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 ```
 
-`xs, ys`:  size of environment world space
+`x_size, y_size`: Size of environment world space
 
 `local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
@@ -42,7 +42,7 @@ urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 `n_pursuers`:  Number of pursuers
 
-`obs_range`:  Radius of agent observation view
+`obs_range`:  Size of the box around the agent that the agent observes.
 
 `n_catch`:  Number pursuers required around an evader to be considered caught
 
@@ -56,6 +56,6 @@ urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 `surround`:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
 
-`constraint_window`: Radius from center (in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means they can only spawn in the center.
+`constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
 
-`max_frames`:  after max_frames steps all agents will return done
+`max_frames`:  After max_frames steps all agents will return done
