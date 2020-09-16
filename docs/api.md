@@ -32,7 +32,7 @@ The commonly used methods are:
 
 `agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns the total reward the agent has received since it's last step and present, if the agent is done, anything in info associated with the selected agent. Note that a particular agent being done does not mean the environment is over!
+`last()` returns reward*, done, and info for the agent currently able to act. The reward returned is the agent has received since it last acted. Note that a single agent being done does not mean the environment is over.
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
@@ -83,7 +83,7 @@ We encourage calling the environment actor `'env'` in `env.agents`, and having i
 
 All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
-Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and reasonable behaviors with incorrect usage (such as playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
+Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the raw_env constructor contained within each module:
 
 ```
 env = prospector_v1.raw_env(<environment parameters>)
