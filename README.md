@@ -58,6 +58,10 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.3.1 (September 16, 2020)
+
+Various fixes and parameter changes for sisl environments. Fixed dones in knights_archers_zombies and cooperative_pong. Fixed install extras.
+
 Version 1.3.0 (September 8, 2020):
 
 Fixed how agent iter wrapper handles premature agent death. Bumped environments with death (joust, mario_bros, maze_craze, warlords, wizard_of_wor, knights_archers_zombies, battle, battlefield, combined_arms, gather, tiger_deer, multiwalker). Also switched MAgent to having a native parallel environment, making it much faster. We bumped adverserial pursuit as well due to this.
