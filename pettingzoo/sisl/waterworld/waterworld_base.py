@@ -535,9 +535,11 @@ class MAWaterWorld():
                 sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
             self.last_obs = obs_list
 
-            local_reward = reward + np.array(self.control_rewards)
+            local_reward = rewards + np.array(self.control_rewards)
             global_reward = local_reward.mean()
             self.last_rewards = local_reward * self.local_ratio + global_reward * (1 - self.local_ratio)
+
+            self.control_rewards = [0 for _ in range(self.n_pursuers)]
 
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
