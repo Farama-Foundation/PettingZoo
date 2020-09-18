@@ -120,7 +120,7 @@ class AgentIterWrapper(BaseWrapper):
 class AECIterable:
     def __init__(self, env, max_iter):
         self.env = env
-        self.max__iter = max_iter
+        self.max_iter = max_iter
 
     def __iter__(self):
         return AECOrderEnforcingIterator(self.env, self.max_agent_iter)
