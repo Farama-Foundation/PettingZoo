@@ -113,23 +113,23 @@ class AgentIterWrapper(BaseWrapper):
 
         return super().observe(self.agent_selection) if observe else None
 
-    def agent_iter(self, max_agent_iter=2**63):
-        return AECIterable(self, max_agent_iter)
+    def agent_iter(self, max_iter=2**63):
+        return AECIterable(self, max_iter)
 
 
 class AECIterable:
-    def __init__(self, env, max_agent_iter):
+    def __init__(self, env, max_iter):
         self.env = env
-        self.max_agent_iter = max_agent_iter
+        self.max__iter = max_iter
 
     def __iter__(self):
         return AECOrderEnforcingIterator(self.env, self.max_agent_iter)
 
 
 class AECIterator:
-    def __init__(self, env, max_agent_iter):
+    def __init__(self, env, max_iter):
         self.env = env
-        self.iters_til_term = max_agent_iter
+        self.iters_til_term = max_iter
         self.env._is_iterating = True
 
     def __next__(self):
