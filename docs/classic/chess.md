@@ -23,14 +23,18 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 
 Like AlphaZero, the observation space is an 8x8 image representing the board. It has 20 channels representing:
 
-* First 4 channels: Castling rights:
-* Next channel: Is black or white
-* Next channel: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
-* Next channel: all ones to help neural network find board edges in padded convolutions
-* Next 12 channels: Each piece type and player combination. So there is a specific channel that represents your knights. If your knight is in that location, that spot is a 1, otherwise, 0. En-passant possibilities are represented by the pawn being on first row instead of the 4th (from the player who moved the pawn's perspective)
-* Finally, a channel representing whether position has been seen before (is a 2-fold repetition)
+* Channels 0 - 3: Castling rights:
+  * Channel 0: All ones if white can castle queenside
+  * Channel 1: All ones if white can castle kingside
+  * Channel 2: All ones if black can castle queenside
+  * Channel 3: All ones if black can castle kingside
+* Channel 4: Is black or white
+* Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+* Channel 6: All ones to help neural networks find board edges in padded convolutions
+* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
+* Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
 
-Like AlphaZero, the board is always oriented towards the current agent (your king starts on the first row). So the two players are looking at mirror images of the board, not the same board.
+Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
 
 Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the `frame_stacking` argument of our wrapper.
 
@@ -39,9 +43,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 From the AlphaZero chess paper:
 
 > [In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
-Each of the 8×8
-positions identifies the square from which to “pick up” a piece. The first 56 planes encode
-possible ‘queen moves’ for any piece: a number of squares [1..7] in which the piece will be
+Each of the 8×8 positions identifies the square from which to “pick up” a piece. The first 56 planes encode possible ‘queen moves’ for any piece: a number of squares [1..7] in which the piece will be
 moved, along one of eight relative compass directions {N, NE, E, SE, S, SW, W, NW}. The
 next 8 planes encode possible knight moves for that piece. The final 9 planes encode possible
 underpromotions for pawn moves or captures in two possible diagonals, to knight, bishop or
