@@ -48,15 +48,43 @@ for agent in env.agent_iter():
 
 For the complete API documentation, please see https://www.pettingzoo.ml/api
 
+### Parallel API
+
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://www.pettingzoo.ml/api#parallel-api
+
 ## SuperSuit
 
 SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
 
 ## Release History
 
+Version 1.3.2 (September 17, 2020)
+
+Fixed import issue for depreciated multiwalker environment.
+
+Version 1.3.1 (September 16, 2020)
+
+Various fixes and parameter changes for all SISL environments, bumped versions. Fixed dones computations in knights_archers_zombies and cooperative_pong, bumped versions. Fixed install extras.
+
+Version 1.3.0 (September 8, 2020):
+
+Fixed how agent iter wrapper handles premature agent death. Bumped environments with death (joust, mario_bros, maze_craze, warlords, wizard_of_wor, knights_archers_zombies, battle, battlefield, combined_arms, gather, tiger_deer, multiwalker). Also switched MAgent to having a native parallel environment, making it much faster. We bumped adverserial pursuit as well due to this.
+
+Version 1.2.1 (August 31, 2020):
+
+Fixed ability to indefinitely stall in Double Dunk, Othello, Tennis and Video Checkers Atari environments, bumped versions to v1.
+
+Version 1.2.0 (August 27, 2020):
+
+Large fix to quadrapong, version bumped to v1.
+
+Version 1.1.0 (August 20, 2020):
+
+Added [ParallelEnv](https://www.pettingzoo.ml/api#parallel-api) API where all agents step at once. Fixed entombed_competitive rewards and bumped environment version to entombed_competitive_v1. Fixed prospector rewards and bumped version to prospector_v1.
+
 Version 1.0.1 (August 12, 2020):
 
-Fixes to continuous made on pistonball and prison environments, along with a bad test that let the problems slip through. Versions bumped on both games.
+Fixes to continuous mode on pistonball and prison butterfly environments, along with a bad test that let the problems slip through. Versions bumped on both games.
 
 Version 1.0.0 (August 5th, 2020):
 

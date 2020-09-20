@@ -30,10 +30,10 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(seed=None, local_ratio=0.5, max_frames=100)
+simple_reference.env(local_ratio=0.5, max_frames=100)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 

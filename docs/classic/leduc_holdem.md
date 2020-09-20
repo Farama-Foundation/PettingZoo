@@ -21,15 +21,6 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 
-### Environment arguments
-
-```
-leduc_holdem.env(seed=None)
-```
-
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
-
-
 #### Observation Space
 
 As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.

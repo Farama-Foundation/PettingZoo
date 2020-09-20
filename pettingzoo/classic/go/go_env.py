@@ -39,6 +39,9 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
+    def seed(self, seed=None):
+        pass
+
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
         go.N = self._N

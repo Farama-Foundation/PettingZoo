@@ -5,6 +5,18 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from gym.utils import seeding, EzPickle
 
+# importing Hanabi and throw error message if pypi package is not installed correctly.
+try:
+    from hanabi_learning_environment.rl_env import HanabiEnv, make
+
+except ModuleNotFoundError:
+    raise ImportError(
+        (
+            "Hanabi is not installed.\n",
+            "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n",
+            "Consult hanabi/README.md for detailed information."
+        )
+    )
 """
 Wrapper class around Deepmind's Hanabi Learning Environment.
 """
@@ -108,57 +120,48 @@ class raw_env(AECEnv, EzPickle):
 
         seed = seeding.create_seed(seed, max_bytes=3)
 
-        # importing Hanabi and throw error message if pypi package is not installed correctly.
-        try:
-            from hanabi_learning_environment.rl_env import HanabiEnv, make
+        # ToDo: Starts
+        # Check if all possible dictionary values are within a certain ranges.
+        self._raise_error_if_config_values_out_of_range(colors,
+                                                        ranks,
+                                                        players,
+                                                        hand_size,
+                                                        max_information_tokens,
+                                                        max_life_tokens,
+                                                        observation_type,
+                                                        random_start_player)
 
-        except ModuleNotFoundError:
-            raise ImportError(
-                (
-                    "Hanabi is not installed.\n",
-                    "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n",
-                    "Consult hanabi/README.md for detailed information."
-                )
-            )
+        self._config = {
+            'colors': colors,
+            'ranks': ranks,
+            'players': players,
+            'hand_size': hand_size,
+            'max_information_tokens': max_information_tokens,
+            'max_life_tokens': max_life_tokens,
+            'observation_type': observation_type,
+            'random_start_player': random_start_player,
+        }
+        self.hanabi_env: HanabiEnv = HanabiEnv(config=self._config)
 
-        else:
+        # List of agent names
+        self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
 
-            # ToDo: Starts
-            # Check if all possible dictionary values are within a certain ranges.
-            self._raise_error_if_config_values_out_of_range(colors,
-                                                            ranks,
-                                                            players,
-                                                            hand_size,
-                                                            max_information_tokens,
-                                                            max_life_tokens,
-                                                            observation_type,
-                                                            random_start_player)
+        self.agent_selection: str
 
-            self.hanabi_env: HanabiEnv = HanabiEnv(config={'colors': colors,
-                                                           'ranks': ranks,
-                                                           'players': players,
-                                                           'hand_size': hand_size,
-                                                           'max_information_tokens': max_information_tokens,
-                                                           'max_life_tokens': max_life_tokens,
-                                                           'observation_type': observation_type,
-                                                           'random_start_player': random_start_player,
-                                                           'seed': seed})
+        # Sets hanabi game to clean state and updates all internal dictionaries
+        self.reset(observe=False)
 
-            # List of agent names
-            self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
+        # Set action_spaces and observation_spaces based on params in hanabi_env
+        self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
+        self.observation_spaces = {player_name: spaces.Box(low=0,
+                                                           high=1,
+                                                           shape=(self.hanabi_env.vectorized_observation_shape()[0],),
+                                                           dtype=np.float32)
+                                   for player_name in self.agents}
 
-            self.agent_selection: str
-
-            # Sets hanabi game to clean state and updates all internal dictionaries
-            self.reset(observe=False)
-
-            # Set action_spaces and observation_spaces based on params in hanabi_env
-            self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
-            self.observation_spaces = {player_name: spaces.Box(low=0,
-                                                               high=1,
-                                                               shape=(self.hanabi_env.vectorized_observation_shape()[0],),
-                                                               dtype=np.float32)
-                                       for player_name in self.agents}
+    def seed(self, seed=None):
+        config = dict(seed=seed, **self._config)
+        self.hanabi_env = HanabiEnv(config=config)
 
     @staticmethod
     def _raise_error_if_config_values_out_of_range(colors, ranks, players, hand_size, max_information_tokens,

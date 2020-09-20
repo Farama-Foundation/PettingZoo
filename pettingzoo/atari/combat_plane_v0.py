@@ -1,4 +1,4 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 
 avaliable_versions = {
     "bi-plane": 15,
@@ -14,3 +14,4 @@ def raw_env(game_version="bi-plane", guided_missile=True, **kwargs):
 
 
 env = base_env_wrapper_fn(raw_env)
+parallel_env = parallel_wrapper_fn(env)

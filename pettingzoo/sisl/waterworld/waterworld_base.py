@@ -71,11 +71,11 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, seed=0, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
+    def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
-                 reward_mech='local', speed_features=True, max_frames=500, **kwargs):
+                 local_ratio=1.0, speed_features=True, max_frames=500, **kwargs):
         """
             n_pursuers: number of pursuing archea
             n_evaders: number of evaading archea
@@ -93,7 +93,7 @@ class MAWaterWorld():
             food_reward: reward for pursuers consuming an evading archea
             encounter_reward: reward for a pursuer colliding with an evading archea
             control_penalty: reward added to pursuer in each step
-            reward_mech: controls whether all pursuers are rewarded for food being consumed, or single pursuer
+            local_ratio: proportion of reward allocated locally vs distributed among all agents
             speed_features: toggles whether archea sensors detect speed of other objects
             max_frames: number of frames before environment automatically ends
         """
@@ -114,14 +114,15 @@ class MAWaterWorld():
         self.control_penalty = control_penalty
         self.encounter_reward = encounter_reward
         self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
+        self.control_rewards = [0 for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
         self.last_obs = [None for _ in range(self.n_pursuers)]
 
         self.n_obstacles = 1
-        self._reward_mech = reward_mech
+        self.local_ratio = local_ratio
         self._speed_features = speed_features
         self.max_frames = max_frames
-        self.seed(seed)
+        self.seed()
         self._pursuers = [
             Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu],
                    speed_features=self._speed_features) for npu in range(self.n_pursuers)
@@ -150,10 +151,6 @@ class MAWaterWorld():
         if self.renderOn:
             cv2.destroyAllWindows()
             cv2.waitKey(1)
-
-    @property
-    def reward_mech(self):
-        return self._reward_mech
 
     @property
     def timestep_limit(self):
@@ -212,6 +209,7 @@ class MAWaterWorld():
         obs_list = self.observe_list(
             sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
         self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
+        self.control_rewards = [0 for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
         self.last_obs = obs_list
 
@@ -467,13 +465,9 @@ class MAWaterWorld():
         ev_encounters, which_pursuer_encounterd_ev = self._caught(
             is_colliding_ev_Np_Ne, 1)
         # Update reward based on these collisions
-        if self.reward_mech == 'global':
-            rewards += (
-                (len(ev_caught) * self.food_reward) + (len(po_caught) * self.poison_reward) + (len(ev_encounters) * self.encounter_reward))
-        else:
-            rewards[which_pursuer_caught_ev] += self.food_reward
-            rewards[which_pursuer_caught_po] += self.poison_reward
-            rewards[which_pursuer_encounterd_ev] += self.encounter_reward
+        rewards[which_pursuer_caught_ev] += self.food_reward
+        rewards[which_pursuer_caught_po] += self.poison_reward
+        rewards[which_pursuer_encounterd_ev] += self.encounter_reward
 
         # Add features together
         if self._speed_features:
@@ -506,8 +500,6 @@ class MAWaterWorld():
 
         action = action * self.action_scale
 
-        rewards = np.zeros((self.n_pursuers,))
-
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
         p.set_position(p.position + self.cycle_time * p.velocity)
@@ -533,19 +525,22 @@ class MAWaterWorld():
                         poison.position[i] = np.clip(poison.position[i], 0, 1)
                         poison.velocity[i] = -1 * poison.velocity[i]
 
-        if self.reward_mech == 'global':
-            rewards[agent_id] += self.control_penalty * (action**2).sum()
-        else:
-            rewards[agent_id] += self.control_penalty * (action**2).sum()
+        self.control_rewards[agent_id] = self.control_penalty * (action**2).sum()
 
         if is_last:
+            rewards = np.zeros(self.n_pursuers)
             sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
                 rewards, is_last)
             obs_list = self.observe_list(
                 sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
             self.last_obs = obs_list
 
-        self.last_rewards[agent_id] = rewards[agent_id]
+            local_reward = rewards + np.array(self.control_rewards)
+            global_reward = local_reward.mean()
+            self.last_rewards = local_reward * self.local_ratio + global_reward * (1 - self.local_ratio)
+
+            self.control_rewards = [0 for _ in range(self.n_pursuers)]
+
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1

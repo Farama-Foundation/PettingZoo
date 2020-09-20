@@ -39,11 +39,11 @@ Where X is the Cartesian product (giving a total action space of 50).
 ### Arguments
 
 ```
-simple_world_comm.env(seed=None, num_good=2, num_adversaries=4, num_obstacles=1,
+simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
                 num_food=2, max_frames=100)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 `num_good`:  number of good agents
 
