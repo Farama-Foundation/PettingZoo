@@ -56,7 +56,7 @@ from pettingzoo.mpe import simple_adversary_v0
 from pettingzoo.mpe import simple_crypto_v0
 from pettingzoo.mpe import simple_push_v0
 from pettingzoo.mpe import simple_reference_v0
-from pettingzoo.mpe import simple_speaker_listener_v0
+from pettingzoo.mpe import simple_speaker_listener_v1
 from pettingzoo.mpe import simple_spread_v0
 from pettingzoo.mpe import simple_tag_v0
 from pettingzoo.mpe import simple_world_comm_v0
@@ -136,7 +136,7 @@ all_environments = {
     "mpe/simple_crypto": simple_crypto_v0,
     "mpe/simple_push": simple_push_v0,
     "mpe/simple_reference": simple_reference_v0,
-    "mpe/simple_speaker_listener": simple_speaker_listener_v0,
+    "mpe/simple_speaker_listener": simple_speaker_listener_v1,
     "mpe/simple_spread": simple_spread_v0,
     "mpe/simple_tag": simple_tag_v0,
     "mpe/simple_world_comm": simple_world_comm_v0,
