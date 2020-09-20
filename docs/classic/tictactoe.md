@@ -15,11 +15,11 @@ agent-labels: "agents= ['player_1', 'player_2']"
 
 
 
-Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal row is the winner.
+Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
 
 #### Observation Space
 
-The observation is 2 layers of the 3x3 board. The first layer represents the placement of Xs, and the other layer is the placement of Os. The possible values for each cell is 0 or 1; in the first layer, 1 indicates that an X has been placed in that cell, and 0 indicates that X is not in that cell. Similarly, in the other layer 1 indicates that an O has been placed, while 0 indicates that 0 has not been placed.
+The observation is 2 planes of the 3x3 board. The first plane represents the placement of Xs, and the second plane shows the placement of Os. The possible values for each cell are 0 or 1; in the first plane, 1 indicates that an X has been placed in that cell, and 0 indicates that X is not in that cell. Similarly, in the second plane, 1 indicates that an O has been placed in that cell, while 0 indicates that an O has not been placed.
 
 #### Action Space
 
