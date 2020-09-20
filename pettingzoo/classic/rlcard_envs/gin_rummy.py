@@ -28,9 +28,9 @@ class raw_env(RLCardBase, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, knock_reward: float = 0.5, gin_reward: float = 1.0):
-        EzPickle.__init__(self, seed, knock_reward, gin_reward)
-        RLCardBase.__init__(self, "gin-rummy", 2, (5, 52), seed)
+    def __init__(self, knock_reward: float = 0.5, gin_reward: float = 1.0):
+        EzPickle.__init__(self, knock_reward, gin_reward)
+        RLCardBase.__init__(self, "gin-rummy", 2, (5, 52))
         self._knock_reward = knock_reward
         self._gin_reward = gin_reward
 

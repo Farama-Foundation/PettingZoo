@@ -7,7 +7,7 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,41)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import battle_v0"
+import: "pettingzoo.magent import battle_v1"
 agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
@@ -38,10 +38,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
+battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
 
 `step_reward`:  reward added unconditionally
 
@@ -52,4 +52,3 @@ battle_v0.env(seed=None, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0
 `attack_opponent_reward`:  Reward added for attacking an opponent
 
 `max_frames`:  number of frames (a step for each agent) until game terminates
-

@@ -7,6 +7,7 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
@@ -369,14 +370,18 @@ def env(**kwargs):
     return env
 
 
+parallel_env = parallel_wrapper_fn(env)
+
+
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None, **kwargs):
-        EzPickle.__init__(self, seed, **kwargs)
-        self.randomizer, seed = seeding.np_random(seed)
-        self.env = CooperativePong(self.randomizer, **kwargs)
+    def __init__(self, **kwargs):
+        EzPickle.__init__(self, **kwargs)
+        self._kwargs = kwargs
+
+        self.seed()
 
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
@@ -396,6 +401,9 @@ class raw_env(AECEnv, EzPickle):
 
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
+    def seed(self, seed=None):
+        self.randomizer, seed = seeding.np_random(seed)
+        self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(self, observe=True):
         self.env.reset()
@@ -428,7 +436,7 @@ class raw_env(AECEnv, EzPickle):
         # select next agent and observe
         self.agent_selection = self._agent_selector.next()
         self.rewards = self.env.rewards
-        self.dones[agent] = self.env.dones[agent]
+        self.dones = self.env.dones
         self.infos = self.env.infos
 
         self.score = self.env.score

@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
 average-total-reward: "3.11"
-import: "from pettingzoo.sisl import pursuit_v0"
+import: "from pettingzoo.sisl import pursuit_v1"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
@@ -28,40 +28,27 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ```
-pursuit.env(seed=None, max_frames=500, xs=16, ys=16, reward_mech='local', n_evaders=30, n_pursuers=8,
-obs_range=7, n_catch=2, random_opponents=False, max_opponents=10,
-freeze_evaders=False, catchr=0.01, caughtr=-0.01, term_pursuit=5.0,
-urgency_reward=0.0, surround=True, constraint_window=1.0,
-train_pursuit=True, ally_layer=AgentLayer(xs, ys, n_pursuers),
-opponent_layer=AgentLayer(xs, ys, n_evaders))
+pursuit.env(max_frames=500, x_size=16, y_size=16, reward_mech=1.0, n_evaders=30, n_pursuers=8,
+obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01, catch_reward=5.0,
+urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+`x_size, y_size`: Size of environment world space
 
-`max_frames`:  after max_frames steps all agents will return done
-
-`xs, ys`:  size of environment world space
-
-`reward_mech`:  Whether a single pursuer is rewarded for an evader being caught, or all pursuers are rewarded
+`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
 `n_evaders`:  Number of evaders
 
 `n_pursuers`:  Number of pursuers
 
-`obs_range`:  Radius of agent observation view
+`obs_range`:  Size of the box around the agent that the agent observes.
 
 `n_catch`:  Number pursuers required around an evader to be considered caught
 
-`random_opponents`:  Whether to randomize number of evaders on reset or use argument amount
-
-`max_opponents`:  Maximum number of random evaders on reset, if random_opponents specified
-
 `freeze_evaders`:  Toggles if evaders can move or not
 
-`catchr`:  Reward for 'tagging' a single evader
-
-`caughtr`:  Reward for getting 'tagged' by a pursuer
+`tag_reward`:  Reward for 'tagging', or being single evader.
 
 `term_pursuit`:  Reward added when a pursuer or pursuers catch an evader
 
@@ -69,10 +56,6 @@ opponent_layer=AgentLayer(xs, ys, n_evaders))
 
 `surround`:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
 
-`constraint_window`:  Window in which agents can randomly spawn into the environment world
+`constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
 
-`train_pursuit`:  Flag indicating if we are simulating pursuers or evaders
-
-`ally_layer`:  Initial pursuers in world
-
-`opponent_layer`:  Initial evader in world
+`max_frames`:  After max_frames steps all agents will return done

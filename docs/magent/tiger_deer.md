@@ -8,7 +8,7 @@ action-shape: "(5),(9)"
 action-values: "Discrete(5),(9)"
 observation-shape: "(3,3,21), (9,9,25)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import tiger_deer_v0"
+import: "pettingzoo.magent import tiger_deer_v1"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
@@ -37,10 +37,9 @@ Map size: 45x45
 ### Arguments
 
 ```
-tiger_deer_v0.env(seed=None, max_frames=500)
+tiger_deer_v1.env(max_frames=500)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior.
+
 
 `max_frames`:  number of frames (a step for each agent) until game terminates
-

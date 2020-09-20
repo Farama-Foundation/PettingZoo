@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import othello_v0"
+import: "from pettingzoo.atari import othello_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -30,7 +30,7 @@ Note that following this reward greedily is known to be a bad long-term strategy
 
 When one player cannot move, the tokens on both sides are tallied, and the player with the most tokens wins! (receives +1 reward, and their opponent -1).
 
-Note that since this is an untimed turn based game, a player can choose to do nothing, which is a good strategy to never lose. 
+This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets. This prevents one player from indefinitely stalling the game.
 
 [Official othello manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=335)
 

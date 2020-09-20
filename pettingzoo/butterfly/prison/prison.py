@@ -7,6 +7,7 @@ from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
@@ -84,10 +85,13 @@ def env(**kwargs):
     return env
 
 
+parallel_env = parallel_wrapper_fn(env)
+
+
 class raw_env(AECEnv, EzPickle):
 
-    def __init__(self, seed=None, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        EzPickle.__init__(self, seed, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
+    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+        EzPickle.__init__(self, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
         self._agent_selector = agent_selector(self.agents)
@@ -115,7 +119,7 @@ class raw_env(AECEnv, EzPickle):
             self.random_aliens = False
         else:
             self.random_aliens = random_aliens
-        self.np_random, seed = seeding.np_random(seed)
+        self.seed()
         self.closed = False
 
         self.action_spaces = {}
@@ -142,6 +146,9 @@ class raw_env(AECEnv, EzPickle):
         self.has_reset = False
 
         self.reinit()
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
 
     def create_walls(self, num_floors):
         self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),

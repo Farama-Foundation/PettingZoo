@@ -8,7 +8,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-5.333,5.333]"
 average-total-reward: "-109.7"
-import: "from pettingzoo.sisl import multiwalker_v0"
+import: "from pettingzoo.sisl import multiwalker_v2"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -21,12 +21,12 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 ### Arguments
 
 ```
-multiwalker.env(seed=None, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
 max_frames=500)
 ```
 
-`seed`:  seed for random values. Set to None to use machine random source. Set to fixed value for deterministic behavior
+
 
 `n_walkers`:  number of bipedal walker agents in environment
 
@@ -34,7 +34,7 @@ max_frames=500)
 
 `angle_noise`:  noise applied to agent rotational sensor observations
 
-`reward_mech`:  whether all agents are rewarded equal amounts or singular agent is rewarded
+`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
 `forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
 

@@ -36,3 +36,9 @@ defaults:
       path: ""
     values:
       layout: docu
+      is_parallel: "True"
+  -
+    scope:
+      path: "classic"
+    values:
+      is_parallel: "false" # overrides previous default layout

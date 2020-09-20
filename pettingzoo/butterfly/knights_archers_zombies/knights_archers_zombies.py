@@ -15,6 +15,7 @@ from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def get_image(path):
@@ -33,12 +34,15 @@ def env(**kwargs):
     return env
 
 
+parallel_env = parallel_wrapper_fn(env)
+
+
 class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, seed=None, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
-        EzPickle.__init__(self, seed, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
+    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
+        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
@@ -52,7 +56,7 @@ class raw_env(AECEnv, EzPickle):
         self.black_death = black_death
         self.line_death = line_death
         self.has_reset = False
-        self.np_random, seed = seeding.np_random(seed)
+        self.seed()
 
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -144,6 +148,9 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         self.num_agents = len(self.agents)
         self.reinit()
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
 
     # Controls the Spawn Rate of Weapons
     def check_weapon_spawn(self, sword_spawn_rate, arrow_spawn_rate):
@@ -371,7 +378,7 @@ class raw_env(AECEnv, EzPickle):
         agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
         if not agent_obj.alive:
-            cropped = np.zeros((512, 512, 3))
+            cropped = np.zeros((512, 512, 3), dtype=np.uint8)
         else:
             min_x = agent_position[0] - 256
             max_x = agent_position[0] + 256
@@ -476,15 +483,16 @@ class raw_env(AECEnv, EzPickle):
             self.frames += 1
 
         self.rewards[agent] = agent_name.score
-        self.dones[agent] = not self.run or self.frames >= self.max_frames
+        done = not self.run or self.frames >= self.max_frames
+        self.dones = {agent: done for agent in self.agents}
 
         if self._agent_selector.is_last() and not self.black_death:
             # self.agents must be recreated
             for k in self.kill_list:
                 self.agents.remove(k)
-                self.dones.pop(k, None)
-                self.rewards.pop(k, None)
-                self.infos.pop(k, None)
+                # self.dones.pop(k, None)
+                # self.rewards.pop(k, None)
+                # self.infos.pop(k, None)
 
             self._agent_selector.reinit(self.agents)
             self.num_agents = len(self.agents)

@@ -20,10 +20,10 @@ def env(**kwargs):
 class raw_env(AECEnv):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None):
+    def __init__(self):
         super().__init__()
-        self.np_random = np.random.RandomState(seed)
         self.game = Game()
+        self.seed()
 
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(2)]
@@ -44,6 +44,9 @@ class raw_env(AECEnv):
         self.observation_spaces = {i: spaces.Box(low=np.float32(low), high=np.float32(high), dtype=np.float32) for i in self.agents}
 
         self.double_roll = 0
+
+    def seed(self, seed=None):
+        self.np_random = np.random.RandomState(seed)
 
     def step(self, action, observe=True):
         if action != 26**2 * 2:

@@ -24,8 +24,8 @@ class raw_env(RLCardBase):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, seed=None):
-        super().__init__("no-limit-holdem", 2, (54,), seed)
+    def __init__(self):
+        super().__init__("no-limit-holdem", 2, (54,))
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.zeros(54,), high=np.append(np.ones(52,), [100, 100]), dtype=np.float32) for _ in range(self.num_agents)])
 
     def render(self, mode='human'):

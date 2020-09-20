@@ -3,6 +3,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 import numpy as np
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 def env(**kwargs):
@@ -13,13 +14,16 @@ def env(**kwargs):
     return env
 
 
+parallel_env = parallel_wrapper_fn(env)
+
+
 class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, seed=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__()
-        self.env = _env(seed, *args, **kwargs)
+        self.env = _env(*args, **kwargs)
 
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(r) for r in range(self.num_agents)]
@@ -32,6 +36,9 @@ class raw_env(AECEnv):
         self.steps = 0
         self.display_wait = 0.03
         self.has_reset = False
+
+    def seed(self, seed=None):
+        self.env.seed(seed)
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))

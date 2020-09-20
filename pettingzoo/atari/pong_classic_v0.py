@@ -1,4 +1,4 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn
+from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 
 avaliable_2p_versions = {
     "classic": 4,
@@ -16,7 +16,7 @@ avaliable_4p_versions = {
     "soccer": 16,
     "foozpong": 21,
     "hockey": 29,
-    "quadrapong": 32,
+    "quadrapong": 33,
     "handball": 37,
     "volleyball": 41,
     "basketball": 49,
@@ -32,3 +32,4 @@ def raw_env(num_players=2, game_version="classic", **kwargs):
 
 
 env = base_env_wrapper_fn(raw_env)
+parallel_env = parallel_wrapper_fn(env)
