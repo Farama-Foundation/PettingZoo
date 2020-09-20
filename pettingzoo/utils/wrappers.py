@@ -124,7 +124,7 @@ class AECIterable:
         self.max_iter = max_iter
 
     def __iter__(self):
-        return AECOrderEnforcingIterator(self.env, self.max_agent_iter)
+        return AECOrderEnforcingIterator(self.env, self.max_iter)
 
 
 class AECIterator:

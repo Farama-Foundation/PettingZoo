@@ -28,7 +28,7 @@ def generate_data(nameline,module):
         if env.dones[agent]:
             env.reset()
 
-        ndarray = env.render()
+        ndarray = env.render(mode='rgb_array')
         tot_size = max(ndarray.shape)
         target_size = 500
         ratio = target_size/tot_size
