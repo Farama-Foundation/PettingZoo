@@ -21,17 +21,17 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can 
 
 #### Observation Space
 
-The observation space has a shape of (7, 4, 15). The first index indicates the plane, the second index the color, and the last index the card number (including any special cards).
+The observation space has a shape of (7, 4, 15). Planes 0-2 represent the current player's hand, while planes 4-6 represent the opponent's hand. For these sets of planes, the first index indicates the number of copies of a card, the second index the color, and the last index the card number (including any special cards). Uno is played with 2 identical decks, so a player can have 0, 1, or 2 copies of a given card, which is why each player has 3 planes to represent their hand. 
 
-| Plane | Feature                                                   |
-| :---: | --------------------------------------------------------- |
-|   0   | Player's hand with 0 cards of the same color and number   |
-|   1   | Player's hand with 1 card of the same color and number    |
-|   2   | Player's hand with 2 cards of the same color and number   |
-|   3   | Target card (top of the Discard pile)                     |
-|   4   | Opponent's hand with 0 cards of the same color and number |
-|   5   | Opponent's hand with 1 cards of the same color and number |
-|   6   | Opponent's hand with 2 cards of the same color and number |
+| Plane | Feature                                                     |
+| :---: | ----------------------------------------------------------- |
+|   0   | Cards that the current player has 0 copies of in their hand |
+|   1   | Cards that the current player has 1 copy of in their hand   |
+|   2   | Cards that the current player has 2 copies of in their hand |
+|   3   | Target card (top of the Discard pile)                       |
+|   4   | Cards that the opponent has 0 copies of in their hand       |
+|   5   | Cards that the opponent has 1 copy of in their hand         |
+|   6   | Cards that the opponent has 2 copies of in their hand       |
 
 ##### Encoding per Plane
 
