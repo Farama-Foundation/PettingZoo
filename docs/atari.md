@@ -62,7 +62,18 @@ All the Atari environments have the following environment parameters:
 
 ### Citation
 
-If you use the Atari environments in your research please cite the following paper:
+Multiplayer games within the Arcade Learning Environment were introduced in:
+
+```
+@article{terry2020arcade,
+  Title = {Multiplayer Support for the Arcade Learning Environment},
+  Author = {Terry, Justin K and Black, Benjamin},
+  journal={arXiv preprint arXiv:2009.09341},
+  year={2020}
+}
+```
+
+The Arcade Learning Environment was originally introduced in:
 
 ```
 @Article{bellemare13arcade,
@@ -73,5 +84,18 @@ If you use the Atari environments in your research please cite the following pap
   month = "jun",
   volume = "47",
   pages = "253--279",
+}
+```
+
+Various to the Arcade Learning Environment were introduced in:
+
+```
+@article{machado2018revisiting,
+  title={Revisiting the arcade learning environment: Evaluation protocols and open problems for general agents},
+  author={Machado, Marlos C and Bellemare, Marc G and Talvitie, Erik and Veness, Joel and Hausknecht, Matthew and Bowling, Michael},
+  journal={Journal of Artificial Intelligence Research},
+  volume={61},
+  pages={523--562},
+  year={2018}
 }
 ```
