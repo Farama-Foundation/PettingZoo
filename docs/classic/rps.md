@@ -15,7 +15,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper and paper beats rock. 
+Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock. 
 
 #### Observation Space
 

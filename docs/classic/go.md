@@ -15,21 +15,21 @@ agent-labels: "agents= ['black_0', 'white_0']"
 
 
 
-Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows with the purpuse of surrounding more territory than the opponent or capturing the opponent's stones. The game ends if both players sequentially decide to pass. Refer to [Wikipedia](https://en.wikipedia.org/wiki/Go_(game)) for additional details about the game.
+Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows by placing a stone of their own, aiming to either surround more territory than their opponent or capture the opponent's stones. The game ends if both players sequentially decide to pass.
 
 Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minigo).
 
 #### Arguments
 
-Go takes two optional arguments that define the board size (int) and komi (float) compensation points. The default values for the board size and komi are 19 and 7.5, respectively.
+Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
-`g0_v0.env(board_size = 13, komi = 2.5)`
+`g0_v0.env(board_size = 13, komi = 7.5)`
 
 `g0_v0.env() # with default values`
 
 #### Observation Space
 
-The observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:,:,0), represent the stones on the board for the current player while the second plane, (:,:,1), encodes the stones of the opponent. The third plane, (:,:,2), is all 1 if the current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is  
+The observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:, :, 0), represent the stones on the board for the current player while the second plane, (:, :, 1), encodes the stones of the opponent. The third plane, (:, :, 2), is all 1 if the current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is  
 ```
    0 1 2 3 4 5 6 7 8
  0 . . . . . . . . .  0
@@ -50,21 +50,23 @@ The observation shape is a function of the board size _N_ and has a shape of (N,
 |    1    | Opponent Player's stones<br>_'`0`: no stone, `1`: stone_  |
 |    2    | Player<br>_'`0`: white, `1`: black_                       |
 
-While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
+While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/). 
+
+
 
 #### Action Space
 
 Similar to the observation space, the action space is dependent on the board size _N_.
 
-|   Action ID   | Description                                                                                                   |
-|:-------------:|---------------------------------------------------------------------------------------------------------------|
-|    0 ~ N-1    | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_                   |
-|    N ~ 2N-1   | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_                |
-|      ...      | ...                                                                                                           |
-| N^2-N ~ N^2-1 | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
-|      N^2      | Pass                                                                                                          |
+|                          Action ID                           | Description                                                  |
+| :----------------------------------------------------------: | ------------------------------------------------------------ |
+| <img src="https://render.githubusercontent.com/render/math?math=0 \ldots (N-1)"> | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_ |
+| <img src="https://render.githubusercontent.com/render/math?math=N \ldots (2N- 1)"> | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_ |
+|                             ...                              | ...                                                          |
+| <img src="https://render.githubusercontent.com/render/math?math=N^2-N \ldots N^2-1"> | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
+| <img src="https://render.githubusercontent.com/render/math?math=N^2"> | Pass                                                         |
 
-For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)` The total action space is N^2+1.
+For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)` The total action space is <img src="https://render.githubusercontent.com/render/math?math=N^2 %2B 1">.
 
 #### Rewards
 
