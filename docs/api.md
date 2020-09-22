@@ -32,7 +32,7 @@ The commonly used methods are:
 
 `agent_iter(max_agent_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
 
-`last()` returns reward*, done, and info for the agent currently able to act. The returned reward is the total reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
+`last()` returns reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
 
 `reset(observe=True)` resets the environment (and sets it up for use when called the first time) and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
 
@@ -53,19 +53,19 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name.
 
-`rewards`: A dict of the rewards of every agent at the time called, keyed by name. Rewards are summed from the last time an agent took it's turn, zeroed before it takes another turn, and accessed by calling `last()`. This looks like:
-
-`{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
-
-`dones`: A dict of the done state of every agent at the time called, keyed by name. This is accessed by calling `last()`. The returned dict looks like:
+`dones`: A dict of the done state of every agent at the time called, keyed by name. `last()` accesses this attribute. The returned dict looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, keyed by name. Each agent's info is also a dict. This is accessed by calling `last()`. The returned dict looks like:
+`infos`: A dict of info for each agent, keyed by name. Each agent's info is also a dict. `last()` accesses this attribute. The returned dict looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `observe(agent)`: Returns the observation an agent currently can make. `step()` calls this function.
+
+`rewards`: A dict of the rewards of every agent at the time called, keyed by name. Rewards are summed from the last time an agent took it's turn and zeroed before it takes another turn.  `last()` accesses this attribute. This looks like:
+
+`{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
 `seed(seed=None)`: Reseeds the environment. `reset()` must be called after `seed()`, and before `step()`.
 
@@ -112,7 +112,7 @@ for step in range(max_frames):
 
 `render(mode='human')`, `seed(seed=None)`, `close()` are methods as described above in the main API description.
 
-`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns the observations dictionary, reward dictionary, done dictionary, and info dictionary, where each dictionary is keyed by the agent.
+`step(actions)`: receives a dictionary of actions keyed by the agent name. Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary, where each dictionary is keyed by the agent.
 
 `reset()`: resets the environment and returns a dictionary of observations (keyed by the agent name)
 
@@ -167,7 +167,7 @@ from pettingzoo.butterfly import prison_v1
 prison_v1.manual_control(<environment parameters>)
 ```
 
-Environments say if they support this functionality in their documentation, and what the specific controls are. Note that MPE environments do not currently support manual control.
+Environments say if they support this functionality in their documentation, and what the specific controls are.
 
 ### Random Demo
 

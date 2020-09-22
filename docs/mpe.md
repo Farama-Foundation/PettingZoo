@@ -23,7 +23,7 @@ The Simple Reference, Simple Speaker Listener, and Simple Spread environments ar
 
 * **Landmarks**: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like Simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more detail in the documentation for each environment.
 
-* **Visibility**: When an agent is visible to a second agent, that second agent's observation contains the first agent's relative position (and in Simple World Comm and Simple Tag, the agent's velocity). If an agent is temporarily hidden (only possible in Simple World Comm) then the agent's position and velocity is set to zero.
+* **Visibility**: When an agent is visible to a another agent, that other agent's observation contains the first agent's relative position (and in Simple World Comm and Simple Tag, the first agent's velocity). If an agent is temporarily hidden (only possible in Simple World Comm) then the agent's position and velocity is set to zero.
 
 * **Communication**: Some agents in some environments can broadcast a message as a part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In Simple Crypto, this message is used to signal that Bob and Eve have reconstructed the message.
 
@@ -37,13 +37,13 @@ The game terminates after the number of cycles specified by the `max_frames` env
 
 ### Observation Space
 
-The observation space of an agent is a vector generally composed of the agent's position and velocity, the other agents' relative positions and velocities, the landmarks' relative positions, the landmarks' and agents' types, and communications received from other agents. The exact form of this is detailed in the environments' documentation.
+The observation space of an agent is a vector generally composed of the agent's position and velocity, other agents' relative positions and velocities, landmarks' relative positions, landmarks' and agents' types, and communications received from other agents. The exact form of this is detailed in the environments' documentation.
 
 If an agent cannot see or observe the communication of a second agent, then the second agent is not included in the first's observation space, resulting in varying observation space sizes in certain environments.
 
 ### Action Space
 
-The action space is a discrete action space representing the combinations of movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions or do nothing. Agents that can communicate choose between 2 and 10 environment dependent broadcasting options.
+The action space is a discrete action space representing the combinations of movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions or do nothing. Agents that can communicate choose between 2 and 10 environment-dependent communication options, which broadcast a message to all agents that can hear it.
 
 ### Rendering
 
