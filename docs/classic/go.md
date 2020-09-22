@@ -15,7 +15,7 @@ agent-labels: "agents= ['black_0', 'white_0']"
 
 
 
-Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows by placing a stone of their own, aiming to either surround more territory than their opponent or capture the opponent's stones. The game ends if both players sequentially decide to pass. Refer to [Wikipedia](https://en.wikipedia.org/wiki/Go_(game)) for additional details about the game.
+Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows by placing a stone of their own, aiming to either surround more territory than their opponent or capture the opponent's stones. The game ends if both players sequentially decide to pass.
 
 Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minigo).
 

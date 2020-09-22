@@ -92,7 +92,7 @@ The location on the board can be found from the location ID, which is either the
 |>25 | Black's bear off location|
 
 #### Agent Order
-The game starts by rolling two dice until their values are different. If the first roll is larger, then the first agent is assigned the color white. Otherwise, the first agent is assigned the color black.
+The game starts with rolling two dice until their values are different. If the first roll is larger, then the first agent is assigned the color white. Otherwise, the first agent is assigned the color black.
 
 Following this, white and black alternate turns. However, if both dice have the same value on an agent's turn (a double roll), then that agent gets an extra turn with the same roll immediately after their current turn. This is reflected in the environment by assigning the current agent as the next player in the agent order and not re-rolling their dice on that turn.  
 
