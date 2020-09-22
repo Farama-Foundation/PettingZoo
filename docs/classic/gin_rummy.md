@@ -17,7 +17,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Gin Rummy is a 2 players card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or cards in sequence of the same suit.
+Gin Rummy is a 2-player card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or in a sequence of the same suit.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
@@ -36,7 +36,7 @@ gin_rummy.env(knock_reward = 0.5, gin_reward = 1.0)
 
 #### Observation Space
 
-The observation space is (5, 52) with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered from Ace of spades to King of spades, Ace of hearts to King of hearts, Ace of diamonds to King of diamonds, followed by the Ace of clubs to King of clubs.
+The observation space is 5x52 with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered by suit (spades, hearts, diamonds, then clubs) and within each suit are ordered by rank (from Ace to King).
 
 | Row Index | Description                                    |
 |:---------:|------------------------------------------------|
@@ -76,15 +76,15 @@ At the end of the game, a player who gins is awarded 1 point, a player who knock
 
 If the hand is declared dead, both players get a reward equal to negative of their deadwood count.
 
-| End Action                                | Winner | Loser               |
-|-------------------------------------------|:------:|---------------------|
-| Dead Hand<br>_Both players are penalized_ |   --   | -deadwood_count/100 |
-| Knock<br>_Knocking player: Default +0.5_  |   --   | -deadwood_count/100 |
-| Gin<br>_Going Gin Player: Default +1_     |   --   | -deadwood_count/100 |
+| End Action                                | Winner | Loser                   |
+| ----------------------------------------- | :----: | ----------------------- |
+| Dead Hand<br>_Both players are penalized_ |   --   | `-deadwood_count / 100` |
+| Knock<br>_Knocking player: Default +0.5_  |   --   | `-deadwood_count / 100` |
+| Gin<br>_Going Gin Player: Default +1_     |   --   | `-deadwood_count / 100` |
 
 Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
 
-Penalties of deadwood_count/100 ensure that the reward never goes below -1.
+Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
 
 #### Legal Moves
 

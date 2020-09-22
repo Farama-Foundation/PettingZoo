@@ -1,13 +1,13 @@
 ---
 observations: "Discrete"
 title: "Leduc Hold'em"
-actions: "2"
-agents: "No"
-manual-control: "Discrete(4)"
+agents: "2"
+manual-control: "No"
 action-shape: "Discrete(4)"
-action-values: "(36,)"
-observation-shape: "[0, 1]"
-observation-values: "10^2"
+action-values: "Discrete(4)"
+observation-shape: "(36,)"
+observation-values: "[0, 1]"
+num-states: "10^2"
 import: "from pettingzoo.classic import leduc_holdem_v0"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
@@ -16,7 +16,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and six cards in total (Jack, Queen, and King). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.   
+Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and a deck of six cards (Jack, Queen, and King in 2 suits). At the beginning of the game, each player receives one card and, after betting, one public card is revealed. Another round follow. At the end, the player with the best hand wins and receives a reward (+1) and the loser receives -1. At any time, any player can fold.   
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
@@ -43,9 +43,9 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 #### Rewards
 
-| Winner          | Loser           |
-| :-------------: | :-------------: |
-| +raised chips/2 | -raised chips/2 |
+|      Winner       |       Loser       |
+| :---------------: | :---------------: |
+| +raised chips / 2 | -raised chips / 2 |
 
 #### Legal Moves
 
