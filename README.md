@@ -60,7 +60,7 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 Version 1.3.3 (September 22, 2020)
 
-Fixed observation issue multiwalker environment, fixed MPE speaker listener naming scheme.
+Fixed observation issue multiwalker environment, fixed MPE speaker listener naming scheme, renamed max_agent_iter to max_iter.
 
 Version 1.3.2 (September 17, 2020)
 
