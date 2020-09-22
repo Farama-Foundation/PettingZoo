@@ -17,6 +17,7 @@ MOTORS_TORQUE = 80
 SPEED_HIP = 4
 SPEED_KNEE = 6
 LIDAR_RANGE = 160 / SCALE
+OBSERVATION_BOUND = np.float32(LIDAR_RANGE)
 
 INITIAL_RANDOM = 5
 
@@ -241,7 +242,7 @@ class BipedalWalker(Agent):
     @property
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package
-        return spaces.Box(low=np.float32(-LIDAR_RANGE), high=np.float32(LIDAR_RANGE), shape=(24 + 4 + 3,), dtype=np.float32)
+        return spaces.Box(low=-OBSERVATION_BOUND, high=OBSERVATION_BOUND, shape=(24 + 4 + 3,), dtype=np.float32)
 
     @property
     def action_space(self):
@@ -412,6 +413,7 @@ class MultiWalkerEnv():
             nobs.append(self.np_random.normal(yd, self.position_noise))
             nobs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(wobs + nobs))
+            np.clip(a=obs, a_min=-OBSERVATION_BOUND, a_max=OBSERVATION_BOUND, out=obs)
 
             # shaping = 130 * pos[0] / SCALE
             shaping = 0.0
