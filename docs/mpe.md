@@ -3,7 +3,7 @@
 
 {% include bigtable.html group="mpe/" avg_rew=1 %}
 
-You can install just the MPEz environments with the following command:
+The unique dependencies for this set of environments can be installed via:
 
 ````bash
 pip install pettingzoo[mpe]

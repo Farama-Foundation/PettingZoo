@@ -19,7 +19,7 @@ The ALE has been studied extensively and a few notable problems have been identi
 
 ### Preprocessing
 
-We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. This library can be installed with:
+We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. The unique dependencies for this set of environments can be installed via:
 
  ````bash
 pip install supersuit

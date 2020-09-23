@@ -3,7 +3,7 @@
 
 {% include bigtable.html group="classic/" %}
 
-You can install just the classic environments with the following command:
+The unique dependencies for this set of environments can be installed via:
 
 ````bash
 pip install pettingzoo[classic]
