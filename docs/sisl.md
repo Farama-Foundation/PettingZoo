@@ -2,6 +2,8 @@
 
 {% include bigtable.html group="sisl/" avg_rew=1 %}
 
+The unique dependencies for this set of environments can be installed via:
+
 `pip install pettingzoo[sisl]`
 
 The SISL environments are a set of three cooperative multi-agent benchmark environments, created at SISL and released as part of "Cooperative multi-agent control using deep reinforcement learning." The code was originally released at: https://github.com/sisl/MADRL
