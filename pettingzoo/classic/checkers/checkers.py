@@ -44,7 +44,7 @@ class env(AECEnv):
         return np.array(obs)
 
     def observe(self, agent):
-        return self.observation
+        return np.array(self.observation)
 
     def reset(self, observe=True):
         self.board = self.ch.initial_board()
@@ -137,13 +137,16 @@ class env(AECEnv):
         action = self._parse_action(action)
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
+        self.agent_order = list(self.agents)
         if turn == 'black':
-            self.agent_selection = self.agents[0]
+            pass
         elif turn == 'white':
-            self.agent_selection = self.agents[1]
+            self.agent_order.reverse()
         else:
             raise ValueError
 
+        print(self.agent_order)
+        self.agent_selection = self.agent_order[0]
         self.observation = self._read_observation()
 
         print("After " + str(self.num_moves) + " moves: ")
@@ -156,7 +159,7 @@ class env(AECEnv):
         self.infos[self.agent_selection]['legal_moves']
         """
 
-        self.infos[self.agent_selection]['legal_moves'] = moves
+        self.infos[self.agent_selection]['legal_moves'] = self.legal_moves()
 
         if winner is None and self.num_moves > self.num_moves_max:
             print("Draw")
@@ -175,11 +178,16 @@ class env(AECEnv):
             else:
                 pass
 
+        self.dones[self.agent_selection] = winner is not None
+
         if observe:
             next_observation = self.observe(self.agent_selection)
         else:
             next_observation = None
-        return np.array(next_observation, dtype=np.int32), np.array(self.rewards), winner is not None, self.infos
+        return next_observation
+
+    def last(self):
+        return self.rewards[self.agent_selection], self.dones[self.agent_selection], self.infos[self.agent_selection]
 
     def render(self, mode='human'):
         print(self.ch.flat_board())
