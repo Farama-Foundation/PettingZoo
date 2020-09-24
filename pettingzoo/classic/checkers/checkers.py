@@ -4,6 +4,7 @@ from six.moves import range
 import itertools
 import copy
 import numpy as np
+import warnings
 
 from pettingzoo import AECEnv
 from gym import spaces
@@ -21,12 +22,11 @@ class env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
         self.agent_order = list(self.agents)
-        print(list(self.agents))
+        self.last_turn = 'black'
 
         self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {name: spaces.Discrete(32 * 4) for name in self.agents}
-        print(spaces.Box(low=0, high= 1, shape=(4,32), dtype=np.int32))
         self.observation_spaces = {name: spaces.Box(low=0, high= 1, shape=(32, 4), dtype=np.int32) for name in self.agents}
         self.observation = np.zeros((32,4))
 
@@ -47,11 +47,13 @@ class env(AECEnv):
         return np.array(self.observation)
 
     def reset(self, observe=True):
-        self.board = self.ch.initial_board()
+        self.ch = CheckersRules()
         self.observation = self._read_observation()
         self.num_moves_max = 300
         self.num_moves = 0
+        self.agent_order = list(self.agents)
         self.agent_selection = self._agent_selector.reset()
+        self.last_turn = 'black'
         self.rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {'legal_moves': []} for name in self.agents}
@@ -133,31 +135,34 @@ class env(AECEnv):
         return legal_moves
 
     def step(self, action, observe=True):
-        self.num_moves += 1
-        action = self._parse_action(action)
-        self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
-        self.agent_order = list(self.agents)
-        if turn == 'black':
-            pass
-        elif turn == 'white':
-            self.agent_order.reverse()
-        else:
-            raise ValueError
+        if action not in self.legal_moves():
+            warnings.warn("Bad checkers move made, game terminating with current player losing. \neninfos[player]['legal_moves'] contains a list of all legal moves that can be chosen.") 
+            winner = 'white' if self.last_turn == 'black' else 'black'
+        else:     
+            self.num_moves += 1
+            action = self._parse_action(action)
+            self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
-        print(self.agent_order)
-        self.agent_selection = self.agent_order[0]
-        self.observation = self._read_observation()
+            self.agent_selection = self._agent_selector.next()
 
-        print("After " + str(self.num_moves) + " moves: ")
+            if turn == self.last_turn:
+                self.agent_selection = self._agent_selector.next()
+                self.agent_order.reverse()
+            self.last_turn = turn
 
-        """
-        self.ch.print_board()
-        print(self.agent_selection)
-        print(self.observe(self.agent_selection))
-        print(self.observation)
-        self.infos[self.agent_selection]['legal_moves']
-        """
+
+            self.observation = self._read_observation()
+
+            #print("After " + str(self.num_moves) + " moves: ")
+
+            """
+            self.ch.print_board()
+            print(self.agent_selection)
+            print(self.observe(self.agent_selection))
+            print(self.observation)
+            self.infos[self.agent_selection]['legal_moves']
+            """
 
         self.infos[self.agent_selection]['legal_moves'] = self.legal_moves()
 
@@ -178,7 +183,8 @@ class env(AECEnv):
             else:
                 pass
 
-        self.dones[self.agent_selection] = winner is not None
+        self.dones[self.agent_order[0]] = winner is not None
+        self.dones[self.agent_order[1]] = winner is not None
 
         if observe:
             next_observation = self.observe(self.agent_selection)
