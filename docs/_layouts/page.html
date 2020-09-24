@@ -1,0 +1,16 @@
+---
+layout: default
+---
+{% include nav.html %}
+
+{% if page.background == "grey" or page.background == "gray" %}
+<script>
+document.getElementById("page-top").className="bg-light";
+</script>
+{% endif %}
+
+<div class="container pagecontainer" id="pagecontainer">
+  <div class="markdown-body">
+{{ content }}
+  </div>
+</div>

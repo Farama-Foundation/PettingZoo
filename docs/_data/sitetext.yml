@@ -1,0 +1,114 @@
+header:
+    title: PettingZoo
+    text: multi-agent reinforcement learning environments
+    headerGif: /atari/atari_warlords.gif
+    buttons:
+      - button: API
+        buttonlink: /api
+        icon: /assets/img/doc_icon.svg
+        iconsize: 80%
+      - button: Environments
+        buttonlink: /envs
+        icon: /assets/img/environment_icon.svg
+        iconsize: 80%
+      - button: GitHub
+        buttonlink: https://github.com/PettingZoo-Team/PettingZoo
+        icon: /assets/img/github_icon.svg
+        iconsize: 80%
+
+services:
+    title: "Usage"
+    text: "Environments can be interacted with in a manner very similar to Gym:"
+    section: services
+
+timeline:
+    title: "Environments"
+    section: timeline
+    rows:
+      - - title: "Atari"
+          desc: "Multi-player Atari 2600 games (both cooperative and competitive)"
+          image: /atari/atari_space_invaders.gif
+          alt:
+          align: left
+          link: atari
+        - title: "Butterfly"
+          desc: "Cooperative graphical games developed by us, requiring a high degree of coordination"
+          image: /butterfly/butterfly_pistonball.gif
+          alt:
+          align: left
+          link: butterfly
+        - title: "Classic"
+          desc: "Classical games including card games, board games, etc."
+          image: /classic/classic_chess.gif
+          alt:
+          align: left
+          link: classic
+      - - title: "MAgent"
+          desc: "Configurable environments with massive numbers of particle agents"
+          image: /magent/magent_adversarial_pursuit.gif
+          alt:
+          align: left
+          link: magent
+        - title: "MPE"
+          desc: "A set of simple nongraphical communication tasks originally from"
+          image: /mpe/mpe_simple_world_comm.gif
+          url: "https://github.com/openai/multiagent-particle-envs"
+          alt:
+          align: left
+          link: mpe
+        - title: "SISL"
+          desc: "3 cooperative environments, originally from "
+          url: "https://github.com/sisl/MADRL"
+          image: /sisl/sisl_multiwalker.gif
+          alt:
+          align: left
+          link: sisl
+
+about:
+    title: "About Us"
+    text: "our story"
+    section: about
+
+clients:
+    section: clients
+    max-height: 100px
+    horizontal-scrolling: "" #"yes/no"
+    list:
+      - title: "envato"
+        url: https://github.com/raviriley/agency-jekyll-theme
+        logo: /assets/img/clients/envato.jpg
+      - title: "designmodo"
+        url: https://github.com/raviriley/agency-jekyll-theme
+        logo: /assets/img/clients/designmodo.jpg
+      - title: "themeforest"
+        url: https://github.com/raviriley/agency-jekyll-theme
+        logo: /assets/img/clients/themeforest.jpg
+      - title: "Creative Market"
+        url: https://github.com/raviriley/agency-jekyll-theme
+        logo: /assets/img/clients/creative-market.jpg
+
+team:
+    title: "Get Started"
+    text: ""
+    subtext: ""
+    section: team
+    people:
+      - name: "Docs"
+        image: /assets/img/doc_icon.svg
+        imglink: documentation
+      - name: "Github"
+        image: /assets/img/github_icon.svg
+        imglink: https://github.com/PettingZoo-Team/PettingZoo
+      - name: "Environments"
+        image: /assets/img/environment_icon.svg
+        imglink: atari
+
+contact:
+    title: "Contact Us"
+    text: "Lorem ipsum or call 123456789"
+    section: contact
+
+footer:
+    easter_egg: "boo"
+
+# {{ site.data.sitetext.ex.ex | markdownify | default: example }}

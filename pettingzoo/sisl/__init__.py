@@ -1,21 +1,7 @@
-class Agent(object):
+from pettingzoo.utils.depreciated_module import DepreciatedModule
 
-    def __new__(cls, *args, **kwargs):
-        agent = super(Agent, cls).__new__(cls)
-        return agent
-
-    @property
-    def observation_space(self):
-        raise NotImplementedError()
-
-    @property
-    def action_space(self):
-        raise NotImplementedError()
-
-    def __str__(self):
-        return '<{} instance>'.format(type(self).__name__)
-
-
-from .pursuit import pursuit as pursuit_v0
-from .waterworld import waterworld as waterworld_v0
-from .multiwalker import multiwalker as multiwalker_v0
+multiwalker_v0 = DepreciatedModule("multiwalker", "v0", "v3")
+multiwalker_v1 = DepreciatedModule("multiwalker", "v1", "v3")
+multiwalker_v2 = DepreciatedModule("multiwalker", "v1", "v3")
+pursuit_v0 = DepreciatedModule("pursuit", "v0", "v1")
+waterworld_v0 = DepreciatedModule("waterworld", "v0", "v1")

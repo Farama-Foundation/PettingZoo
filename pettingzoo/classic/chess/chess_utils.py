@@ -6,7 +6,7 @@ def boards_to_ndarray(boards):
     arr64 = np.array(boards, dtype=np.uint64)
     arr8 = arr64.view(dtype=np.uint8)
     bits = np.unpackbits(arr8)
-    floats = bits.astype(np.float32)
+    floats = bits.astype(np.bool)
     boardstack = floats.reshape([len(boards), 8, 8])
     boardimage = np.transpose(boardstack, [1, 2, 0])
     return boardimage

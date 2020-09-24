@@ -17,11 +17,13 @@ class EnvLogger():
             handler = EnvWarningHandler(mqueue=EnvLogger.mqueue)
             logger.addHandler(handler)
         logger.warning(msg)
+        # needed to get the pytest runner to work correctly, and doesn't seem to have serious issues
+        EnvLogger.mqueue.append(msg)
 
     @staticmethod
     def flush():
         EnvLogger.mqueue.clear()
-    
+
     @staticmethod
     def suppress_output():
         EnvLogger._output = False
@@ -31,12 +33,40 @@ class EnvLogger():
         EnvLogger._output = True
 
     @staticmethod
-    def warn_action_out_of_bound():
-        EnvLogger._generic_warning("[WARNING]: Received an action that was outside action space")
+    def warn_action_out_of_bound(action, action_space, backup_policy):
+        EnvLogger._generic_warning("[WARNING]: Received an action {} that was outside action space {}. Environment is {}".format(action, action_space, backup_policy))
+
+    @staticmethod
+    def warn_action_is_NaN(backup_policy):
+        EnvLogger._generic_warning("[WARNING]: Received an NaN action. Environment is {}".format(backup_policy))
 
     @staticmethod
     def warn_close_unrendered_env():
-        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment")
+        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
+
+    @staticmethod
+    def warn_close_before_reset():
+        EnvLogger._generic_warning("[WARNING]: reset() needs to be called before close.")
+
+    @staticmethod
+    def warn_on_illegal_move():
+        EnvLogger._generic_warning("[WARNING]: Illegal move made, game terminating with current player losing. \nenv.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
+
+    @staticmethod
+    def error_observe_before_reset():
+        assert False, "reset() needs to be called before observe"
+
+    @staticmethod
+    def error_step_before_reset():
+        assert False, "reset() needs to be called before step"
+
+    @staticmethod
+    def warn_step_after_done():
+        EnvLogger._generic_warning("[WARNING]: step() called after all agents are done. Should reset() first.")
+
+    @staticmethod
+    def error_render_before_reset():
+        assert False, "reset() needs to be called before render"
 
 
 class EnvWarningHandler(logging.Handler):

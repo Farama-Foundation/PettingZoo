@@ -1,0 +1,164 @@
+// Styling for the masthead
+header.masthead {
+  text-align: center;
+  color: white;
+  // background-image: url("#{$header-image}");
+  // background-repeat: no-repeat;
+  // background-attachment: scroll;
+  // background-position: center center;
+  // background-size: cover;
+  overflow: hidden;
+  position: relative;
+  background-color: #353535;
+  padding-bottom: 30px;
+  .intro-text {
+    padding-bottom: 10px;
+    padding-right: 25%;
+    .intro-lead-in {
+      font-size: 30px;
+      line-height: 40px;
+      margin-bottom: 25px;
+      @include heading-font;
+    }
+    .intro-heading {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 22px;
+      margin-bottom: 25px;
+      @include heading-font;
+    }
+  }
+  .particles-js {
+    width: 100%;
+    height: 90%;
+    z-index: 1;
+    top: 0;
+    position: absolute;
+  }
+  .row {
+    padding-top: 25px;
+  }
+
+  .nestedrow {
+    padding-top: 0px;
+  }
+  .logobox {
+    text-align: right;
+    img {
+      width: 60px;
+    }
+  }
+  .headerbox {
+    text-align: center;
+    img {
+      height: 100%;
+    }
+  }
+  .btn-circle {
+    border-radius: 350px;
+    padding: 20px;
+  }
+
+  .nav-button {
+    width: 0;
+    padding-left: 0px;
+    padding-right: 0px;
+
+  }
+}
+@media(min-width:768px) {
+  header.masthead {
+    .intro-text {
+      padding-bottom: 10px;
+      .intro-lead-in {
+        font-size: 45px;
+        line-height: 60px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        @include heading-font;
+      }
+      .intro-heading {
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 30px;
+        margin-bottom: 10px;
+        @include heading-font;
+      }
+    }
+    .headerbox {
+      img {
+        //height: 300px;
+      }
+    }
+    .logobox {
+      img {
+        width: 100px;
+      }
+    }
+  }
+}
+
+@media(min-width:992px) {
+  header.masthead {
+    .headerbox {
+      img {
+        //height: 390px;
+      }
+    }
+    .logobox {
+      img {
+        width: 130px;
+      }
+    }
+  }
+}
+
+@media(min-width:1200px) {
+  header.masthead {
+    .headerbox {
+      img {
+        //height: 440px;
+      }
+    }
+    .logobox {
+      img {
+        width: 180px;
+      }
+    }
+  }
+}
+
+.circlebutton {
+  display: inline-block;
+  p {
+    font-size: x-small;
+  }
+}
+.buttonfont{
+  font-size: x-small;
+}
+@media(min-width: 768px) {
+  .buttonfont {
+    font-size: small;
+  }
+}
+
+@media(min-width: 992px) {
+  .buttonfont {
+      font-size: small;
+  }
+}
+
+@media(min-width: 1200px) {
+  .buttonfont {
+      font-size: medium;
+  }
+}
+
+@media(max-width:768px) {
+  header.masthead {
+    .headerbox {
+        display: none;
+    }
+  }
+}

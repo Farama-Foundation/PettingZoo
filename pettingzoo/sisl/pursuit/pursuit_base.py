@@ -6,7 +6,6 @@ from subprocess import call
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
-from pettingzoo.utils import EnvLogger
 
 
 import pygame
@@ -23,41 +22,35 @@ class Pursuit():
         """
         In evade purusit a set of pursuers must 'tag' a set of evaders
         Required arguments:
-            xs, ys: World size
-            reward_mech: local or global reward mechanism
+            x_size, y_size: World size
+            local_ratio: proportion of reward allocated locally vs distributed among all agents
             n_evaders
             n_pursuers
             obs_range: how far each agent can see
         Optional arguments:
-        Ally layer: list of pursuers
-        Opponent layer: list of evaders
         pursuer controller: stationary policy of ally pursuers
         evader controller: stationary policy of opponent evaders
 
-        catchr: reward for 'tagging' a single evader
-        caughtr: reward for getting 'tagged' by a pursuer
+        tag_reward: reward for 'tagging' a single evader
 
-        train_pursuit: flag indicating if we are simulating pursuers or evaders
         max_frames: after how many frames should the game end
         n_catch: how surrounded evader needs to be, before removal
-        random_opponents: randomized number of evaders on reset
-        max_opponents: maximum number of random evaders on reset
         freeze_evaders: toggle evaders move or not
-        term_pursuit: reward for pursuer who catches an evader
+        catch_reward: reward for pursuer who catches an evader
         urgency_reward: reward added in each step
-        train_pursuit: toggles whether pursuers are rewarded or evaders
         surround: toggles surround condition for evader removal
         constraint_window: window in which agents can randomly spawn
         """
 
-        self.xs = kwargs.pop('xs', 16)
-        self.ys = kwargs.pop('ys', 16)
-        xs = self.xs
-        ys = self.ys
-        self.map_matrix = two_d_maps.rectangle_map(self.xs, self.ys)
+        self.x_size = kwargs.pop('x_size', 16)
+        self.y_size = kwargs.pop('y_size', 16)
+        x_size = self.x_size
+        y_size = self.y_size
+        self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
         self.max_frames = kwargs.pop("max_frames", 500)
+        self.seed()
 
-        self._reward_mech = kwargs.pop('reward_mech', 'local')
+        self.local_ratio = kwargs.pop('local_ratio', 1.0)
 
         self.n_evaders = kwargs.pop('n_evaders', 30)
         self.n_pursuers = kwargs.pop('n_pursuers', 8)
@@ -72,21 +65,14 @@ class Pursuit():
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
         self.pursuers = agent_utils.create_agents(
-            self.n_pursuers, self.map_matrix, self.obs_range)
+            self.n_pursuers, self.map_matrix, self.obs_range, self.np_random)
         self.evaders = agent_utils.create_agents(
-            self.n_evaders, self.map_matrix, self.obs_range)
+            self.n_evaders, self.map_matrix, self.obs_range, self.np_random)
 
-        self.pursuer_layer = kwargs.pop(
-            'ally_layer', AgentLayer(xs, ys, self.pursuers))
-        self.evader_layer = kwargs.pop(
-            'opponent_layer', AgentLayer(xs, ys, self.evaders))
-
-        self.layer_norm = kwargs.pop('layer_norm', 10)
+        self.pursuer_layer = AgentLayer(x_size, y_size, self.pursuers)
+        self.evader_layer = AgentLayer(x_size, y_size, self.evaders)
 
         self.n_catch = kwargs.pop('n_catch', 2)
-
-        self.random_opponents = kwargs.pop('random_opponents', False)
-        self.max_opponents = kwargs.pop('max_opponents', 10)
 
         n_act_purs = self.pursuer_layer.get_nactions(0)
         n_act_ev = self.evader_layer.get_nactions(0)
@@ -100,47 +86,30 @@ class Pursuit():
                 'pursuer_controller', SingleActionPolicy(4))
         else:
             self.evader_controller = kwargs.pop(
-                'evader_controller', RandomPolicy(n_act_purs))
+                'evader_controller', RandomPolicy(n_act_purs, self.np_random))
             self.pursuer_controller = kwargs.pop(
-                'pursuer_controller', RandomPolicy(n_act_ev))
+                'pursuer_controller', RandomPolicy(n_act_ev, self.np_random))
 
-        self.current_agent_layer = np.zeros((xs, ys), dtype=np.int32)
+        self.current_agent_layer = np.zeros((x_size, y_size), dtype=np.int32)
 
-        self.catchr = kwargs.pop('catchr', 0.01)
-        self.caughtr = kwargs.pop('caughtr', -0.01)
+        self.tag_reward = kwargs.pop('tag_reward', 0.01)
 
-        self.term_pursuit = kwargs.pop('term_pursuit', 5.0)
+        self.catch_reward = kwargs.pop('catch_reward', 5.0)
 
         self.urgency_reward = kwargs.pop('urgency_reward', 0.0)
 
         self.ally_actions = np.zeros(n_act_purs, dtype=np.int32)
         self.opponent_actions = np.zeros(n_act_ev, dtype=np.int32)
 
-        self.train_pursuit = kwargs.pop('train_pursuit', True)
+        max_agents_overlap = max(self.n_pursuers, self.n_evaders)
+        obs_space = spaces.Box(low=0, high=max_agents_overlap, shape=(
+            self.obs_range, self.obs_range, 3), dtype=np.float32)
+        act_space = spaces.Discrete(n_act_purs)
+        self.action_space = [act_space for _ in range(self.n_pursuers)]
 
-        if self.train_pursuit:
-            self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
-            self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            self.action_space = [spaces.Discrete(
-                n_act_purs) for _ in range(self.n_pursuers)]
+        self.observation_space = [obs_space for _ in range(self.n_pursuers)]
+        self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
 
-            self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_pursuers)]
-            self.local_obs = np.zeros(
-                (self.n_pursuers, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
-            self.act_dims = [n_act_purs for i in range(self.n_pursuers)]
-        else:
-            self.low = np.array([0.0 for i in range(3 * self.obs_range**2)])
-            self.high = np.array([1.0 for i in range(3 * self.obs_range**2)])
-            self.action_space = [spaces.Discrete(
-                n_act_ev) for _ in range(self.n_evaders)]
-
-            self.observation_space = [spaces.Box(low=0, high=255, shape=(
-                3, self.obs_range, self.obs_range), dtype=np.uint8) for _ in range(self.n_evaders)]
-            self.local_obs = np.zeros(
-                (self.n_evaders, 3, self.obs_range, self.obs_range))  # Nagents X 3 X xsize X ysize
-            self.act_dims = [n_act_purs for i in range(self.n_evaders)]
-        self.pursuers_gone = np.array([False for i in range(self.n_pursuers)])
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
 
         self.surround = kwargs.pop('surround', True)
@@ -154,15 +123,13 @@ class Pursuit():
         self.renderOn = False
         self.pixel_scale = 30
 
-        pygame.init()
         self.clock = pygame.time.Clock()
         self.frames = 0
         self.reset()
+        assert not kwargs, f"gave arguments {list(kwargs.keys())} that are not valid pursuit arguments"
 
     def close(self):
-        if not self.renderOn:
-            EnvLogger.warn_close_unrendered_env()
-        else:
+        if self.renderOn:
             pygame.event.pump()
             pygame.display.quit()
             pygame.quit()
@@ -175,39 +142,39 @@ class Pursuit():
     def agents(self):
         return self.pursuers
 
-    @property
-    def reward_mech(self):
-        return self._reward_mech
-
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
+        try:
+            policies = [self.evader_controller, self.pursuer_controller]
+            for policy in policies:
+                try:
+                    policy.set_rng(self.np_random)
+                except AttributeError:
+                    pass
+        except AttributeError:
+            pass
+
         return [seed_]
 
     def get_param_values(self):
         return self.__dict__
 
     def reset(self):
-        self.pursuers_gone.fill(False)
         self.evaders_gone.fill(False)
-        if self.random_opponents:
-            if self.train_pursuit:
-                self.n_evaders = self.np_random.randint(1, self.max_opponents)
-            else:
-                self.n_pursuers = self.np_random.randint(1, self.max_opponents)
 
-        x_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        y_window_start = np.random.uniform(0.0, 1.0 - self.constraint_window)
-        xlb, xub = int(self.xs * x_window_start), int(self.xs * (x_window_start + self.constraint_window))
-        ylb, yub = int(self.ys * y_window_start), int(self.ys * (y_window_start + self.constraint_window))
+        x_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
+        y_window_start = self.np_random.uniform(0.0, 1.0 - self.constraint_window)
+        xlb, xub = int(self.x_size * x_window_start), int(self.x_size * (x_window_start + self.constraint_window))
+        ylb, yub = int(self.y_size * y_window_start), int(self.y_size * (y_window_start + self.constraint_window))
         constraints = [[xlb, xub], [ylb, yub]]
 
-        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range,
+        self.pursuers = agent_utils.create_agents(self.n_pursuers, self.map_matrix, self.obs_range, self.np_random,
                                                   randinit=True, constraints=constraints)
-        self.pursuer_layer = AgentLayer(self.xs, self.ys, self.pursuers)
+        self.pursuer_layer = AgentLayer(self.x_size, self.y_size, self.pursuers)
 
-        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range,
+        self.evaders = agent_utils.create_agents(self.n_evaders, self.map_matrix, self.obs_range, self.np_random,
                                                  randinit=True, constraints=constraints)
-        self.evader_layer = AgentLayer(self.xs, self.ys, self.evaders)
+        self.evader_layer = AgentLayer(self.x_size, self.y_size, self.evaders)
 
         self.latest_reward_state = [0 for _ in range(self.num_agents)]
         self.latest_done_state = [False for _ in range(self.num_agents)]
@@ -218,20 +185,17 @@ class Pursuit():
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
         self.frames = 0
+        self.renderOn = False
 
         return self.safely_observe(0)
 
     def step(self, action, agent_id, is_last):
-        if self.train_pursuit:
-            agent_layer = self.pursuer_layer
-            opponent_layer = self.evader_layer
-            opponent_controller = self.evader_controller
-        else:
-            agent_layer = self.evader_layer
-            opponent_layer = self.pursuer_layer
-            opponent_controller = self.pursuer_controller
+        agent_layer = self.pursuer_layer
+        opponent_layer = self.evader_layer
+        opponent_controller = self.evader_controller
 
-        self.latest_reward_state = self.reward()
+        if is_last:
+            self.latest_reward_state = self.reward()
 
         # actual action application
         agent_layer.move_agent(agent_id, action)
@@ -244,24 +208,23 @@ class Pursuit():
                 a = opponent_controller.act(self.model_state)
                 opponent_layer.move_agent(i, a)
 
-            self.latest_reward_state += self.term_pursuit * pursuers_who_remove
+            self.latest_reward_state += self.catch_reward * pursuers_who_remove
             self.latest_reward_state += self.urgency_reward
 
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
-        if self.reward_mech == 'global' and is_last:
-            meanVal = self.latest_reward_state.mean()
-            self.latest_reward_state = [
-                meanVal for _ in range(len(self.latest_reward_state))]
+        if is_last:
+            global_val = self.latest_reward_state.mean()
+            local_val = self.latest_reward_state
+            self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
 
         if self.renderOn:
             self.clock.tick(15)
         else:
             self.clock.tick(2000)
 
-        pygame.event.pump()
         self.frames = self.frames + 1
 
     def draw_model_state(self):
@@ -290,42 +253,30 @@ class Pursuit():
     def draw_pursuers(self):
         for i in range(self.pursuer_layer.n_agents()):
             x, y = self.pursuer_layer.get_position(i)
-            center = (self.pixel_scale * x + self.pixel_scale / 2,
-                      self.pixel_scale * y + self.pixel_scale / 2)
+            center = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                      int(self.pixel_scale * y + self.pixel_scale / 2))
             col = (255, 0, 0)
             pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
-
-    def draw_evaders_observations(self):
-        for i in range(self.evader_layer.n_agents()):
-            x, y = self.evader_layer.get_position(i)
-            patch = pygame.Surface(
-                (self.pixel_scale * self.obs_range, self.pixel_scale * self.obs_range))
-            patch.set_alpha(128)
-            patch.fill((0, 154, 205))
-            ofst = self.obs_range / 2.0
-            self.screen.blit(
-                patch, (self.pixel_scale * (x - ofst), self.pixel_scale * (y - ofst)))
 
     def draw_evaders(self):
         for i in range(self.evader_layer.n_agents()):
             x, y = self.evader_layer.get_position(i)
-            center = (self.pixel_scale * x + self.pixel_scale / 2,
-                      self.pixel_scale * y + self.pixel_scale / 2)
+            center = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                      int(self.pixel_scale * y + self.pixel_scale / 2))
             col = (0, 0, 255)
 
-            pygame.draw.circle(self.screen, col, center, self.pixel_scale / 3)
+            pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
     def render(self):
         if not self.renderOn:
             pygame.display.init()
             self.screen = pygame.display.set_mode(
-                (self.pixel_scale * self.xs, self.pixel_scale * self.ys))
+                (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size))
         self.renderOn = True
         self.draw_model_state()
-        if self.train_pursuit:
-            self.draw_pursuers_observations()
-        else:
-            self.draw_evaders_observations()
+
+        self.draw_pursuers_observations()
+
         self.draw_evaders()
         self.draw_pursuers()
 
@@ -361,8 +312,8 @@ class Pursuit():
         self.render()
         capture = pygame.surfarray.array3d(self.screen)
 
-        xl, xh = -self.obs_offset - 1, self.xs + self.obs_offset + 1
-        yl, yh = -self.obs_offset - 1, self.ys + self.obs_offset + 1
+        xl, xh = -self.obs_offset - 1, self.x_size + self.obs_offset + 1
+        yl, yh = -self.obs_offset - 1, self.y_size + self.obs_offset + 1
 
         window = pygame.Rect(xl, yl, xh, yh)
         subcapture = capture.subsurface(window)
@@ -372,11 +323,11 @@ class Pursuit():
     def reward(self):
         es = self.evader_layer.get_state_matrix()  # evader positions
         rewards = [
-            self.catchr * np.sum(es[np.clip(
+            self.tag_reward * np.sum(es[np.clip(
                 self.pursuer_layer.get_position(
-                    i)[0] + self.surround_mask[:, 0], 0, self.xs - 1
+                    i)[0] + self.surround_mask[:, 0], 0, self.x_size - 1
             ), np.clip(
-                self.pursuer_layer.get_position(i)[1] + self.surround_mask[:, 1], 0, self.ys - 1)])
+                self.pursuer_layer.get_position(i)[1] + self.surround_mask[:, 1], 0, self.y_size - 1)])
             for i in range(self.n_pursuers)
         ]
         return np.array(rewards)
@@ -399,48 +350,33 @@ class Pursuit():
         return self.pursuer_layer.n_agents()
 
     def safely_observe(self, i):
-        if self.train_pursuit:
-            agent_layer = self.pursuer_layer
-        else:
-            agent_layer = self.evader_layer
-        obs = self.collect_obs(agent_layer)
-        return obs[i]
-
-    def collect_obs(self, agent_layer):
-        if self.train_pursuit:
-            gone_flags = self.pursuers_gone
-        else:
-            gone_flags = self.evaders_gone
-        obs = []
-        nage = 0
-        for i in range(self.n_agents()):
-            if gone_flags[i]:
-                obs.append(None)
-            else:
-                o = self.collect_obs_by_idx(agent_layer, nage)
-                obs.append(o)
-                nage += 1
+        agent_layer = self.pursuer_layer
+        obs = self.collect_obs(agent_layer, i)
         return obs
+
+    def collect_obs(self, agent_layer, i):
+        for i in range(self.n_agents()):
+            return self.collect_obs_by_idx(agent_layer, i)
+        assert False, "bad index"
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
         # returns a flattened array of all the observations
-        self.local_obs[agent_idx][0].fill(
-            1.0 / self.layer_norm)  # border walls set to -0.1?
+        obs = np.zeros((3, self.obs_range, self.obs_range), dtype=np.float32)
+        obs[0].fill(1.0)  # border walls set to -0.1?
         xp, yp = agent_layer.get_position(agent_idx)
 
         xlo, xhi, ylo, yhi, xolo, xohi, yolo, yohi = self.obs_clip(xp, yp)
 
-        self.local_obs[agent_idx, 0:3, xolo:xohi, yolo:yohi] = np.abs(
-            self.model_state[0:3, xlo:xhi, ylo:yhi]) / self.layer_norm
-        return self.local_obs[agent_idx]
+        obs[0:3, xolo:xohi, yolo:yohi] = np.abs(self.model_state[0:3, xlo:xhi, ylo:yhi])
+        return obs
 
     def obs_clip(self, x, y):
         xld = x - self.obs_offset
         xhd = x + self.obs_offset
         yld = y - self.obs_offset
         yhd = y + self.obs_offset
-        xlo, xhi, ylo, yhi = (np.clip(xld, 0, self.xs - 1), np.clip(xhd, 0, self.xs - 1),
-                              np.clip(yld, 0, self.ys - 1), np.clip(yhd, 0, self.ys - 1))
+        xlo, xhi, ylo, yhi = (np.clip(xld, 0, self.x_size - 1), np.clip(xhd, 0, self.x_size - 1),
+                              np.clip(yld, 0, self.y_size - 1), np.clip(yhd, 0, self.y_size - 1))
         xolo, yolo = abs(np.clip(xld, -self.obs_offset, 0)
                          ), abs(np.clip(yld, -self.obs_offset, 0))
         xohi, yohi = xolo + (xhi - xlo), yolo + (yhi - ylo)
@@ -496,8 +432,6 @@ class Pursuit():
 
         ai = 0
         for i in range(self.pursuer_layer.n_agents()):
-            if self.pursuers_gone[i]:
-                continue
             x, y = self.pursuer_layer.get_position(i)
             # can remove pursuers probabilitcally here?
         for ridx in removed_evade:
@@ -514,14 +448,14 @@ class Pursuit():
             (no wall or obstacle)
         """
         tosur = 4
-        if x == 0 or x == (self.xs - 1):
+        if x == 0 or x == (self.x_size - 1):
             tosur -= 1
-        if y == 0 or y == (self.ys - 1):
+        if y == 0 or y == (self.y_size - 1):
             tosur -= 1
         neighbors = self.surround_mask + np.array([x, y])
         for n in neighbors:
             xn, yn = n
-            if not 0 < xn < self.xs or not 0 < yn < self.ys:
+            if not 0 < xn < self.x_size or not 0 < yn < self.y_size:
                 continue
             if self.model_state[0][xn, yn] == -1:
                 tosur -= 1

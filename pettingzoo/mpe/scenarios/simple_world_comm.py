@@ -57,8 +57,6 @@ class Scenario(BaseScenario):
         world.landmarks += world.forests
         # world.landmarks += self.set_boundaries(world)
         # world boundaries now penalized with negative reward
-        # make initial conditions
-        self.reset_world(world)
         return world
 
     def set_boundaries(self, world):
@@ -89,7 +87,7 @@ class Scenario(BaseScenario):
 
         return boundary_list
 
-    def reset_world(self, world):
+    def reset_world(self, world, np_random):
         # random properties for agents
         for i, agent in enumerate(world.agents):
             agent.color = np.array([0.45, 0.95, 0.45]) if not agent.adversary else np.array([0.95, 0.45, 0.45])
@@ -103,17 +101,17 @@ class Scenario(BaseScenario):
             landmark.color = np.array([0.6, 0.9, 0.6])
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
+            agent.state.p_pos = np_random.uniform(-1, +1, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-0.9, +0.9, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-0.9, +0.9, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
         for i, landmark in enumerate(world.food):
-            landmark.state.p_pos = np.random.uniform(-0.9, +0.9, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-0.9, +0.9, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
         for i, landmark in enumerate(world.forests):
-            landmark.state.p_pos = np.random.uniform(-0.9, +0.9, world.dim_p)
+            landmark.state.p_pos = np_random.uniform(-0.9, +0.9, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def benchmark_data(self, agent, world):

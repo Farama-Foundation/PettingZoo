@@ -1,0 +1,27 @@
+  <!-- Footer -->
+  <footer class="footer" id="footer" style="background-color:white;">
+    <div class="container">
+      <div class="row">
+        <div class="col-md">
+          <span class="copyright">Copyright &copy; {{ site.copyright }} {{ 'now' | date: "%Y" }}</span>
+        </div>
+		<!-- Social Media -->
+		<!-- Legal -->
+      </div>
+    </div>
+  </footer>
+{% if page.layout == "page" %}
+<script>
+fixPageShort();
+function fixPageShort() {
+  if(window.innerHeight > document.body.offsetHeight) {
+    document.getElementById("footer").style.position="fixed";
+    document.getElementById("footer").style.bottom=0;
+    document.getElementById("footer").style.right=0;
+    document.getElementById("footer").style.left=0;
+    document.getElementById("footer").style.width="100%";
+  }
+}
+</script>
+{% endif %}
+  <!-- End Footer -->

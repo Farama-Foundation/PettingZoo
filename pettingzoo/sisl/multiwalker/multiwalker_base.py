@@ -6,8 +6,7 @@ from gym.utils import seeding
 import Box2D
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
-from .. import Agent
-from pettingzoo.utils import EnvLogger
+from .._utils import Agent
 
 MAX_AGENTS = 40
 
@@ -82,13 +81,13 @@ class ContactDetector(contactListener):
 class BipedalWalker(Agent):
 
     def __init__(self, world, init_x=TERRAIN_STEP * TERRAIN_STARTPAD / 2,
-                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2):
+                 init_y=TERRAIN_HEIGHT + 2 * LEG_H, n_walkers=2, seed=None):
         self.world = world
         self._n_walkers = n_walkers
         self.hull = None
         self.init_x = init_x
         self.init_y = init_y
-        self._seed()
+        self._seed(seed)
 
     def _destroy(self):
         if not self.hull:
@@ -179,10 +178,10 @@ class BipedalWalker(Agent):
 
             def ReportFixture(self, fixture, point, normal, fraction):
                 if (fixture.filterData.categoryBits & 1) == 0:
-                    return 1
+                    return -1
                 self.p2 = point
                 self.fraction = fraction
-                return 0
+                return fraction
 
         self.lidar = [LidarCallback() for _ in range(10)]
 
@@ -256,14 +255,13 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
                  forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
-        # reward_mech is 'global' for cooperative game (same reward for every agent)
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
             angle_noise: noise applied to agent rotational sensor observations
-            reward_mech: whether all agents are rewarded equal amounts or singular agent is rewarded
+            local_ratio: proportion of reward allocated locally vs distributed among all agents
             forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
             fall_reward: reward applied when an agent falls down
             drop_reward: reward applied for each fallen walker in environment
@@ -274,11 +272,13 @@ class MultiWalkerEnv():
         self.n_walkers = n_walkers
         self.position_noise = position_noise
         self.angle_noise = angle_noise
-        self._reward_mech = reward_mech
         self.forward_reward = forward_reward
         self.fall_reward = fall_reward
         self.drop_reward = drop_reward
         self.terminate_on_fall = terminate_on_fall
+        self.local_ratio = local_ratio
+        self.seed_val = None
+        self.seed()
         self.setup()
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
@@ -291,7 +291,6 @@ class MultiWalkerEnv():
         return self.__dict__
 
     def setup(self):
-        self.seed()
         self.viewer = None
 
         self.world = Box2D.b2World()
@@ -304,7 +303,7 @@ class MultiWalkerEnv():
         ]
         self.walkers = [
             BipedalWalker(self.world, init_x=sx,
-                          init_y=init_y)
+                          init_y=init_y, seed=self.seed_val)
             for sx in self.start_x
         ]
         self.num_agents = len(self.walkers)
@@ -328,12 +327,11 @@ class MultiWalkerEnv():
     def agents(self):
         return self.walkers
 
-    @property
-    def reward_mech(self):
-        return self._reward_mech
-
     def seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
+        self.seed_val = seed_
+        for walker in getattr(self, "walkers", []):
+            walker._seed(seed_)
         return [seed_]
 
     def _destroy(self):
@@ -353,8 +351,6 @@ class MultiWalkerEnv():
         if self.viewer is not None:
             self.viewer.close()
             self.viewer = None
-        else:
-            EnvLogger.warn_close_unrendered_env()
 
     def reset(self):
         self._destroy()
@@ -408,13 +404,13 @@ class MultiWalkerEnv():
                 else:
                     xm = (self.walkers[j].hull.position.x - x) / self.package_length
                     ym = (self.walkers[j].hull.position.y - y) / self.package_length
-                    nobs.append(np.random.normal(xm, self.position_noise))
-                    nobs.append(np.random.normal(ym, self.position_noise))
+                    nobs.append(self.np_random.normal(xm, self.position_noise))
+                    nobs.append(self.np_random.normal(ym, self.position_noise))
             xd = (self.package.position.x - x) / self.package_length
             yd = (self.package.position.y - y) / self.package_length
-            nobs.append(np.random.normal(xd, self.position_noise))
-            nobs.append(np.random.normal(yd, self.position_noise))
-            nobs.append(np.random.normal(self.package.angle, self.angle_noise))
+            nobs.append(self.np_random.normal(xd, self.position_noise))
+            nobs.append(self.np_random.normal(yd, self.position_noise))
+            nobs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(wobs + nobs))
 
             # shaping = 130 * pos[0] / SCALE
@@ -450,12 +446,10 @@ class MultiWalkerEnv():
         self.frames = self.frames + 1
         if is_last:
             rewards, done, mod_obs = self.scroll_subroutine()
-            self.last_obs[agent_id] = mod_obs[agent_id]
-            if self.reward_mech == 'local':
-                self.last_rewards = rewards
-            else:
-                self.last_rewards = [rewards.mean()
-                                     for _ in range(self.n_walkers)]
+            self.last_obs = mod_obs
+            global_reward = rewards.mean()
+            local_reward = rewards * self.local_ratio
+            self.last_rewards = global_reward * (1. - self.local_ratio) + local_reward * self.local_ratio
             self.last_dones = [done for _ in range(self.n_walkers)]
 
     def get_last_rewards(self):
@@ -469,7 +463,7 @@ class MultiWalkerEnv():
 
     def observe(self, agent):
         o = self.last_obs[agent]
-        o = np.array(o)
+        o = np.array(o, dtype=np.float32)
         return o
 
     def render(self, mode='human', close=False):

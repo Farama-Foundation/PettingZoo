@@ -1,0 +1,102 @@
+// Global styling for this template
+body {
+    overflow-x: hidden;
+    @include body-font;
+  }
+
+  p {
+    line-height: 1.75;
+  }
+
+  a {
+    color: $primary;
+    &:hover {
+      color: darken($primary, 10%);
+    }
+  }
+
+  .text-primary {
+    color: $primary !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    @include heading-font;
+  }
+
+  .page-section {
+    padding: 50px 0;
+    h2.section-heading {
+      font-size: 40px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    p.section-subheading {
+      font-style:normal;
+      margin-bottom: 75px;
+      text-transform: none;
+    }
+  }
+  @media(min-width:768px) {
+    section {
+      padding: 150px 0;
+    }
+  }
+
+  // Highlight color customization
+  ::-moz-selection {
+    background: $primary;
+    text-shadow: none;
+  }
+
+  ::selection {
+    background: $primary;
+    text-shadow: none;
+  }
+
+  img::selection {
+    background: transparent;
+  }
+
+  img::-moz-selection {
+    background: transparent;
+  }
+
+.appear_small {
+  display: block;
+}
+.appear_big {
+  display: none;
+}
+@media(min-width:768px) {
+  .floatright{
+    width: 350px;
+    float: right;
+    padding: 1em;
+    margin: 1em;
+    border: 2px;
+    border-style: solid;
+    background-color: white;
+    p{
+      text-align: center;
+    }
+    h4{
+      text-align: center;
+    }
+    img{
+    display: block;
+    margin: 0 auto;
+    }
+  }
+  .appear_small {
+    display: none;
+  }
+  .appear_big {
+    display: block;
+  }
+}

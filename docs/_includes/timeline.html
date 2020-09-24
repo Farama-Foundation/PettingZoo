@@ -1,0 +1,36 @@
+<!-- About -->
+  <section class="page-section" id="{{ site.data.sitetext.timeline.section | default: "about" }}">
+    <div class="container">
+      <div class="markdown-body">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase">{{ site.data.sitetext.timeline.title | markdownify | default: "About" }}</h2>
+          <h3 class="section-subheading text-muted">{{ site.data.sitetext.timeline.text | default: ""}}</h3>
+        </div>
+      </div>
+      <div class="env_table">
+      {%- for row in site.data.sitetext.timeline.rows -%}
+      <div class="env_row">
+        {%- for event in row -%}
+        <div class="img_entry gallery_entry env_entry">
+            <a href="{{ event.link }}">
+            <img  src="{{ event.image }}" alt="Card image">
+            </a>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="env_row">
+        {%- for event in row -%}
+        <div class="descrip_entry gallery_entry">
+          <div><h4 class="card-title horizontal_center"> {{ event.title }} </h4></div>
+          <p class="card-title horizontal_center"> {{ event.desc }} </p>
+          {% if event.url %}<a href="{{event.url}}">{{event.url}}</a>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+  </section>
+<!-- End About -->
