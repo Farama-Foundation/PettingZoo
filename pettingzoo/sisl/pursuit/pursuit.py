@@ -3,23 +3,37 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 import numpy as np
-from pettingzoo.utils import EnvLogger
+import pygame
+from pettingzoo.utils import wrappers
+from gym.utils import EzPickle
+from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
-class env(AECEnv):
+def env(**kwargs):
+    env = raw_env(**kwargs)
+    example_space = list(env.action_spaces.values())[0]
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape, dtype=example_space.dtype), "taking all zeros action")
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+parallel_env = parallel_wrapper_fn(env)
+
+
+class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self, *args, **kwargs):
-        super(env, self).__init__()
+        EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
-
+        pygame.init()
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
-        self.agent_order = self.agents[:]
-        self._agent_selector = agent_selector(self.agent_order)
-        self.agent_selection = 0
+        self._agent_selector = agent_selector(self.agents)
+        self.has_reset = False
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -27,40 +41,35 @@ class env(AECEnv):
             zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.0
+        self.closed = False
 
-        self.rewards = dict(
-            zip(self.agents, [np.float64(0) for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
-        self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-
-        self.reset()
+    def seed(self, seed=None):
+        self.env.seed(seed)
 
     def reset(self, observe=True):
+        self.has_reset = True
         self.steps = 0
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        self._agent_selector.reinit(self.agent_order)
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
+        self.env.reset()
         if observe:
             return self.observe(self.agent_selection)
 
     def close(self):
-        self.env.close()
+        if not self.closed and self.has_reset:
+            self.closed = True
+            self.env.close()
 
     def render(self, mode="human"):
-        self.env.render()
+        if not self.closed:
+            self.env.render()
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if action is None or action == np.NaN:
-            action = 4
-            EnvLogger.warn_action_out_of_bound()
-        elif not self.action_spaces[agent].contains(action):
-            EnvLogger.warn_action_out_of_bound()
-            raise Exception('Action for agent {} must be in Discrete({}). \
-                                It is currently {}'.format(agent, self.action_spaces[agent].n, action))
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
             if self.env.frames >= self.env.max_frames:
@@ -75,5 +84,5 @@ class env(AECEnv):
             return self.observe(self.agent_selection)
 
     def observe(self, agent):
-        o = np.array(self.env.safely_observe(self.agent_name_mapping[agent]))
-        return o
+        o = self.env.safely_observe(self.agent_name_mapping[agent])
+        return np.swapaxes(o, 2, 0)

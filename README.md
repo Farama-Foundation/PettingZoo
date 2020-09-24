@@ -1,176 +1,119 @@
-# PettingZoo
-PettingZoo is Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
+<p align="center">
+    <img src="PettingZoo_Text.png" width="500px"/>
+</p>
+
+[![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
+
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
 We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
 
-## Environment Types and Installation
+Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
 
-PettingZoo includes the following sets of games:
+## Environments and Installation
 
-* atari: Multi-player Atari 2600 games (both cooperative and competitive)
-* classic: Classical, nongraphical, competitive games (i.e. chess, Texas hold 'em, and go)
-* gamma: Cooperative graphical games developed by us. Policies for these must learn very coordinated behaviors.
-* magent: Environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
-* mpe: A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* sisl: 3 cooperative environments, originally from https://github.com/sisl/MADRL
+PettingZoo includes the following families of environments:
 
-To install a set of games, use `pip3 install pettingzoo[atari]` (or whichever set of games you want).
+* [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
+* [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
+* [Classic](https://www.pettingzoo.ml/classic): Classical games including card games, board games, etc.
+* [MAgent](https://www.pettingzoo.ml/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
+* [MPE](https://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
+* [SISL](https://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
-We support Python 3.5, 3.6, 3.7 and 3.8
+To install the pettingzoo base library, use `pip install pettingzoo`.
 
+This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install pettingzoo[atari]` or use `pip install pettingzoo[all]` to install all dependencies.
 
-## Initializing Environments
+We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
+
+## API
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.gamma import pistonball_v0
+from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 ```
 
-Environments are generally highly configurable via arguments at creation, i.e.:
-
-```
-cooperative_pong.env(ball_velocity=?, left_paddle_velocity=?,
-right_paddle_velocity=?, wedding_cake_paddle=True, max_frames=900)
-```
-
-## Interacting With Environments
 Environments can be interacted with in a manner very similar to Gym:
 
 ```
 observation = env.reset()
-while True:
-    for _ in env.agent_order:
-        reward, done, info = env.last()
-        action = policy(observation)
-        observation = env.step(action)
+for agent in env.agent_iter():
+    reward, done, info = env.last()
+    action = policy(observation)
+    observation = env.step(action)
 ```
 
-The commonly used methods are:
+For the complete API documentation, please see https://www.pettingzoo.ml/api
 
-`agent_order` is a list of agent names in the order they act. In some environments, the number of agents and this order can change. Agent's can also appear twice in this (i.e. act twice in a cycle).
+### Parallel API
 
-`last()` returns the reward, etc. from the action taken by the selected agent during it's last step. This is because those values aren't guaranteed to be fully known until right before an agent's next turn.
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://www.pettingzoo.ml/api#parallel-api
 
-`agent_selection` is used to let all the functions know what agent is acting (and is why agent isn't passed as an argument above).
+## SuperSuit
 
-`reset(observe=True)` is the same as in Gym- it resets the environment (and set's it up for use when called the first time), and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
+SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
 
-`step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent in `env.agent_order`, and returns the observation for the next agent (as it's what the policy will next need). Setting `observe=False` disables computing and returning the observation.
+## Release History
+
+Version 1.3.3 (September 22, 2020)
+
+Fixed observation issue multiwalker environment, fixed MPE speaker listener naming scheme, renamed max_agent_iter to max_iter.
+
+Version 1.3.2 (September 17, 2020)
+
+Fixed import issue for depreciated multiwalker environment.
+
+Version 1.3.1 (September 16, 2020)
+
+Various fixes and parameter changes for all SISL environments, bumped versions. Fixed dones computations in knights_archers_zombies and cooperative_pong, bumped versions. Fixed install extras.
+
+Version 1.3.0 (September 8, 2020):
+
+Fixed how agent iter wrapper handles premature agent death. Bumped environments with death (joust, mario_bros, maze_craze, warlords, wizard_of_wor, knights_archers_zombies, battle, battlefield, combined_arms, gather, tiger_deer, multiwalker). Also switched MAgent to having a native parallel environment, making it much faster. We bumped adverserial pursuit as well due to this.
+
+Version 1.2.1 (August 31, 2020):
+
+Fixed ability to indefinitely stall in Double Dunk, Othello, Tennis and Video Checkers Atari environments, bumped versions to v1.
+
+Version 1.2.0 (August 27, 2020):
+
+Large fix to quadrapong, version bumped to v1.
+
+Version 1.1.0 (August 20, 2020):
+
+Added [ParallelEnv](https://www.pettingzoo.ml/api#parallel-api) API where all agents step at once. Fixed entombed_competitive rewards and bumped environment version to entombed_competitive_v1. Fixed prospector rewards and bumped version to prospector_v1.
+
+Version 1.0.1 (August 12, 2020):
+
+Fixes to continuous mode on pistonball and prison butterfly environments, along with a bad test that let the problems slip through. Versions bumped on both games.
+
+Version 1.0.0 (August 5th, 2020):
+
+This is the first official stable release of PettingZoo. Any changes to environments after this point will result in incrementing the environment version number. We currently plan to do three more things for PettingZoo beyond general maintenance: write a paper and put it on Arxiv, add Shogi as a classic environment using python-shogi, and add "colosseum"- an online tool for benchmarking competitive environments.
 
 
-## Additional Environment API
+## Citation
 
-PettingZoo models games as AEC games, and thus can support any game multi-agent RL can consider, allowing for fantastically weird cases. Because of this, our API includes lower level functions and attributes that you probably won't need, but are very important when you do. Their functionality is also needed by the high level functions above though, so implementing them is just a matter of code factoring.
-
-`agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
-
-`num_agents`: The number of agents currently in the environment.
-
-`observation_spaces`: A dict of the gym observation spaces of every agent, by name.
-
-`action_spaces`: A dict of the gym action spaces of every agent, by name.
-
-`rewards`: A dict of the rewards of every agent at the time called, by name. Rewards are summed from the last time an agent took it's turn, and zeroed before it takes another turn. This is called by `last`. This looks like:
-
-`{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
-
-`dones`: A dict of the done state of every agent at the time called, by name. This is called by `last`. This looks like:
-
-`dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
-
-`infos`: A dict of info for each agent, by name. Each agent's info is also a dict. This is called by `last`. This looks like:
-
-`infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
-
-`observe(agent)`: Returns the observation an agent currently can make. `step` calls this.
-
-`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes.
-
-`close()`: Closes the rendering window.
-
-## Environment Actions
-
-In this API, when the environment acts following an agents action, they're treated as happening at the same time. There are cases where breaking these apart can be very helpful. Our API supports this by treating the environment as an "agent". While initially odd, having an environment agent that can act on the state of the game is actually a common modeling practice in game theory.
-
-We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
-
-## Environment Documentation
-
-Full documentation of each environment is available [here].
-
-All environments end in something like \_v0.  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
-
-## Utils
-
-### API Test
+To cite this project in publication, please use
 
 ```
-import pettingzoo.tests.api_test as api_test
-api_test.api_test(env, render=True, manual_control=None, save_obs=False)
-```
-
-This tests the environment for API compliance. `render=True` tests render functionality, if an environment has it. `manual_control` tests for manual_control functionality if included (explained below). Set `save_obs=True` to save observations as .png images in the directory the command is run in for debugging purposes (this only supports enviornment with image observations). `manual_control` takes the manual control method name for an environment (i.e. `manual_control=pistonball.manual_control`) to run the test.
-
-### Bombardment Test
-
-```
-import pettingzoo.tests.bombardment_test as bombardment_test
-bombardment_test.bombardment_test(env, cycles=10000)
-```
-
-This randomly plays through the environment `cycles` times, to test for stability.
-
-### Performance Test
-
-```
-import pettingzoo.tests.performance_benchmark as performance_benchmark
-performance_benchmark.performance_benchmark(env)
-```
-
-This randomly steps through the environment for 60 seconds to benchmark it's performance.
-
-### Manual Control
-
-Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
-
-```
-from pettingzoo.gamma import prison
-prison.manual_control([environment specs])
-```
-
-Look at the [documentation] for individual environments to see which supports manual control and what the controls for a specific environment are.
-
-### Random Demo
-
-For all renderable games games, including those that can't be played by humans, you easily can get an impression for them by watching a random policy control all the actions:
-
-```
-from pettingzoo.utils import random_demo
-random_demo(env)
+@misc{pettingZoo2020,
+  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam},
+  title = {Petting{Z}oo},
+  year = {2020},
+  publisher = {GitHub},
+  note = {GitHub repository},
+  howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
+}
 ```
 
 ## OS Support
 
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to windows, but do not officially support it. We're open to help properly supporting Windows.
+We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it. We're open to help properly supporting Windows.
 
+## Reward Program
 
-## Leaderboards
-Our cooperative games have leaderboards for best total (summed over all agents) score. If you'd like to be listed on the leader board, please submit a pull request. Only pull requests that link to code for reproducibility and use environment arguments in the spirit of the competition will be accepted.
-
-## Incomplete Environments
-
-The following environments are under active development:
-
-* atari/* (Ben)
-* classic/checkers (Ben)
-* classic/go (Luis)
-* classic/hanabi (Clemens)
-* gamma/prospector (Yashas)
-* magent/* (David and Mario)
-
-Development has not yet started on:
-
-* classic/backgammon
-* classic/shogi (python-shogi)
+We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can receive a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing address or PayPal address. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.

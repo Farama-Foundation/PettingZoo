@@ -1,0 +1,114 @@
+language: python
+
+cache: pip
+
+jobs:
+  include:
+    - name: "Python 3.6 on Linux"
+      services:
+        - xvfb
+      python: 3.6
+      before_install:
+        - export AUDIODEV=null
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest ./pettingzoo/tests/pytest_runner.py
+    - name: "Python 3.7 on Linux"
+      services:
+        - xvfb
+      python: 3.7
+      before_install:
+        - export AUDIODEV=null
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest ./pettingzoo/tests/pytest_runner.py
+
+    - name: "Python 3.8 on Linux"
+      services:
+        - xvfb
+      python: 3.8
+      before_install:
+        - export AUDIODEV=null
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=atari
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest ./pettingzoo/tests/pytest_runner.py
+
+    - name: "Python 3 on macOS"
+      os: osx
+      osx_image: xcode11.4
+      addons:
+        homebrew:
+          packages:
+            - swig
+            - unrar
+            - llvm
+      language: shell
+      before_install:
+        - export pz_module=sisl
+        - export pz_render=False
+      install:
+        - pip3 install pytest
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - pytest ./pettingzoo/tests/pytest_runner.py
+
+    - name: "Full CI tests"
+      services:
+        - xvfb
+      python: 3.6
+      before_install:
+
+        - export AUDIODEV=null
+        - cd ${TRAVIS_BUILD_DIR}
+        - sudo apt-get install swig
+        - sudo apt install freeglut3-dev
+        - sudo apt-get install unrar
+        - export pz_module=classic
+
+      install:
+        - pip3 install -r requirements.txt
+        - pip3 install AutoROM
+        - AutoROM -v
+      script:
+        - python3 -m pettingzoo.tests.ci_test atari True True True False
+        - python3 -m pettingzoo.tests.ci_test classic True True True False
+        - python3 -m pettingzoo.tests.ci_test butterfly True True True False
+        - python3 -m pettingzoo.tests.ci_test mpe True True True False
+        - python3 -m pettingzoo.tests.ci_test magent True True True False
+        - python3 -m pettingzoo.tests.ci_test sisl True True True False
+        - pytest ./pettingzoo/tests/all_parameter_combs.py
+    - name: "Flake 8 tests"
+      install:
+        - pip3 install flake8
+      script:
+        - bash ./check_style.sh
+    - name: "Print tests"
+      script:
+        - python3 -m pettingzoo.tests.print_test
+    - name: "source distribution test"
+        - python setup.py sdist
+        - pip install dist/*.tar.gz --user

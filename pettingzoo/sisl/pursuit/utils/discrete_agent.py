@@ -1,7 +1,7 @@
 import numpy as np
 
 from gym import spaces
-from ... import Agent
+from ..._utils import Agent
 
 
 #################################################################
@@ -11,11 +11,11 @@ from ... import Agent
 class DiscreteAgent(Agent):
 
     # constructor
-    def __init__(self, xs, ys, map_matrix, obs_range=3, n_channels=3, seed=1, flatten=False):
+    def __init__(self, xs, ys, map_matrix, randomizer, obs_range=3, n_channels=3, seed=1, flatten=False):
         # map_matrix is the may of the enviroment (-1 are buildings)
         # n channels is the number of observation channels
 
-        self.random_state = np.random.RandomState(seed)
+        self.random_state = randomizer
 
         self.xs = xs
         self.ys = ys

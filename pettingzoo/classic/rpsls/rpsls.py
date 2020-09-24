@@ -2,6 +2,7 @@ from gym.spaces import Discrete
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils import wrappers
 
 rock = 0
 paper = 1
@@ -13,7 +14,15 @@ MOVES = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK", "None"]
 NUM_ITERS = 100
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
     """Two-player environment for rock paper scissors lizard spock.
     The observation is simply the last opponent action."""
 
@@ -23,7 +32,6 @@ class env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_" + str(r) for r in range(self.num_agents)]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
-        self.agent_order = self.agents[:]
 
         self.action_spaces = {agent: Discrete(5) for agent in self.agents}
         self.observation_spaces = {agent: Discrete(6) for agent in self.agents}
@@ -31,18 +39,21 @@ class env(AECEnv):
         self.display_wait = 0.0
         self.reinit()
 
+    def seed(self, seed=None):
+        pass
+
     def reinit(self):
-        self._agent_selector = agent_selector(self.agent_order)
+        self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
-        self.state = {}
+        self.state = {agent: none for agent in self.agents}
         self.observations = {agent: none for agent in self.agents}
         self.num_moves = 0
 
     def render(self, mode="human"):
-        print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[0]], MOVES[self.state[1]]))
+        print("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
 
     def observe(self, agent):
         # observation of one agent is the previous state of the other
@@ -58,12 +69,8 @@ class env(AECEnv):
 
     def step(self, action, observe=True):
         agent = self.agent_selection
-        if np.isnan(action):
-            action = 0
-        elif not self.action_spaces[agent].contains(action):
-            raise Exception('Action for agent {} must be in Discrete({}).'
-                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
-        self.state[self.agent_name_mapping[self.agent_selection]] = action
+
+        self.state[self.agent_selection] = action
 
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
@@ -97,17 +104,16 @@ class env(AECEnv):
                 (spock, scissors): (1, -1),
                 (spock, lizard): (-1, 1),
                 (spock, spock): (0, 0),
-            }[(self.state[0], self.state[1])]
+            }[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
             self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
 
             # observe the current state
             for i in self.agents:
-                self.observations[i] = self.state[1 - self.agent_name_mapping[i]]
-                self.state[1 - self.agent_name_mapping[i]] = none
+                self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
-            self.state[1 - self.agent_name_mapping[agent]] = none
+            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
 
         self.agent_selection = self._agent_selector.next()
         if observe:

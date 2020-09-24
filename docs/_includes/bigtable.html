@@ -1,0 +1,72 @@
+
+
+{% assign page_infos = '' | split: '' %}
+{% for page in site.pages %}
+  {% if page.url contains include.group %}
+  {% assign url_arr = page.url | split: "/" %}
+    {% if url_arr.size > 2 %}
+      {% assign underscore_name = url_arr[2] | split: "." %}
+      {% assign page_info = url_arr[1] | append:  "1" | append: underscore_name[0] | append:  "1" | append: page.title %}
+
+      {% assign page_info_arr = page_info | split: '12345'%}
+
+       {% assign page_infos = page_infos | concat: page_info_arr %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if include.cols %}
+{% assign cols = include.cols %}
+{% else %}
+{% assign cols = 3 %}
+{% endif %}
+
+<div class="env_table">
+{% assign cur_idx = 0 %}
+{% assign max_idx = page_infos | size %}
+
+{% for page_info in page_infos %}
+  {% if cur_idx < max_idx %} <div class="env_row"> {% endif %}
+  {% for page_info in (1..cols) %}
+
+    {% if cur_idx < max_idx %}
+    {% assign item_arr = page_infos[cur_idx] | split: "1" %}
+    {% assign gif_url = "/" | append: item_arr[0] | append: "/" | append: item_arr[0] | append: "_" | append: item_arr[1] | append: ".gif" %}
+    {% assign link =   "/" | append: item_arr[0] | append: "/" |  append: item_arr[1] %}
+      <div class="img_entry gallery_entry env_entry">
+          <a href="{{ link }}">
+          <img  src="{{ gif_url }}" alt="Env image">
+          </a>
+      </div>
+    {% endif %}
+    {% assign cur_idx = cur_idx | plus: 1 %}
+  {% endfor %}
+
+  {% assign cur_idx = cur_idx | minus: cols %}
+  {% if cur_idx < max_idx %}   </div> <div class="env_row"> {% endif %}
+
+  {% for page_info in (1..cols) %}
+    {% if cur_idx < max_idx %}
+    {% assign item_arr = page_infos[cur_idx] | split: "1" %}
+      <div class="descrip_entry gallery_entry">
+        <div><h3 class="card-title horizontal_center"> {{ item_arr[2] }} </h3></div>
+      </div>
+    {% endif %}
+    {% assign cur_idx = cur_idx | plus: 1 %}
+    {% if cur_idx == max_idx %} </div> {% endif %}
+  {% endfor %}
+  {% if cur_idx < max_idx %} </div> {% endif %}
+{% endfor %}
+
+</div>
+
+### Overview
+
+<!--
+<div class="bigtable" markdown="1">
+| Environment                                         | Actions  | Agents | Manual Control | Action Shape | Action Values | Observation Shape | Observation Values | {%if include.avg_rew %} Average Total Reward|{% endif %}
+|-----------------------------------------------------|----------|--------|----------------|--------------|---------------|-------------------|--------------------|{%if include.avg_rew %}---|{% endif %}
+{% for page in site.pages %}{% if page.url contains include.group %}{% assign url_arr = page.url | split: "/" %}{% if url_arr.size > 2 %}{% assign underscore_name = url_arr[2] | split: "." %}[{{page.title}}](/{{include.group}}{{underscore_name[0]}}) | {{page.actions}} | {{page.agents}} | {{page.manual-control}} | {{ page.action-shape }} | {{page.action-values}} | {{page.observation-shape}} | {{page.observation-values}} {%if include.avg_rew %}| {{ page.average-total-reward }}{% endif %}
+{% endif %}{% endif %}{% endfor %}
+</div>
+-->

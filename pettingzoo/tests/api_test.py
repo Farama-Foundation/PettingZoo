@@ -6,11 +6,10 @@ from copy import copy
 import gym
 import random
 import re
-from skimage.io import imsave
 import os
 
 
-def test_obervation(observation, observation_0):
+def test_observation(observation, observation_0):
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():
             warnings.warn("Observation contains infinity (np.inf) or negative infinity (-np.inf)")
@@ -109,31 +108,37 @@ def test_reward(reward):
 def test_rewards_dones(env, agent_0):
     for agent in env.agents:
         assert isinstance(env.dones[agent], bool), "Agent's values in dones must be True or False"
-        assert isinstance(env.rewards[agent], env.rewards[agent_0].__class__), "Rewards for each agent must be of the same class"
+        float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
         test_reward(env.rewards[agent])
 
 
 def play_test(env, observation_0):
     prev_observe = env.reset()
-    for agent in env.agent_order:  # step through every agent once with observe=True
-        if 'legal_moves' in env.infos[agent]:
+    for agent in env.agent_iter(env.num_agents*2):  # step through every agent once with observe=True
+        assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
+        reward, done, info = env.last()
+        if 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+        if isinstance(env.observation_spaces[agent], gym.spaces.Box):
+            assert env.observation_spaces[agent].dtype == prev_observe.dtype
         if not env.observation_spaces[agent].contains(prev_observe):
             print("Out of bounds observation: ", prev_observe)
+
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
-        test_obervation(prev_observe, observation_0)
+        test_observation(prev_observe, observation_0)
         prev_observe = next_observe
         if not isinstance(env.infos[agent], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
         assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
-    reward_0 = env.rewards[env.agent_order[0]]
-    for agent in env.agent_order:  # step through every agent once with observe=False
-        if 'legal_moves' in env.infos[agent]:
+    reward_0 = env.rewards[env.agent_selection]
+    for agent in env.agent_iter(env.num_agents*2):
+        reward, done, info = env.last()
+        if 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
@@ -142,168 +147,61 @@ def play_test(env, observation_0):
         assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
         assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
         assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
-        assert isinstance(env.rewards[agent], reward_0.__class__), "Rewards for each agent must be of the same class"
+        float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
         test_reward(reward)
         observation = env.step(action, observe=False)
         assert observation is None, "step(observe=False) must not return anything"
 
-
-def test_observe(env, observation_0, save_obs):
-    if save_obs:
-        save_obs_folder = "saved_observations/{}".format(env.__module__)
-        os.makedirs(save_obs_folder, exist_ok=True)
-
-    for agent in env.agent_order:
-        observation = env.observe(agent)
-        test_obervation(observation, observation_0)
-        if save_obs:
-            fname = os.path.join(save_obs_folder, str(agent) + '.png')
-            imsave(fname, observation)
-
-
-def test_render(env):
-    render_modes = env.metadata.get('render.modes')
-    assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
-    env.reset(observe=False)
-    for mode in render_modes:
-        for _ in range(10):
-            for agent in env.agent_order:
-                if 'legal_moves' in env.infos[agent]:
-                    action = random.choice(env.infos[agent]['legal_moves'])
-                else:
-                    action = env.action_spaces[agent].sample()
-                env.step(action, observe=False)
-                env.render(mode=mode)
-                if all(env.dones.values()):
-                    env.reset()
-                    break
-
-
-def test_agent_selector(env):
-    if not hasattr(env, "_agent_selector"):
-        warnings.warn("Env has no object named _agent_selector. We recommend handling agent cycling with the agent_selector utility from utils/agent_selector.py.")
-        return
-
-    if not isinstance(env._agent_selector, agent_selector):
-        warnings.warn("You created your own agent_selector utility. You might want to use ours, in utils/agent_selector.py")
-        return
-
-    assert hasattr(env, "agent_order"), "Env does not have agent_order"
-
-    env.reset(observe=False)
-    agent_order = copy(env.agent_order)
-    _agent_selector = agent_selector(agent_order)
-    agent_selection = _agent_selector.next()
-    assert env._agent_selector == _agent_selector, "env._agent_selector is initialized incorrectly"
-    assert env.agent_selection == agent_selection, "env.agent_selection is not the same as the first agent in agent_order"
-
-    for _ in range(200):
-        agent = agent_selection
+def test_action_flexibility(env):
+    env.reset()
+    agent = env.agent_selection
+    action_space = env.action_spaces[agent]
+    if isinstance(action_space, gym.spaces.Discrete):
         if 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
+            action = env.infos[agent]['legal_moves'][0]
         else:
-            action = env.action_spaces[agent].sample()
-        env.step(action, observe=False)
+            action = 0
+        env.step(action)
+        env.reset()
+        env.step(np.int32(action))
+    elif isinstance(action_space, gym.spaces.Box):
+        env.step(np.zeros_like(action_space.low))
+        env.reset()
+        env.step(np.zeros_like(action_space.low).tolist())
 
-        if all(env.dones.values()):
-            break
+def api_test(env, render=False, verbose_progress=False):
+    def progress_report(msg):
+        if verbose_progress:
+            print(msg)
 
-        if agent_order == env.agent_order:
-            agent_selection = _agent_selector.next()
-            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
-        else:
-            previous_agent_selection_index = agent_order.index(agent_selection)
-            agent_order = copy(env.agent_order)
-            _agent_selector.reinit(agent_order)
-            skips = (previous_agent_selection_index + 1) % len(env.agents)
-            for _ in range(skips + 1):
-                agent_selection = _agent_selector.next()
-            assert env.agent_selection == agent_selection, "env.agent_selection ({}) is not the same as the next agent in agent_order {}".format(env.agent_selection, env.agent_order)
-
-
-def test_warnings(env):
-    from pettingzoo.utils import EnvLogger
-    EnvLogger.suppress_output()
-    try:
-        EnvLogger.flush()
-        e1 = copy(env)
-        e1.reset()
-        e1.close()
-    except:
-        # e1 should throw a close_unrendered_environment warning
-        assert "[WARNING]: Called close on an unrendered environment" in EnvLogger.mqueue, "env does not warn when closing unrendered env"
-
-    try:
-        e2 = copy(env)
-        EnvLogger.flush()
-        e2.step(None)
-    except:
-        assert "[WARNING]: Received an action that was outside action space" in EnvLogger.mqueue, "env does not warn on out of bounds/NaN action"
-    EnvLogger.unsuppress_output()
-
-
-def inp_handler(name):
-    from pynput.keyboard import Key, Controller as KeyboardController
-    import time
-
-    keyboard = KeyboardController()
-    time.sleep(0.1)
-    choices = ['w', 'a', 's', 'd', 'j', 'k', Key.left, Key.right, Key.up, Key.down]
-    NUM_TESTS = 50
-    for x in range(NUM_TESTS):
-        i = random.choice(choices) if x != NUM_TESTS - 1 else Key.esc
-        keyboard.press(i)
-        time.sleep(0.1)
-        keyboard.release(i)
-
-
-def test_manual_control(manual_control):
-    import threading
-    manual_in_thread = threading.Thread(target=inp_handler, args=(1,))
-
-    manual_in_thread.start()
-
-    try:
-        manual_control()
-    except Exception:
-        raise Exception("manual_control() has crashed. Please fix it.")
-
-    manual_in_thread.join()
-
-
-def api_test(env, render=False, manual_control=None, save_obs=False):
     print("Starting API test")
-    env_agent_sel = copy(env)
-    env_warnings = copy(env)
+    env.reset()
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
+    # do this before reset
     observation = env.reset(observe=False)
     assert observation is None, "reset(observe=False) must not return anything"
     assert not any(env.dones.values()), "dones must all be False after reset"
 
     assert isinstance(env.num_agents, int), "num_agents must be an integer"
-    assert env.num_agents != 0, "Your environment should have nonzero number of agents"
+    assert env.num_agents != 0, "Your environment should have a nonzero number of agents"
     assert env.num_agents > 0, "Your environment can't have a negative number of agents"
 
     observation_0 = env.reset()
-    test_obervation(observation_0, observation_0)
+    test_observation(observation_0, observation_0)
 
-    if save_obs:
-        for agent in env.agents:
-            assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
-            assert np.all(np.equal(env.observation_spaces[agent].low, 0)) and np.all(np.equal(env.observation_spaces[agent].high, 255)), "Observations must be 0 to 255 to save as image"
-            assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
-            if len(env.observation_spaces[agent].shape) == 3:
-                assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
+    progress_report("Finished test_observation")
 
-    assert isinstance(env.agent_order, list), "agent_order must be a list"
-
-    agent_0 = env.agent_order[0]
+    agent_0 = env.agent_selection
 
     test_observation_action_spaces(env, agent_0)
 
+    progress_report("Finished test_observation_action_spaces")
+
     play_test(env, observation_0)
+
+    progress_report("Finished play test")
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
     assert isinstance(env.dones, dict), "dones must be a dict"
@@ -313,19 +211,9 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
 
     test_rewards_dones(env, agent_0)
 
-    test_observe(env, observation_0, save_obs=save_obs)
+    test_action_flexibility(env)
 
-    test_agent_selector(env_agent_sel)
-
-    test_warnings(env_warnings)
-
-    if render:
-        test_render(env)
-
-    if manual_control is not None:
-        test_manual_control(manual_control)
-    else:
-        env.close()
+    progress_report("Finished test_rewards_dones")
 
     # test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
@@ -333,6 +221,6 @@ def api_test(env, render=False, manual_control=None, save_obs=False):
     if base_render != env.__class__.render:
         assert (base_close != env.__class__.close), "If render method defined, then close method required"
     else:
-        warnings.warn("environment has not defined a render() method")
+        warnings.warn("Environment has not defined a render() method")
 
     print("Passed API test")

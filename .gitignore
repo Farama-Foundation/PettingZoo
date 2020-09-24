@@ -3,4 +3,7 @@ __pycache__/
 *.swp
 .DS_Store
 .vscode/
-saved_observatons
+saved_observations/
+build/
+dist/
+PettingZoo.egg-info/

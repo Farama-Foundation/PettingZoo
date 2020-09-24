@@ -1,0 +1,78 @@
+  <!-- Navigation -->
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+	  <a class="navbar-brand js-scroll-trigger" href="#page-top">
+          {%- if site.logo -%}
+            <img height="{{ site.logo.height | default: 52 }}" src="{{ site.logo.path }}"/>
+          {%- else -%}
+            {{ site.title }}
+          {%- endif -%}
+      </a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto">
+		  {%- for link in site.data.navigation.nav -%}
+		  <li class="nav-item">
+		  {%- if link.url -%}
+		    <a class="nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
+		  {%- else if link.section -%}
+		    <a class="nav-link js-scroll-trigger" href="#{{ link.section }}">{{ link.title }}</a>
+		  {%- else -%}
+		    <a class="nav-link js-scroll-trigger" href="#">{{ link.title }}</a>
+		  {%- endif -%}
+          </li>
+		  {% endfor %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav> -->
+  <!-- End Navigation -->
+
+  <!-- Header -->
+  <header class="masthead">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4 headerbox">
+          <img src="{{site.data.sitetext.header.headerGif}}">  </img>
+        </div>
+        <div class="col" style="padding-right: 10px">
+          <div class="row nestedrow">
+            <div class="col-3 logobox">
+              <img src="{{ site.logo.path }}"/>
+            </div>
+            <div class="col">
+              <div class="intro-text">
+                {%- if site.data.sitetext.header.title -%}
+                <div class="intro-lead-in">{{ site.data.sitetext.header.title | markdownify }}</div>
+                {%- endif -%}
+                {%- if site.data.sitetext.header.text -%}
+                <div class="intro-heading text-uppercase">{{ site.data.sitetext.header.text | markdownify }}</div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 10%; margin-right: 10%;">
+            {%- for but in site.data.sitetext.header.buttons -%}
+              <div class="col nav-button">
+                <div style="margin-bottom: 10px; margin-top: 10px; margin-right: 5px; margin-left: 5px;">
+                  <div class="row-sm">
+                  <a class="btn btn-primary btn-circle btn-sm text-uppercase js-scroll-trigger circlebutton" href="{{ but.buttonlink }}">
+                      <img width="100%" height="100%" src="{{ but.icon }}" width="90%"></img>
+                  </a>
+                  </div>
+                  <div class="row-sm text-uppercase buttonfont" style="padding-top: 5px;">
+                      {{ but.button }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      </div>
+  </header>
+  <!-- End Header -->
