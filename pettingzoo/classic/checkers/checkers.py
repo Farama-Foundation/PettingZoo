@@ -21,6 +21,7 @@ class env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
         self.agent_order = list(self.agents)
+        print(list(self.agents))
 
         self._agent_selector = agent_selector(self.agent_order)
 
@@ -31,7 +32,7 @@ class env(AECEnv):
         self.reset()
 
     def observe(self, agent):
-        return self.observation[:, :, agent]
+        return self.observation[:, :, list(self.agents).index(agent)]
 
     def reset(self, observe=True):
         self.board = self.ch.initial_board()
@@ -46,22 +47,96 @@ class env(AECEnv):
         self.infos[self.agent_selection]['legal_moves'] = self.ch.legal_moves()
         self.winner = -1
 
+    def rel_to_abs(self, pos):
+        row = int(pos / 4)
+        if (row % 2 == 0) :
+            return 2 * pos + 1
+        else:
+            return 2 * pos
+
+    def abs_to_rel(self, pos):
+        return int((pos + 0.5)/ 2)
+        
+    # Parse action from 32x4 action space into (32)x(32) action space
+    # Action validation is performed later by the gym environment
+    def parse_action(self, action):
+        
+        # Check if given move is a jump
+        def check_jump(pos):
+            opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
+            res =  self.ch.check_occupancy(self.abs_to_rel(pos), by_players=opponent)
+            print(res)
+            return res
+            
+
+        pos = self.rel_to_abs(action[0])
+        dest_pos = 0
+        if (action[1] == 0):
+            # Move up-left
+            dest_pos = pos - 9
+
+            if (check_jump(dest_pos)):
+                dest_pos = dest_pos - 9    
+        elif (action[1] == 1):
+            # Move up-right
+            dest_pos = pos - 7
+
+            if (check_jump(dest_pos)):
+                dest_pos = dest_pos - 7
+        elif (action[1] == 2):
+            # Move down-left
+            dest_pos = pos + 7
+
+            if (check_jump(dest_pos)):
+                dest_pos = dest_pos + 7
+        elif (action[1] == 3):
+            # Move down-right
+            dest_pos = pos + 9
+
+            if (check_jump(dest_pos)):
+                dest_pos = dest_pos + 9
+        else:
+            print("Invalid direction {}".format(action[1]))
+
+        return (self.abs_to_rel(pos), self.abs_to_rel(dest_pos))
+        
+
+    def legal_moves(self):
+        moves = self.ch.legal_moves()
+        legal_moves = []
+        for move in moves:
+            srcpos = self.rel_to_abs(move[0])
+            destpos = self.rel_to_abs(move[1])
+            print(srcpos, destpos)
+            direction = -1
+            if (destpos == srcpos - 9 or destpos == srcpos - 18):
+                direction = 0
+            elif (destpos == srcpos - 7 or destpos == srcpos - 14):
+                direction = 1
+            elif (destpos == srcpos + 7 or destpos == srcpos + 14):
+                direction = 2
+            elif (destpos == srcpos + 9 or destpos == srcpos + 18):
+                direction = 3
+
+            legal_moves.append((self.abs_to_rel(srcpos), direction))
+            
+        return legal_moves
+
     def step(self, action, observe=True):
         self.num_moves += 1
+        print(action)
+        action = self.parse_action(action)
+        print(action)
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
-        print(turn)
         if turn == 'black':
-            self.agent_order = [self.agents[0],self.agents[1]]
-            self.agent_selection = list(self.agents).index(self._agent_selector.reset())
+            self.agent_selection = self.agents[0]
         elif turn == 'white':
-            self.agent_order = [self.agents[1],self.agents[0]]
-            self.agent_selection = list(self.agents).index(self._agent_selector.reset())
+            self.agent_selection = self.agents[1]
         else:
             raise ValueError
 
-        print(self.agent_selection)
-        self.observation[:, :, self.agent_selection] = np.array(self.ch.flat_board())
+        self.observation[:, :, list(self.agents).index(self.agent_selection)] = np.array(self.ch.flat_board())
 
         print("After " + str(self.num_moves) + " moves: ")
 
@@ -73,7 +148,7 @@ class env(AECEnv):
         self.infos[self.agent_selection]['legal_moves']
         """
 
-        self.infos["player_{}".format(self.agent_selection)]['legal_moves'] = moves
+        self.infos[self.agent_selection]['legal_moves'] = moves
 
         if winner is None and self.num_moves > self.num_moves_max:
             print("Draw")
