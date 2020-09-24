@@ -50,15 +50,17 @@ class env(AECEnv):
         self.num_moves += 1
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
+        print(turn)
         if turn == 'black':
             self.agent_order = [self.agents[0],self.agents[1]]
-            self.agent_selection = self._agent_selector.reset()
+            self.agent_selection = list(self.agents).index(self._agent_selector.reset())
         elif turn == 'white':
             self.agent_order = [self.agents[1],self.agents[0]]
-            self.agent_selection = self._agent_selector.reset()
+            self.agent_selection = list(self.agents).index(self._agent_selector.reset())
         else:
             raise ValueError
 
+        print(self.agent_selection)
         self.observation[:, :, self.agent_selection] = np.array(self.ch.flat_board())
 
         print("After " + str(self.num_moves) + " moves: ")
@@ -94,7 +96,7 @@ class env(AECEnv):
             next_observation = self.observe(self.agent_selection)
         else:
             next_observation = None
-        return np.array(next_observation)
+        return np.array(next_observation), np.array(self.rewards), winner is not None, self.infos
 
     def render(self, mode='human'):
         print(self.ch.flat_board())
