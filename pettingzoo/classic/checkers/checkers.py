@@ -25,51 +25,61 @@ class env(AECEnv):
 
         self._agent_selector = agent_selector(self.agent_order)
 
-        self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
-        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.float32) for name in self.agents}
-        self.observation = np.zeros((8, 8, 2))
+        self.action_spaces = {name: spaces.Discrete(32 * 4) for name in self.agents}
+        print(spaces.Box(low=0, high= 1, shape=(4,32), dtype=np.int32))
+        self.observation_spaces = {name: spaces.Box(low=0, high= 1, shape=(32, 4), dtype=np.int32) for name in self.agents}
+        self.observation = np.zeros((32,4))
 
         self.reset()
 
+    def _read_observation(self):
+        # Use self.ch.flatboard to update self.observation
+        board = self.ch.flat_board()
+        obs = np.zeros((32, 4))
+        for i, row in enumerate(board):
+            for j, sq in enumerate(row):
+                intpos = (i * 8) + j
+                if (sq > 0):
+                    obs[self._abs_to_rel(intpos), sq-1] = 1
+        return np.array(obs)
+
     def observe(self, agent):
-        return self.observation[:, :, list(self.agents).index(agent)]
+        return self.observation
 
     def reset(self, observe=True):
         self.board = self.ch.initial_board()
-        self.observation[:, :, 0] = np.array(self.ch.flat_board())
-        self.observation[:, :, 1] = np.array(self.ch.flat_board())
+        self.observation = self._read_observation()
         self.num_moves_max = 300
         self.num_moves = 0
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {'legal_moves': []} for name in self.agents}
-        self.infos[self.agent_selection]['legal_moves'] = self.ch.legal_moves()
+        self.infos[self.agent_selection]['legal_moves'] = self.legal_moves()
         self.winner = -1
+        if observe:
+            return np.array(self.observation)
 
-    def rel_to_abs(self, pos):
+    def _rel_to_abs(self, pos):
         row = int(pos / 4)
         if (row % 2 == 0) :
             return 2 * pos + 1
         else:
             return 2 * pos
 
-    def abs_to_rel(self, pos):
+    def _abs_to_rel(self, pos):
         return int((pos + 0.5)/ 2)
         
     # Parse action from 32x4 action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
-    def parse_action(self, action):
+    def _parse_action(self, action):
         
         # Check if given move is a jump
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
-            res =  self.ch.check_occupancy(self.abs_to_rel(pos), by_players=opponent)
-            print(res)
-            return res
-            
+            return self.ch.check_occupancy(self._abs_to_rel(pos), by_players=opponent)
 
-        pos = self.rel_to_abs(action[0])
+        pos = self._rel_to_abs(action[0])
         dest_pos = 0
         if (action[1] == 0):
             # Move up-left
@@ -98,16 +108,16 @@ class env(AECEnv):
         else:
             print("Invalid direction {}".format(action[1]))
 
-        return (self.abs_to_rel(pos), self.abs_to_rel(dest_pos))
+        return (self._abs_to_rel(pos), self._abs_to_rel(dest_pos))
         
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
         legal_moves = []
         for move in moves:
-            srcpos = self.rel_to_abs(move[0])
-            destpos = self.rel_to_abs(move[1])
-            print(srcpos, destpos)
+            srcpos = self._rel_to_abs(move[0])
+            destpos = self._rel_to_abs(move[1])
+
             direction = -1
             if (destpos == srcpos - 9 or destpos == srcpos - 18):
                 direction = 0
@@ -118,15 +128,13 @@ class env(AECEnv):
             elif (destpos == srcpos + 9 or destpos == srcpos + 18):
                 direction = 3
 
-            legal_moves.append((self.abs_to_rel(srcpos), direction))
+            legal_moves.append((self._abs_to_rel(srcpos), direction))
             
         return legal_moves
 
     def step(self, action, observe=True):
         self.num_moves += 1
-        print(action)
-        action = self.parse_action(action)
-        print(action)
+        action = self._parse_action(action)
         self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
         if turn == 'black':
@@ -136,7 +144,7 @@ class env(AECEnv):
         else:
             raise ValueError
 
-        self.observation[:, :, list(self.agents).index(self.agent_selection)] = np.array(self.ch.flat_board())
+        self.observation = self._read_observation()
 
         print("After " + str(self.num_moves) + " moves: ")
 
@@ -171,7 +179,7 @@ class env(AECEnv):
             next_observation = self.observe(self.agent_selection)
         else:
             next_observation = None
-        return np.array(next_observation), np.array(self.rewards), winner is not None, self.infos
+        return np.array(next_observation, dtype=np.int32), np.array(self.rewards), winner is not None, self.infos
 
     def render(self, mode='human'):
         print(self.ch.flat_board())
