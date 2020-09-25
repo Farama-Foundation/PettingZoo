@@ -9,14 +9,24 @@ import warnings
 from pettingzoo import AECEnv
 from gym import spaces
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils import wrappers
 
 
-class env(AECEnv):
+def env():
+    env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        super(env, self).__init__()
+        super(raw_env, self).__init__()
 
         self.ch = CheckersRules()
         self.num_agents = 2
@@ -71,11 +81,11 @@ class env(AECEnv):
 
     def _abs_to_rel(self, pos):
         return int((pos + 0.5)/ 2)
-        
+
     # Parse action from 32x4 action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
     def _parse_action(self, action):
-        
+
         # Check if given move is a jump
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
@@ -88,7 +98,7 @@ class env(AECEnv):
             dest_pos = pos - 9
 
             if (check_jump(dest_pos)):
-                dest_pos = dest_pos - 9    
+                dest_pos = dest_pos - 9
         elif (action[1] == 1):
             # Move up-right
             dest_pos = pos - 7
@@ -111,7 +121,7 @@ class env(AECEnv):
             print("Invalid direction {}".format(action[1]))
 
         return (self._abs_to_rel(pos), self._abs_to_rel(dest_pos))
-        
+
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
@@ -131,15 +141,15 @@ class env(AECEnv):
                 direction = 3
 
             legal_moves.append((self._abs_to_rel(srcpos), direction))
-            
+
         return legal_moves
 
     def step(self, action, observe=True):
 
         if action not in self.legal_moves():
-            warnings.warn("Bad checkers move made, game terminating with current player losing. \neninfos[player]['legal_moves'] contains a list of all legal moves that can be chosen.") 
+            warnings.warn("Bad checkers move made, game terminating with current player losing. \neninfos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
             winner = 'white' if self.last_turn == 'black' else 'black'
-        else:     
+        else:
             self.num_moves += 1
             action = self._parse_action(action)
             self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
