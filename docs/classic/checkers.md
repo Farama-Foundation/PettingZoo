@@ -1,6 +1,6 @@
 ---
 layout: "docu"
-title: "Backgammon"
+title: "Checkers"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
