@@ -9,14 +9,20 @@ import warnings
 from pettingzoo import AECEnv
 from gym import spaces
 from pettingzoo.utils.agent_selector import agent_selector
+from pettingzoo.utils import wrappers
 
+def env():
+    env = raw_env()
+    env = wrappers.NaNRandomWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
 
-class env(AECEnv):
+class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        super(env, self).__init__()
+        super().__init__()
 
         self.ch = CheckersRules()
         self.num_agents = 2
@@ -45,6 +51,9 @@ class env(AECEnv):
 
     def observe(self, agent):
         return np.array(self.observation)
+
+    def seed(self, seed=None):
+        pass
 
     def reset(self, observe=True):
         self.ch = CheckersRules()
