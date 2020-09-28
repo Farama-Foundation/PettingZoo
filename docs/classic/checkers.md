@@ -4,9 +4,9 @@ title: "Checkers"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(32,4)"
-action-values: "Discrete(32)"
-observation-shape: "(32,4)"
+action-shape: "Discrete(32*4)"
+action-values: "Discrete(32*4)"
+observation-shape: "Box(32,4)"
 observation-values: "[0, 1]"
 num-states: "10^21"
 import: "from pettingzoo.classic import checkers_v0"
@@ -37,14 +37,14 @@ The observation contains 4 planes, each which indicate the presence of a specifi
 
 #### Action Space
 
-The action space is also divided into 4 planes, one for each direction that a piece can move. Each plane has 32 values, one for each occupiable square on the board. The action directions listed below:
+The action space is a discrete space of size 128 (32*4), where each value describes the starting location and direction of a move. The formula `action % 32` returns the action's starting square. The action space can be split into 4 sections of 32 elements as described below:
 
-| Action | Direction |
-| ------ | --------- |
-| 0      | Northwest |
-| 1      | Northeast |
-| 2      | Southwest |
-| 3      | Southeast |
+| Action   | Starting Square | Direction |
+| -------- | --------------- | --------- |
+| 0...31   | 0...31          | Northwest |
+| 32...63  | 0...31          | Northeast |
+| 64...95  | 0...31          | Southwest |
+| 96...127 | 0...31          | Southeast |
 
 When an action is chosen, the environment automatically decides whether the provided action is a simple move or a jump. Given an action with a starting location and direction, if the square immediately adjacent to the starting location in that direction is unoccupied, then the move is a simple move to that square. If the square is occupied by an enemy man, and the next square in that direction is unoccupied, then the move is a jump. In any other situation, the move is illegal. Note that each player is required to make jumps when available. This is reflected in `infos[agent]['legal moves']` by only listing jump moves if at least one is available.
 
