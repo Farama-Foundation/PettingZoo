@@ -22,9 +22,9 @@ Checkers (also claled Draughts) is a 2-player turn based game. Our implementatio
 
 #### Observation Space
 
-There are 32 habitable spaces in the game of checkers, numbered from left to right and top to bottom, such that every other square in a row is numbered. On even numbered rows (starting with 0) the second square is the first habitable position. On odd numbered rows, the first square is habitable.
+There are 32 occupiable spaces in the game of checkers, numbered from left to right and top to bottom, such that every other square in a row is numbered. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
 
-The observation contains 4 planes, each which indicate the presence of a specific type of piece in the habitable locations of the board
+The observation contains 4 planes, each which indicate the presence of a specific type of piece in the occupiable locations of the board
 
 
 
@@ -37,7 +37,7 @@ The observation contains 4 planes, each which indicate the presence of a specifi
 
 #### Action Space
 
-The action space is also divided into 4 planes, one for each direction that a piece can move. Each plane has 32 values, one for each habitable square on the board. The action directions listed below:
+The action space is also divided into 4 planes, one for each direction that a piece can move. Each plane has 32 values, one for each occupiable square on the board. The action directions listed below:
 
 | Action | Direction |
 | ------ | --------- |
@@ -46,7 +46,7 @@ The action space is also divided into 4 planes, one for each direction that a pi
 | 2      | Southwest |
 | 3      | Southeast |
 
-The environment automatically decides whether the provided action is a simple move or a jump. Note that jumps are required when available. This is reflected in `infos[agent]['legal moves']` by listing jump moves and no simple moves if jumps are available.
+When an action is chosen, the environment automatically decides whether the provided action is a simple move or a jump. Given an action with a starting location and direction, if the square immediately adjacent to the starting location in that direction is unoccupied, then the move is a simple move to that square. If the square is occupied by an enemy man, and the next square in that direction is unoccupied, then the move is a jump. In any other situation, the move is illegal. Note that each player is required to make jumps when available. This is reflected in `infos[agent]['legal moves']` by only listing jump moves if at least one is available.
 
 #### Rewards
 
