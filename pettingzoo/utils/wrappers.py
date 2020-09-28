@@ -99,7 +99,8 @@ class AgentIterWrapper(BaseWrapper):
             self.agent_selection = self.env.agent_selection
         else:
             self._was_dones[cur_agent] = self.env.dones[cur_agent]
-            super().step(action, False)
+            if not self.env.dones[cur_agent]:
+                super().step(action, False)
 
         for agent in self.agents:
             if self.dones[agent] and not self._final_rewards[agent]:
