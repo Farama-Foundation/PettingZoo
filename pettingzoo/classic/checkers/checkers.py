@@ -13,6 +13,8 @@ from pettingzoo.utils import wrappers
 
 def env():
     env = raw_env()
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
@@ -89,35 +91,35 @@ class raw_env(AECEnv):
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
             return self.ch.check_occupancy(self._abs_to_rel(pos), by_players=opponent)
-
-        pos = self._rel_to_abs(action[0])
+        direction = int(action / 32)
+        pos = self._rel_to_abs(action % 32)
         dest_pos = 0
-        if (action[1] == 0):
+        if (direction == 0):
             # Move up-left
             dest_pos = pos - 9
 
             if (check_jump(dest_pos)):
                 dest_pos = dest_pos - 9    
-        elif (action[1] == 1):
+        elif (direction == 1):
             # Move up-right
             dest_pos = pos - 7
 
             if (check_jump(dest_pos)):
                 dest_pos = dest_pos - 7
-        elif (action[1] == 2):
+        elif (direction == 2):
             # Move down-left
             dest_pos = pos + 7
 
             if (check_jump(dest_pos)):
                 dest_pos = dest_pos + 7
-        elif (action[1] == 3):
+        elif (direction == 3):
             # Move down-right
             dest_pos = pos + 9
 
             if (check_jump(dest_pos)):
                 dest_pos = dest_pos + 9
         else:
-            print("Invalid direction {}".format(action[1]))
+            print("Invalid direction {}".format(direction))
 
         return (self._abs_to_rel(pos), self._abs_to_rel(dest_pos))
         
@@ -139,14 +141,14 @@ class raw_env(AECEnv):
             elif (destpos == srcpos + 9 or destpos == srcpos + 18):
                 direction = 3
 
-            legal_moves.append((self._abs_to_rel(srcpos), direction))
+            legal_moves.append(self._abs_to_rel(srcpos) + (32*direction))
             
         return legal_moves
 
     def step(self, action, observe=True):
 
         if action not in self.legal_moves():
-            warnings.warn("Bad checkers move made, game terminating with current player losing. \neninfos[player]['legal_moves'] contains a list of all legal moves that can be chosen.") 
+            warnings.warn("Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.") 
             winner = 'white' if self.last_turn == 'black' else 'black'
         else:     
             self.num_moves += 1
