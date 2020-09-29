@@ -11,6 +11,7 @@ from gym import spaces
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils import wrappers
 
+
 def env():
     env = raw_env()
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
@@ -18,6 +19,7 @@ def env():
     env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
 
 class raw_env(AECEnv):
 
@@ -35,8 +37,8 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {name: spaces.Discrete(32 * 4) for name in self.agents}
-        self.observation_spaces = {name: spaces.Box(low=0, high= 1, shape=(32, 4), dtype=np.int32) for name in self.agents}
-        self.observation = np.zeros((32,4))
+        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(32, 4), dtype=np.int32) for name in self.agents}
+        self.observation = np.zeros((32, 4))
 
         self.reset()
 
@@ -48,7 +50,7 @@ class raw_env(AECEnv):
             for j, sq in enumerate(row):
                 intpos = (i * 8) + j
                 if (sq > 0):
-                    obs[self._abs_to_rel(intpos), sq-1] = 1
+                    obs[self._abs_to_rel(intpos), sq - 1] = 1
         return np.array(obs)
 
     def observe(self, agent):
@@ -75,18 +77,18 @@ class raw_env(AECEnv):
 
     def _rel_to_abs(self, pos):
         row = int(pos / 4)
-        if (row % 2 == 0) :
+        if (row % 2 == 0):
             return 2 * pos + 1
         else:
             return 2 * pos
 
     def _abs_to_rel(self, pos):
-        return int((pos + 0.5)/ 2)
-        
+        return int((pos + 0.5) / 2)
+
     # Parse action from 32x4 action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
     def _parse_action(self, action):
-        
+
         # Check if given move is a jump
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
@@ -99,7 +101,7 @@ class raw_env(AECEnv):
             dest_pos = pos - 9
 
             if (check_jump(dest_pos)):
-                dest_pos = dest_pos - 9    
+                dest_pos = dest_pos - 9
         elif (direction == 1):
             # Move up-right
             dest_pos = pos - 7
@@ -122,7 +124,6 @@ class raw_env(AECEnv):
             print("Invalid direction {}".format(direction))
 
         return (self._abs_to_rel(pos), self._abs_to_rel(dest_pos))
-        
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
@@ -141,16 +142,16 @@ class raw_env(AECEnv):
             elif (destpos == srcpos + 9 or destpos == srcpos + 18):
                 direction = 3
 
-            legal_moves.append(self._abs_to_rel(srcpos) + (32*direction))
-            
+            legal_moves.append(self._abs_to_rel(srcpos) + (32 * direction))
+
         return legal_moves
 
     def step(self, action, observe=True):
 
         if action not in self.legal_moves():
-            warnings.warn("Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.") 
+            warnings.warn("Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen.")
             winner = 'white' if self.last_turn == 'black' else 'black'
-        else:     
+        else:
             self.num_moves += 1
             action = self._parse_action(action)
             self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
@@ -162,18 +163,13 @@ class raw_env(AECEnv):
                 self.agent_order.reverse()
             self.last_turn = turn
 
-
             self.observation = self._read_observation()
 
-            #print("After " + str(self.num_moves) + " moves: ")
-
-            """
-            self.ch.print_board()
-            print(self.agent_selection)
-            print(self.observe(self.agent_selection))
-            print(self.observation)
-            self.infos[self.agent_selection]['legal_moves']
-            """
+            # self.ch.print_board()
+            # print(self.agent_selection)
+            # print(self.observe(self.agent_selection))
+            # print(self.observation)
+            # self.infos[self.agent_selection]['legal_moves']
 
         self.infos[self.agent_selection]['legal_moves'] = self.legal_moves()
 
