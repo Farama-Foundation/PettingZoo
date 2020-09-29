@@ -5,7 +5,7 @@ Additionally, this library includes the Secret Code font from
 http://www.squaregear.net/fonts/, by Matthew Welch, for the MPE games. 
 This font was released under an MIT-like license, included below
 
-Copyright by Justin Terry, except for taken code from other repositories. The MIT,
+Copyright by Justin Terry, except for unmodified taken code from other repositories. The MIT,
 Apache, and Secret Code licenses are included below:
 
 --------------------------------------------------------------------------------
