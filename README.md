@@ -27,7 +27,7 @@ We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
 
 ## API
 
-We model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/abs/2009.13051), in order to be able to support all types of multi-agent RL environments under one API.
+PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/abs/2009.13051), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
