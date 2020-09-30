@@ -206,17 +206,17 @@ class raw_env(AECEnv):
         if winner is None and self.num_moves > self.num_moves_max:
             print("Draw")
             self.winner = -1
-            self.rewards[0] = 0
-            self.rewards[1] = 0
+            self.rewards[self.agents[0]] = 0
+            self.rewards[self.agents[1]] = 0
         else:
             if winner == "black":
                 self.winner = 0
-                self.rewards[0] = 1
-                self.rewards[1] = -1
+                self.rewards[self.agents[0]] = 1
+                self.rewards[self.agents[1]] = -1
             elif winner == "white":
                 self.winner = 1
-                self.rewards[0] = -1
-                self.rewards[1] = 1
+                self.rewards[self.agents[0]] = -1
+                self.rewards[self.agents[1]] = 1
             else:
                 pass
 
@@ -228,13 +228,6 @@ class raw_env(AECEnv):
         else:
             next_observation = None
         return next_observation
-
-    def last(self):
-        return (
-            self.rewards[self.agent_selection],
-            self.dones[self.agent_selection],
-            self.infos[self.agent_selection],
-        )
 
     def render(self, mode="human"):
         print(self.ch.flat_board())
