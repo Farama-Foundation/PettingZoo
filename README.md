@@ -6,8 +6,6 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
-We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
-
 Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
 
 ## Environments and Installation
@@ -28,6 +26,8 @@ This does not include dependencies for all families of environments (there's a m
 We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
 
 ## API
+
+We model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/abs/2009.13051), in order to be able to support all types of multi-agent RL environments under one API.
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
