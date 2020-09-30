@@ -36,21 +36,21 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agent_order)
 
-        self.action_spaces = {name: spaces.Discrete(32 * 4) for name in self.agents}
-        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(32, 4), dtype=np.int32) for name in self.agents}
-        self.observation = np.zeros((32, 4))
+        self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
+        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 4), dtype=np.int32) for name in self.agents}
+        self.observation = np.zeros((8, 8, 4))
 
         self.reset()
 
     def _read_observation(self):
         # Use self.ch.flatboard to update self.observation
         board = self.ch.flat_board()
-        obs = np.zeros((32, 4))
+        obs = np.zeros((8, 8, 4))
         for i, row in enumerate(board):
             for j, sq in enumerate(row):
                 intpos = (i * 8) + j
                 if (sq > 0):
-                    obs[self._abs_to_rel(intpos), sq - 1] = 1
+                    obs[i, j, sq - 1] = 1
         return np.array(obs)
 
     def observe(self, agent):
@@ -75,26 +75,47 @@ class raw_env(AECEnv):
         if observe:
             return np.array(self.observation)
 
-    def _rel_to_abs(self, pos):
+    def _obs_rel_to_abs(self, pos):
+        # Convert location from (32) to (8, 8)
+        row = int(pos / 4)
+        pos64 = 0
+        if (row % 2 == 0):
+            pos64 = 2 * pos + 1
+        else:
+            pos64 = 2 * pos
+        row = int(pos64 / 8)
+        col = int(pos64 % 8)
+        return (row, col)
+
+    def _obs_abs_to_rel(self, pos):
+        # Convert location from (8, 8) to (32)
+        row = pos[0]
+        col = pos[1]
+        pos64 = (row * 8) + col
+        return int((pos64 + 0.5) / 2)
+
+    def _act_rel_to_abs(self, pos):
+        # Convert location from (32) to (64)
         row = int(pos / 4)
         if (row % 2 == 0):
             return 2 * pos + 1
         else:
             return 2 * pos
 
-    def _abs_to_rel(self, pos):
+    def _act_abs_to_rel(self, pos):
+        # Convert location from (64) to (32)
         return int((pos + 0.5) / 2)
 
-    # Parse action from 32x4 action space into (32)x(32) action space
+    # Parse action from (256) action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
     def _parse_action(self, action):
 
         # Check if given move is a jump
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
-            return self.ch.check_occupancy(self._abs_to_rel(pos), by_players=opponent)
-        direction = int(action / 32)
-        pos = self._rel_to_abs(action % 32)
+            return self.ch.check_occupancy(self._act_abs_to_rel(pos), by_players=opponent)
+        direction = int(action / 64)
+        pos = self._act_rel_to_abs(action % 64)
         dest_pos = 0
         if (direction == 0):
             # Move up-left
@@ -123,14 +144,14 @@ class raw_env(AECEnv):
         else:
             print("Invalid direction {}".format(direction))
 
-        return (self._abs_to_rel(pos), self._abs_to_rel(dest_pos))
+        return (self._act_abs_to_rel(pos), self._act_abs_to_rel(dest_pos))
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
         legal_moves = []
         for move in moves:
-            srcpos = self._rel_to_abs(move[0])
-            destpos = self._rel_to_abs(move[1])
+            srcpos = self._act_rel_to_abs(move[0])
+            destpos = self._act_rel_to_abs(move[1])
 
             direction = -1
             if (destpos == srcpos - 9 or destpos == srcpos - 18):
@@ -142,7 +163,7 @@ class raw_env(AECEnv):
             elif (destpos == srcpos + 9 or destpos == srcpos + 18):
                 direction = 3
 
-            legal_moves.append(self._abs_to_rel(srcpos) + (32 * direction))
+            legal_moves.append(self._act_abs_to_rel(srcpos) + (64 * direction))
 
         return legal_moves
 
