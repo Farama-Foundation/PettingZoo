@@ -4,9 +4,9 @@ title: "Checkers"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(32*4)"
-action-values: "Discrete(32*4)"
-observation-shape: "Box(32,4)"
+action-shape: "Discrete(8*8*4)"
+action-values: "Discrete(8*8*4)"
+observation-shape: "Box(8, 8, 4)"
 observation-values: "[0, 1]"
 num-states: "10^21"
 import: "from pettingzoo.classic import checkers_v0"
@@ -18,15 +18,11 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Checkers (also claled Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
+Checkers (also called Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
 
 #### Observation Space
 
-There are 32 occupiable spaces in the game of checkers, numbered from left to right and top to bottom, such that every other square in a row is numbered. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
-
-The observation contains 4 planes, each which indicate the presence of a specific type of piece in the occupiable locations of the board
-
-
+The observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board. These type of piece corresponding to each plane is listed in the table below: 
 
 | Plane | Observation |
 | ----- | ----------- |
@@ -35,16 +31,18 @@ The observation contains 4 planes, each which indicate the presence of a specifi
 | 2     | White Men   |
 | 3     | White Kings |
 
+Note that there are only 32 occupiable spaces (the dark colored spaced on a real game board) in the game of checkers. They are numbered in increasing order from left to right and top to bottom, such that every other square in a row is numbered. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
+
 #### Action Space
 
-The action space is a discrete space of size 128 (32*4), where each value describes the starting location and direction of a move. The formula `action % 32` returns the action's starting square. The action space can be split into 4 sections of 32 elements as described below:
+The action space is a discrete space of size 256 (8 * 8 * 4) discrete values, where each value describes the starting location and direction of a move. The formula `action % 64` returns the action's starting square. The action space can be split into 4 sections of 64 elements as described below:
 
-| Action   | Starting Square | Direction |
-| -------- | --------------- | --------- |
-| 0...31   | 0...31          | Northwest |
-| 32...63  | 0...31          | Northeast |
-| 64...95  | 0...31          | Southwest |
-| 96...127 | 0...31          | Southeast |
+| Action    | Starting Square | Direction |
+| --------- | --------------- | --------- |
+| 0...63    | 0...63          | Northwest |
+| 64...127  | 0...63          | Northeast |
+| 128...191 | 0...63          | Southwest |
+| 192...255 | 0...63          | Southeast |
 
 When an action is chosen, the environment automatically decides whether the provided action is a simple move or a jump. Given an action with a starting location and direction, if the square immediately adjacent to the starting location in that direction is unoccupied, then the move is a simple move to that square. If the square is occupied by an enemy man, and the next square in that direction is unoccupied, then the move is a jump. In any other situation, the move is illegal. Note that each player is required to make jumps when available. This is reflected in `infos[agent]['legal moves']` by only listing jump moves if at least one is available.
 
