@@ -100,14 +100,11 @@ This is the first official stable release of PettingZoo. Any changes to environm
 To cite this project in publication, please use
 
 ```
-@misc{pettingZoo2020,
-  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam},
-  title = {Petting{Z}oo},
-  year = {2020},
-  publisher = {GitHub},
-  note = {GitHub repository},
-  howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
-}
+@article{terry2020pettingzoo,
+  Title = {PettingZoo: Gym for Multi-Agent Reinforcement Learning},
+  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Horsch, Caroline and Ravi, Praveen and Sullivan, Ryan},
+  journal={arXiv preprint arXiv:2009.14471},
+  year={2020}
 ```
 
 ## OS Support
