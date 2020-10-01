@@ -105,6 +105,7 @@ To cite this project in publication, please use
   Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Horsch, Caroline and Ravi, Praveen and Sullivan, Ryan},
   journal={arXiv preprint arXiv:2009.14471},
   year={2020}
+}
 ```
 
 ## OS Support
