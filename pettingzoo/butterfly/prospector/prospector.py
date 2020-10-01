@@ -776,7 +776,6 @@ class raw_env(AECEnv, EzPickle):
                 agent.body.nugget.rect, self.dirty_fences
             )
         agent.update(action)
-        self._bound(agent)
 
         if agent_pos != agent.rect.topleft or agent_angle != agent.body.angle:
             self.dirty_rects.extend(agent_bg_rects)
@@ -805,9 +804,6 @@ class raw_env(AECEnv, EzPickle):
 
         if observe:
             return self.observe(self.agent_selection)
-
-    def _bound(self, agent):
-        print(list(agent.rect))
 
     def reward(self):
         return self.rewards
