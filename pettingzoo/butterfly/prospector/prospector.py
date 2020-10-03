@@ -409,10 +409,10 @@ class Background(object):
         self.dirty_rects.clear()
 
     def update(self, sprite_rect: pg.Rect, dirty_fences):
-        top_y = int(sprite_rect.top // 50)
-        bottom_y = int(sprite_rect.bottom // 50)
-        left_x = int(sprite_rect.left // 50)
-        right_x = int(sprite_rect.right // 50)
+        top_y = int(sprite_rect.top // const.TILE_SIZE)
+        bottom_y = int(sprite_rect.bottom // const.TILE_SIZE)
+        left_x = int(sprite_rect.left // const.TILE_SIZE)
+        right_x = int(sprite_rect.right // const.TILE_SIZE)
 
         for pair in self.debris:
             self.dirty_rects.append(pair[1])
@@ -422,7 +422,7 @@ class Background(object):
         self.dirty_rects.append(self.rects[bottom_y][left_x])
         self.dirty_rects.append(self.rects[bottom_y][right_x])
 
-        if left_x == 1:
+        if left_x == 0:
             dirty_fences[0] = True
         if top_y == 0:
             dirty_fences[1] = True
@@ -681,6 +681,10 @@ class raw_env(AECEnv, EzPickle):
         def prospec_gold_handler(arbiter, space, data):
             return False
 
+        def boundary_collision_handler(arbiter, space, data):
+            ps = arbiter.contact_point_set
+            arbiter.shapes[0].body.position += ps.normal * (ps.points[0].distance + 1)
+
         # Create the collision event generators
         gold_dispenser = self.space.add_collision_handler(
             CollisionTypes.PROSPECTOR, CollisionTypes.WATER
@@ -705,6 +709,12 @@ class raw_env(AECEnv, EzPickle):
         )
 
         prospec_gold_collision.begin = prospec_gold_handler
+
+        pros_bound_coll = self.space.add_wildcard_collision_handler(CollisionTypes.PROSPECTOR)
+        pros_bound_coll.post_solve = boundary_collision_handler
+
+        bank_bound_coll = self.space.add_wildcard_collision_handler(CollisionTypes.BANKER)
+        bank_bound_coll.post_solve = boundary_collision_handler
 
     def seed(self, seed=None):
         self.rng, seed = seeding.np_random(seed)
@@ -816,10 +826,17 @@ class raw_env(AECEnv, EzPickle):
         self.water.generate_debris(self.rng)
 
         for p in self.prospectors.values():
+            p.body.nugget = None
             p.reset(utils.rand_pos("prospector", self.rng))
 
         for b in self.bankers.values():
+            b.body.nugget = None
             b.reset(utils.rand_pos("banker", self.rng))
+
+        for g in self.gold:
+            self.all_sprites.remove(g)
+
+        self.gold = []
 
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
