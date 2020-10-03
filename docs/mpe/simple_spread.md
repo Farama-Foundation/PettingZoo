@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-555.4"
-import: "pettingzoo.mpe import simple_spread_v0"
+import: "pettingzoo.mpe import simple_spread_v1"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
@@ -27,7 +27,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_spread.env(N=3, local_ratio=0.5, max_frames=100)
+simple_spread.env(N=3, local_ratio=0.5, max_frames=25)
 ```
 
 
