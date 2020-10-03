@@ -58,6 +58,10 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.3.4 (October 3, 2020)
+
+Fixed prospector agents leaving game area. Fixed to_parallel wrapper issue which was causing crashes with rllib.
+
 Version 1.3.3 (September 22, 2020)
 
 Fixed observation issue multiwalker environment, fixed MPE speaker listener naming scheme, renamed max_agent_iter to max_iter.
