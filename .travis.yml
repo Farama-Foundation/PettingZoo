@@ -112,4 +112,4 @@ jobs:
     - name: "source distribution test"
       script:
         - python setup.py sdist
-        - pip install dist/*.tar.gz --user
+        - pip install dist/*.tar.gz
