@@ -30,7 +30,7 @@ for agent in env.agent_iter():
 
 The commonly used methods are:
 
-`agent_iter(max__iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_agent_iter` (steps have been executed).
+`agent_iter(max_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_iter` (steps have been executed).
 
 `last()` returns reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
 
