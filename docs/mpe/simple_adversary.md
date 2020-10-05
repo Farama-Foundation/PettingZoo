@@ -7,7 +7,7 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(8),(10)"
 observation-values: "(-inf,inf)"
-import: "pettingzoo.mpe.simple_adversary_v0"
+import: "from pettingzoo.mpe import simple_adversary_v1"
 agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 ---
 
@@ -28,7 +28,7 @@ Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_adversary.env(N=2, max_frames=100)
+simple_adversary.env(N=2, max_frames=25)
 ```
 
 
