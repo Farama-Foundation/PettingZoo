@@ -10,5 +10,5 @@ simple_speaker_listener_v1 = DepreciatedModule("simple_speaker_listener", "v1", 
 
 simple_spread_v0 = DepreciatedModule("simple_spread", "v0", "v1")
 simple_tag_v0 = DepreciatedModule("simple_tag", "v0", "v1")
-simple__v0 = DepreciatedModule("simple_", "v0", "v1")
+simple_v0 = DepreciatedModule("simple", "v0", "v1")
 simple_world_comm_v0 = DepreciatedModule("simple_world_comm", "v0", "v1")

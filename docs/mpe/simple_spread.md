@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-555.4"
-import: "pettingzoo.mpe import simple_spread_v1"
+import: "from pettingzoo.mpe import simple_spread_v1"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
