@@ -22,16 +22,18 @@ Checkers (also called Draughts) is a 2-player turn based game. Our implementatio
 
 #### Observation Space
 
-The observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board. These type of piece corresponding to each plane is listed in the table below: 
+The observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board. 
 
-| Plane | Observation |
-| ----- | ----------- |
-| 0     | Black Men   |
-| 1     | Black Kings |
-| 2     | White Men   |
-| 3     | White Kings |
+The board is rotated and the planes are shifted to accommodate the current player. During the black player's turn, the top row provided by the `render` function is stored in row 0 of the observation. During the white player's turn, the top row is stored in row 7 of the observation. Additionally, the first two planes of the observation represent the men and kings of the current agent stored in `agent_selection` (The agent that must act next). The last two planes represent the other player's pieces.
 
-Note that there are only 32 occupiable spaces (the dark colored spaced on a real game board) in the game of checkers. They are numbered in increasing order from left to right and top to bottom, such that every other square in a row is numbered. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
+| Plane | Observation            |
+| ----- | ---------------------- |
+| 0     | Current Player's Men   |
+| 1     | Current Player's Kings |
+| 2     | Other Player's Men     |
+| 3     | Other Player's Kings   |
+
+Note that there are only 32 occupiable spaces (the dark colored spaced on a real game board) in the game of checkers. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
 
 #### Action Space
 
