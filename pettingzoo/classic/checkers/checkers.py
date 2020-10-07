@@ -50,7 +50,7 @@ class raw_env(AECEnv):
             for j, sq in enumerate(row):
                 if sq > 0:
                     obs[i, j, sq - 1] = 1
-        if self.agent_selection == "player_1":
+        if agent == "player_1":
             # Rotate last two planes (white pieces) to front two positions
             obs = np.roll(obs, 2, axis=2)
             # Rotate board to place black pieces at bottom
