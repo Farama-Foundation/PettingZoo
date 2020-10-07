@@ -32,9 +32,6 @@ class raw_env(AECEnv):
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
         self.agent_order = list(self.agents)
-        self.last_turn = "black"
-
-        self._agent_selector = agent_selector(self.agent_order)
 
         self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
         self.observation_spaces = {
@@ -45,7 +42,7 @@ class raw_env(AECEnv):
 
         self.reset()
 
-    def _read_observation(self):
+    def observe(self, agent):
         # Use self.ch.flatboard to update self.observation
         board = self.ch.flat_board()
         obs = np.zeros((8, 8, 4))
@@ -53,22 +50,25 @@ class raw_env(AECEnv):
             for j, sq in enumerate(row):
                 if sq > 0:
                     obs[i, j, sq - 1] = 1
+        if self.agent_selection == "player_1":
+            # Rotate last two planes (white pieces) to front two positions
+            obs = np.roll(obs, 2, axis=2) 
+        else:
+            # Rotate board to place black pieces at bottom
+            obs = np.rot90(obs, 2, axes=(0,1)) 
         self.observation = np.array(obs)
         return self.observation
-
-    def observe(self, agent):
-        return self._read_observation()
 
     def seed(self, seed=None):
         pass
 
     def reset(self, observe=True):
         self.ch = CheckersRules()
-        self.observation = self._read_observation()
         self.num_moves_max = 300
         self.num_moves = 0
         self.agent_order = list(self.agents)
-        self.agent_selection = self._agent_selector.reset()
+        self.agent_selection = self.agent_order[0]
+        self.observation = self.observe(self.agent_selection)
         self.last_turn = "black"
         self.rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
@@ -166,12 +166,7 @@ class raw_env(AECEnv):
                 action[0], action[1]
             )
 
-            self.agent_selection = self._agent_selector.next()
-
-            if turn == self.last_turn:
-                self.agent_selection = self._agent_selector.next()
-                self.agent_order.reverse()
-            self.last_turn = turn
+            self.agent_selection =  "player_0" if turn == "black" else "player_1"
 
 
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
