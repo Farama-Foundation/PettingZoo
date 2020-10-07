@@ -38,7 +38,7 @@ class raw_env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
         self.observation_spaces = {
-            name: spaces.Box(low=0, high=1, shape=(8, 8, 4), dtype=np.int32)
+            name: spaces.Box(low=0, high=1, shape=(8, 8, 4))
             for name in self.agents
         }
         self.observation = np.zeros((8, 8, 4))
