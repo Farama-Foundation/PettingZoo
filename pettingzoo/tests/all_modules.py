@@ -53,15 +53,15 @@ from pettingzoo.magent import combined_arms_v1
 from pettingzoo.magent import tiger_deer_v1
 from pettingzoo.magent import battlefield_v1
 
-from pettingzoo.mpe import simple_adversary_v0
-from pettingzoo.mpe import simple_crypto_v0
-from pettingzoo.mpe import simple_push_v0
-from pettingzoo.mpe import simple_reference_v0
-from pettingzoo.mpe import simple_speaker_listener_v1
-from pettingzoo.mpe import simple_spread_v0
-from pettingzoo.mpe import simple_tag_v0
-from pettingzoo.mpe import simple_world_comm_v0
-from pettingzoo.mpe import simple_v0
+from pettingzoo.mpe import simple_adversary_v1
+from pettingzoo.mpe import simple_crypto_v1
+from pettingzoo.mpe import simple_push_v1
+from pettingzoo.mpe import simple_reference_v1
+from pettingzoo.mpe import simple_speaker_listener_v2
+from pettingzoo.mpe import simple_spread_v1
+from pettingzoo.mpe import simple_tag_v1
+from pettingzoo.mpe import simple_world_comm_v1
+from pettingzoo.mpe import simple_v1
 
 from pettingzoo.sisl import pursuit_v1
 from pettingzoo.sisl import waterworld_v1
@@ -134,15 +134,15 @@ all_environments = {
     "magent/gather": gather_v1,
     "magent/tiger_deer": tiger_deer_v1,
 
-    "mpe/simple_adversary": simple_adversary_v0,
-    "mpe/simple_crypto": simple_crypto_v0,
-    "mpe/simple_push": simple_push_v0,
-    "mpe/simple_reference": simple_reference_v0,
-    "mpe/simple_speaker_listener": simple_speaker_listener_v1,
-    "mpe/simple_spread": simple_spread_v0,
-    "mpe/simple_tag": simple_tag_v0,
-    "mpe/simple_world_comm": simple_world_comm_v0,
-    "mpe/simple": simple_v0,
+    "mpe/simple_adversary": simple_adversary_v1,
+    "mpe/simple_crypto": simple_crypto_v1,
+    "mpe/simple_push": simple_push_v1,
+    "mpe/simple_reference": simple_reference_v1,
+    "mpe/simple_speaker_listener": simple_speaker_listener_v2,
+    "mpe/simple_spread": simple_spread_v1,
+    "mpe/simple_tag": simple_tag_v1,
+    "mpe/simple_world_comm": simple_world_comm_v1,
+    "mpe/simple": simple_v1,
 
     "sisl/multiwalker": multiwalker_v3,
     "sisl/waterworld": waterworld_v1,
