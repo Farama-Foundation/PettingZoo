@@ -27,6 +27,17 @@ class AECEnv:
     def close(self):
         pass
 
+    def find_done(self):
+        dones = self.dones
+        return [agent for agent in self.agents if dones[agent]]
+
+    def remove_if_done(self, agent):
+        assert self.dones[agent], "an agent that was not done as attemted to be removed"
+        del self.dones[agent]
+        del self.rewards[agent]
+        del self.infos[agent]
+        self.agents.remove(agent)
+
 
 class ParallelEnv:
     def reset(self):
