@@ -52,6 +52,7 @@ When an action is chosen, the environment automatically decides whether the prov
 | :----: | :---: |
 |   +1   |  -1   |
 
+In the event of a tie, both players receive a reward of 0.
 
 #### Legal Moves
 
