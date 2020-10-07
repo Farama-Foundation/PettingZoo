@@ -127,8 +127,6 @@ class raw_env(AECEnv):
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos + 9
-        else:
-            print("Invalid direction {}".format(direction))
 
         return (self._act_abs_to_rel(pos), self._act_abs_to_rel(dest_pos))
 
@@ -176,16 +174,9 @@ class raw_env(AECEnv):
 
             self.observation = self._read_observation()
 
-            # self.ch.print_board()
-            # print(self.agent_selection)
-            # print(self.observe(self.agent_selection))
-            # print(self.observation)
-            # self.infos[self.agent_selection]['legal_moves']
-
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
 
         if winner is None and self.num_moves > self.num_moves_max:
-            print("Draw")
             self.winner = -1
             self.rewards[self.agents[0]] = 0
             self.rewards[self.agents[1]] = 0
@@ -211,7 +202,24 @@ class raw_env(AECEnv):
         return next_observation
 
     def render(self, mode="human"):
-        print(self.ch.flat_board())
+        board = self.ch.flat_board()
+        pieces = {
+            1: 'M',
+            2: 'K',
+            3: 'm',
+            4: 'k',
+        }
+        for row, line in enumerate(board):
+            for col, sq in enumerate(line):
+                if sq == 0:
+                    if row % 2 == 0 and col % 2 == 1 \
+                        or row % 2 == 1 and col % 2 == 0:
+                            print("_", end = ' ')
+                    else:
+                        print(" ", end = ' ')        
+                else:
+                    print(pieces[sq], end = ' ')
+            print("")
 
     def close(self):
         pass
