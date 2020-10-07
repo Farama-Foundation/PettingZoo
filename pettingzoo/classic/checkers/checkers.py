@@ -52,10 +52,10 @@ class raw_env(AECEnv):
                     obs[i, j, sq - 1] = 1
         if self.agent_selection == "player_1":
             # Rotate last two planes (white pieces) to front two positions
-            obs = np.roll(obs, 2, axis=2) 
+            obs = np.roll(obs, 2, axis=2)
         else:
             # Rotate board to place black pieces at bottom
-            obs = np.rot90(obs, 2, axes=(0,1)) 
+            obs = np.rot90(obs, 2, axes=(0, 1))
         self.observation = np.array(obs)
         return self.observation
 
@@ -166,8 +166,7 @@ class raw_env(AECEnv):
                 action[0], action[1]
             )
 
-            self.agent_selection =  "player_0" if turn == "black" else "player_1"
-
+            self.agent_selection = "player_0" if turn == "black" else "player_1"
 
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
 
@@ -199,21 +198,20 @@ class raw_env(AECEnv):
     def render(self, mode="human"):
         board = self.ch.flat_board()
         pieces = {
-            1: 'M',
-            2: 'K',
-            3: 'm',
-            4: 'k',
+            1: "M",
+            2: "K",
+            3: "m",
+            4: "k",
         }
         for row, line in enumerate(board):
             for col, sq in enumerate(line):
                 if sq == 0:
-                    if row % 2 == 0 and col % 2 == 1 \
-                        or row % 2 == 1 and col % 2 == 0:
-                            print("_", end = ' ')
+                    if row % 2 == 0 and col % 2 == 1 or row % 2 == 1 and col % 2 == 0:
+                        print("_", end=" ")
                     else:
-                        print(" ", end = ' ')        
+                        print(" ", end=" ")
                 else:
-                    print(pieces[sq], end = ' ')
+                    print(pieces[sq], end=" ")
             print("")
 
     def close(self):
