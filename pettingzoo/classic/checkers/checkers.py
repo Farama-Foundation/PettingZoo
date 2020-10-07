@@ -53,10 +53,11 @@ class raw_env(AECEnv):
             for j, sq in enumerate(row):
                 if sq > 0:
                     obs[i, j, sq - 1] = 1
-        return np.array(obs)
+        self.observation = np.array(obs)
+        return self.observation
 
     def observe(self, agent):
-        return np.array(self.observation)
+        return self._read_observation()
 
     def seed(self, seed=None):
         pass
@@ -172,7 +173,6 @@ class raw_env(AECEnv):
                 self.agent_order.reverse()
             self.last_turn = turn
 
-            self.observation = self._read_observation()
 
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
 
