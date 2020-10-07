@@ -63,7 +63,6 @@ class raw_env(AECEnv):
 
     def reset(self, observe=True):
         self.ch = CheckersRules()
-        self.num_moves_max = 300
         self.num_moves = 0
         self.agent_order = list(self.agents)
         self.agent_selection = self.agent_order[0]
@@ -169,21 +168,14 @@ class raw_env(AECEnv):
 
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
 
-        if winner is None and self.num_moves > self.num_moves_max:
-            self.winner = -1
-            self.rewards[self.agents[0]] = 0
-            self.rewards[self.agents[1]] = 0
-        else:
-            if winner == "black":
-                self.winner = 0
-                self.rewards[self.agents[0]] = 1
-                self.rewards[self.agents[1]] = -1
-            elif winner == "white":
-                self.winner = 1
-                self.rewards[self.agents[0]] = -1
-                self.rewards[self.agents[1]] = 1
-            else:
-                pass
+        if winner == "black":
+            self.winner = 0
+            self.rewards[self.agents[0]] = 1
+            self.rewards[self.agents[1]] = -1
+        elif winner == "white":
+            self.winner = 1
+            self.rewards[self.agents[0]] = -1
+            self.rewards[self.agents[1]] = 1
 
         self.dones[self.agent_order[0]] = winner is not None
         self.dones[self.agent_order[1]] = winner is not None
