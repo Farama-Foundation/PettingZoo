@@ -77,25 +77,6 @@ class raw_env(AECEnv):
         if observe:
             return np.array(self.observation)
 
-    def _obs_rel_to_abs(self, pos):
-        # Convert location from (32) to (8, 8)
-        row = int(pos / 4)
-        pos64 = 0
-        if row % 2 == 0:
-            pos64 = 2 * pos + 1
-        else:
-            pos64 = 2 * pos
-        row = int(pos64 / 8)
-        col = int(pos64 % 8)
-        return (row, col)
-
-    def _obs_abs_to_rel(self, pos):
-        # Convert location from (8, 8) to (32)
-        row = pos[0]
-        col = pos[1]
-        pos64 = (row * 8) + col
-        return int((pos64 + 0.5) / 2)
-
     def _act_rel_to_abs(self, pos):
         # Convert location from (32) to (64)
         row = int(pos / 4)
