@@ -114,7 +114,7 @@ def test_rewards_dones(env, agent_0):
 
 def play_test(env, observation_0):
     prev_observe = env.reset()
-    for agent in env.agent_iter(env.num_agents*2):  # step through every agent once with observe=True
+    for agent in env.agent_iter(env.num_agents*20):  # step through every agent once with observe=True
         assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
         reward, done, info = env.last()
         if 'legal_moves' in env.infos[agent] and not done:
