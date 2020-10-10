@@ -30,7 +30,7 @@ Deer's reward is given as:
 
 * -1 reward for dying
 
-Observation space: `[empty, obstacle, deer, tigers, binary_agent_id(10), one_hot_action, last_reward]`
+Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
 
 Map size: 45x45
 
