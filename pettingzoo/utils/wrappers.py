@@ -299,14 +299,7 @@ class OrderEnforcingWrapper(AgentIterWrapper):
         super().seed(seed)
 
     def observe(self, agent):
-        if agent not in self.dones:
-            obs_space = self.observation_spaces[agent]
-            if isinstance(obs_space, gym.spaces.Box):
-                return np.zeros_like(obs_space.low)
-            elif isinstance(obs_space, gym.spaces.Discrete):
-                return 0
-        else:
-            return super().observe(agent)
+        return super().observe(agent)
 
     def render(self, mode='human'):
         if not self._has_reset:

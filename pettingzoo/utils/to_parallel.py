@@ -26,7 +26,7 @@ class to_parallel(ParallelEnv):
         dones = {}
         infos = {}
 
-        while self.aec_env.agent_selection is not None and self.aec_env.dones[self.aec_env.agent_selection]:
+        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
             self.aec_env.step(None, observe=False)
         for agent in self.agents:
             self.aec_env.step(actions[agent], observe=False)

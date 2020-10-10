@@ -41,8 +41,6 @@ class AECEnv:
         except StopIteration:
             if self.agents:
                 self.agent_selection = self._skip_agent_selection
-            else:
-                self.agent_selection = None
 
     def _remove_done_agent(self, agent):
         assert self.dones[agent], "an agent that was not done as attemted to be removed"
