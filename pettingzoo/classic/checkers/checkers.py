@@ -90,6 +90,7 @@ class raw_env(AECEnv):
 
     # Parse action from (256) action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
+    # Directions are from the player's perspective
     def _parse_action(self, action):
 
         # Check if given move is a jump
@@ -100,28 +101,38 @@ class raw_env(AECEnv):
             )
 
         direction = int(action / 64)
+
+        # From the current player's perspective directions are as follows:
+        #   3 _ 2
+        #   _ M _
+        #   1 _ 0 
+        # Adjust direction for current player
+        if self.agent_selection == "player_1":
+            direction = 3 - direction
+
         pos = self._act_rel_to_abs(action % 64)
         dest_pos = 0
+
         if direction == 0:
-            # Move up-left
+            # Move back-right
             dest_pos = pos - 9
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos - 9
         elif direction == 1:
-            # Move up-right
+            # Move back-left
             dest_pos = pos - 7
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos - 7
         elif direction == 2:
-            # Move down-left
+            # Move forward-right
             dest_pos = pos + 7
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos + 7
         elif direction == 3:
-            # Move down-right
+            # Move forward-left
             dest_pos = pos + 9
 
             if check_jump(dest_pos):
@@ -146,6 +157,10 @@ class raw_env(AECEnv):
             elif destpos == srcpos + 9 or destpos == srcpos + 18:
                 direction = 3
 
+            
+            # Adjust direction for current player
+            if self.agent_selection == "player_1":
+                direction = 3 - direction
             legal_moves.append(self._act_abs_to_rel(srcpos) + (64 * direction))
 
         return legal_moves
