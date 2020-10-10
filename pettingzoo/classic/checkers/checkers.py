@@ -26,38 +26,38 @@ class raw_env(AECEnv):
     metadata = {"render.modes": ["human"]}
 
     move64_32 = {
-        1:0,
-        3:1,
-        5:2,
-        7:3,
-        8:4,
-        10:5,
-        12:6,
-        14:7,
-        17:8,
-        19:9,
-        21:10,
-        23:11,
-        24:12,
-        26:13,
-        28:14,
-        30:15,
-        33:16,
-        35:17,
-        37:18,
-        39:19,
-        40:20,
-        42:21,
-        44:22,
-        46:23,
-        49:24,
-        51:25,
-        53:26,
-        55:27,
-        56:28,
-        58:29,
-        60:30,
-        62:31,
+        1: 0,
+        3: 1,
+        5: 2,
+        7: 3,
+        8: 4,
+        10: 5,
+        12: 6,
+        14: 7,
+        17: 8,
+        19: 9,
+        21: 10,
+        23: 11,
+        24: 12,
+        26: 13,
+        28: 14,
+        30: 15,
+        33: 16,
+        35: 17,
+        37: 18,
+        39: 19,
+        40: 20,
+        42: 21,
+        44: 22,
+        46: 23,
+        49: 24,
+        51: 25,
+        53: 26,
+        55: 27,
+        56: 28,
+        58: 29,
+        60: 30,
+        62: 31,
     }
     move32_64 = {v: k for k, v in move64_32.items()}
 
@@ -120,16 +120,14 @@ class raw_env(AECEnv):
         # Check if given move is a jump
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
-            return self.ch.check_occupancy(
-                raw_env.move64_32[pos], by_players=opponent
-            )
+            return self.ch.check_occupancy(raw_env.move64_32[pos], by_players=opponent)
 
         direction = int(action / 64)
 
         # From the current player's perspective directions are as follows:
         #   3 _ 2
         #   _ M _
-        #   1 _ 0 
+        #   1 _ 0
         # Adjust direction for current player
         if self.agent_selection == "player_1":
             direction = 3 - direction
@@ -181,11 +179,10 @@ class raw_env(AECEnv):
             elif destpos == srcpos + 9 or destpos == srcpos + 18:
                 direction = 3
 
-            
             # Adjust direction for current player
             if self.agent_selection == "player_1":
                 direction = 3 - direction
-            legal_moves.append(raw_env.move64_32[srcpos]  + (64 * direction))
+            legal_moves.append(raw_env.move64_32[srcpos] + (64 * direction))
 
         return legal_moves
 
