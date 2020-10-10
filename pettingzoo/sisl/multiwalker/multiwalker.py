@@ -28,6 +28,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.num_agents = self.env.num_agents
         self.agents = ["walker_" + str(r) for r in range(self.num_agents)]
+        self.possible_agents = self.agents
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
         # spaces
@@ -69,6 +70,8 @@ class raw_env(AECEnv, EzPickle):
         return self.env.observe(self.agent_name_mapping[agent])
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
         action = np.array(action, dtype=np.float32)
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
@@ -81,6 +84,7 @@ class raw_env(AECEnv, EzPickle):
         if self.env.frames >= self.env.max_frames:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
+        self._dones_step_first()
         self.steps += 1
         if observe:
             return self.observe(self.agent_selection)

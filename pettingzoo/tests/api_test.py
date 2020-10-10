@@ -114,14 +114,35 @@ def test_rewards_dones(env, agent_0):
 
 def play_test(env, observation_0):
     prev_observe = env.reset()
+
+    done = {agent:False for agent in env.agents}
+    live_agents = env.agents[:]
+    has_finished = set()
     for agent in env.agent_iter(env.num_agents*20):  # step through every agent once with observe=True
         assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
         reward, done, info = env.last()
-        if 'legal_moves' in env.infos[agent] and not done:
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
         next_observe = env.step(action)
+
+        # check dict element removal
+        assert not done or agent not in has_finished, "agent cannot  be done twice in an environment"
+        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
+        assert set(env.rewards.keys()) == (set(env.agents)), "agents should not be given a reward if they were done last turn"
+        assert set(env.dones.keys()) == (set(env.agents)), "agents should not be given a done if they were done last turn"
+        assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
+        assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should include all agents always"
+        if done:
+            live_agents.remove(agent)
+            has_finished.add(agent)
+        if not env.agents:
+            assert has_finished == set(env.possible_agents), "not all agents finished, some were skipped over"
+            break
+
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             assert env.observation_spaces[agent].dtype == prev_observe.dtype
         if not env.observation_spaces[agent].contains(prev_observe):
@@ -130,9 +151,10 @@ def play_test(env, observation_0):
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
         prev_observe = next_observe
-        if not isinstance(env.infos[agent], dict):
+        if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
-        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
+
+
 
     env.reset()
     reward_0 = env.rewards[env.agent_selection]
