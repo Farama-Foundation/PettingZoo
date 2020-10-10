@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import foozpong"
+import: "from pettingzoo.atari import foozpong_v0"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
@@ -35,4 +35,3 @@ foozpong.env(num_players=4)
 ```
 
 `num_players`:  Number of players (must be either 2 or 4)
-
