@@ -19,10 +19,9 @@ class BaseWrapper(AECEnv):
         super().__init__()
         self.env = env
 
-        self.num_agents = self.env.num_agents
-        self.agents = self.env.agents
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = self.env.action_spaces
+        self.possible_agents = self.env.possible_agents
 
         # we don't want these defined as we don't want them used before they are gotten
 
@@ -53,6 +52,8 @@ class BaseWrapper(AECEnv):
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
+        self.agents = self.env.agents
+        self.num_agents = self.env.num_agents
 
         return observation
 
@@ -66,6 +67,8 @@ class BaseWrapper(AECEnv):
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
+        self.agents = self.env.agents
+        self.num_agents = self.env.num_agents
 
         return next_obs
 
@@ -75,14 +78,14 @@ class AgentIterWrapper(BaseWrapper):
         super().__init__(env)
         self._has_updated = False
         self._is_iterating = False
-        self._agent_idxs = {agent: i for i, agent in enumerate(env.agents)}
+        self._agent_idxs = {agent: i for i, agent in enumerate(env.possible_agents)}
         # self._was_dones = {agent: False for agent in self.agents}
 
     def reset(self, observe=True):
+        obs = super().reset(observe)
         self._has_updated = True
         self._final_rewards = {agent: 0 for agent in self.agents}
         self.old_observation = None
-        obs = super().reset(observe)
         self._was_dones = {agent: done for agent, done in self.dones.items()}
         return obs
 
@@ -184,7 +187,7 @@ class NanNoOpWrapper(BaseWrapper):
         self._no_op_policy = no_op_policy
 
     def step(self, action, observe=True):
-        if np.isnan(action).any():
+        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
             EnvLogger.warn_action_is_NaN(self._no_op_policy)
             action = self._no_op_action
         return super().step(action, observe)
@@ -200,7 +203,7 @@ class NanZerosWrapper(BaseWrapper):
         assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use NanZerosWrapper for Box spaces. Use NanNoOpWrapper for discrete spaces"
 
     def step(self, action, observe=True):
-        if np.isnan(action).any():
+        if not (action is None and self.dones[self.agent_selection]) and  np.isnan(action).any():
             EnvLogger.warn_action_is_NaN("taking the all zeros action")
             action = np.zeros_like(action)
         return super().step(action, observe)
@@ -256,7 +259,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
 
     def step(self, action, observe=True):
         space = self.action_spaces[self.agent_selection]
-        if not space.contains(action):
+        if action is not None and not space.contains(action):
             assert space.shape == action.shape, "action should have shape {}, has shape {}".format(space.shape, action.shape)
 
             EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
@@ -286,7 +289,7 @@ class OrderEnforcingWrapper(AgentIterWrapper):
         '''
         if value == "agent_order":
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
-        elif value in {"rewards", "dones", "infos", "agent_selection"}:
+        elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:
             raise AttributeError("{} cannot be accessed before reset".format(value))
         else:
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
@@ -294,6 +297,16 @@ class OrderEnforcingWrapper(AgentIterWrapper):
     def seed(self, seed=None):
         self._has_reset = False
         super().seed(seed)
+
+    def observe(self, agent):
+        if agent not in self.dones:
+            obs_space = self.observation_spaces[agent]
+            if isinstance(obs_space, gym.spaces.Box):
+                return np.zeros_like(obs_space.low)
+            elif isinstance(obs_space, gym.spaces.Discrete):
+                return 0
+        else:
+            return super().observe(agent)
 
     def render(self, mode='human'):
         if not self._has_reset:
@@ -314,11 +327,9 @@ class OrderEnforcingWrapper(AgentIterWrapper):
     def step(self, action, observe=True):
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
-        elif self._was_dones[self.agent_selection]:
+        elif self.agent_selection is None:
             EnvLogger.warn_step_after_done()
-            self.dones = {agent: True for agent in self.dones}
-            self.rewards = {agent: 0 for agent in self.rewards}
-            return super().observe(self.agent_selection) if observe else None
+            return None
         else:
             return super().step(action, observe)
 
