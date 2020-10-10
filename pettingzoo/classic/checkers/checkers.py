@@ -123,16 +123,17 @@ class raw_env(AECEnv):
             return self.ch.check_occupancy(raw_env.move64_32[pos], by_players=opponent)
 
         direction = int(action / 64)
+        pos = action % 64
 
         # From the current player's perspective directions are as follows:
         #   3 _ 2
         #   _ M _
         #   1 _ 0
-        # Adjust direction for current player
+        # Adjust action for current player
         if self.agent_selection == "player_1":
             direction = 3 - direction
+            pos = (63 - pos)
 
-        pos = raw_env.move32_64[action % 64]
         dest_pos = 0
 
         if direction == 0:
@@ -179,10 +180,11 @@ class raw_env(AECEnv):
             elif destpos == srcpos + 9 or destpos == srcpos + 18:
                 direction = 3
 
-            # Adjust direction for current player
+            # Adjust action for current player
             if self.agent_selection == "player_1":
                 direction = 3 - direction
-            legal_moves.append(raw_env.move64_32[srcpos] + (64 * direction))
+                srcpos = (63 - srcpos)
+            legal_moves.append(srcpos + (64 * direction))
 
         return legal_moves
 
