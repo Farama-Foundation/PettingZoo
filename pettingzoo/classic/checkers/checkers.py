@@ -25,6 +25,42 @@ class raw_env(AECEnv):
 
     metadata = {"render.modes": ["human"]}
 
+    move64_32 = {
+        1:0,
+        3:1,
+        5:2,
+        7:3,
+        8:4,
+        10:5,
+        12:6,
+        14:7,
+        17:8,
+        19:9,
+        21:10,
+        23:11,
+        24:12,
+        26:13,
+        28:14,
+        30:15,
+        33:16,
+        35:17,
+        37:18,
+        39:19,
+        40:20,
+        42:21,
+        44:22,
+        46:23,
+        49:24,
+        51:25,
+        53:26,
+        55:27,
+        56:28,
+        58:29,
+        60:30,
+        62:31,
+    }
+    move32_64 = {v: k for k, v in move64_32.items()}
+
     def __init__(self):
         super().__init__()
 
@@ -76,18 +112,6 @@ class raw_env(AECEnv):
         if observe:
             return np.array(self.observation)
 
-    def _act_rel_to_abs(self, pos):
-        # Convert location from (32) to (64)
-        row = int(pos / 4)
-        if row % 2 == 0:
-            return 2 * pos + 1
-        else:
-            return 2 * pos
-
-    def _act_abs_to_rel(self, pos):
-        # Convert location from (64) to (32)
-        return int((pos + 0.5) / 2)
-
     # Parse action from (256) action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
     # Directions are from the player's perspective
@@ -97,7 +121,7 @@ class raw_env(AECEnv):
         def check_jump(pos):
             opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
             return self.ch.check_occupancy(
-                self._act_abs_to_rel(pos), by_players=opponent
+                raw_env.move64_32[pos], by_players=opponent
             )
 
         direction = int(action / 64)
@@ -110,7 +134,7 @@ class raw_env(AECEnv):
         if self.agent_selection == "player_1":
             direction = 3 - direction
 
-        pos = self._act_rel_to_abs(action % 64)
+        pos = raw_env.move32_64[action % 64]
         dest_pos = 0
 
         if direction == 0:
@@ -138,14 +162,14 @@ class raw_env(AECEnv):
             if check_jump(dest_pos):
                 dest_pos = dest_pos + 9
 
-        return (self._act_abs_to_rel(pos), self._act_abs_to_rel(dest_pos))
+        return (raw_env.move64_32[pos], raw_env.move64_32[dest_pos])
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
         legal_moves = []
         for move in moves:
-            srcpos = self._act_rel_to_abs(move[0])
-            destpos = self._act_rel_to_abs(move[1])
+            srcpos = raw_env.move32_64[move[0]]
+            destpos = raw_env.move32_64[move[1]]
 
             direction = -1
             if destpos == srcpos - 9 or destpos == srcpos - 18:
@@ -161,7 +185,7 @@ class raw_env(AECEnv):
             # Adjust direction for current player
             if self.agent_selection == "player_1":
                 direction = 3 - direction
-            legal_moves.append(self._act_abs_to_rel(srcpos) + (64 * direction))
+            legal_moves.append(raw_env.move64_32[srcpos]  + (64 * direction))
 
         return legal_moves
 
