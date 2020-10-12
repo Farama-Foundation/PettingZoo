@@ -19,7 +19,7 @@
 <g id="node2" class="node">
 <title>a1</title>
 <ellipse fill="none" stroke="#000000" cx="185.9044" cy="-43" rx="43" ry="43"/>
-<text text-anchor="middle" x="185.9044" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">listener_0</text>
+<text text-anchor="middle" x="185.9044" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">speaker_0</text>
 </g>
 <!-- a0&#45;&gt;a1 -->
 <g id="edge1" class="edge">
@@ -31,7 +31,7 @@
 <g id="node3" class="node">
 <title>a2</title>
 <ellipse fill="none" stroke="#000000" cx="43" cy="-43" rx="43" ry="43"/>
-<text text-anchor="middle" x="43" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">speaker_0</text>
+<text text-anchor="middle" x="43" y="-39.3" font-family="Segoe UI" font-size="14.00" fill="#000000">listener_0</text>
 </g>
 <!-- a1&#45;&gt;a2 -->
 <g id="edge2" class="edge">
