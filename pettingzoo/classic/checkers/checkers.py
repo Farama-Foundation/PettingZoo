@@ -60,6 +60,7 @@ class raw_env(AECEnv):
         62: 31,
     }
     move32_64 = {v: k for k, v in move64_32.items()}
+    move_to_action = {"player_0": {}, "player_1": {}}
 
     def __init__(self):
         super().__init__()
@@ -132,7 +133,7 @@ class raw_env(AECEnv):
         # Adjust action for current player
         if self.agent_selection == "player_1":
             direction = 3 - direction
-            pos = (63 - pos)
+            pos = 63 - pos
 
         dest_pos = 0
 
@@ -160,13 +161,20 @@ class raw_env(AECEnv):
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos + 9
-
-        return (raw_env.move64_32[pos], raw_env.move64_32[dest_pos])
+        
+        # Cache action conversion
+        move = (raw_env.move64_32[pos], raw_env.move64_32[dest_pos])
+        raw_env.move_to_action[self.agent_selection][move] = action
+        return move
 
     def legal_moves(self):
         moves = self.ch.legal_moves()
         legal_moves = []
         for move in moves:
+            if move in raw_env.move_to_action[self.agent_selection]:
+                legal_moves.append(raw_env.move_to_action[self.agent_selection][move])
+                continue
+
             srcpos = raw_env.move32_64[move[0]]
             destpos = raw_env.move32_64[move[1]]
 
@@ -183,8 +191,12 @@ class raw_env(AECEnv):
             # Adjust action for current player
             if self.agent_selection == "player_1":
                 direction = 3 - direction
-                srcpos = (63 - srcpos)
-            legal_moves.append(srcpos + (64 * direction))
+                srcpos = 63 - srcpos
+
+            # Cache move conversion
+            action = srcpos + (64 * direction)
+            raw_env.move_to_action[self.agent_selection][move] = action
+            legal_moves.append(action)
 
         return legal_moves
 
