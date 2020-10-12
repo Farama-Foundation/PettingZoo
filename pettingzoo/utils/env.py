@@ -34,6 +34,7 @@ class AECEnv:
             self._dones_iter = iter(_dones_order)
             self._skip_agent_selection = self.agent_selection
             self.agent_selection = next(self._dones_iter)
+        return self.agent_selection
 
     def _find_next_agent(self):
         try:
@@ -56,6 +57,44 @@ class AECEnv:
         self._remove_done_agent(self.agent_selection)
         self._find_next_agent()
         return self.observe(self.agent_selection) if observe else None
+
+    def agent_iter(self, max_iter=2**63):
+        return AECIterable(self, max_iter)
+
+    def last(self):
+        agent = self.agent_selection
+        return self.rewards[agent], self.dones[agent], self.infos[agent]
+
+
+class AECIterable:
+    def __init__(self, env, max_iter):
+        self.env = env
+        self.max_iter = max_iter
+
+    def __iter__(self):
+        return AECIterator(self.env, self.max_iter)
+
+
+class AECIterator:
+    def __init__(self, env, max_iter):
+        self.env = env
+        self.iters_til_term = max_iter
+        self.env._is_iterating = True
+
+    def __next__(self):
+        if not self.env.agents or self.iters_til_term <= 0:
+            raise StopIteration
+        self.iters_til_term -= 1
+        return self.env.agent_selection
+
+
+class AECOrderEnforcingIterator(AECIterator):
+    def __next__(self):
+        agent = super().__next__()
+        assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`!"
+        self.env._has_updated = False
+        return agent
+
 
 class ParallelEnv:
     def reset(self):

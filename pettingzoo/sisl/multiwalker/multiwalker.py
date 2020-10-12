@@ -39,8 +39,6 @@ class raw_env(AECEnv, EzPickle):
         self.display_wait = 0.04
         self.observations = self.env.get_last_obs()
 
-        self.has_reset = False
-
     def seed(self, seed=None):
         self.env.seed(seed)
 
@@ -48,9 +46,10 @@ class raw_env(AECEnv, EzPickle):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, observe=True):
-        self.has_reset = True
         self.env.reset()
         self.steps = 0
+        self.num_agents = self.env.num_agents
+        self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(

@@ -73,83 +73,6 @@ class BaseWrapper(AECEnv):
         return next_obs
 
 
-class AgentIterWrapper(BaseWrapper):
-    def __init__(self, env):
-        super().__init__(env)
-        self._has_updated = False
-        self._is_iterating = False
-        self._agent_idxs = {agent: i for i, agent in enumerate(env.possible_agents)}
-        # self._was_dones = {agent: False for agent in self.agents}
-
-    def reset(self, observe=True):
-        obs = super().reset(observe)
-        self._has_updated = True
-        self._final_rewards = {agent: 0 for agent in self.agents}
-        self.old_observation = None
-        self._was_dones = {agent: done for agent, done in self.dones.items()}
-        return obs
-
-    def last(self):
-        agent = self.agent_selection
-        return self.rewards[agent], self.dones[agent], self.infos[agent]
-
-    def step(self, action, observe=True):
-        self._has_updated = True
-
-        cur_agent = self.agent_selection
-        if self.agent_selection != self.env.agent_selection:
-            self._was_dones[cur_agent] = True
-            self.agent_selection = self.env.agent_selection
-        else:
-            self._was_dones[cur_agent] = self.env.dones[cur_agent]
-            super().step(action, False)
-
-        for agent in self.agents:
-            if self.dones[agent] and not self._final_rewards[agent]:
-                self._final_rewards[agent] = self.rewards[agent]
-
-        for agent in self.agents:
-            if self.dones[agent] and not self._was_dones[agent]:
-                self.agent_selection = agent
-                self.rewards[agent] = self._final_rewards[agent]
-                break
-
-        return super().observe(self.agent_selection) if observe else None
-
-    def agent_iter(self, max_iter=2**63):
-        return AECIterable(self, max_iter)
-
-
-class AECIterable:
-    def __init__(self, env, max_iter):
-        self.env = env
-        self.max_iter = max_iter
-
-    def __iter__(self):
-        return AECOrderEnforcingIterator(self.env, self.max_iter)
-
-
-class AECIterator:
-    def __init__(self, env, max_iter):
-        self.env = env
-        self.iters_til_term = max_iter
-        self.env._is_iterating = True
-
-    def __next__(self):
-        if self.env._was_dones[self.env.agent_selection] or self.iters_til_term <= 0:
-            raise StopIteration
-        self.iters_til_term -= 1
-        return self.env.agent_selection
-
-
-class AECOrderEnforcingIterator(AECIterator):
-    def __next__(self):
-        agent = super().__next__()
-        assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`!"
-        self.env._has_updated = False
-        return agent
-
-
 class TerminateIllegalWrapper(BaseWrapper):
     '''
     this wrapper terminates the game with the current player losing
@@ -220,7 +143,7 @@ class NaNRandomWrapper(BaseWrapper):
         self.np_random = np.random.RandomState(SEED)
 
     def step(self, action, observe=True):
-        if np.isnan(action).any():
+        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
             cur_info = self.infos[self.agent_selection]
             if 'legal_moves' in cur_info:
                 backup_policy = "taking a random legal action"
@@ -245,7 +168,7 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
         assert all(isinstance(space, Discrete) for space in self.action_spaces.values()), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
     def step(self, action, observe=True):
-        assert self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
+        assert (action is None and self.dones[self.agent_selection]) or self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
         return super().step(action, observe)
 
 
@@ -268,7 +191,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
         return super().step(action, observe)
 
 
-class OrderEnforcingWrapper(AgentIterWrapper):
+class OrderEnforcingWrapper(BaseWrapper):
     '''
     check all orders:
 

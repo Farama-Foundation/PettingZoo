@@ -28,7 +28,9 @@ class to_parallel(ParallelEnv):
 
         while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
             self.aec_env.step(None, observe=False)
-        for agent in self.agents:
+
+        for agent in self.aec_env.agents:
+            assert agent == self.aec_env.agent_selection, f"expected agent {agent} got agent {self.aec_env.agent_selection}, agent order is nontrivial"
             self.aec_env.step(actions[agent], observe=False)
 
         rewards = dict(**self.aec_env.rewards)
