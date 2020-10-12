@@ -24,6 +24,7 @@ from pettingzoo.atari import wizard_of_wor_v1
 from pettingzoo.atari import warlords_v1
 
 from pettingzoo.classic import chess_v0
+from pettingzoo.classic import checkers_v0
 from pettingzoo.classic import rps_v0
 from pettingzoo.classic import rpsls_v0
 from pettingzoo.classic import connect_four_v0
@@ -104,6 +105,7 @@ all_environments = {
     "atari/warlords": warlords_v1,
 
     "classic/chess": chess_v0,
+    "classic/checkers": checkers_v0,
     "classic/rps": rps_v0,
     "classic/rpsls": rpsls_v0,
     "classic/connect_four": connect_four_v0,
