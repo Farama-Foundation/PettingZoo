@@ -31,9 +31,9 @@ class raw_env(AECEnv, EzPickle):
         pygame.init()
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(a) for a in range(self.num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
-        self.has_reset = False
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
@@ -47,8 +47,9 @@ class raw_env(AECEnv, EzPickle):
         self.env.seed(seed)
 
     def reset(self, observe=True):
-        self.has_reset = True
         self.steps = 0
+        self.num_agents = self.env.num_agents
+        self.agents = self.possible_agents[:]
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
@@ -60,7 +61,7 @@ class raw_env(AECEnv, EzPickle):
             return self.observe(self.agent_selection)
 
     def close(self):
-        if not self.closed and self.has_reset:
+        if not self.closed:
             self.closed = True
             self.env.close()
 
@@ -69,6 +70,8 @@ class raw_env(AECEnv, EzPickle):
             self.env.render()
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
@@ -80,6 +83,7 @@ class raw_env(AECEnv, EzPickle):
             self.rewards[k] = self.env.latest_reward_state[self.agent_name_mapping[k]]
         self.steps += 1
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
 
