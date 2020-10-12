@@ -161,7 +161,7 @@ class raw_env(AECEnv):
 
             if check_jump(dest_pos):
                 dest_pos = dest_pos + 9
-        
+
         # Cache action conversion
         move = (raw_env.move64_32[pos], raw_env.move64_32[dest_pos])
         raw_env.move_to_action[self.agent_selection][move] = action
