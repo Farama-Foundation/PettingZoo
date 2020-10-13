@@ -605,24 +605,10 @@ class raw_env(AECEnv, EzPickle):
                 gold_sprite is None
                 or gold_sprite.parent_body.sprite_type != "prospector"
             ):
-                return False
+                return True
 
             banker_body = banker_shape.body
             prospec_body = gold_sprite.parent_body
-
-            for k, v in self.prospectors.items():
-                self.rewards[k] += other_group_reward * banker_receive_gold_reward
-                if v.body is prospec_body:
-                    self.rewards[k] += ind_reward * prospec_handoff_gold_reward
-                else:
-                    self.rewards[k] += group_reward * prospec_handoff_gold_reward
-
-            for k, v in self.bankers.items():
-                self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
-                if v.body is banker_body:
-                    self.rewards[k] += ind_reward * banker_receive_gold_reward
-                else:
-                    self.rewards[k] += group_reward * banker_receive_gold_reward
 
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
@@ -633,11 +619,26 @@ class raw_env(AECEnv, EzPickle):
                 <= normalized_normal
                 <= corrected + const.BANKER_HANDOFF_TOLERANCE
             ):
-                gold_sprite.parent_body.nugget = None
 
+                # transfer gold
+                gold_sprite.parent_body.nugget = None
                 gold_sprite.parent_body = banker_body
                 banker_body.nugget = gold_sprite
                 banker_body.nugget_offset = normal.angle
+
+                for k, v in self.prospectors.items():
+                    self.rewards[k] += other_group_reward * banker_receive_gold_reward
+                    if v.body is prospec_body:
+                        self.rewards[k] += ind_reward * prospec_handoff_gold_reward
+                    else:
+                        self.rewards[k] += group_reward * prospec_handoff_gold_reward
+
+                for k, v in self.bankers.items():
+                    self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
+                    if v.body is banker_body:
+                        self.rewards[k] += ind_reward * banker_receive_gold_reward
+                    else:
+                        self.rewards[k] += group_reward * banker_receive_gold_reward
 
             return True
 
