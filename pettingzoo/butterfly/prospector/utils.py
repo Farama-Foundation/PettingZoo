@@ -17,7 +17,7 @@ def load_image(path: list) -> pg.Surface:  # All images stored in data/
 
 # Convert chipmunk coords to pymunk coords, flipping and offsetting y-coordinate
 def flipy(point):
-    return Vec2d(point[0], -point[1] + 600)
+    return Vec2d(point[0], const.SCREEN_HEIGHT - point[1])
 
 
 def invert_y(points):
@@ -27,7 +27,7 @@ def invert_y(points):
 def rand_pos(sprite, rng):
     x = rng.randint(100, const.SCREEN_WIDTH - 100)
     if sprite == "banker":
-        return x, rng.randint(153, 300)
+        return x, rng.randint(170, 300)
     elif sprite == "prospector":
         return x, rng.randint(350, const.SCREEN_HEIGHT - (const.WATER_HEIGHT + 30))
 
