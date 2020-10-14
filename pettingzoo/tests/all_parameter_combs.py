@@ -58,7 +58,7 @@ parameterized_envs = [
     (prison_v1.env, dict(random_aliens=True)),
     (prison_v1.env, dict(random_aliens=False)),
 
-    (prospector_v1.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
+    (prospector_v2.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
     prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
     banker_deposit_gold_reward=1, max_frames=900)),
 
