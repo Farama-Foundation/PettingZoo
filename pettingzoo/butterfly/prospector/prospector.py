@@ -35,13 +35,13 @@ class Prospector(pg.sprite.Sprite):
         self.image = utils.load_image(["prospector.png"])
         self.id = num
 
-        self.rect = self.image.get_rect(topleft=pos)
-        self.orig_image = self.image
+        self.rect = self.image.get_rect(center=pos)
+        self.orig_image = self.image.copy()
 
         # Create the physics body and shape of this object.
-        moment = pm.moment_for_circle(1, 0, self.rect.width / 2)
+        moment = pm.moment_for_circle(1, 0, const.AGENT_RADIUS)
 
-        self.body = pm.Body(1, moment)
+        self.body = pm.Body(1, moment, body_type=pm.Body.DYNAMIC)
         self.body.nugget = None
         self.body.sprite_type = "prospector"
 
@@ -57,15 +57,17 @@ class Prospector(pg.sprite.Sprite):
     def reset(self, pos):
         self.body.angle = 0
         self.image = pg.transform.rotozoom(self.orig_image, 0, 1)
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(center=pos)
         self.body.position = utils.flipy(pos)
         self.body.velocity = Vec2d(0.0, 0.0)
+        self.body.nugget = None
 
     @property
     def center(self):
-        return self.rect.x + const.AGENT_RADIUS, self.rect.y + const.AGENT_RADIUS
+        return self.rect.center
 
     def update(self, action):
+        # These actions are performed with the agent's angle in mind
         # forward/backward action
         y_vel = action[0] * const.PROSPECTOR_SPEED
         # left/right action
@@ -76,19 +78,17 @@ class Prospector(pg.sprite.Sprite):
         self.body.angle += delta_angle
         self.body.angular_velocity = 0
 
-        self.body.velocity = Vec2d(x_vel, y_vel).rotated(self.body.angle)
+        move = pm.Vec2d(x_vel, y_vel)
+        self.body.apply_force_at_local_point(move, point=(0, 0))
 
+    def synchronize_center(self):
         self.rect.center = utils.flipy(self.body.position)
         self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
-
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        curr_vel = self.body.velocity
-
+    def update_gold(self):
         if self.body.nugget is not None:
             self.body.nugget.update(self.body.position, self.body.angle, False)
-
-        self.body.velocity = curr_vel
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
@@ -104,15 +104,14 @@ class Banker(pg.sprite.Sprite):
     def __init__(self, pos, space, num, *sprite_groups):
         super().__init__(sprite_groups)
         self.image = utils.load_image(["bankers", f"{num}.png"])
-
         self.id = num
 
-        self.rect = self.image.get_rect(topleft=pos)
-        self.orig_image = self.image
+        self.rect = self.image.get_rect(center=pos)
+        self.orig_image = self.image.copy()
 
-        moment = pm.moment_for_circle(1, 0, self.rect.width / 2)
+        moment = pm.moment_for_circle(1, 0, const.AGENT_RADIUS)
 
-        self.body = pm.Body(1, moment)
+        self.body = pm.Body(1, moment, body_type=pm.Body.DYNAMIC)
         self.body.nugget = None
         self.body.sprite_type = "banker"
         self.body.nugget_offset = None
@@ -125,16 +124,17 @@ class Banker(pg.sprite.Sprite):
         self.space = space
         self.space.add(self.body, self.shape)
 
-    @property
-    def center(self):
-        return self.rect.x + const.AGENT_RADIUS, self.rect.y + const.AGENT_RADIUS
-
     def reset(self, pos):
         self.body.angle = 0
         self.image = pg.transform.rotozoom(self.orig_image, 0, 1)
-        self.rect = self.image.get_rect(topleft=pos)
+        self.rect = self.image.get_rect(center=pos)
         self.body.position = utils.flipy(pos)
         self.body.velocity = Vec2d(0.0, 0.0)
+        self.body.nugget = None
+
+    @property
+    def center(self):
+        return self.rect.center
 
     def update(self, action):
         # up/down action
@@ -150,21 +150,21 @@ class Banker(pg.sprite.Sprite):
             self.body.angle = angle_radians
         self.body.angular_velocity = 0
 
-        self.body.velocity = Vec2d(x_vel, y_vel)
+        # rotate movement backwards with a magnitude of self.body.angle
+        #     so that sprite moves forward in chosen direction
+        move = pm.Vec2d(x_vel, y_vel).rotated(-self.body.angle)
+        self.body.apply_force_at_local_point(move, point=(0, 0))
 
+    def synchronize_center(self):
         self.rect.center = utils.flipy(self.body.position)
         self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
-
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        curr_vel = self.body.velocity
-
+    def update_gold(self):
         if self.body.nugget is not None:
             self.body.nugget.update(
                 self.body.position, self.body.angle + (math.pi / 2), True
             )
-
-        self.body.velocity = curr_vel
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
@@ -257,12 +257,14 @@ class Gold(pg.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-        self.moment = pm.moment_for_circle(1, 0, 6)
-        self.body = pm.Body(1, self.moment)
+        self.moment = pm.moment_for_circle(1, 0, const.GOLD_RADIUS)
+        self.body = pm.Body(1, self.moment, body_type=pm.Body.KINEMATIC)
         self.body.position = body.position
 
-        self.shape = pm.Circle(self.body, 8)
+        self.shape = pm.Circle(self.body, const.GOLD_RADIUS)
         self.shape.collision_type = CollisionTypes.GOLD
+        # only triggers collision callbacks, doesn't create real collisions
+        self.shape.sensor = True
         self.shape.id = self.id
 
         self.space = space
@@ -355,9 +357,9 @@ class Water(object):
 class Background(object):
     def __init__(self, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
-        self.num_rows = math.ceil(
-            (const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE
-        ) + 1
+        self.num_rows = (
+            math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE) + 1
+        )
 
         self.tile = utils.load_image(["sand_tile.png"])
 
@@ -368,11 +370,12 @@ class Background(object):
             3: utils.load_image(["debris", "3.png"]),
         }
 
-        tile_size = self.tile.get_size()
-
         # Used when updating environment and drawing
         self.dirty_rects = []
+
         self.rects = []
+        # same as (const.TILE_SIZE, const.TILE_SIZE)
+        tile_size = self.tile.get_size()
         for row in range(self.num_rows):
             new_row = []
             for col in range(self.num_cols):
@@ -381,7 +384,7 @@ class Background(object):
             self.rects.append(new_row)
 
     def generate_debris(self, rng):
-        self.debris = []
+        self.debris = {}
         for row in range(1, self.num_rows - 1, 3):
             for col in range(1, self.num_cols - 1, 3):
                 y = row + rng.randint(0, 3)
@@ -389,52 +392,42 @@ class Background(object):
                     y += -1
                 x = col + rng.randint(0, 3)
                 choice = rng.randint(0, 4)
-                self.debris.append([self.debris_tiles[choice], self.rects[y][x]])
+                self.debris[self.rects[y][x].topleft] = self.debris_tiles[choice]
 
     def full_draw(self, screen):
         for row in self.rects:
             for rect in row:
                 screen.blit(self.tile, rect)
-
-        for pair in self.debris:
-            screen.blit(pair[0], pair[1])
+                debris = self.debris.get(rect.topleft, None)
+                if debris is not None:
+                    screen.blit(debris, rect)
 
     def draw(self, screen):
+        # self.full_draw(screen)
         for rect in self.dirty_rects:
             screen.blit(self.tile, rect)
-
-        for pair in self.debris:
-            screen.blit(pair[0], pair[1])
+            debris = self.debris.get(rect.topleft, None)
+            if debris is not None:
+                screen.blit(debris, rect)
 
         self.dirty_rects.clear()
 
-    def update(self, sprite_rect: pg.Rect, dirty_fences):
+    def update(self, sprite_rect: pg.Rect):
         top_y = int(sprite_rect.top // const.TILE_SIZE)
         bottom_y = int(sprite_rect.bottom // const.TILE_SIZE)
         left_x = int(sprite_rect.left // const.TILE_SIZE)
         right_x = int(sprite_rect.right // const.TILE_SIZE)
-
-        for pair in self.debris:
-            self.dirty_rects.append(pair[1])
 
         self.dirty_rects.append(self.rects[top_y][left_x])
         self.dirty_rects.append(self.rects[top_y][right_x])
         self.dirty_rects.append(self.rects[bottom_y][left_x])
         self.dirty_rects.append(self.rects[bottom_y][right_x])
 
-        if left_x == 0:
-            dirty_fences[0] = True
-        if top_y == 0:
-            dirty_fences[1] = True
-        if right_x == self.num_cols - 1:
-            dirty_fences[2] = True
-
-        return self.dirty_rects
-
     def convert_img(self):
         self.tile = self.tile.convert_alpha()
-        for pair in self.debris:
-            pair[0] = pair[0].convert_alpha()
+
+        for i in self.debris_tiles:
+            self.debris_tiles[i].convert_alpha()
 
 
 def env(**kwargs):
@@ -469,11 +462,14 @@ class raw_env(AECEnv, EzPickle):
             prospec_handoff_gold_reward,
             banker_receive_gold_reward,
             banker_deposit_gold_reward,
-            max_frames)
-        if ind_reward + group_reward + other_group_reward != 1.0:
+            max_frames,
+        )
+
+        total_reward_factor = ind_reward + group_reward + other_group_reward
+        if not math.isclose(total_reward_factor, 1.0, rel_tol=1e-09):
             raise ValueError(
-                "Individual reward, group reward, and other group reward should "
-                "add up to 1.0"
+                "The sum of the individual reward, group reward, and other "
+                "group reward should add up to approximately 1.0"
             )
 
         self.num_agents = const.NUM_AGENTS
@@ -496,6 +492,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.space = pm.Space()
         self.space.gravity = Vec2d(0.0, 0.0)
+        self.space.iterations = 20  # for decreasing bounciness
         self.space.damping = 0.0
 
         self.all_sprites = pg.sprite.RenderUpdates()
@@ -574,12 +571,6 @@ class raw_env(AECEnv, EzPickle):
             prospec_shape = arbiter.shapes[0]
             prospec_body = prospec_shape.body
 
-            position = arbiter.contact_point_set.points[0].point_a
-            normal = arbiter.contact_point_set.normal
-
-            prospec_body.position = position - (24 * normal)
-            prospec_body.velocity = (0, 0)
-
             for k, v in self.prospectors.items():
                 if v.body is prospec_body:
                     self.rewards[k] += ind_reward * prospec_find_gold_reward
@@ -600,7 +591,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Prospector to banker
         def handoff_gold_handler(arbiter, space, data):
-            banker_shape, gold_shape = arbiter.shapes[0], arbiter.shapes[1]
+            banker_shape, gold_shape = arbiter.shapes
 
             gold_sprite = None
             for g in self.gold:
@@ -608,30 +599,16 @@ class raw_env(AECEnv, EzPickle):
                     gold_sprite = g
 
             # gold_sprite is None if gold was handed off to the bank right before
-            # calling this collision handler
+            #   calling this collision handler
             # This collision handler is only for prospector -> banker gold handoffs
             if (
                 gold_sprite is None
                 or gold_sprite.parent_body.sprite_type != "prospector"
             ):
-                return False
+                return True
 
             banker_body = banker_shape.body
             prospec_body = gold_sprite.parent_body
-
-            for k, v in self.prospectors.items():
-                self.rewards[k] += other_group_reward * banker_receive_gold_reward
-                if v.body is prospec_body:
-                    self.rewards[k] += prospec_handoff_gold_reward
-                else:
-                    self.rewards[k] += group_reward * prospec_handoff_gold_reward
-
-            for k, v in self.bankers.items():
-                self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
-                if v.body is banker_body:
-                    self.rewards[k] += banker_receive_gold_reward
-                else:
-                    self.rewards[k] += group_reward * banker_receive_gold_reward
 
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
@@ -642,17 +619,32 @@ class raw_env(AECEnv, EzPickle):
                 <= normalized_normal
                 <= corrected + const.BANKER_HANDOFF_TOLERANCE
             ):
-                gold_sprite.parent_body.nugget = None
 
+                # transfer gold
+                gold_sprite.parent_body.nugget = None
                 gold_sprite.parent_body = banker_body
                 banker_body.nugget = gold_sprite
                 banker_body.nugget_offset = normal.angle
+
+                for k, v in self.prospectors.items():
+                    self.rewards[k] += other_group_reward * banker_receive_gold_reward
+                    if v.body is prospec_body:
+                        self.rewards[k] += ind_reward * prospec_handoff_gold_reward
+                    else:
+                        self.rewards[k] += group_reward * prospec_handoff_gold_reward
+
+                for k, v in self.bankers.items():
+                    self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
+                    if v.body is banker_body:
+                        self.rewards[k] += ind_reward * banker_receive_gold_reward
+                    else:
+                        self.rewards[k] += group_reward * banker_receive_gold_reward
 
             return True
 
         # Banker to bank
         def gold_score_handler(arbiter, space, data):
-            gold_shape, _ = arbiter.shapes[0], arbiter.shapes[1]
+            gold_shape, _ = arbiter.shapes
 
             for g in self.gold:
                 if g.id == gold_shape.id:
@@ -665,7 +657,7 @@ class raw_env(AECEnv, EzPickle):
 
                 for k, v in self.bankers.items():
                     if v.body is banker_body:
-                        self.rewards[k] += banker_deposit_gold_reward
+                        self.rewards[k] += ind_reward * banker_deposit_gold_reward
                     else:
                         self.rewards[k] += group_reward * banker_deposit_gold_reward
 
@@ -676,14 +668,6 @@ class raw_env(AECEnv, EzPickle):
                 self.all_sprites.remove(gold_class)
 
             return False
-
-        # Prevent prospector motion lag from colliding with gold nugget
-        def prospec_gold_handler(arbiter, space, data):
-            return False
-
-        def boundary_collision_handler(arbiter, space, data):
-            ps = arbiter.contact_point_set
-            arbiter.shapes[0].body.position += ps.normal * (ps.points[0].distance + 1)
 
         # Create the collision event generators
         gold_dispenser = self.space.add_collision_handler(
@@ -703,18 +687,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
         gold_score.begin = gold_score_handler
-
-        prospec_gold_collision = self.space.add_collision_handler(
-            CollisionTypes.PROSPECTOR, CollisionTypes.GOLD
-        )
-
-        prospec_gold_collision.begin = prospec_gold_handler
-
-        pros_bound_coll = self.space.add_wildcard_collision_handler(CollisionTypes.PROSPECTOR)
-        pros_bound_coll.post_solve = boundary_collision_handler
-
-        bank_bound_coll = self.space.add_wildcard_collision_handler(CollisionTypes.BANKER)
-        bank_bound_coll.post_solve = boundary_collision_handler
 
     def seed(self, seed=None):
         self.rng, seed = seeding.np_random(seed)
@@ -740,6 +712,7 @@ class raw_env(AECEnv, EzPickle):
 
         s_x, s_y, _ = sub_screen.shape
         pad_x = side_len - s_x
+
         if x > const.SCREEN_WIDTH - delta:  # Right side of the screen
             sub_screen = np.pad(
                 sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode="constant"
@@ -750,6 +723,7 @@ class raw_env(AECEnv, EzPickle):
             )
 
         pad_y = side_len - s_y
+
         if y > const.SCREEN_HEIGHT - delta:  # Bottom of the screen
             sub_screen = np.pad(
                 sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode="constant"
@@ -776,21 +750,13 @@ class raw_env(AECEnv, EzPickle):
         else:
             agent = self.bankers[agent_id]
 
-        agent_pos = agent.rect.topleft
-        agent_angle = agent.body.angle
-        agent_bg_rects = self.background.update(agent.rect, self.dirty_fences)
+        self.background.update(agent.rect)
 
-        gold_bg_rects = []
-        if agent.body.nugget is not None:
-            gold_bg_rects = self.background.update(
-                agent.body.nugget.rect, self.dirty_fences
-            )
+        nugget = agent.body.nugget
+        if nugget is not None:
+            self.background.update(nugget.rect)
+
         agent.update(action)
-
-        if agent_pos != agent.rect.topleft or agent_angle != agent.body.angle:
-            self.dirty_rects.extend(agent_bg_rects)
-            self.dirty_rects.extend(gold_bg_rects)
-            self.dirty_rects.append(agent.rect)
 
         # Only take next step in game if all agents have received an action
         if all_agents_updated:
@@ -798,7 +764,27 @@ class raw_env(AECEnv, EzPickle):
                 self.clock.tick(const.FPS)
             else:
                 self.clock.tick()
-            self.space.step(1 / const.FPS)
+
+            for _ in range(const.STEPS_PER_FRAME):
+                self.space.step(const.SPACE_STEP_DELTA)
+
+            for pr in self.prospectors.values():
+                pr.synchronize_center()
+                pr.update_gold()
+                self.background.update(pr.rect)
+
+                nugget = pr.body.nugget
+                if nugget is not None:
+                    self.background.update(nugget.rect)
+
+            for b in self.bankers.values():
+                b.synchronize_center()
+                b.update_gold()
+                self.background.update(b.rect)
+
+                nugget = b.body.nugget
+                if nugget is not None:
+                    self.background.update(nugget.rect)
 
             self.draw()
 
@@ -826,14 +812,13 @@ class raw_env(AECEnv, EzPickle):
         self.water.generate_debris(self.rng)
 
         for p in self.prospectors.values():
-            p.body.nugget = None
             p.reset(utils.rand_pos("prospector", self.rng))
 
         for b in self.bankers.values():
-            b.body.nugget = None
             b.reset(utils.rand_pos("banker", self.rng))
 
         for g in self.gold:
+            self.space.remove(g.shape, g.body)
             self.all_sprites.remove(g)
 
         self.gold = []
@@ -845,7 +830,7 @@ class raw_env(AECEnv, EzPickle):
         self.rendering = False
         self.frame = 0
         self.dirty_rects = []
-        self.dirty_fences = [False, False, False]
+        self.background.dirty_rects.clear()
 
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
@@ -865,12 +850,8 @@ class raw_env(AECEnv, EzPickle):
                 s.convert_img()
             self.rendering = True
             self.full_draw()
-            pg.display.flip()
-        else:
-            self.draw()
-            pg.display.update(self.dirty_rects)
-            self.dirty_fences = [False, False, False]
-            self.dirty_rects.clear()
+
+        pg.display.flip()
 
     def full_draw(self):
         """ Called to draw everything when first rendering """
@@ -883,9 +864,8 @@ class raw_env(AECEnv, EzPickle):
     def draw(self):
         """ Called after each frame, all agents updated """
         self.background.draw(self.screen)
-        for idx, dirty in enumerate(self.dirty_fences):
-            if dirty:
-                self.fences[idx].full_draw(self.screen)
+        for f in self.fences:
+            f.full_draw(self.screen)
         self.water.full_draw(self.screen)
         self.all_sprites.draw(self.screen)
 
