@@ -44,7 +44,7 @@ from pettingzoo.butterfly import knights_archers_zombies_v2
 from pettingzoo.butterfly import pistonball_v0
 from pettingzoo.butterfly import cooperative_pong_v1
 from pettingzoo.butterfly import prison_v1
-from pettingzoo.butterfly import prospector_v1
+from pettingzoo.butterfly import prospector_v2
 
 from pettingzoo.magent import battle_v1
 from pettingzoo.magent import adversarial_pursuit_v1
@@ -125,7 +125,7 @@ all_environments = {
     "butterfly/pistonball": pistonball_v0,
     "butterfly/cooperative_pong": cooperative_pong_v1,
     "butterfly/prison": prison_v1,
-    "butterfly/prospector": prospector_v1,
+    "butterfly/prospector": prospector_v2,
 
     "magent/adversarial_pursuit": adversarial_pursuit_v1,
     "magent/battle": battle_v1,
