@@ -25,3 +25,4 @@ def render_test(env):
             if mode == "human":
                 assert res is None
         env.reset()
+    env.close()
