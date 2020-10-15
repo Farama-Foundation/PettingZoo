@@ -63,8 +63,7 @@ class raw_env(AECEnv, EzPickle):
         self.env.close()
 
     def render(self, mode="human"):
-        result = self.env.render(mode)
-        return result if mode == "rgb_array" else None
+        self.env.render(mode)
 
         import pyglet
         buffer = pyglet.image.get_buffer_manager().get_color_buffer()
@@ -72,8 +71,7 @@ class raw_env(AECEnv, EzPickle):
         arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
         arr = arr.reshape(buffer.height, buffer.width, 4)
         arr = arr[::-1, :, 0:3]
-        return arr
-
+        return arr if mode == "rgb_array" else None
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

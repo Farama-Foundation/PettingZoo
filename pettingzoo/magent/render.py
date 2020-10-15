@@ -273,4 +273,4 @@ class Renderer:
         new_observation = np.copy(observation)
         del observation
         pygame.display.flip()
-        return np.transpose(new_observation,axes=(1,0,2)) if mode == "rgb_array" else None
+        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None

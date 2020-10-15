@@ -592,4 +592,4 @@ class MAWaterWorld():
         cv2.addWeighted(bg, opacity, img, 1 - opacity, 0, img)
         cv2.imshow('Waterworld', img)
         cv2.waitKey(rate)
-        return np.asarray(img)[..., ::-1]  if mode == "rgb_array" else None
+        return np.asarray(img)[..., ::-1] if mode == "rgb_array" else None

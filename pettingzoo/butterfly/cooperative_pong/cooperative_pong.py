@@ -293,7 +293,7 @@ class CooperativePong(gym.Env):
 
         observation = pygame.surfarray.pixels3d(self.screen)
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2)) if mode == "rgb_array" else None
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
