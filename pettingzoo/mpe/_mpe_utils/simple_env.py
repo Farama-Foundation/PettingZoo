@@ -4,7 +4,6 @@ from pettingzoo import AECEnv
 from pettingzoo.utils.agent_selector import agent_selector
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
-from gym.utils import EzPickle
 
 
 def make_env(raw_env):
@@ -18,13 +17,12 @@ def make_env(raw_env):
     return env
 
 
-class SimpleEnv(AECEnv, EzPickle):
+class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human', 'rgb_array']}
 
     def __init__(self, scenario, world, max_frames, local_ratio=None):
         super(SimpleEnv, self).__init__()
-        EzPickle.__init__(self, scenario, world, max_frames, local_ratio)
 
         self.seed()
 
