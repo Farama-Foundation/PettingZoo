@@ -14,7 +14,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Rock Paper Scissors Lizard Spock is a variation of the traditional Rock Paper Scissors game, where the choices lizard and Spock are added as well. The interactions between Rock, Paper and Scissor are the same as the original with Rock beating scissors, scissors beating paper and paper beating rock. However, the new choices interact as follows: rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors beats lizard, lizard eats paper, paper beats Spock and Spock destroys rock. As is in the original, each player reveal their choice at the same time, at which point the winner is determined.
+Rock Paper Scissors Lizard Spock is a variation of the traditional Rock Paper Scissors game, where the choices lizard and Spock are added as well. The interactions between Rock, Paper and Scissor are the same as the original with Rock beating scissors, scissors beating paper and paper beating rock. However, the new choices interact as follows: rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors beats lizard, lizard eats paper, paper beats Spock, and Spock destroys rock. As is in the original, each player reveal their choice at the same time, at which point the winner is determined.
 
 
 #### Observation Space

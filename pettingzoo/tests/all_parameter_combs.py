@@ -58,7 +58,7 @@ parameterized_envs = [
     (prison_v1.env, dict(random_aliens=True)),
     (prison_v1.env, dict(random_aliens=False)),
 
-    (prospector_v1.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
+    (prospector_v2.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
     prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
     banker_deposit_gold_reward=1, max_frames=900)),
 
@@ -77,18 +77,18 @@ parameterized_envs = [
     (hanabi_v0.env, dict(random_start_player=False)),
     (hanabi_v0.env, dict(random_start_player=True)),
 
-    (simple_adversary_v0.env, dict(N=4)),
-    (simple_reference_v0.env, dict(local_ratio=0.2)),
-    (simple_spread_v0.env, dict(N=5)),
-    (simple_tag_v0.env, dict(num_good=5,num_adversaries=10,num_obstacles=4)),
-    (simple_tag_v0.env, dict(num_good=1,num_adversaries=1,num_obstacles=1)),
-    (simple_world_comm_v0.env, dict(num_good=5,num_adversaries=10,num_obstacles=4,num_food=3)),
-    (simple_world_comm_v0.env, dict(num_good=1,num_adversaries=1,num_obstacles=1,num_food=1)),
+    (simple_adversary_v1.env, dict(N=4)),
+    (simple_reference_v1.env, dict(local_ratio=0.2)),
+    (simple_spread_v1.env, dict(N=5)),
+    (simple_tag_v1.env, dict(num_good=5,num_adversaries=10,num_obstacles=4)),
+    (simple_tag_v1.env, dict(num_good=1,num_adversaries=1,num_obstacles=1)),
+    (simple_world_comm_v1.env, dict(num_good=5,num_adversaries=10,num_obstacles=4,num_food=3)),
+    (simple_world_comm_v1.env, dict(num_good=1,num_adversaries=1,num_obstacles=1,num_food=1)),
 
-    (multiwalker_v2.env, dict(n_walkers=10)),
-    (multiwalker_v2.env, dict(local_ratio=0.5)),
-    (multiwalker_v2.env, dict(terminate_on_fall=True)),
-    (multiwalker_v2.env, dict(terminate_on_fall=False)),
+    (multiwalker_v3.env, dict(n_walkers=10)),
+    (multiwalker_v3.env, dict(local_ratio=0.5)),
+    (multiwalker_v3.env, dict(terminate_on_fall=True)),
+    (multiwalker_v3.env, dict(terminate_on_fall=False)),
 
     (pursuit_v1.env, dict(x_size=8,y_size=19)),
     (pursuit_v1.env, dict(local_ratio=0.5)),

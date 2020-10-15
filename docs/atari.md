@@ -6,24 +6,26 @@
 
 The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/PettingZoo-Team/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
 
-### Games overview
+### Games Overview
 
-Most games are two player, with the exception of Warlords and a couple of Pong variations which are four player.
+Most games have two players, with the exception of Warlords and a couple of Pong variations which have four players.
 
-There are three types of games:
+### Environment Details
 
-### Environment details
+The ALE has been studied extensively and a few notable problems have been identified: 
 
-The ALE environment has been studied extensively and examined for various flaws and how to fix them.  
-
-* Determinism: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/PettingZoo-Team/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
-* Frame flickering: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this is a frame stack of the previous 4 observations (see example below for implementation).
+* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/PettingZoo-Team/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+* **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this is a frame stack of the previous 4 observations (see example below for implementation).
 
 ### Preprocessing
 
-We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. This library can be installed with `pip install supersuit`.
+We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. The unique dependencies for this set of environments can be installed via:
 
-Here is some example usage for the Atari preprocessing.
+ ````bash
+pip install supersuit
+ ````
+
+Here is some example usage for the Atari preprocessing:
 
 ```python
 from supersuit import resize, frame_skip, frame_stack, sticky_actions
@@ -37,11 +39,11 @@ env = sticky_actions(env, repeat_action_probability=0.25)
 # downscale observation for faster processing
 env = resize(env, (84, 84))
 
-# to allow agent to see everything on the screen despite atari's flickering screen problem
+# allow agent to see everything on the screen despite Atari's flickering screen problem
 env = frame_stack(env, 4)
 
 # skip frames for faster processing and less control
-# to be compatable with gym, do frame_skip(env, (2,5))
+# to be compatable with gym, use frame_skip(env, (2,5))
 env = frame_skip(env, 4)
 ```
 
@@ -49,20 +51,34 @@ env = frame_skip(env, 4)
 
 All the Atari environments have the following environment parameters:
 
-```
+```python
 <atari_game>.env(obs_type='rgb_image', full_action_space=True, max_frames=100000)
 ```
 
-`obs_type`:  default value of 'rgb_image' leads to RGB image like you see as a human, 'grayscale_image' leads to a grayscale image, 'ram' leads to an observation of the 1024 bits that comprise the RAM of the atari console.
+`obs_type`:  There are three possible values for this parameter:
 
-`full_action_space`:  The effective action space of the atari games is often smaller than the full space of 18 moves. Setting this to False shrinks the action space to this smaller space.
+* 'rgb_image' (default) - produces an RGB image like you would see as a human player. 
+* 'grayscale_image' - produces a grayscale image.
+* 'ram' - produces an observation of the 1024 bits that comprise the RAM of the Atari console.
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`full_action_space`:  the effective action space of the Atari games is often smaller than the full space of 18 moves. Setting this to `False` shrinks the available action space to that smaller space.
 
+`max_frames`:  the number of frames (the number of steps that each agent can take) until game terminates.
 
 ### Citation
 
-If you use the Atari environments in your research please cite the following paper:
+Multiplayer games within the Arcade Learning Environment were introduced in:
+
+```
+@article{terry2020arcade,
+  Title = {Multiplayer Support for the Arcade Learning Environment},
+  Author = {Terry, Justin K and Black, Benjamin},
+  journal={arXiv preprint arXiv:2009.09341},
+  year={2020}
+}
+```
+
+The Arcade Learning Environment was originally introduced in:
 
 ```
 @Article{bellemare13arcade,
@@ -73,5 +89,18 @@ If you use the Atari environments in your research please cite the following pap
   month = "jun",
   volume = "47",
   pages = "253--279",
+}
+```
+
+Various to the Arcade Learning Environment were introduced in:
+
+```
+@article{machado2018revisiting,
+  title={Revisiting the arcade learning environment: Evaluation protocols and open problems for general agents},
+  author={Machado, Marlos C and Bellemare, Marc G and Talvitie, Erik and Veness, Joel and Hausknecht, Matthew and Bowling, Michael},
+  journal={Journal of Artificial Intelligence Research},
+  volume={61},
+  pages={523--562},
+  year={2018}
 }
 ```

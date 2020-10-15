@@ -4,8 +4,7 @@ from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):
-
-    def __init__(self, max_frames=100):
+    def __init__(self, max_frames=25):
         scenario = Scenario()
         world = scenario.make_world()
         super().__init__(scenario, world, max_frames)
