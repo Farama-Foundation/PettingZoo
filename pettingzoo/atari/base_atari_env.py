@@ -141,6 +141,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
+        self.frame += 1
         if self.ale.game_over() or self.frame >= self.max_frames:
             dones = {agent: True for agent in self.agents}
         else:
@@ -148,7 +149,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             # an inactive agent in ale gets a -1 life.
             dones = {agent: int(life) < 0 for agent, life in zip(self.agents, lives)}
 
-        self.frame += 1
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
         rewards = {agent: rew for agent, rew in zip(self.agents, rewards)}

@@ -48,7 +48,7 @@ class raw_env(AECEnv, EzPickle):
         self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
-        self.max_frames = 500
+        self.max_frames = max_frames
         self.frames = 0
         self.pad_observation = pad_observation
         self.killable_knights = killable_knights
