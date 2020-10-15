@@ -236,12 +236,12 @@ class NaNRandomWrapper(BaseWrapper):
 class CaptureStdoutWrapper(BaseWrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.metadata['render.modes'].append("ascii")
+        self.metadata['render.modes'].append("ansi")
 
     def render(self, mode="human"):
         if mode == "human":
             super().render()
-        elif mode == "ascii":
+        elif mode == "ansi":
             with capture_stdout() as stdout:
 
                 super().render()
