@@ -380,7 +380,8 @@ class raw_env(AECEnv, EzPickle):
 
         self.seed()
 
-        self.agents = self.env.agents
+        self.agents = self.env.agents[:]
+        self.possible_agents = self.agents[:]
         self.num_agents = len(self.agents)
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
@@ -404,6 +405,8 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.env.reset()
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
         self.dones = self.env.dones
@@ -422,6 +425,8 @@ class raw_env(AECEnv, EzPickle):
         self.env.render(mode)
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
         if np.isnan(action):
             action = 0
@@ -438,6 +443,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.score = self.env.score
 
+        self._dones_step_first()
         if observe:
             observation = self.observe(self.agent_selection)
             return observation

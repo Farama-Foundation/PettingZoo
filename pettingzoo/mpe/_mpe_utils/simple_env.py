@@ -35,6 +35,7 @@ class SimpleEnv(AECEnv):
 
         self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
+        self.possible_agents = self.agents[:]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self._agent_selector = agent_selector(self.agents)
@@ -68,6 +69,8 @@ class SimpleEnv(AECEnv):
     def reset(self, observe=True):
         self.scenario.reset_world(self.world, self.np_random)
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
@@ -147,6 +150,8 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()
@@ -160,6 +165,7 @@ class SimpleEnv(AECEnv):
                 for a in self.agents:
                     self.dones[a] = True
 
+        self._dones_step_first()
         if observe:
             next_observation = self.observe(self.agent_selection)
         else:

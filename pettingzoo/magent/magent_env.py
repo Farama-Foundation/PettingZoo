@@ -32,7 +32,8 @@ class magent_parallel_env(ParallelEnv):
 
         self.team_sizes = team_sizes = [env.get_num(handle) for handle in self.handles]
         self.agents = [f"{names[j]}_{i}" for j in range(len(team_sizes)) for i in range(team_sizes[j])]
-        self.num_agents = sum(team_sizes)
+        self.possible_agents = self.agents[:]
+        self.max_num_agents = sum(team_sizes)
 
         num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
         action_spaces_list = [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
@@ -69,13 +70,16 @@ class magent_parallel_env(ParallelEnv):
         pygame.quit()
 
     def reset(self):
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.env.reset()
         self.frames = 0
+        self.all_dones = {agent: False for agent in self.possible_agents}
         self.generate_map()
         return self._observe_all()
 
     def _observe_all(self):
-        observes = [None] * self.num_agents
+        observes = [None] * self.max_num_agents
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
             view, features = self.env.get_observation(handle)
@@ -86,26 +90,31 @@ class magent_parallel_env(ParallelEnv):
             for id, obs in zip(ids, fin_obs):
                 observes[id] = obs
 
-        return {agent: obs if obs is not None else self._zero_obs[agent] for agent, obs in zip(self.agents, observes)}
+        ret_agents = set(self.agents)
+        return {agent: obs if obs is not None else self._zero_obs[agent] for agent, obs in zip(self.possible_agents, observes) if agent in ret_agents}
 
     def _all_rewards(self):
-        rewards = np.zeros(self.num_agents)
+        rewards = np.zeros(self.max_num_agents)
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
             rewards[ids] = self.env.get_reward(handle)
-        return {agent: float(rew) for agent, rew in zip(self.agents, rewards)}
+        ret_agents = set(self.agents)
+        return {agent: float(rew) for agent, rew in zip(self.possible_agents, rewards) if agent in ret_agents}
 
     def _all_dones(self, step_done=False):
-        dones = np.ones(self.num_agents, dtype=np.bool)
+        dones = np.ones(self.max_num_agents, dtype=np.bool)
         if not step_done:
             for handle in self.handles:
                 ids = self.env.get_agent_id(handle)
                 dones[ids] = ~self.env.get_alive(handle)
-        return {agent: bool(done) for agent, done in zip(self.agents, dones)}
+        ret_agents = set(self.agents)
+        return {agent: bool(done) for agent, done in zip(self.possible_agents, dones) if agent in ret_agents}
 
     def step(self, all_actions):
-        action_list = [0] * self.num_agents
-        for i, agent in enumerate(self.agents):
+        action_list = [0] * self.max_num_agents
+        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
+        self.env.clear_dead()
+        for i, agent in enumerate(self.possible_agents):
             if agent in all_actions:
                 action_list[i] = all_actions[agent]
         all_actions = np.asarray(action_list, dtype=np.int32)
@@ -119,7 +128,10 @@ class magent_parallel_env(ParallelEnv):
         done = self.env.step() or self.frames >= self.max_frames
 
         all_infos = {agent: {} for agent in self.agents}
-        result = self._observe_all(), self._all_rewards(), self._all_dones(done), all_infos
-        self.env.clear_dead()
+        all_dones = self._all_dones(done)
+        all_rewards = self._all_rewards()
+        all_observes = self._observe_all()
+        self.all_dones = all_dones
+        result = all_observes, all_rewards, all_dones, all_infos
 
         return result

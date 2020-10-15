@@ -27,6 +27,7 @@ class raw_env(AECEnv):
 
         self.num_agents = self.env.num_agents
         self.agents = ["pursuer_" + str(r) for r in range(self.num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
         # spaces
@@ -47,6 +48,7 @@ class raw_env(AECEnv):
         self.has_reset = True
         self.steps = 0
         self.env.reset()
+        self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(
@@ -64,6 +66,8 @@ class raw_env(AECEnv):
         self.env.render()
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
 
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
@@ -75,6 +79,7 @@ class raw_env(AECEnv):
         else:
             self.dones = dict(zip(self.agents, self.env.last_dones))
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
 
         # AGENT SELECT
 

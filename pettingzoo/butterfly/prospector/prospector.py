@@ -561,6 +561,7 @@ class raw_env(AECEnv, EzPickle):
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
 
+        self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.reset()
@@ -740,6 +741,8 @@ class raw_env(AECEnv, EzPickle):
         return sub_screen
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
         if all_agents_updated:
@@ -798,6 +801,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.agent_selection = self._agent_selector.next()
 
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
 
@@ -823,6 +827,8 @@ class raw_env(AECEnv, EzPickle):
 
         self.gold = []
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
