@@ -27,6 +27,7 @@ class raw_env(AECEnv):
         self.board = chess.Board()
 
         self.agents = ["player_{}".format(i) for i in range(2)]
+        self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
 
@@ -50,8 +51,12 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.has_reset = True
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
+
         self.board = chess.Board()
 
+        self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
 
         self.rewards = {name: 0 for name in self.agents}
@@ -72,6 +77,8 @@ class raw_env(AECEnv):
             self.infos[name] = {'legal_moves': []}
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         self.agent_selection = next_agent = self._agent_selector.next()
@@ -99,6 +106,7 @@ class raw_env(AECEnv):
             self.infos[next_agent] = {'legal_moves': next_legal_moves}
             assert len(self.infos[next_agent]['legal_moves'])
 
+        self._dones_step_first()
         if observe:
             next_observation = self.observe(next_agent)
         else:

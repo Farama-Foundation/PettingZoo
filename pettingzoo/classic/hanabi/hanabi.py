@@ -144,6 +144,7 @@ class raw_env(AECEnv, EzPickle):
 
         # List of agent names
         self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
+        self.possible_agents = self.agents[:]
 
         self.agent_selection: str
 
@@ -216,6 +217,8 @@ class raw_env(AECEnv, EzPickle):
             current agent (agent_selection).
         """
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment
         obs = self.hanabi_env.reset()
 
@@ -257,6 +260,8 @@ class raw_env(AECEnv, EzPickle):
             By default a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         action = int(action)
 
         agent_on_turn = self.agent_selection
@@ -278,6 +283,7 @@ class raw_env(AECEnv, EzPickle):
             self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
             # Return latest observations if specified
+            self._dones_step_first()
             if observe:
                 return self.observe(agent_name=agent_on_turn)
 

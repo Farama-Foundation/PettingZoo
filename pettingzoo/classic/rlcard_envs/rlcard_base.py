@@ -17,6 +17,7 @@ class RLCardBase(AECEnv):
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
         self.num_agents = len(self.agents)
+        self.possible_agents = self.agents[:]
 
         dtype = self.env.reset()[0]['obs'].dtype
         if dtype == np.dtype(np.int64):
@@ -49,6 +50,8 @@ class RLCardBase(AECEnv):
         return obs['obs'].astype(self._dtype)
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         obs, next_player_id = self.env.step(action)
         next_player = self._int_to_name(next_player_id)
         self._last_obs = obs['obs']
@@ -59,11 +62,14 @@ class RLCardBase(AECEnv):
         else:
             self.infos[next_player]['legal_moves'] = obs['legal_actions']
         self.agent_selection = next_player
+        self._dones_step_first()
         if observe:
             return obs['obs'].astype(self._dtype) if obs else self._last_obs.astype(self._dtype)
 
     def reset(self, observe=True):
         obs, player_id = self.env.reset()
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
         self.rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])

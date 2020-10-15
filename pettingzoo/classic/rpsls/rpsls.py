@@ -31,6 +31,7 @@ class raw_env(AECEnv):
     def __init__(self):
         self.num_agents = 2
         self.agents = ["player_" + str(r) for r in range(self.num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
 
         self.action_spaces = {agent: Discrete(5) for agent in self.agents}
@@ -43,6 +44,8 @@ class raw_env(AECEnv):
         pass
 
     def reinit(self):
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
@@ -68,6 +71,8 @@ class raw_env(AECEnv):
             return self.observe(self.agent_selection)
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
@@ -116,5 +121,6 @@ class raw_env(AECEnv):
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
 
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)

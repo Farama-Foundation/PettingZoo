@@ -30,6 +30,7 @@ class raw_env(AECEnv):
 
         self.num_agents = 2
         self.agents = ['player_0', 'player_1']
+        self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
         self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8) for i in self.agents}
@@ -61,6 +62,8 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         # assert valid move
         assert (self.board[0:7][action] == 0), "played illegal move."
 
@@ -91,6 +94,7 @@ class raw_env(AECEnv):
             # no winner yet
             self.agent_selection = next_agent
 
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
         else:
@@ -100,6 +104,8 @@ class raw_env(AECEnv):
         # reset environment
         self.board = [0] * (6 * 7)
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': list(range(7))} for i in self.agents}
