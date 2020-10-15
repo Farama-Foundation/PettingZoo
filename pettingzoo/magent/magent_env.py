@@ -115,11 +115,11 @@ class magent_parallel_env(ParallelEnv):
             self.env.set_action(self.handles[i], all_actions[start_point:(start_point + size)])
             start_point += size
 
+        self.frames += 1
         done = self.env.step() or self.frames >= self.max_frames
 
         all_infos = {agent: {} for agent in self.agents}
         result = self._observe_all(), self._all_rewards(), self._all_dones(done), all_infos
         self.env.clear_dead()
 
-        self.frames += 1
         return result

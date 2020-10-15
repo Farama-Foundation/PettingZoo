@@ -10,6 +10,7 @@ from .render_test import render_test
 from .error_tests import error_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
+from .max_frames_test import max_frames_test
 import subprocess
 
 render = sys.argv[2] == 'True'
@@ -32,6 +33,7 @@ def perform_ci_test(env_id, render, manual_control, performance, save_obs):
         error_collected.append("API Test: " + str(e))
 
     seed_test(env_module.env)
+    max_frames_test(env_module, env_id)
     # error_test(env_module.env())
 
     if save_obs:

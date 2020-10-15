@@ -58,9 +58,13 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.3.5 (October 14, 2020)
+
+Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments. 
+
 Version 1.3.4 (October 3, 2020)
 
-Fixed prospector agents leaving game area. Fixed to_parallel wrapper issue which was causing crashes with rllib.
+Fixed prospector agents leaving game area, changed default max_iter of MPE environments to be the same as in original, fixed to_parallel wrapper issue which was causing crashes with rllib.
 
 Version 1.3.3 (September 22, 2020)
 

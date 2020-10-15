@@ -540,11 +540,11 @@ class MAWaterWorld():
             self.last_rewards = local_reward * self.local_ratio + global_reward * (1 - self.local_ratio)
 
             self.control_rewards = [0 for _ in range(self.n_pursuers)]
+            self.frames += 1
 
         self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
 
         self._timesteps += 1
-        self.frames += 1
         return self.observe(agent_id)
 
     def observe(self, agent):
