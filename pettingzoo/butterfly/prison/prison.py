@@ -349,7 +349,7 @@ class raw_env(AECEnv, EzPickle):
             return observation
 
     def render(self, mode='human'):
-        if not self.rendering:
+        if not self.rendering and mode == "human":
             pygame.display.init()
             old_screen = self.screen
             self.screen = pygame.display.set_mode((750, 50 + 150 * self.num_floors))
@@ -360,11 +360,11 @@ class raw_env(AECEnv, EzPickle):
                 for k in range(min_rows):
                     h = 650 + 150 * k
                     self.screen.blit(self.background_append, (0, h))
-        self.rendering = True
+            self.rendering = True
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation,axes=(1,0,2)) if mode == "rgb_array" else None
 
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven

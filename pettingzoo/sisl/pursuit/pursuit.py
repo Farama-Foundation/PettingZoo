@@ -66,7 +66,7 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self, mode="human"):
         if not self.closed:
-            return self.env.render()
+            return self.env.render(mode)
 
     def step(self, action, observe=True):
         agent = self.agent_selection

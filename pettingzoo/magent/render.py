@@ -112,9 +112,10 @@ class Renderer:
 
     def close(self):
         import pygame
+        pygame.display.quit()
         pygame.quit()
 
-    def render(self):
+    def render(self, mode):
         import pygame
 
         env = self.env
@@ -272,4 +273,4 @@ class Renderer:
         new_observation = np.copy(observation)
         del observation
         pygame.display.flip()
-        return np.transpose(new_observation,axes=(1,0,2))
+        return np.transpose(new_observation,axes=(1,0,2)) if mode == "rgb_array" else None

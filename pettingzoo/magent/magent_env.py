@@ -60,14 +60,14 @@ class magent_parallel_env(ParallelEnv):
         obs_spaces = [(view_space[:2] + (view_space[2] + feature_space[0],)) for view_space, feature_space in zip(view_spaces, feature_spaces)]
         return obs_spaces
 
-    def render(self):
+    def render(self, mode="human"):
         if self._renderer is None:
             self._renderer = Renderer(self.env, self.map_size)
-        return self._renderer.render()
+        return self._renderer.render(mode)
 
     def close(self):
-        import pygame
-        pygame.quit()
+        if self._renderer is not None:
+            self._renderer.close()
 
     def reset(self):
         self.env.reset()

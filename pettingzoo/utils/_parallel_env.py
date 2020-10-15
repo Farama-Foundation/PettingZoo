@@ -52,7 +52,7 @@ class _parallel_env_wrapper(AECEnv):
         return self.observe(self.agent_selection) if observe else None
 
     def render(self, mode="human"):
-        return self.env.render()
+        return self.env.render(mode)
 
     def close(self):
         self.env.close()
