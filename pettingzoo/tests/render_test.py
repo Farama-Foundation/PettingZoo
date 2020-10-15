@@ -8,7 +8,7 @@ def render_test(env):
     env.reset(observe=False)
     assert len(render_modes) >= 2
     for mode in render_modes:
-        assert (mode in {"human", "ascii", "rgb_array"})
+        assert (mode in {"human", "ansi", "rgb_array"})
         env.reset(observe=False)
         for agent in env.agent_iter(min(env.num_agents*5,100)):
             reward, done, info = env.last()
