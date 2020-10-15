@@ -15,15 +15,15 @@ agent-labels: "agents= ['player_0', 'player_0']"
 
 
 
-Connect Four is a 2 player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a standing grid, where each token will fall as far down into its column as possible. Players cannot fill up a column with more than 6 token, and the game ends when either a player has made a sequence of 4 token, or when all 7 columns have been filled.
+Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.
 
 #### Observation Space
 
-The observation space is 2 stacks of a 6x7 grid. Each stack represents the placement of the corresponding agent's token, where 1 indicates that the agent has a token placed in that cell, and 0 means they do not have a token in that cell. 0 can be interpreted as either the cell being empty, or the other agent may have a token in that cell.
+The observation space is 2 planes of a 6x7 grid. Each plane represents a specific agent's tokens, and each location in the grid represents the placement of the corresponding agent's token. 1 indicates that the agent has a token placed in that cell, and 0 indicates they do not have a token in that cell. A 0 means that either the cell is empty, or the other agent has a token in that cell.
 
 #### Action Space
 
-The action space is integers from 0 to 6, where the action represents which column a token should be dropped in. If a token is dropped in a column that is full, the game will terminate with an illegal move error. The possible actions each agent can make is stored in infos[agent], and is updated on every step.
+The action space is the set of integers from 0 to 6 (inclusive), where the action represents which column a token should be dropped in. If a token is dropped in a column that is full, the game will terminate with an illegal move error. The possible actions each agent can make are stored in `infos[agent]`, and are updated every step.
 
 #### Rewards
 

@@ -15,24 +15,23 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is determined as the first player with no cards left. In order to get rid of a card, a player must match either the color and number of the card on top of the discard pile. If the player does not have a card to discard, then it will take a card from the Draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild Draw Four, Skip, Reverse).
+Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is the first player with no cards left. In order to discard a card from their hand, a player must match either the color or number of the card on top of the discard pile. If the player does not have a card to discard, then they will take a card from the draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild, Wild Draw Four, Draw Two, Skip, and Reverse).
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-
 #### Observation Space
 
-The observation space has a shape of (7, 4, 15). The first index represent the plane, the second index the color, and the last index the card number (including any special card).
+The observation space has a shape of (7, 4, 15). Planes 0-2 represent the current player's hand, while planes 4-6 represent the opponent's hand. For these sets of planes, the first index indicates the number of copies of a card, the second index the color, and the last index the card number (including any special cards). Uno is played with 2 identical decks, so a player can have 0, 1, or 2 copies of a given card, which is why each player has 3 planes to represent their hand. 
 
-| Plane | Feature                                                   |
-| :---: | --------------------------------------------------------- |
-| 0     | Player's Hand with 0 cards of the same color and number   |
-| 1     | Player's Hand with 1 card of the same color and number    |
-| 2     | Player's Hand with 2 cards of the same color and number   |
-| 3     | Target card (top of the Discard pile)                     |
-| 4     | Opponent's Hand with 0 cards of the same color and number |
-| 5     | Opponent's Hand with 1 cards of the same color and number |
-| 6     | Opponent's Hand with 2 cards of the same color and number |
+| Plane | Feature                                                     |
+| :---: | ----------------------------------------------------------- |
+|   0   | Cards that the current player has 0 copies of in their hand |
+|   1   | Cards that the current player has 1 copy of in their hand   |
+|   2   | Cards that the current player has 2 copies of in their hand |
+|   3   | Target card (top of the Discard pile)                       |
+|   4   | Cards that the opponent has 0 copies of in their hand       |
+|   5   | Cards that the opponent has 1 copy of in their hand         |
+|   6   | Cards that the opponent has 2 copies of in their hand       |
 
 ##### Encoding per Plane
 

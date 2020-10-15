@@ -3,7 +3,11 @@
 
 {% include bigtable.html group="mpe/" avg_rew=1 %}
 
-`pip install pettingzoo[mpe]`
+The unique dependencies for this set of environments can be installed via:
+
+````bash
+pip install pettingzoo[mpe]
+````
 
 Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.
 
@@ -11,39 +15,39 @@ These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-
 
 ### Types of Environments
 
-The simple_adversary, simple_crypto, simple_push, simple_tag, simple_world_comm are adversarial- a "good" agent being rewarded means an "adversary" agent is punished and vice versa (though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and a "adversary" team rendered in red.
+The Simple Adversary, Simple Crypto, Simple Push, Simple Tag, and Simple World Comm environments are adversarial (a "good" agent being rewarded means an "adversary" agent is punished and vice versa, though not always in a perfectly zero-sum manner). In most of these environments, there are "good" agents rendered in green and an "adversary" team rendered in red.
 
-The simple_reference, simple_speaker_listener, and simple_spread environments are cooperative in nature: agents must work together to achieve their goals, and received a mixture of rewards based on their own success and the success of the other agents.
+The Simple Reference, Simple Speaker Listener, and Simple Spread environments are cooperative in nature (agents must work together to achieve their goals, and received a mixture of rewards based on their own success and the success of the other agents).
 
 ### Key Concepts
 
-* Landmarks: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more details for each environment.
+* **Landmarks**: Landmarks are static circular features of the environment that cannot be controlled. In some environments, like Simple, they are destinations that affect the rewards of the agents depending on how close the agents are to them. In other environments, they can be obstacles that block the motion of the agents. These are described in more detail in the documentation for each environment.
 
-* Visibility: When an agent is visible to another, the other agent's observation contains the agent's relative position (and in simple_world_comm and simple_tag, the agent's velocity). If the agent is temporarily hidden (only possible in simple_world_comm) the agent's position and velocity is set to zero.
+* **Visibility**: When an agent is visible to a another agent, that other agent's observation contains the first agent's relative position (and in Simple World Comm and Simple Tag, the first agent's velocity). If an agent is temporarily hidden (only possible in Simple World Comm) then the agent's position and velocity is set to zero.
 
-* Communication: Some agents in some environments can broadcast a message as part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In simple_crypto, this message is also used to signal that Bob and Eve have reconstructed the message.
+* **Communication**: Some agents in some environments can broadcast a message as a part of its action (see action space for more details) which will be transmitted to each agent that is allowed to see that message. In Simple Crypto, this message is used to signal that Bob and Eve have reconstructed the message.
 
-* Color: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments. The color is not observed by the agents.
+* **Color**: Since all agents are rendered as circles, the agents are only identifiable to a human by their color, so the color of the agents is described in most of the environments. The color is not observed by the agents.
 
-* Distances: The landmarks and agents typically start out uniformly randomly placed from -1. to 1. on the map. This means they are typically around 1-2 units distance apart, so keep that in mind when reasoning about the scale of the rewards, which often depend on distance, and the observation space, which contain relative and absolute positions.
+* **Distances**: The landmarks and agents typically start out uniformly randomly placed from -1 to 1 on the map. This means they are typically around 1-2 units apart. This is important to keep in mind when reasoning about the scale of the rewards (which often depend on distance) and the observation space, which contains relative and absolute positions.
 
 ### Termination
 
-The game terminates after a number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original source code, the default value was 25, not 100.
+The game terminates after the number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original OpenAI source code, the default value was 25, not 100.
 
 ### Observation Space
 
-The observation space of an agent is a vector generally composed of the agent's position and velocity, other agent's relative position and velocity, the landmarks relative positions, the landmark's and agent's types, and communications it received from other agents. The exact form of this is detailed in the environments.
+The observation space of an agent is a vector generally composed of the agent's position and velocity, other agents' relative positions and velocities, landmarks' relative positions, landmarks' and agents' types, and communications received from other agents. The exact form of this is detailed in the environments' documentation.
 
-If an agent_1 cannot see or observe the communication of agent_2, then agent_2 is not included in agent_1's observation space, resulting in varying observation space sizes in certain environments.
+If an agent cannot see or observe the communication of a second agent, then the second agent is not included in the first's observation space, resulting in varying observation space sizes in certain environments.
 
 ### Action Space
 
-The action space is a discrete action space representing the combinations of the movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions and do nothing. Agents that can communicate choose between 2 and 10 environment dependent options, and the message is broadcast all agents which can hear it.
+The action space is a discrete action space representing the combinations of movements and communications an agent can perform. Agents that can move can choose between the 4 cardinal directions or do nothing. Agents that can communicate choose between 2 and 10 environment-dependent communication options, which broadcast a message to all agents that can hear it.
 
 ### Rendering
 
-Rendering displays the scene in a window that automatically grows if agents wander beyond its border. Communication is rendered at the bottom of the scene. Render also method returns the pixel map of the rendered area.
+Rendering displays the scene in a window that automatically grows if agents wander beyond its border. Communication is rendered at the bottom of the scene. The `render()` method also returns the pixel map of the rendered area.
 
 ### Citation
 

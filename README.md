@@ -6,8 +6,6 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
-We model environments as *Agent Environment Cycle* (AEC) games, in order to be able to support all types of multi-agent RL environments under one API.
-
 Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
 
 ## Environments and Installation
@@ -28,6 +26,8 @@ This does not include dependencies for all families of environments (there's a m
 We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
 
 ## API
+
+PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/abs/2009.13051), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
@@ -57,6 +57,18 @@ In certain environments, it's a valid to assume that agents take their actions a
 SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
 
 ## Release History
+
+Version 1.3.5 (October 14, 2020)
+
+Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments. 
+
+Version 1.3.4 (October 3, 2020)
+
+Fixed prospector agents leaving game area, changed default max_iter of MPE environments to be the same as in original, fixed to_parallel wrapper issue which was causing crashes with rllib.
+
+Version 1.3.3 (September 22, 2020)
+
+Fixed observation issue multiwalker environment, fixed MPE speaker listener naming scheme, renamed max_agent_iter to max_iter.
 
 Version 1.3.2 (September 17, 2020)
 
@@ -96,13 +108,11 @@ This is the first official stable release of PettingZoo. Any changes to environm
 To cite this project in publication, please use
 
 ```
-@misc{pettingZoo2020,
-  author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario  and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall and Ravi, Praveen and Lokesh, Yashas and Horsch, Caroline and Patel, Dipam},
-  title = {Petting{Z}oo},
-  year = {2020},
-  publisher = {GitHub},
-  note = {GitHub repository},
-  howpublished = {\url{https://github.com/PettingZoo-Team/PettingZoo}}
+@article{terry2020pettingzoo,
+  Title = {PettingZoo: Gym for Multi-Agent Reinforcement Learning},
+  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Horsch, Caroline and Ravi, Praveen and Sullivan, Ryan},
+  journal={arXiv preprint arXiv:2009.14471},
+  year={2020}
 }
 ```
 

@@ -14,7 +14,7 @@ agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 
 
 
-Mahjong is a tile-based game with 4 players and 136 tiles, which includes 4 identical sets of 34 unique tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
+Mahjong is a tile-based game with 4 players. It uses a deck of 136 tiles that is comprised of 4 identical sets of 34 unique tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
@@ -22,7 +22,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you 
 
 #### Observation Space
 
-The observation space has a (6, 34, 4) shape with the first index representing the encoding plane. Plane 0 represent the current player's hand, Plane 1 represent the played cards on the table, and Planes 2-5 encode the public piles of each player (Plane 2: Player 0, Plane 3: Player 1, Plane 4: Player 2, and Plane 5: Player 3).
+The observation space has a (6, 34, 4) shape with the first index representing the encoding plane. The contents of each plane are described in the table below:
 
 | Plane | Description               |
 |:-----:|---------------------------|

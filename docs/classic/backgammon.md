@@ -5,7 +5,7 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "Discrete(26^2 * 2 + 1)"
-action-values: "Discrete( 26^2 * 2 + 1)"
+action-values: "Discrete(26^2 * 2 + 1)"
 observation-shape: "(198,)"
 observation-values: "[0, 7.5]"
 num-states: "10^26"
@@ -16,7 +16,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Backgammon is a 2-player turn based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.
+Backgammon is a 2-player turn-based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.
 
 This environment uses [gym-backgammon](https://github.com/dellalibera/gym-backgammon)'s implementation of backgammon.
 
@@ -44,19 +44,19 @@ If there are more than 3 checkers on a point, then the value of the 4th componen
 
 Encoding of checkers on the bar:
 
-| Checkers | Encoding             |           
+| Checkers | Encoding             |
 | -------- | -------------------- |
 | 0 - 14   | bar_checkers / 2.0 |
 
 Encoding of off checkers:
 
-| Checkers | Encoding              |           
+| Checkers | Encoding              |
 | -------- | --------------------- |
 | 0 - 14   | off_checkers / 15.0 |
 
 Encoding of the current player:
 
-| Player  | Encoding   |           
+| Player  | Encoding   |
 | ------- | ---------- |
 | WHITE   | [1.0, 0.0] |
 | BLACK   | [0.0, 1.0] |
@@ -70,7 +70,7 @@ Each action value encodes the two points to move checkers from (source locations
 
 It is possible that only one of the dice rolls can be used. In that case, one of the source locations will be out of the bounds of the board and is not used.
 
-Actions from 0 to 26^ 2 -1 use the low dice roll first, and actions from 26^2 to 2*26 ^2 - 1 use the high dice roll first.
+Actions from 0 to 26^2 -1 use the low dice roll first, and actions from 26^2 to 2*26 ^2 - 1 use the high dice roll first.
 
 The two locations to move a checker from are encoded as a number in base 26.
 
@@ -94,7 +94,7 @@ The location on the board can be found from the location ID, which is either the
 #### Agent Order
 The game starts with rolling two dice until their values are different. If the first roll is larger, then the first agent is assigned the color white. Otherwise, the first agent is assigned the color black.
 
-Following this, white and black alternate turns. However, if both dice have the same value on an agent's turn (a double roll), then that agent gets an extra turn with the same roll immediately after their current turn. This is reflected in the environment by the current agent being next in the agent order and not re-rolling their dice on that turn.  
+Following this, white and black alternate turns. However, if both dice have the same value on an agent's turn (a double roll), then that agent gets an extra turn with the same roll immediately after their current turn. This is reflected in the environment by assigning the current agent as the next player in the agent order and not re-rolling their dice on that turn.  
 
 #### Rewards
 
