@@ -155,10 +155,10 @@ class SimpleEnv(AECEnv):
 
         if next_idx == 0:
             self._execute_world_step()
-            if self.steps > self.max_frames:
+            self.steps += 1
+            if self.steps >= self.max_frames:
                 for a in self.agents:
                     self.dones[a] = True
-            self.steps += 1
 
         if observe:
             next_observation = self.observe(self.agent_selection)

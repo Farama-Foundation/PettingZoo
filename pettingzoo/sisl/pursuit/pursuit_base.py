@@ -219,13 +219,13 @@ class Pursuit():
             global_val = self.latest_reward_state.mean()
             local_val = self.latest_reward_state
             self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
+            self.frames = self.frames + 1
 
         if self.renderOn:
             self.clock.tick(15)
         else:
             self.clock.tick(2000)
 
-        self.frames = self.frames + 1
 
     def draw_model_state(self):
         # -1 is building pixel flag

@@ -443,7 +443,6 @@ class MultiWalkerEnv():
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
         self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
-        self.frames = self.frames + 1
         if is_last:
             rewards, done, mod_obs = self.scroll_subroutine()
             self.last_obs = mod_obs
@@ -451,6 +450,7 @@ class MultiWalkerEnv():
             local_reward = rewards * self.local_ratio
             self.last_rewards = global_reward * (1. - self.local_ratio) + local_reward * self.local_ratio
             self.last_dones = [done for _ in range(self.n_walkers)]
+            self.frames = self.frames + 1
 
     def get_last_rewards(self):
         return dict(zip(list(range(self.n_walkers)), map(lambda r: np.float64(r), self.last_rewards)))

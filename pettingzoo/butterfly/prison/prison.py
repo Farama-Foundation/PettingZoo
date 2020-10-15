@@ -332,13 +332,15 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.clock.tick()
 
+        if self._agent_selector.is_last():
+            self.num_frames += 1
+
         if (self.num_frames >= self.max_frames):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
         if self._agent_selector.is_last():
             self.draw()
-        self.num_frames += 1
         if self.rendering:
             pygame.event.pump()
 
