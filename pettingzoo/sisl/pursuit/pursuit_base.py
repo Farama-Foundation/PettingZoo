@@ -284,7 +284,7 @@ class Pursuit():
         new_observation = np.copy(observation)
         del observation
         pygame.display.flip()
-        return np.transpose(new_observation,axes=(1,0,2)) if mode == "rgb_array" else None
+        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def animate(self, act_fn, nsteps, file_name, rate=1.5, verbose=False):
         """
