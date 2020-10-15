@@ -68,6 +68,7 @@ class raw_env(AECEnv):
         self.ch = CheckersRules()
         self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_order = list(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
@@ -101,6 +102,8 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.ch = CheckersRules()
         self.num_moves = 0
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.agent_order = list(self.agents)
         self.agent_selection = self.agent_order[0]
         self.observation = self.observe(self.agent_selection)
@@ -201,7 +204,8 @@ class raw_env(AECEnv):
         return legal_moves
 
     def step(self, action, observe=True):
-
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         if action not in self.legal_moves():
             warnings.warn(
                 "Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen."
@@ -230,6 +234,7 @@ class raw_env(AECEnv):
         self.dones[self.agent_order[0]] = winner is not None
         self.dones[self.agent_order[1]] = winner is not None
 
+        self._dones_step_first()
         if observe:
             next_observation = self.observe(self.agent_selection)
         else:

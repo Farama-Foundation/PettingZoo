@@ -30,6 +30,7 @@ class raw_env(AECEnv):
         self._komi = komi
 
         self.agents = ['black_0', 'white_0']
+        self.possible_agents = self.agents[:]
         self.num_agents = len(self.agents)
         self.has_reset = False
 
@@ -90,6 +91,8 @@ class raw_env(AECEnv):
         return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
         next_player = self._agent_selector.next()
@@ -100,6 +103,7 @@ class raw_env(AECEnv):
         else:
             self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
+        self._dones_step_first()
         if observe:
             return self._last_obs
 
@@ -107,6 +111,9 @@ class raw_env(AECEnv):
         self.has_reset = True
         self._go = go.Position(board=None, komi=self._komi)
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
+        self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])

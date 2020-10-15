@@ -27,6 +27,7 @@ class raw_env(AECEnv):
 
         self.num_agents = 2
         self.agents = ["player_1", "player_2"]
+        self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(9) for i in self.agents}
         self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8) for i in self.agents}
@@ -62,6 +63,8 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         # check if input action is a valid move (0 == empty spot)
         assert (self.board.squares[action] == 0), "played illegal move"
         # play turn
@@ -95,6 +98,7 @@ class raw_env(AECEnv):
         # Switch selection to next agents
         self.agent_selection = next_agent
 
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
         else:
@@ -104,11 +108,14 @@ class raw_env(AECEnv):
         # reset environment
         self.board = Board()
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': list(range(0, 9))} for i in self.agents}
 
         # selects the first agent
+        self._agent_selector.reinit(self.agents)
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
         if observe:
