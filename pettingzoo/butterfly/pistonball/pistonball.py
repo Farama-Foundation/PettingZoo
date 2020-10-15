@@ -49,6 +49,7 @@ class raw_env(AECEnv, EzPickle):
     def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
         self.agents = ["piston_" + str(r) for r in range(20)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self._agent_selector = agent_selector(self.agents)
         self.continuous = continuous
@@ -208,6 +209,9 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
+
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
@@ -267,6 +271,8 @@ class raw_env(AECEnv, EzPickle):
         pygame.display.flip()
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
@@ -306,6 +312,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
 

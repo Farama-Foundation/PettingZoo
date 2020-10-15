@@ -144,6 +144,7 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
+        self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
         self.num_agents = len(self.agents)
@@ -398,6 +399,8 @@ class raw_env(AECEnv, EzPickle):
         return np.swapaxes(cropped, 1, 0)
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         agent = self.agent_selection
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
@@ -501,6 +504,7 @@ class raw_env(AECEnv, EzPickle):
             self.kill_list = []
 
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
         if observe:
             return self.observe(self.agent_selection)
 
@@ -603,6 +607,8 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.has_reset = True
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))

@@ -118,7 +118,7 @@ def play_test(env, observation_0):
     done = {agent:False for agent in env.agents}
     live_agents = env.agents[:]
     has_finished = set()
-    for agent in env.agent_iter(env.num_agents*20):  # step through every agent once with observe=True
+    for agent in env.agent_iter(env.num_agents*1000):  # step through every agent once with observe=True
         assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
         reward, done, info = env.last()
         if done:
@@ -140,8 +140,6 @@ def play_test(env, observation_0):
             live_agents.remove(agent)
             has_finished.add(agent)
         if not env.agents:
-            print(has_finished)
-            print(env.possible_agents)
             assert has_finished == set(env.possible_agents), "not all agents finished, some were skipped over"
             break
 

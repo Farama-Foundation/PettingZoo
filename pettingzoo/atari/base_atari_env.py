@@ -101,12 +101,13 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                 num_channels = 1
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
-        self.num_agents = num_players
+        self.max_num_agents = num_players
         player_names = ["first", "second", "third", "fourth"]
-        self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
+        self.agents = [f"{player_names[n]}_0" for n in range(self.max_num_agents)]
+        self.possible_agents = self.agents[:]
 
-        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
-        self.observation_spaces = {agent: observation_space for agent in self.agents}
+        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents}
+        self.observation_spaces = {agent: observation_space for agent in self.possible_agents}
 
         self._screen = None
         self.seed(seed)
@@ -120,6 +121,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def reset(self):
         self.ale.reset_game()
+        self.num_agents = self.max_num_agents
+        self.agents = self.possible_agents[:]
+        self.dones = {agent: False for agent in self.possible_agents}
         self.frame = 0
 
         obs = self._observe()
@@ -135,8 +139,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             return self.ale.getScreenGrayscale()
 
     def step(self, action_dict):
-        actions = np.zeros(self.num_agents, dtype=np.int32)
-        for i, agent in enumerate(self.agents):
+        actions = np.zeros(self.max_num_agents, dtype=np.int32)
+        self.agents = [agent for agent in self.agents if not self.dones[agent]]
+        for i, agent in enumerate(self.possible_agents):
             actions[i] = action_dict[agent]
 
         actions = self.action_mapping[actions]
@@ -147,12 +152,13 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
-            dones = {agent: int(life) < 0 for agent, life in zip(self.agents, lives)}
+            dones = {agent: int(life) < 0 for agent, life in zip(self.possible_agents, lives) if agent in self.agents}
+            self.dones = dones
 
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
-        rewards = {agent: rew for agent, rew in zip(self.agents, rewards)}
-        infos = {agent: {} for agent in self.agents}
+        rewards = {agent: rew for agent, rew in zip(self.possible_agents, rewards) if agent in self.agents}
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         return observations, rewards, dones, infos
 
     def render(self):

@@ -94,6 +94,7 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
         self.num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
+        self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
@@ -297,6 +298,8 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.has_reset = True
+        self.num_agents = len(self.possible_agents)
+        self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
@@ -310,6 +313,8 @@ class raw_env(AECEnv, EzPickle):
             return self.observe(self.agent_selection)
 
     def step(self, action, observe=True):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action, observe)
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         if not isinstance(action, int):
             action = np.asarray(action)
@@ -345,6 +350,7 @@ class raw_env(AECEnv, EzPickle):
             pygame.event.pump()
 
         self.agent_selection = self._agent_selector.next()
+        self._dones_step_first()
         observation = self.observe(self.agent_selection)
 
         if observe:
