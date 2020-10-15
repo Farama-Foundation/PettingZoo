@@ -236,16 +236,18 @@ class NaNRandomWrapper(BaseWrapper):
 class CaptureStdoutWrapper(BaseWrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.metadata['render.modes'].append("ansi")
+        self.metadata['render.modes'].append("ascii")
 
-    def render(self, mode):
-        with capture_stdout() as stdout:
-
+    def render(self, mode="human"):
+        if mode == "human":
             super().render()
+        elif mode == "ascii":
+            with capture_stdout() as stdout:
 
-            val = stdout.getvalue()
-        print(val)
-        return val
+                super().render()
+
+                val = stdout.getvalue()
+            return val
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):

@@ -261,13 +261,13 @@ class raw_env(AECEnv, EzPickle):
         return local_reward * self.local_reward_weight
 
     def render(self, mode="human"):
-        if not self.renderOn:
+        if not self.renderOn and mode == "human":
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation,axes=(1,0,2)) if mode == "rgb_array" else None
 
     def step(self, action, observe=True):
         action = np.asarray(action)

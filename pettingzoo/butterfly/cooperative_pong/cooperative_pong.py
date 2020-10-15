@@ -287,13 +287,13 @@ class CooperativePong(gym.Env):
         self.renderOn = True
 
     def render(self, mode='human'):
-        if not self.renderOn:
+        if not self.renderOn and mode == "human":
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
         observation = pygame.surfarray.pixels3d(self.screen)
         pygame.display.flip()
-        return np.transpose(observation,axes=(1,0,2))
+        return np.transpose(observation,axes=(1,0,2)) if mode == "rgb_array" else None
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
@@ -375,7 +375,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, **kwargs):
         EzPickle.__init__(self, **kwargs)

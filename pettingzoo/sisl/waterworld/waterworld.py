@@ -61,7 +61,7 @@ class raw_env(AECEnv):
             self.env.close()
 
     def render(self, mode="human"):
-        return self.env.render()
+        return self.env.render(mode)
 
         # import pyglet
         # buffer = pyglet.image.get_buffer_manager().get_color_buffer()

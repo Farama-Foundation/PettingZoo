@@ -181,5 +181,5 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
     def close(self):
         if self._screen is not None:
             import pygame
-            pygame.display.quit()
+            pygame.quit()
             self._screen = None
