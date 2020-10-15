@@ -294,8 +294,8 @@ class raw_env(AECEnv, EzPickle):
             for index in local_pistons_to_reward:
                 total_reward[index] += local_reward
             self.rewards = dict(zip(self.agents, total_reward))
+            self.frames += 1
 
-        self.frames += 1
         if self.frames >= self.max_frames:
             self.done = True
         if not self.done:
