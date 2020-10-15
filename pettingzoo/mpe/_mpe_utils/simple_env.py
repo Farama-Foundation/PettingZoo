@@ -24,7 +24,7 @@ class SimpleEnv(AECEnv, EzPickle):
 
     def __init__(self, scenario, world, max_frames, local_ratio=None):
         super(SimpleEnv, self).__init__()
-        EzPickle.__init__(scenario, world, max_frames, local_ratio)
+        EzPickle.__init__(self, scenario, world, max_frames, local_ratio)
 
         self.seed()
 
