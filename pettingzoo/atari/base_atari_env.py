@@ -1,5 +1,4 @@
 import multi_agent_ale_py
-import os
 from pathlib import Path
 from pettingzoo import AECEnv
 import gym
