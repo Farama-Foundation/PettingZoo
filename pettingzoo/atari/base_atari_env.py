@@ -75,7 +75,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                           "or specify and double-check the path to your Atari rom using the `rom_path` argument.")
 
         self.rom_path = str(final)
-        print(self.rom_path)
         self.ale.loadROM(self.rom_path)
 
         all_modes = self.ale.getAvailableModes(num_players)
