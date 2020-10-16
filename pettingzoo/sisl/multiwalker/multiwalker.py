@@ -20,7 +20,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
@@ -63,7 +63,15 @@ class raw_env(AECEnv, EzPickle):
         self.env.close()
 
     def render(self, mode="human"):
-        self.env.render()
+        self.env.render(mode)
+
+        import pyglet
+        buffer = pyglet.image.get_buffer_manager().get_color_buffer()
+        image_data = buffer.get_image_data()
+        arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
+        arr = arr.reshape(buffer.height, buffer.width, 4)
+        arr = arr[::-1, :, 0:3]
+        return arr if mode == "rgb_array" else None
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

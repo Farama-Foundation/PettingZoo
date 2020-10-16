@@ -6,6 +6,7 @@ import warnings
 from pettingzoo import AECEnv
 
 from .env_logger import EnvLogger
+from .capture_stdout import capture_stdout
 
 
 class BaseWrapper(AECEnv):
@@ -13,7 +14,6 @@ class BaseWrapper(AECEnv):
     Creates a wrapper around `env` parameter. Extend this class
     to create a useful wrapper.
     '''
-    metadata = {'render.modes': ['human']}
 
     def __init__(self, env):
         super().__init__()
@@ -23,6 +23,7 @@ class BaseWrapper(AECEnv):
         self.agents = self.env.agents
         self.observation_spaces = self.env.observation_spaces
         self.action_spaces = self.env.action_spaces
+        self.metadata = self.env.metadata
 
         # we don't want these defined as we don't want them used before they are gotten
 
@@ -44,7 +45,7 @@ class BaseWrapper(AECEnv):
         self.env.close()
 
     def render(self, mode='human'):
-        self.env.render(mode)
+        return self.env.render(mode)
 
     def reset(self, observe=True):
         observation = self.env.reset(observe)
@@ -232,6 +233,23 @@ class NaNRandomWrapper(BaseWrapper):
         return super().step(action, observe)
 
 
+class CaptureStdoutWrapper(BaseWrapper):
+    def __init__(self, env):
+        super().__init__(env)
+        self.metadata['render.modes'].append("ansi")
+
+    def render(self, mode="human"):
+        if mode == "human":
+            super().render()
+        elif mode == "ansi":
+            with capture_stdout() as stdout:
+
+                super().render()
+
+                val = stdout.getvalue()
+            return val
+
+
 class AssertOutOfBoundsWrapper(BaseWrapper):
     '''
     this wrapper crashes for out of bounds actions
@@ -298,8 +316,9 @@ class OrderEnforcingWrapper(AgentIterWrapper):
     def render(self, mode='human'):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
+        assert mode in self.metadata['render.modes']
         self._has_rendered = True
-        super().render(mode)
+        return super().render(mode)
 
     def close(self):
         super().close()

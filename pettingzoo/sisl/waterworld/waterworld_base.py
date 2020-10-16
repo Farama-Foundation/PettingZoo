@@ -550,8 +550,8 @@ class MAWaterWorld():
     def observe(self, agent):
         return np.array(self.last_obs[agent], dtype=np.float32)
 
-    def render(self, screen_size=900, rate=5, mode='human'):
-        if not self.renderOn:
+    def render(self, mode='human', screen_size=900, rate=5):
+        if not self.renderOn and mode == "human":
             self.renderOn = True
             cv2.startWindowThread()
         img = np.empty((screen_size, screen_size, 3), dtype=np.uint8)
@@ -592,4 +592,4 @@ class MAWaterWorld():
         cv2.addWeighted(bg, opacity, img, 1 - opacity, 0, img)
         cv2.imshow('Waterworld', img)
         cv2.waitKey(rate)
-        return np.asarray(img)[..., ::-1]
+        return np.asarray(img)[..., ::-1] if mode == "rgb_array" else None

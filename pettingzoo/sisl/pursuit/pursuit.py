@@ -23,7 +23,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
@@ -66,7 +66,7 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self, mode="human"):
         if not self.closed:
-            self.env.render()
+            return self.env.render(mode)
 
     def step(self, action, observe=True):
         agent = self.agent_selection
