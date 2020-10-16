@@ -828,7 +828,6 @@ class raw_env(AECEnv, EzPickle):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.rendering = False
         self.frame = 0
-        self.dirty_rects = []
         self.background.dirty_rects.clear()
 
         self._agent_selector.reinit(self.agents)
@@ -838,28 +837,25 @@ class raw_env(AECEnv, EzPickle):
             return self.observe(self.agent_selection)
 
     def render(self, mode="human"):
-        if not self.rendering and mode == "human":
-            pg.display.init()
-            self.screen = pg.display.set_mode(const.SCREEN_SIZE)
-            self.background.convert_img()
-            self.water.convert_img()
-            for f in self.fences:
-                f.convert_img()
-            for s in self.all_sprites.sprites():
-                s.convert_img()
-            self.rendering = True
+        if mode == "human":
+            if not self.rendering:
+                self.rendering = True
+                pg.display.init()
+                self.screen = pg.display.set_mode(const.SCREEN_SIZE)
+                self.background.convert_img()
+                self.water.convert_img()
+                for f in self.fences:
+                    f.convert_img()
+                for s in self.all_sprites.sprites():
+                    s.convert_img()
+                self.full_draw()
 
-            self.full_draw()
-            observation = np.array(pg.surfarray.pixels3d(self.screen))
             pg.display.flip()
-        else:
-            self.draw()
-            observation = np.array(pg.surfarray.pixels3d(self.screen))
-            pg.display.update(self.dirty_rects)
-            self.dirty_fences = [False, False, False]
-            self.dirty_rects.clear()
 
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        elif mode == "rgb_array":  # no display, return whole screen as array
+            observation = np.array(pg.surfarray.pixels3d(self.screen))
+            transposed = np.transpose(observation, axes=(1, 0, 2))
+            return transposed
 
     def full_draw(self):
         """ Called to draw everything when first rendering """
