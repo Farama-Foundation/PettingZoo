@@ -127,6 +127,7 @@ def play_test(env, observation_0):
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
+        print(agent, done, agent not in has_finished)
         next_observe = env.step(action)
 
         # check dict element removal

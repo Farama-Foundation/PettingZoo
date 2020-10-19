@@ -46,7 +46,7 @@ class raw_env(AECEnv):
         pass
 
     def observe(self, agent):
-        return chess_utils.get_observation(self.board, self.agents.index(agent))
+        return chess_utils.get_observation(self.board, self.possible_agents.index(agent))
 
     def reset(self, observe=True):
         self.has_reset = True

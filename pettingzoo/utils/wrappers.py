@@ -88,7 +88,7 @@ class TerminateIllegalWrapper(BaseWrapper):
     def step(self, action, observe=True):
         current_agent = self.agent_selection
         assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
-        if action not in self.infos[current_agent]['legal_moves']:
+        if not self.dones[current_agent] and action not in self.infos[current_agent]['legal_moves']:
             EnvLogger.warn_on_illegal_move()
             self.dones = {d: True for d in self.dones}
             for info in self.infos.values():
