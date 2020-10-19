@@ -28,10 +28,10 @@ class raw_env(RLCardBase, EzPickle):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, knock_reward: float = 0.5, gin_reward: float = 1.0, full_observation_space=False):
+    def __init__(self, knock_reward: float = 0.5, gin_reward: float = 1.0, opponents_hand_visible=False):
         EzPickle.__init__(self, knock_reward, gin_reward)
-        self._full_observation_space = full_observation_space
-        num_planes = 5 if self._full_observation_space else 4
+        self._opponents_hand_visible = opponents_hand_visible
+        num_planes = 5 if self._opponents_hand_visible else 4
         RLCardBase.__init__(self, "gin-rummy", 2, (num_planes, 52))
         self._knock_reward = knock_reward
         self._gin_reward = gin_reward
@@ -55,7 +55,7 @@ class raw_env(RLCardBase, EzPickle):
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
-        if self._full_observation_space:
+        if self._opponents_hand_visible:
             return obs['obs'].astype(self._dtype)
         else:
             return obs['obs'][0:4, :].astype(self._dtype)

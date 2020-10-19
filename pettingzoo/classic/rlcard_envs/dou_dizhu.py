@@ -23,10 +23,10 @@ class raw_env(RLCardBase):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, full_observation_space=False):
-        self._full_observation_space = full_observation_space
+    def __init__(self, opponents_hand_visible=False):
+        self._opponents_hand_visible = opponents_hand_visible
         self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
-        num_planes = 6 if self._full_observation_space else 4
+        num_planes = 6 if self._opponents_hand_visible else 4
         super().__init__("doudizhu", 3, (num_planes, 5, 15))
 
     def _scale_rewards(self, reward):
@@ -35,7 +35,7 @@ class raw_env(RLCardBase):
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
-        if self._full_observation_space:
+        if self._opponents_hand_visible:
             return obs['obs'].astype(self._dtype)
         else:
             return obs['obs'][[0, 2, 3, 4], :, :].astype(self._dtype)
