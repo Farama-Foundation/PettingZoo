@@ -14,6 +14,7 @@ from gym.utils import EzPickle
 
 map_size = 45
 max_frames_default = 500
+minimap_mode = False
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
@@ -32,6 +33,7 @@ def get_config(map_size, attack_penalty=-0.2):
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
+    cfg.set({"minimap_mode": minimap_mode})
 
     options = {
         'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
@@ -69,9 +71,11 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
+        reward_vals = np.array([1, -1] + list(reward_args.values()))
+        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
 
         names = ["predator", "prey"]
-        super().__init__(env, handles, names, map_size, max_frames)
+        super().__init__(env, handles, names, map_size, max_frames, reward_range, minimap_mode)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size

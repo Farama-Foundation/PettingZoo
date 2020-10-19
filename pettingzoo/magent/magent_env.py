@@ -22,7 +22,7 @@ def make_env(raw_env):
 
 
 class magent_parallel_env(ParallelEnv):
-    def __init__(self, env, active_handles, names, map_size, max_frames):
+    def __init__(self, env, active_handles, names, map_size, max_frames, reward_range, minimap_mode):
         self.map_size = map_size
         self.max_frames = max_frames
         self.env = env
@@ -39,6 +39,11 @@ class magent_parallel_env(ParallelEnv):
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        reward_low, reward_high = reward_range
+        for space in observation_space_list:
+            idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
+            space.low[:, :, idx] = reward_low
+            space.high[:, :, idx] = reward_high
 
         self.action_spaces = {agent: space for agent, space in zip(self.agents, action_spaces_list)}
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
