@@ -71,7 +71,7 @@ class RLCardBase(AECEnv):
         self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
         self._last_obs = obs['obs']
         if observe:
-            return obs['obs'].astype(self._dtype)
+            return self.observe(self.agent_selection)
         else:
             return
 

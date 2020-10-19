@@ -21,7 +21,13 @@ The "Landlord" plays first by putting down a combination of cards. The next play
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+### Environment parameters
 
+```
+dou_dizhu.env(full_observation_space=False)
+```
+
+`full_observation_space`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0, 2, 3, and 4. 
 
 #### Observation Space
 
@@ -94,3 +100,5 @@ We modified the reward structure compared to RLCard. Instead of rewarding `0` to
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+
