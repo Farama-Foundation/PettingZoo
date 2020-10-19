@@ -4,9 +4,8 @@ from pettingzoo import AECEnv
 
 class _parallel_env_wrapper(AECEnv):
 
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, parallel_env):
+        self.metadata = parallel_env.metadata
         self.env = parallel_env
         self.agents = self.env.agents
         self.num_agents = len(self.agents)
@@ -53,7 +52,7 @@ class _parallel_env_wrapper(AECEnv):
         return self.observe(self.agent_selection) if observe else None
 
     def render(self, mode="human"):
-        self.env.render()
+        return self.env.render(mode)
 
     def close(self):
         self.env.close()
