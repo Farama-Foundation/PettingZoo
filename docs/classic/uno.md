@@ -19,6 +19,14 @@ Uno is shedding game involving 2 players. At the beginning, each player receives
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+### Environment parameters
+
+```
+uno.env(full_observation_space=False)
+```
+
+`full_observation_space`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0 to 3.
+ 
 #### Observation Space
 
 The observation space has a shape of (7, 4, 15). Planes 0-2 represent the current player's hand, while planes 4-6 represent the opponent's hand. For these sets of planes, the first index indicates the number of copies of a card, the second index the color, and the last index the card number (including any special cards). Uno is played with 2 identical decks, so a player can have 0, 1, or 2 copies of a given card, which is why each player has 3 planes to represent their hand. 
@@ -90,3 +98,4 @@ For example, you would use action `6` to put down a red "6" card or action `60` 
 #### Legal Moves
 
 The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+

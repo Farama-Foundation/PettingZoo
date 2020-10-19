@@ -23,18 +23,27 @@ class raw_env(RLCardBase):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self):
+    def __init__(self, full_observation_space=False):
+        self._full_observation_space = full_observation_space
         self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
-        super().__init__("doudizhu", 3, (6, 5, 15))
+        num_planes = 6 if self._full_observation_space else 4
+        super().__init__("doudizhu", 3, (num_planes, 5, 15))
 
     def _scale_rewards(self, reward):
         # Maps 1 to 1 and 0 to -1
         return 2 * reward - 1
 
+    def observe(self, agent):
+        obs = self.env.get_state(self._name_to_int(agent))
+        if self._full_observation_space:
+            return obs['obs'].astype(self._dtype)
+        else:
+            return obs['obs'][[0,2,3,4],:,:].astype(self._dtype)
+
     def render(self, mode='human'):
         for player in self.agents:
             state = self.env.game.get_state(self._name_to_int(player))
-            print("\n===== {}'s Hand ({}) =====".format(player, 'Landlord' if player == 0 else 'Peasant'))
+            print("\n===== {}'s Hand =====".format(player))
             print(state['current_hand'])
         print('\n=========== Last 3 Actions ===========')
         for action in state['trace'][:-4:-1]:

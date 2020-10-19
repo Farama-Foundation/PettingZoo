@@ -23,8 +23,17 @@ class raw_env(RLCardBase):
 
     metadata = {'render.modes': ['human']}
 
-    def __init__(self):
-        super().__init__("uno", 2, (7, 4, 15))
+    def __init__(self, full_observation_space=False):
+        self._full_observation_space = full_observation_space
+        num_planes = 7 if self._full_observation_space else 4
+        super().__init__("uno", 2, (num_planes, 4, 15))
+
+    def observe(self, agent):
+        obs = self.env.get_state(self._name_to_int(agent))
+        if self._full_observation_space:
+            return obs['obs'].astype(self._dtype)
+        else:
+            return obs['obs'][0:4,:,:].astype(self._dtype)
 
     def render(self, mode='human'):
         for player in self.agents:
