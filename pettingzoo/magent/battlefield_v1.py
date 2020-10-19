@@ -9,12 +9,13 @@ from pettingzoo.utils import agent_selector, wrappers
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils._parallel_env import _parallel_env_wrapper
 from pettingzoo.utils.to_parallel import parallel_wrapper_fn
-from .battle_v1 import get_config
+from .battle_v1 import get_config, KILL_REWARD
 from gym.utils import EzPickle
 
 
 map_size = 80
 max_frames_default = 1000
+minimap_mode = True
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
@@ -34,8 +35,10 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
+        reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
+        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
         names = ["red", "blue"]
-        super().__init__(env, env.get_handles(), names, map_size, max_frames)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames, reward_range, minimap_mode)
 
     def generate_map(self):
         env, map_size, handles = self.env, self.map_size, self.handles

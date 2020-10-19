@@ -14,6 +14,8 @@ from gym.utils import EzPickle
 
 map_size = 200
 max_frames_default = 500
+KILL_REWARD = 5
+minimap_mode = True
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
@@ -32,7 +34,7 @@ def load_config(size, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, a
     cfg = gw.Config()
 
     cfg.set({"map_width": size, "map_height": size})
-    cfg.set({"minimap_mode": True})
+    cfg.set({"minimap_mode": minimap_mode})
 
     options = {
         'width': 1, 'length': 1, 'hp': 3, 'speed': 3,
@@ -48,7 +50,7 @@ def load_config(size, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, a
     options = {
         'width': 1, 'length': 1, 'hp': 25, 'speed': 0,
         'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-        'kill_reward': 5}
+        'kill_reward': KILL_REWARD}
     food = cfg.register_agent_type(
         name='food',
         attr=options)
@@ -69,9 +71,10 @@ class _parallel_env(magent_parallel_env, EzPickle):
         EzPickle.__init__(self, map_size, reward_args, max_frames)
         env = magent.GridWorld(load_config(map_size, **reward_args))
         handles = env.get_handles()
-
+        reward_vals = np.array([5] + list(reward_args.values()))
+        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
         names = ["omnivore"]
-        super().__init__(env, handles[1:], names, map_size, max_frames)
+        super().__init__(env, handles[1:], names, map_size, max_frames, reward_range, minimap_mode)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size
