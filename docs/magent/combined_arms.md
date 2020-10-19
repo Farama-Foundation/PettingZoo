@@ -32,7 +32,7 @@ Reward is given as:
 
 If multiple options apply, rewards are added together
 
-Observation space: `[empty, obstacle, agent_maps, agent_minimaps, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
+Observation space: `[obstacle, agent_maps_healthmaps_minimaps(12), binary_agent_id(10), one_hot_action, last_reward, agent_position]`
 
 Map size: 45x45
 
