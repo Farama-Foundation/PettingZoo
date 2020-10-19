@@ -58,7 +58,7 @@ class raw_env(RLCardBase, EzPickle):
         if self._full_observation_space:
             return obs['obs'].astype(self._dtype)
         else:
-            return obs['obs'][0:4,:].astype(self._dtype)
+            return obs['obs'][0:4, :].astype(self._dtype)
 
     def render(self, mode='human'):
         for player in self.agents:
