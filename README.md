@@ -39,11 +39,11 @@ env = pistonball_v0.env()
 Environments can be interacted with in a manner very similar to Gym:
 
 ```
-observation = env.reset()
+env.reset()
 for agent in env.agent_iter():
-    reward, done, info = env.last()
+    observation, reward, done, info = env.last()
     action = policy(observation)
-    observation = env.step(action)
+    env.step(action)
 ```
 
 For the complete API documentation, please see https://www.pettingzoo.ml/api
@@ -60,7 +60,7 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 Version 1.3.5 (October 14, 2020)
 
-Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments. 
+Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments.
 
 Version 1.3.4 (October 3, 2020)
 
