@@ -533,7 +533,7 @@ class raw_env(AECEnv, EzPickle):
             f = Fence(w_type, s_pos, b_pos, verts, self.space)
             self.fences.append(f)
 
-        self.metadata = {"render.modes": ["human"]}
+        self.metadata = {"render.modes": ["human", "rgb_array"]}
 
         self.action_spaces = {}
         for p in self.prospectors:
@@ -832,10 +832,8 @@ class raw_env(AECEnv, EzPickle):
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        self.metadata = {"render.modes": ["human"]}
         self.rendering = False
         self.frame = 0
-        self.dirty_rects = []
         self.background.dirty_rects.clear()
 
         self._agent_selector.reinit(self.agents)
@@ -845,19 +843,25 @@ class raw_env(AECEnv, EzPickle):
             return self.observe(self.agent_selection)
 
     def render(self, mode="human"):
-        if not self.rendering:
-            pg.display.init()
-            self.screen = pg.display.set_mode(const.SCREEN_SIZE)
-            self.background.convert_img()
-            self.water.convert_img()
-            for f in self.fences:
-                f.convert_img()
-            for s in self.all_sprites.sprites():
-                s.convert_img()
-            self.rendering = True
-            self.full_draw()
+        if mode == "human":
+            if not self.rendering:
+                self.rendering = True
+                pg.display.init()
+                self.screen = pg.display.set_mode(const.SCREEN_SIZE)
+                self.background.convert_img()
+                self.water.convert_img()
+                for f in self.fences:
+                    f.convert_img()
+                for s in self.all_sprites.sprites():
+                    s.convert_img()
+                self.full_draw()
 
-        pg.display.flip()
+            pg.display.flip()
+
+        elif mode == "rgb_array":  # no display, return whole screen as array
+            observation = np.array(pg.surfarray.pixels3d(self.screen))
+            transposed = np.transpose(observation, axes=(1, 0, 2))
+            return transposed
 
     def full_draw(self):
         """ Called to draw everything when first rendering """

@@ -10,6 +10,7 @@ from .rlcard_base import RLCardBase
 
 def env(**kwargs):
     env = raw_env(**kwargs)
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     pass_move = 308

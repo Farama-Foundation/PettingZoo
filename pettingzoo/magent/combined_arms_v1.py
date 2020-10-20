@@ -14,6 +14,8 @@ from gym.utils import EzPickle
 
 map_size = 45
 max_frames_default = 1000
+KILL_REWARD = 100
+minimap_mode = True
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
@@ -32,7 +34,7 @@ def load_config(map_size, step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-
     cfg = gw.Config()
 
     cfg.set({"map_width": map_size, "map_height": map_size})
-    cfg.set({"minimap_mode": True})
+    cfg.set({"minimap_mode": minimap_mode})
 
     cfg.set({"embedding_size": 10})
 
@@ -82,15 +84,15 @@ def load_config(map_size, step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-
     cfg.add_reward_rule(gw.Event(arm1_1, 'attack', arm0_1), receiver=arm1_1, value=attack_opponent_reward)
 
     # kill reward
-    cfg.add_reward_rule(gw.Event(arm0_0, 'kill', arm1_0), receiver=arm0_0, value=100)
-    cfg.add_reward_rule(gw.Event(arm0_0, 'kill', arm1_1), receiver=arm0_0, value=100)
-    cfg.add_reward_rule(gw.Event(arm0_1, 'kill', arm1_0), receiver=arm0_1, value=100)
-    cfg.add_reward_rule(gw.Event(arm0_1, 'kill', arm1_1), receiver=arm0_1, value=100)
+    cfg.add_reward_rule(gw.Event(arm0_0, 'kill', arm1_0), receiver=arm0_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_0, 'kill', arm1_1), receiver=arm0_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_1, 'kill', arm1_0), receiver=arm0_1, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_1, 'kill', arm1_1), receiver=arm0_1, value=KILL_REWARD)
 
-    cfg.add_reward_rule(gw.Event(arm1_0, 'kill', arm0_0), receiver=arm1_0, value=100)
-    cfg.add_reward_rule(gw.Event(arm1_0, 'kill', arm0_1), receiver=arm1_0, value=100)
-    cfg.add_reward_rule(gw.Event(arm1_1, 'kill', arm0_0), receiver=arm1_1, value=100)
-    cfg.add_reward_rule(gw.Event(arm1_1, 'kill', arm0_1), receiver=arm1_1, value=100)
+    cfg.add_reward_rule(gw.Event(arm1_0, 'kill', arm0_0), receiver=arm1_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_0, 'kill', arm0_1), receiver=arm1_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_1, 'kill', arm0_0), receiver=arm1_1, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_1, 'kill', arm0_1), receiver=arm1_1, value=KILL_REWARD)
 
     return cfg
 
@@ -131,8 +133,10 @@ class _parallel_env(magent_parallel_env, EzPickle):
     def __init__(self, map_size, reward_args, max_frames):
         EzPickle.__init__(self, map_size, reward_args, max_frames)
         env = magent.GridWorld(load_config(map_size, **reward_args))
+        reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
+        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
-        super().__init__(env, env.get_handles(), names, map_size, max_frames)
+        super().__init__(env, env.get_handles(), names, map_size, max_frames, reward_range, minimap_mode)
 
     def generate_map(self):
         generate_map(self.env, self.map_size, self.handles)

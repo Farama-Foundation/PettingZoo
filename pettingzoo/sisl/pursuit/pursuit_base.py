@@ -267,12 +267,12 @@ class Pursuit():
 
             pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
-    def render(self):
-        if not self.renderOn:
+    def render(self, mode="human"):
+        if not self.renderOn and mode == "human":
             pygame.display.init()
             self.screen = pygame.display.set_mode(
                 (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size))
-        self.renderOn = True
+            self.renderOn = True
         self.draw_model_state()
 
         self.draw_pursuers_observations()
@@ -280,7 +280,11 @@ class Pursuit():
         self.draw_evaders()
         self.draw_pursuers()
 
+        observation = pygame.surfarray.pixels3d(self.screen)
+        new_observation = np.copy(observation)
+        del observation
         pygame.display.flip()
+        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def animate(self, act_fn, nsteps, file_name, rate=1.5, verbose=False):
         """

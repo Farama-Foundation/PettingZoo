@@ -10,6 +10,7 @@ from pettingzoo.utils import wrappers
 
 def env():
     env = raw_env()
+    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
@@ -115,6 +116,7 @@ class raw_env(AECEnv):
 
     def render(self, mode='human'):
         print(self.board)
+        return str(self.board)
 
     def close(self):
         pass
