@@ -127,7 +127,6 @@ def play_test(env, observation_0):
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        print(agent, done, agent not in has_finished)
         next_observe = env.step(action)
 
         # check dict element removal
@@ -161,7 +160,9 @@ def play_test(env, observation_0):
     reward_0 = env.rewards[env.agent_selection]
     for agent in env.agent_iter(env.num_agents*2):
         reward, done, info = env.last()
-        if 'legal_moves' in env.infos[agent] and not done:
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent] and not done:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
@@ -180,7 +181,9 @@ def test_action_flexibility(env):
     agent = env.agent_selection
     action_space = env.action_spaces[agent]
     if isinstance(action_space, gym.spaces.Discrete):
-        if 'legal_moves' in env.infos[agent]:
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent]:
             action = env.infos[agent]['legal_moves'][0]
         else:
             action = 0
