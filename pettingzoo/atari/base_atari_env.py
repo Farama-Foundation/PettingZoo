@@ -102,7 +102,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
         player_names = ["first", "second", "third", "fourth"]
-        self.agents = [f"{player_names[n]}_0" for n in range(self.max_num_agents)]
+        self.agents = [f"{player_names[n]}_0" for n in range(num_players)]
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents}

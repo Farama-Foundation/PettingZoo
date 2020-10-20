@@ -80,7 +80,6 @@ class magent_parallel_env(ParallelEnv):
         self.env.reset()
         self.frames = 0
         self.all_dones = {agent: False for agent in self.possible_agents}
-        self.aagents = self.agents[:]
         self.generate_map()
         return self._observe_all()
 
@@ -118,9 +117,7 @@ class magent_parallel_env(ParallelEnv):
 
     def step(self, all_actions):
         action_list = [0] * self.max_num_agents
-        print("start",set(self.aagents) - set(self.all_dones))
         self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
-        print("start2",set(self.agents) - set(self.all_dones))
         self.env.clear_dead()
         for i, agent in enumerate(self.possible_agents):
             if agent in all_actions:
@@ -140,6 +137,4 @@ class magent_parallel_env(ParallelEnv):
         all_rewards = self._all_rewards()
         all_observes = self._observe_all()
         self.all_dones = all_dones
-        self.aagents = dict(self.all_dones)
-        print("start3",set(self.agents) - set(self.aagents))
         return all_observes, all_rewards, all_dones, all_infos

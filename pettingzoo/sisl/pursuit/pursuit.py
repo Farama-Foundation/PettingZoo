@@ -47,7 +47,6 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.steps = 0
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = dict(
             zip(self.agents, [np.float64(0) for _ in self.agents]))
