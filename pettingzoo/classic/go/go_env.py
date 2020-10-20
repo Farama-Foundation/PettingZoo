@@ -55,13 +55,13 @@ class raw_env(AECEnv):
         return 0 <= c[0] < self._N and 0 <= c[1] < self._N
 
     def _encode_player_plane(self, agent):
-        if agent == self.agents[0]:
+        if agent == self.possible_agents[0]:
             return np.zeros([self._N, self._N], dtype=np.bool)
         else:
             return np.ones([self._N, self._N], dtype=np.bool)
 
     def _encode_board_planes(self, agent):
-        agent_factor = -1 if agent == self.agents[0] else 1
+        agent_factor = -1 if agent == self.possible_agents[0] else 1
         current_agent_plane_idx = np.where(self._go.board == agent_factor)
         opponent_agent_plane_idx = np.where(self._go.board == -agent_factor)
         current_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
@@ -71,13 +71,13 @@ class raw_env(AECEnv):
         return current_agent_plane, opponent_agent_plane
 
     def _int_to_name(self, ind):
-        return self.agents[ind]
+        return self.possible_agents[ind]
 
     def _name_to_int(self, name):
-        return self.agents.index(name)
+        return self.possible_agents.index(name)
 
     def _convert_to_dict(self, list_of_list):
-        return dict(zip(self.agents, list_of_list))
+        return dict(zip(self.possible_agents, list_of_list))
 
     def _encode_legal_actions(self, actions):
         return np.where(actions == 1)[0]

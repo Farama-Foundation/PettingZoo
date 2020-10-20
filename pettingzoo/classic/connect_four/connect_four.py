@@ -53,7 +53,7 @@ class raw_env(AECEnv):
     #        [1, 1, 2, 1, 0, 1, 0]], dtype=int8)
     def observe(self, agent):
         board_vals = np.array(self.board).reshape(6, 7)
-        cur_player = self.agents.index(self.agent_selection)
+        cur_player = self.possible_agents.index(self.agent_selection)
         opp_player = (cur_player + 1) % 2
 
         cur_p_board = np.equal(board_vals, cur_player + 1)
