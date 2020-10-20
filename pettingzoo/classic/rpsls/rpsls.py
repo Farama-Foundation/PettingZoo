@@ -30,8 +30,7 @@ class raw_env(AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        self.num_agents = 2
-        self.agents = ["player_" + str(r) for r in range(self.num_agents)]
+        self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
 
@@ -45,7 +44,6 @@ class raw_env(AECEnv):
         pass
 
     def reinit(self):
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()

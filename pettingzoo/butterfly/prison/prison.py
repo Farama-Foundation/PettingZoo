@@ -92,8 +92,8 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         EzPickle.__init__(self, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
-        self.num_agents = 2 * num_floors
-        self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
+        num_agents = 2 * num_floors
+        self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
@@ -298,7 +298,6 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.has_reset = True
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))

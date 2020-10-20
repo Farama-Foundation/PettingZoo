@@ -26,7 +26,6 @@ class raw_env(AECEnv):
         super().__init__()
         self.board = Board()
 
-        self.num_agents = 2
         self.agents = ["player_1", "player_2"]
         self.possible_agents = self.agents[:]
 
@@ -109,7 +108,6 @@ class raw_env(AECEnv):
         # reset environment
         self.board = Board()
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}

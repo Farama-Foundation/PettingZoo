@@ -26,7 +26,6 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
 
-        self.num_agents = self.env.num_agents
         self.agents = ["walker_" + str(r) for r in range(self.num_agents)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
@@ -48,7 +47,6 @@ class raw_env(AECEnv, EzPickle):
     def reset(self, observe=True):
         self.env.reset()
         self.steps = 0
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()

@@ -385,7 +385,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
-        self.num_agents = len(self.agents)
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
         # spaces
@@ -408,7 +407,6 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.env.reset()
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards

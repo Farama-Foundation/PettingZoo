@@ -67,8 +67,8 @@ class raw_env(AECEnv):
         super().__init__()
 
         self.ch = CheckersRules()
-        self.num_agents = 2
-        self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
+        num_agents = 2
+        self.agents = ["player_{}".format(i) for i in range(num_agents)]
         self.possible_agents = self.agents[:]
         self.agent_order = list(self.agents)
 
@@ -103,7 +103,6 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.ch = CheckersRules()
         self.num_moves = 0
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.agent_order = list(self.agents)
         self.agent_selection = self.agent_order[0]

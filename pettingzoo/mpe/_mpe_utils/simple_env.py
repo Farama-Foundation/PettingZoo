@@ -33,7 +33,6 @@ class SimpleEnv(AECEnv):
 
         self.scenario.reset_world(self.world, self.np_random)
 
-        self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
         self.possible_agents = self.agents[:]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
@@ -69,7 +68,6 @@ class SimpleEnv(AECEnv):
     def reset(self, observe=True):
         self.scenario.reset_world(self.world, self.np_random)
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}

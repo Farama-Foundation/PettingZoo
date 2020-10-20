@@ -181,6 +181,7 @@ def test_action_flexibility(env):
     agent = env.agent_selection
     action_space = env.action_spaces[agent]
     if isinstance(action_space, gym.spaces.Discrete):
+        reward, done, info = env.last()
         if done:
             action = None
         elif 'legal_moves' in env.infos[agent]:

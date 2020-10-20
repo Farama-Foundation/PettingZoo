@@ -16,7 +16,6 @@ class RLCardBase(AECEnv):
         self.env = rlcard.make(name)
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
-        self.num_agents = len(self.agents)
         self.possible_agents = self.agents[:]
 
         dtype = self.env.reset()[0]['obs'].dtype
@@ -68,7 +67,6 @@ class RLCardBase(AECEnv):
 
     def reset(self, observe=True):
         obs, player_id = self.env.reset()
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
         self.rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])

@@ -1,5 +1,6 @@
 from pettingzoo.utils import agent_selector
 from pettingzoo import AECEnv
+import copy
 
 
 class _parallel_env_wrapper(AECEnv):
@@ -7,9 +8,8 @@ class _parallel_env_wrapper(AECEnv):
     def __init__(self, parallel_env):
         self.metadata = parallel_env.metadata
         self.env = parallel_env
-        self.agents = self.env.agents
+        self.agents = self.env.agents[:]
         self.possible_agents = self.env.possible_agents
-        self.num_agents = len(self.agents)
 
         self.action_spaces = self.env.action_spaces
         self.observation_spaces = self.env.observation_spaces
@@ -18,8 +18,8 @@ class _parallel_env_wrapper(AECEnv):
         self.env.seed(seed)
 
     def reset(self, observe=True):
-        self.num_agents = len(self.possible_agents)
-        self.agents = self.possible_agents[:]
+        self._observations = self.env.reset()
+        self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions = {agent: None for agent in self.agents}
         self._agent_selector = agent_selector(self._live_agents)
@@ -28,7 +28,6 @@ class _parallel_env_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
 
-        self._observations = self.env.reset()
 
         return self.observe(self.agent_selection) if observe else None
 
@@ -42,12 +41,14 @@ class _parallel_env_wrapper(AECEnv):
         if self._agent_selector.is_last():
             obss, rews, dones, infos = self.env.step(self._actions)
 
-            self._observations = obss
-            self.dones = dones
-            self.infos = infos
-            self.rewards = rews
+            self._observations = copy.copy(obss)
+            self.dones = copy.copy(dones)
+            self.infos = copy.copy(infos)
+            self.rewards = copy.copy(rews)
+            self.agents = self.env.agents[:]
 
             self._live_agents = [agent for agent in self.agents if not dones[agent]]
+            # assert self._live_agents == self.agents
             if len(self._live_agents):
                 self._agent_selector = agent_selector(self._live_agents)
                 self.agent_selection = self._agent_selector.reset()

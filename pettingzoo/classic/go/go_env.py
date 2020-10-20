@@ -32,7 +32,6 @@ class raw_env(AECEnv):
 
         self.agents = ['black_0', 'white_0']
         self.possible_agents = self.agents[:]
-        self.num_agents = len(self.agents)
         self.has_reset = False
 
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool) for _ in range(self.num_agents)])
@@ -112,7 +111,6 @@ class raw_env(AECEnv):
         self.has_reset = True
         self._go = go.Position(board=None, komi=self._komi)
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()

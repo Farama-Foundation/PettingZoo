@@ -12,6 +12,7 @@ def parallel_play_test(par_env):
         actions = {agent:space.sample() for agent, space in par_env.action_spaces.items() if agent in done and not done[agent]}
         obs, rew, done, info = par_env.step(actions)
         assert par_env.agents == live_agents
+        assert par_env.agents == par_env.num_agents
         assert isinstance(obs, dict)
         assert isinstance(rew, dict)
         assert isinstance(done, dict)

@@ -118,7 +118,6 @@ class raw_env(AECEnv, EzPickle):
         self.frames = 0
         self.display_wait = 0.0
 
-        self.num_agents = len(self.agents)
         self.has_reset = False
         self.closed = False
 
@@ -209,7 +208,6 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
 
         self._agent_selector.reinit(self.agents)

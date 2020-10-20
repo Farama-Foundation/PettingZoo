@@ -29,7 +29,6 @@ class raw_env(AECEnv):
         # flat representation in row major order
         self.board = [0] * (6 * 7)
 
-        self.num_agents = 2
         self.agents = ['player_0', 'player_1']
         self.possible_agents = self.agents[:]
 
@@ -105,7 +104,6 @@ class raw_env(AECEnv):
         # reset environment
         self.board = [0] * (6 * 7)
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}

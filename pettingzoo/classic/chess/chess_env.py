@@ -41,8 +41,6 @@ class raw_env(AECEnv):
 
         self.agent_selection = None
 
-        self.num_agents = len(self.agents)
-
     def seed(self, seed=None):
         pass
 
@@ -52,7 +50,6 @@ class raw_env(AECEnv):
     def reset(self, observe=True):
         self.has_reset = True
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
 
         self.board = chess.Board()

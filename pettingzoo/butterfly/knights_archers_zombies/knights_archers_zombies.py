@@ -147,7 +147,6 @@ class raw_env(AECEnv, EzPickle):
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
-        self.num_agents = len(self.agents)
         self.reinit()
 
     def seed(self, seed=None):
@@ -498,7 +497,6 @@ class raw_env(AECEnv, EzPickle):
                 # self.infos.pop(k, None)
 
             self._agent_selector.reinit(self.agents)
-            self.num_agents = len(self.agents)
 
             # reset the kill list
             self.kill_list = []
@@ -610,7 +608,6 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, observe=True):
         self.has_reset = True
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()

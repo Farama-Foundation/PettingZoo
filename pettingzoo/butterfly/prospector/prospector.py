@@ -472,7 +472,6 @@ class raw_env(AECEnv, EzPickle):
                 "group reward should add up to approximately 1.0"
             )
 
-        self.num_agents = const.NUM_AGENTS
         self.agents = []
 
         self.sprite_list = [
@@ -827,7 +826,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.gold = []
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))

@@ -54,7 +54,6 @@ class BaseWrapper(AECEnv):
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
-        self.num_agents = self.env.num_agents
 
         return observation
 
@@ -69,7 +68,6 @@ class BaseWrapper(AECEnv):
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
-        self.num_agents = self.env.num_agents
 
         return next_obs
 

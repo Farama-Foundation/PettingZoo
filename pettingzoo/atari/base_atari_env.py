@@ -101,7 +101,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                 num_channels = 1
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
-        self.max_num_agents = num_players
         player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(self.max_num_agents)]
         self.possible_agents = self.agents[:]
@@ -121,7 +120,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def reset(self):
         self.ale.reset_game()
-        self.num_agents = self.max_num_agents
         self.agents = self.possible_agents[:]
         self.dones = {agent: False for agent in self.possible_agents}
         self.frame = 0
