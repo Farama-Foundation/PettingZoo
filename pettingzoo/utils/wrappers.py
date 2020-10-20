@@ -200,7 +200,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
 
     def step(self, action, observe=True):
         space = self.action_spaces[self.agent_selection]
-        if action is not None and not space.contains(action):
+        if not (action is None and self.dones[self.agent_selection]) and not space.contains(action):
             assert space.shape == action.shape, "action should have shape {}, has shape {}".format(space.shape, action.shape)
 
             EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
