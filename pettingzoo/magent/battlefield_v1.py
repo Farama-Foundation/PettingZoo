@@ -16,14 +16,17 @@ from gym.utils import EzPickle
 map_size = 80
 max_frames_default = 1000
 minimap_mode = True
+default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
-    return _parallel_env(map_size, reward_args, max_frames)
+    env_reward_args = dict(**default_reward_args)
+    env_reward_args.update(reward_args)
+    return _parallel_env(map_size, env_reward_args, max_frames)
 
 
 def raw_env(max_frames=max_frames_default, **reward_args):
-    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames))
+    return _parallel_env_wrapper(parallel_env(max_frames, **reward_args))
 
 
 env = make_env(raw_env)
