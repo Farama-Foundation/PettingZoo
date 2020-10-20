@@ -25,8 +25,7 @@ class raw_env(AECEnv):
         super().__init__()
         self.env = _env(*args, **kwargs)
 
-        self.num_agents = self.env.num_agents
-        self.agents = ["pursuer_" + str(r) for r in range(self.num_agents)]
+        self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)

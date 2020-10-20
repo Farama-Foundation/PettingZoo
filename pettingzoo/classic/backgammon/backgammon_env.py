@@ -25,7 +25,6 @@ class raw_env(AECEnv):
         self.game = Game()
         self.seed()
 
-        self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(2)]
         self.possible_agents = self.agents[:]
         self._agent_order = list(self.agents)
@@ -100,7 +99,6 @@ class raw_env(AECEnv):
         return np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198,)
 
     def reset(self, observe=True):
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': []} for i in self.agents}

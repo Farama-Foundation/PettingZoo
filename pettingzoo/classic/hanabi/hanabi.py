@@ -214,7 +214,6 @@ class raw_env(AECEnv, EzPickle):
             current agent (agent_selection).
         """
 
-        self.num_agents = len(self.possible_agents)
         self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment
         obs = self.hanabi_env.reset()
@@ -285,7 +284,7 @@ class raw_env(AECEnv, EzPickle):
                 return self.observe(agent_name=agent_on_turn)
 
     def observe(self, agent_name: str):
-        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32)
+        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32) if agent_name in self.infos else np.zeros_like(self.observation_spaces[agent_name].low)
 
     def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""

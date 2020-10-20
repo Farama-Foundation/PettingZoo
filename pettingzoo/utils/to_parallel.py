@@ -17,7 +17,6 @@ class to_parallel(ParallelEnv):
     def reset(self):
         self.aec_env.reset(observe=False)
         self.agents = self.aec_env.agents
-        self.num_agents = self.aec_env.num_agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
 
@@ -37,7 +36,6 @@ class to_parallel(ParallelEnv):
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
         self.agents = self.aec_env.agents
-        self.num_agents = self.aec_env.num_agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
 

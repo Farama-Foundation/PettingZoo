@@ -27,6 +27,14 @@ class AECEnv:
     def close(self):
         pass
 
+    @property
+    def num_agents(self):
+        return len(self.agents)
+
+    @property
+    def max_num_agents(self):
+        return len(self.possible_agents)
+
     def _dones_step_first(self):
         dones = self.dones
         _dones_order = [agent for agent in self.agents if dones[agent]]
@@ -49,7 +57,6 @@ class AECEnv:
         del self.rewards[agent]
         del self.infos[agent]
         self.agents.remove(agent)
-        self.num_agents -= 1
 
     def _was_done_step(self, action, observe):
         if action is not None:
@@ -111,3 +118,11 @@ class ParallelEnv:
 
     def close(self):
         pass
+
+    @property
+    def num_agents(self):
+        return len(self.agents)
+
+    @property
+    def max_num_agents(self):
+        return len(self.possible_agents)
