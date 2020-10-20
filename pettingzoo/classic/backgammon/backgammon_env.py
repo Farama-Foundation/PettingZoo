@@ -48,9 +48,9 @@ class raw_env(AECEnv):
     def seed(self, seed=None):
         self.np_random = np.random.RandomState(seed)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
 
         if action != 26**2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
@@ -92,13 +92,11 @@ class raw_env(AECEnv):
         self.infos[opp_agent]['legal_moves'] = []
 
         self._dones_step_first()
-        if observe:
-            return self.observe(self.game.get_opponent(self.colors[self.agent_selection]))
 
     def observe(self, agent):
         return np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198,)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': []} for i in self.agents}
@@ -127,8 +125,6 @@ class raw_env(AECEnv):
         legal_moves = np.array(bg_utils.to_gym_format(bg_utils.get_valid_actions(self, roll), roll))
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
-        if observe:
-            return self.observe(self.colors[self.agent_selection])
 
     def render(self, mode='human'):
         assert mode in ['human'], print(mode)

@@ -15,7 +15,7 @@ class to_parallel(ParallelEnv):
         return self.aec_env.seed(seed)
 
     def reset(self):
-        self.aec_env.reset(observe=False)
+        self.aec_env.reset()
         self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
@@ -26,11 +26,11 @@ class to_parallel(ParallelEnv):
         infos = {}
 
         while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
-            self.aec_env.step(None, observe=False)
+            self.aec_env.step(None)
 
         for agent in self.aec_env.agents:
             assert agent == self.aec_env.agent_selection, f"expected agent {agent} got agent {self.aec_env.agent_selection}, agent order is nontrivial"
-            self.aec_env.step(actions[agent], observe=False)
+            self.aec_env.step(actions[agent])
 
         rewards = dict(**self.aec_env.rewards)
         dones = dict(**self.aec_env.dones)

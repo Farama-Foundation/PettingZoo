@@ -66,14 +66,12 @@ class raw_env(AECEnv):
     def close(self):
         pass
 
-    def reset(self, observe=True):
+    def reset(self):
         self.reinit()
-        if observe:
-            return self.observe(self.agent_selection)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
@@ -123,5 +121,3 @@ class raw_env(AECEnv):
 
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)

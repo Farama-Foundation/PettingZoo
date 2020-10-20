@@ -61,9 +61,9 @@ class raw_env(AECEnv):
         return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         # assert valid move
         assert (self.board[0:7][action] == 0), "played illegal move."
 
@@ -95,12 +95,8 @@ class raw_env(AECEnv):
             self.agent_selection = next_agent
 
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
-    def reset(self, observe=True):
+    def reset(self):
         # reset environment
         self.board = [0] * (6 * 7)
 
@@ -112,11 +108,6 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
 
         self.agent_selection = self._agent_selector.reset()
-
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def render(self, mode='human'):
         print("{}'s turn'".format(self.agent_selection))

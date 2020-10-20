@@ -739,9 +739,9 @@ class raw_env(AECEnv, EzPickle):
 
         return sub_screen
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
         if all_agents_updated:
@@ -801,13 +801,11 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
 
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def reward(self):
         return self.rewards
 
-    def reset(self, observe=True):
+    def reset(self):
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.done = False
 
@@ -837,8 +835,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.full_draw()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def render(self, mode="human"):
         if mode == "human":

@@ -90,9 +90,9 @@ class raw_env(AECEnv):
         player_plane = self._encode_player_plane(agent)
         return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
         next_player = self._agent_selector.next()
@@ -104,10 +104,8 @@ class raw_env(AECEnv):
             self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._dones_step_first()
-        if observe:
-            return self._last_obs
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         self._go = go.Position(board=None, komi=self._komi)
 
@@ -119,10 +117,6 @@ class raw_env(AECEnv):
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
         self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])
-        if observe:
-            return self._last_obs
-        else:
-            return
 
     def render(self, mode='human'):
         print(self._go)

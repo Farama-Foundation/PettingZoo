@@ -397,9 +397,9 @@ class raw_env(AECEnv, EzPickle):
 
         return np.swapaxes(cropped, 1, 0)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
@@ -503,8 +503,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
@@ -606,7 +604,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
@@ -615,8 +613,6 @@ class raw_env(AECEnv, EzPickle):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
-        if observe:
-            return self.observe(self.agent_selection)
 
 # The original code for this game, that was added by Justin Terry, was
 # created by Dipam Patel in a different repository (hence the git history)

@@ -48,9 +48,9 @@ class RLCardBase(AECEnv):
         obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs'].astype(self._dtype)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         obs, next_player_id = self.env.step(action)
         next_player = self._int_to_name(next_player_id)
         self._last_obs = obs['obs']
@@ -62,10 +62,8 @@ class RLCardBase(AECEnv):
             self.infos[next_player]['legal_moves'] = obs['legal_actions']
         self.agent_selection = next_player
         self._dones_step_first()
-        if observe:
-            return obs['obs'].astype(self._dtype) if obs else self._last_obs.astype(self._dtype)
 
-    def reset(self, observe=True):
+    def reset(self):
         obs, player_id = self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
@@ -74,10 +72,6 @@ class RLCardBase(AECEnv):
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
         self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
         self._last_obs = obs['obs']
-        if observe:
-            return obs['obs'].astype(self._dtype)
-        else:
-            return
 
     def render(self, mode='human'):
         raise NotImplementedError()

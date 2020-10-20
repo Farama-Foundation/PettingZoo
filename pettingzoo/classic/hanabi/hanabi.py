@@ -150,7 +150,7 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection: str
 
         # Sets hanabi game to clean state and updates all internal dictionaries
-        self.reset(observe=False)
+        self.reset()
 
         # Set action_spaces and observation_spaces based on params in hanabi_env
         self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
@@ -206,7 +206,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, observe=True) -> Optional[List[int]]:
+    def reset(self):
         """ Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
@@ -224,12 +224,6 @@ class raw_env(AECEnv, EzPickle):
         self.rewards = {agent: 0 for agent in self.agents}
         # Reset internal state
         self._process_latest_observations(obs=obs)
-
-        # If specified, return observation of current agent
-        if observe:
-            return self.observe(agent_name=self.agent_selection)
-        else:
-            return None
 
     def _reset_agents(self, player_number: int):
         """ Rearrange self.agents as pyhanabi starts a different player after each reset(). """
@@ -257,7 +251,7 @@ class raw_env(AECEnv, EzPickle):
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         action = int(action)
 
         agent_on_turn = self.agent_selection

@@ -191,7 +191,7 @@ class raw_env(AECEnv, EzPickle):
         piston.position = (piston.position[0], cap(
             piston.position[1] - v * self.velocity))
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
@@ -219,9 +219,6 @@ class raw_env(AECEnv, EzPickle):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.frames = 0
-
-        if observe:
-            return self.observe(self.agent_selection)
 
     def draw(self):
         # redraw the background image if ball goes outside valid position
@@ -271,9 +268,9 @@ class raw_env(AECEnv, EzPickle):
         pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
@@ -314,7 +311,5 @@ class raw_env(AECEnv, EzPickle):
         self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
 
 # Game art created by Justin Terry

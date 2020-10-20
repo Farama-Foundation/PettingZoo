@@ -296,7 +296,7 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.rendering = False
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
@@ -308,12 +308,10 @@ class raw_env(AECEnv, EzPickle):
         self.reinit()
         self.spawn_prisoners()
         self.draw()
-        if observe:
-            return self.observe(self.agent_selection)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         if not isinstance(action, int):
             action = np.asarray(action)
@@ -350,10 +348,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-        observation = self.observe(self.agent_selection)
-
-        if observe:
-            return observation
 
     def render(self, mode='human'):
         if not self.rendering and mode == "human":

@@ -47,7 +47,7 @@ class raw_env(AECEnv):
     def observe(self, agent):
         return chess_utils.get_observation(self.board, self.possible_agents.index(agent))
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
 
         self.agents = self.possible_agents[:]
@@ -62,11 +62,6 @@ class raw_env(AECEnv):
         self.infos = {name: {'legal_moves': []} for name in self.agents}
         self.infos[self.agent_selection]['legal_moves'] = chess_utils.legal_moves(self.board)
 
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
-
     def set_game_result(self, result_val):
         for i, name in enumerate(self.agents):
             self.dones[name] = True
@@ -74,9 +69,9 @@ class raw_env(AECEnv):
             self.rewards[name] = result_val * result_coef
             self.infos[name] = {'legal_moves': []}
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         self.agent_selection = next_agent = self._agent_selector.next()
@@ -105,11 +100,6 @@ class raw_env(AECEnv):
             assert len(self.infos[next_agent]['legal_moves'])
 
         self._dones_step_first()
-        if observe:
-            next_observation = self.observe(next_agent)
-        else:
-            next_observation = None
-        return next_observation
 
     def render(self, mode='human'):
         print(self.board)

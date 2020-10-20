@@ -17,7 +17,7 @@ class _parallel_env_wrapper(AECEnv):
     def seed(self, seed=None):
         self.env.seed(seed)
 
-    def reset(self, observe=True):
+    def reset(self):
         self._observations = self.env.reset()
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
@@ -28,15 +28,12 @@ class _parallel_env_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
 
-
-        return self.observe(self.agent_selection) if observe else None
-
     def observe(self, agent):
         return self._observations[agent]
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
             obss, rews, dones, infos = self.env.step(self._actions)
@@ -56,7 +53,6 @@ class _parallel_env_wrapper(AECEnv):
             self._dones_step_first()
         else:
             self.agent_selection = self._agent_selector.next()
-        return self.observe(self.agent_selection) if observe else None
 
     def render(self, mode="human"):
         return self.env.render(mode)

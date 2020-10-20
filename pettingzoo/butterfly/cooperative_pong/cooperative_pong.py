@@ -405,15 +405,13 @@ class raw_env(AECEnv, EzPickle):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
-        if observe:
-            return self.observe(self.agent_selection)
 
     def observe(self, agent):
         obs = self.env.observe(agent)
@@ -425,9 +423,9 @@ class raw_env(AECEnv, EzPickle):
     def render(self, mode='human'):
         return self.env.render(mode)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
         if np.isnan(action):
             action = 0
@@ -445,9 +443,6 @@ class raw_env(AECEnv, EzPickle):
         self.score = self.env.score
 
         self._dones_step_first()
-        if observe:
-            observation = self.observe(self.agent_selection)
-            return observation
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
 # added in by Justin Terry (which is why he's shown as the creator in the git history)
