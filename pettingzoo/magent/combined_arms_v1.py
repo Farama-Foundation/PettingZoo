@@ -16,20 +16,23 @@ map_size = 45
 max_frames_default = 1000
 KILL_REWARD = 100
 minimap_mode = True
+default_reward_args = dict(step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2)
 
 
 def parallel_env(max_frames=max_frames_default, **reward_args):
-    return _parallel_env(map_size, reward_args, max_frames)
+    env_reward_args = dict(**default_reward_args)
+    env_reward_args.update(reward_args)
+    return _parallel_env(map_size, env_reward_args, max_frames)
 
 
 def raw_env(max_frames=max_frames_default, **reward_args):
-    return _parallel_env_wrapper(_parallel_env(map_size, reward_args, max_frames))
+    return _parallel_env_wrapper(parallel_env(max_frames, **reward_args))
 
 
 env = make_env(raw_env)
 
 
-def load_config(map_size, step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2):
+def load_config(map_size, step_reward, dead_penalty, attack_penalty, attack_opponent_reward):
     gw = magent.gridworld
     cfg = gw.Config()
 
