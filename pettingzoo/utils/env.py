@@ -9,10 +9,10 @@ class AECEnv:
     def __init__(self):
         pass
 
-    def step(self, action, observe=True):
+    def step(self, action):
         raise NotImplementedError
 
-    def reset(self, observe=True):
+    def reset(self):
         raise NotImplementedError
 
     def seed(self, seed=None):
@@ -58,19 +58,18 @@ class AECEnv:
         del self.infos[agent]
         self.agents.remove(agent)
 
-    def _was_done_step(self, action, observe):
+    def _was_done_step(self, action):
         if action is not None:
             raise ValueError("when an agent is done, the only valid action is None")
         self._remove_done_agent(self.agent_selection)
         self._find_next_agent()
-        return self.observe(self.agent_selection) if observe else None
 
     def agent_iter(self, max_iter=2**63):
         return AECIterable(self, max_iter)
 
     def last(self):
         agent = self.agent_selection
-        return self.rewards[agent], self.dones[agent], self.infos[agent]
+        return self.observe(agent), self.rewards[agent], self.dones[agent], self.infos[agent]
 
 
 class AECIterable:

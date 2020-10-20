@@ -44,7 +44,7 @@ class raw_env(AECEnv, EzPickle):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, observe=True):
+    def reset(self):
         self.env.reset()
         self.steps = 0
         self.agents = self.possible_agents[:]
@@ -54,8 +54,6 @@ class raw_env(AECEnv, EzPickle):
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        if observe:
-            return self.observe(self.agent_selection)
 
     def close(self):
         self.env.close()
@@ -74,9 +72,9 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
         action = np.array(action, dtype=np.float32)
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
@@ -91,5 +89,3 @@ class raw_env(AECEnv, EzPickle):
 
         self._dones_step_first()
         self.steps += 1
-        if observe:
-            return self.observe(self.agent_selection)

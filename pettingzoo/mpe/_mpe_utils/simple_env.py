@@ -65,7 +65,7 @@ class SimpleEnv(AECEnv):
     def observe(self, agent):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.scenario.reset_world(self.world, self.np_random)
 
         self.agents = self.possible_agents[:]
@@ -79,11 +79,6 @@ class SimpleEnv(AECEnv):
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
-
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def _execute_world_step(self):
         # set action for each agent
@@ -147,9 +142,9 @@ class SimpleEnv(AECEnv):
         # make sure we used all elements of action
         assert len(action) == 0
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()
@@ -164,11 +159,6 @@ class SimpleEnv(AECEnv):
                     self.dones[a] = True
 
         self._dones_step_first()
-        if observe:
-            next_observation = self.observe(self.agent_selection)
-        else:
-            next_observation = None
-        return next_observation
 
     def render(self, mode='human'):
         from . import rendering

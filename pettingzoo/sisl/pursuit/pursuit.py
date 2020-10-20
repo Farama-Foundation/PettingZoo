@@ -45,7 +45,7 @@ class raw_env(AECEnv, EzPickle):
     def seed(self, seed=None):
         self.env.seed(seed)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.steps = 0
         self.agents = self.possible_agents[:]
         self.rewards = dict(
@@ -55,8 +55,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.env.reset()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def close(self):
         if not self.closed:
@@ -67,9 +65,9 @@ class raw_env(AECEnv, EzPickle):
         if not self.closed:
             return self.env.render(mode)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
@@ -82,8 +80,6 @@ class raw_env(AECEnv, EzPickle):
         self.steps += 1
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def observe(self, agent):
         o = self.env.safely_observe(self.agent_name_mapping[agent])

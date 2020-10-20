@@ -46,30 +46,26 @@ class BaseWrapper(AECEnv):
     def render(self, mode='human'):
         return self.env.render(mode)
 
-    def reset(self, observe=True):
-        observation = self.env.reset(observe)
+    def reset(self):
+        self.env.reset()
 
         self.agent_selection = self.env.agent_selection
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
-
-        return observation
 
     def observe(self, agent):
         return self.env.observe(agent)
 
-    def step(self, action, observe=True):
-        next_obs = self.env.step(action, observe=observe)
+    def step(self, action):
+        self.env.step(action)
 
         self.agent_selection = self.env.agent_selection
         self.rewards = self.env.rewards
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
-
-        return next_obs
 
 
 class TerminateIllegalWrapper(BaseWrapper):
@@ -84,7 +80,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         super().__init__(env)
         self._illegal_value = illegal_reward
 
-    def step(self, action, observe=True):
+    def step(self, action):
         current_agent = self.agent_selection
         assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
         if not self.dones[current_agent] and action not in self.infos[current_agent]['legal_moves']:
@@ -95,7 +91,7 @@ class TerminateIllegalWrapper(BaseWrapper):
             self.rewards = {d: 0 for d in self.dones}
             self.rewards[current_agent] = self._illegal_value
         else:
-            return super().step(action, observe)
+            super().step(action)
 
 
 class NanNoOpWrapper(BaseWrapper):
@@ -108,11 +104,11 @@ class NanNoOpWrapper(BaseWrapper):
         self._no_op_action = no_op_action
         self._no_op_policy = no_op_policy
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
             EnvLogger.warn_action_is_NaN(self._no_op_policy)
             action = self._no_op_action
-        return super().step(action, observe)
+        super().step(action)
 
 
 class NanZerosWrapper(BaseWrapper):
@@ -124,11 +120,11 @@ class NanZerosWrapper(BaseWrapper):
         super().__init__(env)
         assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use NanZerosWrapper for Box spaces. Use NanNoOpWrapper for discrete spaces"
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if not (action is None and self.dones[self.agent_selection]) and  np.isnan(action).any():
             EnvLogger.warn_action_is_NaN("taking the all zeros action")
             action = np.zeros_like(action)
-        return super().step(action, observe)
+        super().step(action)
 
 
 class NaNRandomWrapper(BaseWrapper):
@@ -141,7 +137,7 @@ class NaNRandomWrapper(BaseWrapper):
         SEED = 0x33bb9cc9
         self.np_random = np.random.RandomState(SEED)
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
             cur_info = self.infos[self.agent_selection]
             if 'legal_moves' in cur_info:
@@ -154,7 +150,7 @@ class NaNRandomWrapper(BaseWrapper):
                 act_space = self.action_spaces[self.agent_selection]
                 action = self.np_random.choice(act_space.n)
 
-        return super().step(action, observe)
+        super().step(action)
 
 
 class CaptureStdoutWrapper(BaseWrapper):
@@ -183,9 +179,9 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
         super().__init__(env)
         assert all(isinstance(space, Discrete) for space in self.action_spaces.values()), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
-    def step(self, action, observe=True):
+    def step(self, action):
         assert (action is None and self.dones[self.agent_selection]) or self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
-        return super().step(action, observe)
+        super().step(action)
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):
@@ -196,7 +192,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
         super().__init__(env)
         assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use ClipOutOfBoundsWrapper for Box spaces"
 
-    def step(self, action, observe=True):
+    def step(self, action):
         space = self.action_spaces[self.agent_selection]
         if not (action is None and self.dones[self.agent_selection]) and not space.contains(action):
             assert space.shape == action.shape, "action should have shape {}, has shape {}".format(space.shape, action.shape)
@@ -204,7 +200,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
             action = np.clip(action, space.low, space.high)
 
-        return super().step(action, observe)
+        super().step(action)
 
 
 class OrderEnforcingWrapper(BaseWrapper):
@@ -257,20 +253,20 @@ class OrderEnforcingWrapper(BaseWrapper):
         self._has_rendered = False
         self._has_reset = False
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
-        elif self.agent_selection is None:
+        elif not self.agents:
             EnvLogger.warn_step_after_done()
             return None
         else:
-            return super().step(action, observe)
+            super().step(action)
 
     def observe(self, agent):
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(agent)
 
-    def reset(self, observe=True):
+    def reset(self):
         self._has_reset = True
-        return super().reset(observe)
+        super().reset()

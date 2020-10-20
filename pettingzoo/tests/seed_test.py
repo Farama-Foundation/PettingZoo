@@ -19,17 +19,16 @@ def check_environment_deterministic(env1, env2):
         new_env = envs[x]
         cur_hashes = []
         for i in range(3):
-            obs = new_env.reset()
+            new_env.reset()
             for i in range(x + 1):
                 random.randint(0, 1000)
                 np.random.normal(size=100)
-            cur_hashes.append(hash_obsevation(obs))
             for _ in range(50):
-                rew, done, info = new_env.last()
+                obs, rew, done, info = new_env.last()
                 if done:
                     break
-                next_obs = new_env.step(actions[new_env.agent_selection])
-                cur_hashes.append(hash_obsevation(next_obs))
+                new_env.step(actions[new_env.agent_selection])
+                cur_hashes.append(hash_obsevation(obs))
                 cur_hashes.append(float(rew))
 
         hashes.append(hash(tuple(cur_hashes)))

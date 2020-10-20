@@ -43,7 +43,7 @@ class raw_env(AECEnv):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         self.steps = 0
         self.env.reset()
@@ -54,8 +54,6 @@ class raw_env(AECEnv):
             zip(self.agents, [np.float64(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        if observe:
-            return self.observe(self.agent_selection)
 
     def close(self):
         if self.has_reset:
@@ -72,9 +70,9 @@ class raw_env(AECEnv):
         # arr = arr[::-1, :, 0:3]
         # return arr
 
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         agent = self.agent_selection
 
         self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
@@ -91,9 +89,6 @@ class raw_env(AECEnv):
         # AGENT SELECT
 
         self.steps += 1
-
-        if observe:
-            return self.observe(self.agent_selection)
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

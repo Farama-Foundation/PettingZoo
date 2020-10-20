@@ -62,9 +62,9 @@ class raw_env(AECEnv):
         pass
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
-    def step(self, action, observe=True):
+    def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action, observe)
+            return self._was_done_step(action)
         # check if input action is a valid move (0 == empty spot)
         assert (self.board.squares[action] == 0), "played illegal move"
         # play turn
@@ -99,12 +99,8 @@ class raw_env(AECEnv):
         self.agent_selection = next_agent
 
         self._dones_step_first()
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
-    def reset(self, observe=True):
+    def reset(self):
         # reset environment
         self.board = Board()
 
@@ -117,10 +113,6 @@ class raw_env(AECEnv):
         self._agent_selector.reinit(self.agents)
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def render(self, mode='human'):
         def getSymbol(input):
