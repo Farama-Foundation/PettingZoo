@@ -44,7 +44,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
         EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
@@ -265,10 +265,13 @@ class raw_env(AECEnv, EzPickle):
         return local_reward * self.local_reward_weight
 
     def render(self, mode="human"):
-        if not self.renderOn:
+        if not self.renderOn and mode == "human":
             # sets self.renderOn to true and initializes display
             self.enable_render()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
         pygame.display.flip()
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def step(self, action, observe=True):
         if self.dones[self.agent_selection]:
