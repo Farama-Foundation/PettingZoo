@@ -197,10 +197,6 @@ class raw_env(AECEnv, EzPickle):
         return self.hanabi_env.vectorized_observation_shape()
 
     @property
-    def num_agents(self):
-        return len(self.agents)
-
-    @property
     def legal_moves(self) -> List[int]:
         return self.infos[self.agent_selection]['legal_moves']
 

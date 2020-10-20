@@ -37,13 +37,13 @@ class RLCardBase(AECEnv):
         return reward
 
     def _int_to_name(self, ind):
-        return self.agents[ind]
+        return self.possible_agents[ind]
 
     def _name_to_int(self, name):
-        return self.agents.index(name)
+        return self.possible_agents.index(name)
 
     def _convert_to_dict(self, list_of_list):
-        return dict(zip(self.agents, list_of_list))
+        return dict(zip(self.possible_agents, list_of_list))
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))

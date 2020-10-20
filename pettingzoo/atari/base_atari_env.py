@@ -142,7 +142,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         actions = np.zeros(self.max_num_agents, dtype=np.int32)
         self.agents = [agent for agent in self.agents if not self.dones[agent]]
         for i, agent in enumerate(self.possible_agents):
-            actions[i] = action_dict[agent]
+            if agent in action_dict:
+                actions[i] = action_dict[agent]
 
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
