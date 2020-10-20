@@ -21,23 +21,21 @@ right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=Fa
 Environments can be interacted with using a similar interface to Gym:
 
 ```python
-observation = env.reset()
 for agent in env.agent_iter():
-    reward, done, info = env.last()
+    observation, reward, done, info = env.last()
     action = policy(observation)
-    observation = env.step(action)
+    env.step(action)
 ```
 
 The commonly used methods are:
 
 `agent_iter(max_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_iter` (steps have been executed).
 
-`last()` returns reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
+`last()` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
 
-`reset(observe=True)` resets the environment (and sets it up for use when called the first time) and returns the observation of the first agent in `agent order`. Setting `observe=False` disables computing and returning the observation.
+`reset()` resets the environment and sets it up for use when called the first time.
 
-`step(action, observe=True)` takes the action of the agent in the environment, automatically switches control to the next agent, and *returns the observation for the next agent* (as that observation is what the policy will need next). Setting `observe=False` disables computing and returning the observation.
-
+`step(action)` takes the action of the agent in the environment, and automatically switches control to the next agent.
 
 ## Additional Environment API
 
@@ -47,23 +45,23 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know which agent is acting.
 
-`num_agents`: The number of agents currently in the environment.
+`num_agents`: The number of agents currently in the environment. This is exactly the length of the `agents` list.
 
 `observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name.
 
-`dones`: A dict of the done state of every agent at the time called, keyed by name. `last()` accesses this attribute. The returned dict looks like:
+`dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. The returned dict looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each agent, keyed by name. Each agent's info is also a dict. `last()` accesses this attribute. The returned dict looks like:
+`infos`: A dict of info for each current agent, keyed by name. Each agent's info is also a dict. `last()` accesses this attribute. The returned dict looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
-`observe(agent)`: Returns the observation an agent currently can make. `step()` calls this function.
+`observe(agent)`: Returns the observation an agent currently can make.
 
-`rewards`: A dict of the rewards of every agent at the time called, keyed by name. Rewards are summed from the last time an agent took it's turn and zeroed before it takes another turn.  `last()` accesses this attribute. This looks like:
+`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards are summed from the last time an agent took it's turn and zeroed before it takes another turn.  `last()` accesses this attribute. This looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
