@@ -32,7 +32,7 @@ def max_frames_test(mod, name):
             agent1_count += 1
         if a == env.agents[-1]:
             agentn_count += 1
-        action = env.action_spaces[a].sample()
+        action = env.action_spaces[a].sample() if not env.dones[a] else None
         env.step(action)
 
     assert max_frames == pstep
