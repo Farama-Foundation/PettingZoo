@@ -226,7 +226,6 @@ class Pursuit():
         else:
             self.clock.tick(2000)
 
-
     def draw_model_state(self):
         # -1 is building pixel flag
         x_len, y_len = self.model_state[0].shape

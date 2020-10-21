@@ -45,6 +45,7 @@ class HanabiTest(TestCase):
         test_env = env(**self.full_config)
 
         test_env.reset()
+        obs, _, _, _ = test_env.last()
         self.assertIsInstance(obs, np.ndarray)
         self.assertEqual(obs.size, test_env.hanabi_env.vectorized_observation_shape()[0])
 
