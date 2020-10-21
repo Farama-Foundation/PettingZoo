@@ -76,7 +76,6 @@ class _parallel_env(magent_parallel_env, EzPickle):
         handles = env.get_handles()
         reward_vals = np.array([1, -1, -1, -1, -1] + list(reward_args.values()))
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
-        print(reward_range)
         names = ["predator", "prey"]
         super().__init__(env, handles, names, map_size, max_frames, reward_range, minimap_mode)
 

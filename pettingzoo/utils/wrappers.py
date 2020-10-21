@@ -121,7 +121,7 @@ class NanZerosWrapper(BaseWrapper):
         assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use NanZerosWrapper for Box spaces. Use NanNoOpWrapper for discrete spaces"
 
     def step(self, action):
-        if not (action is None and self.dones[self.agent_selection]) and  np.isnan(action).any():
+        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
             EnvLogger.warn_action_is_NaN("taking the all zeros action")
             action = np.zeros_like(action)
         super().step(action)
@@ -232,9 +232,6 @@ class OrderEnforcingWrapper(BaseWrapper):
     def seed(self, seed=None):
         self._has_reset = False
         super().seed(seed)
-
-    def observe(self, agent):
-        return super().observe(agent)
 
     def render(self, mode='human'):
         if not self._has_reset:
