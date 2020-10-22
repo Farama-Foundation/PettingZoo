@@ -27,7 +27,7 @@ extras = {
     "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
     "magent": ["magent==0.1.12"],
     "mpe": [],
-    "sisl": ["pygame==2.0.0.dev10", "gym[box2d]>=0.17.2", "opencv-python>=4.4.0.42"],
+    "sisl": ["pygame==2.0.0.dev10", "box2d-py==2.3.5", "opencv-python>=4.4.0.42"],
     "tests": ["pynput"]
 }
 
