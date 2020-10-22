@@ -1,4 +1,4 @@
-from skimage.io import imsave
+from cv2 import imwrite
 import numpy as np
 import gym
 import os
@@ -27,4 +27,4 @@ def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
 
         observation = env.observe(a)
         fname = os.path.join(save_folder, str(a) + ".png")
-        imsave(fname, observation)
+        imwrite(fname, observation)
