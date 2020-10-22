@@ -84,24 +84,27 @@ class raw_env(AECEnv, EzPickle):
                 "players": 2,
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
+                "hand_size": (4 if players == 5 else 5)
                 "observation_type": 1,
                 "hand_size": 2
                 }
 
             Hanabi-Small : {
-                "colors": 5,
-                "ranks": 5,
-                "players": 2,
-                "max_information_tokens":
-                "max_life_tokens":
-                "observation_type": 1}
-
-            Hanabi-Very-Small : {
                 "colors": 2,
                 "ranks": 5,
                 "players": 2,
-                "max_information_tokens":
-                "max_life_tokens":
+                "max_information_tokens": 3
+                "hand_size": 2,
+                "max_life_tokens": 1
+                "observation_type": 1}
+
+            Hanabi-Very-Small : {
+                "colors": 1,
+                "ranks": 5,
+                "players": 2,
+                "max_information_tokens": 3
+                "hand_size": 2,
+                "max_life_tokens": 1
                 "observation_type": 1}
 
         """
