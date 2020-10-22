@@ -23,11 +23,11 @@ def get_version():
 
 extras = {
     "atari": ["multi_agent_ale_py==0.1.8", "pygame==2.0.0.dev10"],
-    "classic": ["python-chess", "rlcard >= 0.2.5", "python-shogi", "hanabi_learning_environment==0.0.1"],
+    "classic": ["python-chess==1.2.0", "rlcard==0.2.5", "hanabi_learning_environment==0.0.1"],
     "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
     "magent": ["magent==0.1.12"],
     "mpe": [],
-    "sisl": ["pygame==2.0.0.dev10", "opencv-python", "scikit-image>=0.16.2", "gym[box2d]>=0.17.2", "box2d-py"],
+    "sisl": ["pygame==2.0.0.dev10", "gym[box2d]>=0.17.2"],
     "tests": ["pynput"]
 }
 
