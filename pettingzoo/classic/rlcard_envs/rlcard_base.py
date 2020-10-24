@@ -53,7 +53,7 @@ class RLCardBase(AECEnv):
             return self._was_done_step(action)
         obs, next_player_id = self.env.step(action)
         next_player = self._int_to_name(next_player_id)
-        self._last_obs = obs['obs']
+        self._last_obs = self.observe(self.agent_selection)
         if self.env.is_over():
             self.rewards = self._convert_to_dict(self._scale_rewards(self.env.get_payoffs()))
             self.infos[next_player]['legal_moves'] = []
