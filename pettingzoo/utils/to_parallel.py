@@ -10,6 +10,7 @@ class to_parallel(ParallelEnv):
         self.observation_spaces = aec_env.observation_spaces
         self.action_spaces = aec_env.action_spaces
         self.possible_agents = aec_env.possible_agents
+        self.metadata = aec_env.metadata
 
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
