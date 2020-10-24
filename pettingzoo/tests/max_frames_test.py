@@ -28,9 +28,9 @@ def max_frames_test(mod, name):
     agent1_count = 0
     agentn_count = 0
     for a in env.agent_iter():
-        if a == env.agents[0]:
+        if a == env.possible_agents[0]:
             agent1_count += 1
-        if a == env.agents[-1]:
+        if a == env.possible_agents[-1]:
             agentn_count += 1
         action = env.action_spaces[a].sample() if not env.dones[a] else None
         env.step(action)
