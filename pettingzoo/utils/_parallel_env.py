@@ -8,7 +8,6 @@ class _parallel_env_wrapper(AECEnv):
     def __init__(self, parallel_env):
         self.metadata = parallel_env.metadata
         self.env = parallel_env
-        self.agents = self.env.agents[:]
         self.possible_agents = self.env.possible_agents
 
         self.action_spaces = self.env.action_spaces
