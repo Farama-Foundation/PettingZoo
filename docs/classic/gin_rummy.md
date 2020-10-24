@@ -26,13 +26,14 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and yo
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 
 ```
-gin_rummy.env(knock_reward = 0.5, gin_reward = 1.0)
+gin_rummy.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
 ```
 
 `knock_reward`:  reward received by a player who knocks
 
 `gin_reward`:  reward received by a player who goes gin
 
+`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the unknown cards and the observation space will only include planes 0 to 3. 
 
 #### Observation Space
 
