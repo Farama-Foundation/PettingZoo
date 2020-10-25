@@ -4,7 +4,7 @@ import warnings
 def max_frames_test(mod, name):
     if "classic/" in name:
         return
-    max_frames = 10
+    max_frames = 5
     parallel_env = mod.parallel_env(max_frames=max_frames)
 
     def make_policy(space):
