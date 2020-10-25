@@ -491,12 +491,7 @@ class raw_env(AECEnv, EzPickle):
         if self._agent_selector.is_last() and not self.black_death:
             # self.agents must be recreated
             for k in self.kill_list:
-                self.agents.remove(k)
-                # self.dones.pop(k, None)
-                # self.rewards.pop(k, None)
-                # self.infos.pop(k, None)
-
-            self._agent_selector.reinit(self.agents)
+                self.dones[k] = True
 
             # reset the kill list
             self.kill_list = []
