@@ -77,7 +77,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env = magent.GridWorld(get_config(map_size), map_size=map_size)
 
         handles = env.get_handles()
-        reward_range = [-1, 1]
+        reward_range = [-1, 2]
 
         names = ["deer", "tiger"]
         super().__init__(env, handles, names, map_size, max_frames, reward_range, minimap_mode)
