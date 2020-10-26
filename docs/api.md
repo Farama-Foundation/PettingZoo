@@ -31,7 +31,7 @@ The commonly used methods are:
 
 `agent_iter(max_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_iter` (steps have been executed).
 
-`last()` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. Note that a single agent being done does not imply the environment is done.
+`last(observe=True)` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done. 
 
 `reset()` resets the environment and sets it up for use when called the first time.
 
