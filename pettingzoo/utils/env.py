@@ -67,9 +67,10 @@ class AECEnv:
     def agent_iter(self, max_iter=2**63):
         return AECIterable(self, max_iter)
 
-    def last(self):
+    def last(self, observe=True):
         agent = self.agent_selection
-        return self.observe(agent), self.rewards[agent], self.dones[agent], self.infos[agent]
+        observation = self.observe(agent) if observe else None
+        return observation, self.rewards[agent], self.dones[agent], self.infos[agent]
 
 
 class AECIterable:
