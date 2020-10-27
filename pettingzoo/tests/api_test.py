@@ -219,8 +219,8 @@ def api_test(env, render=False, verbose_progress=False):
     observation_0, _, _, _ = env.last()
     test_observation(observation_0, observation_0)
 
-    observation_0, _, _, _ = env.last(observe=False)
-    assert observation_0 is None, "last must return a None when observe=False"
+    non_observe, _, _, _ = env.last(observe=False)
+    assert non_observe is None, "last must return a None when observe=False"
 
     progress_report("Finished test_observation")
 
