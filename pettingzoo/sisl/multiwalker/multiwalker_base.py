@@ -442,9 +442,9 @@ class MultiWalkerEnv():
         # action is array of size 4
         action = action.reshape(4)
         self.walkers[agent_id].apply_action(action)
-        self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
-        self.frames = self.frames + 1
         if is_last:
+            self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
+            self.frames = self.frames + 1
             rewards, done, mod_obs = self.scroll_subroutine()
             self.last_obs = mod_obs
             global_reward = rewards.mean()
