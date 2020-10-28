@@ -153,10 +153,6 @@ class MAWaterWorld():
             cv2.waitKey(1)
 
     @property
-    def timestep_limit(self):
-        return 1000
-
-    @property
     def agents(self):
         return self._pursuers
 
@@ -173,7 +169,6 @@ class MAWaterWorld():
         return objx_2
 
     def reset(self):
-        self._timesteps = 0
         self.frames = 0
         # Initialize obstacles
         if self.obstacle_loc is None:
@@ -214,12 +209,6 @@ class MAWaterWorld():
         self.last_obs = obs_list
 
         return obs_list[0]
-
-    @property
-    def is_terminal(self):
-        if self._timesteps >= self.timestep_limit:
-            return True
-        return False
 
     def _caught(self, is_colliding_N1_N2, n_coop):
         """ Checke whether collision results in catching the object
@@ -542,9 +531,6 @@ class MAWaterWorld():
             self.control_rewards = [0 for _ in range(self.n_pursuers)]
             self.frames += 1
 
-        self.dones = [self.is_terminal for _ in range(self.n_pursuers)]
-
-        self._timesteps += 1
         return self.observe(agent_id)
 
     def observe(self, agent):
