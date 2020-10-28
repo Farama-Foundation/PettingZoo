@@ -33,7 +33,6 @@ class raw_env(AECEnv):
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(
             zip(self.agents, self.env.observation_space))
-        self.steps = 0
         self.display_wait = 0.03
         self.has_reset = False
 
@@ -45,7 +44,6 @@ class raw_env(AECEnv):
 
     def reset(self):
         self.has_reset = True
-        self.steps = 0
         self.env.reset()
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
@@ -62,14 +60,6 @@ class raw_env(AECEnv):
     def render(self, mode="human"):
         return self.env.render(mode)
 
-        # import pyglet
-        # buffer = pyglet.image.get_buffer_manager().get_color_buffer()
-        # image_data = buffer.get_image_data()
-        # arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
-        # arr = arr.reshape(buffer.height, buffer.width, 4)
-        # arr = arr[::-1, :, 0:3]
-        # return arr
-
     def step(self, action):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
@@ -85,10 +75,6 @@ class raw_env(AECEnv):
             self.dones = dict(zip(self.agents, self.env.last_dones))
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
-
-        # AGENT SELECT
-
-        self.steps += 1
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

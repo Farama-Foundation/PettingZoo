@@ -65,7 +65,6 @@ class raw_env(AECEnv, EzPickle):
         self.sword_dict = {}
 
         # Game Variables
-        self.frame_count = 0
         self.score = 0
         self.run = True
         self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0
@@ -535,11 +534,6 @@ class raw_env(AECEnv, EzPickle):
         # Zombie Kills all Players
         self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
 
-        # Condition to Check 900 Frames
-        self.frame_count += 1
-        if self.frame_count > 900:
-            self.run = False
-
     def reinit(self):
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -548,7 +542,6 @@ class raw_env(AECEnv, EzPickle):
         self.sword_dict = {}
 
         # Game Variables
-        self.frame_count = 0
         self.score = 0
         self.run = True
         self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0

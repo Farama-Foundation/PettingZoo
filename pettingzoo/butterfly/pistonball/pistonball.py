@@ -307,8 +307,8 @@ class raw_env(AECEnv, EzPickle):
         # Clear the list of recent pistons for the next reward cycle
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
-
-        self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
+        if self._agent_selector.is_last():
+            self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
         self.agent_selection = self._agent_selector.next()
         self._dones_step_first()
 
