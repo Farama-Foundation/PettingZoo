@@ -35,6 +35,10 @@ class AECEnv:
     def max_num_agents(self):
         return len(self.possible_agents)
 
+    @property
+    def env_done(self):
+        return not self.agents
+
     def _dones_step_first(self):
         dones = self.dones
         _dones_order = [agent for agent in self.agents if dones[agent]]

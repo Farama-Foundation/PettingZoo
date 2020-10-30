@@ -2,6 +2,25 @@ import warnings
 import random
 import numpy as np
 
+MAX_ENV_ITERS = 50
+
+def calc_hash(new_env, actions, rand_issue=1):
+    cur_hashes = []
+    for i in range(3):
+        new_env.reset()
+        for j in range(rand_issue + 1):
+            random.randint(0, 1000)
+            np.random.normal(size=100)
+        for j in range(MAX_ENV_ITERS):
+            obs, rew, done, info = new_env.last()
+            new_env.step(actions[new_env.agent_selection][j] if not done else None)
+            cur_hashes.append(hash_obsevation(obs))
+            cur_hashes.append(float(rew))
+            if new_env.env_done:
+                break
+
+    return hash(tuple(cur_hashes))
+
 
 def check_environment_deterministic(env1, env2):
     '''
@@ -11,27 +30,12 @@ def check_environment_deterministic(env1, env2):
     '''
 
     # checks deterministic behavior if seed is set
-    actions = {agent: space.sample() for agent, space in env1.action_spaces.items()}
+    actions = {agent: [space.sample() for i in range(MAX_ENV_ITERS)] for agent, space in env1.action_spaces.items()}
     hashes = []
     num_seeds = 2
     envs = [env1, env2]
     for x in range(num_seeds):
-        new_env = envs[x]
-        cur_hashes = []
-        for i in range(3):
-            new_env.reset()
-            for i in range(x + 1):
-                random.randint(0, 1000)
-                np.random.normal(size=100)
-            for _ in range(50):
-                obs, rew, done, info = new_env.last()
-                if done:
-                    break
-                new_env.step(actions[new_env.agent_selection])
-                cur_hashes.append(hash_obsevation(obs))
-                cur_hashes.append(float(rew))
-
-        hashes.append(hash(tuple(cur_hashes)))
+        hashes.append(calc_hash(envs[x], actions, x))
 
     return all(hashes[0] == h for h in hashes)
 

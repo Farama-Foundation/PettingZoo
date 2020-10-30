@@ -31,7 +31,7 @@ The commonly used methods are:
 
 `agent_iter(max_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_iter` (steps have been executed).
 
-`last(observe=True)` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done. 
+`last(observe=True)` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done.
 
 `reset()` resets the environment and sets it up for use when called the first time.
 
@@ -46,6 +46,8 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know which agent is acting.
 
 `num_agents`: The number of agents currently in the environment. This is exactly the length of the `agents` list.
+
+`env_done`: Whether the environment has terminated and should be reset before taking any more steps.
 
 `observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
 
