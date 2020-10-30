@@ -1,8 +1,19 @@
 import warnings
 import random
 import numpy as np
+import hashlib
+import pickle
+
 
 MAX_ENV_ITERS = 50
+
+
+def hash(val):
+    val = pickle.dumps(val)
+    hasher = hashlib.md5()
+    hasher.update(val)
+    return hasher.hexdigest()
+
 
 def calc_hash(new_env, actions, rand_issue=1):
     cur_hashes = []
@@ -13,7 +24,15 @@ def calc_hash(new_env, actions, rand_issue=1):
             np.random.normal(size=100)
         for j in range(MAX_ENV_ITERS):
             obs, rew, done, info = new_env.last()
-            new_env.step(actions[new_env.agent_selection][j] if not done else None)
+            if done:
+                action = None
+            elif 'legal_moves' in info:
+                basic_action = actions[new_env.agent_selection][j]
+                moves = info['legal_moves']
+                action = moves[basic_action % len(moves)]
+            else:
+                action = actions[new_env.agent_selection][j]
+            new_env.step(action)
             cur_hashes.append(hash_obsevation(obs))
             cur_hashes.append(float(rew))
             if new_env.env_done:
