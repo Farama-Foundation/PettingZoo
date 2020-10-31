@@ -48,6 +48,14 @@ class AECEnv:
             self.agent_selection = next(self._dones_iter)
         return self.agent_selection
 
+    def _clear_rewards(self):
+        for agent in self.rewards:
+            self.rewards[agent] = 0
+
+    def _accumulate_rewards(self):
+        for agent, reward in self.rewards.items():
+            self._cumulative_rewards[agent] += reward
+
     def _find_next_agent(self):
         try:
             self.agent_selection = next(self._dones_iter)
@@ -59,6 +67,7 @@ class AECEnv:
         assert self.dones[agent], "an agent that was not done as attemted to be removed"
         del self.dones[agent]
         del self.rewards[agent]
+        del self._cumulative_rewards[agent]
         del self.infos[agent]
         self.agents.remove(agent)
 
@@ -67,6 +76,7 @@ class AECEnv:
             raise ValueError("when an agent is done, the only valid action is None")
         self._remove_done_agent(self.agent_selection)
         self._find_next_agent()
+        self._clear_rewards()
 
     def agent_iter(self, max_iter=2**63):
         return AECIterable(self, max_iter)
@@ -74,7 +84,7 @@ class AECEnv:
     def last(self, observe=True):
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
-        return observation, self.rewards[agent], self.dones[agent], self.infos[agent]
+        return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
 
 
 class AECIterable:

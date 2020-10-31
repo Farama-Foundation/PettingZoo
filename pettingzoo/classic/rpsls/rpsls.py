@@ -48,6 +48,7 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: none for agent in self.agents}
@@ -118,6 +119,9 @@ class raw_env(AECEnv):
                 self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
+            self._clear_rewards()
 
+        self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
+        self._accumulate_rewards()
         self._dones_step_first()

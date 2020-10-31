@@ -225,6 +225,7 @@ class raw_env(AECEnv, EzPickle):
         self._reset_agents(player_number=obs['current_player'])
 
         self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         # Reset internal state
         self._process_latest_observations(obs=obs)
 
@@ -269,16 +270,13 @@ class raw_env(AECEnv, EzPickle):
             # Apply action
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
-            # sets current reward for 0 to intialize reward accumulation
-            self.rewards[agent_on_turn] = 0
-
             # Update internal state
             self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
-            # Return latest observations if specified
+            # sets current reward for 0 to intialize reward accumulation
+            self._cumulative_rewards[agent_on_turn] = 0
+            self._accumulate_rewards()
             self._dones_step_first()
-            if observe:
-                return self.observe(agent_name=agent_on_turn)
 
     def observe(self, agent_name: str):
         return np.array(self.infos[agent_name]['observations_vectorized'], np.float32) if agent_name in self.infos else np.zeros_like(self.observation_spaces[agent_name].low)
@@ -287,8 +285,7 @@ class raw_env(AECEnv, EzPickle):
         """Updates internal state"""
 
         self.latest_observations = obs
-        for agent, agent_rew in self.rewards.items():
-            self.rewards[agent] = reward + agent_rew
+        self.rewards = {a: reward for a in self.agents}
         self.dones = {player_name: done for player_name in self.agents}
 
         # Here we have to deal with the player index with offset = 1

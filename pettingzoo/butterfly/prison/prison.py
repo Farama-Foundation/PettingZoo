@@ -300,6 +300,7 @@ class raw_env(AECEnv, EzPickle):
         self.has_reset = True
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self._agent_selector.reinit(self.agents)
@@ -328,6 +329,7 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.prisoners[agent].set_state(0)
 
+        self._clear_rewards()
         self.rewards[agent] = reward
         if self.rendering:
             self.clock.tick(30)
@@ -347,6 +349,8 @@ class raw_env(AECEnv, EzPickle):
             pygame.event.pump()
 
         self.agent_selection = self._agent_selector.next()
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def render(self, mode='human'):

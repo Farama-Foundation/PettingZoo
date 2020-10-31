@@ -50,8 +50,8 @@ class raw_env(AECEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = dict(
-            zip(self.agents, [np.float64(0) for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
+        self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
@@ -77,15 +77,22 @@ class raw_env(AECEnv, EzPickle):
             return self._was_done_step(action)
         agent = self.agent_selection
         action = np.array(action, dtype=np.float32)
-        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
-        for r in self.rewards:
-            self.rewards[r] = self.env.get_last_rewards()[self.agent_name_mapping[r]]
-        for d in self.dones:
-            self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+        is_last = self._agent_selector.is_last()
+        self.env.step(action, self.agent_name_mapping[agent], is_last)
+        if is_last:
+            last_rewards = self.env.get_last_rewards()
+            for r in self.rewards:
+                self.rewards[r] = last_rewards[self.agent_name_mapping[r]]
+            for d in self.dones:
+                self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+        else:
+            self._clear_rewards()
         self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_frames:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
         self.steps += 1

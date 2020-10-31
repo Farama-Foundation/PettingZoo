@@ -118,6 +118,7 @@ def play_test(env, observation_0):
     done = {agent:False for agent in env.agents}
     live_agents = env.agents[:]
     has_finished = set()
+    accumulated_rewards = {a: 0 for a in env.agents}
     for agent in env.agent_iter(env.num_agents*1000):  # step through every agent once with observe=True
         assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
         prev_observe, reward, done, info = env.last()
@@ -127,7 +128,13 @@ def play_test(env, observation_0):
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        next_observe = env.step(action)
+
+        env.step(action)
+
+        assert accumulated_rewards[agent] == reward, "reward returned by last is not the accumulated rewards in its rewards dict"
+        accumulated_rewards[agent] = 0
+        for a, rew in env.rewards:
+            accumulated_rewards[a] += rew
 
         # check dict element removal
         assert not done or agent not in has_finished, "agent cannot  be done twice in an environment"

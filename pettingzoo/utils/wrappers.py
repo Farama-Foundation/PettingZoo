@@ -54,6 +54,7 @@ class BaseWrapper(AECEnv):
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
+        self._cumulative_rewards = self.env._cumulative_rewards
 
     def observe(self, agent):
         return self.env.observe(agent)
@@ -66,7 +67,28 @@ class BaseWrapper(AECEnv):
         self.dones = self.env.dones
         self.infos = self.env.infos
         self.agents = self.env.agents
+        self._cumulative_rewards = self.env._cumulative_rewards
 
+    def last(self):
+        return self.env.last()
+
+# class LastWrapper(BaseWrapper):
+#     def reset(self):
+#         super().reset()
+#         self._cumulative_rewards = dict(**self.rewards)
+#
+#     def step(self, action):
+#         agent = self.agent_selection
+#         super().step(action)
+#
+#         self._cumulative_rewards[agent] = 0
+#         for a, reward in self.rewards.items():
+#             self._cumulative_rewards[agent] += reward
+#
+#     def last(self, observe=True):
+#         agent = self.agent_selection
+#         observation = self.observe(agent) if observe else None
+#         return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
 
 class TerminateIllegalWrapper(BaseWrapper):
     '''

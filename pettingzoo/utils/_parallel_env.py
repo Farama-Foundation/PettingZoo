@@ -26,6 +26,7 @@ class _parallel_env_wrapper(AECEnv):
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {agent: 0 for agent in self.agents}
 
     def observe(self, agent):
         return self._observations[agent]
@@ -49,9 +50,18 @@ class _parallel_env_wrapper(AECEnv):
                 self._agent_selector = agent_selector(self._live_agents)
                 self.agent_selection = self._agent_selector.reset()
 
+            self._cumulative_rewards = copy.copy(rews)
             self._dones_step_first()
         else:
+            if self._agent_selector.is_first():
+                self._clear_rewards()
+
             self.agent_selection = self._agent_selector.next()
+
+    def last(self, observe=True):
+        agent = self.agent_selection
+        observation = self.observe(agent) if observe else None
+        return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
 
     def render(self, mode="human"):
         return self.env.render(mode)

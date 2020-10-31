@@ -109,6 +109,7 @@ class raw_env(AECEnv):
         self.observation = self.observe(self.agent_selection)
         self.last_turn = "black"
         self.rewards = {name: 0 for name in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {"legal_moves": []} for name in self.agents}
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
@@ -232,6 +233,7 @@ class raw_env(AECEnv):
         self.dones[self.agent_order[0]] = winner is not None
         self.dones[self.agent_order[1]] = winner is not None
 
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def render(self, mode="human"):

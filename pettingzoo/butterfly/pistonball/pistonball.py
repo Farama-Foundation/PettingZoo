@@ -215,6 +215,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
@@ -299,6 +300,8 @@ class raw_env(AECEnv, EzPickle):
                 total_reward[index] += local_reward
             self.rewards = dict(zip(self.agents, total_reward))
             self.frames += 1
+        else:
+            self._clear_rewards()
 
         if self.frames >= self.max_frames:
             self.done = True
@@ -309,7 +312,10 @@ class raw_env(AECEnv, EzPickle):
             self.recentPistons = set()
         if self._agent_selector.is_last():
             self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
+
         self.agent_selection = self._agent_selector.next()
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
 
 # Game art created by Justin Terry

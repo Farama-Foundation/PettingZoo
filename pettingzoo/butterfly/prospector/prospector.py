@@ -744,8 +744,7 @@ class raw_env(AECEnv, EzPickle):
             return self._was_done_step(action)
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
-        if all_agents_updated:
-            self.rewards = {agent: 0 for agent in self.agents}
+        self.rewards = {agent: 0 for agent in self.agents}
 
         if agent_id in self.prospectors:
             agent = self.prospectors[agent_id]
@@ -799,11 +798,9 @@ class raw_env(AECEnv, EzPickle):
             pg.event.pump()
 
         self.agent_selection = self._agent_selector.next()
-
+        self._cumulative_rewards[agent_id] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
-
-    def reward(self):
-        return self.rewards
 
     def reset(self):
         self.screen = pg.Surface(const.SCREEN_SIZE)
@@ -826,6 +823,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.rendering = False
