@@ -133,7 +133,7 @@ def play_test(env, observation_0):
 
         assert accumulated_rewards[agent] == reward, "reward returned by last is not the accumulated rewards in its rewards dict"
         accumulated_rewards[agent] = 0
-        for a, rew in env.rewards:
+        for a, rew in env.rewards.items():
             accumulated_rewards[a] += rew
 
         # check dict element removal
@@ -158,7 +158,6 @@ def play_test(env, observation_0):
 
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
-        prev_observe = next_observe
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
 
