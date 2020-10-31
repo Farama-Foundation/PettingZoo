@@ -78,7 +78,7 @@ class raw_env(AECEnv, EzPickle):
         for k in self.agents:
             self.rewards[k] = self.env.latest_reward_state[self.agent_name_mapping[k]]
         self.steps += 1
-        
+
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
