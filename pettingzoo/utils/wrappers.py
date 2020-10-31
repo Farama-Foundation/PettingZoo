@@ -80,12 +80,16 @@ class TerminateIllegalWrapper(BaseWrapper):
         super().__init__(env)
         self._illegal_value = illegal_reward
 
+    def reset(self):
+        self._terminated = False
+        super().reset()
+
     def step(self, action):
         current_agent = self.agent_selection
         assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
-        if self.dones[self.agent_selection]:
+        if self._terminated and self.dones[self.agent_selection]:
             self._was_done_step(action)
-        elif action not in self.infos[current_agent]['legal_moves']:
+        elif not self.dones[self.agent_selection] and action not in self.infos[current_agent]['legal_moves']:
             EnvLogger.warn_on_illegal_move()
             self.dones = {d: True for d in self.dones}
             for info in self.infos.values():
@@ -93,9 +97,9 @@ class TerminateIllegalWrapper(BaseWrapper):
             self.rewards = {d: 0 for d in self.dones}
             self.rewards[current_agent] = self._illegal_value
             self._dones_step_first()
+            self._terminated = False
         else:
             super().step(action)
-            self._dones_step_first()
 
 
 class NanNoOpWrapper(BaseWrapper):
