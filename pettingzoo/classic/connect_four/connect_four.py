@@ -94,6 +94,7 @@ class raw_env(AECEnv):
             # no winner yet
             self.agent_selection = next_agent
 
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def reset(self):
@@ -102,6 +103,7 @@ class raw_env(AECEnv):
 
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': list(range(7))} for i in self.agents}
 

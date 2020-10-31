@@ -483,9 +483,10 @@ class raw_env(AECEnv, EzPickle):
             self.check_game_end()
             self.frames += 1
 
+        self._clear_rewards()
         self.rewards[agent] = agent_name.score
         done = not self.run or self.frames >= self.max_frames
-        self.dones = {agent: done for agent in self.agents}
+        self.dones = {a: done for a in self.agents}
 
         if self._agent_selector.is_last() and not self.black_death:
             _live_agents = self.agents[:]
@@ -500,6 +501,8 @@ class raw_env(AECEnv, EzPickle):
             self._agent_selector.reinit(_live_agents)
 
         self.agent_selection = self._agent_selector.next()
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def enable_render(self):
@@ -602,6 +605,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = {a: 0 for a in self.agents}
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()

@@ -58,6 +58,7 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.reset()
 
         self.rewards = {name: 0 for name in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {'legal_moves': []} for name in self.agents}
         self.infos[self.agent_selection]['legal_moves'] = chess_utils.legal_moves(self.board)
@@ -99,6 +100,7 @@ class raw_env(AECEnv):
             self.infos[next_agent] = {'legal_moves': next_legal_moves}
             assert len(self.infos[next_agent]['legal_moves'])
 
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def render(self, mode='human'):

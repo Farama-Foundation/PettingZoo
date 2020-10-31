@@ -48,8 +48,8 @@ class raw_env(AECEnv, EzPickle):
     def reset(self):
         self.steps = 0
         self.agents = self.possible_agents[:]
-        self.rewards = dict(
-            zip(self.agents, [np.float64(0) for _ in self.agents]))
+        self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self._agent_selector.reinit(self.agents)
@@ -78,7 +78,10 @@ class raw_env(AECEnv, EzPickle):
         for k in self.agents:
             self.rewards[k] = self.env.latest_reward_state[self.agent_name_mapping[k]]
         self.steps += 1
+        
+        self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def observe(self, agent):

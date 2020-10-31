@@ -66,6 +66,8 @@ class raw_env(AECEnv):
                 self.rewards[self.agent_selection] = -1
                 self.rewards[opp_agent] = 1
             self.dones = {i: True for i in self.agents}
+        else:
+            self._clear_rewards()
 
         if self.double_roll == 0:
             self.agent_selection = self._agent_selector.next()
@@ -91,6 +93,7 @@ class raw_env(AECEnv):
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
 
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def observe(self, agent):
@@ -104,6 +107,7 @@ class raw_env(AECEnv):
         self._agent_selector.reinit(self._agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {i: 0 for i in self.agents}
+        self._cumulative_rewards = {i: 0 for i in self.agents}
         self.colors = {}
         self.double_roll = 0
         self.game = Game()

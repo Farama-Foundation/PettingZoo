@@ -322,6 +322,7 @@ class CooperativePong(gym.Env):
         # action: 0: do nothing,
         # action: 1: p[i] move up, 2: p[i] move down
         if agent == self.agents[0]:
+            self.rewards = {a: 0 for a in self.agents}
             self.p0.update(self.area, action)
         elif agent == self.agents[1]:
             self.p1.update(self.area, action)
@@ -410,6 +411,7 @@ class raw_env(AECEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
+        self._cumulative_rewards = {a: 0 for a in self.agents}
         self.dones = self.env.dones
         self.infos = self.env.infos
 
@@ -442,6 +444,8 @@ class raw_env(AECEnv, EzPickle):
 
         self.score = self.env.score
 
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
         self._dones_step_first()
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was

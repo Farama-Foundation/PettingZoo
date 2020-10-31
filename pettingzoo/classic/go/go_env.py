@@ -103,6 +103,7 @@ class raw_env(AECEnv):
         else:
             self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
+        self._accumulate_rewards()
         self._dones_step_first()
 
     def reset(self):
@@ -112,6 +113,7 @@ class raw_env(AECEnv):
         self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.reset()
+        self._cumulative_rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])

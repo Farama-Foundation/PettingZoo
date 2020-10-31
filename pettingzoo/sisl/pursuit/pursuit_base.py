@@ -194,11 +194,10 @@ class Pursuit():
         opponent_layer = self.evader_layer
         opponent_controller = self.evader_controller
 
-        if is_last:
-            self.latest_reward_state = self.reward()
-
         # actual action application
         agent_layer.move_agent(agent_id, action)
+
+        self.latest_reward_state = self.reward() / self.num_agents
 
         if is_last:
             ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
