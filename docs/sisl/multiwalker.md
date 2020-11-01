@@ -8,7 +8,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-5.333,5.333]"
 average-total-reward: "-109.7"
-import: "from pettingzoo.sisl import multiwalker_v3"
+import: "from pettingzoo.sisl import multiwalker_v4"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -21,7 +21,7 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 ### Arguments
 
 ```
-multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, reward_mech='local',
+multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True,
 max_frames=500)
 ```
