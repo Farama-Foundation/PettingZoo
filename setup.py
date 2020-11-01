@@ -22,7 +22,7 @@ def get_version():
     raise RuntimeError("bad version data in __init__.py")
 
 extras = {
-    "atari": ["multi_agent_ale_py==0.1.8", "pygame==2.0.0.dev10"],
+    "atari": ["multi_agent_ale_py==0.1.9", "pygame==2.0.0.dev10"],
     "classic": ["python-chess==0.31.4", "rlcard==0.2.5", "hanabi_learning_environment==0.0.1"],
     "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
     "magent": ["magent==0.1.12"],
