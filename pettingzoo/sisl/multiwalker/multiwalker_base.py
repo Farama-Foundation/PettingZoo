@@ -256,7 +256,7 @@ class MultiWalkerEnv():
     hardcore = False
 
     def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_frames=500):
+                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_cycles=500):
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
@@ -266,7 +266,7 @@ class MultiWalkerEnv():
             fall_reward: reward applied when an agent falls down
             drop_reward: reward applied for each fallen walker in environment
             terminate_on_fall: toggles whether agent is done if it falls down
-            max_frames: after max_frames steps all agents will return done
+            max_cycles: after max_cycles steps all agents will return done
         """
 
         self.n_walkers = n_walkers
@@ -284,7 +284,7 @@ class MultiWalkerEnv():
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.frames = 0
 
     def get_param_values(self):

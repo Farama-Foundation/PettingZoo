@@ -35,9 +35,9 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 ### Arguments
 
 ```
-simple_crypto.env(max_frames=25)
+simple_crypto.env(max_cycles=25)
 ```
 
 
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

@@ -37,7 +37,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed=None,
             obs_type='rgb_image',
             full_action_space=True,
-            max_frames=100000):
+            max_cycles=100000):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
         EzPickle.__init__(
@@ -48,14 +48,14 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed,
             obs_type,
             full_action_space,
-            max_frames
+            max_cycles
         )
 
         assert obs_type in ('ram', 'rgb_image', "grayscale_image"), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
         self.obs_type = obs_type
         self.full_action_space = full_action_space
         self.num_players = num_players
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -146,7 +146,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
         self.frame += 1
-        if self.ale.game_over() or self.frame >= self.max_frames:
+        if self.ale.game_over() or self.frame >= self.max_cycles:
             dones = {agent: True for agent in self.agents}
         else:
             lives = self.ale.allLives()

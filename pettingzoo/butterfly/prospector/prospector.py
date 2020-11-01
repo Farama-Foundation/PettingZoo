@@ -451,7 +451,7 @@ class raw_env(AECEnv, EzPickle):
         prospec_handoff_gold_reward=1,
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
-        max_frames=900,
+        max_cycles=900,
     ):
         EzPickle.__init__(
             self,
@@ -462,7 +462,7 @@ class raw_env(AECEnv, EzPickle):
             prospec_handoff_gold_reward,
             banker_receive_gold_reward,
             banker_deposit_gold_reward,
-            max_frames,
+            max_cycles,
         )
 
         total_reward_factor = ind_reward + group_reward + other_group_reward
@@ -480,7 +480,7 @@ class raw_env(AECEnv, EzPickle):
             "bankers/2.png",
             "prospector.png",
         ]
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         pg.init()
         self.seed()
@@ -791,7 +791,7 @@ class raw_env(AECEnv, EzPickle):
 
             self.frame += 1
             # If we reached max frames, we're done
-            if self.frame == self.max_frames:
+            if self.frame == self.max_cycles:
                 self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
         if self.rendering:

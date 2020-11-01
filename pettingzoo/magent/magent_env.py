@@ -24,9 +24,9 @@ def make_env(raw_env):
 class magent_parallel_env(ParallelEnv):
     metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, env, active_handles, names, map_size, max_frames, reward_range, minimap_mode):
+    def __init__(self, env, active_handles, names, map_size, max_cycles, reward_range, minimap_mode):
         self.map_size = map_size
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.env = env
         self.handles = active_handles
         env.reset()
@@ -130,7 +130,7 @@ class magent_parallel_env(ParallelEnv):
             start_point += size
 
         self.frames += 1
-        done = self.env.step() or self.frames >= self.max_frames
+        done = self.env.step() or self.frames >= self.max_cycles
 
         all_infos = {agent: {} for agent in self.agents}
         all_dones = self._all_dones(done)

@@ -34,7 +34,7 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 ### Arguments
 
 ```
-simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=25)
+simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_cycles=25)
 ```
 
 
@@ -45,5 +45,5 @@ simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=25)
 
 `num_obstacles`:  number of obstacles
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

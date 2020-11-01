@@ -37,7 +37,7 @@ parameterized_envs = [
     (knights_archers_zombies_v2.env, dict(black_death=False)),
     (knights_archers_zombies_v2.env, dict(line_death=False)),
     (knights_archers_zombies_v2.env, dict(pad_observation=False)),
-    (knights_archers_zombies_v2.env, dict(max_frames=100)),
+    (knights_archers_zombies_v2.env, dict(max_cycles=100)),
 
     (pistonball_v0.env, dict(local_ratio=0.7)),
     (pistonball_v0.env, dict(continuous=True)),
@@ -60,7 +60,7 @@ parameterized_envs = [
 
     (prospector_v2.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
     prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
-    banker_deposit_gold_reward=1, max_frames=900)),
+    banker_deposit_gold_reward=1, max_cycles=900)),
 
     (go_v0.env, dict(board_size = 13, komi = 2.5)),
     (go_v0.env, dict(board_size = 9, komi = 0.)),

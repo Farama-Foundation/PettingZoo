@@ -13,7 +13,7 @@ Environments are generally highly configurable via arguments at creation, i.e.:
 
 ```python
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
-right_paddle_speed=25, is_cake_paddle=True, max_frames=900, bounce_randomness=False)
+right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
 ## Interacting with Environments
@@ -100,8 +100,8 @@ Environments can be interacted with as follows:
 ```python
 parallel_env = pistonball_v0.parallel_env()
 observations = parallel_env.reset()
-max_frames = 500
-for step in range(max_frames):
+max_cycles = 500
+for step in range(max_cycles):
     actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
     observations, rewards, dones, infos = parallel_env.step(actions)
 ```

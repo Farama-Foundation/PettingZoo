@@ -73,7 +73,7 @@ class raw_env(AECEnv):
         else:
             self._clear_rewards()
 
-        if self.env.frames >= self.env.max_frames:
+        if self.env.frames >= self.env.max_cycles:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
         else:
             self.dones = dict(zip(self.agents, self.env.last_dones))

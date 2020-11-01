@@ -37,9 +37,9 @@ Map size: 45x45
 ### Arguments
 
 ```
-tiger_deer_v1.env(max_frames=500)
+tiger_deer_v1.env(max_cycles=500)
 ```
 
 
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

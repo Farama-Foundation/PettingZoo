@@ -22,10 +22,10 @@ Observation space: `[self_vel, landmark_rel_position]`
 ### Arguments
 
 ```
-simple.env(max_frames=25)
+simple.env(max_cycles=25)
 ```
 
 
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

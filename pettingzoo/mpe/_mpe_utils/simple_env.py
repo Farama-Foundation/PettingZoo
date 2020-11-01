@@ -21,12 +21,12 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, scenario, world, max_frames, local_ratio=None):
+    def __init__(self, scenario, world, max_cycles, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.seed()
 
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.scenario = scenario
         self.world = world
         self.local_ratio = local_ratio
@@ -156,7 +156,7 @@ class SimpleEnv(AECEnv):
         if next_idx == 0:
             self._execute_world_step()
             self.steps += 1
-            if self.steps >= self.max_frames:
+            if self.steps >= self.max_cycles:
                 for a in self.agents:
                     self.dones[a] = True
         else:

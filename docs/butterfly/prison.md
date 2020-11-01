@@ -29,7 +29,7 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 
 ```
 prison.env(vector_observation=False, continuous=False, synchronized_start=False,
-identical_aliens=False, max_frames=900, num_floors=4, random_aliens=False)
+identical_aliens=False, max_cycles=900, num_floors=4, random_aliens=False)
 ```
 
 

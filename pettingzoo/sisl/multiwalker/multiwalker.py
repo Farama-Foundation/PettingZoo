@@ -89,7 +89,7 @@ class raw_env(AECEnv, EzPickle):
             self._clear_rewards()
         self.agent_selection = self._agent_selector.next()
 
-        if self.env.frames >= self.env.max_frames:
+        if self.env.frames >= self.env.max_cycles:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
         self._cumulative_rewards[agent] = 0
