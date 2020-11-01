@@ -69,9 +69,6 @@ class BaseWrapper(AECEnv):
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards
 
-    def last(self, observe=True):
-        return self.env.last(observe)
-
 # class LastWrapper(BaseWrapper):
 #     def reset(self):
 #         super().reset()

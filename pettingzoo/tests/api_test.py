@@ -175,7 +175,6 @@ def play_test(env, observation_0):
             action = env.action_spaces[agent].sample()
         obs, reward, done, info = env.last()
         assert isinstance(done, bool), "Done from last is not True or False"
-        assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
         assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
         assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
         float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
