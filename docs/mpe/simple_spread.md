@@ -27,7 +27,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_spread.env(N=3, local_ratio=0.5, max_frames=25)
+simple_spread.env(N=3, local_ratio=0.5, max_cycles=25)
 ```
 
 
@@ -36,5 +36,5 @@ simple_spread.env(N=3, local_ratio=0.5, max_frames=25)
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

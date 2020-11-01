@@ -90,8 +90,8 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        EzPickle.__init__(self, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
+    def __init__(self, continuous=False, vector_observation=False, max_cycles=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+        EzPickle.__init__(self, continuous, vector_observation, max_cycles, num_floors, synchronized_start, identical_aliens, random_aliens)
         num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]
         self.possible_agents = self.agents[:]
@@ -101,7 +101,7 @@ class raw_env(AECEnv, EzPickle):
         self.metadata = {'render.modes': ['human', "rgb_array"]}
         self.infos = {}
         self.rendering = False
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         pygame.init()
         self.clock = pygame.time.Clock()
         self.num_frames = 0
@@ -339,7 +339,7 @@ class raw_env(AECEnv, EzPickle):
         if self._agent_selector.is_last():
             self.num_frames += 1
 
-        if (self.num_frames >= self.max_frames):
+        if (self.num_frames >= self.max_cycles):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True

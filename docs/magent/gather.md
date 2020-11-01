@@ -35,7 +35,7 @@ Map size: 200x200
 ### Arguments
 
 ```
-gather_v1.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
+gather_v1.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
 ```
 
 
@@ -48,4 +48,4 @@ gather_v1.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_fo
 
 `attack_food_reward`:  Reward added for attacking a food
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

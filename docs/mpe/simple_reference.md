@@ -30,12 +30,12 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(local_ratio=0.5, max_frames=25)
+simple_reference.env(local_ratio=0.5, max_cycles=25)
 ```
 
 
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

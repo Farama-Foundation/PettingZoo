@@ -38,7 +38,7 @@ Map size: 45x45
 ### Arguments
 
 ```
-battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
+battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
 
@@ -51,4 +51,4 @@ battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_
 
 `attack_opponent_reward`:  Reward added for attacking an opponent
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

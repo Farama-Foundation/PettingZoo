@@ -75,7 +75,7 @@ class MAWaterWorld():
                  obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
-                 local_ratio=1.0, speed_features=True, max_frames=500, **kwargs):
+                 local_ratio=1.0, speed_features=True, max_cycles=500, **kwargs):
         """
             n_pursuers: number of pursuing archea
             n_evaders: number of evaading archea
@@ -95,7 +95,7 @@ class MAWaterWorld():
             control_penalty: reward added to pursuer in each step
             local_ratio: proportion of reward allocated locally vs distributed among all agents
             speed_features: toggles whether archea sensors detect speed of other objects
-            max_frames: number of frames before environment automatically ends
+            max_cycles: number of frames before environment automatically ends
         """
         self.n_pursuers = n_pursuers
         self.n_evaders = n_evaders
@@ -121,7 +121,7 @@ class MAWaterWorld():
         self.n_obstacles = 1
         self.local_ratio = local_ratio
         self._speed_features = speed_features
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.seed()
         self._pursuers = [
             Archea(npu + 1, self.radius, self.n_sensors, self.sensor_range[npu],

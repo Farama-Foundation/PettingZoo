@@ -203,7 +203,7 @@ class CooperativePong(gym.Env):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -228,7 +228,7 @@ class CooperativePong(gym.Env):
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
 
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         # paddles
         self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
@@ -342,9 +342,9 @@ class CooperativePong(gym.Env):
                 if not self.done:
                     self.num_frames += 1
                     # scaling reward so that the max reward is 100
-                    reward = 100 / self.max_frames
+                    reward = 100 / self.max_cycles
                     self.score += reward
-                    if self.num_frames == self.max_frames:
+                    if self.num_frames == self.max_cycles:
                         self.done = True
 
                 # let the clock tick

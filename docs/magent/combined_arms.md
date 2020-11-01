@@ -39,7 +39,7 @@ Map size: 45x45
 ### Arguments
 
 ```
-combined_arms_v1.env(step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2, max_frames=1000)
+combined_arms_v1.env(step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2, max_cycles=1000)
 ```
 
 
@@ -52,4 +52,4 @@ combined_arms_v1.env(step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, att
 
 `attack_opponent_reward`:  Reward added for attacking an opponent
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

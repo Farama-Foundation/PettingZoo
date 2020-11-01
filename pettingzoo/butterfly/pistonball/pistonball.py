@@ -46,8 +46,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
+    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
@@ -65,7 +65,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         self.pistonSprite = get_image('piston.png')
         self.background = get_image('background.png')
@@ -303,7 +303,7 @@ class raw_env(AECEnv, EzPickle):
         else:
             self._clear_rewards()
 
-        if self.frames >= self.max_frames:
+        if self.frames >= self.max_cycles:
             self.done = True
         if not self.done:
             global_reward -= 0.1

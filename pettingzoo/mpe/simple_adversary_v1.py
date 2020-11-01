@@ -4,10 +4,10 @@ from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):
-    def __init__(self, N=2, max_frames=25):
+    def __init__(self, N=2, max_cycles=25):
         scenario = Scenario()
         world = scenario.make_world(N=2)
-        super().__init__(scenario, world, max_frames)
+        super().__init__(scenario, world, max_cycles)
 
 
 env = make_env(raw_env)

@@ -41,14 +41,14 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
-        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
+    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_cycles=900):
+        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_cycles)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.frames = 0
         self.pad_observation = pad_observation
         self.killable_knights = killable_knights
@@ -485,7 +485,7 @@ class raw_env(AECEnv, EzPickle):
 
         self._clear_rewards()
         self.rewards[agent] = agent_name.score
-        done = not self.run or self.frames >= self.max_frames
+        done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
 
         if self._agent_selector.is_last() and not self.black_death:

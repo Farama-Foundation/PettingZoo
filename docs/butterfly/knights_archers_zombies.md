@@ -33,7 +33,7 @@ Press 'M' key to spawn a new knight.
 
 ```
 knights_archers_zombies.env(spawn_rate=20, num_knights=2, num_archers=2,
-killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_frames=900)
+killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_cycles=900)
 ```
 
 

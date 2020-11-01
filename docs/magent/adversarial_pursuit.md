@@ -37,10 +37,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-adversarial_pursuit_v1.env(attack_penalty=-0.2, max_frames=500)
+adversarial_pursuit_v1.env(attack_penalty=-0.2, max_cycles=500)
 ```
 
 
 `attack_penalty`:  Adds the following value to the reward whenever an attacking action is taken
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

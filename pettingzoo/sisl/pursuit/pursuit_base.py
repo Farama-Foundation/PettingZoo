@@ -33,7 +33,7 @@ class Pursuit():
 
         tag_reward: reward for 'tagging' a single evader
 
-        max_frames: after how many frames should the game end
+        max_cycles: after how many frames should the game end
         n_catch: how surrounded evader needs to be, before removal
         freeze_evaders: toggle evaders move or not
         catch_reward: reward for pursuer who catches an evader
@@ -47,7 +47,7 @@ class Pursuit():
         x_size = self.x_size
         y_size = self.y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
-        self.max_frames = kwargs.pop("max_frames", 500)
+        self.max_cycles = kwargs.pop("max_cycles", 500)
         self.seed()
 
         self.local_ratio = kwargs.pop('local_ratio', 1.0)
