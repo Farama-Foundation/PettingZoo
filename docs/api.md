@@ -63,7 +63,7 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `observe(agent)`: Returns the observation an agent currently can make.
 
-`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards are summed from the last time an agent took it's turn and zeroed before it takes another turn.  `last()` accesses this attribute. This looks like:
+`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step.  `last()` does not directly access this attribute, rather it access a hidden attribute which tracks the cumulative reward. The rewards structure looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
