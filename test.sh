@@ -5,7 +5,7 @@ manual_control=False
 performance=False
 save_obs=False
 
-runs all tests in .travis.yml
+# runs all tests in .travis.yml
 pytest ./pettingzoo/tests/pytest_runner.py
 bash ./check_style.sh
 pytest ./pettingzoo/tests/all_parameter_combs.py
