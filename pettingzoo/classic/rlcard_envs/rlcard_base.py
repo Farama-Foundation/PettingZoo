@@ -59,7 +59,7 @@ class RLCardBase(AECEnv):
             self.infos[next_player]['legal_moves'] = []
             self.dones = self._convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
         else:
-            self.infos[next_player]['legal_moves'] = obs['legal_actions']
+            self.infos[next_player]['legal_moves'] = list(sorted(obs['legal_actions']))
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = next_player
         self._accumulate_rewards()
@@ -73,7 +73,7 @@ class RLCardBase(AECEnv):
         self._cumulative_rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
+        self.infos[self._int_to_name(player_id)]['legal_moves'] = list(sorted(obs['legal_actions']))
         self._last_obs = obs['obs']
 
     def render(self, mode='human'):
