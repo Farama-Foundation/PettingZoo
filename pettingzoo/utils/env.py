@@ -140,3 +140,7 @@ class ParallelEnv:
     @property
     def max_num_agents(self):
         return len(self.possible_agents)
+
+    @property
+    def env_done(self):
+        return not self.agents

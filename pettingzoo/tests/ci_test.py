@@ -13,6 +13,8 @@ from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
 import subprocess
 
+assert len(sys.argv) == 6, "ci_test expects 5 arguments: env_id, render, manual_control, performance, save_obs"
+
 render = sys.argv[2] == 'True'
 manual_control = sys.argv[3] == 'True'
 performance = sys.argv[4] == 'True'
