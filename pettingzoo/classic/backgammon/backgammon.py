@@ -90,11 +90,11 @@ class Backgammon:
         plays = set()
 
         positions = self.players_positions[player]
-        combinations_positions = set(itertools.combinations(positions, 2))
+        combinations_positions = list(itertools.combinations(positions, 2))
 
         for s in positions:
             if self.board[s][0] > 1:
-                combinations_positions.add((s, s))
+                combinations_positions.append((s, s))
 
             if self.is_valid(player, s + roll[0]) and self.is_valid(player, s + roll[0] + roll[1]):
                 plays.add(((s, s + roll[0]), (s + roll[0], s + roll[0] + roll[1])))

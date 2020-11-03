@@ -88,7 +88,8 @@ class raw_env(AECEnv):
 
         legal_moves = np.array(bg_utils.to_gym_format(valid_moves, self.roll))
         if len(legal_moves) == 0:
-            legal_moves = [26**2 * 2]
+            legal_moves = np.array([26**2 * 2])
+        legal_moves.sort()
         opp_agent = bg_utils.opp_agent(self, self.agent_selection)
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
@@ -127,6 +128,7 @@ class raw_env(AECEnv):
         self.roll = roll
 
         legal_moves = np.array(bg_utils.to_gym_format(bg_utils.get_valid_actions(self, roll), roll))
+        legal_moves.sort()
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
 
