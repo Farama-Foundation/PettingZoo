@@ -21,6 +21,7 @@ right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=Fa
 Environments can be interacted with using a similar interface to Gym:
 
 ```python
+env.reset()
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
     action = policy(observation)
@@ -35,7 +36,7 @@ The commonly used methods are:
 
 `reset()` resets the environment and sets it up for use when called the first time.
 
-`step(action)` takes the action of the agent in the environment, and automatically switches control to the next agent.
+`step(action)` takes and executes the action of the agent in the environment, automatically switches control to the next agent.
 
 ## Additional Environment API
 
@@ -43,9 +44,13 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
+`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces.
+
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know which agent is acting.
 
 `num_agents`: The number of agents currently in the environment. This is exactly the length of the `agents` list.
+
+`max_num_agents`: The maximum number of agents the environment can take. This is exactly the length of the `possible_agents` list.
 
 `env_done`: Whether the environment has terminated and should be reset before taking any more steps.
 
@@ -53,17 +58,17 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name.
 
-`dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. The returned dict looks like:
+`dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
 
-`infos`: A dict of info for each current agent, keyed by name. Each agent's info is also a dict. `last()` accesses this attribute. The returned dict looks like:
+`infos`: A dict of info for each current agent, keyed by name. Each agent's info is also a dict. Note that agents can be added or removed from this attribute. `last()` accesses this attribute. The returned dict looks like:
 
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
-`observe(agent)`: Returns the observation an agent currently can make.
+`observe(agent)`: Returns the observation an agent currently can make. `last()` calls this function.
 
-`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step.  `last()` does not directly access this attribute, rather it access a hidden attribute which tracks the cumulative reward. The rewards structure looks like:
+`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather it access a hidden attribute which tracks the cumulative reward. The rewards structure looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
