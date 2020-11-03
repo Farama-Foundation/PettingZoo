@@ -31,7 +31,7 @@ extras = {
     "tests": ["pynput"]
 }
 
-extras["all"] = list(set().union(extras["atari"], extras["classic"], extras["butterfly"], extras["magent"], extras["mpe"], extras["sisl"]))
+extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]))
 
 
 setup(
