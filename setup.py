@@ -24,7 +24,7 @@ def get_version():
 extras = {
     "atari": ["multi_agent_ale_py==0.1.9", "pygame==2.0.0.dev10"],
     "classic": ["python-chess==0.31.4", "rlcard==0.2.5", "hanabi_learning_environment==0.0.1"],
-    "butterfly": ["pygame==2.0.0.dev10", "pymunk==5.6.0"],
+    "butterfly": ["pygame==2.0.0", "pymunk==5.7.0"],
     "magent": ["magent==0.1.12"],
     "mpe": [],
     "sisl": ["pygame==2.0.0.dev10", "box2d-py==2.3.5", "opencv-python>=4.4.0.42"],
@@ -44,7 +44,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
-    python_requires=">=3.6",
+    python_requires=">=3.6, <3.9",
     data_files=[("", ["LICENSE.txt"])],
     packages=find_packages(),
     include_package_data=True,
