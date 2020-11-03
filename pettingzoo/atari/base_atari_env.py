@@ -66,9 +66,10 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         if rom_path is None:
             start = Path(multi_agent_ale_py.__file__).parent
-            final = start / "ROM" / game / f"{game}.bin"
         else:
-            final = Path(rom_path).resolve()
+            start = Path(rom_path).resolve()
+
+        final = start / "ROM" / game / f"{game}.bin"
 
         if not final.exists():
             raise IOError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM) "
