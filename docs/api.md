@@ -48,12 +48,6 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know which agent is acting.
 
-`num_agents`: The number of agents currently in the environment. This is exactly the length of the `agents` list.
-
-`max_num_agents`: The maximum number of agents the environment can take. This is exactly the length of the `possible_agents` list.
-
-`env_done`: Whether the environment has terminated and should be reset before taking any more steps.
-
 `observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name.
@@ -78,11 +72,20 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `close()`: Closes the rendering window.
 
-## Environment Actions
+## API Idioms
 
-In this API, when the environment acts following an agent's action, both actions are handled as if happening at the same time. There are cases where separating these actions can be very helpful. Our API supports this by optionally treating the environment as an "agent". An environment agent that can act on the state of the game is a common modeling practice in fields such as game theory, for example.
+### Environment done
 
-We encourage calling the environment actor `'env'` in `env.agents`, and having it take `None` as an action.
+An environment is done when it has no more agents left. This means that its `agents` attribute, will be an empty list. So you can calculate that the environment is done by checking `not env.agents`.
+
+### Number of agents
+
+You can get the number of agents with `len(env.agents)`, and the maximum possible number of agents with `len(env.possible_agents)`.
+
+### Environment as agent
+
+Environment agents: In certain cases, separating agent from environment actions is helpful for studying. This can be done by treating the environment as an agent. We encourage calling the environment actor 'env' in env.agents, and having it take None as an action.
+
 
 ## Raw Environments
 
