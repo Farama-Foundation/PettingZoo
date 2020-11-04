@@ -86,8 +86,6 @@ We encourage calling the environment actor `'env'` in `env.agents`, and having i
 
 ## Raw Environments
 
-All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
-
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
 ```python
