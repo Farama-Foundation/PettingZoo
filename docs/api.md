@@ -46,7 +46,7 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces.
 
-`agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for. Internal functions use it to know which agent is acting.
+`agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
 `observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
 
@@ -72,11 +72,12 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `close()`: Closes the rendering window.
 
-## API Idioms
 
-### Environment done
+## Noteable Idioms
 
-An environment is done when it has no more agents left. This means that its `agents` attribute, will be an empty list. So you can calculate that the environment is done by checking `not env.agents`.
+### Checking if the entire environment is done
+
+When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
 ### Number of agents
 
@@ -84,7 +85,7 @@ You can get the number of agents with `len(env.agents)`, and the maximum possibl
 
 ### Environment as agent
 
-Environment agents: In certain cases, separating agent from environment actions is helpful for studying. This can be done by treating the environment as an agent. We encourage calling the environment actor 'env' in env.agents, and having it take None as an action.
+In certain cases, separating agent from environment actions is helpful for studying. This can be done by treating the environment as an agent. We encourage calling the environment actor `env` in env.agents, and having it take `None` as an action.
 
 
 ## Raw Environments
