@@ -56,6 +56,10 @@ In certain environments, it's a valid to assume that agents take their actions a
 
 SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
 
+## Environment Versioning
+
+PettingZoo keeps strict versioning for reproducibility reasons. All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
+
 ## Release History
 
 Version 1.3.5 (October 14, 2020)
