@@ -32,7 +32,7 @@ The commonly used methods are:
 
 `agent_iter(max_iter=2**63)` returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when `max_iter` (steps have been executed).
 
-`last(observe=True)` returns observation, reward*, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done.
+`last(observe=True)` returns observation, reward, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done.
 
 `reset()` resets the environment and sets it up for use when called the first time.
 
@@ -68,7 +68,7 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `observe(agent)`: Returns the observation an agent currently can make. `last()` calls this function.
 
-`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather it access a hidden attribute which tracks the cumulative reward. The rewards structure looks like:
+`rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
 
