@@ -52,7 +52,7 @@ env = frame_skip(env, 4)
 All the Atari environments have the following environment parameters:
 
 ```python
-<atari_game>.env(obs_type='rgb_image', full_action_space=True, max_frames=100000)
+<atari_game>.env(obs_type='rgb_image', full_action_space=True, max_frames=100000, auto_rom_install_path=None)
 ```
 
 `obs_type`:  There are three possible values for this parameter:
@@ -64,6 +64,16 @@ All the Atari environments have the following environment parameters:
 `full_action_space`:  the effective action space of the Atari games is often smaller than the full space of 18 moves. Setting this to `False` shrinks the available action space to that smaller space.
 
 `max_frames`:  the number of frames (the number of steps that each agent can take) until game terminates.
+
+`auto_rom_install_path`: The path to your AutoROM installation, installed
+with the [PettingZoo-Team/AutoROM](https://github.com/PettingZoo-Team/AutoROM) tool.
+This is the path you specified when installing AutoROM. For example, if
+you're using the boxing Atari environment, then the library will look for
+the rom at 
+`/auto_rom_install_path/ROM/boxing/boxing.bin`.
+If this is not specified (has value `None`), then the library looks for roms
+installed at the default AutoROM path.
+
 
 ### Citation
 
