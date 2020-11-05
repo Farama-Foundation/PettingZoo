@@ -38,7 +38,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             obs_type='rgb_image',
             full_action_space=True,
             max_frames=100000,
-            rom_path=None):
+            auto_rom_install_path=None):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
         EzPickle.__init__(
@@ -50,7 +50,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             obs_type,
             full_action_space,
             max_frames,
-            rom_path,
+            auto_rom_install_path,
         )
 
         assert obs_type in ('ram', 'rgb_image', "grayscale_image"), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
@@ -64,10 +64,10 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         self.ale.setFloat(b'repeat_action_probability', 0.)
 
-        if rom_path is None:
+        if auto_rom_install_path is None:
             start = Path(multi_agent_ale_py.__file__).parent
         else:
-            start = Path(rom_path).resolve()
+            start = Path(auto_rom_install_path).resolve()
 
         final = start / "ROM" / game / f"{game}.bin"
 
