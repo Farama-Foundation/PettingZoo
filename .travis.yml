@@ -20,6 +20,7 @@ jobs:
         - AutoROM -v
       script:
         - pytest ./pettingzoo/tests/pytest_runner.py
+
     - name: "Python 3.7 on Linux"
       services:
         - xvfb
@@ -81,14 +82,12 @@ jobs:
         - xvfb
       python: 3.7
       before_install:
-
         - export AUDIODEV=null
         - cd ${TRAVIS_BUILD_DIR}
         - sudo apt-get install swig
         - sudo apt install freeglut3-dev
         - sudo apt-get install unrar
         - export pz_module=classic
-
       install:
         - pip3 install -r requirements.txt
         - pip3 install AutoROM
@@ -101,14 +100,17 @@ jobs:
         - python3 -m pettingzoo.tests.ci_test magent True True True False
         - python3 -m pettingzoo.tests.ci_test sisl True True True False
         - pytest ./pettingzoo/tests/all_parameter_combs.py
+
     - name: "Flake 8 tests"
       install:
         - pip3 install flake8
       script:
         - bash ./check_style.sh
+
     - name: "Print tests"
       script:
         - python3 -m pettingzoo.tests.print_test
+
     - name: "source distribution test"
       script:
         - python setup.py sdist
