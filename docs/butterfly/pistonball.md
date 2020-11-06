@@ -29,7 +29,7 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 ### Arguments
 
 ```
-pistonball.env(local_ratio=.02, time_penalty=-0.1, continuous=False, random_drop=True,
+pistonball.env(local_ratio=.2, time_penalty=-0.1, continuous=False, random_drop=True,
 starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
 ball_elasticity=1.5, max_cycles=900)
 ```
