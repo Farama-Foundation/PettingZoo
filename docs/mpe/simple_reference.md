@@ -8,7 +8,7 @@ action-values: "Discrete(50)"
 observation-shape: "(21)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-303.4"
-import: "from pettingzoo.mpe import simple_reference_v1"
+import: "from pettingzoo.mpe import simple_reference_v2"
 agent-labels: "agents= [agent_0, agent_1]"
 ---
 
@@ -30,12 +30,12 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(local_ratio=0.5, max_frames=25)
+simple_reference.env(local_ratio=0.5, max_cycles=25)
 ```
 
 
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

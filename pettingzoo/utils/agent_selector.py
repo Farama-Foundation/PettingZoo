@@ -25,6 +25,9 @@ class agent_selector():
         '''
         return self.selected_agent == self.agent_order[-1]
 
+    def is_first(self):
+        return self.selected_agent == self.agent_order[0]
+
     def __eq__(self, other):
         if not isinstance(other, agent_selector):
             return NotImplemented

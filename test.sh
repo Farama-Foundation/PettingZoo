@@ -8,6 +8,7 @@ save_obs=False
 # runs all tests in .travis.yml
 pytest ./pettingzoo/tests/pytest_runner.py
 bash ./check_style.sh
+python3 -m pettingzoo.tests.print_test
 pytest ./pettingzoo/tests/all_parameter_combs.py
 python3 -m pettingzoo.tests.ci_test atari $render $manual_control $performance $save_obs
 python3 -m pettingzoo.tests.ci_test classic $render $manual_control $performance $save_obs

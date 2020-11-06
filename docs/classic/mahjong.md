@@ -7,7 +7,7 @@ action-shape: "Discrete(38)"
 action-values: "Discrete(38)"
 observation-shape: "(6, 34, 4)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import mahjong_v0"
+import: "from pettingzoo.classic import mahjong_v1"
 agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 ---
 {% include info_box.md %}

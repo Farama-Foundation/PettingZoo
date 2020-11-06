@@ -44,15 +44,15 @@ class HanabiTest(TestCase):
     def test_reset(self):
         test_env = env(**self.full_config)
 
-        obs = test_env.reset()
+        test_env.reset()
+        obs, _, _, _ = test_env.last()
         self.assertIsInstance(obs, np.ndarray)
         self.assertEqual(obs.size, test_env.hanabi_env.vectorized_observation_shape()[0])
 
-        obs = test_env.reset(observe=False)
-        self.assertIsNone(obs)
+        test_env.reset()
 
         old_state = test_env.hanabi_env.state
-        test_env.reset(observe=False)
+        test_env.reset()
         new_state = test_env.hanabi_env.state
 
         self.assertNotEqual(old_state, new_state)
@@ -90,12 +90,12 @@ class HanabiTest(TestCase):
         self.assertNotEqual(legal_moves, new_legal_moves)
 
         # Assert return not as vector:
-        new_obs = test_env.step(action=new_legal_moves[0], as_vector=False)
-        self.assertIsInstance(new_obs, dict)
+        # new_obs = test_env.step(action=new_legal_moves[0], as_vector=False)
+        # self.assertIsInstance(new_obs, dict)
 
         # Assert no return
         new_legal_moves = test_env.legal_moves
-        new_obs = test_env.step(action=new_legal_moves[0], observe=False)
+        new_obs = test_env.step(action=new_legal_moves[0])
         self.assertIsNone(new_obs)
 
         # Assert raises error if wrong input
@@ -117,13 +117,13 @@ class HanabiTest(TestCase):
 
         while not all(test_env.dones.values()):
             self.assertIs(all(test_env.dones.values()), False)
-            test_env.step(test_env.legal_moves[0], observe=False)
+            test_env.step(test_env.legal_moves[0])
 
-        test_env.reset(observe=False)
+        test_env.reset()
 
         while not all(test_env.dones.values()):
             self.assertIs(all(test_env.dones.values()), False)
-            test_env.step(test_env.legal_moves[0], observe=False)
+            test_env.step(test_env.legal_moves[0])
 
         self.assertIs(all(test_env.dones.values()), True)
 

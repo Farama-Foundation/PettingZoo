@@ -5,7 +5,7 @@ import pygame
 def manual_control(**kwargs):
     from .cooperative_pong import env as _env
     env = _env(**kwargs)
-    env.reset(observe=True)
+    env.reset()
 
     quit_loop = 0
 
@@ -48,10 +48,10 @@ def manual_control(**kwargs):
 
         for _ in env.agents:
             agent = env.agent_selection
-            reward, dones[agent], _ = env.last()
+            obs, reward, dones[agent], _ = env.last()
             total_reward += reward
             initial_iteration[agent] = False
-            env.step(action_dict[agent], observe=False)
+            env.step(action_dict[agent])
         done = all(env.dones.values())
 
         env.render()

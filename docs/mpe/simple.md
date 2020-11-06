@@ -7,7 +7,7 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(4)"
 observation-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_v1"
+import: "from pettingzoo.mpe import simple_v2"
 agent-labels: "agents= [agent_0]"
 ---
 
@@ -22,10 +22,10 @@ Observation space: `[self_vel, landmark_rel_position]`
 ### Arguments
 
 ```
-simple.env(max_frames=25)
+simple.env(max_cycles=25)
 ```
 
 
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

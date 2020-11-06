@@ -148,11 +148,12 @@ class raw_env(AECEnv, EzPickle):
 
         # List of agent names
         self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
+        self.possible_agents = self.agents[:]
 
         self.agent_selection: str
 
         # Sets hanabi game to clean state and updates all internal dictionaries
-        self.reset(observe=False)
+        self.reset()
 
         # Set action_spaces and observation_spaces based on params in hanabi_env
         self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
@@ -200,10 +201,6 @@ class raw_env(AECEnv, EzPickle):
         return self.hanabi_env.vectorized_observation_shape()
 
     @property
-    def num_agents(self):
-        return len(self.agents)
-
-    @property
     def legal_moves(self) -> List[int]:
         return self.infos[self.agent_selection]['legal_moves']
 
@@ -212,7 +209,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, observe=True) -> Optional[List[int]]:
+    def reset(self):
         """ Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
@@ -220,6 +217,7 @@ class raw_env(AECEnv, EzPickle):
             current agent (agent_selection).
         """
 
+        self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment
         obs = self.hanabi_env.reset()
 
@@ -227,14 +225,9 @@ class raw_env(AECEnv, EzPickle):
         self._reset_agents(player_number=obs['current_player'])
 
         self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         # Reset internal state
         self._process_latest_observations(obs=obs)
-
-        # If specified, return observation of current agent
-        if observe:
-            return self.observe(agent_name=self.agent_selection)
-        else:
-            return None
 
     def _reset_agents(self, player_number: int):
         """ Rearrange self.agents as pyhanabi starts a different player after each reset(). """
@@ -261,6 +254,8 @@ class raw_env(AECEnv, EzPickle):
             By default a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         action = int(action)
 
         agent_on_turn = self.agent_selection
@@ -275,25 +270,22 @@ class raw_env(AECEnv, EzPickle):
             # Apply action
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
-            # sets current reward for 0 to intialize reward accumulation
-            self.rewards[agent_on_turn] = 0
-
             # Update internal state
             self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
-            # Return latest observations if specified
-            if observe:
-                return self.observe(agent_name=agent_on_turn)
+            # sets current reward for 0 to intialize reward accumulation
+            self._cumulative_rewards[agent_on_turn] = 0
+            self._accumulate_rewards()
+            self._dones_step_first()
 
     def observe(self, agent_name: str):
-        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32)
+        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32) if agent_name in self.infos else np.zeros_like(self.observation_spaces[agent_name].low)
 
     def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
 
         self.latest_observations = obs
-        for agent, agent_rew in self.rewards.items():
-            self.rewards[agent] = reward + agent_rew
+        self.rewards = {a: reward for a in self.agents}
         self.dones = {player_name: done for player_name in self.agents}
 
         # Here we have to deal with the player index with offset = 1

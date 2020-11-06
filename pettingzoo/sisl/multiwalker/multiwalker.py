@@ -26,8 +26,8 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
 
-        self.num_agents = self.env.num_agents
-        self.agents = ["walker_" + str(r) for r in range(self.num_agents)]
+        self.agents = ["walker_" + str(r) for r in range(self.env.num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
         # spaces
@@ -38,26 +38,22 @@ class raw_env(AECEnv, EzPickle):
         self.display_wait = 0.04
         self.observations = self.env.get_last_obs()
 
-        self.has_reset = False
-
     def seed(self, seed=None):
         self.env.seed(seed)
 
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, observe=True):
-        self.has_reset = True
+    def reset(self):
         self.env.reset()
         self.steps = 0
+        self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
-        self.rewards = dict(
-            zip(self.agents, [np.float64(0) for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
+        self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
-        if observe:
-            return self.observe(self.agent_selection)
 
     def close(self):
         self.env.close()
@@ -76,19 +72,27 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         agent = self.agent_selection
         action = np.array(action, dtype=np.float32)
-        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
-        for r in self.rewards:
-            self.rewards[r] = self.env.get_last_rewards()[self.agent_name_mapping[r]]
-        for d in self.dones:
-            self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+        is_last = self._agent_selector.is_last()
+        self.env.step(action, self.agent_name_mapping[agent], is_last)
+        if is_last:
+            last_rewards = self.env.get_last_rewards()
+            for r in self.rewards:
+                self.rewards[r] = last_rewards[self.agent_name_mapping[r]]
+            for d in self.dones:
+                self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+        else:
+            self._clear_rewards()
         self.agent_selection = self._agent_selector.next()
 
-        if self.env.frames >= self.env.max_frames:
+        if self.env.frames >= self.env.max_cycles:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
         self.steps += 1
-        if observe:
-            return self.observe(self.agent_selection)

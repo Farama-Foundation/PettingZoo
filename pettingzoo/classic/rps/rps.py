@@ -28,8 +28,8 @@ class raw_env(AECEnv):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        self.num_agents = 2
-        self.agents = ["player_" + str(r) for r in range(self.num_agents)]
+        self.agents = ["player_" + str(r) for r in range(2)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
 
         self.action_spaces = {agent: Discrete(3) for agent in self.agents}
@@ -42,9 +42,11 @@ class raw_env(AECEnv):
         pass
 
     def reinit(self):
+        self.agents = self.possible_agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
+        self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: none for agent in self.agents}
@@ -63,12 +65,12 @@ class raw_env(AECEnv):
     def close(self):
         pass
 
-    def reset(self, observe=True):
+    def reset(self):
         self.reinit()
-        if observe:
-            return self.observe(self.agent_selection)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
@@ -95,7 +97,9 @@ class raw_env(AECEnv):
                 self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
+            self._clear_rewards()
 
+        self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
-        if observe:
-            return self.observe(self.agent_selection)
+        self._accumulate_rewards()
+        self._dones_step_first()

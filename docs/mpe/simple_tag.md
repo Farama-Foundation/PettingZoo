@@ -7,7 +7,7 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(14),(16)"
 observation-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_tag_v1"
+import: "from pettingzoo.mpe import simple_tag_v2"
 agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
 {% include info_box.md %}
@@ -34,7 +34,7 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 ### Arguments
 
 ```
-simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=25)
+simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_cycles=25)
 ```
 
 
@@ -45,5 +45,5 @@ simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_frames=25)
 
 `num_obstacles`:  number of obstacles
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

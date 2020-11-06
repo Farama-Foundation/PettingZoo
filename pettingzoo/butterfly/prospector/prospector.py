@@ -451,7 +451,7 @@ class raw_env(AECEnv, EzPickle):
         prospec_handoff_gold_reward=1,
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
-        max_frames=900,
+        max_cycles=900,
     ):
         EzPickle.__init__(
             self,
@@ -462,7 +462,7 @@ class raw_env(AECEnv, EzPickle):
             prospec_handoff_gold_reward,
             banker_receive_gold_reward,
             banker_deposit_gold_reward,
-            max_frames,
+            max_cycles,
         )
 
         total_reward_factor = ind_reward + group_reward + other_group_reward
@@ -472,7 +472,6 @@ class raw_env(AECEnv, EzPickle):
                 "group reward should add up to approximately 1.0"
             )
 
-        self.num_agents = const.NUM_AGENTS
         self.agents = []
 
         self.sprite_list = [
@@ -481,7 +480,7 @@ class raw_env(AECEnv, EzPickle):
             "bankers/2.png",
             "prospector.png",
         ]
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         pg.init()
         self.seed()
@@ -561,6 +560,7 @@ class raw_env(AECEnv, EzPickle):
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
 
+        self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.reset()
@@ -739,11 +739,12 @@ class raw_env(AECEnv, EzPickle):
 
         return sub_screen
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
-        if all_agents_updated:
-            self.rewards = {agent: 0 for agent in self.agents}
+        self.rewards = {agent: 0 for agent in self.agents}
 
         if agent_id in self.prospectors:
             agent = self.prospectors[agent_id]
@@ -790,21 +791,18 @@ class raw_env(AECEnv, EzPickle):
 
             self.frame += 1
             # If we reached max frames, we're done
-            if self.frame == self.max_frames:
+            if self.frame == self.max_cycles:
                 self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
         if self.rendering:
             pg.event.pump()
 
         self.agent_selection = self._agent_selector.next()
+        self._cumulative_rewards[agent_id] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
-        if observe:
-            return self.observe(self.agent_selection)
-
-    def reward(self):
-        return self.rewards
-
-    def reset(self, observe=True):
+    def reset(self):
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.done = False
 
@@ -823,7 +821,9 @@ class raw_env(AECEnv, EzPickle):
 
         self.gold = []
 
+        self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.rendering = False
@@ -833,8 +833,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.full_draw()
-        if observe:
-            return self.observe(self.agent_selection)
 
     def render(self, mode="human"):
         if mode == "human":

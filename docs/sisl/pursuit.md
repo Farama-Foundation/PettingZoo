@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
 average-total-reward: "3.11"
-import: "from pettingzoo.sisl import pursuit_v1"
+import: "from pettingzoo.sisl import pursuit_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
@@ -28,7 +28,7 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ```
-pursuit.env(max_frames=500, x_size=16, y_size=16, local_ratio=1.0, n_evaders=30, n_pursuers=8,
+pursuit.env(max_cycles=500, x_size=16, y_size=16, local_ratio=1.0, n_evaders=30, n_pursuers=8,
 obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01, catch_reward=5.0,
 urgency_reward=0.0, surround=True, constraint_window=1.0)
 
@@ -58,4 +58,4 @@ urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 `constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
 
-`max_frames`:  After max_frames steps all agents will return done
+`max_cycles`:  After max_cycles steps all agents will return done

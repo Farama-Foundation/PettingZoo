@@ -9,46 +9,37 @@ class to_parallel(ParallelEnv):
         self.aec_env = aec_env
         self.observation_spaces = aec_env.observation_spaces
         self.action_spaces = aec_env.action_spaces
-        self.agents = aec_env.agents
-        self.num_agents = aec_env.num_agents
-        self._was_dones = {agent: False for agent in self.agents}
+        self.possible_agents = aec_env.possible_agents
+        self.metadata = aec_env.metadata
 
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
 
     def reset(self):
-        self.aec_env.reset(observe=False)
-        self._was_dones = {agent: False for agent in self.agents}
+        self.aec_env.reset()
+        self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
 
     def step(self, actions):
-        rewards = {}
+        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
+            self.aec_env.step(None)
+
+        rewards = {a: 0 for a in self.aec_env.agents}
         dones = {}
         infos = {}
+        observations = {}
 
-        stepped_agents = set()
-        while (self.aec_env.agent_selection not in stepped_agents and self.aec_env.dones[self.aec_env.agent_selection]):
-            agent = self.aec_env.agent_selection
-            self.aec_env.step(None)
-            stepped_agents.add(agent)
+        for agent in self.aec_env.agents:
+            assert agent == self.aec_env.agent_selection, f"expected agent {agent} got agent {self.aec_env.agent_selection}, agent order is nontrivial"
+            obs, rew, done, info = self.aec_env.last()
+            self.aec_env.step(actions[agent])
+            for agent in self.aec_env.agents:
+                rewards[agent] += self.aec_env.rewards[agent]
 
-        stepped_agents = set()
-        while (self.aec_env.agent_selection not in stepped_agents):
-            agent = self.aec_env.agent_selection
-            assert agent in actions or self.aec_env.dones[agent], \
-                "Live environment agent is not in actions dictionary"
-            self.aec_env.step(actions.get(agent, None))
-            stepped_agents.add(agent)
-
-        assert all(agent in stepped_agents or self.aec_env.dones[agent]
-                   for agent in actions), \
-            "environment has a nontrivial ordering, and cannot be used with"\
-            " the POMGameEnv wrapper"
-
-        rewards = self.aec_env.rewards
-        dones = self.aec_env.dones
-        infos = self.aec_env.infos
+        dones = dict(**self.aec_env.dones)
+        infos = dict(**self.aec_env.infos)
+        self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
 

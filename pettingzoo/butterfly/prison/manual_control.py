@@ -43,7 +43,7 @@ def manual_control(**kwargs):
             if done:
                 test_done = True
             action = agent_actions[i]
-            env.step(action, observe=False)
+            env.step(action)
         env.render()
 
         if test_done:

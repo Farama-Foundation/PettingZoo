@@ -7,7 +7,7 @@ action-shape: "(5),(20)"
 action-values: "Discrete(5),(20)"
 observation-shape: "(28),(34)"
 observation-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_world_comm_v1"
+import: "from pettingzoo.mpe import simple_world_comm_v2"
 agent-labels: "agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]"
 ---
 
@@ -40,7 +40,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 ```
 simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
-                num_food=2, max_frames=25)
+                num_food=2, max_cycles=25)
 ```
 
 
@@ -53,5 +53,5 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 
 `num_food`:  number of food locations that good agents are rewarded at
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates
 

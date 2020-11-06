@@ -46,9 +46,10 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_frames=900):
-        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_frames)
+    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.agents = ["piston_" + str(r) for r in range(20)]
+        self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
         self._agent_selector = agent_selector(self.agents)
         self.continuous = continuous
@@ -64,7 +65,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         self.pistonSprite = get_image('piston.png')
         self.background = get_image('background.png')
@@ -117,7 +118,6 @@ class raw_env(AECEnv, EzPickle):
         self.frames = 0
         self.display_wait = 0.0
 
-        self.num_agents = len(self.agents)
         self.has_reset = False
         self.closed = False
 
@@ -191,7 +191,7 @@ class raw_env(AECEnv, EzPickle):
         piston.position = (piston.position[0], cap(
             piston.position[1] - v * self.velocity))
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
@@ -208,18 +208,18 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
+        self.agents = self.possible_agents[:]
+
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.frames = 0
-
-        if observe:
-            return self.observe(self.agent_selection)
 
     def draw(self):
         # redraw the background image if ball goes outside valid position
@@ -269,7 +269,9 @@ class raw_env(AECEnv, EzPickle):
         pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
@@ -297,19 +299,23 @@ class raw_env(AECEnv, EzPickle):
             for index in local_pistons_to_reward:
                 total_reward[index] += local_reward
             self.rewards = dict(zip(self.agents, total_reward))
+            self.frames += 1
+        else:
+            self._clear_rewards()
 
-        self.frames += 1
-        if self.frames >= self.max_frames:
+        if self.frames >= self.max_cycles:
             self.done = True
         if not self.done:
             global_reward -= 0.1
         # Clear the list of recent pistons for the next reward cycle
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
+        if self._agent_selector.is_last():
+            self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
 
-        self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
         self.agent_selection = self._agent_selector.next()
-        if observe:
-            return self.observe(self.agent_selection)
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
 # Game art created by Justin Terry

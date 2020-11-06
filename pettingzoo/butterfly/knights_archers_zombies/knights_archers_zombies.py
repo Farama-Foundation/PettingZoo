@@ -41,14 +41,14 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_frames=900):
-        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_frames)
+    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_cycles=900):
+        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_cycles)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
-        self.max_frames = 500
+        self.max_cycles = max_cycles
         self.frames = 0
         self.pad_observation = pad_observation
         self.killable_knights = killable_knights
@@ -65,7 +65,6 @@ class raw_env(AECEnv, EzPickle):
         self.sword_dict = {}
 
         # Game Variables
-        self.frame_count = 0
         self.score = 0
         self.run = True
         self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0
@@ -144,9 +143,9 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.display_wait = 0.0
+        self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
-        self.num_agents = len(self.agents)
         self.reinit()
 
     def seed(self, seed=None):
@@ -397,7 +396,9 @@ class raw_env(AECEnv, EzPickle):
 
         return np.swapaxes(cropped, 1, 0)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         agent = self.agent_selection
         if self.render_on:
             self.clock.tick(self.FPS)                # FPS
@@ -482,27 +483,27 @@ class raw_env(AECEnv, EzPickle):
             self.check_game_end()
             self.frames += 1
 
+        self._clear_rewards()
         self.rewards[agent] = agent_name.score
-        done = not self.run or self.frames >= self.max_frames
-        self.dones = {agent: done for agent in self.agents}
+        done = not self.run or self.frames >= self.max_cycles
+        self.dones = {a: done for a in self.agents}
 
         if self._agent_selector.is_last() and not self.black_death:
+            _live_agents = self.agents[:]
             # self.agents must be recreated
             for k in self.kill_list:
-                self.agents.remove(k)
-                # self.dones.pop(k, None)
-                # self.rewards.pop(k, None)
-                # self.infos.pop(k, None)
-
-            self._agent_selector.reinit(self.agents)
-            self.num_agents = len(self.agents)
+                self.dones[k] = True
+                _live_agents.remove(k)
 
             # reset the kill list
             self.kill_list = []
 
+            self._agent_selector.reinit(_live_agents)
+
         self.agent_selection = self._agent_selector.next()
-        if observe:
-            return self.observe(self.agent_selection)
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
@@ -536,11 +537,6 @@ class raw_env(AECEnv, EzPickle):
         # Zombie Kills all Players
         self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
 
-        # Condition to Check 900 Frames
-        self.frame_count += 1
-        if self.frame_count > 900:
-            self.run = False
-
     def reinit(self):
         # Dictionaries for holding new players and their weapons
         self.archer_dict = {}
@@ -549,7 +545,6 @@ class raw_env(AECEnv, EzPickle):
         self.sword_dict = {}
 
         # Game Variables
-        self.frame_count = 0
         self.score = 0
         self.run = True
         self.arrow_spawn_rate = self.sword_spawn_rate = self.zombie_spawn_rate = 0
@@ -604,16 +599,16 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
+        self.agents = self.possible_agents[:]
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = {a: 0 for a in self.agents}
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
-        if observe:
-            return self.observe(self.agent_selection)
 
 # The original code for this game, that was added by Justin Terry, was
 # created by Dipam Patel in a different repository (hence the git history)

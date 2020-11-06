@@ -7,7 +7,7 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,41)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import battle_v1"
+import: "pettingzoo.magent import battle_v2"
 agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
@@ -31,14 +31,14 @@ Reward is given as:
 
 If multiple options apply, rewards are added together.
 
-Observation space: `[empty, obstacle, red, blue, minimap_red, minimap_blue, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
+Observation space: `[obstacle, my_team_presence, my_team_presence_health, my_team_presence_minimap, other_team_presence, other_team_presence_health, other_team_presence_minimap, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
 
 Map size: 45x45
 
 ### Arguments
 
 ```
-battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_frames=1000)
+battle_v2.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
 
@@ -51,4 +51,4 @@ battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_
 
 `attack_opponent_reward`:  Reward added for attacking an opponent
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

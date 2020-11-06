@@ -37,7 +37,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed=None,
             obs_type='rgb_image',
             full_action_space=True,
-            max_frames=100000,
+            max_cycles=100000,
             auto_rom_install_path=None):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
@@ -49,7 +49,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed,
             obs_type,
             full_action_space,
-            max_frames,
+            max_cycles,
             auto_rom_install_path,
         )
 
@@ -57,7 +57,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.obs_type = obs_type
         self.full_action_space = full_action_space
         self.num_players = num_players
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -109,12 +109,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                 num_channels = 1
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
-        self.num_agents = num_players
         player_names = ["first", "second", "third", "fourth"]
-        self.agents = [f"{player_names[n]}_0" for n in range(self.num_agents)]
+        self.agents = [f"{player_names[n]}_0" for n in range(num_players)]
+        self.possible_agents = self.agents[:]
 
-        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.agents}
-        self.observation_spaces = {agent: observation_space for agent in self.agents}
+        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents}
+        self.observation_spaces = {agent: observation_space for agent in self.possible_agents}
 
         self._screen = None
         self.seed(seed)
@@ -128,6 +128,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def reset(self):
         self.ale.reset_game()
+        self.agents = self.possible_agents[:]
+        self.dones = {agent: False for agent in self.possible_agents}
         self.frame = 0
 
         obs = self._observe()
@@ -143,24 +145,27 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             return self.ale.getScreenGrayscale()
 
     def step(self, action_dict):
-        actions = np.zeros(self.num_agents, dtype=np.int32)
-        for i, agent in enumerate(self.agents):
-            actions[i] = action_dict[agent]
+        actions = np.zeros(self.max_num_agents, dtype=np.int32)
+        self.agents = [agent for agent in self.agents if not self.dones[agent]]
+        for i, agent in enumerate(self.possible_agents):
+            if agent in action_dict:
+                actions[i] = action_dict[agent]
 
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
-        if self.ale.game_over() or self.frame >= self.max_frames:
+        self.frame += 1
+        if self.ale.game_over() or self.frame >= self.max_cycles:
             dones = {agent: True for agent in self.agents}
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
-            dones = {agent: int(life) < 0 for agent, life in zip(self.agents, lives)}
+            dones = {agent: int(life) < 0 for agent, life in zip(self.possible_agents, lives) if agent in self.agents}
+            self.dones = dones
 
-        self.frame += 1
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
-        rewards = {agent: rew for agent, rew in zip(self.agents, rewards)}
-        infos = {agent: {} for agent in self.agents}
+        rewards = {agent: rew for agent, rew in zip(self.possible_agents, rewards) if agent in self.agents}
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):

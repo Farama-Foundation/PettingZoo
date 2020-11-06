@@ -203,7 +203,7 @@ class CooperativePong(gym.Env):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_frames=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
         pygame.init()
@@ -228,7 +228,7 @@ class CooperativePong(gym.Env):
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
 
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
 
         # paddles
         self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
@@ -322,6 +322,7 @@ class CooperativePong(gym.Env):
         # action: 0: do nothing,
         # action: 1: p[i] move up, 2: p[i] move down
         if agent == self.agents[0]:
+            self.rewards = {a: 0 for a in self.agents}
             self.p0.update(self.area, action)
         elif agent == self.agents[1]:
             self.p1.update(self.area, action)
@@ -341,9 +342,9 @@ class CooperativePong(gym.Env):
                 if not self.done:
                     self.num_frames += 1
                     # scaling reward so that the max reward is 100
-                    reward = 100 / self.max_frames
+                    reward = 100 / self.max_cycles
                     self.score += reward
-                    if self.num_frames == self.max_frames:
+                    if self.num_frames == self.max_cycles:
                         self.done = True
 
                 # let the clock tick
@@ -383,8 +384,8 @@ class raw_env(AECEnv, EzPickle):
 
         self.seed()
 
-        self.agents = self.env.agents
-        self.num_agents = len(self.agents)
+        self.agents = self.env.agents[:]
+        self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
         # spaces
@@ -405,14 +406,14 @@ class raw_env(AECEnv, EzPickle):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.env.reset()
+        self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
+        self._cumulative_rewards = {a: 0 for a in self.agents}
         self.dones = self.env.dones
         self.infos = self.env.infos
-        if observe:
-            return self.observe(self.agent_selection)
 
     def observe(self, agent):
         obs = self.env.observe(agent)
@@ -424,7 +425,9 @@ class raw_env(AECEnv, EzPickle):
     def render(self, mode='human'):
         return self.env.render(mode)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         agent = self.agent_selection
         if np.isnan(action):
             action = 0
@@ -441,9 +444,9 @@ class raw_env(AECEnv, EzPickle):
 
         self.score = self.env.score
 
-        if observe:
-            observation = self.observe(self.agent_selection)
-            return observation
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
 # added in by Justin Terry (which is why he's shown as the creator in the git history)
