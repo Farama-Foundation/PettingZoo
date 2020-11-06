@@ -1,5 +1,5 @@
 import multi_agent_ale_py
-import os
+from pathlib import Path
 from pettingzoo import AECEnv
 import gym
 from gym.utils import seeding, EzPickle
@@ -37,7 +37,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed=None,
             obs_type='rgb_image',
             full_action_space=True,
-            max_cycles=100000):
+            max_cycles=100000,
+            auto_rom_install_path=None):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
         EzPickle.__init__(
@@ -48,7 +49,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed,
             obs_type,
             full_action_space,
-            max_cycles
+            max_cycles,
+            auto_rom_install_path,
         )
 
         assert obs_type in ('ram', 'rgb_image', "grayscale_image"), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
@@ -62,12 +64,18 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         self.ale.setFloat(b'repeat_action_probability', 0.)
 
-        pathstart = os.path.dirname(multi_agent_ale_py.__file__)
-        final_path = os.path.join(pathstart, "ROM", game, game + ".bin")
-        if not os.path.exists(final_path):
-            raise IOError("rom {} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM)".format(game))
+        if auto_rom_install_path is None:
+            start = Path(multi_agent_ale_py.__file__).parent
+        else:
+            start = Path(auto_rom_install_path).resolve()
 
-        self.rom_path = final_path
+        final = start / "ROM" / game / f"{game}.bin"
+
+        if not final.exists():
+            raise IOError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM) "
+                          "or specify and double-check the path to your Atari rom using the `rom_path` argument.")
+
+        self.rom_path = str(final)
         self.ale.loadROM(self.rom_path)
 
         all_modes = self.ale.getAvailableModes(num_players)

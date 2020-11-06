@@ -62,6 +62,17 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 ## Release History
 
+Version 1.4.0 (November 5, 2020)
+
+General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death
+Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification
+Butterfly: Bug fixes in all environment, bumped PyGame and PyMunk versions
+Classic: Bumped RLCard version, fixed default observation space for many environments depending on RLCard
+SISL: Bug fixes in all environments
+MAgent: Fixes to observation space of all environments
+
+Bumped versions of all environments. There hopefully will be no more more major API changes after this. 
+
 Version 1.3.5 (October 14, 2020)
 
 Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments.
@@ -114,7 +125,7 @@ To cite this project in publication, please use
 ```
 @article{terry2020pettingzoo,
   Title = {PettingZoo: Gym for Multi-Agent Reinforcement Learning},
-  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Horsch, Caroline and Ravi, Praveen and Sullivan, Ryan},
+  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Sullivan, Ryan and Horsch, Caroline and Ravi, Praveen},
   journal={arXiv preprint arXiv:2009.14471},
   year={2020}
 }
