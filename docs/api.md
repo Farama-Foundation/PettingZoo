@@ -79,6 +79,10 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
+### Agent Death
+
+While the maximum number of agents is fixed, agents can die and generate. If an agent dies, then its entry in the `dones` dictionary is set to True, it will become the next selected agent (or after another agent that is also done), and the action it takes is required to be None. After this dummy step is taken, the agent will be removed from the agents list and the data for this agent will no longer be accessible. While we currently do not have environments with agent generation, this can be implemented by simply adding an agent to the agents list and allowing its rewards and observations to be accessed.
+
 ### Number of agents
 
 You can get the number of agents with `len(env.agents)`, and the maximum possible number of agents with `len(env.possible_agents)`.
