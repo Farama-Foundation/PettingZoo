@@ -9,7 +9,7 @@ action-values: "Discrete(26^2 * 2 + 1)"
 observation-shape: "(198,)"
 observation-values: "[0, 7.5]"
 num-states: "10^26"
-import: "from pettingzoo.classic import backgammon_v0"
+import: "from pettingzoo.classic import backgammon_v1"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 {% include info_box.md %}

@@ -7,7 +7,7 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,41)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import battlefield_v1"
+import: "pettingzoo.magent import battlefield_v2"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
@@ -40,7 +40,7 @@ Map size: 80x80
 ### Arguments
 
 ```
-battle_v1.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
+battle_v2.env(step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
 

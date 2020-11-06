@@ -9,7 +9,7 @@ action-values: "Discrete(110)"
 observation-shape: "(5, 52)"
 observation-values: "[0,1]"
 num-states: "10^52"
-import: "from pettingzoo.classic import gin_rummy_v0"
+import: "from pettingzoo.classic import gin_rummy_v1"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 

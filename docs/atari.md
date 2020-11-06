@@ -29,9 +29,9 @@ Here is some example usage for the Atari preprocessing:
 
 ```python
 from supersuit import resize, frame_skip, frame_stack, sticky_actions
-from pettingzoo.atari import space_invaders_v0
+from pettingzoo.atari import space_invaders_v1
 
-env = space_invaders_v0.env()
+env = space_invaders_v1.env()
 
 # repeat_action_probability is set to 0.25 to introduce non-determinism to the system
 env = sticky_actions(env, repeat_action_probability=0.25)

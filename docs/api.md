@@ -5,8 +5,8 @@
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
 ```python
-from pettingzoo.butterfly import pistonball_v0
-env = pistonball_v0.env()
+from pettingzoo.butterfly import pistonball_v1
+env = pistonball_v1.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -44,13 +44,13 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces.
+`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or reseting.
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
-`observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
+`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
-`action_spaces`: A dict of the action spaces of every agent, keyed by name.
+`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
 `dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
@@ -79,9 +79,9 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
-### Agent Death
+### Variable Numbers of Agents (Death)
 
-While the maximum number of agents is fixed, agents can die and generate. If an agent dies, then its entry in the `dones` dictionary is set to True, it will become the next selected agent (or after another agent that is also done), and the action it takes is required to be None. After this dummy step is taken, the agent will be removed from the agents list and the data for this agent will no longer be accessible. While we currently do not have environments with agent generation, this can be implemented by simply adding an agent to the agents list and allowing its rewards and observations to be accessed.
+Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
 
 ### Number of agents
 
@@ -97,7 +97,7 @@ In certain cases, separating agent from environment actions is helpful for study
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
 ```python
-env = prospector_v2.raw_env(<environment parameters>)
+env = prospector_v3.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
@@ -109,7 +109,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 Environments can be interacted with as follows:
 
 ```python
-parallel_env = pistonball_v0.parallel_env()
+parallel_env = pistonball_v1.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
 for step in range(max_cycles):
@@ -174,8 +174,8 @@ If the environment has `manual_control` functionality included (explained below)
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```python
-from pettingzoo.butterfly import prison_v1
-prison_v1.manual_control(<environment parameters>)
+from pettingzoo.butterfly import prison_v2
+prison_v2.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.

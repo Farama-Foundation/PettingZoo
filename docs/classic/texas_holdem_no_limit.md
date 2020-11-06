@@ -7,7 +7,7 @@ action-shape: "Discrete(4)"
 action-values: "Discrete(4)"
 observation-shape: "(72,)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import texas_holdem_v0"
+import: "from pettingzoo.classic import texas_holdem_v1"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 

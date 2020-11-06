@@ -9,7 +9,7 @@ action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
 average-total-reward: "6.23"
-import: "from pettingzoo.atari import entombed_cooperative_v1"
+import: "from pettingzoo.atari import entombed_cooperative_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 

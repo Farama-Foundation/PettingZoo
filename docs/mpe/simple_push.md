@@ -7,7 +7,7 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(8),(19)"
 observation-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_push_v1"
+import: "from pettingzoo.mpe import simple_push_v2"
 agent-labels: "agents= [adversary_0, agent_0]"
 ---
 
