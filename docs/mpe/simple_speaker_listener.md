@@ -8,7 +8,7 @@ action-values: "Discrete(3),(5)"
 observation-shape: "(3),(11)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-80.9"
-import: "from pettingzoo.mpe import simple_speaker_listener_v2"
+import: "from pettingzoo.mpe import simple_speaker_listener_v3"
 agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
