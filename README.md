@@ -58,6 +58,17 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 ## Release History
 
+Version 1.4.0 (November 5, 2020)
+
+General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death
+Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification
+Butterfly: Bug fixes in all environment, bumped PyGame and PyMunk versions
+Classic: Bumped RLCard version, fixed default observation space for many environments depending on RLCard
+SISL: Bug fixes in all environments
+MAgent: Fixes to observation space of all environments
+
+Bumped versions of all environments. There hopefully will be no more more major API changes after this. 
+
 Version 1.3.5 (October 14, 2020)
 
 Fixed numerous more prospector issues, added checkers, renamed Atari Pong based environments. 
