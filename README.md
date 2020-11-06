@@ -110,7 +110,7 @@ To cite this project in publication, please use
 ```
 @article{terry2020pettingzoo,
   Title = {PettingZoo: Gym for Multi-Agent Reinforcement Learning},
-  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Horsch, Caroline and Ravi, Praveen and Sullivan, Ryan},
+  Author = {Terry, Justin K and Black, Benjamin and Jayakumar, Mario and Hari, Ananth and Santos, Luis and Dieffendahl, Clemens and Williams, Niall L and Lokesh, Yashas and Sullivan, Ryan and Horsch, Caroline and Ravi, Praveen},
   journal={arXiv preprint arXiv:2009.14471},
   year={2020}
 }
