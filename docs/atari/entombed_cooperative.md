@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-average-total-reward: "0.0082"
+average-total-reward: "6.23"
 import: "from pettingzoo.atari import entombed_cooperative_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
@@ -28,7 +28,7 @@ Note you can easily find yourself in a dead-end escapable only through the use o
 If players help each other by the use of these powerups, they can last longer. Note that optimal coordination requires that the agents be on opposite sides of the map, because powerups appear on one side or the other, but can be used to break through walls on both sides (the break is symmetric and effects both halves of the screen).
 In addition, there dangerous zombies lurking around to avoid.
 
-The reward was designed to be identical to the single player rewards. In particular, an entombed stage is divided into 5 invisible sections. You receive reward immediately after changing sections, or after resetting the stage. Note that this means that you receive a reward when you lose a life, because it resets the stage, but not when you lose your last life, because the game terminates without the stage resetting. 
+The reward was designed to be identical to the single player rewards. In particular, an entombed stage is divided into 5 invisible sections. You receive reward immediately after changing sections, or after resetting the stage. Note that this means that you receive a reward when you lose a life, because it resets the stage, but not when you lose your last life, because the game terminates without the stage resetting.
 
 
 [Official Entombed manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=165)

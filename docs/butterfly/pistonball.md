@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "discrete (2)"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
-average-total-reward: "0.419"
+average-total-reward: "2.518"
 import: "from pettingzoo.butterfly import pistonball_v0"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
@@ -47,4 +47,3 @@ ball_elasticity=1.5, max_cycles=900)
 `ball_friction`:  Sets the friction of the ball physics object
 
 `ball_elasticity`:  Sets the elasticity of the ball physics object
-

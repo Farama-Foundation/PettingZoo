@@ -7,7 +7,7 @@ action-shape: "(5)"
 action-values: "Discrete(5)"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
-average-total-reward: "-555.4"
+average-total-reward: "-115.6"
 import: "from pettingzoo.mpe import simple_spread_v1"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
@@ -37,4 +37,3 @@ simple_spread.env(N=3, local_ratio=0.5, max_cycles=25)
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
-
