@@ -46,8 +46,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
-        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
+    def __init__(self, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
@@ -83,8 +83,8 @@ class raw_env(AECEnv, EzPickle):
         # Defines what "recent" means in terms of number of frames.
         self.recentFrameLimit = 20
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
-        self.global_reward_weight = 1 - local_ratio
-        self.local_reward_weight = 1 - self.global_reward_weight
+        self.time_penalty = time_penalty
+        self.local_ratio = local_ratio
 
         self.add_walls()
 
@@ -258,7 +258,7 @@ class raw_env(AECEnv, EzPickle):
 
     def get_local_reward(self, prev_position, curr_position):
         local_reward = .5 * (prev_position - curr_position)
-        return local_reward * self.local_reward_weight
+        return local_reward
 
     def render(self, mode="human"):
         if not self.renderOn and mode == "human":
@@ -279,34 +279,33 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
-        newX = int(self.ball.position[0] - 40)
-        local_reward = self.get_local_reward(self.lastX, newX)
-        # opposite order due to moving right to left
-        global_reward = (100 / self.distance) * (self.lastX - newX)
-        self.lastX = newX
-        if newX <= 81:
-            self.done = True
-
         if self.renderOn:
             self.clock.tick(60)
         else:
             self.clock.tick()
         self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
+            newX = int(self.ball.position[0] - 40)
+            if newX <= 81:
+                self.done = True
             self.draw()
-            total_reward = [(global_reward / 20) * self.global_reward_weight] * 20  # start with global reward
+            local_reward = self.get_local_reward(self.lastX, newX)
+            # opposite order due to moving right to left
+            global_reward = (100 / self.distance) * (self.lastX - newX)
+            if not self.done:
+                global_reward -= 0.1
+            total_reward = [global_reward * (1-self.local_ratio)] * 20  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
-                total_reward[index] += local_reward
+                total_reward[index] += local_reward * self.local_ratio
             self.rewards = dict(zip(self.agents, total_reward))
+            self.lastX = newX
             self.frames += 1
         else:
             self._clear_rewards()
 
         if self.frames >= self.max_cycles:
             self.done = True
-        if not self.done:
-            global_reward -= 0.1
         # Clear the list of recent pistons for the next reward cycle
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
