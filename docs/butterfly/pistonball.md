@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "discrete (2)"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
-average-total-reward: "2.518"
+average-total-reward: "-1053.72"
 import: "from pettingzoo.butterfly import pistonball_v1"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
