@@ -44,13 +44,13 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces.
+`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or reseting.
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
-`observation_spaces`: A dict of the observation spaces of every agent, keyed by name.
+`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
-`action_spaces`: A dict of the action spaces of every agent, keyed by name.
+`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
 `dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
@@ -79,9 +79,9 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
-### Agent Death
+### Variable Numbers of Agents (Death)
 
-While the maximum number of agents is fixed, agents can die and generate. If an agent dies, then its entry in the `dones` dictionary is set to True, it will become the next selected agent (or after another agent that is also done), and the action it takes is required to be None. After this dummy step is taken, the agent will be removed from the agents list and the data for this agent will no longer be accessible. While we currently do not have environments with agent generation, this can be implemented by simply adding an agent to the agents list and allowing its rewards and observations to be accessed.
+Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
 
 ### Number of agents
 
