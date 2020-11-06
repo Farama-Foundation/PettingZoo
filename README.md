@@ -62,7 +62,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 ## Release History
 
-Version 1.4.0 (November 5, 2020)
+Version 1.4.0 (November 6, 2020)
 
 General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death
 Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification
