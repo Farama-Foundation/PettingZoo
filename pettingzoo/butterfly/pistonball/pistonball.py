@@ -294,7 +294,7 @@ class raw_env(AECEnv, EzPickle):
             global_reward = (100 / self.distance) * (self.lastX - newX)
             if not self.done:
                 global_reward -= 0.1
-            total_reward = [global_reward * (1-self.local_ratio)] * 20  # start with global reward
+            total_reward = [global_reward * (1 - self.local_ratio)] * 20  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
                 total_reward[index] += local_reward * self.local_ratio
