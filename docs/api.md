@@ -5,8 +5,8 @@
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
 ```python
-from pettingzoo.butterfly import pistonball_v0
-env = pistonball_v0.env()
+from pettingzoo.butterfly import pistonball_v1
+env = pistonball_v1.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -97,7 +97,7 @@ In certain cases, separating agent from environment actions is helpful for study
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
 ```python
-env = prospector_v2.raw_env(<environment parameters>)
+env = prospector_v3.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
@@ -109,7 +109,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 Environments can be interacted with as follows:
 
 ```python
-parallel_env = pistonball_v0.parallel_env()
+parallel_env = pistonball_v1.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
 for step in range(max_cycles):
@@ -174,8 +174,8 @@ If the environment has `manual_control` functionality included (explained below)
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```python
-from pettingzoo.butterfly import prison_v1
-prison_v1.manual_control(<environment parameters>)
+from pettingzoo.butterfly import prison_v2
+prison_v2.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.
