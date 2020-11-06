@@ -16,7 +16,7 @@ class RLCardBase(AECEnv):
         self.env = rlcard.make(name)
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
-        self.num_agents = len(self.agents)
+        self.possible_agents = self.agents[:]
 
         dtype = self.env.reset()[0]['obs'].dtype
         if dtype == np.dtype(np.int64):
@@ -36,19 +36,21 @@ class RLCardBase(AECEnv):
         return reward
 
     def _int_to_name(self, ind):
-        return self.agents[ind]
+        return self.possible_agents[ind]
 
     def _name_to_int(self, name):
-        return self.agents.index(name)
+        return self.possible_agents.index(name)
 
     def _convert_to_dict(self, list_of_list):
-        return dict(zip(self.agents, list_of_list))
+        return dict(zip(self.possible_agents, list_of_list))
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
         return obs['obs'].astype(self._dtype)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         obs, next_player_id = self.env.step(action)
         next_player = self._int_to_name(next_player_id)
         self._last_obs = self.observe(self.agent_selection)
@@ -57,23 +59,22 @@ class RLCardBase(AECEnv):
             self.infos[next_player]['legal_moves'] = []
             self.dones = self._convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
         else:
-            self.infos[next_player]['legal_moves'] = obs['legal_actions']
+            self.infos[next_player]['legal_moves'] = list(sorted(obs['legal_actions']))
+        self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = next_player
-        if observe:
-            return self.observe(self.agent_selection) if obs else self._last_obs
+        self._accumulate_rewards()
+        self._dones_step_first()
 
-    def reset(self, observe=True):
+    def reset(self):
         obs, player_id = self.env.reset()
+        self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
         self.rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
+        self._cumulative_rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[self._int_to_name(player_id)]['legal_moves'] = obs['legal_actions']
+        self.infos[self._int_to_name(player_id)]['legal_moves'] = list(sorted(obs['legal_actions']))
         self._last_obs = obs['obs']
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def render(self, mode='human'):
         raise NotImplementedError()

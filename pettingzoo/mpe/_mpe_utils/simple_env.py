@@ -21,20 +21,20 @@ class SimpleEnv(AECEnv):
 
     metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, scenario, world, max_frames, local_ratio=None):
+    def __init__(self, scenario, world, max_cycles, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.seed()
 
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         self.scenario = scenario
         self.world = world
         self.local_ratio = local_ratio
 
         self.scenario.reset_world(self.world, self.np_random)
 
-        self.num_agents = len(self.world.agents)
         self.agents = [agent.name for agent in self.world.agents]
+        self.possible_agents = self.agents[:]
         self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self._agent_selector = agent_selector(self.agents)
@@ -65,10 +65,12 @@ class SimpleEnv(AECEnv):
     def observe(self, agent):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
 
-    def reset(self, observe=True):
+    def reset(self):
         self.scenario.reset_world(self.world, self.np_random)
 
+        self.agents = self.possible_agents[:]
         self.rewards = {name: 0. for name in self.agents}
+        self._cumulative_rewards = {name: 0. for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
@@ -78,11 +80,6 @@ class SimpleEnv(AECEnv):
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
-
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def _execute_world_step(self):
         # set action for each agent
@@ -146,7 +143,10 @@ class SimpleEnv(AECEnv):
         # make sure we used all elements of action
         assert len(action) == 0
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
+        cur_agent = self.agent_selection
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
         self.agent_selection = self._agent_selector.next()
@@ -155,16 +155,16 @@ class SimpleEnv(AECEnv):
 
         if next_idx == 0:
             self._execute_world_step()
-            if self.steps > self.max_frames:
+            self.steps += 1
+            if self.steps >= self.max_cycles:
                 for a in self.agents:
                     self.dones[a] = True
-            self.steps += 1
-
-        if observe:
-            next_observation = self.observe(self.agent_selection)
         else:
-            next_observation = None
-        return next_observation
+            self._clear_rewards()
+
+        self._cumulative_rewards[cur_agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
     def render(self, mode='human'):
         from . import rendering

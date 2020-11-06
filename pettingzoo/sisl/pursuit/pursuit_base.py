@@ -33,7 +33,7 @@ class Pursuit():
 
         tag_reward: reward for 'tagging' a single evader
 
-        max_frames: after how many frames should the game end
+        max_cycles: after how many frames should the game end
         n_catch: how surrounded evader needs to be, before removal
         freeze_evaders: toggle evaders move or not
         catch_reward: reward for pursuer who catches an evader
@@ -47,7 +47,7 @@ class Pursuit():
         x_size = self.x_size
         y_size = self.y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
-        self.max_frames = kwargs.pop("max_frames", 500)
+        self.max_cycles = kwargs.pop("max_cycles", 500)
         self.seed()
 
         self.local_ratio = kwargs.pop('local_ratio', 1.0)
@@ -194,11 +194,10 @@ class Pursuit():
         opponent_layer = self.evader_layer
         opponent_controller = self.evader_controller
 
-        if is_last:
-            self.latest_reward_state = self.reward()
-
         # actual action application
         agent_layer.move_agent(agent_id, action)
+
+        self.latest_reward_state = self.reward() / self.num_agents
 
         if is_last:
             ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
@@ -219,13 +218,12 @@ class Pursuit():
             global_val = self.latest_reward_state.mean()
             local_val = self.latest_reward_state
             self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
+            self.frames = self.frames + 1
 
         if self.renderOn:
             self.clock.tick(15)
         else:
             self.clock.tick(2000)
-
-        self.frames = self.frames + 1
 
     def draw_model_state(self):
         # -1 is building pixel flag

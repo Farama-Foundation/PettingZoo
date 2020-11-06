@@ -113,15 +113,55 @@ def test_rewards_dones(env, agent_0):
 
 
 def play_test(env, observation_0):
-    prev_observe = env.reset()
-    for agent in env.agent_iter(env.num_agents*2):  # step through every agent once with observe=True
-        assert isinstance(env.infos[agent], dict), "an environment info must be a dictionary"
-        reward, done, info = env.last()
-        if 'legal_moves' in env.infos[agent] and not done:
+    '''
+    plays through environment and does dynamic checks to make
+    sure the state returned by the environment is
+    consistent. In particular it checks:
+
+    * Whether the reward returned by last is the accumulated reward
+    * Whether the agents list shrinks when agents are done
+    * Whether the keys of the rewards, dones, infos are equal to the agents list
+    * tests that the observation is in bounds.
+    '''
+    env.reset()
+
+    done = {agent:False for agent in env.agents}
+    live_agents = env.agents[:]
+    has_finished = set()
+    accumulated_rewards = {a: 0 for a in env.agents}
+    MAX_FRAMES_TEST = 1000 # long enough for all environments to end, but won't spend forever on atari envs
+    for agent in env.agent_iter(env.num_agents*MAX_FRAMES_TEST):
+        assert isinstance(env.infos[agent], dict), "an environment agent's info must be a dictionary"
+        prev_observe, reward, done, info = env.last()
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        next_observe = env.step(action)
+
+        env.step(action)
+
+        assert accumulated_rewards[agent] == reward, "reward returned by last is not the accumulated rewards in its rewards dict"
+        accumulated_rewards[agent] = 0
+        for a, rew in env.rewards.items():
+            accumulated_rewards[a] += rew
+
+        # check dict element removal
+        assert not (done and agent in has_finished), "agent cannot be done twice in an environment"
+        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
+        assert set(env.rewards.keys()) == (set(env.agents)), "agents should not be given a reward if they were done last turn"
+        assert set(env.dones.keys()) == (set(env.agents)), "agents should not be given a done if they were done last turn"
+        assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
+        assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents"
+        if done:
+            live_agents.remove(agent)
+            has_finished.add(agent)
+        assert env.agents == live_agents, "environment must delete agents as the game continues"
+        if env.env_done:
+            assert has_finished == set(env.possible_agents), "not all agents finished, some were skipped over"
+            break
+
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             assert env.observation_spaces[agent].dtype == prev_observe.dtype
         if not env.observation_spaces[agent].contains(prev_observe):
@@ -129,35 +169,36 @@ def play_test(env, observation_0):
 
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
-        prev_observe = next_observe
-        if not isinstance(env.infos[agent], dict):
+        if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
-        assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
 
     env.reset()
     reward_0 = env.rewards[env.agent_selection]
     for agent in env.agent_iter(env.num_agents*2):
-        reward, done, info = env.last()
-        if 'legal_moves' in env.infos[agent] and not done:
+        obs, reward, done, info = env.last()
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        reward, done, info = env.last()
         assert isinstance(done, bool), "Done from last is not True or False"
-        assert reward == env.rewards[agent], "Reward from last() and rewards[agent] do not match"
-        assert done == env.dones[agent], "Done from last() and rewards[agent] do not match"
+        assert done == env.dones[agent], "Done from last() and dones[agent] do not match"
         assert info == env.infos[agent], "Info from last() and infos[agent] do not match"
         float(env.rewards[agent])  # "Rewards for each agent must be convertible to float
         test_reward(reward)
-        observation = env.step(action, observe=False)
-        assert observation is None, "step(observe=False) must not return anything"
+        observation = env.step(action)
+        assert observation is None, "step() must not return anything"
 
 def test_action_flexibility(env):
     env.reset()
     agent = env.agent_selection
     action_space = env.action_spaces[agent]
     if isinstance(action_space, gym.spaces.Discrete):
-        if 'legal_moves' in env.infos[agent]:
+        obs, reward, done, info = env.last()
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent]:
             action = env.infos[agent]['legal_moves'][0]
         else:
             action = 0
@@ -179,17 +220,19 @@ def api_test(env, render=False, verbose_progress=False):
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 
-    # do this before reset
-    observation = env.reset(observe=False)
-    assert observation is None, "reset(observe=False) must not return anything"
+    env.reset()
     assert not any(env.dones.values()), "dones must all be False after reset"
 
     assert isinstance(env.num_agents, int), "num_agents must be an integer"
-    assert env.num_agents != 0, "Your environment should have a nonzero number of agents"
-    assert env.num_agents > 0, "Your environment can't have a negative number of agents"
+    assert env.num_agents != 0, "An environment should have a nonzero number of agents"
+    assert env.num_agents > 0, "An environment should have a positive number of agents"
 
-    observation_0 = env.reset()
+    env.reset()
+    observation_0, _, _, _ = env.last()
     test_observation(observation_0, observation_0)
+
+    non_observe, _, _, _ = env.last(observe=False)
+    assert non_observe is None, "last must return a None when observe=False"
 
     progress_report("Finished test_observation")
 

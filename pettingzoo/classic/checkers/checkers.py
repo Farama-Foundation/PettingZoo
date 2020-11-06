@@ -67,8 +67,9 @@ class raw_env(AECEnv):
         super().__init__()
 
         self.ch = CheckersRules()
-        self.num_agents = 2
-        self.agents = ["player_{}".format(i) for i in range(self.num_agents)]
+        num_agents = 2
+        self.agents = ["player_{}".format(i) for i in range(num_agents)]
+        self.possible_agents = self.agents[:]
         self.agent_order = list(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
@@ -99,20 +100,20 @@ class raw_env(AECEnv):
     def seed(self, seed=None):
         pass
 
-    def reset(self, observe=True):
+    def reset(self):
         self.ch = CheckersRules()
         self.num_moves = 0
+        self.agents = self.possible_agents[:]
         self.agent_order = list(self.agents)
         self.agent_selection = self.agent_order[0]
         self.observation = self.observe(self.agent_selection)
         self.last_turn = "black"
         self.rewards = {name: 0 for name in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {"legal_moves": []} for name in self.agents}
         self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
         self.winner = -1
-        if observe:
-            return np.array(self.observation)
 
     # Parse action from (256) action space into (32)x(32) action space
     # Action validation is performed later by the gym environment
@@ -201,8 +202,9 @@ class raw_env(AECEnv):
 
         return legal_moves
 
-    def step(self, action, observe=True):
-
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         if action not in self.legal_moves():
             warnings.warn(
                 "Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen."
@@ -231,11 +233,8 @@ class raw_env(AECEnv):
         self.dones[self.agent_order[0]] = winner is not None
         self.dones[self.agent_order[1]] = winner is not None
 
-        if observe:
-            next_observation = self.observe(self.agent_selection)
-        else:
-            next_observation = None
-        return next_observation
+        self._accumulate_rewards()
+        self._dones_step_first()
 
     def render(self, mode="human"):
         board = self.ch.flat_board()

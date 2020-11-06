@@ -7,7 +7,7 @@ action-shape: "Discrete(309)"
 action-values: "Discrete(309)"
 observation-shape: "(6, 5, 15)"
 observation-values: "[0,1]"
-import: "from pettingzoo.classic import dou_dizhu_v0"
+import: "from pettingzoo.classic import dou_dizhu_v1"
 agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 

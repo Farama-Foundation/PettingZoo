@@ -18,8 +18,8 @@ def test_module(name, env_module):
 
     seed_test(env_module.env)
 
-    render_test(_env)
-    _env.close()
+    # render_test(_env)
+    # _env.close()
     # pickle test
     env2 = pickle.loads(pickle.dumps(_env))
     api_test.api_test(env2)

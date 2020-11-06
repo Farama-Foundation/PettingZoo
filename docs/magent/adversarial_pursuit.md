@@ -7,7 +7,7 @@ action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
 observation-shape: "(9,9,15), (10,10,19)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import adversarial_pursuit_v1"
+import: "pettingzoo.magent import adversarial_pursuit_v2"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
@@ -30,17 +30,17 @@ Prey's reward is given as:
 
 * -1 reward for being attacked
 
-Observation space: `[empty, obstacle, predators, prey, one_hot_action, last_reward]`
+Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
 
 Map size: 45x45
 
 ### Arguments
 
 ```
-adversarial_pursuit_v1.env(attack_penalty=-0.2, max_frames=500)
+adversarial_pursuit_v2.env(attack_penalty=-0.2, max_cycles=500)
 ```
 
 
 `attack_penalty`:  Adds the following value to the reward whenever an attacking action is taken
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

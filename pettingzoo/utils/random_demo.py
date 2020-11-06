@@ -26,13 +26,13 @@ def random_demo(env, render=True):
             time.sleep(display_wait)
 
         # for _ in env.agents:
-        reward, done, _ = env.last()
+        obs, reward, done, _ = env.last()
         total_reward += reward
         if 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
-        env.step(action, observe=False)
+        env.step(action)
 
     print("Total reward", total_reward, "done", done)
 

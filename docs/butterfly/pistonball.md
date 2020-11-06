@@ -9,7 +9,7 @@ action-values: "discrete (2)"
 observation-shape: "(200, 120, 3)"
 observation-values: "(0, 255)"
 average-total-reward: "0.419"
-import: "from pettingzoo.butterfly import pistonball_v0"
+import: "from pettingzoo.butterfly import pistonball_v1"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
@@ -31,7 +31,7 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 ```
 pistonball.env(local_ratio=.02, continuous=False, random_drop=True,
 starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
-ball_elasticity=1.5, max_frames=900)
+ball_elasticity=1.5, max_cycles=900)
 ```
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
@@ -47,4 +47,3 @@ ball_elasticity=1.5, max_frames=900)
 `ball_friction`:  Sets the friction of the ball physics object
 
 `ball_elasticity`:  Sets the elasticity of the ball physics object
-

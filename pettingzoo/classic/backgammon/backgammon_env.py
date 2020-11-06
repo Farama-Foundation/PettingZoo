@@ -25,8 +25,8 @@ class raw_env(AECEnv):
         self.game = Game()
         self.seed()
 
-        self.num_agents = 2
         self.agents = ["player_{}".format(i) for i in range(2)]
+        self.possible_agents = self.agents[:]
         self._agent_order = list(self.agents)
         self._agent_selector = agent_selector(self._agent_order)
         self.infos = {i: {'legal_moves': []} for i in self.agents}
@@ -48,7 +48,10 @@ class raw_env(AECEnv):
     def seed(self, seed=None):
         self.np_random = np.random.RandomState(seed)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
+
         if action != 26**2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
             self.game.execute_play(self.colors[self.agent_selection], action)
@@ -63,6 +66,8 @@ class raw_env(AECEnv):
                 self.rewards[self.agent_selection] = -1
                 self.rewards[opp_agent] = 1
             self.dones = {i: True for i in self.agents}
+        else:
+            self._clear_rewards()
 
         if self.double_roll == 0:
             self.agent_selection = self._agent_selector.next()
@@ -83,24 +88,27 @@ class raw_env(AECEnv):
 
         legal_moves = np.array(bg_utils.to_gym_format(valid_moves, self.roll))
         if len(legal_moves) == 0:
-            legal_moves = [26**2 * 2]
+            legal_moves = np.array([26**2 * 2])
+        legal_moves.sort()
         opp_agent = bg_utils.opp_agent(self, self.agent_selection)
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
 
-        if observe:
-            return self.observe(self.game.get_opponent(self.colors[self.agent_selection]))
+        self._accumulate_rewards()
+        self._dones_step_first()
 
     def observe(self, agent):
         return np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198,)
 
-    def reset(self, observe=True):
+    def reset(self):
+        self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': []} for i in self.agents}
         self._agent_order = list(self.agents)
         self._agent_selector.reinit(self._agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {i: 0 for i in self.agents}
+        self._cumulative_rewards = {i: 0 for i in self.agents}
         self.colors = {}
         self.double_roll = 0
         self.game = Game()
@@ -120,10 +128,9 @@ class raw_env(AECEnv):
         self.roll = roll
 
         legal_moves = np.array(bg_utils.to_gym_format(bg_utils.get_valid_actions(self, roll), roll))
+        legal_moves.sort()
         self.infos[self.agent_selection]['legal_moves'] = legal_moves
         self.infos[opp_agent]['legal_moves'] = []
-        if observe:
-            return self.observe(self.colors[self.agent_selection])
 
     def render(self, mode='human'):
         assert mode in ['human'], print(mode)

@@ -33,7 +33,7 @@ The Simple Reference, Simple Speaker Listener, and Simple Spread environments ar
 
 ### Termination
 
-The game terminates after the number of cycles specified by the `max_frames` environment argument is executed. The default for all environments is 100 cycles. Note that in the original OpenAI source code, the default value was 25, not 100.
+The game terminates after the number of cycles specified by the `max_cycles` environment argument is executed. The default for all environments is 100 cycles. Note that in the original OpenAI source code, the default value was 25, not 100.
 
 ### Observation Space
 

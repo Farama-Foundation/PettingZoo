@@ -1,6 +1,43 @@
 import warnings
 import random
 import numpy as np
+import hashlib
+import pickle
+
+
+def hash(val):
+    val = pickle.dumps(val)
+    hasher = hashlib.md5()
+    hasher.update(val)
+    return hasher.hexdigest()
+
+
+def calc_hash(new_env, rand_issue, max_env_iters):
+    cur_hashes = []
+    sampler = random.Random(42)
+    for i in range(3):
+        new_env.reset()
+        for j in range(rand_issue + 1):
+            random.randint(0, 1000)
+            np.random.normal(size=100)
+        for agent in new_env.agent_iter(max_env_iters):
+            obs, rew, done, info = new_env.last()
+            if done:
+                action = None
+            elif 'legal_moves' in info:
+                action = sampler.choice(info['legal_moves'])
+            else:
+                action = new_env.action_spaces[agent].sample()
+            new_env.step(action)
+            cur_hashes.append(hash_obsevation(obs))
+            cur_hashes.append(float(rew))
+
+    return hash(tuple(cur_hashes))
+
+
+def seed_action_spaces(env):
+    for space in env.action_spaces.values():
+        space.seed(42)
 
 
 def check_environment_deterministic(env1, env2):
@@ -10,29 +47,17 @@ def check_environment_deterministic(env1, env2):
     returns a bool: true if env1 and env2 execute the same way
     '''
 
+    # seeds action space so that actions are deterministic
+    seed_action_spaces(env1)
+    seed_action_spaces(env2)
+
     # checks deterministic behavior if seed is set
-    actions = {agent: space.sample() for agent, space in env1.action_spaces.items()}
     hashes = []
     num_seeds = 2
+    max_env_iters = 50
     envs = [env1, env2]
     for x in range(num_seeds):
-        new_env = envs[x]
-        cur_hashes = []
-        for i in range(3):
-            obs = new_env.reset()
-            for i in range(x + 1):
-                random.randint(0, 1000)
-                np.random.normal(size=100)
-            cur_hashes.append(hash_obsevation(obs))
-            for _ in range(50):
-                rew, done, info = new_env.last()
-                if done:
-                    break
-                next_obs = new_env.step(actions[new_env.agent_selection])
-                cur_hashes.append(hash_obsevation(next_obs))
-                cur_hashes.append(float(rew))
-
-        hashes.append(hash(tuple(cur_hashes)))
+        hashes.append(calc_hash(envs[x], x, max_env_iters))
 
     return all(hashes[0] == h for h in hashes)
 

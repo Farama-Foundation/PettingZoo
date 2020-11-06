@@ -10,7 +10,10 @@ from .render_test import render_test
 from .error_tests import error_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
+from .max_cycles_test import max_cycles_test
 import subprocess
+
+assert len(sys.argv) == 6, "ci_test expects 5 arguments: env_id, render, manual_control, performance, save_obs"
 
 render = sys.argv[2] == 'True'
 manual_control = sys.argv[3] == 'True'
@@ -32,6 +35,7 @@ def perform_ci_test(env_id, render, manual_control, performance, save_obs):
         error_collected.append("API Test: " + str(e))
 
     seed_test(env_module.env)
+    max_cycles_test(env_module, env_id)
     # error_test(env_module.env())
 
     if save_obs:

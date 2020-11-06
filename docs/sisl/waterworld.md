@@ -8,7 +8,7 @@ action-values: "(-1, 1)"
 observation-shape: "(212,)"
 observation-values: "[-10,10]"
 average-total-reward: "-0.533"
-import: "from pettingzoo.sisl import waterworld_v1"
+import: "from pettingzoo.sisl import waterworld_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 ---
 
@@ -27,7 +27,7 @@ waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
 obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
 poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
 poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
-local_ratio=1.0, speed_features=True, max_frames=500)
+local_ratio=1.0, speed_features=True, max_cycles=500)
 ```
 
 
@@ -68,4 +68,4 @@ local_ratio=1.0, speed_features=True, max_frames=500)
 
 `speed_features`:  toggles whether archea sensors detect speed of other objects
 
-`max_frames`:  after max_frames steps all agents will return done
+`max_cycles`:  after max_cycles steps all agents will return done

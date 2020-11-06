@@ -62,7 +62,7 @@ def manual_control(**kwargs):
                     # break
         # actions should be a dict of numpy arrays
         for a in _actions:
-            reward, d, info = env.last()
+            obs, reward, d, info = env.last()
             env.step(a)
             pygame.event.pump()
             if d:

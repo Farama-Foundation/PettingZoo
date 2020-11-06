@@ -90,17 +90,18 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    def __init__(self, continuous=False, vector_observation=False, max_frames=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        EzPickle.__init__(self, continuous, vector_observation, max_frames, num_floors, synchronized_start, identical_aliens, random_aliens)
-        self.num_agents = 2 * num_floors
-        self.agents = ["prisoner_" + str(s) for s in range(0, self.num_agents)]
+    def __init__(self, continuous=False, vector_observation=False, max_cycles=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+        EzPickle.__init__(self, continuous, vector_observation, max_cycles, num_floors, synchronized_start, identical_aliens, random_aliens)
+        num_agents = 2 * num_floors
+        self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]
+        self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
         self.metadata = {'render.modes': ['human', "rgb_array"]}
         self.infos = {}
         self.rendering = False
-        self.max_frames = max_frames
+        self.max_cycles = max_cycles
         pygame.init()
         self.clock = pygame.time.Clock()
         self.num_frames = 0
@@ -295,9 +296,11 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.rendering = False
 
-    def reset(self, observe=True):
+    def reset(self):
         self.has_reset = True
+        self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self._agent_selector.reinit(self.agents)
@@ -306,10 +309,10 @@ class raw_env(AECEnv, EzPickle):
         self.reinit()
         self.spawn_prisoners()
         self.draw()
-        if observe:
-            return self.observe(self.agent_selection)
 
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         # move prisoners, -1 = move left, 0 = do  nothing and 1 is move right
         if not isinstance(action, int):
             action = np.asarray(action)
@@ -326,27 +329,29 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.prisoners[agent].set_state(0)
 
+        self._clear_rewards()
         self.rewards[agent] = reward
         if self.rendering:
             self.clock.tick(30)
         else:
             self.clock.tick()
 
-        if (self.num_frames >= self.max_frames):
+        if self._agent_selector.is_last():
+            self.num_frames += 1
+
+        if (self.num_frames >= self.max_cycles):
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
         if self._agent_selector.is_last():
             self.draw()
-        self.num_frames += 1
         if self.rendering:
             pygame.event.pump()
 
         self.agent_selection = self._agent_selector.next()
-        observation = self.observe(self.agent_selection)
-
-        if observe:
-            return observation
+        self._cumulative_rewards[agent] = 0
+        self._accumulate_rewards()
+        self._dones_step_first()
 
     def render(self, mode='human'):
         if not self.rendering and mode == "human":

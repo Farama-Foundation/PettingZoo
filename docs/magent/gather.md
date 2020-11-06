@@ -7,7 +7,7 @@ action-shape: "(33)"
 action-values: "Discrete(33)"
 observation-shape: "(15,15,43)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import gather_v1"
+import: "pettingzoo.magent import gather_v2"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
@@ -35,7 +35,7 @@ Map size: 200x200
 ### Arguments
 
 ```
-gather_v1.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_frames=500)
+gather_v2.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
 ```
 
 
@@ -48,4 +48,4 @@ gather_v1.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_fo
 
 `attack_food_reward`:  Reward added for attacking a food
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

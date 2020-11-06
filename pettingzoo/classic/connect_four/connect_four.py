@@ -29,8 +29,8 @@ class raw_env(AECEnv):
         # flat representation in row major order
         self.board = [0] * (6 * 7)
 
-        self.num_agents = 2
         self.agents = ['player_0', 'player_1']
+        self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
         self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8) for i in self.agents}
@@ -53,7 +53,7 @@ class raw_env(AECEnv):
     #        [1, 1, 2, 1, 0, 1, 0]], dtype=int8)
     def observe(self, agent):
         board_vals = np.array(self.board).reshape(6, 7)
-        cur_player = self.agents.index(self.agent_selection)
+        cur_player = self.possible_agents.index(self.agent_selection)
         opp_player = (cur_player + 1) % 2
 
         cur_p_board = np.equal(board_vals, cur_player + 1)
@@ -61,7 +61,9 @@ class raw_env(AECEnv):
         return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
-    def step(self, action, observe=True):
+    def step(self, action):
+        if self.dones[self.agent_selection]:
+            return self._was_done_step(action)
         # assert valid move
         assert (self.board[0:7][action] == 0), "played illegal move."
 
@@ -92,27 +94,22 @@ class raw_env(AECEnv):
             # no winner yet
             self.agent_selection = next_agent
 
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
+        self._accumulate_rewards()
+        self._dones_step_first()
 
-    def reset(self, observe=True):
+    def reset(self):
         # reset environment
         self.board = [0] * (6 * 7)
 
+        self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
+        self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': list(range(7))} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
 
         self.agent_selection = self._agent_selector.reset()
-
-        if observe:
-            return self.observe(self.agent_selection)
-        else:
-            return
 
     def render(self, mode='human'):
         print("{}'s turn'".format(self.agent_selection))

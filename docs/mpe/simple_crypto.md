@@ -7,7 +7,7 @@ action-shape: "(4)"
 action-values: "Discrete(4)"
 observation-shape: "(4),(8)"
 observation-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_crypto_v1"
+import: "from pettingzoo.mpe import simple_crypto_v2"
 agent-labels: "agents= [eve_0, bob_0, alice_0]"
 ---
 
@@ -35,9 +35,9 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 ### Arguments
 
 ```
-simple_crypto.env(max_frames=25)
+simple_crypto.env(max_cycles=25)
 ```
 
 
 
-`max_frames`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of frames (a step for each agent) until game terminates

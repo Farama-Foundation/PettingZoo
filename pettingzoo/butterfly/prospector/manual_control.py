@@ -52,7 +52,7 @@ def manual_control(**kwargs):
         if quit_while:
             break
         for a in agent_actions:
-            env.step(a, observe=False)
+            env.step(a)
         env.render()
 
         done = any(env.dones.values())
