@@ -57,7 +57,7 @@ jobs:
 
     - name: "Python 3 on macOS"
       os: osx
-      osx_image: xcode11.4
+      osx_image: xcode12
       addons:
         homebrew:
           packages:
@@ -79,7 +79,7 @@ jobs:
     - name: "Full CI tests"
       services:
         - xvfb
-      python: 3.6
+      python: 3.7
       before_install:
 
         - export AUDIODEV=null
