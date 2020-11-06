@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
 average-total-reward: "3.11"
-import: "from pettingzoo.sisl import pursuit_v1"
+import: "from pettingzoo.sisl import pursuit_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 

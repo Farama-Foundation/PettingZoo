@@ -7,7 +7,7 @@ action-shape: "Discrete(5)"
 action-values: "Discrete(5)"
 observation-shape: "Discrete(6)"
 observation-values: "Discrete(6)"
-import: "from pettingzoo.classic import rpsls_v0"
+import: "from pettingzoo.classic import rpsls_v1"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 {% include info_box.md %}

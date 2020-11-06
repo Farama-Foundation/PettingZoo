@@ -10,7 +10,7 @@ action-values: "[0, 1]"
 observation-shape: "(280, 240, 3)"
 observation-values: "[0, 255]"
 average-total-reward: "-92.8"
-import: "from pettingzoo.butterfly import cooperative_pong_v1"
+import: "from pettingzoo.butterfly import cooperative_pong_v2"
 agent-labels: "agents= ['paddle_0', 'paddle_1']"
 aec-diagram: "cooperative_pong_aec.png"
 ---

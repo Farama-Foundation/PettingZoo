@@ -7,7 +7,7 @@ action-shape: "Discrete(170)"
 action-values: "Discrete(170)"
 observation-shape: "(170, 170, 3)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import go_v0"
+import: "from pettingzoo.classic import go_v1"
 agent-labels: "agents= ['black_0', 'white_0']"
 ---
 
@@ -23,9 +23,9 @@ Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minig
 
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
-`g0_v0.env(board_size = 13, komi = 7.5)`
+`g0_v1.env(board_size = 13, komi = 7.5)`
 
-`g0_v0.env() # with default values`
+`g0_v1.env() # with default values`
 
 #### Observation Space
 

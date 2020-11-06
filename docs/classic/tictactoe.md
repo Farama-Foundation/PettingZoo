@@ -7,7 +7,7 @@ action-shape: "(1)"
 action-values: "[0, 8]"
 observation-shape: "(3, 3, 2)"
 observation-values: "[0,1]"
-import: "from pettingzoo.classic import tictactoe_v0"
+import: "from pettingzoo.classic import tictactoe_v1"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
