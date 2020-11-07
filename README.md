@@ -64,7 +64,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 Version 1.4.1 (November 7, 2020)
 
-Changed pistonball reward calculation, other pistonball fixes.
+Changed pistonball reward calculation, other pistonball fixes. Fixed KAZ observation and rendering after reset but before step, and Cooperative Pong issues with rendering. 
 
 Version 1.4.0 (November 6, 2020)
 
