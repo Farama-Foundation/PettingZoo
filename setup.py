@@ -52,5 +52,11 @@ setup(
         "numpy>=1.18.0",
         "gym>=0.17.2"
     ],
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+    ],
     extras_require=extras,
 )
