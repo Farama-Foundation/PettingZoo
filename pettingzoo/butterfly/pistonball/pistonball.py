@@ -93,7 +93,7 @@ class raw_env(AECEnv, EzPickle):
         self.velocity = 4
         self.resolution = 16
 
-        self.seed(0)
+        self.seed()
         for i in range(20):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
             piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
@@ -127,8 +127,8 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_low = 40 * i
-        x_high = 40 * i + 120
+        x_low = 40 * (i+1)
+        x_high = 40 * (i+4)
         cropped = np.array(observation[x_low:x_high, 257:457, :])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
@@ -137,7 +137,8 @@ class raw_env(AECEnv, EzPickle):
     def enable_render(self):
         self.screen = pygame.display.set_mode((960, 560))
         self.renderOn = True
-        self.reset()
+        self.screen.blit(self.background, (0, 0))
+        self.draw()
 
     def close(self):
         if not self.closed:
