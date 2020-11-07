@@ -64,9 +64,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 Version 1.4.0 (November 6, 2020)
 
-General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death. In particular, the agents list now only contains live agents (agents which have not been done).
-
-Internal refactoring: Moved significant logic from wrappers to raw environment.
+General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death. In particular, the agents list now only contains live agents (agents which have not been done). Moved significant logic from wrappers to raw environment. Renamed max_frames to max_cycles and made the meaning of this argument consistent across all environments.
 
 Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification
 
@@ -77,8 +75,6 @@ Classic: Bumped RLCard version, fixed default observation space for many environ
 SISL: Bug fixes in all environments
 
 MAgent: Fixes to observation space of all environments
-
-Renamed max_frames to max_cycles and made the meaning of this argument consistent across all environments (MPE, SISL, Butterfly, Atari, MAgent). 
 
 Bumped versions of all environments. There hopefully will be no more major API changes after this.
 
