@@ -285,6 +285,7 @@ class CooperativePong(gym.Env):
     def enable_render(self):
         self.screen = pygame.display.set_mode(self.screen.get_size())
         self.renderOn = True
+        self.draw()
 
     def render(self, mode='human'):
         if not self.renderOn and mode == "human":
