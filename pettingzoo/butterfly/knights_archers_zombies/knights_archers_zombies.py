@@ -470,15 +470,7 @@ class raw_env(AECEnv, EzPickle):
                 self.arrow_list.remove(arrow)
                 self.all_sprites.remove(arrow)
 
-            self.WINDOW.fill((66, 40, 53))
-            self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
-            self.WINDOW.blit(self.right_wall, self.right_wall_rect)
-            self.WINDOW.blit(self.floor_patch1, (500, 500))
-            self.WINDOW.blit(self.floor_patch2, (900, 30))
-            self.WINDOW.blit(self.floor_patch3, (150, 430))
-            self.WINDOW.blit(self.floor_patch4, (300, 50))
-            self.WINDOW.blit(self.floor_patch1, (1000, 250))
-            self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
+            self.draw()
 
             self.check_game_end()
             self.frames += 1
@@ -509,7 +501,19 @@ class raw_env(AECEnv, EzPickle):
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.render_on = True
-        self.reset()
+        self.draw()
+
+    def draw(self):
+        self.WINDOW.fill((66, 40, 53))
+        self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
+        self.WINDOW.blit(self.right_wall, self.right_wall_rect)
+        self.WINDOW.blit(self.floor_patch1, (500, 500))
+        self.WINDOW.blit(self.floor_patch2, (900, 30))
+        self.WINDOW.blit(self.floor_patch3, (150, 430))
+        self.WINDOW.blit(self.floor_patch4, (300, 50))
+        self.WINDOW.blit(self.floor_patch1, (1000, 250))
+        self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
+
 
     def render(self, mode="human"):
         if not self.render_on and mode == "human":
@@ -597,6 +601,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
+        self.draw()
         self.frames = 0
 
     def reset(self):
