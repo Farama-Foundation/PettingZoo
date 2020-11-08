@@ -40,7 +40,7 @@ def seed_action_spaces(env):
         space.seed(42)
 
 
-def check_environment_deterministic(env1, env2):
+def check_environment_deterministic(env1, env2, num_cycles):
     '''
     env1 and env2 should be seeded environments
 
@@ -54,7 +54,7 @@ def check_environment_deterministic(env1, env2):
     # checks deterministic behavior if seed is set
     hashes = []
     num_seeds = 2
-    max_env_iters = 50
+    max_env_iters = num_cycles*len(env1.possible_agents)
     envs = [env1, env2]
     for x in range(num_seeds):
         hashes.append(calc_hash(envs[x], x, max_env_iters))
@@ -74,17 +74,17 @@ def hash_obsevation(obs):
             return 0
 
 
-def seed_test(env_constructor):
+def seed_test(env_constructor, num_cycles):
     env1 = env_constructor()
     env2 = env_constructor()
     base_seed = 42
     env1.seed(base_seed)
     env2.seed(base_seed)
 
-    assert check_environment_deterministic(env1, env2), \
+    assert check_environment_deterministic(env1, env2, num_cycles), \
          ("The environment gives different results on multiple runs when intialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state.")
 
     env1.seed(base_seed)
     env2.seed(base_seed+1)
-    if check_environment_deterministic(env1, env2):
+    if check_environment_deterministic(env1, env2, num_cycles):
         warnings.warn("The environment gives same results on multiple runs when intialized by default. By default, environments that take a seed argument should be nondeterministic")

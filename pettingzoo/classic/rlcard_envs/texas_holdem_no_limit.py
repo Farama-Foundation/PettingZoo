@@ -29,7 +29,7 @@ class raw_env(RLCardBase):
         self.observation_spaces = self._convert_to_dict([spaces.Box(low=np.zeros(54,), high=np.append(np.ones(52,), [100, 100]), dtype=np.float32) for _ in range(self.num_agents)])
 
     def render(self, mode='human'):
-        for player in self.agents:
+        for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
             print("\n=============== {}'s Hand ===============".format(player))
             print_card(state['hand'])
