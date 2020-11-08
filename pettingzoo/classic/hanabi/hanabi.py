@@ -303,9 +303,9 @@ class raw_env(AECEnv, EzPickle):
          Example:
         """
         player_data = self.latest_observations['player_observations']
-        print("Active player:", self.agents[player_data[0]['current_player_offset']])
+        print("Active player:", self.possible_agents[player_data[0]['current_player_offset']])
         for i, d in enumerate(player_data):
-            print(self.agents[i])
+            print(self.possible_agents[i])
             print("========")
             print(d['pyhanabi'])
             print()

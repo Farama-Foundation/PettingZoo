@@ -25,7 +25,7 @@ class raw_env(RLCardBase):
         super().__init__("mahjong", 4, (6, 34, 4))
 
     def render(self, mode='human'):
-        for player in self.agents:
+        for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
             print("\n======== {}'s Hand ========".format(player))
             print(', '.join([c.get_str() for c in state['current_hand']]))
