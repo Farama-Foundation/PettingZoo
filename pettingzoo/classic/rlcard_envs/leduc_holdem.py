@@ -28,7 +28,7 @@ class raw_env(RLCardBase):
         super().__init__("leduc-holdem", 2, (36,))
 
     def render(self, mode='human'):
-        for player in self.agents:
+        for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
             print("\n=============== {}'s Hand ===============".format(player))
             print_card(state['hand'])
