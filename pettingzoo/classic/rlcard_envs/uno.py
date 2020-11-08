@@ -36,7 +36,7 @@ class raw_env(RLCardBase):
             return obs['obs'][0:4, :, :].astype(self._dtype)
 
     def render(self, mode='human'):
-        for player in self.agents:
+        for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
             print("\n\n=============== {}'s Hand ===============".format(player))
             UnoCard.print_cards(state['hand'])

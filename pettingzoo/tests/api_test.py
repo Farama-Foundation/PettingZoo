@@ -112,7 +112,7 @@ def test_rewards_dones(env, agent_0):
         test_reward(env.rewards[agent])
 
 
-def play_test(env, observation_0):
+def play_test(env, observation_0, num_cycles):
     '''
     plays through environment and does dynamic checks to make
     sure the state returned by the environment is
@@ -129,8 +129,7 @@ def play_test(env, observation_0):
     live_agents = env.agents[:]
     has_finished = set()
     accumulated_rewards = {a: 0 for a in env.agents}
-    MAX_FRAMES_TEST = 1000 # long enough for all environments to end, but won't spend forever on atari envs
-    for agent in env.agent_iter(env.num_agents*MAX_FRAMES_TEST):
+    for agent in env.agent_iter(env.num_agents * num_cycles):
         assert isinstance(env.infos[agent], dict), "an environment agent's info must be a dictionary"
         prev_observe, reward, done, info = env.last()
         if done:
@@ -210,7 +209,7 @@ def test_action_flexibility(env):
         env.reset()
         env.step(np.zeros_like(action_space.low).tolist())
 
-def api_test(env, render=False, verbose_progress=False):
+def api_test(env, num_cycles=10, render=False, verbose_progress=False):
     def progress_report(msg):
         if verbose_progress:
             print(msg)
@@ -242,7 +241,7 @@ def api_test(env, render=False, verbose_progress=False):
 
     progress_report("Finished test_observation_action_spaces")
 
-    play_test(env, observation_0)
+    play_test(env, observation_0, num_cycles)
 
     progress_report("Finished play test")
 
