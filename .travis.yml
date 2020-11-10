@@ -93,12 +93,12 @@ jobs:
         - pip3 install AutoROM
         - AutoROM -v
       script:
-        - python3 -m pettingzoo.tests.ci_test atari True True True False
-        - python3 -m pettingzoo.tests.ci_test classic True True True False
-        - python3 -m pettingzoo.tests.ci_test butterfly True True True False
-        - python3 -m pettingzoo.tests.ci_test mpe True True True False
-        - python3 -m pettingzoo.tests.ci_test magent True True True False
-        - python3 -m pettingzoo.tests.ci_test sisl True True True False
+        - python3 -m pettingzoo.tests.ci_test atari 20 True True False False
+        - python3 -m pettingzoo.tests.ci_test classic 20 True True False False
+        - python3 -m pettingzoo.tests.ci_test butterfly 20 True True False False
+        - python3 -m pettingzoo.tests.ci_test mpe 20 True True False False
+        - python3 -m pettingzoo.tests.ci_test magent 20 True True False False
+        - python3 -m pettingzoo.tests.ci_test sisl 20 True True False False
         - pytest ./pettingzoo/tests/all_parameter_combs.py
 
     - name: "Flake 8 tests"
