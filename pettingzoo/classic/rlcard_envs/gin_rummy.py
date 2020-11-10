@@ -61,7 +61,7 @@ class raw_env(RLCardBase, EzPickle):
             return obs['obs'][0:4, :].astype(self._dtype)
 
     def render(self, mode='human'):
-        for player in self.agents:
+        for player in self.possible_agents:
             state = self.env.game.round.players[self._name_to_int(player)].hand
             print("\n===== {}'s Hand =====".format(player))
             print_card([c.__str__()[::-1] for c in state])

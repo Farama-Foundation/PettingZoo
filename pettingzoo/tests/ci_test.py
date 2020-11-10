@@ -11,30 +11,35 @@ from .error_tests import error_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
+from .parallel_test import parallel_play_test
 import subprocess
 
-assert len(sys.argv) == 6, "ci_test expects 5 arguments: env_id, render, manual_control, performance, save_obs"
+assert len(sys.argv) == 7, "ci_test expects 5 arguments: env_id, num_cycles, render, manual_control, performance, save_obs"
 
-render = sys.argv[2] == 'True'
-manual_control = sys.argv[3] == 'True'
-performance = sys.argv[4] == 'True'
-save_obs = sys.argv[5] == 'True'
+num_cycles = int(sys.argv[2])
+render = sys.argv[3] == 'True'
+manual_control = sys.argv[4] == 'True'
+performance = sys.argv[5] == 'True'
+save_obs = sys.argv[6] == 'True'
 
 
 env_id = sys.argv[1]
 
 
-def perform_ci_test(env_id, render, manual_control, performance, save_obs):
+def perform_ci_test(env_id, num_cycles, render, manual_control, performance, save_obs):
     print("running game {}".format(env_id))
     env_module = all_environments[env_id]
     _env = env_module.env()
     error_collected = []
     try:
-        api_test.api_test(_env, render=render, verbose_progress=True)
+        api_test.api_test(_env, num_cycles=num_cycles, render=render, verbose_progress=True)
     except Exception as e:
         error_collected.append("API Test: " + str(e))
 
-    seed_test(env_module.env)
+    if "classic/" not in env_id:
+        parallel_play_test(env_module.parallel_env(), num_cycles=num_cycles)
+
+    seed_test(env_module.env, num_cycles)
     max_cycles_test(env_module, env_id)
     # error_test(env_module.env())
 
@@ -65,7 +70,7 @@ if env_id in all_prefixes:
     warning_map = {}
     for e in all_environments:
         if e.startswith(env_id):
-            warning_map[e] = perform_ci_test(e, render, manual_control, performance, save_obs)
+            warning_map[e] = perform_ci_test(e, num_cycles, render, manual_control, performance, save_obs)
     f = open("test_output.txt", "w")
     for warn in warning_map:
         warn_list = warning_map[warn]
