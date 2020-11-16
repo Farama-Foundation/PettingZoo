@@ -72,12 +72,6 @@ class raw_env(AECEnv, EzPickle):
         self.random_drop = random_drop
         self.starting_angular_momentum = starting_angular_momentum
 
-        self.space = pymunk.Space(threaded=True)
-        self.space.threads = 2
-        self.space.gravity = (0.0, 750.0)
-        self.space.collision_bias = .0001
-        self.space.iterations = 10  # 10 is default in PyMunk
-
         self.pistonList = []
         self.pistonRewards = []  # Keeps track of individual rewards
         # Defines what "recent" means in terms of number of frames.
@@ -85,28 +79,16 @@ class raw_env(AECEnv, EzPickle):
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
         self.local_ratio = local_ratio
-
-        self.add_walls()
+        self.ball_mass = ball_mass
+        self.ball_friction = ball_friction
+        self.ball_elasticity = ball_elasticity
 
         self.done = False
 
         self.velocity = 4
         self.resolution = 16
 
-        self.seed()
-        for i in range(20):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
-            self.pistonList.append(piston)
-
-        self.offset = 0
-        if self.random_drop:
-            self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), ball_mass, ball_friction, ball_elasticity)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
-
+        self.screen.fill((0,0,0))
         self.screen.blit(self.background, (0, 0))
 
         self.rect = pygame.Rect(80, 80, 800, 377)
@@ -120,6 +102,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.has_reset = False
         self.closed = False
+        self.seed()
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -193,15 +176,39 @@ class raw_env(AECEnv, EzPickle):
             piston.position[1] - v * self.velocity))
 
     def reset(self):
+        self.space = pymunk.Space(threaded=False)
+        self.add_walls()
+        # self.space.threads = 2
+        self.space.gravity = (0.0, 750.0)
+        self.space.collision_bias = .0001
+        self.space.iterations = 10  # 10 is default in PyMunk
+
+        self.pistonList = []
+        for i in range(20):
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            self.pistonList.append(piston)
+
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.randint(-30, 30 + 1)
+        self.ball = self.add_ball(
+            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), self.ball_mass, self.ball_friction, self.ball_elasticity)
+        self.lastX = int(self.ball.position[0] - 40)
+        self.distance = self.lastX - 80
+
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
             piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            piston.velociy = 0
 
         self.offset = 0
         if self.random_drop:
             self.offset = self.np_random.randint(-30, 30 + 1)
         self.ball.position = (800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
+        self.ball.angle = 0
+        self.ball.velocity = (0, 0)
         if self.starting_angular_momentum:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         self.lastX = int(self.ball.position[0] - 40)
