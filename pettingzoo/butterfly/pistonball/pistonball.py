@@ -88,7 +88,7 @@ class raw_env(AECEnv, EzPickle):
         self.velocity = 4
         self.resolution = 16
 
-        self.screen.fill((0,0,0))
+        self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
 
         self.rect = pygame.Rect(80, 80, 800, 377)
@@ -110,8 +110,8 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_low = 40 * (i+1)
-        x_high = 40 * (i+4)
+        x_low = 40 * (i + 1)
+        x_high = 40 * (i + 4)
         cropped = np.array(observation[x_low:x_high, 257:457, :])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)

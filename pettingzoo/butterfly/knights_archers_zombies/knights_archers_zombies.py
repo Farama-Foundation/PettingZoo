@@ -514,7 +514,6 @@ class raw_env(AECEnv, EzPickle):
         self.WINDOW.blit(self.floor_patch1, (1000, 250))
         self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
 
-
     def render(self, mode="human"):
         if not self.render_on and mode == "human":
             # sets self.render_on to true and initializes display
