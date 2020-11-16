@@ -74,8 +74,21 @@ def hash_obsevation(obs):
             return 0
 
 
+def test_environment_reset_deterministic(env1, num_cycles):
+    seed_action_spaces(env1)
+    env1.seed(42)
+    env1.reset()
+    hash1 = calc_hash(env1, 1, num_cycles)
+    seed_action_spaces(env1)
+    env1.seed(42)
+    env1.reset()
+    hash2 = calc_hash(env1, 2, num_cycles)
+    assert hash1 == hash2, "environments kept state after seed(42) and reset()"
+
+
 def seed_test(env_constructor, num_cycles):
     env1 = env_constructor()
+    test_environment_reset_deterministic(env1, num_cycles)
     env2 = env_constructor()
     base_seed = 42
     env1.seed(base_seed)
