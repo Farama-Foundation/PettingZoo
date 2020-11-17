@@ -24,7 +24,7 @@ Environments can be interacted with using a similar interface to Gym:
 env.reset()
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
-    action = policy(observation)
+    action = policy(observation, agent)
     env.step(action)
 ```
 
@@ -113,7 +113,7 @@ parallel_env = pistonball_v1.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
 for step in range(max_cycles):
-    actions = {agent: policies[agent](observations[agent]) for agent in parallel_env.agents}
+    actions = {agent: policy(observations[agent], agent) for agent in parallel_env.agents}
     observations, rewards, dones, infos = parallel_env.step(actions)
 ```
 
