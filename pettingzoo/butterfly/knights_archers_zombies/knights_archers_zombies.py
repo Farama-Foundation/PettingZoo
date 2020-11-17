@@ -45,7 +45,6 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_cycles)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
-        self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
         self.max_cycles = max_cycles
@@ -94,7 +93,6 @@ class raw_env(AECEnv, EzPickle):
         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
-        self.clock = pygame.time.Clock()
         self.left_wall = get_image(os.path.join('img', 'left_wall.png'))
         self.right_wall = get_image(os.path.join('img', 'right_wall.png'))
         self.right_wall_rect = self.right_wall.get_rect()
@@ -400,10 +398,7 @@ class raw_env(AECEnv, EzPickle):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         agent = self.agent_selection
-        if self.render_on:
-            self.clock.tick(self.FPS)                # FPS
-        else:
-            self.clock.tick()
+
         if self._agent_selector.is_last():
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)

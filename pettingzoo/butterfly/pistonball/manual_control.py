@@ -13,12 +13,14 @@ def manual_control(**kwargs):
     # save_observation(obs_dict, reverse_colors=False)
     # exit()
     i = 19
+    clock = pygame.time.Clock()
     start = time.time()
     done = False
     quit_game = 0
     pygame.key.set_repeat(20, 0)
     num_agents = len(env.agents)  # 20
     while not done:
+        clock.tick(60)
         action_list = np.array([1 for _ in range(num_agents)])
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -50,5 +52,5 @@ def manual_control(**kwargs):
         env.render()
         done = any(env.dones.values())
     # Uncomment next line to print FPS at which the game runs
-    # print("fps = ", env.clock.get_fps())
+
     env.close()
