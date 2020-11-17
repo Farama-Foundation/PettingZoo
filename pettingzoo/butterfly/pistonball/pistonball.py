@@ -61,7 +61,6 @@ class raw_env(AECEnv, EzPickle):
             zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
-        self.clock = pygame.time.Clock()
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
@@ -287,10 +286,6 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
-        if self.renderOn:
-            self.clock.tick(60)
-        else:
-            self.clock.tick()
         self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
             newX = int(self.ball.position[0] - 40)

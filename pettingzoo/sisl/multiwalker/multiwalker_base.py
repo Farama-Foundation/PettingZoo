@@ -321,7 +321,6 @@ class MultiWalkerEnv():
 
         self.terrain_length = int(TERRAIN_LENGTH * self.n_walkers * 1 / 8.)
 
-        self.reset()
 
     @property
     def agents(self):
@@ -353,7 +352,7 @@ class MultiWalkerEnv():
             self.viewer = None
 
     def reset(self):
-        self._destroy()
+        self.setup()
         self.world.contactListener_bug_workaround = ContactDetector(self)
         self.world.contactListener = self.world.contactListener_bug_workaround
         self.game_over = False

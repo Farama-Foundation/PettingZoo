@@ -56,10 +56,12 @@ class Prospector(pg.sprite.Sprite):
 
     def reset(self, pos):
         self.body.angle = 0
+        self.body.angular_velocity = 0
         self.image = pg.transform.rotozoom(self.orig_image, 0, 1)
         self.rect = self.image.get_rect(center=pos)
         self.body.position = utils.flipy(pos)
         self.body.velocity = Vec2d(0.0, 0.0)
+        self.body.force = Vec2d(0.0, 0.0)
         self.body.nugget = None
 
     @property
@@ -114,7 +116,6 @@ class Banker(pg.sprite.Sprite):
         self.body = pm.Body(1, moment, body_type=pm.Body.DYNAMIC)
         self.body.nugget = None
         self.body.sprite_type = "banker"
-        self.body.nugget_offset = None
 
         self.shape = pm.Circle(self.body, const.AGENT_RADIUS)
         self.shape.collision_type = CollisionTypes.BANKER
@@ -484,7 +485,6 @@ class raw_env(AECEnv, EzPickle):
 
         pg.init()
         self.seed()
-        self.clock = pg.time.Clock()
         self.closed = False
 
         self.background = Background(self.rng)
@@ -624,7 +624,6 @@ class raw_env(AECEnv, EzPickle):
                 gold_sprite.parent_body.nugget = None
                 gold_sprite.parent_body = banker_body
                 banker_body.nugget = gold_sprite
-                banker_body.nugget_offset = normal.angle
 
                 for k, v in self.prospectors.items():
                     self.rewards[k] += other_group_reward * banker_receive_gold_reward
@@ -761,11 +760,6 @@ class raw_env(AECEnv, EzPickle):
 
         # Only take next step in game if all agents have received an action
         if all_agents_updated:
-            if self.rendering:
-                self.clock.tick(const.FPS)
-            else:
-                self.clock.tick()
-
             for _ in range(const.STEPS_PER_FRAME):
                 self.space.step(const.SPACE_STEP_DELTA)
 

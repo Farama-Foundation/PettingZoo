@@ -221,8 +221,6 @@ class CooperativePong(gym.Env):
         # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
 
-        self.clock = pygame.time.Clock()
-
         self.renderOn = False
 
         # set speed
@@ -347,12 +345,6 @@ class CooperativePong(gym.Env):
                     self.score += reward
                     if self.num_frames == self.max_cycles:
                         self.done = True
-
-                # let the clock tick
-                if self.renderOn:
-                    self.clock.tick(15)
-                else:
-                    self.clock.tick()
 
                 for ag in self.agents:
                     self.rewards[ag] = reward / self.num_agents

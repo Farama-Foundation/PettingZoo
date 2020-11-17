@@ -7,6 +7,7 @@ def manual_control(**kwargs):
     from .prospector import env as _env
 
     env = _env(**kwargs)
+    clock = pygame.time.Clock()
     env.reset()
     default_scalar = 1
     agent = 0
@@ -14,6 +15,7 @@ def manual_control(**kwargs):
     quit_while = False
 
     while not done:
+        clock.tick(const.FPS)
         agent_actions = (
             [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)]
             + [np.array([0, 0]) for _ in range(const.NUM_BANKERS)]
