@@ -50,12 +50,13 @@ class ContactDetector(contactListener):
     def BeginContact(self, contact):
         # if walkers fall on ground
         for i, walker in enumerate(self.env.walkers):
-            if walker.hull == contact.fixtureA.body:
-                if self.env.package != contact.fixtureB.body:
-                    self.env.fallen_walkers[i] = True
-            if walker.hull == contact.fixtureB.body:
-                if self.env.package != contact.fixtureA.body:
-                    self.env.fallen_walkers[i] = True
+            if walker.hull is not None:
+                if walker.hull == contact.fixtureA.body:
+                    if self.env.package != contact.fixtureB.body:
+                        self.env.fallen_walkers[i] = True
+                if walker.hull == contact.fixtureB.body:
+                    if self.env.package != contact.fixtureA.body:
+                        self.env.fallen_walkers[i] = True
 
         # if package is on the ground
         if self.env.package == contact.fixtureA.body:
@@ -67,15 +68,17 @@ class ContactDetector(contactListener):
 
             #    self.env.game_over = True
         for walker in self.env.walkers:
-            for leg in [walker.legs[1], walker.legs[3]]:
-                if leg in [contact.fixtureA.body, contact.fixtureB.body]:
-                    leg.ground_contact = True
+            if walker.hull is not None:
+                for leg in [walker.legs[1], walker.legs[3]]:
+                    if leg in [contact.fixtureA.body, contact.fixtureB.body]:
+                        leg.ground_contact = True
 
     def EndContact(self, contact):
         for walker in self.env.walkers:
-            for leg in [walker.legs[1], walker.legs[3]]:
-                if leg in [contact.fixtureA.body, contact.fixtureB.body]:
-                    leg.ground_contact = False
+            if walker.hull is not None:
+                for leg in [walker.legs[1], walker.legs[3]]:
+                    if leg in [contact.fixtureA.body, contact.fixtureB.body]:
+                        leg.ground_contact = False
 
 
 class BipedalWalker(Agent):
@@ -256,7 +259,7 @@ class MultiWalkerEnv():
     hardcore = False
 
     def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-                 forward_reward=1.0, fall_reward=-100.0, drop_reward=-100.0, terminate_on_fall=True, max_cycles=500):
+                 forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=True, max_cycles=500):
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
@@ -264,7 +267,7 @@ class MultiWalkerEnv():
             local_ratio: proportion of reward allocated locally vs distributed among all agents
             forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
             fall_reward: reward applied when an agent falls down
-            drop_reward: reward applied for each fallen walker in environment
+            terminate_reward: reward applied for each fallen walker in environment
             terminate_on_fall: toggles whether agent is done if it falls down
             max_cycles: after max_cycles steps all agents will return done
         """
@@ -274,9 +277,10 @@ class MultiWalkerEnv():
         self.angle_noise = angle_noise
         self.forward_reward = forward_reward
         self.fall_reward = fall_reward
-        self.drop_reward = drop_reward
+        self.terminate_reward = terminate_reward
         self.terminate_on_fall = terminate_on_fall
         self.local_ratio = local_ratio
+        self.remove_on_fall = remove_on_fall
         self.seed_val = None
         self.seed()
         self.setup()
@@ -390,6 +394,9 @@ class MultiWalkerEnv():
         rewards = np.zeros(self.n_walkers)
 
         for i in range(self.n_walkers):
+            if self.walkers[i].hull is None:
+                obs.append(np.zeros_like(self.observation_space[i].low))
+                continue
             pos = self.walkers[i].hull.position
             x, y = pos.x, pos.y
             xpos[i] = x
@@ -398,7 +405,7 @@ class MultiWalkerEnv():
             nobs = []
             for j in [i - 1, i + 1]:
                 # if no neighbor (for edge walkers)
-                if j < 0 or j == self.n_walkers:
+                if j < 0 or j == self.n_walkers or self.walkers[j].hull is None:
                     nobs.append(0.0)
                     nobs.append(0.0)
                 else:
@@ -426,21 +433,30 @@ class MultiWalkerEnv():
         self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * \
             WALKER_SEPERATION * TERRAIN_STEP
 
-        done = False
+        done = [False] * self.n_walkers
         if self.game_over or pos[0] < 0:
-            rewards += self.drop_reward
-            done = True
+            rewards += self.terminate_reward
+            done = [True] * self.n_walkers
         if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
             done = True
         rewards += self.fall_reward * self.fallen_walkers
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
-            done = True
+            rewards += self.terminate_reward
+            done = [True] * self.n_walkers
+        for i, (fallen, walker) in enumerate(zip(self.fallen_walkers, self.walkers)):
+            if fallen:
+                if not done[i]:
+                    rewards[i] += self.terminate_reward
+                if self.remove_on_fall:
+                    walker._destroy()
+                done[i] = True
 
         return rewards, done, obs
 
     def step(self, action, agent_id, is_last):
         # action is array of size 4
         action = action.reshape(4)
+        assert self.walkers[agent_id].hull is not None, agent_id
         self.walkers[agent_id].apply_action(action)
         if is_last:
             self.world.Step(1.0 / FPS, 6 * 30, 2 * 30)
@@ -449,7 +465,7 @@ class MultiWalkerEnv():
             global_reward = rewards.mean()
             local_reward = rewards * self.local_ratio
             self.last_rewards = global_reward * (1. - self.local_ratio) + local_reward * self.local_ratio
-            self.last_dones = [done for _ in range(self.n_walkers)]
+            self.last_dones = done
             self.frames = self.frames + 1
 
     def get_last_rewards(self):
