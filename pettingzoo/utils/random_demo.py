@@ -28,7 +28,9 @@ def random_demo(env, render=True):
         # for _ in env.agents:
         obs, reward, done, _ = env.last()
         total_reward += reward
-        if 'legal_moves' in env.infos[agent]:
+        if done:
+            action = None
+        elif 'legal_moves' in env.infos[agent]:
             action = random.choice(env.infos[agent]['legal_moves'])
         else:
             action = env.action_spaces[agent].sample()
