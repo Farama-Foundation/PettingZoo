@@ -85,9 +85,16 @@ class raw_env(AECEnv, EzPickle):
                 self.rewards[r] = last_rewards[self.agent_name_mapping[r]]
             for d in self.dones:
                 self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+            self.agent_name_mapping = {agent: i for i, (agent, done) in enumerate(zip(self.possible_agents, self.env.get_last_dones()))}
+            iter_agents = self.agents[:]
+            for a, d in self.dones.items():
+                if d:
+                    iter_agents.remove(a)
+            self._agent_selector.reinit(iter_agents)
         else:
             self._clear_rewards()
-        self.agent_selection = self._agent_selector.next()
+        if self._agent_selector.agent_order:
+            self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_cycles:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
