@@ -36,7 +36,6 @@ class raw_env(AECEnv, EzPickle):
             zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.display_wait = 0.04
-        self.observations = self.env.get_last_obs()
 
     def seed(self, seed=None):
         self.env.seed(seed)

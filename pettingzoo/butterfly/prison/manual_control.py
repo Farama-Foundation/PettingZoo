@@ -6,12 +6,14 @@ def manual_control(**kwargs):
     from .prison import env as _env
     env = _env(**kwargs)
     env.reset()
+    clock = pygame.time.Clock()
     x = 0
     y = 0
     prisoner_mapping = {}
     for prisoner in env.agents:
         prisoner_mapping[env.infos[prisoner]['map_tuple']] = prisoner
     while True:
+        clock.tick(30)
         agent_actions = {agent: 1 for agent in env.agents}
         num_actions = 0
         test_done = False

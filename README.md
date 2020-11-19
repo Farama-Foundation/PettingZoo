@@ -62,6 +62,10 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 ## Release History
 
+Version 1.4.1 (November 7, 2020)
+
+Changed pistonball reward calculation, other pistonball fixes. Fixed KAZ observation and rendering after reset but before step, and Cooperative Pong issues with rendering. 
+
 Version 1.4.0 (November 6, 2020)
 
 General: Substantial API upgrades (see https://www.pettingzoo.ml/api), overhaul of the handling of agent death. In particular, the agents list now only contains live agents (agents which have not been done). Moved significant logic from wrappers to raw environment. Renamed max_frames to max_cycles and made the meaning of this argument consistent across all environments.

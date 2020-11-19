@@ -45,7 +45,6 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_cycles)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
-        self.FPS = 90
         self.WIDTH = 1280
         self.HEIGHT = 720
         self.max_cycles = max_cycles
@@ -94,7 +93,6 @@ class raw_env(AECEnv, EzPickle):
         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
-        self.clock = pygame.time.Clock()
         self.left_wall = get_image(os.path.join('img', 'left_wall.png'))
         self.right_wall = get_image(os.path.join('img', 'right_wall.png'))
         self.right_wall_rect = self.right_wall.get_rect()
@@ -400,10 +398,7 @@ class raw_env(AECEnv, EzPickle):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         agent = self.agent_selection
-        if self.render_on:
-            self.clock.tick(self.FPS)                # FPS
-        else:
-            self.clock.tick()
+
         if self._agent_selector.is_last():
             # Controls the Spawn Rate of Weapons
             self.sword_spawn_rate, self.arrow_spawn_rate = self.check_weapon_spawn(self.sword_spawn_rate, self.arrow_spawn_rate)
@@ -470,15 +465,7 @@ class raw_env(AECEnv, EzPickle):
                 self.arrow_list.remove(arrow)
                 self.all_sprites.remove(arrow)
 
-            self.WINDOW.fill((66, 40, 53))
-            self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
-            self.WINDOW.blit(self.right_wall, self.right_wall_rect)
-            self.WINDOW.blit(self.floor_patch1, (500, 500))
-            self.WINDOW.blit(self.floor_patch2, (900, 30))
-            self.WINDOW.blit(self.floor_patch3, (150, 430))
-            self.WINDOW.blit(self.floor_patch4, (300, 50))
-            self.WINDOW.blit(self.floor_patch1, (1000, 250))
-            self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
+            self.draw()
 
             self.check_game_end()
             self.frames += 1
@@ -509,7 +496,18 @@ class raw_env(AECEnv, EzPickle):
         self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         # self.WINDOW = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.render_on = True
-        self.reset()
+        self.draw()
+
+    def draw(self):
+        self.WINDOW.fill((66, 40, 53))
+        self.WINDOW.blit(self.left_wall, self.left_wall.get_rect())
+        self.WINDOW.blit(self.right_wall, self.right_wall_rect)
+        self.WINDOW.blit(self.floor_patch1, (500, 500))
+        self.WINDOW.blit(self.floor_patch2, (900, 30))
+        self.WINDOW.blit(self.floor_patch3, (150, 430))
+        self.WINDOW.blit(self.floor_patch4, (300, 50))
+        self.WINDOW.blit(self.floor_patch1, (1000, 250))
+        self.all_sprites.draw(self.WINDOW)       # Draw all the sprites
 
     def render(self, mode="human"):
         if not self.render_on and mode == "human":
@@ -597,6 +595,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
+        self.draw()
         self.frames = 0
 
     def reset(self):
