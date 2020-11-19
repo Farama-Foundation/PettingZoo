@@ -331,10 +331,6 @@ class raw_env(AECEnv, EzPickle):
 
         self._clear_rewards()
         self.rewards[agent] = reward
-        if self.rendering:
-            self.clock.tick(30)
-        else:
-            self.clock.tick()
 
         if self._agent_selector.is_last():
             self.num_frames += 1

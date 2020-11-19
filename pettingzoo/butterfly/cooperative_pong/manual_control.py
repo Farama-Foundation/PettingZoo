@@ -10,6 +10,7 @@ def manual_control(**kwargs):
     quit_loop = 0
 
     pygame.key.set_repeat(20, 0)
+    clock = pygame.time.Clock()
 
     total_reward = 0
     initial_iteration = {agent: True for agent in env.agents}
@@ -17,7 +18,7 @@ def manual_control(**kwargs):
     done = all(dones.values())
 
     while not done:
-
+        clock.tick(15)
         action_dict = {agent: 0 for agent in env.agents}  # do nothing
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

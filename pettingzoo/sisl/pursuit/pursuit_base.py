@@ -123,7 +123,6 @@ class Pursuit():
         self.renderOn = False
         self.pixel_scale = 30
 
-        self.clock = pygame.time.Clock()
         self.frames = 0
         self.reset()
         assert not kwargs, f"gave arguments {list(kwargs.keys())} that are not valid pursuit arguments"
@@ -219,11 +218,6 @@ class Pursuit():
             local_val = self.latest_reward_state
             self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
             self.frames = self.frames + 1
-
-        if self.renderOn:
-            self.clock.tick(15)
-        else:
-            self.clock.tick(2000)
 
     def draw_model_state(self):
         # -1 is building pixel flag

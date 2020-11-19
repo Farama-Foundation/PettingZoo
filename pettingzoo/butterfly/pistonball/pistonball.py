@@ -46,8 +46,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.02, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
-        EzPickle.__init__(self, local_ratio, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
+    def __init__(self, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.agents = ["piston_" + str(r) for r in range(20)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
@@ -61,7 +61,6 @@ class raw_env(AECEnv, EzPickle):
             zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
-        self.clock = pygame.time.Clock()
 
         self.renderOn = False
         self.screen = pygame.Surface((960, 560))
@@ -72,41 +71,23 @@ class raw_env(AECEnv, EzPickle):
         self.random_drop = random_drop
         self.starting_angular_momentum = starting_angular_momentum
 
-        self.space = pymunk.Space(threaded=True)
-        self.space.threads = 2
-        self.space.gravity = (0.0, 750.0)
-        self.space.collision_bias = .0001
-        self.space.iterations = 10  # 10 is default in PyMunk
-
         self.pistonList = []
         self.pistonRewards = []  # Keeps track of individual rewards
         # Defines what "recent" means in terms of number of frames.
         self.recentFrameLimit = 20
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
-        self.global_reward_weight = 1 - local_ratio
-        self.local_reward_weight = 1 - self.global_reward_weight
-
-        self.add_walls()
+        self.time_penalty = time_penalty
+        self.local_ratio = local_ratio
+        self.ball_mass = ball_mass
+        self.ball_friction = ball_friction
+        self.ball_elasticity = ball_elasticity
 
         self.done = False
 
         self.velocity = 4
         self.resolution = 16
 
-        self.seed(0)
-        for i in range(20):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
-            self.pistonList.append(piston)
-
-        self.offset = 0
-        if self.random_drop:
-            self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), ball_mass, ball_friction, ball_elasticity)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
-
+        self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
 
         self.rect = pygame.Rect(80, 80, 800, 377)
@@ -120,6 +101,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.has_reset = False
         self.closed = False
+        self.seed()
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -127,8 +109,8 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_low = 40 * i
-        x_high = 40 * i + 120
+        x_low = 40 * (i + 1)
+        x_high = 40 * (i + 4)
         cropped = np.array(observation[x_low:x_high, 257:457, :])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
@@ -137,7 +119,8 @@ class raw_env(AECEnv, EzPickle):
     def enable_render(self):
         self.screen = pygame.display.set_mode((960, 560))
         self.renderOn = True
-        self.reset()
+        self.screen.blit(self.background, (0, 0))
+        self.draw()
 
     def close(self):
         if not self.closed:
@@ -192,15 +175,39 @@ class raw_env(AECEnv, EzPickle):
             piston.position[1] - v * self.velocity))
 
     def reset(self):
+        self.space = pymunk.Space(threaded=False)
+        self.add_walls()
+        # self.space.threads = 2
+        self.space.gravity = (0.0, 750.0)
+        self.space.collision_bias = .0001
+        self.space.iterations = 10  # 10 is default in PyMunk
+
+        self.pistonList = []
+        for i in range(20):
+            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            self.pistonList.append(piston)
+
+        self.offset = 0
+        if self.random_drop:
+            self.offset = self.np_random.randint(-30, 30 + 1)
+        self.ball = self.add_ball(
+            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), self.ball_mass, self.ball_friction, self.ball_elasticity)
+        self.lastX = int(self.ball.position[0] - 40)
+        self.distance = self.lastX - 80
+
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
             temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
             piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            piston.velociy = 0
 
         self.offset = 0
         if self.random_drop:
             self.offset = self.np_random.randint(-30, 30 + 1)
         self.ball.position = (800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
+        self.ball.angle = 0
+        self.ball.velocity = (0, 0)
         if self.starting_angular_momentum:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         self.lastX = int(self.ball.position[0] - 40)
@@ -258,7 +265,7 @@ class raw_env(AECEnv, EzPickle):
 
     def get_local_reward(self, prev_position, curr_position):
         local_reward = .5 * (prev_position - curr_position)
-        return local_reward * self.local_reward_weight
+        return local_reward
 
     def render(self, mode="human"):
         if not self.renderOn and mode == "human":
@@ -279,34 +286,29 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
-        newX = int(self.ball.position[0] - 40)
-        local_reward = self.get_local_reward(self.lastX, newX)
-        # opposite order due to moving right to left
-        global_reward = (100 / self.distance) * (self.lastX - newX)
-        self.lastX = newX
-        if newX <= 81:
-            self.done = True
-
-        if self.renderOn:
-            self.clock.tick(60)
-        else:
-            self.clock.tick()
         self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
+            newX = int(self.ball.position[0] - 40)
+            if newX <= 81:
+                self.done = True
             self.draw()
-            total_reward = [(global_reward / 20) * self.global_reward_weight] * 20  # start with global reward
+            local_reward = self.get_local_reward(self.lastX, newX)
+            # opposite order due to moving right to left
+            global_reward = (100 / self.distance) * (self.lastX - newX)
+            if not self.done:
+                global_reward -= 0.1
+            total_reward = [global_reward * (1 - self.local_ratio)] * 20  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
-                total_reward[index] += local_reward
+                total_reward[index] += local_reward * self.local_ratio
             self.rewards = dict(zip(self.agents, total_reward))
+            self.lastX = newX
             self.frames += 1
         else:
             self._clear_rewards()
 
         if self.frames >= self.max_cycles:
             self.done = True
-        if not self.done:
-            global_reward -= 0.1
         # Clear the list of recent pistons for the next reward cycle
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()

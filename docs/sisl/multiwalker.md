@@ -7,7 +7,7 @@ action-shape: "(4,)"
 action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-5.333,5.333]"
-average-total-reward: "-109.7"
+average-total-reward: "-102.1"
 import: "from pettingzoo.sisl import multiwalker_v5"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---

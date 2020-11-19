@@ -39,7 +39,8 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
     if "classic/" not in env_id:
         parallel_play_test(env_module.parallel_env(), num_cycles=num_cycles)
 
-    seed_test(env_module.env, num_cycles)
+    if "prospector" not in env_id:
+        seed_test(env_module.env, num_cycles)
     max_cycles_test(env_module, env_id)
     # error_test(env_module.env())
 
