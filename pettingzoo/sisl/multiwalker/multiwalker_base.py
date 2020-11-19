@@ -325,7 +325,6 @@ class MultiWalkerEnv():
 
         self.terrain_length = int(TERRAIN_LENGTH * self.n_walkers * 1 / 8.)
 
-
     @property
     def agents(self):
         return self.walkers
