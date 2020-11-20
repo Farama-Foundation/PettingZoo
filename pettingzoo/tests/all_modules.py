@@ -37,7 +37,7 @@ from pettingzoo.classic import uno_v1
 from pettingzoo.classic import dou_dizhu_v1
 from pettingzoo.classic import gin_rummy_v1
 from pettingzoo.classic import go_v1
-from pettingzoo.classic import hanabi_v1
+from pettingzoo.classic import hanabi_v2
 from pettingzoo.classic import backgammon_v1
 
 from pettingzoo.butterfly import knights_archers_zombies_v4
@@ -118,7 +118,7 @@ all_environments = {
     "classic/dou_dizhu": dou_dizhu_v1,
     "classic/gin_rummy": gin_rummy_v1,
     "classic/go": go_v1,
-    "classic/hanabi": hanabi_v1,
+    "classic/hanabi": hanabi_v2,
     "classic/backgammon": backgammon_v1,
 
     "butterfly/knights_archers_zombies": knights_archers_zombies_v4,
