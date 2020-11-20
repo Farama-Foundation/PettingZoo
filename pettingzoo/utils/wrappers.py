@@ -117,7 +117,8 @@ class TerminateIllegalWrapper(BaseWrapper):
             self.rewards = {d: 0 for d in self.dones}
             self.rewards[current_agent] = self._illegal_value
             self._dones_step_first()
-            self._terminated = False
+            self._accumulate_rewards()
+            self._terminated = True
         else:
             super().step(action)
 
