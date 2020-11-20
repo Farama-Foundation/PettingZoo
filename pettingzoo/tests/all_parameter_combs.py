@@ -1,4 +1,4 @@
-from .all_modules import *
+from .all_modules import *  # noqa: F403
 
 import pytest
 from .all_modules import all_environments
@@ -57,8 +57,8 @@ parameterized_envs = [
     (prison_v2.env, dict(random_aliens=False)),
 
     (prospector_v3.env, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
-    prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
-    banker_deposit_gold_reward=1, max_cycles=900)),
+                             prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
+                             banker_deposit_gold_reward=1, max_cycles=900)),
 
     (go_v1.env, dict(board_size=13, komi=2.5)),
     (go_v1.env, dict(board_size=9, komi=0.)),

@@ -172,7 +172,6 @@ def play_test(env, observation_0, num_cycles):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
 
     env.reset()
-    reward_0 = env.rewards[env.agent_selection]
     for agent in env.agent_iter(env.num_agents * 2):
         obs, reward, done, info = env.last()
         if done:
