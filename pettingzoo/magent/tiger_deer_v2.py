@@ -84,7 +84,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
-        reward_vals = np.array([1,-1] + list(reward_args.values()))
+        reward_vals = np.array([1, -1] + list(reward_args.values()))
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
 
         names = ["deer", "tiger"]
