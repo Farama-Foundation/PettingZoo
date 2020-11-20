@@ -8,7 +8,7 @@ jobs:
       services:
         - xvfb
       python: 3.6
-      
+
       before_install:
         - export AUDIODEV=null
         - cd ${TRAVIS_BUILD_DIR}
@@ -103,6 +103,8 @@ jobs:
         - python3 -m pettingzoo.tests.ci_test magent 20 True True False False
         - python3 -m pettingzoo.tests.ci_test sisl 20 True True False False
         - pytest ./pettingzoo/tests/all_parameter_combs.py
+        - python3 -m pettingzoo.tests.generate_diffs _travis_tmp_hashes.json
+        - diff test_data/env_hashes.json _travis_tmp_hashes.json
 
     - name: "Flake 8 tests"
       install:
