@@ -14,24 +14,24 @@ from gym.utils import EzPickle
 
 map_size = 45
 max_cycles_default = 300
-minimap_mode = False
+minimap_mode_default = False
 default_env_args = dict(tiger_step_recover=-0.1, deer_attacked=-0.1)
 
 
-def parallel_env(max_cycles=max_cycles_default, **env_args):
+def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **env_args):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
-    return _parallel_env(map_size, max_cycles, env_env_args)
+    return _parallel_env(map_size, minimap_mode, env_env_args, max_cycles)
 
 
-def raw_env(max_cycles=max_cycles_default, **env_args):
-    return _parallel_env_wrapper(parallel_env(max_cycles, **env_args))
+def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **env_args):
+    return _parallel_env_wrapper(parallel_env(max_cycles, minimap_mode, **env_args))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size, tiger_step_recover, deer_attacked):
+def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -78,9 +78,9 @@ def get_config(map_size, tiger_step_recover, deer_attacked):
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, max_cycles, reward_args):
-        EzPickle.__init__(self, map_size, max_cycles, reward_args)
-        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
+    def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
         reward_vals = np.array([1,-1] + list(reward_args.values()))
