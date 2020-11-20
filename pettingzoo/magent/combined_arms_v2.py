@@ -135,7 +135,7 @@ def generate_map(env, map_size, handles):
 class _parallel_env(magent_parallel_env, EzPickle):
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
-        assert map_size >= 16, "size of map must be at least 12"
+        assert map_size >= 16, "size of map must be at least 16"
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
