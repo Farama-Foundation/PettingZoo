@@ -1,5 +1,5 @@
+dist: bionic
 language: python
-
 cache: pip
 
 jobs:
