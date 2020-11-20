@@ -14,9 +14,9 @@ from gym.utils import EzPickle
 
 map_size = 45
 max_cycles_default = 1000
-KILL_REWARD = 100
+KILL_REWARD = 5
 minimap_mode = True
-default_reward_args = dict(step_reward=-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2)
+default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
 
 def parallel_env(max_cycles=max_cycles_default, **reward_args):

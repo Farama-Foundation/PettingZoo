@@ -15,13 +15,12 @@ agent-labels: "agents= [ omnivore_[0-494] ]"
 
 
 
-In gather, the agents must gain reward by eating food or fighting each other. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce.
+In gather, the agents gain reward by eating food. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food.
 
 Action options: `[do_nothing, move_28, attack_4]`
 
 Reward is given as:
 
-* 1 reward for attacking an agent
 * 5 reward for eating a food (requires multiple attacks)
 * -0.01 reward every step (step_reward option)
 * -0.1 reward for attacking (attack_penalty option)
@@ -37,7 +36,6 @@ Map size: 200x200
 ```
 gather_v2.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
 ```
-
 
 
 `step_reward`:  reward added unconditionally
