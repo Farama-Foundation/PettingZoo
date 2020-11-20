@@ -12,7 +12,7 @@ def render_test(env):
         env.reset()
         for i in range(5):
             if i > 0:
-                for agent in env.agent_iter(env.num_agents//2+1):
+                for agent in env.agent_iter(env.num_agents // 2 + 1):
                     obs, reward, done, info = env.last()
                     if done:
                         action = None
@@ -25,7 +25,7 @@ def render_test(env):
             if mode == 'rgb_array':
                 assert isinstance(res, np.ndarray) and len(res.shape) == 3 and res.shape[2] == 3 and res.dtype == np.uint8, f"rgb_array mode must return a valid image array, is {res}"
             if mode == 'ansi':
-                assert isinstance(res, str)# and len(res.shape) == 3 and res.shape[2] == 3 and res.dtype == np.uint8, "rgb_array mode must have shit in it"
+                assert isinstance(res, str)  # and len(res.shape) == 3 and res.shape[2] == 3 and res.dtype == np.uint8, "rgb_array mode must have shit in it"
             if mode == "human":
                 assert res is None
         env.reset()

@@ -125,7 +125,7 @@ def play_test(env, observation_0, num_cycles):
     '''
     env.reset()
 
-    done = {agent:False for agent in env.agents}
+    done = {agent: False for agent in env.agents}
     live_agents = env.agents[:]
     has_finished = set()
     accumulated_rewards = {a: 0 for a in env.agents}
@@ -173,7 +173,7 @@ def play_test(env, observation_0, num_cycles):
 
     env.reset()
     reward_0 = env.rewards[env.agent_selection]
-    for agent in env.agent_iter(env.num_agents*2):
+    for agent in env.agent_iter(env.num_agents * 2):
         obs, reward, done, info = env.last()
         if done:
             action = None
@@ -188,6 +188,7 @@ def play_test(env, observation_0, num_cycles):
         test_reward(reward)
         observation = env.step(action)
         assert observation is None, "step() must not return anything"
+
 
 def test_action_flexibility(env):
     env.reset()
@@ -208,6 +209,7 @@ def test_action_flexibility(env):
         env.step(np.zeros_like(action_space.low))
         env.reset()
         env.step(np.zeros_like(action_space.low).tolist())
+
 
 def api_test(env, num_cycles=10, render=False, verbose_progress=False):
     def progress_report(msg):

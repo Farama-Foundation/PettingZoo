@@ -9,9 +9,7 @@ from .seed_test import seed_test, check_environment_deterministic
 from .render_test import render_test
 
 
-
 parameterized_envs = [
-    # generic atari parameters
     (boxing_v1.env, dict(obs_type="grayscale_image")),
     (boxing_v1.env, dict(obs_type="ram")),
     (boxing_v1.env, dict(full_action_space=False)),
@@ -28,10 +26,10 @@ parameterized_envs = [
     (maze_craze_v2.env, dict(visibilty_level=1)),
     (maze_craze_v2.env, dict(visibilty_level=3)),
 
-    (space_invaders_v1.env, dict(alternating_control=True,moving_shields=True,zigzaging_bombs=True,fast_bomb=True,invisible_invaders=True)),
+    (space_invaders_v1.env, dict(alternating_control=True, moving_shields=True, zigzaging_bombs=True, fast_bomb=True, invisible_invaders=True)),
 
     (knights_archers_zombies_v4.env, dict(spawn_rate=50)),
-    (knights_archers_zombies_v4.env, dict(num_knights=4,num_archers=5)),
+    (knights_archers_zombies_v4.env, dict(num_knights=4, num_archers=5)),
     (knights_archers_zombies_v4.env, dict(killable_knights=True, killable_archers=True)),
     (knights_archers_zombies_v4.env, dict(killable_knights=False, killable_archers=False)),
     (knights_archers_zombies_v4.env, dict(black_death=False)),
@@ -62,16 +60,16 @@ parameterized_envs = [
     prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
     banker_deposit_gold_reward=1, max_cycles=900)),
 
-    (go_v1.env, dict(board_size = 13, komi = 2.5)),
-    (go_v1.env, dict(board_size = 9, komi = 0.)),
+    (go_v1.env, dict(board_size=13, komi=2.5)),
+    (go_v1.env, dict(board_size=9, komi=0.)),
 
-    (hanabi_v2.env, dict(colors = 3)),
-    (hanabi_v2.env, dict(ranks = 3)),
+    (hanabi_v2.env, dict(colors=3)),
+    (hanabi_v2.env, dict(ranks=3)),
     (hanabi_v2.env, dict(players=4)),
     (hanabi_v2.env, dict(hand_size=5)),
     (hanabi_v2.env, dict(max_information_tokens=3)),
     (hanabi_v2.env, dict(max_life_tokens=2)),
-    (hanabi_v2.env, dict(colors = 5, ranks = 3, players=4, hand_size=5, max_information_tokens=3, max_life_tokens=2)),
+    (hanabi_v2.env, dict(colors=5, ranks=3, players=4, hand_size=5, max_information_tokens=3, max_life_tokens=2)),
     (hanabi_v2.env, dict(observation_type=0)),
     (hanabi_v2.env, dict(observation_type=1)),
     (hanabi_v2.env, dict(random_start_player=False)),
@@ -80,25 +78,24 @@ parameterized_envs = [
     (simple_adversary_v2.env, dict(N=4)),
     (simple_reference_v2.env, dict(local_ratio=0.2)),
     (simple_spread_v2.env, dict(N=5)),
-    (simple_tag_v2.env, dict(num_good=5,num_adversaries=10,num_obstacles=4)),
-    (simple_tag_v2.env, dict(num_good=1,num_adversaries=1,num_obstacles=1)),
-    (simple_world_comm_v2.env, dict(num_good=5,num_adversaries=10,num_obstacles=4,num_food=3)),
-    (simple_world_comm_v2.env, dict(num_good=1,num_adversaries=1,num_obstacles=1,num_food=1)),
+    (simple_tag_v2.env, dict(num_good=5, num_adversaries=10, num_obstacles=4)),
+    (simple_tag_v2.env, dict(num_good=1, num_adversaries=1, num_obstacles=1)),
+    (simple_world_comm_v2.env, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3)),
+    (simple_world_comm_v2.env, dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1)),
 
     (multiwalker_v5.env, dict(n_walkers=10)),
     (multiwalker_v5.env, dict(local_ratio=0.5)),
     (multiwalker_v5.env, dict(terminate_on_fall=False)),
     (multiwalker_v5.env, dict(terminate_on_fall=False, remove_on_fall=False)),
 
-    (pursuit_v2.env, dict(x_size=8,y_size=19)),
+    (pursuit_v2.env, dict(x_size=8, y_size=19)),
     (pursuit_v2.env, dict(local_ratio=0.5)),
-    (pursuit_v2.env, dict(n_evaders=5,n_pursuers=16)),
+    (pursuit_v2.env, dict(n_evaders=5, n_pursuers=16)),
     (pursuit_v2.env, dict(obs_range=15)),
     (pursuit_v2.env, dict(n_catch=3)),
     (pursuit_v2.env, dict(freeze_evaders=True)),
-    # what is up with the ally_layer and opponent_layer parameters?
 
-    (waterworld_v2.env, dict(n_pursuers=3,n_evaders=6)),
+    (waterworld_v2.env, dict(n_pursuers=3, n_evaders=6)),
     (waterworld_v2.env, dict(n_coop=1)),
     (waterworld_v2.env, dict(n_coop=1)),
     (waterworld_v2.env, dict(n_poison=4)),
@@ -108,18 +105,9 @@ parameterized_envs = [
     (waterworld_v2.env, dict(speed_features=False)),
 ]
 
+
 @pytest.mark.parametrize(("env_constr", "kwargs"), parameterized_envs)
 def test_module(env_constr, kwargs):
     _env = env_constr(**kwargs)
     print(kwargs)
     api_test.api_test(_env)
-
-    # seed_test
-    #seed_test(lambda seed=None: env_constr(seed=seed, **kwargs))
-
-    # args are different test
-    # SEED = 0x7267a520
-    # if should_seed:
-    #     assert not check_environment_deterministic(env_constr(seed=SEED, **kwargs), env_constr(seed=SEED))
-    # else:
-    #     assert not check_environment_deterministic(env_constr(**kwargs), env_constr())
