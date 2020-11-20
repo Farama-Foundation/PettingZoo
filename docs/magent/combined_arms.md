@@ -7,7 +7,7 @@ action-shape: "(9),(25)"
 action-values: "Discrete(9),(25)"
 observation-shape: "(13,13,35), (13,13,51)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import combined_arms_v2"
+import: "pettingzoo.magent import combined_arms_v3"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
@@ -39,7 +39,7 @@ Map size: 45x45
 ### Arguments
 
 ```
-combined_arms_v2.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
+combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.
