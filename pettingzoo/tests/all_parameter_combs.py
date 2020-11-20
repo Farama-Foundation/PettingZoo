@@ -77,6 +77,9 @@ parameterized_envs = [
     (hanabi_v2.env, dict(random_start_player=False)),
     (hanabi_v2.env, dict(random_start_player=True)),
 
+    (tiger_deer_v2.env, dict(minimap_mode=True)),
+    (battle_v2.env, dict(minimap_mode=False)),
+
     (simple_adversary_v2.env, dict(N=4)),
     (simple_reference_v2.env, dict(local_ratio=0.2)),
     (simple_spread_v2.env, dict(N=5)),

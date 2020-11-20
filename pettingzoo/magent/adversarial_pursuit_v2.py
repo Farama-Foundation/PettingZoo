@@ -14,24 +14,24 @@ from gym.utils import EzPickle
 
 map_size = 45
 max_cycles_default = 500
-minimap_mode = False
+minimap_mode_default = False
 default_reward_args = dict(attack_penalty=-0.2)
 
 
-def parallel_env(max_cycles=max_cycles_default, **reward_args):
+def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, env_reward_args, max_cycles)
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles)
 
 
-def raw_env(max_cycles=max_cycles_default, **reward_args):
-    return _parallel_env_wrapper(parallel_env(max_cycles, **reward_args))
+def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
+    return _parallel_env_wrapper(parallel_env(max_cycles, minimap_mode, **reward_args))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size, attack_penalty):
+def get_config(map_size, minimap_mode, attack_penalty):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -69,9 +69,9 @@ def get_config(map_size, attack_penalty):
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, reward_args, max_cycles):
-        EzPickle.__init__(self, map_size, reward_args, max_cycles)
-        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
+    def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
         reward_vals = np.array([1, -1, -1, -1, -1] + list(reward_args.values()))

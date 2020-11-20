@@ -38,8 +38,10 @@ Map size: 45x45
 ### Arguments
 
 ```
-tiger_deer_v2.env(tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500)
+tiger_deer_v2.env(minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500)
 ```
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
 `tiger_step_recover`: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
 

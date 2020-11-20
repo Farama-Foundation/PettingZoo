@@ -15,24 +15,24 @@ from gym.utils import EzPickle
 map_size = 200
 max_cycles_default = 500
 KILL_REWARD = 5
-minimap_mode = True
+minimap_mode_default = True
 default_reward_args = dict(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5)
 
 
-def parallel_env(max_cycles=max_cycles_default, **reward_args):
+def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, env_reward_args, max_cycles)
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles)
 
 
-def raw_env(max_cycles=max_cycles_default, **reward_args):
-    return _parallel_env_wrapper(parallel_env(max_cycles, **reward_args))
+def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
+    return _parallel_env_wrapper(parallel_env(max_cycles, minimap_mode, **reward_args))
 
 
 env = make_env(raw_env)
 
 
-def load_config(size, step_reward, attack_penalty, dead_penalty, attack_food_reward):
+def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, attack_food_reward):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -70,9 +70,9 @@ def load_config(size, step_reward, attack_penalty, dead_penalty, attack_food_rew
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, reward_args, max_cycles):
-        EzPickle.__init__(self, map_size, reward_args, max_cycles)
-        env = magent.GridWorld(load_config(map_size, **reward_args))
+    def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+        env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
         handles = env.get_handles()
         reward_vals = np.array([5] + list(reward_args.values()))
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]

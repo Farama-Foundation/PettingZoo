@@ -15,24 +15,24 @@ from gym.utils import EzPickle
 map_size = 45
 max_cycles_default = 1000
 KILL_REWARD = 5
-minimap_mode = True
+minimap_mode_default = True
 default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
 
-def parallel_env(max_cycles=max_cycles_default, **reward_args):
+def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, env_reward_args, max_cycles)
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles)
 
 
-def raw_env(max_cycles=max_cycles_default, **reward_args):
-    return _parallel_env_wrapper(parallel_env(max_cycles, **reward_args))
+def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
+    return _parallel_env_wrapper(parallel_env(max_cycles, minimap_mode, **reward_args))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size, step_reward, dead_penalty, attack_penalty, attack_opponent_reward):
+def get_config(map_size, minimap_mode, step_reward, dead_penalty, attack_penalty, attack_opponent_reward):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -65,9 +65,9 @@ def get_config(map_size, step_reward, dead_penalty, attack_penalty, attack_oppon
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, reward_args, max_cycles):
-        EzPickle.__init__(self, map_size, reward_args, max_cycles)
-        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
+    def __init__(self, map_siz, minimap_modee, reward_args, max_cycles):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))

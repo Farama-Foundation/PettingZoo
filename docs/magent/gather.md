@@ -34,9 +34,10 @@ Map size: 200x200
 ### Arguments
 
 ```
-gather_v2.env(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
+gather_v2.env(minimap_mode=True, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
 ```
 
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
 `step_reward`:  reward added unconditionally
 
