@@ -16,7 +16,7 @@ agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 
 
 
-In tiger-deer, there are a number of tigers who must team up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will not survive. At the same time, the deer are trying to avoid getting attacked.  
+In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose heath until they die. At the same time, the deer are trying to avoid getting attacked.  
 
 Tiger action options: `[do_nothing, move_4, attack_4]`
 
@@ -29,6 +29,7 @@ Deer action options: `[do_nothing, move_4]`
 Deer's reward is given as:
 
 * -1 reward for dying
+* -0.1 for being attacked
 
 Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
 
@@ -37,9 +38,11 @@ Map size: 45x45
 ### Arguments
 
 ```
-tiger_deer_v2.env(max_cycles=500)
+tiger_deer_v2.env(tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500)
 ```
 
+`tiger_step_recover`: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
 
+`deer_attacked`: Reward a deer gets for being attacked
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates

@@ -23,11 +23,11 @@ Ranged action options: `[do_nothing, move_12, attack_12]`
 
 Reward is given as:
 
-* 100 reward for killing an opponent
-* -0.01 reward every step (step_reward option)
+* 5 reward for killing an opponent
+* -0.005 reward every step (step_reward option)
 * -0.1 reward for attacking (attack_penalty option)
-* 2 reward for attacking an opponent (attack_opponent_reward option)
-* -1 reward for dying (dead_penalty option)
+* 0.2 reward for attacking an opponent (attack_opponent_reward option)
+* -0.1 reward for dying (dead_penalty option)
 
 
 If multiple options apply, rewards are added together
@@ -39,7 +39,7 @@ Map size: 45x45
 ### Arguments
 
 ```
-combined_arms_v2.env(step_reward-0.01, dead_penalty=-0.1, attack_penalty=-1, attack_opponent_reward=2, max_cycles=1000)
+combined_arms_v2.env(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
 

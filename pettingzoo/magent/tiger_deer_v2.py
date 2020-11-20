@@ -15,20 +15,23 @@ from gym.utils import EzPickle
 map_size = 45
 max_cycles_default = 300
 minimap_mode = False
+default_env_args = dict(tiger_step_recover=-0.1, deer_attacked=-0.1)
 
 
-def parallel_env(max_cycles=max_cycles_default):
-    return _parallel_env(map_size, max_cycles)
+def parallel_env(max_cycles=max_cycles_default, **env_args):
+    env_env_args = dict(**default_env_args)
+    env_env_args.update(env_args)
+    return _parallel_env(map_size, max_cycles, env_env_args)
 
 
-def raw_env(max_cycles=max_cycles_default):
-    return _parallel_env_wrapper(_parallel_env(map_size, max_cycles))
+def raw_env(max_cycles=max_cycles_default, **env_args):
+    return _parallel_env_wrapper(parallel_env(max_cycles, **env_args))
 
 
 env = make_env(raw_env)
 
 
-def get_config(map_size):
+def get_config(map_size, tiger_step_recover, deer_attacked):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -50,7 +53,7 @@ def get_config(map_size):
     options = {
         'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
         'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-        'damage': 1, 'step_recover': -0.2
+        'damage': 1, 'step_recover': tiger_step_recover
     }
     tiger = cfg.register_agent_type(
         "tiger",
@@ -66,18 +69,22 @@ def get_config(map_size):
     # tigers get reward when they attack a deer simultaneously
     e1 = gw.Event(a, 'attack', c)
     e2 = gw.Event(b, 'attack', c)
-    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[1, 1])
+    tiger_attack_rew = 1
+    # reward is halved because the reward is double counted
+    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[tiger_attack_rew / 2, tiger_attack_rew / 2])
+    cfg.add_reward_rule(e1, receiver=[c], value=[deer_attacked])
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    def __init__(self, map_size, max_cycles):
-        EzPickle.__init__(self, map_size, max_cycles)
-        env = magent.GridWorld(get_config(map_size), map_size=map_size)
+    def __init__(self, map_size, max_cycles, reward_args):
+        EzPickle.__init__(self, map_size, max_cycles, reward_args)
+        env = magent.GridWorld(get_config(map_size, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
-        reward_range = [-1, 2]
+        reward_vals = np.array([1,-1] + list(reward_args.values()))
+        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
 
         names = ["deer", "tiger"]
         super().__init__(env, handles, names, map_size, max_cycles, reward_range, minimap_mode)
