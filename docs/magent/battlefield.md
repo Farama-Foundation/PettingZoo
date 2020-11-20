@@ -40,9 +40,10 @@ Map size: 80x80
 ### Arguments
 
 ```
-battle_v2.env(minimap_mode=True, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
+battle_v2.env(map_size=80, minimap_mode=True, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
+`map_size`: Sets dimensions of the (square) map.
 
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
