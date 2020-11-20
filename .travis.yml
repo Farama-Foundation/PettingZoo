@@ -1,13 +1,14 @@
-dist: bionic
 language: python
 cache: pip
 
 jobs:
   include:
     - name: "Python 3.6 on Linux"
+      dist: bionic
       services:
         - xvfb
       python: 3.6
+      
       before_install:
         - export AUDIODEV=null
         - cd ${TRAVIS_BUILD_DIR}
@@ -22,6 +23,7 @@ jobs:
         - pytest ./pettingzoo/tests/pytest_runner.py
 
     - name: "Python 3.7 on Linux"
+      dist: bionic
       services:
         - xvfb
       python: 3.7
@@ -39,6 +41,7 @@ jobs:
         - pytest ./pettingzoo/tests/pytest_runner.py
 
     - name: "Python 3.8 on Linux"
+      dist: bionic
       services:
         - xvfb
       python: 3.8
