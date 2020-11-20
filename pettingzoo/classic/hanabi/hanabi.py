@@ -47,7 +47,6 @@ class raw_env(AECEnv, EzPickle):
         'max_information_tokens',
         'max_life_tokens',
         'observation_type',
-        'seed',
         'random_start_player',
     }
 
@@ -55,11 +54,10 @@ class raw_env(AECEnv, EzPickle):
                  colors: int = 5,
                  ranks: int = 5,
                  players: int = 2,
-                 hand_size: int = 2,
+                 hand_size: int = 5,
                  max_information_tokens: int = 8,
                  max_life_tokens: int = 3,
                  observation_type: int = 1,
-                 seed=None,
                  random_start_player: bool = False,
                  ):
 
@@ -74,7 +72,6 @@ class raw_env(AECEnv, EzPickle):
               - observation_type: int.
                     0: Minimal observation.
                     1: First-order common knowledge observation.
-              - seed: int, Random seed or None.
               - random_start_player: bool, Random start player.
 
         Common game configurations:
@@ -84,7 +81,7 @@ class raw_env(AECEnv, EzPickle):
                 "players": 2,
                 "max_information_tokens": 8,
                 "max_life_tokens": 3,
-                "hand_size": (4 if players == 5 else 5)
+                "hand_size": (4 if players >= 4 else 5)
                 "observation_type": 1,
                 "hand_size": 2
                 }
@@ -117,11 +114,8 @@ class raw_env(AECEnv, EzPickle):
             max_information_tokens,
             max_life_tokens,
             observation_type,
-            seed,
             random_start_player,
         )
-
-        seed = seeding.create_seed(seed, max_bytes=3)
 
         # ToDo: Starts
         # Check if all possible dictionary values are within a certain ranges.
