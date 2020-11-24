@@ -1,17 +1,15 @@
-
 def parallel_play_test(par_env, num_cycles=10):
-    MAX_CYCLES_TEST = 15
     MAX_RESETS = 2
     for n_resets in range(MAX_RESETS):
         obs = par_env.reset()
         assert isinstance(obs, dict)
         assert set(obs.keys()) == (set(par_env.agents))
 
-        done = {agent:False for agent in par_env.agents}
+        done = {agent: False for agent in par_env.agents}
         live_agents = par_env.agents[:]
         has_finished = set()
         for i in range(num_cycles):
-            actions = {agent:space.sample() for agent, space in par_env.action_spaces.items() if agent in done and not done[agent]}
+            actions = {agent: space.sample() for agent, space in par_env.action_spaces.items() if agent in done and not done[agent]}
             obs, rew, done, info = par_env.step(actions)
             assert par_env.agents == live_agents
             assert isinstance(obs, dict)

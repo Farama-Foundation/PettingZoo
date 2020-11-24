@@ -20,12 +20,19 @@ def generate_cycle_words(agents, is_classic):
                 type_nums[type].append(int(splitname[1]))
                 if type not in types:
                     types.append(type)
-            words = ["env"]
-            for type in types:
-                tyrange = list(range(type_nums[type][0],type_nums[type][-1]+1))
-                assert tyrange == type_nums[type]
-                type_range = f"{type}_[{tyrange[0]}...{tyrange[-1]}]"
+            if len(types) == 1:
+                words = ["env"]
+                words.append(agents[0])
+                nums = type_nums[types[0]]
+                type_range = f"{type}_[{nums[1]}...{nums[-1]}]"
                 words.append(type_range)
+            else:
+                words = ["env"]
+                for type in types:
+                    tyrange = list(range(type_nums[type][0],type_nums[type][-1]+1))
+                    assert tyrange == type_nums[type]
+                    type_range = f"{type}_[{tyrange[0]}...{tyrange[-1]}]"
+                    words.append(type_range)
         else:
             words = ["env"] + agents
     return words
@@ -49,8 +56,8 @@ def generate_graphviz(words):
 
 for name, module in list(all_environments.items()):
     env = module.env()
-    agents = env.agents
-    words = generate_cycle_words(env.agents, "classic/" in name)
+    agents = env.possible_agents
+    words = generate_cycle_words(env.possible_agents, "classic/" in name)
     vis_code = generate_graphviz(words)
     code_path = "graphviz/"+name+".vis"
     os.makedirs(os.path.dirname(code_path),exist_ok=True)
