@@ -37,9 +37,12 @@ Map size: 45x45
 ### Arguments
 
 ```
-adversarial_pursuit_v2.env(attack_penalty=-0.2, max_cycles=500)
+adversarial_pursuit_v2.env(map_size=45, minimap_mode=False, attack_penalty=-0.2, max_cycles=500)
 ```
 
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
 `attack_penalty`:  Adds the following value to the reward whenever an attacking action is taken
 
