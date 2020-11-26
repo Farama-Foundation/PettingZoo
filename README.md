@@ -64,7 +64,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 Version 1.4.2 (November 25, 2020)
 
-Changed pistonball reward calculation, other pistonball fixes. Fixed KAZ observation and rendering after reset but before step, and Cooperative Pong issues with rendering. Fixed default parameters to Hanabi to match normal 2 player game. Changed multiwalker rewards, added arguments. Changed combined arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
+Pistnball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
 
 Version 1.4.0 (November 6, 2020)
 
