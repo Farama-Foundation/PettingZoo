@@ -102,7 +102,7 @@ The Arcade Learning Environment was originally introduced in:
 }
 ```
 
-Various to the Arcade Learning Environment were introduced in:
+Various extensions to the Arcade Learning Environment were introduced in:
 
 ```
 @article{machado2018revisiting,
