@@ -18,22 +18,20 @@ agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 
 In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose heath until they die. At the same time, the deer are trying to avoid getting attacked.  
 
-Tiger action options: `[do_nothing, move_4, attack_4]`
+Tiger action space: `[do_nothing, move_4, attack_4]`
 
-Tiger's reward is given as:
+Tiger's reward scheme is:
 
 * 1 reward for attacking a deer alongside another tiger
 
-Deer action options: `[do_nothing, move_4]`
+Deer action space: `[do_nothing, move_4]`
 
-Deer's reward is given as:
+Deer's reward scheme is:
 
 * -1 reward for dying
 * -0.1 for being attacked
 
 Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
-
-Map size: 45x45
 
 ### Arguments
 
