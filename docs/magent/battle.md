@@ -29,11 +29,9 @@ Reward is given as:
 * 0.2 reward for attacking an opponent (attack_opponent_reward option)
 * -0.1 reward for dying (dead_penalty option)
 
-If multiple options apply, rewards are added together.
+If multiple options apply, rewards are added.
 
 Observation space: `[obstacle, my_team_presence, my_team_presence_health, my_team_presence_minimap, other_team_presence, other_team_presence_health, other_team_presence_minimap, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
-
-Map size: 45x45
 
 ### Arguments
 
@@ -52,6 +50,6 @@ battle_v2.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-
 
 `attack_penalty`:  reward added for attacking
 
-`attack_opponent_reward`:  Reward added for attacking an opponent
+`attack_opponent_reward`:  reward added for attacking an opponent
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
