@@ -14,9 +14,9 @@ MAgent is a set of environments where large numbers of pixel agents in a gridwor
 
 ### Types of Environments
 
-All environments except Gather are competitive team games where each team must cooperate to defeat the other team. Note that reward is allocated entirely individually, so the team coordination, if any, must arise out of emergent behavior.
+All environments, except Gather, are competitive team games where agents in each team must cooperate to defeat the other team. Note that reward is allocated entirely individually.
 
-Gather is a survival game where agents must try to stay alive either by gathering the food or by killing other agents.
+Gather is a competitive free for all game where agents try to stay alive for as long as possible, either by gathering food or killing other agents.
 
 ### Key Concepts
 
