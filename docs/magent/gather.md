@@ -29,8 +29,6 @@ Reward is given as:
 
 Observation space: `[empty, obstacle, omnivore, food, omnivore_minimap, food_minimap, one_hot_action, last_reward, agent_position]`
 
-Map size: 200x200
-
 ### Arguments
 
 ```
