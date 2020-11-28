@@ -17,7 +17,7 @@ agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 
-A small-scale team battle. Agents have to figure out the optimal way to coordinate their small team in a large space and maneuver around obstacles in order to defeat the opponent team.
+A small-scale team battle, where agents have to figure out the optimal way to coordinate their small team in a large space and maneuver around obstacles in order to defeat the opposing team.
 
 Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
@@ -31,11 +31,9 @@ Reward is given as:
 * 0.2 reward for attacking an opponent (attack_opponent_reward option)
 * -0.1 reward for dying (dead_penalty option)
 
-If multiple options apply, rewards are added together.
+If multiple options apply, rewards are added.
 
 Observation space: `[obstacle, my_team_presence, my_team_presence_health, my_team_presence_minimap, other_team_presence, other_team_presence_health, other_team_presence_minimap, binary_agent_id(10), one_hot_action, last_reward, agent_position]`
-
-Map size: 80x80
 
 ### Arguments
 
