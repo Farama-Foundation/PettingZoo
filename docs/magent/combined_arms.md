@@ -29,12 +29,10 @@ Reward is given as:
 * 0.2 reward for attacking an opponent (attack_opponent_reward option)
 * -0.1 reward for dying (dead_penalty option)
 
-
-If multiple options apply, rewards are added together
+If multiple options apply, rewards are added.
 
 Observation space: `[obstacle, my_group_presence, my_group_presence_health, my_group_presence_minimap, other_team_presences_healths_minimaps(9), binary_agent_id(10), one_hot_action, last_reward, agent_position]`
 
-Map size: 45x45
 
 ### Arguments
 
@@ -47,12 +45,12 @@ combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_pe
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
 
-`step_reward`:  reward added unconditionally
+`step_reward`:  reward after every step
 
-`dead_penalty`:  reward added when killed
+`dead_penalty`:  reward when killed
 
-`attack_penalty`:  reward added for attacking
+`attack_penalty`:  reward when attacking anything
 
-`attack_opponent_reward`:  Reward added for attacking an opponent
+`attack_opponent_reward`:  reward added for attacking an opponent
 
-`max_cycles`:  number of frames (a step for each agent) until game terminates
+`max_cycles`:  number of cycles (a step for each agent) until game terminates
