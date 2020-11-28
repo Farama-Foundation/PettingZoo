@@ -13,9 +13,7 @@ agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 
 {% include info_box.md %}
 
-
-
-The red agents must navigate the obstacles and attack the blue agents. The blue agents should try to avoid being attacked. Since the red agents are slower (but larger) than the blue agents, they must work together to trap the blue agents, so they can attack them continually (note that they blue agent's won't die if attacked, so they can be used as an infinite source of reward).
+In this environment, red agents work navigate the obstacles and attack the blue agents, who in turn work to avoid attatcks. To be effect the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents and attack them continually.
 
 Predator action options: `[do_nothing, move_4, attack_8]`
 
@@ -31,8 +29,6 @@ Prey's reward is given as:
 * -1 reward for being attacked
 
 Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
-
-Map size: 45x45
 
 ### Arguments
 
