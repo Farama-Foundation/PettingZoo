@@ -15,9 +15,15 @@ agent-labels: "agents= [ omnivore_[0-494] ]"
 
 
 
-In gather, the agents gain reward by eating food. Agent's don't die unless attacked. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food.
+In gather, the agents gain reward by eating food. Food needs to be broken down by several "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food.
+
+#### Action Space
+
+Key: `move_N`: options to move to the N nearest squares.
 
 Action options: `[do_nothing, move_28, attack_4]`
+
+#### Reward
 
 Reward is given as:
 
@@ -27,7 +33,23 @@ Reward is given as:
 * -1 reward for dying (dead_penalty option)
 * 0.5 reward for attacking a food (attack_food_reward option)
 
-Observation space: `[empty, obstacle, omnivore, food, omnivore_minimap, food_minimap, one_hot_action, last_reward, agent_position]`
+#### Observation space
+
+The observation space is a 13x13 map with 41 channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle/off the map| 1
+omnivore_presence| 1
+omnivore_hp| 1
+omnivore_minimap| 1
+food_presense| 1
+food_hp| 1
+food_minimap| 1
+one_hot_action| 33
+last_reward| 1
+agent_position| 2
+
 
 ### Arguments
 
