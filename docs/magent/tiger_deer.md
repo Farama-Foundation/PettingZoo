@@ -15,23 +15,43 @@ agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 {% include info_box.md %}
 
 
+In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose heath until they die. At the same time, the deer are trying to avoid getting attacked. It is not clear what emergent behavior is expected in this environment.
 
-In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose heath until they die. At the same time, the deer are trying to avoid getting attacked.  
+
+#### Action Space
+
+Key: `move_N`: options to move to the N nearest squares.
 
 Tiger action space: `[do_nothing, move_4, attack_4]`
+
+Deer action space: `[do_nothing, move_4]`
+
+#### Reward
 
 Tiger's reward scheme is:
 
 * 1 reward for attacking a deer alongside another tiger
-
-Deer action space: `[do_nothing, move_4]`
 
 Deer's reward scheme is:
 
 * -1 reward for dying
 * -0.1 for being attacked
 
-Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
+#### Observation space
+
+The observation space is a 3x3 map with 21 channels for deer and 9x9 map with 25 channels for tigers, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle/off the map| 1
+my_team_presence| 1
+my_team_hp| 1
+other_team_presence| 1
+other_team_hp| 1
+binary_agent_id| 10
+one_hot_action| 5 Deer/9 Tiger
+last_reward| 1
+agent_position| 2
 
 ### Arguments
 
@@ -39,7 +59,7 @@ Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_
 tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500)
 ```
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
 
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 

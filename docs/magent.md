@@ -20,19 +20,15 @@ Gather is a competitive free for all game where agents try to stay alive for as 
 
 ### Key Concepts
 
-* **HP decay**: The agents in Gather and the tigers in Tiger-Deer have HP (health points) that decays over time, so the agents slowly lose HP until they die. The only way to prevent this is by eating something.
-
-* **HP recovery**: In battle games, agents recover HP over time, so low HP agents can hide or be protected until they heal.
-
 * **Observation view**: All agents observe a box around themselves. They see whether the coordinates are empty, contain an obstacle, or contain an agent in any of the observation channels. If an agent in on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
-* **Feature vector**: The feature vector contains `<agent_id, action, last_reward>`
+* **Feature vector**: The feature vector contains information about the agent itself, rather than its surrounding. In normal mode it contains `<agent_id, action, last_reward>`, in minimap mode it also contains the agent position on the map, normalized to 0-1.
 
-* Observation concatenates the 1D feature vector with 3D observation view by repeating the value of the feature across an entire image channel.
+* **Observation**: The observation is 3D observation view concatenated with the 1D feature vector by repeating the value of the feature across an entire image channel.
 
-* **Minimap mode**: For the battle games (Battle, Battlefield, Combined Arms), the agents have access to additional global information: two density maps of the teams' respective presences on the map that are binned and concatenated onto the agent's observation view (concatenated in the channel dimension, axis=2). Their own absolute positions on the global map is appended to the feature vector.
+* **Minimap mode**: For most of the games (Battle, Battlefield, Combined Arms, Gather), the agents have access to additional global information: two density maps of the teams' respective presences on the map that are binned and concatenated onto the agent's observation view (concatenated in the channel dimension, axis=2). Their own absolute positions on the global map is appended to the feature vector. This feature can be turned on or off with the `minimap_mode` environment argument.
 
-* **Moving and attacking**: An agent can only act or move with a single action, so the action space is the concatenations of all possible moves and all possible attacks.
+* **Moving and attacking**: An agent can only act or move each step, so the action space is the concatenations of all possible moves and all possible attacks.
 
 ### Termination
 

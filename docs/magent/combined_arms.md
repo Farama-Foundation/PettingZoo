@@ -15,11 +15,17 @@ agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blu
 
 
 
-A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack father and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so).
+A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack father and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so). Agents slowly regain HP over time, so it is best to kill an opposing agent quickly.
+
+#### Action Space
+
+Key: `move_N`: options to move to the N nearest squares.
 
 Melee action options: `[do_nothing, move_4, attack_4]`
 
 Ranged action options: `[do_nothing, move_12, attack_12]`
+
+#### Reward
 
 Reward is given as:
 
@@ -31,7 +37,22 @@ Reward is given as:
 
 If multiple options apply, rewards are added.
 
-Observation space: `[obstacle, my_group_presence, my_group_presence_health, my_group_presence_minimap, other_team_presences_healths_minimaps(9), binary_agent_id(10), one_hot_action, last_reward, agent_position]`
+
+#### Observation space
+
+The observation space is a 13x13 map with 35 channels for Melee and 51 channels for Ranged units, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle/off the map| 1
+my_team_presence| 1
+my_team_hp| 1
+my_team_minimap| 1
+Other teams presences/heaths/minimaps (in some order) | 9
+binary_agent_id| 10
+one_hot_action| 9 Melee/25 ranged
+last_reward| 1
+agent_position| 2
 
 
 ### Arguments
@@ -40,7 +61,7 @@ Observation space: `[obstacle, my_group_presence, my_group_presence_health, my_g
 combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
 ```
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.
 
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
 
