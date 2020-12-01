@@ -19,7 +19,7 @@ Name | Value
 --- | ---
 Actions | {{ page.actions }}
 Agents | {{ page.agents }}
-Parallel API | {{page.is_parallel}}
+Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
 Manual Control | {{ page.manual-control }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}
