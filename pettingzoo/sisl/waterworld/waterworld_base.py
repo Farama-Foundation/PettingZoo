@@ -514,7 +514,9 @@ class MAWaterWorld():
                         poison.position[i] = np.clip(poison.position[i], 0, 1)
                         poison.velocity[i] = -1 * poison.velocity[i]
 
-        self.control_rewards[agent_id] = self.control_penalty * (action**2).sum()
+        control_reward = self.control_penalty * (action**2).sum()
+        self.control_rewards = (control_reward / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
+        self.control_rewards[agent_id] += control_reward * self.local_ratio
 
         if is_last:
             rewards = np.zeros(self.n_pursuers)
@@ -524,11 +526,10 @@ class MAWaterWorld():
                 sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
             self.last_obs = obs_list
 
-            local_reward = rewards + np.array(self.control_rewards)
+            local_reward = rewards
             global_reward = local_reward.mean()
             self.last_rewards = local_reward * self.local_ratio + global_reward * (1 - self.local_ratio)
 
-            self.control_rewards = [0 for _ in range(self.n_pursuers)]
             self.frames += 1
 
         return self.observe(agent_id)
