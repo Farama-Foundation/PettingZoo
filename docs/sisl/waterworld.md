@@ -36,7 +36,7 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `n_evaders`:  number of evaders
 
-`n_coop`:  how many archea touching food at same time for food to be considered consumed
+`n_coop`:  number of archea that must be touching food at the same time for food to be considered consumed
 
 `n_poison`:  number of poison objects
 
