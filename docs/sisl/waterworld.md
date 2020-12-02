@@ -10,15 +10,30 @@ observation-values: "[-10,10]"
 average-total-reward: "-14.5"
 import: "from pettingzoo.sisl import waterworld_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
+
 ---
 
 {% include info_box.md %}
 
+### Observation Space
 
+The observation shape of each archea is a vector of length > 4 that is heavily dependent  on its input parameters. The full size of the vector is the number of features per sensor multiplied by the number of sensors plus an element for the type and an element for the id. The number of features per sensor is 7 by default with `speed_features = True`, or 4 if `speed_features=False`. With `speed_features` enabled, the observation shape takes the full form of `(7 × n_sensors) + 2`. Elements of the observation vector take on values in the range [-10, 10].
 
-By default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 212 long vector of computed values about the environment for the observation space. They have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust. The agents each receive a reward of 10 when more than one agent captures food together (the food is not destroyed), a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a -0.5×｜action｜ reward when an agent collides into another. The environment runs for 500 frames by default. Observation shape takes the full form of ((4 + 3×speed_features)×n_sensors+2,).
+For example, by default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 212 long vector of computed values about the environment for the observation space. 
 
 This has been fixed from the reference environments to keep items floating off screen and being lost forever.
+
+**Agent observation space:** `[sensor_coord_0, sensor_coord_1, sensor_coord_2, sensor_coord_3, (sensor_speed_feature_0, sensor_speed_feature_1, sensor_speed_feature_2)] X [n_sensors] + [type, id]`
+
+### Action Space
+
+The archea have a continuous action space represented as a 2 element vector, which corresponds to left/right and up/down thrust having values in the range [-1, 1]. 
+
+**Agent action space:** `[velocity_left_right, velocity_up_down]`
+
+### Rewards
+
+By default, when multiple agents capture food together each agent receives a reward of 10 (the food is not destroyed). They receive a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a -0.5×｜action｜ reward when they collide into another agent. The environment runs for 500 frames by default. 
 
 ### Arguments
 
