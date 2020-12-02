@@ -67,11 +67,12 @@ class raw_env(AECEnv):
 
         is_last = self._agent_selector.is_last()
         self.env.step(action, self.agent_name_mapping[agent], is_last)
+
+        for r in self.rewards:
+            self.rewards[r] = self.env.control_rewards[self.agent_name_mapping[r]]
         if is_last:
             for r in self.rewards:
-                self.rewards[r] = self.env.last_rewards[self.agent_name_mapping[r]]
-        else:
-            self._clear_rewards()
+                self.rewards[r] += self.env.last_rewards[self.agent_name_mapping[r]]
 
         if self.env.frames >= self.env.max_cycles:
             self.dones = dict(zip(self.agents, [True for _ in self.agents]))
