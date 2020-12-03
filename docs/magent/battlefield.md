@@ -17,13 +17,13 @@ agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 
-A small-scale team battle, where agents have to figure out the optimal way to coordinate their small team in a large space and maneuver around obstacles in order to defeat the opposing team. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly.
+A small-scale team battle, where agents have to figure out the optimal way to coordinate their small team in a large space and maneuver around obstacles in order to defeat the opposing team. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
 
 Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
 #### Action Space
 
-Key: `move_N`: options to move to the N nearest squares.
+Key: `move_N` means N separate actions, one to move to each of the N nearest squares on the grid.
 
 Action options: `[do_nothing, move_12, attack_8]`
 
