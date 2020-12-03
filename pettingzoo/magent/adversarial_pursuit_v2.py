@@ -15,7 +15,7 @@ from gym.utils import EzPickle
 default_map_size = 45
 max_cycles_default = 500
 minimap_mode_default = False
-default_reward_args = dict(attack_penalty=-0.2)
+default_reward_args = dict(tag_penalty=-0.2)
 
 
 def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
@@ -31,7 +31,7 @@ def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mo
 env = make_env(raw_env)
 
 
-def get_config(map_size, minimap_mode, attack_penalty):
+def get_config(map_size, minimap_mode, tag_penalty):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -41,7 +41,7 @@ def get_config(map_size, minimap_mode, attack_penalty):
     options = {
         'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
         'view_range': gw.CircleRange(5), 'attack_range': gw.CircleRange(2),
-        'attack_penalty': attack_penalty
+        'attack_penalty': tag_penalty
     }
     predator = cfg.register_agent_type(
         "predator",
