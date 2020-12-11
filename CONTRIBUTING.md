@@ -8,7 +8,7 @@ We welcome:
 
 We have a bug bounty of sorts for PRs, outlined in the readme
 
-We are not actively looking to add new environments (other than for classic) or other additional functionality. Please raise an issue or contact us directly before starting on a new classic environment.
+If you're thinking about creating submitting a new environment, please contact us first. There's a very small number of things that we'd like to add in the main PettingZoo repo that we haven't already done.
 
 ## Contributing
 
