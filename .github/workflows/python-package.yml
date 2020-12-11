@@ -14,13 +14,8 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
-      - python-version: '3.6'
-        runs-on: ubuntu-latest
-      - python-version: '3.7'
-        runs-on: ubuntu-latest
-      - python-version: '3.8'
-        runs-on: ubuntu-latest
-
+      matrix:
+        python-version: ['3.6', '3.7', '3.8']
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -58,3 +53,34 @@ jobs:
       run: |
         python setup.py sdist
         pip install dist/*.tar.gz
+
+  build:
+
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        export AUDIODEV=null
+        cd ${TRAVIS_BUILD_DIR}
+        sudo apt-get install swig
+        sudo apt install freeglut3-dev
+        sudo apt-get install unrar
+        pip install -r requirements.txt
+        pip install AutoROM
+        pip install flake8 pytest
+        AutoROM -v
+    - name: Full python tests
+      run: |
+        pytest ./pettingzoo/tests/pytest_runner.py
+        python -m pettingzoo.tests.ci_test atari 20 True True False False
+        python -m pettingzoo.tests.ci_test classic 20 True True False False
+        python -m pettingzoo.tests.ci_test butterfly 20 True True False False
+        python -m pettingzoo.tests.ci_test mpe 20 True True False False
+        python -m pettingzoo.tests.ci_test magent 20 True True False False
+        python -m pettingzoo.tests.ci_test sisl 20 True True False False
+        pytest ./pettingzoo/tests/all_parameter_combs.py
