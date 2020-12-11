@@ -54,7 +54,7 @@ jobs:
         python setup.py sdist
         pip install dist/*.tar.gz
 
-  build:
+  test:
 
     runs-on: macos-latest
     steps:
