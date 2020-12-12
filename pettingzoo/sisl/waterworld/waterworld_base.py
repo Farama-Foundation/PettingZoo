@@ -214,7 +214,7 @@ class MAWaterWorld():
         return obs_list[0]
 
     def _caught(self, is_colliding_N1_N2, n_coop):
-        """ Checke whether collision results in catching the object
+        """ Check whether collision results in catching the object
 
         This is because you need `n_coop` agents to collide with the object to actually catch it
         """
@@ -267,14 +267,14 @@ class MAWaterWorld():
             pursuer.set_position(clipped_coord)
 
         def rebound_particles(particles, n):
-            particle_obstacle_collisions = np.zeros(n)
+            collisions_particle_obstacle = np.zeros(n)
             # Particles rebound on hitting an obstacle
             for idx, particle in enumerate(particles):
                 obstacle_distance = ssd.cdist(np.expand_dims(
                     particle.position, 0), self.obstacle_coords)
                 is_colliding = obstacle_distance <= particle._radius + self.obstacle_radius
-                particle_obstacle_collisions[idx] = is_colliding.sum()
-                if particle_obstacle_collisions[idx] > 0:
+                collisions_particle_obstacle[idx] = is_colliding.sum()
+                if collisions_particle_obstacle[idx] > 0:
                     # Rebound the particle that collided with an obstacle
                     velocity_scale = pursuer._radius + self.obstacle_radius - \
                         ssd.euclidean(particle.position, self.obstacle_coords)
@@ -300,138 +300,125 @@ class MAWaterWorld():
             rebound_particles(self._poisons, self.n_poison)
 
         # Find collisions
-        pursuer_positions = np.array(
-            [pursuer.position for pursuer in self._pursuers])
-        evader_positions = np.array([evader.position for evader in self._evaders])
-        poison_positions = np.array([poison.position for poison in self._poisons])
+        positions_pursuer = np.array([pursuer.position for pursuer in self._pursuers])
+        positions_evader = np.array([evader.position for evader in self._evaders])
+        positions_poison = np.array([poison.position for poison in self._poisons])
 
         # Evaders
-        evdists_Np_Ne = ssd.cdist(pursuer_positions, evader_positions)
-        is_colliding_ev_Np_Ne = evdists_Np_Ne <= np.asarray([
+        distances_pursuer_evader = ssd.cdist(positions_pursuer, positions_evader)
+        # Generate n_evaders x n_pursuers matrix of boolean values for collisions
+        collisions_pursuer_evader = distances_pursuer_evader <= np.asarray([
             pursuer._radius + evader._radius for pursuer in self._pursuers
             for evader in self._evaders
         ]).reshape(self.n_pursuers, self.n_evaders)
 
         # num_collisions depends on how many needed to catch an evader
-        ev_caught, which_pursuer_caught_ev = self._caught(
-            is_colliding_ev_Np_Ne, self.n_coop)
+        caught_evaders, evader_catching_pursuers = self._caught(
+            collisions_pursuer_evader, self.n_coop)
 
         # Poisons
-        podists_Np_Npo = ssd.cdist(pursuer_positions, poison_positions)
-        is_colliding_po_Np_Npo = podists_Np_Npo <= np.asarray([
+        distances_pursuer_poison = ssd.cdist(positions_pursuer, positions_poison)
+        collisions_pursuer_poison = distances_pursuer_poison <= np.asarray([
             pursuer._radius + poison._radius for pursuer in self._pursuers
             for poison in self._poisons
         ]).reshape(self.n_pursuers, self.n_poison)
-        po_caught, which_pursuer_caught_po = self._caught(
-            is_colliding_po_Np_Npo, 1)
+
+
+        caught_poisons, poison_catching_pursuers = self._caught(
+            collisions_pursuer_poison, 1)
 
         # Find sensed objects
         # Obstacles
-        sensorvals_Np_K_No = np.array(
+        sensorvals_pursuer_obstacle = np.array(
             [pursuer.sensed(self.obstacle_coords) for pursuer in self._pursuers])
 
         # Evaders
-        sensorvals_Np_K_Ne = np.array(
-            [pursuer.sensed(evader_positions) for pursuer in self._pursuers])
+        sensorvals_pursuer_evader = np.array(
+            [pursuer.sensed(positions_evader) for pursuer in self._pursuers])
 
         # Poison
-        sensorvals_Np_K_Npo = np.array(
-            [pursuer.sensed(poison_positions) for pursuer in self._pursuers])
+        sensorvals_pursuer_poison = np.array(
+            [pursuer.sensed(positions_poison) for pursuer in self._pursuers])
 
         # Allies
-        sensorvals_Np_K_Np = np.array(
-            [pursuer.sensed(pursuer_positions, same=True) for pursuer in self._pursuers])
+        sensorvals_pursuer_pursuer = np.array(
+            [pursuer.sensed(positions_pursuer, same=True) for pursuer in self._pursuers])
 
+
+        
         # dist features
-        closest_ob_idx_Np_K = np.argmin(sensorvals_Np_K_No, axis=2)
-        closest_ob_dist_Np_K = self._closest_dist(
-            closest_ob_idx_Np_K, sensorvals_Np_K_No)
-        sensedmask_ob_Np_K = np.isfinite(closest_ob_dist_Np_K)
-        sensed_obdistfeatures_Np_K = np.zeros(
-            (self.n_pursuers, self.n_sensors))
-        sensed_obdistfeatures_Np_K[sensedmask_ob_Np_K] = closest_ob_dist_Np_K[sensedmask_ob_Np_K]
-        # Evaders
-        closest_ev_idx_Np_K = np.argmin(sensorvals_Np_K_Ne, axis=2)
-        closest_ev_dist_Np_K = self._closest_dist(
-            closest_ev_idx_Np_K, sensorvals_Np_K_Ne)
-        sensedmask_ev_Np_K = np.isfinite(closest_ev_dist_Np_K)
-        sensed_evdistfeatures_Np_K = np.zeros(
-            (self.n_pursuers, self.n_sensors))
-        sensed_evdistfeatures_Np_K[sensedmask_ev_Np_K] = closest_ev_dist_Np_K[sensedmask_ev_Np_K]
-        # Poison
-        closest_po_idx_Np_K = np.argmin(sensorvals_Np_K_Npo, axis=2)
-        closest_po_dist_Np_K = self._closest_dist(
-            closest_po_idx_Np_K, sensorvals_Np_K_Npo)
-        sensedmask_po_Np_K = np.isfinite(closest_po_dist_Np_K)
-        sensed_podistfeatures_Np_K = np.zeros(
-            (self.n_pursuers, self.n_sensors))
-        sensed_podistfeatures_Np_K[sensedmask_po_Np_K] = closest_po_dist_Np_K[sensedmask_po_Np_K]
-        # Allies
-        closest_pu_idx_Np_K = np.argmin(sensorvals_Np_K_Np, axis=2)
-        closest_pu_dist_Np_K = self._closest_dist(
-            closest_pu_idx_Np_K, sensorvals_Np_K_Np)
-        sensedmask_pu_Np_K = np.isfinite(closest_pu_dist_Np_K)
-        sensed_pudistfeatures_Np_K = np.zeros(
-            (self.n_pursuers, self.n_sensors))
-        sensed_pudistfeatures_Np_K[sensedmask_pu_Np_K] = closest_pu_dist_Np_K[sensedmask_pu_Np_K]
+        def sensor_features(sensorvals):    
+            closest_idx_array = np.argmin(sensorvals, axis=2)
+            closest_distances = self._closest_dist(
+                closest_idx_array, sensorvals)
+            infinite_mask = np.isfinite(closest_distances)
+            sensed_distances = np.zeros(
+                (self.n_pursuers, self.n_sensors))
+            sensed_distances[infinite_mask] = closest_distances[infinite_mask]
+            return sensed_distances, closest_idx_array, infinite_mask
+
+        obstacle_distance_features, _, _  = sensor_features(sensorvals_pursuer_obstacle)
+        evader_distance_features, closest_evader_idx, evader_mask  = sensor_features(sensorvals_pursuer_evader)
+        poison_distance_features, closest_poison_idx, poison_mask = sensor_features(sensorvals_pursuer_poison)
+        pursuer_distance_features, closest_pursuer_idx, pursuer_mask = sensor_features(sensorvals_pursuer_pursuer)
 
         # speed features
-        pursuersv_Np_2 = np.array(
+        pursuers_speed = np.array(
             [pursuer.velocity for pursuer in self._pursuers])
-        evadersv_Ne_2 = np.array([evader.velocity for evader in self._evaders])
-        poisonv_Npo_2 = np.array([poison.velocity for poison in self._poisons])
+        evaders_speed = np.array([evader.velocity for evader in self._evaders])
+        poisons_speed = np.array([poison.velocity for poison in self._poisons])
 
         # Evaders
 
-        sensed_evspeedfeatures_Np_K = self._extract_speed_features(evadersv_Ne_2,
-                                                                   closest_ev_idx_Np_K,
-                                                                   sensedmask_ev_Np_K)
+        evader_speed_features = self._extract_speed_features(evaders_speed,
+                                                                   closest_evader_idx,
+                                                                   evader_mask)
         # Poison
-        sensed_pospeedfeatures_Np_K = self._extract_speed_features(poisonv_Npo_2,
-                                                                   closest_po_idx_Np_K,
-                                                                   sensedmask_po_Np_K)
+        poison_speed_features = self._extract_speed_features(poisons_speed,
+                                                                   closest_poison_idx,
+                                                                   poison_mask)
         # Allies
-        sensed_puspeedfeatures_Np_K = self._extract_speed_features(pursuersv_Np_2,
-                                                                   closest_pu_idx_Np_K,
-                                                                   sensedmask_pu_Np_K)
+        pursuer_speed_features = self._extract_speed_features(pursuers_speed,
+                                                                   closest_pursuer_idx,
+                                                                   pursuer_mask)
 
         # Process collisions
         # If object collided with required number of players, reset its position and velocity
         # Effectively the same as removing it and adding it back
-        if ev_caught.size:
-            for evcaught in ev_caught:
-                self._evaders[evcaught].set_position(
-                    self._generate_coord(self._evaders[evcaught]._radius))
+        if caught_evaders.size:
+            for evader_idx in caught_evaders:
+                self._evaders[evader_idx].set_position(
+                    self._generate_coord(self._evaders[evader_idx]._radius))
                 # Generate both velocity components from range [-self.evader_speed, self.evader_speed) 
-                self._evaders[evcaught].set_velocity(
+                self._evaders[evader_idx].set_velocity(
                     (self.np_random.rand(2,) - 0.5) * 2 * self.evader_speed)
 
-        if po_caught.size:
-            for pocaught in po_caught:
-                self._poisons[pocaught].set_position(
-                    self._generate_coord(self._poisons[pocaught]._radius))
+        if caught_poisons.size:
+            for poison_idx in caught_poisons:
+                self._poisons[poison_idx].set_position(
+                    self._generate_coord(self._poisons[poison_idx]._radius))
                 # Generate both velocity components from range [-self.poison_speed, self.poison_speed) 
-                self._poisons[pocaught].set_velocity(
+                self._poisons[poison_idx].set_velocity(
                     (self.np_random.rand(2,) - 0.5) * 2 * self.poison_speed)
 
-        ev_encounters, which_pursuer_encounterd_ev = self._caught(
-            is_colliding_ev_Np_Ne, 1)
+        evader_encounters, evader_encounter_matrix = self._caught(
+            collisions_pursuer_evader, 1)
         # Update reward based on these collisions
-        rewards[which_pursuer_caught_ev] += self.food_reward
-        rewards[which_pursuer_caught_po] += self.poison_reward
-        rewards[which_pursuer_encounterd_ev] += self.encounter_reward
+        rewards[evader_catching_pursuers] += self.food_reward
+        rewards[poison_catching_pursuers] += self.poison_reward
+        rewards[evader_encounter_matrix] += self.encounter_reward
 
         # Add features together
         if self._speed_features:
-            sensorfeatures_Np_K_O = np.c_[sensed_obdistfeatures_Np_K, sensed_evdistfeatures_Np_K,
-                                          sensed_evspeedfeatures_Np_K, sensed_podistfeatures_Np_K,
-                                          sensed_pospeedfeatures_Np_K, sensed_pudistfeatures_Np_K,
-                                          sensed_puspeedfeatures_Np_K]
+            sensorfeatures = np.c_[obstacle_distance_features, evader_distance_features,
+                                          evader_speed_features, poison_distance_features,
+                                          poison_speed_features, pursuer_distance_features,
+                                          pursuer_speed_features]
         else:
-            sensorfeatures_Np_K_O = np.c_[sensed_obdistfeatures_Np_K, sensed_evdistfeatures_Np_K,
-                                          sensed_podistfeatures_Np_K, sensed_pudistfeatures_Np_K]
+            sensorfeatures = np.c_[obstacle_distance_Features, evader_distance_feature,
+                                          poison_distance_feature, pursuer_distance_feature]
 
-        return sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards
+        return sensorfeatures, collisions_pursuer_evader, collisions_pursuer_poison, rewards
 
     def observe_list(self, sensor_feature, is_colliding_ev, is_colliding_po):
         obslist = []
