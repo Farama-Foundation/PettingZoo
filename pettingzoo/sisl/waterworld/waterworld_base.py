@@ -213,20 +213,22 @@ class MAWaterWorld():
 
         return obs_list[0]
 
-    def _caught(self, is_colliding_N1_N2, n_coop):
+    def _caught(self, is_colliding_x_y, n_coop):
         """ Check whether collision results in catching the object
 
         This is because you need `n_coop` agents to collide with the object to actually catch it
         """
-        # number of N1 colliding with given N2
-        n_collisions_N2 = is_colliding_N1_N2.sum(axis=0)
-        is_caught_cN2 = np.where(n_collisions_N2 >= n_coop)[0]
+        # Number of collisions for each y
+        n_collisions_N2 = is_colliding_x_y.sum(axis=0)
+        # List of y that have been caught
+        caught_y = np.where(n_collisions_N2 >= n_coop)[0]
 
-        # number of N2 colliding with given N1
-        who_collisions_N1_cN2 = is_colliding_N1_N2[:, is_caught_cN2]
-        who_caught_cN1 = np.where(who_collisions_N1_cN2 >= 1)[0]
+        # Boolean array indicating which x caught any y in caught_y
+        did_x_catch_y = is_colliding_x_y[:, caught_y]
+        # List of x that caught corresponding y in caught_y
+        x_caught_y = np.where(did_x_catch_y >= 1)[0]
 
-        return is_caught_cN2, who_caught_cN1
+        return caught_y, x_caught_y
 
     def _closest_dist(self, closest_obj_idx_Np_K, sensorvals_Np_K_N):
         """Closest distances according to `idx`"""
