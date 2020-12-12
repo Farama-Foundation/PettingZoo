@@ -34,13 +34,13 @@ jobs:
         AutoROM -v
     - name: Full python tests
       run: |
-        pytest ./pettingzoo/tests/pytest_runner.py
-        python -m pettingzoo.tests.ci_test atari 20 True True False False
-        python -m pettingzoo.tests.ci_test classic 20 True True False False
-        python -m pettingzoo.tests.ci_test butterfly 20 True True False False
-        python -m pettingzoo.tests.ci_test mpe 20 True True False False
-        python -m pettingzoo.tests.ci_test magent 20 True True False False
-        python -m pettingzoo.tests.ci_test sisl 20 True True False False
+        xvfb-run pytest ./pettingzoo/tests/pytest_runner.py
+        xvfb-run python -m pettingzoo.tests.ci_test atari 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test classic 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test butterfly 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test mpe 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test magent 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test sisl 20 True True False False
         pytest ./pettingzoo/tests/all_parameter_combs.py
     - name: Flake 8 tests
       run: |
@@ -73,11 +73,11 @@ jobs:
         AutoROM -v
     - name: Full python tests
       run: |
-        pytest ./pettingzoo/tests/pytest_runner.py
-        python -m pettingzoo.tests.ci_test atari 20 True True False False
-        python -m pettingzoo.tests.ci_test classic 20 True True False False
-        python -m pettingzoo.tests.ci_test butterfly 20 True True False False
-        python -m pettingzoo.tests.ci_test mpe 20 True True False False
-        python -m pettingzoo.tests.ci_test magent 20 True True False False
-        python -m pettingzoo.tests.ci_test sisl 20 True True False False
+        xvfb-run pytest ./pettingzoo/tests/pytest_runner.py
+        xvfb-run python -m pettingzoo.tests.ci_test atari 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test classic 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test butterfly 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test mpe 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test magent 20 True True False False
+        xvfb-run python -m pettingzoo.tests.ci_test sisl 20 True True False False
         pytest ./pettingzoo/tests/all_parameter_combs.py
