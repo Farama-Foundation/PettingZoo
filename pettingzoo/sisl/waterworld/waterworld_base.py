@@ -17,15 +17,15 @@ class Archea(Agent):
         self._sensor_obscoord = 4
         if speed_features:
             self._sensor_obscoord += 3
-        self._obscoord_from_sensors = self._n_sensors * self._sensor_obscoord
-        self._obs_dim = self._obscoord_from_sensors + 2  # +1 for type, +1 for id
+        self._sensor_obs_coord = self._n_sensors * self._sensor_obscoord
+        self._obs_dim = self._sensor_obs_coord + 2  # +1 for is_colliding_evader, +1 for is_colliding_poison
 
         self._position = None
         self._velocity = None
         # Sensors
-        angles_K = np.linspace(0., 2. * np.pi, self._n_sensors + 1)[:-1]
-        sensor_vecs_K_2 = np.c_[np.cos(angles_K), np.sin(angles_K)]
-        self._sensors = sensor_vecs_K_2
+        angles = np.linspace(0., 2. * np.pi, self._n_sensors + 1)[:-1]
+        sensor_vectors = np.c_[np.cos(angles), np.sin(angles)]
+        self._sensors = sensor_vectors
 
     @property
     def observation_space(self):
@@ -45,13 +45,13 @@ class Archea(Agent):
         assert self._velocity is not None
         return self._velocity
 
-    def set_position(self, x_2):
-        assert x_2.shape == (2,)
-        self._position = x_2
+    def set_position(self, pos):
+        assert pos.shape == (2,)
+        self._position = pos
 
-    def set_velocity(self, v_2):
-        assert v_2.shape == (2,)
-        self._velocity = v_2
+    def set_velocity(self, velocity):
+        assert velocity.shape == (2,)
+        self._velocity = velocity
 
     @property
     def sensors(self):
