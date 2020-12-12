@@ -58,15 +58,19 @@ class Archea(Agent):
         assert self._sensors is not None
         return self._sensors
 
-    def sensed(self, objx_N_2, same=False):
+    def sensed(self, object_coord, same=False):
         """Whether `obj` would be sensed by the pursuers"""
-        relpos_obj_N_2 = objx_N_2 - np.expand_dims(self.position, 0)
-        sensorvals_K_N = self.sensors.dot(relpos_obj_N_2.T)
-        sensorvals_K_N[(sensorvals_K_N < 0) | (sensorvals_K_N > self._sensor_range) | ((
-            relpos_obj_N_2**2).sum(axis=1)[None, :] - sensorvals_K_N**2 > self._radius**2)] = np.inf
+        relative_coord = object_coord - np.expand_dims(self.position, 0)
+        sensorvals = self.sensors.dot(relative_coord.T)
+        # Set sensorvals to np.inf when sensorvals are outside sensing range
+        sensorvals[
+            (sensorvals < 0)
+            | (sensorvals > self._sensor_range)
+            | ((relative_coord**2).sum(axis=1)[None, :] - sensorvals**2 > self._radius**2)
+        ] = np.inf
         if same:
-            sensorvals_K_N[:, self._idx - 1] = np.inf
-        return sensorvals_K_N
+            sensorvals[:, self._idx - 1] = np.inf
+        return sensorvals
 
 
 class MAWaterWorld():
