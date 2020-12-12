@@ -434,32 +434,26 @@ class MAWaterWorld():
         p.set_velocity(p.velocity + action)
         p.set_position(p.position + self.cycle_time * p.velocity)
 
-        if is_last:
-            for evader in self._evaders:
-                # Move objects
-                evader.set_position(
-                    evader.position + self.cycle_time * evader.velocity)
-                # Bounce object if it hits a wall
-                for i in range(len(evader.position)):
-                    if evader.position[i] >= 1 or evader.position[i] <= 0:
-                        evader.position[i] = np.clip(evader.position[i], 0, 1)
-                        evader.velocity[i] = -1 * evader.velocity[i]
-
-            for poison in self._poisons:
-                # Move objects
-                poison.set_position(
-                    poison.position + self.cycle_time * poison.velocity)
-                # Bounce object if it hits a wall
-                for i in range(len(poison.position)):
-                    if poison.position[i] >= 1 or poison.position[i] <= 0:
-                        poison.position[i] = np.clip(poison.position[i], 0, 1)
-                        poison.velocity[i] = -1 * poison.velocity[i]
 
         control_reward = self.control_penalty * (action**2).sum()
         self.control_rewards = (control_reward / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
         self.control_rewards[agent_id] += control_reward * self.local_ratio
 
         if is_last:
+            def move_objects(objects):
+                for obj in objects:
+                    # Move objects
+                    obj.set_position(
+                        obj.position + self.cycle_time * obj.velocity)
+                    # Bounce object if it hits a wall
+                    for i in range(len(obj.position)):
+                        if obj.position[i] >= 1 or obj.position[i] <= 0:
+                            obj.position[i] = np.clip(obj.position[i], 0, 1)
+                            obj.velocity[i] = -1 * obj.velocity[i]
+    
+            move_objects(self._evaders)
+            move_objects(self._poisons)
+
             rewards = np.zeros(self.n_pursuers)
             sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
                 rewards, is_last)
