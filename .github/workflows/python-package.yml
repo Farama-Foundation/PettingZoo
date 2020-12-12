@@ -25,7 +25,6 @@ jobs:
     - name: Install dependencies
       run: |
         export AUDIODEV=null
-        cd ${TRAVIS_BUILD_DIR}
         sudo apt-get install swig
         sudo apt install freeglut3-dev
         sudo apt-get install unrar
@@ -48,7 +47,7 @@ jobs:
         bash ./check_style.sh
     - name: Print tests
       run: |
-        python3 -m pettingzoo.tests.print_test
+        python -m pettingzoo.tests.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist
@@ -57,6 +56,7 @@ jobs:
   test:
 
     runs-on: macos-latest
+    python-version: 3.8
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -66,10 +66,8 @@ jobs:
     - name: Install dependencies
       run: |
         export AUDIODEV=null
-        cd ${TRAVIS_BUILD_DIR}
-        sudo apt-get install swig
-        sudo apt install freeglut3-dev
-        sudo apt-get install unrar
+        sudo brew install swig
+        sudo brew install unrar
         pip install -r requirements.txt
         pip install AutoROM
         pip install flake8 pytest
