@@ -258,95 +258,55 @@ class MAWaterWorld():
     def collision_handling_subroutine(self, rewards, is_last):
         # Stop pursuers upon hitting a wall
         for pursuer in self._pursuers:
-            clippedx_2 = np.clip(pursuer.position, 0, 1)
-            vel_2 = pursuer.velocity
+            clipped_coord = np.clip(pursuer.position, 0, 1)
+            clipped_velocity = pursuer.velocity
             # If x or y position gets clipped, set x or y velocity to 0 respectively
-            vel_2[pursuer.position != clippedx_2] = 0
+            clipped_velocity[pursuer.position != clipped_coord] = 0
             # Save clipped velocity and position
-            pursuer.set_velocity(vel_2)
-            pursuer.set_position(clippedx_2)
+            pursuer.set_velocity(clipped_velocity)
+            pursuer.set_position(clipped_coord)
 
-        obstacle_coll_Np = np.zeros(self.n_pursuers)
-        # Particles rebound on hitting an obstacle
-        for idx, pursuer in enumerate(self._pursuers):
-            distfromobst_No = ssd.cdist(np.expand_dims(
-                pursuer.position, 0), self.obstacle_coords)
-            is_colliding_No = distfromobst_No <= pursuer._radius + self.obstacle_radius
-            obstacle_coll_Np[idx] = is_colliding_No.sum()
-            if obstacle_coll_Np[idx] > 0:
-                velocity_scale = pursuer._radius + self.obstacle_radius - \
-                    ssd.euclidean(pursuer.position, self.obstacle_coords)
-                pos_diff = pursuer.position - self.obstacle_coords[0]
-                new_pos = pursuer.position + velocity_scale * pos_diff
-                pursuer.set_position(new_pos)
+        def rebound_particles(particles, n):
+            particle_obstacle_collisions = np.zeros(n)
+            # Particles rebound on hitting an obstacle
+            for idx, particle in enumerate(particles):
+                obstacle_distance = ssd.cdist(np.expand_dims(
+                    particle.position, 0), self.obstacle_coords)
+                is_colliding = obstacle_distance <= particle._radius + self.obstacle_radius
+                particle_obstacle_collisions[idx] = is_colliding.sum()
+                if particle_obstacle_collisions[idx] > 0:
+                    # Rebound the particle that collided with an obstacle
+                    velocity_scale = pursuer._radius + self.obstacle_radius - \
+                        ssd.euclidean(particle.position, self.obstacle_coords)
+                    pos_diff = particle.position - self.obstacle_coords[0]
+                    new_pos = particle.position + velocity_scale * pos_diff
+                    particle.set_position(new_pos)
 
-                collision_normal = pursuer.position - self.obstacle_coords[0]
-                # project current velocity onto collision normal
-                current_vel = pursuer.velocity
-                proj_numer = np.dot(current_vel, collision_normal)
-                cllsn_mag = np.dot(collision_normal, collision_normal)
-                proj_vel = (proj_numer / cllsn_mag) * collision_normal
-                perp_vel = current_vel - proj_vel
-                total_vel = perp_vel - proj_vel
-                pursuer.set_velocity(total_vel)
+                    collision_normal = particle.position - self.obstacle_coords[0]
+                    # project current velocity onto collision normal
+                    current_vel = particle.velocity
+                    proj_numer = np.dot(current_vel, collision_normal)
+                    cllsn_mag = np.dot(collision_normal, collision_normal)
+                    proj_vel = (proj_numer / cllsn_mag) * collision_normal
+                    perp_vel = current_vel - proj_vel
+                    total_vel = perp_vel - proj_vel
+                    particle.set_velocity(total_vel)
+
+        rebound_particles(self._pursuers, self.n_pursuers)
+
 
         if is_last:
-            obstacle_coll_Ne = np.zeros(self.n_evaders)
-            for idx, evader in enumerate(self._evaders):
-                distfromobst_No = ssd.cdist(np.expand_dims(
-                    evader.position, 0), self.obstacle_coords)
-                is_colliding_No = distfromobst_No <= evader._radius + self.obstacle_radius
-                obstacle_coll_Ne[idx] = is_colliding_No.sum()
-                if obstacle_coll_Ne[idx] > 0:
-                    velocity_scale = evader._radius + self.obstacle_radius - \
-                        ssd.euclidean(evader.position, self.obstacle_coords)
-                    pos_diff = evader.position - self.obstacle_coords[0]
-                    evader.set_position(
-                        evader.position + velocity_scale * pos_diff)
-
-                    collision_normal = evader.position - \
-                        self.obstacle_coords[0]
-                    # project current velocity onto collision normal
-                    current_vel = evader.velocity
-                    proj_numer = np.dot(current_vel, collision_normal)
-                    cllsn_mag = np.dot(collision_normal, collision_normal)
-                    proj_vel = (proj_numer / cllsn_mag) * collision_normal
-                    perp_vel = current_vel - proj_vel
-                    total_vel = perp_vel - proj_vel
-                    evader.set_velocity(total_vel)
-
-            obstacle_coll_Npo = np.zeros(self.n_poison)
-            for idx, poison in enumerate(self._poisons):
-                distfromobst_No = ssd.cdist(np.expand_dims(
-                    poison.position, 0), self.obstacle_coords)
-                is_colliding_No = distfromobst_No <= poison._radius + self.obstacle_radius
-                obstacle_coll_Npo[idx] = is_colliding_No.sum()
-                if obstacle_coll_Npo[idx] > 0:
-                    velocity_scale = poison._radius + self.obstacle_radius - \
-                        ssd.euclidean(poison.position, self.obstacle_coords)
-                    pos_diff = poison.position - self.obstacle_coords[0]
-                    poison.set_position(
-                        poison.position + velocity_scale * pos_diff)
-
-                    collision_normal = poison.position - \
-                        self.obstacle_coords[0]
-                    # project current velocity onto collision normal
-                    current_vel = poison.velocity
-                    proj_numer = np.dot(current_vel, collision_normal)
-                    cllsn_mag = np.dot(collision_normal, collision_normal)
-                    proj_vel = (proj_numer / cllsn_mag) * collision_normal
-                    perp_vel = current_vel - proj_vel
-                    total_vel = perp_vel - proj_vel
-                    poison.set_velocity(total_vel)
+            rebound_particles(self._evaders, self.n_evaders)
+            rebound_particles(self._poisons, self.n_poison)
 
         # Find collisions
-        pursuersx_Np_2 = np.array(
+        pursuer_positions = np.array(
             [pursuer.position for pursuer in self._pursuers])
-        evadersx_Ne_2 = np.array([evader.position for evader in self._evaders])
-        poisonx_Npo_2 = np.array([poison.position for poison in self._poisons])
+        evader_positions = np.array([evader.position for evader in self._evaders])
+        poison_positions = np.array([poison.position for poison in self._poisons])
 
         # Evaders
-        evdists_Np_Ne = ssd.cdist(pursuersx_Np_2, evadersx_Ne_2)
+        evdists_Np_Ne = ssd.cdist(pursuer_positions, evader_positions)
         is_colliding_ev_Np_Ne = evdists_Np_Ne <= np.asarray([
             pursuer._radius + evader._radius for pursuer in self._pursuers
             for evader in self._evaders
@@ -357,7 +317,7 @@ class MAWaterWorld():
             is_colliding_ev_Np_Ne, self.n_coop)
 
         # Poisons
-        podists_Np_Npo = ssd.cdist(pursuersx_Np_2, poisonx_Npo_2)
+        podists_Np_Npo = ssd.cdist(pursuer_positions, poison_positions)
         is_colliding_po_Np_Npo = podists_Np_Npo <= np.asarray([
             pursuer._radius + poison._radius for pursuer in self._pursuers
             for poison in self._poisons
@@ -372,15 +332,15 @@ class MAWaterWorld():
 
         # Evaders
         sensorvals_Np_K_Ne = np.array(
-            [pursuer.sensed(evadersx_Ne_2) for pursuer in self._pursuers])
+            [pursuer.sensed(evader_positions) for pursuer in self._pursuers])
 
         # Poison
         sensorvals_Np_K_Npo = np.array(
-            [pursuer.sensed(poisonx_Npo_2) for pursuer in self._pursuers])
+            [pursuer.sensed(poison_positions) for pursuer in self._pursuers])
 
         # Allies
         sensorvals_Np_K_Np = np.array(
-            [pursuer.sensed(pursuersx_Np_2, same=True) for pursuer in self._pursuers])
+            [pursuer.sensed(pursuer_positions, same=True) for pursuer in self._pursuers])
 
         # dist features
         closest_ob_idx_Np_K = np.argmin(sensorvals_Np_K_No, axis=2)
