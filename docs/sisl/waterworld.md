@@ -23,7 +23,7 @@ For example, by default there are 5 agents (purple), 5 food targets (green) and 
 
 This has been fixed from the reference environments to keep items floating off screen and being lost forever.
 
-**Agent observation space:** `[sensor_coord_0, sensor_coord_1, sensor_coord_2, sensor_coord_3, (sensor_speed_feature_0, sensor_speed_feature_1, sensor_speed_feature_2)] X [n_sensors] + [type, id]`
+**Agent observation space:** `[sensor_object_distance, sensor_evader_distance, (sensor_evader_speed), sensor_poison_distance, (sensor_poison_speed), sensor_pursuer_distance, (sensor_pursuer_speed)] X [n_sensors] + [is_colliding_evader, is_colliding_poison]`
 
 ### Action Space
 
