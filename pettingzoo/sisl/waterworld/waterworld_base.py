@@ -72,7 +72,7 @@ class Archea(Agent):
 class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), ev_speed=0.01,
+                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), evader_speed=0.01,
                  poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
                  local_ratio=1.0, speed_features=True, max_cycles=500, **kwargs):
@@ -84,7 +84,7 @@ class MAWaterWorld():
             radius: pursuer archea radius
             obstacle_radius: radius of obstacle object
             initial_obstacle_coord: starting coordinate of obstacle object
-            ev_speed: evading archea speed
+            evader_speed: evading archea speed
             poison_speed: speed of poison object
             n_sensors: number of sensor dendrites on all archea
             sensor_range: length of sensor dendrite on all archea
@@ -105,7 +105,7 @@ class MAWaterWorld():
         self.initial_obstacle_coord = initial_obstacle_coord
         self.poison_speed = poison_speed
         self.radius = radius
-        self.ev_speed = ev_speed
+        self.evader_speed = evader_speed
         self.n_sensors = n_sensors
         self.sensor_range = np.ones(self.n_pursuers) * sensor_range
         self.action_scale = action_scale
@@ -191,13 +191,15 @@ class MAWaterWorld():
         # Initialize evaders
         for evader in self._evaders:
             evader.set_position(self._generate_coord(evader._radius))
+            # Generate both velocity components from range [-self.evader_speed, self.evader_speed) 
             evader.set_velocity(
-                (self.np_random.rand(2) - 0.5) * self.ev_speed)
+                (self.np_random.rand(2) - 0.5) * 2 * self.evader_speed)
 
         # Initialize poisons
         for poison in self._poisons:
             poison.set_position(self._generate_coord(poison._radius))
-            poison.set_velocity((self.np_random.rand(2) - 0.5) * self.ev_speed)
+            # Generate both velocity components from range [-self.poison_speed, self.poison_speed) 
+            poison.set_velocity((self.np_random.rand(2) - 0.5) * 2 * self.poison_speed)
 
         rewards = np.zeros(self.n_pursuers)
         sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
@@ -440,15 +442,17 @@ class MAWaterWorld():
             for evcaught in ev_caught:
                 self._evaders[evcaught].set_position(
                     self._generate_coord(self._evaders[evcaught]._radius))
+                # Generate both velocity components from range [-self.evader_speed, self.evader_speed) 
                 self._evaders[evcaught].set_velocity(
-                    (self.np_random.rand(2,) - 0.5) * self.ev_speed)
+                    (self.np_random.rand(2,) - 0.5) * 2 * self.evader_speed)
 
         if po_caught.size:
             for pocaught in po_caught:
                 self._poisons[pocaught].set_position(
                     self._generate_coord(self._poisons[pocaught]._radius))
+                # Generate both velocity components from range [-self.poison_speed, self.poison_speed) 
                 self._poisons[pocaught].set_velocity(
-                    (self.np_random.rand(2,) - 0.5) * self.poison_speed)
+                    (self.np_random.rand(2,) - 0.5) * 2 * self.poison_speed)
 
         ev_encounters, which_pursuer_encounterd_ev = self._caught(
             is_colliding_ev_Np_Ne, 1)
