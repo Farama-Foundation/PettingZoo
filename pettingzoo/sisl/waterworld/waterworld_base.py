@@ -299,12 +299,11 @@ class MAWaterWorld():
             rebound_particles(self._evaders, self.n_evaders)
             rebound_particles(self._poisons, self.n_poison)
 
-        # Find collisions
         positions_pursuer = np.array([pursuer.position for pursuer in self._pursuers])
         positions_evader = np.array([evader.position for evader in self._evaders])
         positions_poison = np.array([poison.position for poison in self._poisons])
 
-        # Evaders
+        # Find evader collisions
         distances_pursuer_evader = ssd.cdist(positions_pursuer, positions_evader)
         # Generate n_evaders x n_pursuers matrix of boolean values for collisions
         collisions_pursuer_evader = distances_pursuer_evader <= np.asarray([
@@ -312,41 +311,39 @@ class MAWaterWorld():
             for evader in self._evaders
         ]).reshape(self.n_pursuers, self.n_evaders)
 
-        # num_collisions depends on how many needed to catch an evader
+        # Number of collisions depends on n_coop, how many are needed to catch an evader
         caught_evaders, evader_catching_pursuers = self._caught(
             collisions_pursuer_evader, self.n_coop)
 
-        # Poisons
+        # Find poison collisions
         distances_pursuer_poison = ssd.cdist(positions_pursuer, positions_poison)
         collisions_pursuer_poison = distances_pursuer_poison <= np.asarray([
             pursuer._radius + poison._radius for pursuer in self._pursuers
             for poison in self._poisons
         ]).reshape(self.n_pursuers, self.n_poison)
 
-
         caught_poisons, poison_catching_pursuers = self._caught(
             collisions_pursuer_poison, 1)
 
-        # Find sensed objects
-        # Obstacles
+        # Find sensed obstacles
         sensorvals_pursuer_obstacle = np.array(
             [pursuer.sensed(self.obstacle_coords) for pursuer in self._pursuers])
 
-        # Evaders
+        # Find sensed evaders
         sensorvals_pursuer_evader = np.array(
             [pursuer.sensed(positions_evader) for pursuer in self._pursuers])
 
-        # Poison
+        # Find sensed poisons
         sensorvals_pursuer_poison = np.array(
             [pursuer.sensed(positions_poison) for pursuer in self._pursuers])
 
-        # Allies
+        # Find sensed pursuers
         sensorvals_pursuer_pursuer = np.array(
             [pursuer.sensed(positions_pursuer, same=True) for pursuer in self._pursuers])
 
 
         
-        # dist features
+        # Collect distance features
         def sensor_features(sensorvals):    
             closest_idx_array = np.argmin(sensorvals, axis=2)
             closest_distances = self._closest_dist(
@@ -362,22 +359,17 @@ class MAWaterWorld():
         poison_distance_features, closest_poison_idx, poison_mask = sensor_features(sensorvals_pursuer_poison)
         pursuer_distance_features, closest_pursuer_idx, pursuer_mask = sensor_features(sensorvals_pursuer_pursuer)
 
-        # speed features
-        pursuers_speed = np.array(
-            [pursuer.velocity for pursuer in self._pursuers])
+        # Collect speed features
+        pursuers_speed = np.array([pursuer.velocity for pursuer in self._pursuers])
         evaders_speed = np.array([evader.velocity for evader in self._evaders])
         poisons_speed = np.array([poison.velocity for poison in self._poisons])
-
-        # Evaders
 
         evader_speed_features = self._extract_speed_features(evaders_speed,
                                                                    closest_evader_idx,
                                                                    evader_mask)
-        # Poison
         poison_speed_features = self._extract_speed_features(poisons_speed,
                                                                    closest_poison_idx,
                                                                    poison_mask)
-        # Allies
         pursuer_speed_features = self._extract_speed_features(pursuers_speed,
                                                                    closest_pursuer_idx,
                                                                    pursuer_mask)
@@ -385,24 +377,21 @@ class MAWaterWorld():
         # Process collisions
         # If object collided with required number of players, reset its position and velocity
         # Effectively the same as removing it and adding it back
-        if caught_evaders.size:
-            for evader_idx in caught_evaders:
-                self._evaders[evader_idx].set_position(
-                    self._generate_coord(self._evaders[evader_idx]._radius))
-                # Generate both velocity components from range [-self.evader_speed, self.evader_speed) 
-                self._evaders[evader_idx].set_velocity(
-                    (self.np_random.rand(2,) - 0.5) * 2 * self.evader_speed)
+        def reset_caught_objects(caught_objects, objects, speed):
+            if caught_objects.size:
+                for object_idx in caught_objects:
+                    objects[object_idx].set_position(
+                        self._generate_coord(objects[object_idx]._radius))
+                    # Generate both velocity components from range [-self.evader_speed, self.evader_speed) 
+                    objects[object_idx].set_velocity(
+                        (self.np_random.rand(2,) - 0.5) * 2 * speed)
 
-        if caught_poisons.size:
-            for poison_idx in caught_poisons:
-                self._poisons[poison_idx].set_position(
-                    self._generate_coord(self._poisons[poison_idx]._radius))
-                # Generate both velocity components from range [-self.poison_speed, self.poison_speed) 
-                self._poisons[poison_idx].set_velocity(
-                    (self.np_random.rand(2,) - 0.5) * 2 * self.poison_speed)
+        reset_caught_objects(caught_evaders, self._evaders, self.evader_speed)
+        reset_caught_objects(caught_poisons, self._poisons, self.poison_speed)
 
         evader_encounters, evader_encounter_matrix = self._caught(
             collisions_pursuer_evader, 1)
+
         # Update reward based on these collisions
         rewards[evader_catching_pursuers] += self.food_reward
         rewards[poison_catching_pursuers] += self.poison_reward
