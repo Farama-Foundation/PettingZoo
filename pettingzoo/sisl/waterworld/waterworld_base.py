@@ -69,7 +69,7 @@ class Archea(Agent):
         # Set sensorvals to np.inf when object should not be seen by sensor
         sensorvals[
             (sensorvals < 0)    # Wrong direction (by more than 90 degrees in both directions)
-            | (sensorvals > self._sensor_range) # Outside sensor range
+            | (sensorvals > self._sensor_range)     # Outside sensor range
             | ((relative_coord**2).sum(axis=1)[None, :] - sensorvals**2 > self._radius**2)
         ] = np.inf
         if same:
@@ -82,7 +82,7 @@ class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), evader_speed=0.01,
-                 poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
+                 poison_speed=0.01, n_sensors=30, sensor_range=0.2,
                  poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
                  local_ratio=1.0, speed_features=True, max_cycles=500, **kwargs):
         """
@@ -97,7 +97,6 @@ class MAWaterWorld():
             poison_speed: speed of poison object
             n_sensors: number of sensor dendrites on all archea
             sensor_range: length of sensor dendrite on all archea
-            action_scale: scaling factor applied to all input actions
             poison_reward: reward for pursuer consuming a poison object
             food_reward: reward for pursuers consuming an evading archea
             encounter_reward: reward for a pursuer colliding with an evading archea
@@ -117,7 +116,6 @@ class MAWaterWorld():
         self.evader_speed = evader_speed
         self.n_sensors = n_sensors
         self.sensor_range = np.ones(self.n_pursuers) * sensor_range
-        self.action_scale = action_scale
         self.poison_reward = poison_reward
         self.food_reward = food_reward
         self.control_penalty = control_penalty
@@ -436,8 +434,6 @@ class MAWaterWorld():
 
         action = np.asarray(action)
         action = action.reshape(2)
-
-        action = action * self.action_scale
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
