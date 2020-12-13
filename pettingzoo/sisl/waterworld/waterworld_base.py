@@ -22,8 +22,11 @@ class Archea(Agent):
 
         self._position = None
         self._velocity = None
-        # Sensors
+
+        # Generate self._n_sensors angles, evenly spaced from 0 to 2pi (
+        # We generate 1 extra angle and remove it because linspace[0] = 0 = 2pi = linspace[-1]
         angles = np.linspace(0., 2. * np.pi, self._n_sensors + 1)[:-1]
+        # Convert angles to x-y coordinates
         sensor_vectors = np.c_[np.cos(angles), np.sin(angles)]
         self._sensors = sensor_vectors
 
@@ -61,14 +64,16 @@ class Archea(Agent):
     def sensed(self, object_coord, same=False):
         """Whether `obj` would be sensed by the pursuers"""
         relative_coord = object_coord - np.expand_dims(self.position, 0)
+        # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
-        # Set sensorvals to np.inf when sensorvals are outside sensing range
+        # Set sensorvals to np.inf when object should not be seen by sensor
         sensorvals[
-            (sensorvals < 0)
-            | (sensorvals > self._sensor_range)
+            (sensorvals < 0)    # Wrong direction (by more than 90 degrees in both directions)
+            | (sensorvals > self._sensor_range) # Outside sensor range
             | ((relative_coord**2).sum(axis=1)[None, :] - sensorvals**2 > self._radius**2)
         ] = np.inf
         if same:
+            # Set sensors values for sensing the current object to np.inf
             sensorvals[:, self._idx - 1] = np.inf
         return sensorvals
 
