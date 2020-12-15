@@ -15,7 +15,7 @@ agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 
 {% include info_box.md %}
 
-Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea are designated the roles of pursuer, evader, and poison. Pursuers attempt to consume evaders while avoiding poisons. Depending on the input parameters, multiple archea may need to work together to consume an evader, creating a dynamic that is both cooperative and competitive. The environment is a continuous box space, and each archea has a position with x and y values each in the range [0,1]. The agents in this environment are the pursuers, while evaders and poison belong to the environment. Agents act by choosing a velocity vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects relative to the pursuer. This information is reported in the observation space, and can be used to navigate the environment.
+Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea are designated the roles of pursuer, evader, and poison. Pursuers attempt to consume evaders while avoiding poisons. Poisons have radii which are 0.75 times the size of the pursuer radius, while evaders have radii that are 2 the size of the pursuer radius. Depending on the input parameters, multiple archea may need to work together to consume an evader, creating a dynamic that is both cooperative and competitive. The environment is a continuous box space, and each archea has a position with x and y values each in the range [0,1]. The agents in this environment are the pursuers, while evaders and poison belong to the environment. Agents act by choosing a velocity vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects relative to the pursuer. This information is reported in the observation space, and can be used to navigate the environment.
 
 ### Observation Space
 
@@ -72,15 +72,15 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 
 
-`n_pursuers`:  number of pursuing archea
+`n_pursuers`:  number of pursuing archea (agents)
 
-`n_evaders`:  number of evaders
+`n_evaders`:  number of evader archea
 
-`n_coop`:  number of archea that must be touching food at the same time for food to be considered consumed
+`n_coop`:  number of pursuing archea (agents) that must be touching food at the same time to consume it
 
-`n_poison`:  number of poison objects
+`n_poison`:  number of poison archea
 
-`radius`:  pursuer archea radius
+`radius`:  archea base radius
 
 `obstacle_radius`:  radius of obstacle object
 
@@ -88,24 +88,22 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `ev_speed`:  evading archea speed
 
-`poison_speed`:  speed of poison object
+`poison_speed`:  poison archea object
 
-`n_sensors`:  number of sensor dendrites on all archea
+`n_sensors`:  number of sensors on all pursuing archea (agents)
 
-`sensor_range`:  length of sensor dendrite on all archea
-
-`action_scale`:  scaling factor applied to all input actions
+`sensor_range`:  length of sensor dendrite on all pursuing archea (agents)
 
 `poison_reward`:  reward for pursuer consuming a poison object
 
 `food_reward`:  reward for pursuers consuming an evading archea
 
-`encounter_reward`:  reward for a pursuer colliding with another archea
+`encounter_reward`:  reward for a pursuer colliding with an evading archea
 
-`control_penalty`:  reward added to pursuer in each step
+`speed_penalty`:  scaling factor for the negative reward used to penalize large actions
 
 `local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
-`speed_features`:  toggles whether archea sensors detect speed of other objects
+`speed_features`:  toggles whether pursuing archea (agents) sensors detect speed of other archea
 
-`max_cycles`:  after max_cycles steps all agents will return done
+`max_cycles`:  After max_cycles steps all agents will return done
