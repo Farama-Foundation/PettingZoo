@@ -68,11 +68,11 @@ class Archea(Agent):
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
         # Set sensorvals to np.inf when object should not be seen by sensor
-        distance_squared = (relative_coord**2).sum(axis=1)[None, :] 
+        distance_squared = (relative_coord**2).sum(axis=1)[None, :]
         sensorvals[
             (sensorvals < 0)    # Wrong direction (by more than 90 degrees in both directions)
-            | (sensorvals - object_radius > self._sensor_range)     # Outside sensor range
-            | (distance_squared - sensorvals**2 > object_radius**2) # Sensor does not intersect object
+            | (sensorvals - object_radius > self._sensor_range)         # Outside sensor range
+            | (distance_squared - sensorvals**2 > object_radius**2)     # Sensor does not intersect object
         ] = np.inf
         if same:
             # Set sensors values for sensing the current object to np.inf
@@ -134,8 +134,8 @@ class MAWaterWorld():
         self.seed()
         # TODO: Look into changing hardcoded radius ratios
         self._pursuers = [
-            Archea(pursuer_idx + 1, self.radius, self.n_sensors, self.sensor_range[pursuer_idx],
-                   speed_features=self._speed_features) for pursuer_idx in range(self.n_pursuers)
+            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, speed_features=self._speed_features)
+            for pursuer_idx in range(self.n_pursuers)
         ]
         self._evaders = [
             Archea(evader_idx + 1, self.radius * 2, self.n_pursuers,
