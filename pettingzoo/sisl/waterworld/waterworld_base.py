@@ -4,6 +4,7 @@ from gym import spaces
 from gym.utils import seeding
 from .._utils import Agent
 import cv2
+import math
 
 
 class Archea(Agent):
@@ -61,16 +62,17 @@ class Archea(Agent):
         assert self._sensors is not None
         return self._sensors
 
-    def sensed(self, object_coord, same=False):
+    def sensed(self, object_coord, object_radius, same=False):
         """Whether `obj` would be sensed by the pursuers"""
         relative_coord = object_coord - np.expand_dims(self.position, 0)
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
         # Set sensorvals to np.inf when object should not be seen by sensor
+        distance_squared = (relative_coord**2).sum(axis=1)[None, :] 
         sensorvals[
             (sensorvals < 0)    # Wrong direction (by more than 90 degrees in both directions)
-            | (sensorvals > self._sensor_range)     # Outside sensor range
-            | ((relative_coord**2).sum(axis=1)[None, :] - sensorvals**2 > self._radius**2)
+            | (sensorvals - object_radius > self._sensor_range)     # Outside sensor range
+            | (distance_squared - sensorvals**2 > object_radius**2) # Sensor does not intersect object
         ] = np.inf
         if same:
             # Set sensors values for sensing the current object to np.inf
@@ -82,8 +84,8 @@ class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), evader_speed=0.01,
-                 poison_speed=0.01, n_sensors=30, sensor_range=0.2,
-                 poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
+                 poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1., food_reward=10.,
+                 encounter_reward=.01, control_penalty=-.5,
                  local_ratio=1.0, speed_features=True, max_cycles=500, **kwargs):
         """
             n_pursuers: number of pursuing archea
@@ -335,30 +337,30 @@ class MAWaterWorld():
 
         # Find sensed obstacles
         sensorvals_pursuer_obstacle = np.array(
-            [pursuer.sensed(self.obstacle_coords) for pursuer in self._pursuers])
+            [pursuer.sensed(self.obstacle_coords, self.obstacle_radius) for pursuer in self._pursuers])
 
         # Find sensed evaders
         sensorvals_pursuer_evader = np.array(
-            [pursuer.sensed(positions_evader) for pursuer in self._pursuers])
+            [pursuer.sensed(positions_evader, self.radius * 2) for pursuer in self._pursuers])
 
         # Find sensed poisons
         sensorvals_pursuer_poison = np.array(
-            [pursuer.sensed(positions_poison) for pursuer in self._pursuers])
+            [pursuer.sensed(positions_poison, self.radius * 3 / 4) for pursuer in self._pursuers])
 
         # Find sensed pursuers
         sensorvals_pursuer_pursuer = np.array(
-            [pursuer.sensed(positions_pursuer, same=True) for pursuer in self._pursuers])
+            [pursuer.sensed(positions_pursuer, self.radius, same=True) for pursuer in self._pursuers])
 
         # Collect distance features
         def sensor_features(sensorvals):
             closest_idx_array = np.argmin(sensorvals, axis=2)
             closest_distances = self._closest_dist(
                 closest_idx_array, sensorvals)
-            infinite_mask = np.isfinite(closest_distances)
+            finite_mask = np.isfinite(closest_distances)
             sensed_distances = np.zeros(
                 (self.n_pursuers, self.n_sensors))
-            sensed_distances[infinite_mask] = closest_distances[infinite_mask]
-            return sensed_distances, closest_idx_array, infinite_mask
+            sensed_distances[finite_mask] = closest_distances[finite_mask]
+            return sensed_distances, closest_idx_array, finite_mask
 
         obstacle_distance_features, _, _ = sensor_features(sensorvals_pursuer_obstacle)
         evader_distance_features, closest_evader_idx, evader_mask = sensor_features(sensorvals_pursuer_evader)
