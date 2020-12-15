@@ -228,9 +228,9 @@ class MAWaterWorld():
         This is because you need `n_coop` agents to collide with the object to actually catch it
         """
         # Number of collisions for each y
-        n_collisions_N2 = is_colliding_x_y.sum(axis=0)
+        n_collisions = is_colliding_x_y.sum(axis=0)
         # List of y that have been caught
-        caught_y = np.where(n_collisions_N2 >= n_coop)[0]
+        caught_y = np.where(n_collisions >= n_coop)[0]
 
         # Boolean array indicating which x caught any y in caught_y
         did_x_catch_y = is_colliding_x_y[:, caught_y]
@@ -239,32 +239,36 @@ class MAWaterWorld():
 
         return caught_y, x_caught_y
 
-    def _closest_dist(self, closest_obj_idx_Np_K, sensorvals_Np_K_N):
+    def _closest_dist(self, closest_object_idx, input_sensorvals):
         """Closest distances according to `idx`"""
         sensorvals = []
-        for inp in range(self.n_pursuers):
-            sensorvals.append(sensorvals_Np_K_N[inp, ...][np.arange(self.n_sensors),
-                                                          closest_obj_idx_Np_K[inp, ...]])
+
+        for pursuer_idx in range(self.n_pursuers):
+            sensors = np.arange(self.n_sensors)         # sensor indices
+            objects = closest_object_idx[pursuer_idx, ...]  # object indices
+            sensorvals.append(input_sensorvals[pursuer_idx, ..., sensors, objects])
+
         return np.c_[sensorvals]
 
-    def _extract_speed_features(self, objv_N_2, closest_obj_idx_N_K, sensedmask_obj_Np_K):
+    def _extract_speed_features(self, object_velocities, object_sensorvals, sensed_mask):
+        # sensed_mask is a boolean mask of which sensor values detected an object
         sensorvals = []
         for pursuer in self._pursuers:
-            sensorvals.append(
-                pursuer.sensors.dot((objv_N_2 - np.expand_dims(pursuer.velocity, 0)).T))
-        sensed_objspeed_Np_K_N = np.c_[sensorvals]
+            relative_speed = object_velocities - np.expand_dims(pursuer.velocity, 0)
+            sensorvals.append(pursuer.sensors.dot(relative_speed.T))
+        sensed_speed = np.c_[sensorvals] # Speeds in direction of each sensor
 
-        sensed_objspeedfeatures_Np_K = np.zeros(
-            (self.n_pursuers, self.n_sensors))
+        speed_features = np.zeros((self.n_pursuers, self.n_sensors))
 
         sensorvals = []
-        for inp in range(self.n_pursuers):
-            sensorvals.append(sensed_objspeed_Np_K_N[inp, :, :][np.arange(self.n_sensors),
-                                                                closest_obj_idx_N_K[inp, :]])
-        sensed_objspeedfeatures_Np_K[sensedmask_obj_Np_K] = np.c_[
-            sensorvals][sensedmask_obj_Np_K]
+        for pursuer_idx in range(self.n_pursuers):
+            sensorvals.append(
+                sensed_speed[pursuer_idx, :, :][np.arange(self.n_sensors), object_sensorvals[pursuer_idx, :]]
+            )
+        # Set sensed values, all others remain 0
+        speed_features[sensed_mask] = np.c_[sensorvals][sensed_mask]
 
-        return sensed_objspeedfeatures_Np_K
+        return speed_features
 
     def collision_handling_subroutine(self, rewards, is_last):
         # Stop pursuers upon hitting a wall
