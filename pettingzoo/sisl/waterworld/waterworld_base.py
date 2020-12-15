@@ -361,8 +361,7 @@ class MAWaterWorld():
             closest_distances = self._closest_dist(
                 closest_idx_array, sensorvals)
             finite_mask = np.isfinite(closest_distances)
-            sensed_distances = np.zeros(
-                (self.n_pursuers, self.n_sensors))
+            sensed_distances = np.ones((self.n_pursuers, self.n_sensors))
             sensed_distances[finite_mask] = closest_distances[finite_mask]
             return sensed_distances, closest_idx_array, finite_mask
 
