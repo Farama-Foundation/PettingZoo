@@ -9,11 +9,12 @@ import math
 
 class Archea(Agent):
 
-    def __init__(self, idx, radius, n_sensors, sensor_range, speed_features=True):
+    def __init__(self, idx, radius, n_sensors, sensor_range, speed, speed_features=True):
         self._idx = idx
         self._radius = radius
         self._n_sensors = n_sensors
         self._sensor_range = sensor_range
+        self._speed = speed
         # Number of observation coordinates from each sensor
         self._sensor_obscoord = 4
         if speed_features:
@@ -33,11 +34,11 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=np.float32(-10), high=np.float32(10), shape=(self._obs_dim,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(self._obs_dim,), dtype=np.float32)
 
     @property
     def action_space(self):
-        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(2,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-self._speed), high=np.float32(self._speed), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
@@ -83,10 +84,10 @@ class Archea(Agent):
 class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), evader_speed=0.01,
-                 poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1., food_reward=10.,
-                 encounter_reward=.01, control_penalty=-.5,
-                 local_ratio=1.0, speed_features=True, max_cycles=500, **kwargs):
+                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_speed=0.05,
+                 evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0,
+                 food_reward=10.0, encounter_reward=0.01, control_penalty=-0.5, local_ratio=1.0,
+                 speed_features=True, max_cycles=500, **kwargs):
         """
             n_pursuers: number of pursuing archea
             n_evaders: number of evaading archea
@@ -113,10 +114,10 @@ class MAWaterWorld():
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
         self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if initial_obstacle_coord is None else initial_obstacle_coord
-        print(self.initial_obstacle_coord)
+        self.pursuer_speed = pursuer_speed
+        self.evader_speed = evader_speed
         self.poison_speed = poison_speed
         self.radius = radius
-        self.evader_speed = evader_speed
         self.n_sensors = n_sensors
         self.sensor_range = np.ones(self.n_pursuers) * sensor_range
         self.poison_reward = poison_reward
@@ -135,16 +136,17 @@ class MAWaterWorld():
         self.seed()
         # TODO: Look into changing hardcoded radius ratios
         self._pursuers = [
-            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, speed_features=self._speed_features)
+            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_speed,
+                   speed_features=self._speed_features)
             for pursuer_idx in range(self.n_pursuers)
         ]
         self._evaders = [
-            Archea(evader_idx + 1, self.radius * 2, self.n_pursuers,
-                   self.sensor_range.mean() / 2)
+            Archea(evader_idx + 1, self.radius * 2, self.n_pursuers, 0, self.evader_speed)
             for evader_idx in range(self.n_evaders)
         ]
         self._poisons = [
-            Archea(poison_idx + 1, self.radius * 3 / 4, self.n_poison, 0) for poison_idx in range(self.n_poison)
+            Archea(poison_idx + 1, self.radius * 3 / 4, self.n_poison, 0, self.poison_speed)
+            for poison_idx in range(self.n_poison)
         ]
 
         self.num_agents = self.n_pursuers
@@ -201,15 +203,25 @@ class MAWaterWorld():
         # Initialize evaders
         for evader in self._evaders:
             evader.set_position(self._generate_coord(evader._radius))
-            # Generate both velocity components from range [-self.evader_speed, self.evader_speed)
-            evader.set_velocity(
-                (self.np_random.rand(2) - 0.5) * 2 * self.evader_speed)
+            # Generate velocity such that speed <= self.evader_speed
+            velocity = self.np_random.rand(2) - 0.5
+            speed = np.linalg.norm(velocity)
+            if speed > self.evader_speed:
+                # Limit speed to self.evader_speed
+                velocity = velocity / speed * self.evader_speed
+            evader.set_velocity(velocity)
 
         # Initialize poisons
         for poison in self._poisons:
             poison.set_position(self._generate_coord(poison._radius))
             # Generate both velocity components from range [-self.poison_speed, self.poison_speed)
-            poison.set_velocity((self.np_random.rand(2) - 0.5) * 2 * self.poison_speed)
+            # Generate velocity such that speed <= self.poison_speed
+            velocity = self.np_random.rand(2) - 0.5
+            speed = np.linalg.norm(velocity)
+            if speed > self.poison_speed:
+                # Limit speed to self.poison_speed
+                velocity = velocity / speed * self.poison_speed
+            poison.set_velocity(velocity)
 
         rewards = np.zeros(self.n_pursuers)
         sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
@@ -257,7 +269,7 @@ class MAWaterWorld():
         for pursuer in self._pursuers:
             relative_speed = object_velocities - np.expand_dims(pursuer.velocity, 0)
             sensorvals.append(pursuer.sensors.dot(relative_speed.T))
-        sensed_speed = np.c_[sensorvals] # Speeds in direction of each sensor
+        sensed_speed = np.c_[sensorvals]    # Speeds in direction of each sensor
 
         speed_features = np.zeros((self.n_pursuers, self.n_sensors))
 
@@ -440,6 +452,10 @@ class MAWaterWorld():
 
         action = np.asarray(action)
         action = action.reshape(2)
+        speed = np.linalg.norm(action)
+        if speed > self.pursuer_speed:
+            # Limit speed to self.pursuer_speed
+            action = action / speed * self.pursuer_speed
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
@@ -453,8 +469,7 @@ class MAWaterWorld():
             def move_objects(objects):
                 for obj in objects:
                     # Move objects
-                    obj.set_position(
-                        obj.position + self.cycle_time * obj.velocity)
+                    obj.set_position(obj.position + self.cycle_time * obj.velocity)
                     # Bounce object if it hits a wall
                     for i in range(len(obj.position)):
                         if obj.position[i] >= 1 or obj.position[i] <= 0:
