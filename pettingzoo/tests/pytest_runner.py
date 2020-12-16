@@ -7,6 +7,7 @@ from .error_tests import error_test
 from .seed_test import seed_test
 from .render_test import render_test
 from .parallel_test import parallel_play_test
+from .max_cycles_test import max_cycles_test
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
@@ -19,7 +20,7 @@ def test_module(name, env_module):
     # seed_test(env_module.env, 20)
 
     if "prospector" not in name:
-        seed_test(env_module.env 50)
+        seed_test(env_module.env, 50)
     max_cycles_test(env_module, name)
     # pickle test
     # env2 = pickle.loads(pickle.dumps(_env))
