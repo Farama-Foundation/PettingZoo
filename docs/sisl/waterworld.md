@@ -84,7 +84,7 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `obstacle_radius`:  radius of obstacle object
 
-`obstacle_loc`:  coordinate of obstacle object
+`obstacle_loc`:  coordinate of obstacle object. Can be set to `None` to use a random location
 
 `ev_speed`:  evading archea speed
 
