@@ -52,9 +52,9 @@ This table enumerates the observation space with `speed_features = False`:
 
 ### Action Space
 
-The archea have a continuous action space represented as a 2 element vector, which corresponds to horizontal and vertical thrust having values in the range [-1, 1]. This velocity vector is added to the archea's current velocity.
+The archea have a continuous action space represented as a 2 element vector, which corresponds to horizontal and vertical thrust. The range of values depends on `pursuer_accel`.  Action values must be in the range `[-pursuer_accel, pursuer_accel]`. If the magnitude of this action vector exceeds `pursuer_accel`, it will be scaled down to `pursuer_accel`. This velocity vector is added to the archea's current velocity.
 
-**Agent action space:** `[horizontal_velocity, vertical_velocity]`
+**Agent action space:** `[horizontal_thrust, vertical_thrust]`
 
 ### Rewards
 
@@ -86,9 +86,11 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `obstacle_loc`:  coordinate of obstacle object. Can be set to `None` to use a random location
 
-`ev_speed`:  evading archea speed
+pursuer_accel:  pursuer archea maximum acceleration (maximum action size)
 
-`poison_speed`:  poison archea object
+`evader_speed`:  evading archea speed
+
+`poison_speed`:  poison archea speed
 
 `n_sensors`:  number of sensors on all pursuing archea (agents)
 

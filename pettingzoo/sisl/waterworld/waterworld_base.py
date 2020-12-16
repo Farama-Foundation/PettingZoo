@@ -9,12 +9,12 @@ import math
 
 class Archea(Agent):
 
-    def __init__(self, idx, radius, n_sensors, sensor_range, accel, speed_features=True):
+    def __init__(self, idx, radius, n_sensors, sensor_range, max_accel, speed_features=True):
         self._idx = idx
         self._radius = radius
         self._n_sensors = n_sensors
         self._sensor_range = sensor_range
-        self._accel = accel
+        self._max_accel = max_accel
         # Number of observation coordinates from each sensor
         self._sensor_obscoord = 4
         if speed_features:
@@ -38,7 +38,7 @@ class Archea(Agent):
 
     @property
     def action_space(self):
-        return spaces.Box(low=np.float32(-self._accel), high=np.float32(self._accel), shape=(2,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-self._max_accel), high=np.float32(self._max_accel), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
@@ -84,7 +84,7 @@ class Archea(Agent):
 class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_accel=0.05,
+                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05,
                  evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0,
                  food_reward=10.0, encounter_reward=0.01, control_penalty=-0.5, local_ratio=1.0,
                  speed_features=True, max_cycles=500, **kwargs):
@@ -115,7 +115,7 @@ class MAWaterWorld():
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
         self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if initial_obstacle_coord is None else initial_obstacle_coord
-        self.pursuer_accel = pursuer_accel
+        self.pursuer_max_accel = pursuer_max_accel
         self.evader_speed = evader_speed
         self.poison_speed = poison_speed
         self.radius = radius
@@ -137,7 +137,7 @@ class MAWaterWorld():
         self.seed()
         # TODO: Look into changing hardcoded radius ratios
         self._pursuers = [
-            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_accel,
+            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_max_accel,
                    speed_features=self._speed_features)
             for pursuer_idx in range(self.n_pursuers)
         ]
@@ -454,9 +454,9 @@ class MAWaterWorld():
         action = np.asarray(action)
         action = action.reshape(2)
         speed = np.linalg.norm(action)
-        if speed > self.pursuer_accel:
-            # Limit added speed to self.pursuer_accel
-            action = action / speed * self.pursuer_accel
+        if speed > self.pursuer_max_accel:
+            # Limit added thrust to self.pursuer_max_accel
+            action = action / speed * self.pursuer_max_accel
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
