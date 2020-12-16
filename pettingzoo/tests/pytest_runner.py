@@ -19,7 +19,7 @@ def test_module(name, env_module):
     # seed_test(env_module.env, 20)
 
     if "prospector" not in name:
-        seed_test(env_module.env, num_cycles)
+        seed_test(env_module.env)
     max_cycles_test(env_module, name)
     # pickle test
     # env2 = pickle.loads(pickle.dumps(_env))
