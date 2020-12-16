@@ -86,7 +86,7 @@ class MAWaterWorld():
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
                  obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05,
                  evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0,
-                 food_reward=10.0, encounter_reward=0.01, control_penalty=-0.5, local_ratio=1.0,
+                 food_reward=10.0, encounter_reward=0.01, accel_penalty=-0.5, local_ratio=1.0,
                  speed_features=True, max_cycles=500, **kwargs):
         """
             These are old. For accurate documentation, check the PettingZoo website
@@ -123,7 +123,7 @@ class MAWaterWorld():
         self.sensor_range = np.ones(self.n_pursuers) * sensor_range
         self.poison_reward = poison_reward
         self.food_reward = food_reward
-        self.control_penalty = control_penalty
+        self.accel_penalty = accel_penalty
         self.encounter_reward = encounter_reward
         self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
         self.control_rewards = [0 for _ in range(self.n_pursuers)]
@@ -340,7 +340,7 @@ class MAWaterWorld():
         ]).reshape(self.n_pursuers, self.n_evaders)
 
         # Number of collisions depends on n_coop, how many are needed to catch an evader
-        caught_evaders, evader_catching_pursuers = self._caught(
+        caught_evaders, pursuer_evader_catches = self._caught(
             collisions_pursuer_evader, self.n_coop)
 
         # Find poison collisions
@@ -350,7 +350,7 @@ class MAWaterWorld():
             for poison in self._poisons
         ]).reshape(self.n_pursuers, self.n_poison)
 
-        caught_poisons, poison_catching_pursuers = self._caught(
+        caught_poisons, pursuer_poison_collisions = self._caught(
             collisions_pursuer_poison, 1)
 
         # Find sensed obstacles
@@ -411,13 +411,13 @@ class MAWaterWorld():
         reset_caught_objects(caught_evaders, self._evaders, self.evader_speed)
         reset_caught_objects(caught_poisons, self._poisons, self.poison_speed)
 
-        evader_encounters, evader_encounter_matrix = self._caught(
+        pursuer_evader_encounters, pursuer_evader_encounter_matrix = self._caught(
             collisions_pursuer_evader, 1)
 
         # Update reward based on these collisions
-        rewards[evader_catching_pursuers] += self.food_reward
-        rewards[poison_catching_pursuers] += self.poison_reward
-        rewards[evader_encounter_matrix] += self.encounter_reward
+        rewards[pursuer_evader_catches] += self.food_reward
+        rewards[pursuer_poison_collisions] += self.poison_reward
+        rewards[pursuer_evader_encounter_matrix] += self.encounter_reward
 
         # Add features together
         if self._speed_features:
@@ -462,9 +462,12 @@ class MAWaterWorld():
         p.set_velocity(p.velocity + action)
         p.set_position(p.position + self.cycle_time * p.velocity)
 
-        control_reward = self.control_penalty * (action ** 2).sum()
-        self.control_rewards = (control_reward / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
-        self.control_rewards[agent_id] += control_reward * self.local_ratio
+        # Penalize large thrusts
+        thrust_penalty = self.accel_penalty * math.sqrt((action ** 2).sum())
+        # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio) 
+        self.control_rewards = (thrust_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
+        # Assign the current agent the local portion designated by local_ratio
+        self.control_rewards[agent_id] += thrust_penalty * self.local_ratio
 
         if is_last:
             def move_objects(objects):
@@ -488,6 +491,7 @@ class MAWaterWorld():
 
             local_reward = rewards
             global_reward = local_reward.mean()
+            # Distribute local and global rewards according to local_ratio
             self.last_rewards = local_reward * self.local_ratio + global_reward * (1 - self.local_ratio)
 
             self.frames += 1
