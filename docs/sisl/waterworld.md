@@ -52,7 +52,7 @@ This table enumerates the observation space with `speed_features = False`:
 
 ### Action Space
 
-The archea have a continuous action space represented as a 2 element vector, which corresponds to horizontal and vertical thrust. The range of values depends on `pursuer_accel`.  Action values must be in the range `[-pursuer_accel, pursuer_accel]`. If the magnitude of this action vector exceeds `pursuer_accel`, it will be scaled down to `pursuer_accel`. This velocity vector is added to the archea's current velocity.
+The archea have a continuous action space represented as a 2 element vector, which corresponds to horizontal and vertical thrust. The range of values depends on `pursuer_max_accel`.  Action values must be in the range `[-pursuer_max_accel, pursuer_max_accel]`. If the magnitude of this action vector exceeds `pursuer_max_accel`, it will be scaled down to `pursuer_max_accel`. This velocity vector is added to the archea's current velocity.
 
 **Agent action space:** `[horizontal_thrust, vertical_thrust]`
 
@@ -86,7 +86,7 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `obstacle_loc`:  coordinate of obstacle object. Can be set to `None` to use a random location
 
-pursuer_accel:  pursuer archea maximum acceleration (maximum action size)
+`pursuer_max_accel`:  pursuer archea maximum acceleration (maximum action size)
 
 `evader_speed`:  evading archea speed
 
