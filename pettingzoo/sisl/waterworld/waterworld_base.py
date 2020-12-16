@@ -9,12 +9,12 @@ import math
 
 class Archea(Agent):
 
-    def __init__(self, idx, radius, n_sensors, sensor_range, speed, speed_features=True):
+    def __init__(self, idx, radius, n_sensors, sensor_range, accel, speed_features=True):
         self._idx = idx
         self._radius = radius
         self._n_sensors = n_sensors
         self._sensor_range = sensor_range
-        self._speed = speed
+        self._accel = accel
         # Number of observation coordinates from each sensor
         self._sensor_obscoord = 4
         if speed_features:
@@ -38,7 +38,7 @@ class Archea(Agent):
 
     @property
     def action_space(self):
-        return spaces.Box(low=np.float32(-self._speed), high=np.float32(self._speed), shape=(2,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-self._accel), high=np.float32(self._accel), shape=(2,), dtype=np.float32)
 
     @property
     def position(self):
@@ -84,11 +84,12 @@ class Archea(Agent):
 class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_speed=0.05,
+                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_accel=0.05,
                  evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0,
                  food_reward=10.0, encounter_reward=0.01, control_penalty=-0.5, local_ratio=1.0,
                  speed_features=True, max_cycles=500, **kwargs):
         """
+            These are old. For accurate documentation, check the PettingZoo website
             n_pursuers: number of pursuing archea
             n_evaders: number of evaading archea
             n_coop: number of agent collisions needed to mark as caught
@@ -114,7 +115,7 @@ class MAWaterWorld():
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
         self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if initial_obstacle_coord is None else initial_obstacle_coord
-        self.pursuer_speed = pursuer_speed
+        self.pursuer_accel = pursuer_accel
         self.evader_speed = evader_speed
         self.poison_speed = poison_speed
         self.radius = radius
@@ -136,7 +137,7 @@ class MAWaterWorld():
         self.seed()
         # TODO: Look into changing hardcoded radius ratios
         self._pursuers = [
-            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_speed,
+            Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_accel,
                    speed_features=self._speed_features)
             for pursuer_idx in range(self.n_pursuers)
         ]
@@ -224,10 +225,10 @@ class MAWaterWorld():
             poison.set_velocity(velocity)
 
         rewards = np.zeros(self.n_pursuers)
-        sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo, rewards = self.collision_handling_subroutine(
-            rewards, True)
+        sensor_features, collided_pursuer_evader, collided_pursuer_poison, rewards \
+            = self.collision_handling_subroutine(rewards, True)
         obs_list = self.observe_list(
-            sensorfeatures_Np_K_O, is_colliding_ev_Np_Ne, is_colliding_po_Np_Npo)
+            sensor_features, collided_pursuer_evader, collided_pursuer_poison)
         self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
         self.control_rewards = [0 for _ in range(self.n_pursuers)]
         self.last_dones = [False for _ in range(self.n_pursuers)]
@@ -453,9 +454,9 @@ class MAWaterWorld():
         action = np.asarray(action)
         action = action.reshape(2)
         speed = np.linalg.norm(action)
-        if speed > self.pursuer_speed:
-            # Limit speed to self.pursuer_speed
-            action = action / speed * self.pursuer_speed
+        if speed > self.pursuer_accel:
+            # Limit added speed to self.pursuer_accel
+            action = action / speed * self.pursuer_accel
 
         p = self._pursuers[agent_id]
         p.set_velocity(p.velocity + action)
