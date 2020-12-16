@@ -58,19 +58,13 @@ The archea have a continuous action space represented as a 2 element vector, whi
 
 ### Rewards
 
-By default, when multiple agents capture food together each agent receives a reward of 10 (the food is not destroyed). They receive a shaping reward of 0.01 for touching food, a reward of -1 for touching poison, and a -0.5 ×｜action｜ reward when they collide into another agent. The environment runs for 500 frames by default. 
+When multiple agents (depending on `n_coop`) capture evader together each agent receives a reward of `food_reward` (the evader is not destroyed). They receive a shaping reward of `encounter_reward` for touching evader, a reward of `poison_reward` for touching poison, and a `pursuer_max_accel x ||action||` reward for every action, where `||action||` is the euclidean norm of the action velocity. All of these rewards are also distributed based on `local_ratio`, where the rewards scaled by `local_ratio` (local rewards) are applied to the agent whose action produced the rewards, and the rewards averaged over the number of pursuers (global rewards) are scaled by `(1 - local_ratio)` and applied to every agent. The environment runs for 500 frames by default. 
 
 ### Arguments
 
+```Python
+waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015, obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01, accel_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 ```
-waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-obstacle_radius=0.2, obstacle_loc=np.array([0.5, 0.5]), ev_speed=0.01,
-poison_speed=0.01, n_sensors=30, sensor_range=0.2, action_scale=0.01,
-poison_reward=-1., food_reward=10., encounter_reward=.01, control_penalty=-.5,
-local_ratio=1.0, speed_features=True, max_cycles=500)
-```
-
-
 
 `n_pursuers`:  number of pursuing archea (agents)
 
@@ -102,7 +96,7 @@ local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `encounter_reward`:  reward for a pursuer colliding with an evading archea
 
-`speed_penalty`:  scaling factor for the negative reward used to penalize large actions
+`accel_penalty`:  scaling factor for the negative reward used to penalize large actions
 
 `local_ratio`: Proportion of reward allocated locally vs distributed among all agents
 
