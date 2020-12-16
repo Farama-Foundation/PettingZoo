@@ -18,8 +18,9 @@ def test_module(name, env_module):
 
     # seed_test(env_module.env, 20)
 
-    render_test(_env)
-    _env.close()
+    if "prospector" not in env_id:
+        seed_test(env_module.env, num_cycles)
+    max_cycles_test(env_module, env_id)
     # pickle test
     # env2 = pickle.loads(pickle.dumps(_env))
     # api_test.api_test(env2)
