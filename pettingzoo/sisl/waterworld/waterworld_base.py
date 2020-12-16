@@ -112,7 +112,8 @@ class MAWaterWorld():
         self.n_coop = n_coop
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
-        self.initial_obstacle_coord = initial_obstacle_coord
+        self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if initial_obstacle_coord is None else initial_obstacle_coord
+        print(self.initial_obstacle_coord)
         self.poison_speed = poison_speed
         self.radius = radius
         self.evader_speed = evader_speed
