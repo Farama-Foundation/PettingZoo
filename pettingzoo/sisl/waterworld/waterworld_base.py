@@ -80,6 +80,28 @@ class Archea(Agent):
             sensorvals[:, self._idx - 1] = np.inf
         return sensorvals
 
+    def sense_barriers(self, min_pos=0, max_pos=1):
+        sensor_vectors = self.sensors * self._sensor_range
+        sensor_endpoints = sensor_vectors + self.position
+
+        # Clip sensor lines on the environment's barriers.
+        # Note that any clipped vectors may not be at the same angle as the original sensors
+        clipped_endpoints = np.clip(sensor_endpoints, min_pos, max_pos)
+
+        # Extract just the sensor vectors after clipping
+        clipped_vectors = clipped_endpoints - self.position
+
+        # Find the ratio of the clipped sensor vector to the original sensor vector
+        # Scaling the vector by this ratio will limit the end of the vector to the barriers
+        ratios = np.divide(clipped_vectors, sensor_vectors, out=np.zeros_like(clipped_vectors),
+                           where=sensor_vectors != 0)
+
+        # Find the minimum ratio (x or y) of clipped endpoints to original endpoints
+        minimum_ratios = np.amin(ratios, axis=1), (self._n_sensors, 1)
+
+        sensor_values = minimum_ratios
+        return sensor_values
+
 
 class MAWaterWorld():
 
@@ -369,6 +391,10 @@ class MAWaterWorld():
         sensorvals_pursuer_pursuer = np.array(
             [pursuer.sensed(positions_pursuer, self.radius, same=True) for pursuer in self._pursuers])
 
+        # Find sensed barriers
+        for pursuer in self._pursuers:
+            pursuer.sense_barriers()
+
         # Collect distance features
         def sensor_features(sensorvals):
             closest_idx_array = np.argmin(sensorvals, axis=2)
@@ -464,7 +490,7 @@ class MAWaterWorld():
 
         # Penalize large thrusts
         thrust_penalty = self.accel_penalty * math.sqrt((action ** 2).sum())
-        # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio) 
+        # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
         self.control_rewards = (thrust_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
         # Assign the current agent the local portion designated by local_ratio
         self.control_rewards[agent_id] += thrust_penalty * self.local_ratio
