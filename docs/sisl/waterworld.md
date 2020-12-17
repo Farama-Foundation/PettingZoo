@@ -103,3 +103,11 @@ waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015, o
 `speed_features`:  toggles whether pursuing archea (agents) sensors detect speed of other archea
 
 `max_cycles`:  After max_cycles steps all agents will return done
+
+
+
+1 -> 1sensor
+
+1 + sensor_range -> 0sensor
+
+max + sensor_range - sensor_endpoint
