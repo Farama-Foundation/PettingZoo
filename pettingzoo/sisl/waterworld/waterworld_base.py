@@ -93,13 +93,18 @@ class Archea(Agent):
 
         # Find the ratio of the clipped sensor vector to the original sensor vector
         # Scaling the vector by this ratio will limit the end of the vector to the barriers
-        ratios = np.divide(clipped_vectors, sensor_vectors, out=np.zeros_like(clipped_vectors),
-                           where=sensor_vectors != 0)
+        ratios = np.divide(clipped_vectors, sensor_vectors, out=np.ones_like(clipped_vectors),
+                           where=np.abs(sensor_vectors) > 0.00000001)
 
         # Find the minimum ratio (x or y) of clipped endpoints to original endpoints
-        minimum_ratios = np.amin(ratios, axis=1), (self._n_sensors, 1)
+        minimum_ratios = np.amin(ratios, axis=1)
 
-        sensor_values = minimum_ratios
+        # Convert to 2d array of size (n_sensors, 1)
+        sensor_values = np.expand_dims(minimum_ratios, 0)
+
+        # Convert -0 to 0
+        sensor_values[sensor_values == -0] = 0
+
         return sensor_values
 
 
@@ -379,6 +384,13 @@ class MAWaterWorld():
         sensorvals_pursuer_obstacle = np.array(
             [pursuer.sensed(self.obstacle_coords, self.obstacle_radius) for pursuer in self._pursuers])
 
+        # Find sensed barriers
+        sensorvals_pursuer_barrier = np.array(
+            [pursuer.sense_barriers() for pursuer in self._pursuers])
+
+        # Combine barrier and obstacle observations)
+        sensorvals_pursuer_obstacle = np.minimum(sensorvals_pursuer_obstacle, sensorvals_pursuer_barrier)
+
         # Find sensed evaders
         sensorvals_pursuer_evader = np.array(
             [pursuer.sensed(positions_evader, self.radius * 2) for pursuer in self._pursuers])
@@ -391,15 +403,10 @@ class MAWaterWorld():
         sensorvals_pursuer_pursuer = np.array(
             [pursuer.sensed(positions_pursuer, self.radius, same=True) for pursuer in self._pursuers])
 
-        # Find sensed barriers
-        for pursuer in self._pursuers:
-            pursuer.sense_barriers()
-
         # Collect distance features
         def sensor_features(sensorvals):
             closest_idx_array = np.argmin(sensorvals, axis=2)
-            closest_distances = self._closest_dist(
-                closest_idx_array, sensorvals)
+            closest_distances = self._closest_dist(closest_idx_array, sensorvals)
             finite_mask = np.isfinite(closest_distances)
             sensed_distances = np.ones((self.n_pursuers, self.n_sensors))
             sensed_distances[finite_mask] = closest_distances[finite_mask]
@@ -415,12 +422,9 @@ class MAWaterWorld():
         evaders_speed = np.array([evader.velocity for evader in self._evaders])
         poisons_speed = np.array([poison.velocity for poison in self._poisons])
 
-        evader_speed_features = self._extract_speed_features(
-            evaders_speed, closest_evader_idx, evader_mask)
-        poison_speed_features = self._extract_speed_features(
-            poisons_speed, closest_poison_idx, poison_mask)
-        pursuer_speed_features = self._extract_speed_features(
-            pursuers_speed, closest_pursuer_idx, pursuer_mask)
+        evader_speed_features = self._extract_speed_features(evaders_speed, closest_evader_idx, evader_mask)
+        poison_speed_features = self._extract_speed_features(poisons_speed, closest_poison_idx, poison_mask)
+        pursuer_speed_features = self._extract_speed_features(pursuers_speed, closest_pursuer_idx, pursuer_mask)
 
         # Process collisions
         # If object collided with required number of players, reset its position and velocity
