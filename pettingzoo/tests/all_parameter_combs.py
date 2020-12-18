@@ -96,12 +96,12 @@ parameterized_envs = [
     (multiwalker_v5.env, dict(terminate_on_fall=False)),
     (multiwalker_v5.env, dict(terminate_on_fall=False, remove_on_fall=False)),
 
-    (pursuit_v2.env, dict(x_size=8, y_size=19)),
-    (pursuit_v2.env, dict(local_ratio=0.5)),
-    (pursuit_v2.env, dict(n_evaders=5, n_pursuers=16)),
-    (pursuit_v2.env, dict(obs_range=15)),
-    (pursuit_v2.env, dict(n_catch=3)),
-    (pursuit_v2.env, dict(freeze_evaders=True)),
+    (pursuit_v3.env, dict(x_size=8, y_size=19)),
+    (pursuit_v3.env, dict(local_ratio=0.5)),
+    (pursuit_v3.env, dict(n_evaders=5, n_pursuers=16)),
+    (pursuit_v3.env, dict(obs_range=15)),
+    (pursuit_v3.env, dict(n_catch=3)),
+    (pursuit_v3.env, dict(freeze_evaders=True)),
 
     (waterworld_v2.env, dict(n_pursuers=3, n_evaders=6)),
     (waterworld_v2.env, dict(n_coop=1)),
