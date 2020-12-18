@@ -23,7 +23,6 @@ class raw_env(AECEnv):
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        print("Check")
         self.env = _env(*args, **kwargs)
 
         self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]
