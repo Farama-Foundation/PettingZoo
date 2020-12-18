@@ -16,7 +16,7 @@ class Archea(Agent):
         self._sensor_range = sensor_range
         self._max_accel = max_accel
         # Number of observation coordinates from each sensor
-        self._sensor_obscoord = 4
+        self._sensor_obscoord = 5
         if speed_features:
             self._sensor_obscoord += 3
         self._sensor_obs_coord = self._n_sensors * self._sensor_obscoord
