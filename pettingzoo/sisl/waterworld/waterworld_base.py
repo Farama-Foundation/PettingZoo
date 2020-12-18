@@ -25,7 +25,7 @@ class Archea(Agent):
         self._position = None
         self._velocity = None
 
-        # Generate self._n_sensors angles, evenly spaced from 0 to 2pi (
+        # Generate self._n_sensors angles, evenly spaced from 0 to 2pi
         # We generate 1 extra angle and remove it because linspace[0] = 0 = 2pi = linspace[-1]
         angles = np.linspace(0., 2. * np.pi, self._n_sensors + 1)[:-1]
         # Convert angles to x-y coordinates
@@ -115,7 +115,7 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, sensor_range=0.2,
+    def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=30, sensor_range=0.2,
                  radius=0.015, obstacle_radius=0.2, obstacle_coord=np.array([0.5, 0.5]),
                  pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0,
                  food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0,
@@ -451,8 +451,6 @@ class MAWaterWorld():
         rewards[pursuer_evader_catches] += self.food_reward
         rewards[pursuer_poison_collisions] += self.poison_reward
         rewards[pursuer_evader_encounter_matrix] += self.encounter_reward
-
-        barrier_distance_features = np.reshape(sensorvals_pursuer_barrier, (self.n_pursuers, self.n_sensors))
 
         # Add features together
         if self._speed_features:
