@@ -63,7 +63,7 @@ from pettingzoo.mpe import simple_tag_v2
 from pettingzoo.mpe import simple_world_comm_v2
 from pettingzoo.mpe import simple_v2
 
-from pettingzoo.sisl import pursuit_v2
+from pettingzoo.sisl import pursuit_v3
 from pettingzoo.sisl import waterworld_v2
 from pettingzoo.sisl import multiwalker_v5
 
@@ -146,5 +146,5 @@ all_environments = {
 
     "sisl/multiwalker": multiwalker_v5,
     "sisl/waterworld": waterworld_v2,
-    "sisl/pursuit": pursuit_v2,
+    "sisl/pursuit": pursuit_v3,
 }
