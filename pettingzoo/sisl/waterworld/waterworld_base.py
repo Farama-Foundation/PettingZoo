@@ -102,10 +102,15 @@ class Archea(Agent):
         # Convert to 2d array of size (n_sensors, 1)
         sensor_values = np.expand_dims(minimum_ratios, 0)
 
+        # Set values beyond sensor range to infinity
+        is_in_max_range = np.reshape((np.amax(sensor_endpoints, axis=1) < max_pos), (1, self._n_sensors))
+        is_in_min_range = np.reshape((np.amin(sensor_endpoints, axis=1) > min_pos), (1, self._n_sensors))
+        sensor_values[np.logical_and(is_in_max_range, is_in_min_range)] = np.inf
+
         # Convert -0 to 0
         sensor_values[sensor_values == -0] = 0
 
-        return sensor_values
+        return sensor_values.T
 
 
 class MAWaterWorld():
@@ -388,9 +393,6 @@ class MAWaterWorld():
         sensorvals_pursuer_barrier = np.array(
             [pursuer.sense_barriers() for pursuer in self._pursuers])
 
-        # Combine barrier and obstacle observations)
-        sensorvals_pursuer_obstacle = np.minimum(sensorvals_pursuer_obstacle, sensorvals_pursuer_barrier)
-
         # Find sensed evaders
         sensorvals_pursuer_evader = np.array(
             [pursuer.sensed(positions_evader, self.radius * 2) for pursuer in self._pursuers])
@@ -413,6 +415,7 @@ class MAWaterWorld():
             return sensed_distances, closest_idx_array, finite_mask
 
         obstacle_distance_features, _, _ = sensor_features(sensorvals_pursuer_obstacle)
+        barrier_distance_features, _, _ = sensor_features(sensorvals_pursuer_barrier)
         evader_distance_features, closest_evader_idx, evader_mask = sensor_features(sensorvals_pursuer_evader)
         poison_distance_features, closest_poison_idx, poison_mask = sensor_features(sensorvals_pursuer_poison)
         pursuer_distance_features, closest_pursuer_idx, pursuer_mask = sensor_features(sensorvals_pursuer_pursuer)
@@ -449,10 +452,12 @@ class MAWaterWorld():
         rewards[pursuer_poison_collisions] += self.poison_reward
         rewards[pursuer_evader_encounter_matrix] += self.encounter_reward
 
+        barrier_distance_features = np.reshape(sensorvals_pursuer_barrier, (self.n_pursuers, self.n_sensors))
+
         # Add features together
         if self._speed_features:
             sensorfeatures = np.c_[
-                obstacle_distance_features,
+                obstacle_distance_features, barrier_distance_features,
                 evader_distance_features, evader_speed_features,
                 poison_distance_features, poison_speed_features,
                 pursuer_distance_features, pursuer_speed_features
@@ -460,6 +465,7 @@ class MAWaterWorld():
         else:
             sensorfeatures = np.c_[
                 obstacle_distance_features,
+                barrier_distance_features,
                 evader_distance_features,
                 poison_distance_features,
                 pursuer_distance_features
