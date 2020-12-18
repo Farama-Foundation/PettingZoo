@@ -15,11 +15,11 @@ agent-labels: "agents= [ omnivore_[0-494] ]"
 
 
 
-In gather, the agents gain reward by eating food. Food needs to be broken down by several "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food.
+In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
 
 #### Action Space
 
-Key: `move_N`: options to move to the N nearest squares.
+Key: `move_N` means N separate actions, one to move to each of the N nearest squares on the grid.
 
 Action options: `[do_nothing, move_28, attack_4]`
 
