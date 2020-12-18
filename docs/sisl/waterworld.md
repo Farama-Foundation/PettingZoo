@@ -1,12 +1,12 @@
 ---
 actions: "Continuous"
 title: "Waterworld"
-agents: "3"
+agents: "5"
 manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
-observation-shape: "(212,)"
-observation-values: "[-10,10]"
+observation-shape: "(242,)"
+observation-values: "[-1,1]"
 average-total-reward: "-14.5"
 import: "from pettingzoo.sisl import waterworld_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
@@ -60,56 +60,48 @@ The archea have a continuous action space represented as a 2 element vector, whi
 
 ### Rewards
 
-When multiple agents (depending on `n_coop`) capture evader together each agent receives a reward of `food_reward` (the evader is not destroyed). They receive a shaping reward of `encounter_reward` for touching evader, a reward of `poison_reward` for touching poison, and a `pursuer_max_accel x ||action||` reward for every action, where `||action||` is the euclidean norm of the action velocity. All of these rewards are also distributed based on `local_ratio`, where the rewards scaled by `local_ratio` (local rewards) are applied to the agent whose action produced the rewards, and the rewards averaged over the number of pursuers (global rewards) are scaled by `(1 - local_ratio)` and applied to every agent. The environment runs for 500 frames by default. 
+When multiple agents (depending on `n_coop`) capture an evader together each agent receives a reward of `food_reward` (the evader is not destroyed). They receive a shaping reward of `encounter_reward` for touching an evader, a reward of `poison_reward` for touching poison, and a `thrust_penalty x ||action||` reward for every action, where `||action||` is the euclidean norm of the action velocity. All of these rewards are also distributed based on `local_ratio`, where the rewards scaled by `local_ratio` (local rewards) are applied to the agents whose actions produced the rewards, and the rewards averaged over the number of agents (global rewards) are scaled by `(1 - local_ratio)` and applied to every agent. The environment runs for 500 frames by default. 
 
 ### Arguments
 
 ```Python
-waterworld.env(n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015, obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01, accel_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
+waterworld.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, sensor_range=0.2,radius=0.015, obstacle_radius=0.2, obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 ```
 
-`n_pursuers`:  number of pursuing archea (agents)
+`n_pursuers`: number of pursuing archea (agents)
 
-`n_evaders`:  number of evader archea
+`n_evaders`: number of evader archea
 
-`n_coop`:  number of pursuing archea (agents) that must be touching food at the same time to consume it
+`n_poison`: number of poison archea
 
-`n_poison`:  number of poison archea
+`n_coop`: number of pursuing archea (agents) that must be touching food at the same time to consume it
 
-`radius`:  archea base radius
+`n_sensors`: number of sensors on all pursuing archea (agents)
 
-`obstacle_radius`:  radius of obstacle object
+`sensor_range`: length of sensor dendrite on all pursuing archea (agents)
 
-`obstacle_loc`:  coordinate of obstacle object. Can be set to `None` to use a random location
+`radius`: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius 
 
-`pursuer_max_accel`:  pursuer archea maximum acceleration (maximum action size)
+`obstacle_radius`: radius of obstacle object
 
-`evader_speed`:  evading archea speed
+`obstacle_coord`: coordinate of obstacle object. Can be set to `None` to use a random location
 
-`poison_speed`:  poison archea speed
+`pursuer_max_accel`: pursuer archea maximum acceleration (maximum action size)
 
-`n_sensors`:  number of sensors on all pursuing archea (agents)
+`evader_speed`: evading archea speed
 
-`sensor_range`:  length of sensor dendrite on all pursuing archea (agents)
+`poison_speed`: poison archea speed
 
-`poison_reward`:  reward for pursuer consuming a poison object
+`poison_reward`: reward for pursuer consuming a poison object (typically negative)
 
-`food_reward`:  reward for pursuers consuming an evading archea
+`food_reward`: reward for pursuers consuming an evading archea
 
-`encounter_reward`:  reward for a pursuer colliding with an evading archea
+`encounter_reward`: reward for a pursuer colliding with an evading archea
 
-`accel_penalty`:  scaling factor for the negative reward used to penalize large actions
+`thrust_penalty`: scaling factor for the negative reward used to penalize large actions
 
-`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
+`local_ratio`: Proportion of reward allocated locally vs distributed globally among all agents
 
-`speed_features`:  toggles whether pursuing archea (agents) sensors detect speed of other archea
+`speed_features`: toggles whether pursuing archea (agent) sensors detect speed of other archea
 
-`max_cycles`:  After max_cycles steps all agents will return done
-
-
-
-1 -> 1sensor
-
-1 + sensor_range -> 0sensor
-
-max + sensor_range - sensor_endpoint
+`max_cycles`: After max_cycles steps all agents will return done

@@ -115,38 +115,38 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, n_pursuers=5, n_evaders=5, n_coop=2, n_poison=10, radius=0.015,
-                 obstacle_radius=0.2, initial_obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.05,
-                 evader_speed=0.01, poison_speed=0.01, n_sensors=30, sensor_range=0.2, poison_reward=-1.0,
-                 food_reward=10.0, encounter_reward=0.01, accel_penalty=-0.5, local_ratio=1.0,
+    def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, sensor_range=0.2,
+                 radius=0.015, obstacle_radius=0.2, obstacle_coord=np.array([0.5, 0.5]),
+                 pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0,
+                 food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0,
                  speed_features=True, max_cycles=500, **kwargs):
         """
-            These are old. For accurate documentation, check the PettingZoo website
-            n_pursuers: number of pursuing archea
-            n_evaders: number of evaading archea
-            n_coop: number of agent collisions needed to mark as caught
-            n_poison: number of poison objects
-            radius: pursuer archea radius
-            obstacle_radius: radius of obstacle object
-            initial_obstacle_coord: starting coordinate of obstacle object
-            evader_speed: evading archea speed
-            poison_speed: speed of poison object
-            n_sensors: number of sensor dendrites on all archea
-            sensor_range: length of sensor dendrite on all archea
-            poison_reward: reward for pursuer consuming a poison object
-            food_reward: reward for pursuers consuming an evading archea
-            encounter_reward: reward for a pursuer colliding with an evading archea
-            control_penalty: reward added to pursuer in each step
-            local_ratio: proportion of reward allocated locally vs distributed among all agents
-            speed_features: toggles whether archea sensors detect speed of other objects
-            max_cycles: number of frames before environment automatically ends
+        n_pursuers: number of pursuing archea (agents)
+        n_evaders: number of evader archea
+        n_poison: number of poison archea
+        n_coop: number of pursuing archea (agents) that must be touching food at the same time to consume it
+        n_sensors: number of sensors on all pursuing archea (agents)
+        sensor_range: length of sensor dendrite on all pursuing archea (agents)
+        radius: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius
+        obstacle_radius: radius of obstacle object
+        obstacle_coord: coordinate of obstacle object. Can be set to `None` to use a random location
+        pursuer_max_accel: pursuer archea maximum acceleration (maximum action size)
+        evader_speed: evading archea speed
+        poison_speed: poison archea speed
+        poison_reward: reward for pursuer consuming a poison object (typically negative)
+        food_reward:reward for pursuers consuming an evading archea
+        encounter_reward: reward for a pursuer colliding with an evading archea
+        thrust_penalty: scaling factor for the negative reward used to penalize large actions
+        local_ratio: Proportion of reward allocated locally vs distributed globally among all agents
+        speed_features: toggles whether pursuing archea (agent) sensors detect speed of other archea
+        max_cycles: After max_cycles steps all agents will return done
         """
         self.n_pursuers = n_pursuers
         self.n_evaders = n_evaders
         self.n_coop = n_coop
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
-        self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if initial_obstacle_coord is None else initial_obstacle_coord
+        self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if obstacle_coord is None else obstacle_coord
         self.pursuer_max_accel = pursuer_max_accel
         self.evader_speed = evader_speed
         self.poison_speed = poison_speed
@@ -155,7 +155,7 @@ class MAWaterWorld():
         self.sensor_range = np.ones(self.n_pursuers) * sensor_range
         self.poison_reward = poison_reward
         self.food_reward = food_reward
-        self.accel_penalty = accel_penalty
+        self.thrust_penalty = thrust_penalty
         self.encounter_reward = encounter_reward
         self.last_rewards = [np.float64(0) for _ in range(self.n_pursuers)]
         self.control_rewards = [0 for _ in range(self.n_pursuers)]
@@ -499,11 +499,11 @@ class MAWaterWorld():
         p.set_position(p.position + self.cycle_time * p.velocity)
 
         # Penalize large thrusts
-        thrust_penalty = self.accel_penalty * math.sqrt((action ** 2).sum())
+        accel_penalty = self.thrust_penalty * math.sqrt((action ** 2).sum())
         # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
-        self.control_rewards = (thrust_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
+        self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
         # Assign the current agent the local portion designated by local_ratio
-        self.control_rewards[agent_id] += thrust_penalty * self.local_ratio
+        self.control_rewards[agent_id] += accel_penalty * self.local_ratio
 
         if is_last:
             def move_objects(objects):
