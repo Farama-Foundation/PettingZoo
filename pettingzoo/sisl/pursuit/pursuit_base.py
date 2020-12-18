@@ -351,8 +351,9 @@ class Pursuit():
         return obs
 
     def collect_obs(self, agent_layer, i):
-        for i in range(self.n_agents()):
-            return self.collect_obs_by_idx(agent_layer, i)
+        for j in range(self.n_agents()):
+            if i == j:
+                return self.collect_obs_by_idx(agent_layer, i)
         assert False, "bad index"
 
     def collect_obs_by_idx(self, agent_layer, agent_idx):
