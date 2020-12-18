@@ -15,40 +15,42 @@ agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 
 {% include info_box.md %}
 
-Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea are designated the roles of pursuer, evader, and poison. Pursuers attempt to consume evaders while avoiding poisons. Poisons have radii which are 0.75 times the size of the pursuer radius, while evaders have radii that are 2 the size of the pursuer radius. Depending on the input parameters, multiple archea may need to work together to consume an evader, creating a dynamic that is both cooperative and competitive. The environment is a continuous box space, and each archea has a position with x and y values each in the range [0,1]. The agents in this environment are the pursuers, while evaders and poison belong to the environment. Agents act by choosing a velocity vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects relative to the pursuer. This information is reported in the observation space, and can be used to navigate the environment.
+Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea are designated the roles of pursuer, evader, and poison. Pursuers attempt to consume evaders while avoiding poisons. Poisons have a radius which is 0.75 times the size of the pursuer radius, while evaders have a radius 2 times the size of the pursuer radius. Depending on the input parameters, multiple archea may need to work together to consume an evader, creating a dynamic that is both cooperative and competitive. Similarly, rewards can be distributed globally to all archea, or applied locally to specific archea. The environment is a continuous 2D space, and each archea has a position with x and y values each in the range [0,1]. Agents can not move beyond barriers at the minimum and maximum x and y values. The agents in this environment are the pursuers, while evaders and poison belong to the environment. Agents act by choosing a thrust vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects near the pursuer. This information is reported in the observation space, and can be used to navigate the environment.
 
 ### Observation Space
 
-The observation shape of each archea is a vector of length > 4 that is dependent on its input parameters. The full size of the vector is the number of features per sensor multiplied by the number of sensors, plus two elements indicating whether the archea collided with an evader or with a poison respectively. The number of features per sensor is 7 by default with `speed_features` enabled, or 4 if `speed_features` is turned off. Therefore with `speed_features` enabled, the observation shape takes the full form of `(7 × n_sensors) + 2`. Elements of the observation vector take on values in the range [-1, 1]. 
+The observation shape of each archea is a vector of length > 4 that is dependent on the environment's input arguments. The full size of the vector is the number of features per sensor multiplied by the number of sensors, plus two elements indicating whether the archea collided with an evader or with a poison respectively. The number of features per sensor is 8 by default with `speed_features` enabled, or 5 if `speed_features` is turned off. Therefore with `speed_features` enabled, the observation shape takes the full form of `(8 × n_sensors) + 2`. Elements of the observation vector take on values in the range [-1, 1]. 
 
-For example, by default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 212 long vector of computed values about the environment for the observation space. These values represent the distances and speeds sensed by each sensor on the archea. Sensors that do not sense any objects within their range report 0 for speed and 1 for distance.
+For example, by default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 242 long vector of computed values about the environment for the observation space. These values represent the distances and speeds sensed by each sensor on the archea. Sensors that do not sense any objects within their range report 0 for speed and 1 for distance.
 
 This has been fixed from the reference environments to keep items floating off screen and being lost forever.
 
 This table enumerates the observation space with `speed_features = True`:
 
-|        Index: [start, end)        | Description                                  | Values  |
-| :-------------------------------: | -------------------------------------------- | :-----: |
-|           0 - n_sensors           | Obstacle distance for each sensor            | [0, 1]  |
-|    n_sensors - (2 * n_sensors)    | Evader distance for each sensor              | [0, 1]  |
-| (2 * n_sensors) - (3 * n_sensors) | Evader speed for each sensor                 | [-1, 1] |
-| (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, 1]  |
-| (4 * n_sensors) - (5 * n_sensors) | Poison speed for each sensor                 | [-1, 1] |
-| (5 * n_sensors) - (6 * n_sensors) | Pursuer distance for each sensor             | [0, 1]  |
-| (6 * n_sensors) - (7 * n_sensors) | Pursuer speed for each sensor                | [-1, 1] |
-|          (7 * n_sensors)          | Indicates whether agent collided with evader | {0, 1}  |
-|        (7 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1}  |
+|        Index: [start, end)         | Description                                  | Values  |
+| :--------------------------------: | -------------------------------------------- | :-----: |
+|           0 to n_sensors           | Obstacle distance for each sensor            | [0, 1]  |
+|    n_sensors to (2 * n_sensors)    | Barrier distance for each sensor             | [0, 1]  |
+| (2 * n_sensors) to (3 * n_sensors) | Evader distance for each sensor              | [0, 1]  |
+| (3 * n_sensors) to (4 * n_sensors) | Evader speed for each sensor                 | [-1, 1] |
+| (4 * n_sensors) to (5 * n_sensors) | Poison distance for each sensor              | [0, 1]  |
+| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-1, 1] |
+| (6 * n_sensors) to (7 * n_sensors) | Pursuer distance for each sensor             | [0, 1]  |
+| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-1, 1] |
+|           8 * n_sensors            | Indicates whether agent collided with evader | {0, 1}  |
+|        (8 * n_sensors) + 1         | Indicates whether agent collided with poison | {0, 1}  |
 
 This table enumerates the observation space with `speed_features = False`:
 
 |        Index: [start, end)        | Description                                  | Values |
 | :-------------------------------: | -------------------------------------------- | :----: |
 |           0 - n_sensors           | Obstacle distance for each sensor            | [0, 1] |
-|    n_sensors - (2 * n_sensors)    | Evader distance for each sensor              | [0, 1] |
-| (2 * n_sensors) - (3 * n_sensors) | Poison distance for each sensor              | [0, 1] |
-| (3 * n_sensors) - (4 * n_sensors) | Pursuer distance for each sensor             | [0, 1] |
-|          (7 * n_sensors)          | Indicates whether agent collided with evader | {0, 1} |
-|        (7 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1} |
+|    n_sensors - (2 * n_sensors)    | Barrier distance for each sensor             | [0, 1] |
+| (2 * n_sensors) - (3 * n_sensors) | Evader distance for each sensor              | [0, 1] |
+| (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, 1] |
+| (4 * n_sensors) - (5 * n_sensors) | Pursuer distance for each sensor             | [0, 1] |
+|          (5 * n_sensors)          | Indicates whether agent collided with evader | {0, 1} |
+|        (5 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1} |
 
 ### Action Space
 
