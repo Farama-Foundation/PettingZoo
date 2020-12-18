@@ -35,7 +35,7 @@ env = make_env(raw_env)
 class _parallel_env(magent_parallel_env, EzPickle):
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
-        assert map_size >= 45, "size of map must be at least 45"
+        assert map_size >= 46, "size of map must be at least 46"
         env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
