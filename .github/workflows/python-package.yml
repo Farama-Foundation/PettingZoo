@@ -60,7 +60,6 @@ jobs:
       run: |
         export AUDIODEV=null
         brew install swig
-        brew install unrar
         pip install -r requirements.txt
         pip install AutoROM
         pip install flake8 pytest
