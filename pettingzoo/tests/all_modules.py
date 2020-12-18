@@ -18,7 +18,7 @@ from pettingzoo.atari import space_invaders_v1
 from pettingzoo.atari import space_war_v1
 from pettingzoo.atari import surround_v1
 from pettingzoo.atari import tennis_v2
-from pettingzoo.atari import video_checkers_v2
+from pettingzoo.atari import video_checkers_v3
 from pettingzoo.atari import volleyball_pong_v1
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
@@ -63,7 +63,7 @@ from pettingzoo.mpe import simple_tag_v2
 from pettingzoo.mpe import simple_world_comm_v2
 from pettingzoo.mpe import simple_v2
 
-from pettingzoo.sisl import pursuit_v2
+from pettingzoo.sisl import pursuit_v3
 from pettingzoo.sisl import waterworld_v2
 from pettingzoo.sisl import multiwalker_v5
 
@@ -99,7 +99,7 @@ all_environments = {
     "atari/space_war": space_war_v1,
     "atari/surround": surround_v1,
     "atari/tennis": tennis_v2,
-    "atari/video_checkers": video_checkers_v2,
+    "atari/video_checkers": video_checkers_v3,
     "atari/volleyball_pong": volleyball_pong_v1,
     "atari/wizard_of_wor": wizard_of_wor_v2,
     "atari/warlords": warlords_v2,
@@ -146,5 +146,5 @@ all_environments = {
 
     "sisl/multiwalker": multiwalker_v5,
     "sisl/waterworld": waterworld_v2,
-    "sisl/pursuit": pursuit_v2,
+    "sisl/pursuit": pursuit_v3,
 }
