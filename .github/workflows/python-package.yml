@@ -59,7 +59,7 @@ jobs:
     - name: Install dependencies
       run: |
         export AUDIODEV=null
-        brew install swig
+        brew install swig rar
         pip install -r requirements.txt
         pip install AutoROM
         pip install flake8 pytest
