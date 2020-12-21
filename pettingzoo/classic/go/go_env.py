@@ -34,7 +34,11 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.has_reset = False
 
-        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool) for _ in range(self.num_agents)])
+        self.observation_spaces = self._convert_to_dict(
+            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
+                          'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 2,), dtype=np.int8)})
+             for _ in range(self.num_agents)])
+
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
         self._agent_selector = agent_selector(self.agents)
@@ -88,7 +92,14 @@ class raw_env(AECEnv):
     def observe(self, agent):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
-        return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+        observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+
+        legal_moves = self.infos[agent]['legal_moves']
+        action_mask = np.zeros((self._N * self._N) + 2, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def step(self, action):
         if self.dones[self.agent_selection]:
