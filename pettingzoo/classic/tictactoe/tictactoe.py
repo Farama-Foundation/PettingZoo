@@ -30,7 +30,10 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(9) for i in self.agents}
-        self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8) for i in self.agents}
+        self.observation_spaces = {i: {
+                                        'observation': spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8),
+                                        'action_mask' : spaces.Box(low=0, high=1, shape=(9,), dtype=np.int8)
+                                  } for i in self.agents}
 
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
@@ -56,7 +59,15 @@ class raw_env(AECEnv):
 
         cur_p_board = np.equal(board_vals, cur_player + 1)
         opp_p_board = np.equal(board_vals, opp_player + 1)
-        return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+
+        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        legal_moves = self.infos[agent]['legal_moves']
+
+        action_mask = np.zeros(9, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def seed(self, seed=None):
         pass

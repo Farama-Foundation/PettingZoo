@@ -33,7 +33,10 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
-        self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8) for i in self.agents}
+        self.observation_spaces = {i: {
+            'observation': spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8),
+            'action_mask': spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8)
+        } for i in self.agents}
 
     def seed(self, seed=None):
         pass
@@ -58,7 +61,15 @@ class raw_env(AECEnv):
 
         cur_p_board = np.equal(board_vals, cur_player + 1)
         opp_p_board = np.equal(board_vals, opp_player + 1)
-        return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+
+        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        legal_moves = self.infos[agent]['legal_moves']
+
+        action_mask = np.zeros(7, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action):
