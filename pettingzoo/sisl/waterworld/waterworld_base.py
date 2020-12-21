@@ -189,7 +189,7 @@ class MAWaterWorld():
 
         self.renderOn = False
 
-        self.cycle_time = 0.8
+        self.cycle_time = 1.0
         self.frames = 0
         self.reset()
 
