@@ -7,6 +7,7 @@ on:
   push:
     branches: [ master ]
 
+jobs:
   macos-test:
 
     runs-on: macos-latest
