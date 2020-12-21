@@ -157,8 +157,8 @@ class raw_env(AECEnv, EzPickle):
                                                                                        self.hanabi_env.vectorized_observation_shape()[
                                                                                            0],),
                                                                                        dtype=np.float32),
-                                                             'action_mask': spaces.Box(low=0, high=1, shape=(20,),
-                                                                                       dtype=np.int8)})
+                                                             'action_mask': spaces.Box(low=0, high=1, shape=(
+                                                             self.hanabi_env.num_moves(),), dtype=np.int8)})
                                    for player_name in self.agents}
 
     def seed(self, seed=None):
@@ -282,7 +282,7 @@ class raw_env(AECEnv, EzPickle):
             self.observation_spaces[agent_name].low)
 
         legal_moves = self.infos[agent_name]['legal_moves']
-        action_mask = np.zeros(20, int)
+        action_mask = np.zeros(self.hanabi_env.num_moves(), int)
         for i in legal_moves:
             action_mask[i] = 1
 
