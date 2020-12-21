@@ -130,7 +130,7 @@ all_environments = {
     "magent/adversarial_pursuit": adversarial_pursuit_v2,
     "magent/battle": battle_v2,
     "magent/battlefield": battlefield_v2,
-    "magent/combined_arms": combined_arms_v3,
+    # "magent/combined_arms": combined_arms_v3,
     "magent/gather": gather_v2,
     "magent/tiger_deer": tiger_deer_v3,
 
