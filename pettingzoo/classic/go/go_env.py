@@ -36,7 +36,7 @@ class raw_env(AECEnv):
 
         self.observation_spaces = self._convert_to_dict(
             [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
-                          'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 2,), dtype=np.int8)})
+                          'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
              for _ in range(self.num_agents)])
 
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
@@ -95,7 +95,7 @@ class raw_env(AECEnv):
         observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
         legal_moves = self.infos[agent]['legal_moves']
-        action_mask = np.zeros((self._N * self._N) + 2, int)
+        action_mask = np.zeros((self._N * self._N) + 1, int)
         for i in legal_moves:
             action_mask[i] = 1
 
@@ -110,7 +110,7 @@ class raw_env(AECEnv):
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
-            self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
+            self.infos[next_player]['legal_moves'] = [self._N * self._N]
         else:
             self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
