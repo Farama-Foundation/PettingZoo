@@ -41,8 +41,10 @@ class raw_env(AECEnv):
         for i in range(101, 195, 4):
             high[i] = 6.0
         high[194] = 7.5
-        self.observation_spaces = {i: spaces.Box(low=np.float32(low), high=np.float32(high), dtype=np.float32) for i in self.agents}
-
+        self.observation_spaces = {
+            i: spaces.Dict({'observation': spaces.Box(low=np.float32(low), high=np.float32(high), dtype=np.float32),
+                            'action_mask': spaces.Box(low=0, high=1, shape=(1353,), dtype=np.int8)})
+            for i in self.agents}
         self.double_roll = 0
 
     def seed(self, seed=None):
@@ -98,7 +100,14 @@ class raw_env(AECEnv):
         self._dones_step_first()
 
     def observe(self, agent):
-        return np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198,)
+        observation = np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198, )
+
+        legal_moves = self.infos[agent]['legal_moves']
+        action_mask = np.zeros(1353, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def reset(self):
         self.agents = self.possible_agents[:]
