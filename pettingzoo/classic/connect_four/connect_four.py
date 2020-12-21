@@ -33,10 +33,10 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
-        self.observation_spaces = {i: {
+        self.observation_spaces = {i: spaces.Dict({
             'observation': spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8),
             'action_mask': spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8)
-        } for i in self.agents}
+        }) for i in self.agents}
 
     def seed(self, seed=None):
         pass
