@@ -33,7 +33,10 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
-        self.observation_spaces = {name: spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.bool) for name in self.agents}
+        self.observation_spaces = {name: spaces.Dict({
+            'observation': spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.bool),
+            'action_mask': spaces.Box(low=0, high=1, shape=(4672,), dtype=np.int8)
+        }) for name in self.agents}
 
         self.rewards = None
         self.dones = None
@@ -45,7 +48,14 @@ class raw_env(AECEnv):
         pass
 
     def observe(self, agent):
-        return chess_utils.get_observation(self.board, self.possible_agents.index(agent))
+        observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
+        legal_moves = self.infos[agent]['legal_moves']
+
+        action_mask = np.zeros(4672, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def reset(self):
         self.has_reset = True
