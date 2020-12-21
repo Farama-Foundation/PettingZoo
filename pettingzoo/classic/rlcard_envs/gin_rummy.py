@@ -56,9 +56,16 @@ class raw_env(RLCardBase, EzPickle):
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
         if self._opponents_hand_visible:
-            return obs['obs'].astype(self._dtype)
+            observation = obs['obs'].astype(self._dtype)
         else:
-            return obs['obs'][0:4, :].astype(self._dtype)
+            observation = obs['obs'][0:4, :].astype(self._dtype)
+
+        legal_moves = self.infos[agent]['legal_moves']
+        action_mask = np.zeros(110, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def render(self, mode='human'):
         for player in self.possible_agents:
