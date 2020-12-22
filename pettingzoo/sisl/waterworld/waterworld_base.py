@@ -3,8 +3,8 @@ import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
 from .._utils import Agent
-import cv2
 import math
+import pygame
 
 
 class Archea(Agent):
@@ -192,6 +192,7 @@ class MAWaterWorld():
             agent.observation_space for agent in self._pursuers]
 
         self.renderOn = False
+        self.pixel_scale = 30 * 25
 
         self.cycle_time = 1.0
         self.frames = 0
@@ -199,8 +200,9 @@ class MAWaterWorld():
 
     def close(self):
         if self.renderOn:
-            cv2.destroyAllWindows()
-            cv2.waitKey(1)
+            pygame.event.pump()
+            pygame.display.quit()
+            pygame.quit()
 
     @property
     def agents(self):
@@ -539,46 +541,67 @@ class MAWaterWorld():
     def observe(self, agent):
         return np.array(self.last_obs[agent], dtype=np.float32)
 
-    def render(self, mode='human', screen_size=900, rate=5):
-        if not self.renderOn and mode == "human":
-            self.renderOn = True
-            cv2.startWindowThread()
-        img = np.empty((screen_size, screen_size, 3), dtype=np.uint8)
-        img[...] = 255
-        # Obstacles
-        for iobs, obstaclex_2 in enumerate(self.obstacle_coords):
-            assert obstaclex_2.shape == (2,)
-            color = (128, 128, 0)
-            cv2.circle(img,
-                       tuple((obstaclex_2 * screen_size).astype(int)),
-                       int(self.obstacle_radius * screen_size), color, -1, lineType=cv2.CV_32S)
-        # Pursuers
+    def draw_obstacles(self):
+        for obstacle in self.obstacle_coords:
+            assert obstacle.shape == (2,)
+            x, y = obstacle
+            center = (int(self.pixel_scale * x),
+                      int(self.pixel_scale * y))
+            color = (200, 150, 110)
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.obstacle_radius)
+        
+    def draw_background(self):
+        # -1 is building pixel flag
+        color = (255, 255, 255)
+        rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
+        pygame.draw.rect(self.screen, color, rect)
+
+
+    def draw_pursuers(self):
         for pursuer in self._pursuers:
-            for k in range(pursuer._n_sensors):
+            x, y = pursuer.position
+            center = (int(self.pixel_scale * x),
+                      int(self.pixel_scale * y))
+            for sensor in pursuer._sensors:
+                start = center
+                end = center + self.pixel_scale * (pursuer._sensor_range * sensor)
                 color = (0, 0, 0)
-                cv2.line(img,
-                         tuple((pursuer.position * screen_size).astype(int)),
-                         tuple(((pursuer.position + pursuer._sensor_range * pursuer.sensors[k]) * screen_size).astype(int)), color, 1, lineType=cv2.CV_32S)
-                cv2.circle(img,
-                           tuple((pursuer.position * screen_size).astype(int)),
-                           int(pursuer._radius * screen_size), (255, 0, 0), -1, lineType=cv2.CV_32S)
-        # Evaders
+                pygame.draw.line(self.screen, color, start, end, 1)
+            color = (0, 0, 224)
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius)
+
+    def draw_evaders(self):
         for evader in self._evaders:
-            color = (0, 255, 0)
-            cv2.circle(img,
-                       tuple((evader.position * screen_size).astype(int)),
-                       int(evader._radius * screen_size), color, -1, lineType=cv2.CV_32S)
+            x, y = evader.position
+            center = (int(self.pixel_scale * x),
+                      int(self.pixel_scale * y))
+            color = (224, 0, 0)
 
-        # Poison
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 2)
+
+    def draw_poisons(self):
         for poison in self._poisons:
-            color = (0, 0, 255)
-            cv2.circle(img,
-                       tuple((poison.position * screen_size).astype(int)),
-                       int(poison._radius * screen_size), color, -1, lineType=cv2.CV_32S)
+            x, y = poison.position
+            center = (int(self.pixel_scale * x),
+                      int(self.pixel_scale * y))
+            color = (0, 224, 0)
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3/4)
 
-        opacity = 0.4
-        bg = np.ones((screen_size, screen_size, 3), dtype=np.uint8) * 255
-        cv2.addWeighted(bg, opacity, img, 1 - opacity, 0, img)
-        cv2.imshow('Waterworld', img)
-        cv2.waitKey(rate)
-        return np.asarray(img)[..., ::-1] if mode == "rgb_array" else None
+    def render(self, mode="human"):
+        if not self.renderOn and mode == "human":
+            pygame.display.init()
+            self.screen = pygame.display.set_mode(
+                (self.pixel_scale, self.pixel_scale))
+            self.renderOn = True
+        self.draw_background()
+        self.draw_obstacles()
+        self.draw_pursuers()
+        self.draw_evaders()
+        self.draw_poisons()
+
+
+        observation = pygame.surfarray.pixels3d(self.screen)
+        new_observation = np.copy(observation)
+        del observation
+        pygame.display.flip()
+        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
