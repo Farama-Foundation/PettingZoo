@@ -34,7 +34,7 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(self._obs_dim,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-2), high=np.float32(2), shape=(self._obs_dim,), dtype=np.float32)
 
     @property
     def action_space(self):
@@ -149,13 +149,14 @@ class MAWaterWorld():
         self.n_coop = n_coop
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
+        obstacle_coord = np.array(obstacle_coord)
         self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if obstacle_coord is None else obstacle_coord
         self.pursuer_max_accel = pursuer_max_accel
         self.evader_speed = evader_speed
         self.poison_speed = poison_speed
         self.radius = radius
         self.n_sensors = n_sensors
-        self.sensor_range = np.ones(self.n_pursuers) * sensor_range
+        self.sensor_range = np.ones(self.n_pursuers) * min(sensor_range, 2)
         self.poison_reward = poison_reward
         self.food_reward = food_reward
         self.thrust_penalty = thrust_penalty
@@ -304,6 +305,11 @@ class MAWaterWorld():
         sensorvals = []
         for pursuer in self._pursuers:
             relative_speed = object_velocities - np.expand_dims(pursuer.velocity, 0)
+            print(object_velocities)
+            print(pursuer.velocity)
+            print(relative_speed)
+            print(pursuer.sensors)
+            print()
             sensorvals.append(pursuer.sensors.dot(relative_speed.T))
         sensed_speed = np.c_[sensorvals]    # Speeds in direction of each sensor
 
