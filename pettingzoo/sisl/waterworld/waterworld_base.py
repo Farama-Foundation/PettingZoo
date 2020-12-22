@@ -343,7 +343,7 @@ class MAWaterWorld():
                 collisions_particle_obstacle[idx] = is_colliding.sum()
                 if collisions_particle_obstacle[idx] > 0:
                     # Rebound the particle that collided with an obstacle
-                    velocity_scale = pursuer._radius + self.obstacle_radius - \
+                    velocity_scale = particle._radius + self.obstacle_radius - \
                         ssd.euclidean(particle.position, self.obstacle_coords)
                     pos_diff = particle.position - self.obstacle_coords[0]
                     new_pos = particle.position + velocity_scale * pos_diff
