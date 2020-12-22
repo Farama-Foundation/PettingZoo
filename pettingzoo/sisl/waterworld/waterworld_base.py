@@ -305,11 +305,6 @@ class MAWaterWorld():
         sensorvals = []
         for pursuer in self._pursuers:
             relative_speed = object_velocities - np.expand_dims(pursuer.velocity, 0)
-            print(object_velocities)
-            print(pursuer.velocity)
-            print(relative_speed)
-            print(pursuer.sensors)
-            print()
             sensorvals.append(pursuer.sensors.dot(relative_speed.T))
         sensed_speed = np.c_[sensorvals]    # Speeds in direction of each sensor
 
