@@ -64,10 +64,13 @@ class Archea(Agent):
         return self._sensors
 
     def sensed(self, object_coord, object_radius, same=False):
-        """Whether `obj` would be sensed by the pursuers"""
+        """Whether object would be sensed by the pursuers"""
         relative_coord = object_coord - np.expand_dims(self.position, 0)
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
+        norm = np.linalg.norm(sensorvals)
+        if norm != 0:
+            sensorvals = sensorvals / norm
         # Set sensorvals to np.inf when object should not be seen by sensor
         distance_squared = (relative_coord**2).sum(axis=1)[None, :]
         sensorvals[
@@ -103,9 +106,9 @@ class Archea(Agent):
         sensor_values = np.expand_dims(minimum_ratios, 0)
 
         # Set values beyond sensor range to infinity
-        is_in_max_range = np.reshape((np.amax(sensor_endpoints, axis=1) < max_pos), (1, self._n_sensors))
-        is_in_min_range = np.reshape((np.amin(sensor_endpoints, axis=1) > min_pos), (1, self._n_sensors))
-        sensor_values[np.logical_and(is_in_max_range, is_in_min_range)] = np.inf
+        does_sense = minimum_ratios < (1.0 - 1e-4)
+        does_sense = np.expand_dims(does_sense, 0)
+        sensor_values[np.logical_not(does_sense)] = np.inf
 
         # Convert -0 to 0
         sensor_values[sensor_values == -0] = 0
