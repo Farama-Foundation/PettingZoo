@@ -48,17 +48,19 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(self, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
         EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
-        self.agents = ["piston_" + str(r) for r in range(20)]
+        self.n_pistons = 20
+
+        self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
-        self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.n_pistons))))
         self._agent_selector = agent_selector(self.agents)
         self.continuous = continuous
         if self.continuous:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
         else:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * 20))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons))
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * self.n_pistons))
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
 
