@@ -200,7 +200,7 @@ class MAWaterWorld():
 
     def close(self):
         if self.renderOn:
-            pygame.event.pump()
+            # pygame.event.pump()
             pygame.display.quit()
             pygame.quit()
 
@@ -549,13 +549,12 @@ class MAWaterWorld():
                       int(self.pixel_scale * y))
             color = (200, 150, 110)
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.obstacle_radius)
-        
+
     def draw_background(self):
         # -1 is building pixel flag
         color = (255, 255, 255)
         rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
         pygame.draw.rect(self.screen, color, rect)
-
 
     def draw_pursuers(self):
         for pursuer in self._pursuers:
@@ -585,23 +584,27 @@ class MAWaterWorld():
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
             color = (0, 224, 0)
-            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3/4)
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3 / 4)
 
     def render(self, mode="human"):
-        if not self.renderOn and mode == "human":
-            pygame.display.init()
-            self.screen = pygame.display.set_mode(
-                (self.pixel_scale, self.pixel_scale))
+        if not self.renderOn:
+            if mode == "human":
+                pygame.display.init()
+                self.screen = pygame.display.set_mode(
+                    (self.pixel_scale, self.pixel_scale))
+            else:
+                self.screen = pygame.Surface((self.pixel_scale, self.pixel_scale))
             self.renderOn = True
+
         self.draw_background()
         self.draw_obstacles()
         self.draw_pursuers()
         self.draw_evaders()
         self.draw_poisons()
 
-
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
         del observation
-        pygame.display.flip()
+        if mode == "human":
+            pygame.display.flip()
         return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
