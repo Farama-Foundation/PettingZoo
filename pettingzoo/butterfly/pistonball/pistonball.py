@@ -2,7 +2,7 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 import pymunkoptions
-pymunkoptions.options["debug"] = False
+pymunkoptions.options["debug"] = True
 import pymunk
 import pymunk.pygame_util
 import math
@@ -56,10 +56,6 @@ class raw_env(AECEnv, EzPickle):
         self.screen_height = 560
         self.wall_width = 80
         self.ball_radius = 40
-        self.left_margin = 40
-        self.right_margin = 40
-        self.top_margin = 40
-        self.bottom_margin = 40
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
@@ -114,10 +110,10 @@ class raw_env(AECEnv, EzPickle):
 
         # Blit background image if ball goes out of bounds. Ball radius is 40
         self.valid_ball_position_rect = pygame.Rect(
-            self.rect.left + self.left_margin,  # Left
-            self.rect.top + self.top_margin,    # Top
-            self.rect.width - (self.left_margin + self.right_margin),   # Width
-            self.rect.height - (self.top_margin + self.bottom_margin)   # Height
+            self.rect.left + self.ball_radius,          # Left
+            self.rect.top + self.ball_radius,           # Top
+            self.rect.width - (2 * self.ball_radius),   # Width
+            self.rect.height - (2 * self.ball_radius)   # Height
         )
 
         self.frames = 0
@@ -132,18 +128,13 @@ class raw_env(AECEnv, EzPickle):
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
-        #print(observation[:,40,:])
         i = self.agent_name_mapping[agent]
         x_low = self.piston_width * (i - 1) + self.wall_width
         x_high = self.piston_width * (i + 2) + self.wall_width
-        print("i: {}, {}:{}".format(i, x_low, x_high))
         y_low = 257
         y_low = 0
         y_high = 457
         cropped = np.array(observation[x_low:x_high, y_low:y_high, :])
-        if i == 0:
-            print(observation.shape)
-            print(observation[:40,:,:])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
         return observation
@@ -169,7 +160,7 @@ class raw_env(AECEnv, EzPickle):
         bot_left = (self.wall_width, self.screen_height - self.wall_width)
         bot_right = (self.screen_width - self.wall_width, self.screen_height - self.wall_width)
         walls = [
-            pymunk.Segment(self.space.static_body, top_left, top_right, 1),     # Top wall 
+            pymunk.Segment(self.space.static_body, top_left, top_right, 1),     # Top wall
             pymunk.Segment(self.space.static_body, top_left, bot_left, 1),      # Left wall
             pymunk.Segment(self.space.static_body, bot_left, bot_right, 1),     # Bottom wall
             pymunk.Segment(self.space.static_body, top_right, bot_right, 1)     # Right
@@ -205,14 +196,15 @@ class raw_env(AECEnv, EzPickle):
     def move_piston(self, piston, v):
 
         def cap(y):
-            if y > 451:
-                y = 451
-            elif y < 451 - (16 * self.velocity):
-                y = 451 - (16 * self.velocity)
+            # TODO: Remove 29. Somehow related to piston height
+            maximum_piston_y = self.screen_height - self.wall_width - 29
+            if y > maximum_piston_y:
+                y = maximum_piston_y
+            elif y < maximum_piston_y - (self.resolution * self.velocity):
+                y = maximum_piston_y - (self.resolution * self.velocity)
             return y
 
-        piston.position = (piston.position[0], cap(
-            piston.position[1] - v * self.velocity))
+        piston.position = (piston.position[0], cap(piston.position[1] - v * self.velocity))
 
     def reset(self):
         self.space = pymunk.Space(threaded=False)
@@ -223,35 +215,41 @@ class raw_env(AECEnv, EzPickle):
         self.space.iterations = 10  # 10 is default in PyMunk
 
         self.pistonList = []
+        maximum_piston_y = self.screen_height - self.wall_width - 29
         for i in range(self.n_pistons):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            possible_y_displacements = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston = self.add_piston(self.space, self.wall_width + 5 + self.piston_width * i, maximum_piston_y - self.np_random.choice(possible_y_displacements))
             self.pistonList.append(piston)
 
         self.offset = 0
         if self.random_drop:
             self.offset = self.np_random.randint(-30, 30 + 1)
         self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), self.ball_mass, self.ball_friction, self.ball_elasticity)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
+            self.screen_width - (2 * self.wall_width) + self.offset,
+            350 + self.np_random.randint(-15, 15 + 1),
+            self.ball_mass,
+            self.ball_friction,
+            self.ball_elasticity
+        )
+        self.lastX = int(self.ball.position[0] - self.ball_radius)
+        self.distance = self.lastX - self.wall_width
 
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+            possible_y_displacements = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            piston.position = (self.wall_width + 5 + self.piston_width * i, maximum_piston_y - self.np_random.choice(possible_y_displacements))
             piston.velociy = 0
 
         self.offset = 0
         if self.random_drop:
             self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball.position = (800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
+        self.ball.position = (self.screen_width - (2 * self.wall_width) + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
         if self.starting_angular_momentum:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
+        self.lastX = int(self.ball.position[0] - self.ball_radius)
+        self.distance = self.lastX - self.wall_width
         self.screen.blit(self.background, (0, 0))
         self.draw()
 
@@ -273,15 +271,21 @@ class raw_env(AECEnv, EzPickle):
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             self.screen.blit(self.background, (0, 0))
 
-        pygame.draw.rect(self.screen, (255,0, 0), self.rect)
-        pygame.draw.circle(self.screen, (65, 159, 221), (int(
-            self.ball.position[0]), int(self.ball.position[1])), 40)
-        pygame.draw.line(self.screen, (58, 64, 65), (int(self.ball.position[0]), int(self.ball.position[1])), (int(self.ball.position[0]) + 39 * np.cos(
-            self.ball.angle), int(self.ball.position[1]) + 39 * np.sin(self.ball.angle)), 3)  # 39 because it kept sticking over by 1 at 40
+        ball_x = int(self.ball.position[0])
+        ball_y = int(self.ball.position[1])
+
+        color = (255, 255, 255)
+        pygame.draw.rect(self.screen, color, self.rect)
+        color = (65, 159, 221)
+        pygame.draw.circle(self.screen, color, (ball_x, ball_y), self.ball_radius)
+
+        line_end_x = ball_x + (self.ball_radius - 1) * np.cos(self.ball.angle)
+        line_end_y = ball_y + (self.ball_radius - 1) * np.sin(self.ball.angle)
+        color = (58, 64, 65)
+        pygame.draw.line(self.screen, color, (ball_x, ball_y), (line_end_x, line_end_y), 3)  # 39 because it kept sticking over by 1 at 40
 
         for piston in self.pistonList:
-            self.screen.blit(self.piston_sprite,
-                             (piston.position[0] - 5, piston.position[1] - 5))
+            self.screen.blit(self.piston_sprite, (piston.position[0] - 5, piston.position[1] - 5))
 
     def get_nearby_pistons(self):
         # first piston = leftmost
