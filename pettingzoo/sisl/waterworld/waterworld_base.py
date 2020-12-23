@@ -120,7 +120,7 @@ class MAWaterWorld():
 
     def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=30, sensor_range=0.2,
                  radius=0.015, obstacle_radius=0.2, obstacle_coord=np.array([0.5, 0.5]),
-                 pursuer_max_accel=0.05, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0,
+                 pursuer_max_accel=0.01, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0,
                  food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0,
                  speed_features=True, max_cycles=500, **kwargs):
         """
@@ -490,7 +490,6 @@ class MAWaterWorld():
         return obslist
 
     def step(self, action, agent_id, is_last):
-
         action = np.asarray(action)
         action = action.reshape(2)
         speed = np.linalg.norm(action)
@@ -547,15 +546,14 @@ class MAWaterWorld():
             x, y = obstacle
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
-            color = (200, 150, 110)
+            color = (120, 176, 178)
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.obstacle_radius)
-        
+
     def draw_background(self):
         # -1 is building pixel flag
         color = (255, 255, 255)
         rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
         pygame.draw.rect(self.screen, color, rect)
-
 
     def draw_pursuers(self):
         for pursuer in self._pursuers:
@@ -567,7 +565,7 @@ class MAWaterWorld():
                 end = center + self.pixel_scale * (pursuer._sensor_range * sensor)
                 color = (0, 0, 0)
                 pygame.draw.line(self.screen, color, start, end, 1)
-            color = (0, 0, 224)
+            color = (101, 104, 249)
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius)
 
     def draw_evaders(self):
@@ -575,7 +573,7 @@ class MAWaterWorld():
             x, y = evader.position
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
-            color = (224, 0, 0)
+            color = (238, 116, 106)
 
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 2)
 
@@ -584,8 +582,8 @@ class MAWaterWorld():
             x, y = poison.position
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
-            color = (0, 224, 0)
-            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3/4)
+            color = (145, 250, 116)
+            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3 / 4)
 
     def render(self, mode="human"):
         if not self.renderOn and mode == "human":
@@ -598,7 +596,6 @@ class MAWaterWorld():
         self.draw_pursuers()
         self.draw_evaders()
         self.draw_poisons()
-
 
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
