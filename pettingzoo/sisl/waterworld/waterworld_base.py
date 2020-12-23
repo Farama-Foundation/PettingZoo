@@ -200,7 +200,7 @@ class MAWaterWorld():
 
     def close(self):
         if self.renderOn:
-            pygame.event.pump()
+            # pygame.event.pump()
             pygame.display.quit()
             pygame.quit()
 
@@ -586,11 +586,15 @@ class MAWaterWorld():
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3 / 4)
 
     def render(self, mode="human"):
-        if not self.renderOn and mode == "human":
-            pygame.display.init()
-            self.screen = pygame.display.set_mode(
-                (self.pixel_scale, self.pixel_scale))
+        if not self.renderOn:
+            if mode == "human":
+                pygame.display.init()
+                self.screen = pygame.display.set_mode(
+                    (self.pixel_scale, self.pixel_scale))
+            else:
+                self.screen = pygame.Surface((self.pixel_scale, self.pixel_scale))
             self.renderOn = True
+
         self.draw_background()
         self.draw_obstacles()
         self.draw_pursuers()
@@ -600,5 +604,6 @@ class MAWaterWorld():
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
         del observation
-        pygame.display.flip()
+        if mode == "human":
+            pygame.display.flip()
         return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
