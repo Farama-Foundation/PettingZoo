@@ -56,7 +56,7 @@ class raw_env(AECEnv, EzPickle):
         self.piston_radius = 5
         self.screen_width = 960
         self.screen_height = 560
-        self.wall_width = 80
+        self.wall_width = 40
         self.ball_radius = 40
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
@@ -100,7 +100,7 @@ class raw_env(AECEnv, EzPickle):
         self.n_piston_positions = 16
 
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.background, (0, 0))
+        # self.screen.blit(self.background, (0, 0))
 
         self.render_rect = pygame.Rect(
             self.wall_width,   # Left
@@ -142,7 +142,7 @@ class raw_env(AECEnv, EzPickle):
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.renderOn = True
-        self.screen.blit(self.background, (0, 0))
+        # self.screen.blit(self.background, (0, 0))
         self.draw()
 
     def close(self):
@@ -218,20 +218,34 @@ class raw_env(AECEnv, EzPickle):
         maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
         for i in range(self.n_pistons):
             possible_y_displacements = np.arange(0, .5 * self.pixels_per_position * self.n_piston_positions, self.pixels_per_position)
-            piston = self.add_piston(self.space, self.wall_width + self.piston_radius + self.piston_width * i, maximum_piston_y - self.np_random.choice(possible_y_displacements))
+            piston = self.add_piston(
+                self.space,
+                self.wall_width + self.piston_radius + self.piston_width * i,       # x position
+                maximum_piston_y - self.np_random.choice(possible_y_displacements)  # y position
+            )
             piston.velociy = 0
             self.pistonList.append(piston)
 
-        self.offset = 0
+        self.horizontal_offset = 0
+        self.vertical_offset = 0
+        horizontal_offset_range = 30
+        vertical_offset_range = 15
         if self.random_drop:
-            self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball = self.add_ball(
-            self.screen_width - (2 * self.wall_width) + self.offset,
-            self.screen_height - (2 * self.wall_width) - 50 + self.np_random.randint(-15, 15 + 1),
-            self.ball_mass,
-            self.ball_friction,
-            self.ball_elasticity
-        )
+            vertical_offset = self.np_random.randint(-vertical_offset_range, vertical_offset_range + 1)
+            self.horizontal_offset = self.np_random.randint(-horizontal_offset_range, horizontal_offset_range + 1)
+        ball_x = (self.screen_width
+                  - self.wall_width
+                  - self.piston_width
+                  - (2 * self.ball_radius)
+                  - horizontal_offset_range
+                  + self.horizontal_offset)
+        ball_y = (self.screen_height
+                  - self.wall_width
+                  - self.piston_height
+                  - (self.pixels_per_position * self.n_piston_positions)
+                  - vertical_offset_range
+                  + vertical_offset)
+        self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
         if self.starting_angular_momentum:
@@ -240,7 +254,7 @@ class raw_env(AECEnv, EzPickle):
         self.lastX = int(self.ball.position[0] - self.ball_radius)
         self.distance = self.lastX - self.wall_width
 
-        self.screen.blit(self.background, (0, 0))
+        # self.screen.blit(self.background, (0, 0))
         self.draw()
 
         self.agents = self.possible_agents[:]
@@ -260,7 +274,8 @@ class raw_env(AECEnv, EzPickle):
     def draw(self):
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
-            self.screen.blit(self.background, (0, 0))
+            # self.screen.blit(self.background, (0, 0))
+            pass
 
         ball_x = int(self.ball.position[0])
         ball_y = int(self.ball.position[1])
