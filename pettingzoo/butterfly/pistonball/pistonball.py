@@ -236,8 +236,6 @@ class raw_env(AECEnv, EzPickle):
         if self.random_drop:
             vertical_offset = self.np_random.randint(-vertical_offset_range, vertical_offset_range + 1)
             self.horizontal_offset = self.np_random.randint(-horizontal_offset_range, horizontal_offset_range + 1)
-        self.horizontal_offset = 30
-        self.vertical_offset = 15
         ball_x = (self.screen_width
                   - self.wall_width
                   - self.ball_radius
@@ -247,9 +245,9 @@ class raw_env(AECEnv, EzPickle):
                   - self.wall_width
                   - self.piston_body_height
                   - self.ball_radius
-                  - (self.pixels_per_position * self.n_piston_positions))
-                  #- vertical_offset_range
-                  #+ vertical_offset)
+                  - (0.5 * self.pixels_per_position * self.n_piston_positions)
+                  - vertical_offset_range
+                  + vertical_offset)
         self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
