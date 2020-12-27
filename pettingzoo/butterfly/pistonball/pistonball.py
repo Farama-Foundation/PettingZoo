@@ -56,7 +56,7 @@ class raw_env(AECEnv, EzPickle):
         self.piston_radius = 5
         self.screen_width = 960
         self.screen_height = 560
-        self.wall_width = 40
+        self.wall_width = 80
         self.ball_radius = 40
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
@@ -100,6 +100,7 @@ class raw_env(AECEnv, EzPickle):
         self.n_piston_positions = 16
 
         self.screen.fill((0, 0, 0))
+        self.draw_background()
         # self.screen.blit(self.background, (0, 0))
 
         self.render_rect = pygame.Rect(
@@ -143,6 +144,7 @@ class raw_env(AECEnv, EzPickle):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))
+        self.draw_background()
         self.draw()
 
     def close(self):
@@ -217,6 +219,7 @@ class raw_env(AECEnv, EzPickle):
         self.pistonList = []
         maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
         for i in range(self.n_pistons):
+            # TODO: Why use 0.5 here?
             possible_y_displacements = np.arange(0, .5 * self.pixels_per_position * self.n_piston_positions, self.pixels_per_position)
             piston = self.add_piston(
                 self.space,
@@ -233,18 +236,20 @@ class raw_env(AECEnv, EzPickle):
         if self.random_drop:
             vertical_offset = self.np_random.randint(-vertical_offset_range, vertical_offset_range + 1)
             self.horizontal_offset = self.np_random.randint(-horizontal_offset_range, horizontal_offset_range + 1)
+        self.horizontal_offset = 30
+        self.vertical_offset = 15
         ball_x = (self.screen_width
                   - self.wall_width
-                  - self.piston_width
-                  - (2 * self.ball_radius)
+                  - self.ball_radius
                   - horizontal_offset_range
                   + self.horizontal_offset)
         ball_y = (self.screen_height
                   - self.wall_width
-                  - self.piston_height
-                  - (self.pixels_per_position * self.n_piston_positions)
-                  - vertical_offset_range
-                  + vertical_offset)
+                  - self.piston_body_height
+                  - self.ball_radius
+                  - (self.pixels_per_position * self.n_piston_positions))
+                  #- vertical_offset_range
+                  #+ vertical_offset)
         self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
@@ -255,6 +260,7 @@ class raw_env(AECEnv, EzPickle):
         self.distance = self.lastX - self.wall_width
 
         # self.screen.blit(self.background, (0, 0))
+        self.draw_background()
         self.draw()
 
         self.agents = self.possible_agents[:]
@@ -271,10 +277,21 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
+    def draw_background(self):
+        walls = pygame.Rect(
+            0,   # Left
+            0,   # Top
+            self.screen_width,      # Width
+            self.screen_height,     # Height
+        )
+        wall_color = (128, 128, 128)
+        pygame.draw.rect(self.screen, wall_color, walls)
+
     def draw(self):
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             # self.screen.blit(self.background, (0, 0))
+            self.draw_background()
             pass
 
         ball_x = int(self.ball.position[0])
