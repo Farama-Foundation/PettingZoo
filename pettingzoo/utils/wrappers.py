@@ -111,13 +111,14 @@ class TerminateIllegalWrapper(BaseWrapper):
             self._was_done_step(action)
         elif not self.dones[self.agent_selection] and action not in self.infos[current_agent]['legal_moves']:
             EnvLogger.warn_on_illegal_move()
+            self._cumulative_rewards[self.agent_selection] = 0
             self.dones = {d: True for d in self.dones}
             for info in self.infos.values():
                 info['legal_moves'] = []
             self.rewards = {d: 0 for d in self.dones}
-            self.rewards[current_agent] = self._illegal_value
-            self._dones_step_first()
+            self.rewards[current_agent] = float(self._illegal_value)
             self._accumulate_rewards()
+            self._dones_step_first()
             self._terminated = True
         else:
             super().step(action)
