@@ -154,8 +154,8 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = {player_name: spaces.Dict({'observation': spaces.Box(low=0,
                                                                                        high=1,
                                                                                        shape=(
-                                                                                       self.hanabi_env.vectorized_observation_shape()[
-                                                                                           0],),
+                                                                                        self.hanabi_env.vectorized_observation_shape()[
+                                                                                       0],),
                                                                                        dtype=np.float32),
                                                              'action_mask': spaces.Box(low=0, high=1, shape=(
                                                              self.hanabi_env.num_moves(),), dtype=np.int8)})
