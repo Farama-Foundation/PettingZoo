@@ -277,19 +277,27 @@ class raw_env(AECEnv, EzPickle):
         self.frames = 0
 
     def draw_background(self):
-        walls = pygame.Rect(
+        outer_walls = pygame.Rect(
             0,   # Left
             0,   # Top
             self.screen_width,      # Width
             self.screen_height,     # Height
         )
-        wall_color = (128, 128, 128)
-        pygame.draw.rect(self.screen, wall_color, walls)
+        outer_wall_color = (58, 64, 65)
+        pygame.draw.rect(self.screen, outer_wall_color, outer_walls)
+        inner_walls = pygame.Rect(
+            self.wall_width / 2,   # Left
+            self.wall_width / 2,   # Top
+            self.screen_width - self.wall_width,      # Width
+            self.screen_height - self.wall_width,     # Height
+        )
+        inner_wall_color = (68, 76, 77)
+        pygame.draw.rect(self.screen, inner_wall_color, inner_walls)
         self.draw_pistons()
             
 
     def draw_pistons(self):
-        piston_color = (65, 159, 221)
+        piston_color = (208, 216, 217)
         x_pos = self.wall_width
         for piston in self.pistonList:
             self.screen.blit(self.piston_body_sprite, (x_pos, self.screen_height - self.wall_width - self.piston_body_height))
