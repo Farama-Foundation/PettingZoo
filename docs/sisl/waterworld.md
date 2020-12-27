@@ -7,7 +7,7 @@ action-shape: "(2,)"
 action-values: "(-1, 1)"
 observation-shape: "(242,)"
 observation-values: "[-3,3]"
-average-total-reward: "-14.5"
+average-total-reward: "-68.3"
 import: "from pettingzoo.sisl import waterworld_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 
