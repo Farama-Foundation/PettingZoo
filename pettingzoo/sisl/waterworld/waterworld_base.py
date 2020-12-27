@@ -573,7 +573,7 @@ class MAWaterWorld():
             x, y = evader.position
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
-            color = (238, 116, 106)
+            color = (145, 250, 116)
 
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 2)
 
@@ -582,7 +582,8 @@ class MAWaterWorld():
             x, y = poison.position
             center = (int(self.pixel_scale * x),
                       int(self.pixel_scale * y))
-            color = (145, 250, 116)
+            color = (238, 116, 106)
+
             pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.radius * 3 / 4)
 
     def render(self, mode="human"):

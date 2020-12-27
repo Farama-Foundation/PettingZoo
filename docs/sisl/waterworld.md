@@ -6,6 +6,7 @@ manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
 observation-shape: "(242,)"
+<<<<<<< HEAD
 observation-values: "[-3,3]"
 average-total-reward: "-68.3"
 import: "from pettingzoo.sisl import waterworld_v2"
@@ -19,7 +20,7 @@ Waterworld is a simulation of archea navigating and trying to survive in their e
 
 ### Observation Space
 
-The observation shape of each archea is a vector of length > 4 that is dependent on the environment's input arguments. The full size of the vector is the number of features per sensor multiplied by the number of sensors, plus two elements indicating whether the archea collided with an evader or with a poison respectively. The number of features per sensor is 8 by default with `speed_features` enabled, or 5 if `speed_features` is turned off. Therefore with `speed_features` enabled, the observation shape takes the full form of `(8 × n_sensors) + 2`. Elements of the observation vector take on values in the range [-1, 1]. 
+The observation shape of each archea is a vector of length > 4 that is dependent on the environment's input arguments. The full size of the vector is the number of features per sensor multiplied by the number of sensors, plus two elements indicating whether the archea collided with an evader or with a poison respectively. The number of features per sensor is 8 by default with `speed_features` enabled, or 5 if `speed_features` is turned off. Therefore with `speed_features` enabled, the observation shape takes the full form of `(8 × n_sensors) + 2`. Elements of the observation vector take on values in the range [-1, 1].
 
 For example, by default there are 5 agents (purple), 5 food targets (green) and 10 poison targets (red). Each agent has 30 range-limited sensors, depicted by the black lines, to detect neighboring agents (food and poison targets) resulting in 242 long vector of computed values about the environment for the observation space. These values represent the distances and speeds sensed by each sensor on the archea. Sensors that do not sense any objects within their range report 0 for speed and 1 for distance.
 
@@ -60,7 +61,7 @@ The archea have a continuous action space represented as a 2 element vector, whi
 
 ### Rewards
 
-When multiple agents (depending on `n_coop`) capture an evader together each agent receives a reward of `food_reward` (the evader is not destroyed). They receive a shaping reward of `encounter_reward` for touching an evader, a reward of `poison_reward` for touching poison, and a `thrust_penalty x ||action||` reward for every action, where `||action||` is the euclidean norm of the action velocity. All of these rewards are also distributed based on `local_ratio`, where the rewards scaled by `local_ratio` (local rewards) are applied to the agents whose actions produced the rewards, and the rewards averaged over the number of agents (global rewards) are scaled by `(1 - local_ratio)` and applied to every agent. The environment runs for 500 frames by default. 
+When multiple agents (depending on `n_coop`) capture an evader together each agent receives a reward of `food_reward` (the evader is not destroyed). They receive a shaping reward of `encounter_reward` for touching an evader, a reward of `poison_reward` for touching poison, and a `thrust_penalty x ||action||` reward for every action, where `||action||` is the euclidean norm of the action velocity. All of these rewards are also distributed based on `local_ratio`, where the rewards scaled by `local_ratio` (local rewards) are applied to the agents whose actions produced the rewards, and the rewards averaged over the number of agents (global rewards) are scaled by `(1 - local_ratio)` and applied to every agent. The environment runs for 500 frames by default.
 
 ### Arguments
 
@@ -80,7 +81,7 @@ waterworld.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, s
 
 `sensor_range`: length of sensor dendrite on all pursuing archea (agents)
 
-`radius`: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius 
+`radius`: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius
 
 `obstacle_radius`: radius of obstacle object
 
