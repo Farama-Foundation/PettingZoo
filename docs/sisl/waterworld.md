@@ -6,7 +6,7 @@ manual-control: "No"
 action-shape: "(2,)"
 action-values: "(-1, 1)"
 observation-shape: "(242,)"
-observation-values: "[-1,1]"
+observation-values: "[-3,3]"
 average-total-reward: "-14.5"
 import: "from pettingzoo.sisl import waterworld_v2"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
@@ -32,11 +32,11 @@ This table enumerates the observation space with `speed_features = True`:
 |           0 to n_sensors           | Obstacle distance for each sensor            | [0, 1]  |
 |    n_sensors to (2 * n_sensors)    | Barrier distance for each sensor             | [0, 1]  |
 | (2 * n_sensors) to (3 * n_sensors) | Evader distance for each sensor              | [0, 1]  |
-| (3 * n_sensors) to (4 * n_sensors) | Evader speed for each sensor                 | [-1, 2] |
+| (3 * n_sensors) to (4 * n_sensors) | Evader speed for each sensor                 | [-3, 3] |
 | (4 * n_sensors) to (5 * n_sensors) | Poison distance for each sensor              | [0, 1]  |
-| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-1, 2] |
+| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-3, 3] |
 | (6 * n_sensors) to (7 * n_sensors) | Pursuer distance for each sensor             | [0, 1]  |
-| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-1, 2] |
+| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-3, 3] |
 |           8 * n_sensors            | Indicates whether agent collided with evader | {0, 1}  |
 |        (8 * n_sensors) + 1         | Indicates whether agent collided with poison | {0, 1}  |
 
