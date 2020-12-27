@@ -46,18 +46,18 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+    def __init__(self, n_pistons = 20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
         EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
-        self.n_pistons = 20
+        self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40
         self.piston_height = 40
         self.piston_body_height = 23
         self.piston_radius = 5
-        self.screen_width = 960
-        self.screen_height = 560
-        self.wall_width = 80
+        self.wall_width = 40
         self.ball_radius = 40
+        self.screen_width = (2 * self.wall_width) + (40 * self.n_pistons)
+        self.screen_height = 560
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
@@ -80,6 +80,7 @@ class raw_env(AECEnv, EzPickle):
         self.max_cycles = max_cycles
 
         self.piston_sprite = get_image('piston.png')
+        self.piston_body_sprite = get_image('piston_body.png')
         self.background = get_image('background.png')
         self.random_drop = random_drop
         self.starting_angular_momentum = starting_angular_momentum
@@ -284,13 +285,30 @@ class raw_env(AECEnv, EzPickle):
         )
         wall_color = (128, 128, 128)
         pygame.draw.rect(self.screen, wall_color, walls)
+        self.draw_pistons()
+            
+
+    def draw_pistons(self):
+        piston_color = (65, 159, 221)
+        x_pos = self.wall_width
+        for piston in self.pistonList:
+            self.screen.blit(self.piston_body_sprite, (x_pos, self.screen_height - self.wall_width - self.piston_body_height))
+            # Height is the size of the blue part of the piston. 6 is the piston base height (the gray part at the bottom)
+            height = self.screen_height - self.wall_width - self.piston_body_height - (piston.position[1] + self.piston_radius) + (self.piston_body_height - 6)
+            body_rect = pygame.Rect(
+                piston.position[0] + self.piston_radius + 1,    # +1 to match up to piston graphics
+                piston.position[1] + self.piston_radius + 1,
+                18,
+                height
+            )
+            pygame.draw.rect(self.screen, piston_color, body_rect)
+            x_pos += 40
 
     def draw(self):
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             # self.screen.blit(self.background, (0, 0))
             self.draw_background()
-            pass
 
         ball_x = int(self.ball.position[0])
         ball_y = int(self.ball.position[1])
@@ -307,6 +325,7 @@ class raw_env(AECEnv, EzPickle):
 
         for piston in self.pistonList:
             self.screen.blit(self.piston_sprite, (piston.position[0] - self.piston_radius, piston.position[1] - self.piston_radius))
+        self.draw_pistons()
 
     def get_nearby_pistons(self):
         # first piston = leftmost
