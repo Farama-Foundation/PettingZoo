@@ -77,10 +77,10 @@ parameterized_envs = [
 
     (tiger_deer_v3.env, dict(minimap_mode=True)),
     (battle_v2.env, dict(minimap_mode=False)),
-    (adversarial_pursuit_v2.env, dict(map_size=20)),
+    (adversarial_pursuit_v2.env, dict(map_size=15)),
     (battle_v2.env, dict(map_size=15)),
-    (battlefield_v2.env, dict(map_size=46)),
-    # (combined_arms_v3.env, dict(map_size=16)),
+    (battlefield_v2.env, dict(map_size=45)),
+    (combined_arms_v3.env, dict(map_size=16)),
     (tiger_deer_v3.env, dict(map_size=15)),
 
     (simple_adversary_v2.env, dict(N=4)),
