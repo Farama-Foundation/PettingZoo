@@ -3,8 +3,8 @@ import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
 from .._utils import Agent
-import math
 import pygame
+import math
 
 
 class Archea(Agent):
@@ -68,9 +68,6 @@ class Archea(Agent):
         relative_coord = object_coord - np.expand_dims(self.position, 0)
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
-        norm = np.linalg.norm(sensorvals)
-        if norm != 0:
-            sensorvals = sensorvals / norm
         # Set sensorvals to np.inf when object should not be seen by sensor
         distance_squared = (relative_coord**2).sum(axis=1)[None, :]
         sensorvals[
@@ -81,7 +78,7 @@ class Archea(Agent):
         if same:
             # Set sensors values for sensing the current object to np.inf
             sensorvals[:, self._idx - 1] = np.inf
-        return sensorvals
+        return sensorvals / self._sensor_range
 
     def sense_barriers(self, min_pos=0, max_pos=1):
         sensor_vectors = self.sensors * self._sensor_range
@@ -156,7 +153,7 @@ class MAWaterWorld():
         self.poison_speed = poison_speed
         self.radius = radius
         self.n_sensors = n_sensors
-        self.sensor_range = np.ones(self.n_pursuers) * min(sensor_range, 2)
+        self.sensor_range = np.ones(self.n_pursuers) * min(sensor_range, (math.ceil(math.sqrt(2) * 100) / 100.0))
         self.poison_reward = poison_reward
         self.food_reward = food_reward
         self.thrust_penalty = thrust_penalty
