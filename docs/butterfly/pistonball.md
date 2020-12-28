@@ -17,9 +17,9 @@ agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 
 
 
-This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating any of the twenty vertically moving pistons. Each piston agents observation is an RGB image of the area the, the two pistons next to them can move in (or the wall for pistons against the wall). Every piston can be acted on in any given time, the action space in discrete mode is 0 for down, 1 for staying still, and 2 for up. In continuous mode, the value is proportional to the amount the pistons are raised or lowered by.
+This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent's observation is an RGB image of the two pistons next to them and the space above them (or the wall for pistons against the wall). Every piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by.
 
-Accordingly, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement it contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100, plus the `time_penalty` (default -0.1). For each piston, the reward is `local_ratio` * local_reward + (1-`local_ratio`) * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
+Accordingly, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement the piston contributed to). Balancing the ratio between these appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100, plus the `time_penalty` (default -0.1). For each piston, the reward is `local_ratio` * local_reward + (1-`local_ratio`) * global_reward. The local reward is applied to pistons surrounding the ball while the global reward is provided to all pistons.
 
 Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.
 
@@ -34,7 +34,7 @@ starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
 ball_elasticity=1.5, max_cycles=900)
 ```
 
-`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - `local_ratio`.
 
 `time_penalty`: Amount of reward added to each piston each timestep. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
 
