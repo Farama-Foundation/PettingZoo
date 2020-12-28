@@ -199,7 +199,6 @@ class raw_env(AECEnv, EzPickle):
     def move_piston(self, piston, v):
 
         def cap(y):
-            # TODO: Remove 29. Somehow related to piston height
             maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
             if y > maximum_piston_y:
                 y = maximum_piston_y
@@ -220,7 +219,7 @@ class raw_env(AECEnv, EzPickle):
         self.pistonList = []
         maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
         for i in range(self.n_pistons):
-            # TODO: Why use 0.5 here?
+            # Multiply by 0.5 to use only the lower half of possible positions
             possible_y_displacements = np.arange(0, .5 * self.pixels_per_position * self.n_piston_positions, self.pixels_per_position)
             piston = self.add_piston(
                 self.space,
@@ -258,7 +257,6 @@ class raw_env(AECEnv, EzPickle):
         self.lastX = int(self.ball.position[0] - self.ball_radius)
         self.distance = self.lastX - self.wall_width
 
-        # self.screen.blit(self.background, (0, 0))
         self.draw_background()
         self.draw()
 
@@ -297,7 +295,7 @@ class raw_env(AECEnv, EzPickle):
             
 
     def draw_pistons(self):
-        piston_color = (208, 216, 217)
+        piston_color = (65, 159, 221)
         x_pos = self.wall_width
         for piston in self.pistonList:
             self.screen.blit(self.piston_body_sprite, (x_pos, self.screen_height - self.wall_width - self.piston_body_height))
