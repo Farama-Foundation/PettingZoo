@@ -23,7 +23,7 @@ A package is placed on top of (by default) 3 pairs of robot legs which you contr
 
 ```
 multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=False,
+forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=True,
 max_cycles=500)
 ```
 
