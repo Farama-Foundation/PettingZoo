@@ -78,7 +78,7 @@ class Archea(Agent):
         if same:
             # Set sensors values for sensing the current object to np.inf
             sensorvals[:, self._idx - 1] = np.inf
-        return sensorvals / self._sensor_range
+        return sensorvals
 
     def sense_barriers(self, min_pos=0, max_pos=1):
         sensor_vectors = self.sensors * self._sensor_range
