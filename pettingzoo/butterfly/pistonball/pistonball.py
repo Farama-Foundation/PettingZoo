@@ -137,8 +137,9 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_high = self.piston_width * (i + 4)
-        x_low = self.piston_width * (i + 1)
+        # Set x bounds to include 40px left and 40px right of piston
+        x_high = self.wall_width + self.piston_width * (i + 2)
+        x_low = self.wall_width + self.piston_width * (i - 1)
         y_high = self.screen_height - self.wall_width - self.piston_body_height
         y_low = self.wall_width
         cropped = np.array(observation[x_low:x_high, y_low:y_high, :])
