@@ -58,6 +58,11 @@ class raw_env(AECEnv, EzPickle):
         self.ball_radius = 40
         self.screen_width = (2 * self.wall_width) + (40 * self.n_pistons)
         self.screen_height = 560
+        y_high = self.screen_height - self.wall_width - self.piston_body_height
+        y_low = self.wall_width
+        obs_height = y_high - y_low
+
+        assert self.piston_width == self.wall_width, "Wall width and piston width must be equal for observation calculation"
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
@@ -65,7 +70,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
 
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * self.n_pistons))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, 120, 3), dtype=np.uint8)] * self.n_pistons))
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
@@ -132,8 +137,8 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_high = self.piston_width * (i + 2) + self.wall_width
-        x_low = self.piston_width * (i - 1) + self.wall_width
+        x_high = self.piston_width * (i + 4)
+        x_low = self.piston_width * (i + 1)
         y_high = self.screen_height - self.wall_width - self.piston_body_height
         y_low = self.wall_width
         cropped = np.array(observation[x_low:x_high, y_low:y_high, :])
