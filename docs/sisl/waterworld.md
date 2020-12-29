@@ -4,14 +4,12 @@ title: "Waterworld"
 agents: "5"
 manual-control: "No"
 action-shape: "(2,)"
-action-values: "(-1, 1)"
+action-values: "[-0.01, 0.01]"
 observation-shape: "(242,)"
-<<<<<<< HEAD
 observation-values: "[-√2, 2*√2]"
 average-total-reward: "-68.3"
-import: "from pettingzoo.sisl import waterworld_v2"
+import: "from pettingzoo.sisl import waterworld_v3"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
-
 ---
 
 {% include info_box.md %}
