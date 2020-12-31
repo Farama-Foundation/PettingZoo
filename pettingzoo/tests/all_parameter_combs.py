@@ -4,7 +4,6 @@ import pytest
 from .all_modules import all_environments
 from pettingzoo.tests import api_test
 
-from .error_tests import error_test
 from .seed_test import seed_test, check_environment_deterministic
 from .render_test import render_test
 
