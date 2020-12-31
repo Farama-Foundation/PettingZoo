@@ -41,7 +41,7 @@ jobs:
         bash ./check_style.sh
     - name: Print tests
       run: |
-        python -m pettingzoo.tests.print_test
+        python -m pettingzoo.test.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist
