@@ -28,24 +28,26 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 
 ### Arguments
 
+```Python
+pistonball.env(n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900)
 ```
-pistonball.env(local_ratio=.2, time_penalty=-0.1, continuous=False, random_drop=True,
-starting_angular_momentum=True, ball_mass = .75, ball_friction=.3,
-ball_elasticity=1.5, max_cycles=900)
-```
+
+`n_pistons`: The number of pistons (agents) in the environment.
 
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - `local_ratio`.
 
-`time_penalty`: Amount of reward added to each piston each timestep. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
+`time_penalty`: Amount of reward added to each piston each time step. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
 
 `continuous`:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
 
 `random_drop`:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
 
-`starting_angular_moment`:  If True, ball will spawn with a random angular momentum
+`random_rotate`:  If True, ball will spawn with a random angular momentum
 
 `ball_mass`:  Sets the mass of the ball physics object
 
 `ball_friction`:  Sets the friction of the ball physics object
 
 `ball_elasticity`:  Sets the elasticity of the ball physics object
+
+`max_cycles`:  after max_cycles steps all agents will return done
