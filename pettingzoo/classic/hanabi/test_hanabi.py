@@ -1,6 +1,6 @@
 from unittest import TestCase
 from pettingzoo.classic.hanabi.hanabi import env
-import pettingzoo.tests.api_test as api_test
+from pettingzoo.tests import api_test
 import numpy as np
 
 
@@ -126,6 +126,3 @@ class HanabiTest(TestCase):
             test_env.step(test_env.legal_moves[0])
 
         self.assertIs(all(test_env.dones.values()), True)
-
-    def test_api(self):
-        api_test.api_test(env(**self.full_config))

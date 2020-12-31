@@ -30,7 +30,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
     _env = env_module.env()
     error_collected = []
     try:
-        api_test.api_test(_env, num_cycles=num_cycles, render=render, verbose_progress=True)
+        api_test(_env, num_cycles=num_cycles, render=render, verbose_progress=True)
     except Exception as e:
         error_collected.append("API Test: " + str(e))
 
@@ -54,7 +54,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
     if manual_control and env_id in manual_environments:
         try:
             manual_control_fn = env_module.manual_control
-            test_manual_control.test_manual_control(manual_control_fn)
+            manual_control_test(manual_control_fn)
         except Exception as e:
             error_collected.append("Manual Control: " + str(e))
 
