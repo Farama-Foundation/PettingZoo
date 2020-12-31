@@ -46,8 +46,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
-        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
+    def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40
@@ -88,7 +88,7 @@ class raw_env(AECEnv, EzPickle):
         self.piston_body_sprite = get_image('piston_body.png')
         self.background = get_image('background.png')
         self.random_drop = random_drop
-        self.starting_angular_momentum = starting_angular_momentum
+        self.random_rotate = random_rotate
 
         self.pistonList = []
         self.pistonRewards = []     # Keeps track of individual rewards
@@ -185,7 +185,7 @@ class raw_env(AECEnv, EzPickle):
         body = pymunk.Body(mass, inertia)
         body.position = x, y
         # radians per second
-        if self.starting_angular_momentum:
+        if self.random_rotate:
             body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
         shape.friction = b_friction
@@ -257,7 +257,7 @@ class raw_env(AECEnv, EzPickle):
         self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
-        if self.starting_angular_momentum:
+        if self.random_rotate:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
 
         self.lastX = int(self.ball.position[0] - self.ball_radius)
