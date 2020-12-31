@@ -3,7 +3,7 @@ import time
 import numpy as np
 import json
 
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 from pettingzoo.classic import gin_rummy_v0
 from PIL import Image
 import os

@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# This workflow will install Python dependencies, run test and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: Python tests
@@ -32,16 +32,16 @@ jobs:
         pip install AutoROM
         pip install flake8 pytest
         AutoROM -v
-    - name: Full python tests
+    - name: Full python test
       run: |
-        pytest ./pettingzoo/tests/pytest_runner.py
-        pytest ./pettingzoo/tests/all_parameter_combs.py
-    - name: Flake 8 tests
+        pytest ./pettingzoo/test/pytest_runner.py
+        pytest ./pettingzoo/test/all_parameter_combs.py
+    - name: Flake 8 test
       run: |
         bash ./check_style.sh
-    - name: Print tests
+    - name: Print test
       run: |
-        python -m pettingzoo.tests.print_test
+        python -m pettingzoo.test.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist

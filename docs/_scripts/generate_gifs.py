@@ -4,7 +4,7 @@ import numpy as np
 import json
 import subprocess
 
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 
 # procs = []
 for name,module in all_environments.items():

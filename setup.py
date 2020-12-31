@@ -30,7 +30,7 @@ extras = {
     "magent": ["magent==0.1.13"],
     "mpe": [],
     "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "opencv-python>=4.4.0.42"],
-    "tests": ["pynput"]
+    "test": ["pynput"]
 }
 
 extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]

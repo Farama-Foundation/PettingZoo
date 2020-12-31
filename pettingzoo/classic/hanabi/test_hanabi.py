@@ -1,6 +1,6 @@
 from unittest import TestCase
 from pettingzoo.classic.hanabi.hanabi import env
-import pettingzoo.tests.api_test as api_test
+import pettingzoo.test.api_test as api_test
 import numpy as np
 
 

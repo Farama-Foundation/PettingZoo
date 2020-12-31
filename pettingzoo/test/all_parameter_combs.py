@@ -2,9 +2,9 @@ from .all_modules import *  # noqa: F403
 
 import pytest
 from .all_modules import all_environments
-import pettingzoo.tests.api_test as api_test
+import pettingzoo.test.api_test as api_test
 
-from .error_tests import error_test
+from .error_test import error_test
 from .seed_test import seed_test, check_environment_deterministic
 from .render_test import render_test
 

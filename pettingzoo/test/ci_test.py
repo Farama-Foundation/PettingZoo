@@ -1,13 +1,13 @@
-import pettingzoo.tests.api_test as api_test
-import pettingzoo.tests.bombardment_test as bombardment_test
-import pettingzoo.tests.performance_benchmark as performance_benchmark
-import pettingzoo.tests.manual_control_test as test_manual_control
+import pettingzoo.test.api_test as api_test
+import pettingzoo.test.bombardment_test as bombardment_test
+import pettingzoo.test.performance_benchmark as performance_benchmark
+import pettingzoo.test.manual_control_test as test_manual_control
 
 import sys
 from .all_modules import all_environments, manual_environments
 from .all_modules import all_prefixes
 from .render_test import render_test
-from .error_tests import error_test
+from .error_test import error_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test

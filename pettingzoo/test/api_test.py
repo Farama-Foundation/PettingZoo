@@ -121,7 +121,7 @@ def play_test(env, observation_0, num_cycles):
     * Whether the reward returned by last is the accumulated reward
     * Whether the agents list shrinks when agents are done
     * Whether the keys of the rewards, dones, infos are equal to the agents list
-    * tests that the observation is in bounds.
+    * test that the observation is in bounds.
     '''
     env.reset()
 

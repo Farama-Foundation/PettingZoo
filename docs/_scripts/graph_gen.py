@@ -1,8 +1,9 @@
 import subprocess
 from collections import defaultdict
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 import math
 import os
+
 
 def generate_cycle_words(agents, is_classic):
     if is_classic:
@@ -37,6 +38,7 @@ def generate_cycle_words(agents, is_classic):
             words = ["env"] + agents
     return words
 
+
 def generate_graphviz(words):
     max_chars = max(len(w) for w in words)
     node_width = max_chars * 0.1 + 0.2
@@ -53,6 +55,7 @@ def generate_graphviz(words):
         innards += f'a{i} -> a{i+1};\n'
     innards += f'a{len(words)-1} -> a{0};\n'
     return 'digraph G {\n%s\n}'%innards
+
 
 for name, module in list(all_environments.items()):
     env = module.env()
