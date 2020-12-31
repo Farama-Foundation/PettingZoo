@@ -16,13 +16,6 @@ def test_module(name, env_module):
     if "classic/" not in name:
         parallel_play_test(env_module.parallel_env())
 
-    # seed_test(env_module.env, 20)
-
     if "prospector" not in name:
         seed_test(env_module.env, 50)
     max_cycles_test(env_module, name)
-    # pickle test
-    # env2 = pickle.loads(pickle.dumps(_env))
-    # api_test.api_test(env2)
-    # render_test(_env)
-    # error_test(env_module.env())
