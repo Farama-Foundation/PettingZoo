@@ -32,8 +32,8 @@ PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https:/
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.butterfly import pistonball_v0
-env = pistonball_v0.env()
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:
