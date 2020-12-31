@@ -85,7 +85,7 @@ class raw_env(AECEnv, EzPickle):
         self.done = False
 
         self.velocity = 4
-        self.resolution = 16
+        self.piston_position_resolution = 16
 
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
@@ -184,7 +184,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.pistonList = []
         for i in range(20):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            temp_range = np.arange(0, .5 * self.velocity * self.piston_position_resolution, self.velocity)
             piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
             self.pistonList.append(piston)
 
@@ -198,7 +198,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.has_reset = True
         for i, piston in enumerate(self.pistonList):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
+            temp_range = np.arange(0, .5 * self.velocity * self.piston_position_resolution, self.velocity)
             piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
             piston.velociy = 0
 
