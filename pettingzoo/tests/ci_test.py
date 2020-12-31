@@ -1,9 +1,8 @@
-import pettingzoo.tests.api_test as api_test
-import pettingzoo.tests.bombardment_test as bombardment_test
-import pettingzoo.tests.performance_benchmark as performance_benchmark
-import pettingzoo.tests.manual_control_test as test_manual_control
-
 import sys
+from .api_test import api_test
+from .bombardment_test import bombardment_test
+from .performance_benchmark import performance_benchmark
+from .manual_control_test import test_manual_control
 from .all_modules import all_environments, manual_environments
 from .all_modules import all_prefixes
 from .render_test import render_test
@@ -12,7 +11,6 @@ from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
 from .parallel_test import parallel_play_test
-import subprocess
 
 assert len(sys.argv) == 7, "ci_test expects 5 arguments: env_id, num_cycles, render, manual_control, performance, save_obs"
 
