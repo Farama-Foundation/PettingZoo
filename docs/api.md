@@ -133,15 +133,6 @@ for step in range(max_cycles):
 
 ## Utils
 
-### Manual Control Test
-
-```python
-import pettingzoo.tests.manual_control_test as manual_control_test
-manual_control_test.test_manual_control(env.manual_control)
-```
-
-If the environment has `manual_control` functionality included (explained below), this test makes sure the method does not crash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
-
 ### Manual Control
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
