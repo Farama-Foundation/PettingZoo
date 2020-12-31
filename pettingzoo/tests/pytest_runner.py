@@ -12,7 +12,7 @@ from .max_cycles_test import max_cycles_test
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_module(name, env_module):
     _env = env_module.env()
-    api_test.api_test(_env)
+    api_test(_env)
     if "classic/" not in name:
         parallel_play_test(env_module.parallel_env())
 
