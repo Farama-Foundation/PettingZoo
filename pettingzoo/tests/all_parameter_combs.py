@@ -2,7 +2,7 @@ from .all_modules import *  # noqa: F403
 
 import pytest
 from .all_modules import all_environments
-import pettingzoo.tests.api_test as api_test
+from pettingzoo.tests import api_test
 
 from .error_tests import error_test
 from .seed_test import seed_test, check_environment_deterministic
@@ -118,4 +118,4 @@ parameterized_envs = [
 def test_module(env_constr, kwargs):
     _env = env_constr(**kwargs)
     print(kwargs)
-    api_test.api_test(_env)
+    api_test(_env)
