@@ -5,6 +5,6 @@ from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
 from .parallel_test import parallel_play_test
-from .bombardment_test import bombardment_Test
-from .performance_benchmark import performance_benchmark
+from .bombardment_test import bombardment_test
+from .performance_benchmark import performace_benchmark
 from .manual_control_test import manual_control_test
