@@ -27,5 +27,5 @@ jobs:
         AutoROM -v
     - name: Full python tests
       run: |
-        pytest ./pettingzoo/tests/pytest_runner.py
-        pytest ./pettingzoo/tests/all_parameter_combs.py
+        pytest ./pettingzoo/test/pytest_runner.py
+        pytest ./pettingzoo/test/all_parameter_combs.py

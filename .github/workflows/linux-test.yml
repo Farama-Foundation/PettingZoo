@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8','3.9']
+        python-version: ['3.6', '3.7', '3.8', '3.9']
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -34,14 +34,14 @@ jobs:
         AutoROM -v
     - name: Full python tests
       run: |
-        pytest ./pettingzoo/tests/pytest_runner.py
-        pytest ./pettingzoo/tests/all_parameter_combs.py
+        pytest ./pettingzoo/test/pytest_runner.py
+        pytest ./pettingzoo/test/all_parameter_combs.py
     - name: Flake 8 tests
       run: |
         bash ./check_style.sh
     - name: Print tests
       run: |
-        python -m pettingzoo.tests.print_test
+        python -m pettingzoo.test.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist
