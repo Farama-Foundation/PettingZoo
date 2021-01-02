@@ -9,3 +9,4 @@ pynput
 hanabi_learning_environment==0.0.1
 multi_agent_ale_py==0.1.10
 magent==0.1.13
+scipy>=1.0.0
