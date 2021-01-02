@@ -29,7 +29,7 @@ extras = {
     "butterfly": ["pygame==2.0.0", "pymunk==5.7.0"],
     "magent": ["magent==0.1.13"],
     "mpe": [],
-    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "opencv-python>=4.4.0.42"],
+    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5"],
     "tests": ["pynput"]
 }
 
