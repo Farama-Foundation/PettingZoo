@@ -3,13 +3,14 @@ import time
 import numpy as np
 import json
 
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 from pettingzoo.classic import gin_rummy_v0
 from PIL import Image
 import os
 import scipy.misc
 import sys
 import subprocess
+
 
 def generate_data(nameline,module):
     dir = f"frames/{nameline}/"
@@ -46,6 +47,7 @@ def generate_data(nameline,module):
     #         # surf = font.render(text,False,(255,255,255),(0,0,0))
     #         # screen.blit(surf, (0,0))
 
+
 def render_gif_image(name):
     ffmpeg_command = [
         "convert",
@@ -55,12 +57,14 @@ def render_gif_image(name):
     print(" ".join(ffmpeg_command))
     subprocess.run(ffmpeg_command)
 
+
 def render_all():
     for name,module in all_environments.items():
         if "classic" not in name and "foozpong" in name:
-            nameline = name.replace("/","_")
-            generate_data(nameline,module)
+            nameline = name.replace("/", "_")
+            generate_data(nameline, module)
             #render_gif_image(nameline)
+
 
 if __name__ == "__main__":
     name = sys.argv[1]
@@ -68,6 +72,6 @@ if __name__ == "__main__":
         render_all()
     else:
         module = all_environments[name]
-        nameline = name.replace("/","_")
+        nameline = name.replace("/", "_")
 
-        generate_data(nameline,module)
+        generate_data(nameline, module)

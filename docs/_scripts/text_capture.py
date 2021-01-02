@@ -3,14 +3,16 @@ import time
 import numpy as np
 import json
 
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 from pettingzoo.classic import gin_rummy_v0
+
 
 def shrink_lines(data,max_height,max_width):
     lines = data.split("\r\n")[:max_height]
     for i in range(len(lines)):
         lines[i] = lines[i][:max_width]
     return "\r\n".join(lines)
+
 
 for name,module in all_environments.items():
     if "classic/" not in name:
