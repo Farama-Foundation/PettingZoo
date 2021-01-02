@@ -53,7 +53,6 @@ setup(
     install_requires=[
         "numpy>=1.18.0",
         "gym>=0.18.0"
-        "scipy>=1.0.0"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
