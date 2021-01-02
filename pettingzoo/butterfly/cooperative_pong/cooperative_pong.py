@@ -291,7 +291,8 @@ class CooperativePong(gym.Env):
             self.enable_render()
 
         observation = pygame.surfarray.pixels3d(self.screen)
-        pygame.display.flip()
+        if mode == "human":
+            pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self, agent):

@@ -363,7 +363,7 @@ class raw_env(AECEnv, EzPickle):
         return local_reward
 
     def render(self, mode="human"):
-        if not self.renderOn and mode == "human":
+        if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
