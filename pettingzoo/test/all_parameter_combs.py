@@ -39,8 +39,8 @@ parameterized_envs = [
     (pistonball_v2.env, dict(local_ratio=0.7)),
     (pistonball_v2.env, dict(continuous=True)),
     (pistonball_v2.env, dict(continuous=False)),
-    (pistonball_v2.env, dict(random_drop=True, starting_angular_momentum=True)),
-    (pistonball_v2.env, dict(random_drop=False, starting_angular_momentum=False)),
+    (pistonball_v2.env, dict(random_drop=True, random_rotate=True)),
+    (pistonball_v2.env, dict(random_drop=False, random_rotate=False)),
 
     (prison_v2.env, dict(continuous=True)),
     (prison_v2.env, dict(continuous=False)),
