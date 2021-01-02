@@ -56,7 +56,7 @@ class raw_env(AECEnv, EzPickle):
         self.piston_radius = 5
         self.wall_width = 40
         self.ball_radius = 40
-        self.screen_width = (2 * self.wall_width) + (40 * self.n_pistons)
+        self.screen_width = (2 * self.wall_width) + (self.piston_width * self.n_pistons)
         self.screen_height = 560
         y_high = self.screen_height - self.wall_width - self.piston_body_height
         y_low = self.wall_width
@@ -70,7 +70,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
 
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, 120, 3), dtype=np.uint8)] * self.n_pistons))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, self.piston_width*3, 3), dtype=np.uint8)] * self.n_pistons))
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
@@ -313,7 +313,7 @@ class raw_env(AECEnv, EzPickle):
                 height
             )
             pygame.draw.rect(self.screen, piston_color, body_rect)
-            x_pos += 40
+            x_pos += self.piston_width
 
     def draw(self):
         # redraw the background image if ball goes outside valid position
