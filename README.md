@@ -6,7 +6,7 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
-Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
+Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
 ## Environments and Installation
 
@@ -64,7 +64,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 Version 1.4.2 (November 25, 2020)
 
-Pistnball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
+Pistonball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
 
 Version 1.4.0 (November 6, 2020)
 
