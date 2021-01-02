@@ -133,9 +133,13 @@ class BipedalWalker(Agent):
             leg = self.world.CreateDynamicBody(
                 position=(init_x, init_y - LEG_H / 2 - LEG_DOWN),
                 angle=(i * 0.05),
-                fixtures=fixtureDef(shape=polygonShape(box=(LEG_W / 2, LEG_H / 2)), density=1.0,
-                                    restitution=0.0, categoryBits=0x002,
-                                    maskBits=0x001)  # collide with ground only
+                fixtures=fixtureDef(
+                    shape=polygonShape(box=(LEG_W / 2, LEG_H / 2)),
+                    density=1.0,
+                    restitution=0.0,
+                    categoryBits=0x002,
+                    maskBits=0x001
+                )  # collide with ground only
             )
             leg.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
             leg.color2 = (0.4 - i / 10., 0.2 - i / 10., 0.3 - i / 10.)
@@ -149,15 +153,22 @@ class BipedalWalker(Agent):
                 maxMotorTorque=MOTORS_TORQUE,
                 motorSpeed=i,
                 lowerAngle=-0.8,
-                upperAngle=1.1,)
+                upperAngle=1.1,
+            )
             self.legs.append(leg)
             self.joints.append(self.world.CreateJoint(rjd))
 
             lower = self.world.CreateDynamicBody(
-                position=(init_x, init_y - LEG_H * 3 / 2 - LEG_DOWN), angle=(i * 0.05),
-                fixtures=fixtureDef(shape=polygonShape(box=(0.8 * LEG_W / 2, LEG_H / 2)),
-                                    density=1.0, restitution=0.0, categoryBits=0x0020,
-                                    maskBits=0x001))
+                position=(init_x, init_y - LEG_H * 3 / 2 - LEG_DOWN),
+                angle=(i * 0.05),
+                fixtures=fixtureDef(
+                    shape=polygonShape(box=(0.8 * LEG_W / 2, LEG_H / 2)),
+                    density=1.0,
+                    restitution=0.0,
+                    categoryBits=0x0020,
+                    maskBits=0x001
+                )
+            )
             lower.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
             lower.color2 = (0.4 - i / 10., 0.2 - i / 10., 0.3 - i / 10.)
             rjd = revoluteJointDef(
@@ -170,7 +181,8 @@ class BipedalWalker(Agent):
                 maxMotorTorque=MOTORS_TORQUE,
                 motorSpeed=1,
                 lowerAngle=-1.6,
-                upperAngle=-0.1,)
+                upperAngle=-0.1,
+            )
             lower.ground_contact = False
             self.legs.append(lower)
             self.joints.append(self.world.CreateJoint(rjd))
@@ -222,9 +234,8 @@ class BipedalWalker(Agent):
             # Normalized to get -1..1 range
             0.3 * vel.x * (VIEWPORT_W / SCALE) / FPS,
             0.3 * vel.y * (VIEWPORT_H / SCALE) / FPS,
-            self.joints[0].
             # This will give 1.1 on high up, but it's still OK (and there should be spikes on hiting the ground, that's normal too)
-            angle,
+            self.joints[0].angle,
             self.joints[0].speed / SPEED_HIP,
             self.joints[1].angle + 1.0,
             self.joints[1].speed / SPEED_KNEE,
@@ -399,28 +410,28 @@ class MultiWalkerEnv():
             x, y = pos.x, pos.y
             xpos[i] = x
 
-            wobs = self.walkers[i].get_observation()
-            nobs = []
+            walker_obs = self.walkers[i].get_observation()
+            neighbor_obs = []
             for j in [i - 1, i + 1]:
                 # if no neighbor (for edge walkers)
                 if j < 0 or j == self.n_walkers or self.walkers[j].hull is None:
-                    nobs.append(0.0)
-                    nobs.append(0.0)
+                    neighbor_obs.append(0.0)
+                    neighbor_obs.append(0.0)
                 else:
                     xm = (self.walkers[j].hull.position.x - x) / self.package_length
                     ym = (self.walkers[j].hull.position.y - y) / self.package_length
-                    nobs.append(self.np_random.normal(xm, self.position_noise))
-                    nobs.append(self.np_random.normal(ym, self.position_noise))
+                    neighbor_obs.append(self.np_random.normal(xm, self.position_noise))
+                    neighbor_obs.append(self.np_random.normal(ym, self.position_noise))
             xd = (self.package.position.x - x) / self.package_length
             yd = (self.package.position.y - y) / self.package_length
-            nobs.append(self.np_random.normal(xd, self.position_noise))
-            nobs.append(self.np_random.normal(yd, self.position_noise))
-            nobs.append(self.np_random.normal(self.package.angle, self.angle_noise))
-            obs.append(np.array(wobs + nobs))
+            neighbor_obs.append(self.np_random.normal(xd, self.position_noise))
+            neighbor_obs.append(self.np_random.normal(yd, self.position_noise))
+            neighbor_obs.append(self.np_random.normal(self.package.angle, self.angle_noise))
+            obs.append(np.array(walker_obs + neighbor_obs))
 
             # shaping = 130 * pos[0] / SCALE
             shaping = 0.0
-            shaping -= 5.0 * abs(wobs[0])
+            shaping -= 5.0 * abs(walker_obs[0])
             rewards[i] = shaping - self.prev_shaping[i]
             self.prev_shaping[i] = shaping
 
