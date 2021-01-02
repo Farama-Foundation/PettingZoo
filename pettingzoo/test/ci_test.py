@@ -59,7 +59,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
 
     if performance:
         _env = env_module.env()
-        performance_benchmark.performance_benchmark(_env)
+        performance_benchmark(_env)
 
     return error_collected
 
