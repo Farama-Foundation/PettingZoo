@@ -4,15 +4,15 @@ import numpy as np
 import json
 import subprocess
 
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 
 # procs = []
-for name,module in all_environments.items():
+for name, module in all_environments.items():
     if "classic" not in name:
         continue
 
-    nameline = name.replace("/","_")
-    proc = subprocess.run(["asciicast2gif",f"gif_data/{nameline}.json",f"gifs/{nameline}.gif"])
+    nameline = name.replace("/", "_")
+    proc = subprocess.run(["asciicast2gif", f"gif_data/{nameline}.json", f"gifs/{nameline}.gif"])
     # procs.append(proc)
     # if len(procs) >= 3:
     #     for p in procs:

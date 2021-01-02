@@ -1,8 +1,9 @@
 import subprocess
 from collections import defaultdict
-from pettingzoo.tests.all_modules import all_environments
+from pettingzoo.test.all_modules import all_environments
 import math
 import os
+
 
 def generate_cycle_words(agents, is_classic):
     if is_classic:
@@ -36,6 +37,7 @@ def generate_cycle_words(agents, is_classic):
         else:
             words = ["env"] + agents
     return words
+
 
 def generate_graphviz(words):
     max_chars = max(len(w) for w in words)
