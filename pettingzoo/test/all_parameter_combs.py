@@ -102,14 +102,14 @@ parameterized_envs = [
     (pursuit_v3.env, dict(n_catch=3)),
     (pursuit_v3.env, dict(freeze_evaders=True)),
 
-    (waterworld_v2.env, dict(n_pursuers=3, n_evaders=6)),
-    (waterworld_v2.env, dict(n_coop=1)),
-    (waterworld_v2.env, dict(n_coop=1)),
-    (waterworld_v2.env, dict(n_poison=4)),
-    (waterworld_v2.env, dict(n_sensors=4)),
-    (waterworld_v2.env, dict(terminate_on_fall=False)),
-    (waterworld_v2.env, dict(local_ratio=0.5)),
-    (waterworld_v2.env, dict(speed_features=False)),
+    (waterworld_v3.env, dict(n_pursuers=3, n_evaders=6)),
+    (waterworld_v3.env, dict(n_coop=1)),
+    (waterworld_v3.env, dict(n_coop=1)),
+    (waterworld_v3.env, dict(n_poison=4)),
+    (waterworld_v3.env, dict(n_sensors=4)),
+    (waterworld_v3.env, dict(terminate_on_fall=False)),
+    (waterworld_v3.env, dict(local_ratio=0.5)),
+    (waterworld_v3.env, dict(speed_features=False)),
 ]
 
 
