@@ -1,8 +1,7 @@
 import numpy as np
 import gym
 import os
-
-from PIL import Image
+from scipy.misc import imsave
 
 
 def _check_observation_saveable(env, agent):
@@ -28,6 +27,5 @@ def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
 
         observation = env.observe(a)
         rescaled = observation.astype(np.uint8)
-        im = Image.fromarray(rescaled)
         fname = os.path.join(save_folder, str(a) + ".png")
-        im.save(fname)
+        imsave(fname, rescaled)
