@@ -70,7 +70,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
 
         self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, self.piston_width*3, 3), dtype=np.uint8)] * self.n_pistons))
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, self.piston_width * 3, 3), dtype=np.uint8)] * self.n_pistons))
         self.continuous = continuous
         if self.continuous:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
