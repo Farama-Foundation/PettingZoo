@@ -36,11 +36,12 @@ parameterized_envs = [
     (knights_archers_zombies_v4.env, dict(pad_observation=False)),
     (knights_archers_zombies_v4.env, dict(max_cycles=100)),
 
-    (pistonball_v2.env, dict(local_ratio=0.7)),
-    (pistonball_v2.env, dict(continuous=True)),
-    (pistonball_v2.env, dict(continuous=False)),
-    (pistonball_v2.env, dict(random_drop=True, starting_angular_momentum=True)),
-    (pistonball_v2.env, dict(random_drop=False, starting_angular_momentum=False)),
+    (pistonball_v3.env, dict(local_ratio=0.7)),
+    (pistonball_v3.env, dict(continuous=True)),
+    (pistonball_v3.env, dict(n_pistons=30)),
+    (pistonball_v3.env, dict(continuous=False)),
+    (pistonball_v3.env, dict(random_drop=True, random_rotate=True)),
+    (pistonball_v3.env, dict(random_drop=False, random_rotate=False)),
 
     (prison_v2.env, dict(continuous=True)),
     (prison_v2.env, dict(continuous=False)),
