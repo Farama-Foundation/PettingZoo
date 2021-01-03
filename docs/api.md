@@ -146,11 +146,11 @@ Environments say if they support this functionality in their documentation, and 
 
 ### Random Demo
 
-For all renderable games, including those that can't be played by humans, you can easily get a quick impression of them by watching a random policy control all the actions:
+You can also easily get a quick impression of them by watching a random policy control all the actions:
 
 ```python
 from pettingzoo.utils import random_demo
-random_demo(env)
+random_demo(env, render=True, cycles=1)
 ```
 
 ### Observation Saving

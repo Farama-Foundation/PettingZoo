@@ -2,7 +2,7 @@ import time
 import random
 
 
-def random_demo(env, render=True):
+def random_demo(env, render=True, cycles=1):
     '''
     Runs an env object with random actions.
     '''
@@ -19,22 +19,22 @@ def random_demo(env, render=True):
     done = False
 
     # start = time.time()
-    for agent in env.agent_iter():
-        # game should run at 15 FPS when rendering
-        if render:
-            env.render()
-            time.sleep(display_wait)
+    for cycle in cycles:
+        for agent in env.agent_iter():
+            if render:
+                env.render()
+                time.sleep(display_wait)
 
-        # for _ in env.agents:
-        obs, reward, done, _ = env.last()
-        total_reward += reward
-        if done:
-            action = None
-        elif 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
-        else:
-            action = env.action_spaces[agent].sample()
-        env.step(action)
+            # for _ in env.agents:
+            obs, reward, done, _ = env.last()
+            total_reward += reward
+            if done:
+                action = None
+            elif 'legal_moves' in env.infos[agent]:
+                action = random.choice(env.infos[agent]['legal_moves'])
+            else:
+                action = env.action_spaces[agent].sample()
+            env.step(action)
 
     print("Total reward", total_reward, "done", done)
 
