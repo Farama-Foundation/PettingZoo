@@ -58,9 +58,6 @@ class raw_env(AECEnv):
         opp_p_board = np.equal(board_vals, opp_player + 1)
         return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
 
-    def seed(self, seed=None):
-        pass
-
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action):
         if self.dones[self.agent_selection]:
