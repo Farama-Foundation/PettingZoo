@@ -2,7 +2,7 @@ import time
 import random
 
 
-def random_demo(env, render=True, cycles=1):
+def random_demo(env, render=True, cycles=100000000):
     '''
     Runs an env object with random actions.
     '''
@@ -17,8 +17,8 @@ def random_demo(env, render=True, cycles=1):
     total_reward = 0
     done = False
 
-    for cycle in cycles:
-        for agent in env.agent_iter():
+    for cycle in range(cycles):
+        for agent in env.agent_iter(len(env.agents)):
             if render:
                 env.render()
                 time.sleep(display_wait)
