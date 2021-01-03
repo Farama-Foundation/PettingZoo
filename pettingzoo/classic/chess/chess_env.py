@@ -41,9 +41,6 @@ class raw_env(AECEnv):
 
         self.agent_selection = None
 
-    def seed(self, seed=None):
-        pass
-
     def observe(self, agent):
         return chess_utils.get_observation(self.board, self.possible_agents.index(agent))
 
