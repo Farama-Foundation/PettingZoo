@@ -97,9 +97,6 @@ class raw_env(AECEnv):
         self.observation = np.array(obs)
         return self.observation
 
-    def seed(self, seed=None):
-        pass
-
     def reset(self):
         self.ch = CheckersRules()
         self.num_moves = 0
