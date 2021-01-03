@@ -1,8 +1,6 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
-import pymunkoptions
-pymunkoptions.options["debug"] = True
 import pymunk
 import pymunk.pygame_util
 import math
