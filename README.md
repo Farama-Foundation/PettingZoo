@@ -2,11 +2,11 @@
     <img src="PettingZoo_Text.png" width="500px"/>
 </p>
 
-[![Build Status](https://travis-ci.com/PettingZoo-Team/PettingZoo.svg?branch=master)](https://travis-ci.com/PettingZoo-Team/PettingZoo)
+[![Build Status](https://github.com/PettingZoo-Team/PettingZoo/workflows/Python%20tests/badge.svg)](https://github.com/PettingZoo-Team/PettingZoo/actions?query=workflow%3A%22Python+tests%22)
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
-Our website with comprehensive documentation is [pettingzoo.ml](https://www.pettingzoo.ml)
+Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
 ## Environments and Installation
 
@@ -32,8 +32,8 @@ PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https:/
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.butterfly import pistonball_v0
-env = pistonball_v0.env()
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:
@@ -64,7 +64,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 Version 1.4.2 (November 25, 2020)
 
-Pistnball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
+Pistonball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
 
 Version 1.4.0 (November 6, 2020)
 

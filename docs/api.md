@@ -133,42 +133,6 @@ for step in range(max_cycles):
 
 ## Utils
 
-### API Test
-
-```python
-import pettingzoo.tests.api_test as api_test
-api_test.api_test(env, render=False, verbose_progress=False)
-```
-
-This tests the environment for API compliance. If the environment has a custom `render()` method, setting argument `render=True` tests whether there is an accompanying custom `close()` method. If `verbose_progress=True`, progress of the test is printed to the console.
-
-### Bombardment Test
-
-```python
-import pettingzoo.tests.bombardment_test as bombardment_test
-bombardment_test.bombardment_test(env, cycles=10000)
-```
-
-This randomly plays through the environment `cycles` times, to test for stability.
-
-### Performance Benchmark
-
-```python
-import pettingzoo.tests.performance_benchmark as performance_benchmark
-performance_benchmark.performance_benchmark(env)
-```
-
-This randomly steps through the environment for 60 seconds to benchmark its performance.
-
-### Manual Control Test
-
-```python
-import pettingzoo.tests.manual_control_test as manual_control_test
-manual_control_test.test_manual_control(env.manual_control)
-```
-
-If the environment has `manual_control` functionality included (explained below), this test makes sure the method does not crash for random key inputs. The argument supplied to the `test_manual_control` method is the manual control method name for the environment (i.e. `manual_control=pistonball.manual_control`).
-
 ### Manual Control
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
@@ -182,11 +146,11 @@ Environments say if they support this functionality in their documentation, and 
 
 ### Random Demo
 
-For all renderable games, including those that can't be played by humans, you can easily get a quick impression of them by watching a random policy control all the actions:
+You can also easily get a quick impression of them by watching a random policy control all the actions:
 
 ```python
 from pettingzoo.utils import random_demo
-random_demo(env)
+random_demo(env, render=True, cycles=1)
 ```
 
 ### Observation Saving

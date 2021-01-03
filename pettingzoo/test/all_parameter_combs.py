@@ -2,9 +2,8 @@ from .all_modules import *  # noqa: F403
 
 import pytest
 from .all_modules import all_environments
-import pettingzoo.tests.api_test as api_test
+from.api_test import api_test
 
-from .error_tests import error_test
 from .seed_test import seed_test, check_environment_deterministic
 from .render_test import render_test
 
@@ -37,11 +36,12 @@ parameterized_envs = [
     (knights_archers_zombies_v4.env, dict(pad_observation=False)),
     (knights_archers_zombies_v4.env, dict(max_cycles=100)),
 
-    (pistonball_v2.env, dict(local_ratio=0.7)),
-    (pistonball_v2.env, dict(continuous=True)),
-    (pistonball_v2.env, dict(continuous=False)),
-    (pistonball_v2.env, dict(random_drop=True, starting_angular_momentum=True)),
-    (pistonball_v2.env, dict(random_drop=False, starting_angular_momentum=False)),
+    (pistonball_v3.env, dict(local_ratio=0.7)),
+    (pistonball_v3.env, dict(continuous=True)),
+    (pistonball_v3.env, dict(n_pistons=30)),
+    (pistonball_v3.env, dict(continuous=False)),
+    (pistonball_v3.env, dict(random_drop=True, random_rotate=True)),
+    (pistonball_v3.env, dict(random_drop=False, random_rotate=False)),
 
     (prison_v2.env, dict(continuous=True)),
     (prison_v2.env, dict(continuous=False)),
@@ -103,14 +103,14 @@ parameterized_envs = [
     (pursuit_v3.env, dict(n_catch=3)),
     (pursuit_v3.env, dict(freeze_evaders=True)),
 
-    (waterworld_v2.env, dict(n_pursuers=3, n_evaders=6)),
-    (waterworld_v2.env, dict(n_coop=1)),
-    (waterworld_v2.env, dict(n_coop=1)),
-    (waterworld_v2.env, dict(n_poison=4)),
-    (waterworld_v2.env, dict(n_sensors=4)),
-    (waterworld_v2.env, dict(terminate_on_fall=False)),
-    (waterworld_v2.env, dict(local_ratio=0.5)),
-    (waterworld_v2.env, dict(speed_features=False)),
+    (waterworld_v3.env, dict(n_pursuers=3, n_evaders=6)),
+    (waterworld_v3.env, dict(n_coop=1)),
+    (waterworld_v3.env, dict(n_coop=1)),
+    (waterworld_v3.env, dict(n_poison=4)),
+    (waterworld_v3.env, dict(n_sensors=4)),
+    (waterworld_v3.env, dict(terminate_on_fall=False)),
+    (waterworld_v3.env, dict(local_ratio=0.5)),
+    (waterworld_v3.env, dict(speed_features=False)),
 ]
 
 
@@ -118,4 +118,4 @@ parameterized_envs = [
 def test_module(env_constr, kwargs):
     _env = env_constr(**kwargs)
     print(kwargs)
-    api_test.api_test(_env)
+    api_test(_env)

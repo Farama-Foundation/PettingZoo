@@ -11,6 +11,7 @@ with open("README.md", "r") as fh:
         else:
             break
 
+
 def get_version():
     path = "pettingzoo/__init__.py"
     with open(path) as file:
@@ -21,13 +22,14 @@ def get_version():
             return line.strip().split()[-1].strip().strip('"')
     raise RuntimeError("bad version data in __init__.py")
 
+
 extras = {
     "atari": ["multi_agent_ale_py==0.1.10", "pygame==2.0.0"],
     "classic": ["python-chess==0.31.4", "rlcard==0.2.7", "hanabi_learning_environment==0.0.1"],
     "butterfly": ["pygame==2.0.0", "pymunk==5.7.0"],
     "magent": ["magent==0.1.13"],
     "mpe": [],
-    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "opencv-python>=4.4.0.42"],
+    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5"],
     "tests": ["pynput"]
 }
 
@@ -44,7 +46,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
-    python_requires=">=3.6, <3.9",
+    python_requires=">=3.6, <3.10",
     data_files=[("", ["LICENSE.txt"])],
     packages=find_packages(),
     include_package_data=True,
@@ -58,6 +60,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     extras_require=extras,
 )

@@ -17,7 +17,7 @@ def inp_handler(name):
         keyboard.release(i)
 
 
-def test_manual_control(manual_control):
+def manual_control_test(manual_control):
     manual_in_thread = threading.Thread(target=inp_handler, args=(1,))
 
     manual_in_thread.start()
