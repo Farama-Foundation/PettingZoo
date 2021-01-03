@@ -7,7 +7,6 @@ def random_demo(env, render=True, cycles=1):
     Runs an env object with random actions.
     '''
 
-    # env = _env(n_pursuers=n_pursuers)
     env.reset()
 
     if hasattr(env, 'display_wait'):
@@ -18,14 +17,12 @@ def random_demo(env, render=True, cycles=1):
     total_reward = 0
     done = False
 
-    # start = time.time()
     for cycle in cycles:
         for agent in env.agent_iter():
             if render:
                 env.render()
                 time.sleep(display_wait)
 
-            # for _ in env.agents:
             obs, reward, done, _ = env.last()
             total_reward += reward
             if done:
@@ -38,8 +35,6 @@ def random_demo(env, render=True, cycles=1):
 
     print("Total reward", total_reward, "done", done)
 
-    # end = time.time()
-    # print("FPS = ", 100/(end-start))
     if render:
         env.render()
         time.sleep(2)
