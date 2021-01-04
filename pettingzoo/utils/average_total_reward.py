@@ -11,12 +11,6 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
     Reward is summed across all agents, making it unsuited for use in zero-sum
     games.
     '''
-
-    if hasattr(env, 'display_wait'):
-        display_wait = env.display_wait
-    else:
-        display_wait = 0.0
-
     total_reward = 0
     total_steps = 0
     done = False
