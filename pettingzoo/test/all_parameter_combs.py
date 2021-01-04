@@ -31,7 +31,6 @@ parameterized_envs = [
     (knights_archers_zombies_v4.env, dict(num_knights=4, num_archers=5)),
     (knights_archers_zombies_v4.env, dict(killable_knights=True, killable_archers=True)),
     (knights_archers_zombies_v4.env, dict(killable_knights=False, killable_archers=False)),
-    (knights_archers_zombies_v4.env, dict(black_death=False)),
     (knights_archers_zombies_v4.env, dict(line_death=False)),
     (knights_archers_zombies_v4.env, dict(pad_observation=False)),
     (knights_archers_zombies_v4.env, dict(max_cycles=100)),
