@@ -61,21 +61,27 @@ def draw_line_matrix(matrix, color, a, b, resolution):
 
 
 class Renderer:
-    def __init__(self, env, map_size):
+    def __init__(self, env, map_size, mode):
         import pygame
-        pygame.init()
-        pygame.display.init()
         self.env = env
+        self.mode = mode
         self.handles = self.env.get_handles()
 
         base_resolution = (map_size * 8, map_size * 8)
+        if mode == "human":
+            pygame.init()
+            pygame.display.init()
+            infoObject = pygame.display.Info()
+            screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
+            self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
+            self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
+            pygame.display.set_caption('MAgent Renderer Window')
+        elif mode == "rgb_array":
+            pygame.font.init()
+            self.resolution = base_resolution
+            self.canvas = pygame.Surface(base_resolution)
 
-        infoObject = pygame.display.Info()
-        screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
-        self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
-        self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
 
-        pygame.display.set_caption('MAgent Renderer Window')
         self.text_formatter = pygame.font.SysFont(None, text_size, True)
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
@@ -147,25 +153,6 @@ class Renderer:
         if self.need_static_update or True:
             grids = pygame.Surface(resolution)
             grids.fill(background_rgb)
-
-            for i in range(x_range[0], x_range[1] + 1):
-                draw_line(
-                    self.canvas, grid_rgba[0],
-                    (i * grid_size - view_position[0], max(0, view_position[1]) - view_position[1]),
-                    (
-                        i * grid_size - view_position[0],
-                        min(view_position[1] + resolution[1], self.map_size[1] * grid_size) - view_position[1]
-                    )
-                )
-            for i in range(y_range[0], y_range[1] + 1):
-                draw_line(
-                    self.canvas, grid_rgba[0],
-                    (max(0, view_position[0]) - view_position[0], i * grid_size - view_position[1]),
-                    (
-                        min(view_position[0] + resolution[0], self.map_size[0] * grid_size) - view_position[0],
-                        i * grid_size - view_position[1]
-                    )
-                )
 
         if self.new_data is None or self.animation_progress > animation_total + animation_stop:
             pos, event = env._get_render_info(x_range, y_range)
@@ -272,5 +259,6 @@ class Renderer:
         observation = pygame.surfarray.pixels3d(self.canvas)
         new_observation = np.copy(observation)
         del observation
-        pygame.display.flip()
+        if self.mode == 'human':
+            pygame.display.flip()
         return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None

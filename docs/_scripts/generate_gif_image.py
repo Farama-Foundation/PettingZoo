@@ -20,7 +20,9 @@ def generate_data(nameline,module):
     env.reset()
     for step in range(100):
         for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
-            if 'legal_moves' in env.infos[agent]:
+            if env.dones[agent]:
+                action = None
+            elif 'legal_moves' in env.infos[agent]:
                 action = random.choice(env.infos[agent]['legal_moves'])
             else:
                 action = env.action_spaces[agent].sample()
@@ -60,7 +62,7 @@ def render_gif_image(name):
 
 def render_all():
     for name,module in all_environments.items():
-        if "classic" not in name and "foozpong" in name:
+        if "classic" not in name:
             nameline = name.replace("/", "_")
             generate_data(nameline, module)
             #render_gif_image(nameline)
