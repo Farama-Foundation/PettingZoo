@@ -14,8 +14,8 @@ Classic environments represent implementations of popular turn-based human games
 * No classic environments currently take any environment arguments.
 * All classic environments are rendered solely via printing to terminal.
 * Most environments only give rewards at the end of the games once an agent wins or losses, with a reward of 1 for winning and -1 for losing.
-* Many classic environments have illegal moves in the action space. These environments communicate the legal moves at any given time as part of the observation. This is done with dictionary observations where the `obs` element is the observation and the `action_mask` element is a binary vector which is 1 if the action is legal. Note that the `action_mask` observation and `legal_moves` info is only well defined right before the agents takes its step. A list of legal moves is also in the agent's info as  `env.infos[agent]['legal_moves']`.
-* In environments with illegal moves, taking an illegal move will give a reward equal to losing the game to the illegally moving player and 0 to the other players before ending the game. 
+* Many classic environments have illegal moves in the action space. These environments communicate the legal moves at any given time as part of the observation. This is done with dictionary observations where the `obs` element is the observation and the `action_mask` element is a binary vector which is 1 if the action is legal. Note that the `action_mask` observation will only have non-zero values right before the agents takes its step.
+* In environments with illegal moves, taking an illegal move will give a reward equal to losing the game to the illegally moving player and 0 to the other players before ending the game.
 
 
 Many of the classic environments are based on [RLCard](https://github.com/datamllab/rlcard). If you use these libraries in your research, please cite them:
