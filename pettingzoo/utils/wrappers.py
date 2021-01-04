@@ -99,21 +99,31 @@ class TerminateIllegalWrapper(BaseWrapper):
     def __init__(self, env, illegal_reward):
         super().__init__(env)
         self._illegal_value = illegal_reward
+        self._prev_obs = None
 
     def reset(self):
         self._terminated = False
+        self._prev_obs = None
         super().reset()
+
+    def observe(self, agent):
+        obs = super().observe(agent)
+        self._prev_obs = obs
+        return obs
 
     def step(self, action):
         current_agent = self.agent_selection
-        assert 'legal_moves' in self.infos[current_agent], "Illegal moves must always be defined to use the TerminateIllegalWrapper"
+        if self._prev_obs is None:
+            self.observe(self.agent_selection)
+        assert 'action_mask' in self._prev_obs, "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"
+        _prev_action_mask = self._prev_obs['action_mask']
+        self._prev_obs = None
         if self._terminated and self.dones[self.agent_selection]:
             self._was_done_step(action)
-        elif not self.dones[self.agent_selection] and action not in self.infos[current_agent]['legal_moves']:
+        elif not self.dones[self.agent_selection] and not _prev_action_mask[action]:
             EnvLogger.warn_on_illegal_move()
             self.dones = {d: True for d in self.dones}
-            for info in self.infos.values():
-                info['legal_moves'] = []
+            self._prev_obs = None
             self.rewards = {d: 0 for d in self.dones}
             self.rewards[current_agent] = self._illegal_value
             self._dones_step_first()

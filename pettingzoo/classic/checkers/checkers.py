@@ -97,7 +97,7 @@ class raw_env(AECEnv):
             obs = np.rot90(obs, 2, axes=(0, 1))
         self.observation = np.array(obs)
 
-        legal_moves = self.infos[agent]['legal_moves']
+        legal_moves = self.legal_moves() if agent == self.agent_selection else []
         action_mask = np.zeros(256, int)
         for i in legal_moves:
             action_mask[i] = 1
@@ -113,13 +113,12 @@ class raw_env(AECEnv):
         self.agents = self.possible_agents[:]
         self.agent_order = list(self.agents)
         self.agent_selection = self.agent_order[0]
-        self.infos = {name: {"legal_moves": []} for name in self.agents}
+        self.infos = {name: {} for name in self.agents}
         self.observation = self.observe(self.agent_selection)
         self.last_turn = "black"
         self.rewards = {name: 0 for name in self.agents}
         self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
-        self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
         self.winner = -1
 
     # Parse action from (256) action space into (32)x(32) action space
@@ -225,8 +224,6 @@ class raw_env(AECEnv):
             )
 
             self.agent_selection = "player_0" if turn == "black" else "player_1"
-
-        self.infos[self.agent_selection]["legal_moves"] = self.legal_moves()
 
         if winner == "black":
             self.winner = 0

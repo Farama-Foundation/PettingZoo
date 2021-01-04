@@ -1,5 +1,6 @@
 import time
 import random
+import numpy as np
 
 
 def random_demo(env, render=True, cycles=100000000):
@@ -27,8 +28,8 @@ def random_demo(env, render=True, cycles=100000000):
             total_reward += reward
             if done:
                 action = None
-            elif 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)
