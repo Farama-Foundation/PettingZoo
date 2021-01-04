@@ -41,8 +41,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, black_death=True, line_death=False, max_cycles=900):
-        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, black_death, line_death, max_cycles)
+    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
+        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, line_death, max_cycles)
         # Game Constants
         self.ZOMBIE_SPAWN = spawn_rate
         self.WIDTH = 1280
@@ -52,7 +52,6 @@ class raw_env(AECEnv, EzPickle):
         self.pad_observation = pad_observation
         self.killable_knights = killable_knights
         self.killable_archers = killable_archers
-        self.black_death = black_death
         self.line_death = line_death
         self.has_reset = False
         self.seed()
@@ -80,9 +79,6 @@ class raw_env(AECEnv, EzPickle):
         self.sword_list = pygame.sprite.Group()
         self.archer_list = pygame.sprite.Group()
         self.knight_list = pygame.sprite.Group()
-
-        # If black_death, this represents agents to remove at end of cycle
-        self.kill_list = []
 
         self.num_archers = num_archers
         self.num_knights = num_knights
@@ -330,7 +326,6 @@ class raw_env(AECEnv, EzPickle):
                 all_sprites.remove(sword)
                 zombie_list.remove(zombie)
                 all_sprites.remove(zombie)
-                # score += 1
                 sword.knight.score += 1
         return zombie_list, sword_list, all_sprites, score
 
@@ -475,18 +470,6 @@ class raw_env(AECEnv, EzPickle):
         done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
 
-        if self._agent_selector.is_last() and not self.black_death:
-            _live_agents = self.agents[:]
-            # self.agents must be recreated
-            for k in self.kill_list:
-                self.dones[k] = True
-                _live_agents.remove(k)
-
-            # reset the kill list
-            self.kill_list = []
-
-            self._agent_selector.reinit(_live_agents)
-
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
@@ -613,6 +596,6 @@ class raw_env(AECEnv, EzPickle):
 # The original code for this game, that was added by Justin Terry, was
 # created by Dipam Patel in a different repository (hence the git history)
 
-# Game art puchased from https://finalbossblues.itch.io/time-fantasy-monsters
+# Game art purchased from https://finalbossblues.itch.io/time-fantasy-monsters
 
 # and https://finalbossblues.itch.io/icons
