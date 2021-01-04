@@ -60,7 +60,7 @@ class raw_env(RLCardBase, EzPickle):
         else:
             observation = obs['obs'][0:4, :].astype(self._dtype)
 
-        legal_moves = self.infos[agent]['legal_moves']
+        legal_moves = self.next_legal_moves
         action_mask = np.zeros(110, int)
         for i in legal_moves:
             action_mask[i] = 1

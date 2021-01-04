@@ -94,7 +94,7 @@ class raw_env(AECEnv):
         player_plane = self._encode_player_plane(agent)
         observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
 
-        legal_moves = self.infos[agent]['legal_moves']
+        legal_moves = self.next_legal_moves if agent == self.agent_selection else []
         action_mask = np.zeros((self._N * self._N) + 1, int)
         for i in legal_moves:
             action_mask[i] = 1
@@ -110,9 +110,9 @@ class raw_env(AECEnv):
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
-            self.infos[next_player]['legal_moves'] = [self._N * self._N]
+            self.next_legal_moves = [self._N * self._N]
         else:
-            self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+            self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._accumulate_rewards()
         self._dones_step_first()
@@ -127,8 +127,8 @@ class raw_env(AECEnv):
         self._cumulative_rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+        self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
+        self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])
 
     def render(self, mode='human'):

@@ -63,13 +63,16 @@ class raw_env(AECEnv):
         opp_p_board = np.equal(board_vals, opp_player + 1)
 
         observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
-        legal_moves = self.infos[agent]['legal_moves']
+        legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
         action_mask = np.zeros(7, int)
         for i in legal_moves:
             action_mask[i] = 1
 
         return {'observation': observation, 'action_mask': action_mask}
+
+    def _legal_moves(self):
+        return [i for i in range(7) if self.board[i] == 0]
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action):
@@ -85,10 +88,6 @@ class raw_env(AECEnv):
                 break
 
         next_agent = self._agent_selector.next()
-
-        # update infos with valid moves
-        self.infos[self.agent_selection]['legal_moves'] = [i for i in range(7) if self.board[i] == 0]
-        self.infos[next_agent]['legal_moves'] = [i for i in range(7) if self.board[i] == 0]
 
         winner = self.check_for_winner()
 
@@ -116,7 +115,7 @@ class raw_env(AECEnv):
         self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {name: 0 for name in self.agents}
         self.dones = {i: False for i in self.agents}
-        self.infos = {i: {'legal_moves': list(range(7))} for i in self.agents}
+        self.infos = {i: {} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
 

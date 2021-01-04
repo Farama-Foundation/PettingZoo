@@ -1,6 +1,7 @@
 from .api_test import test_observation
 import random
 from copy import copy
+import numpy as np
 
 
 def bombardment_test(env, cycles=10000):
@@ -16,8 +17,8 @@ def bombardment_test(env, cycles=10000):
             obs, reward, done, info = env.last()
             if done:
                 action = None
-            elif 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = env.action_spaces[agent].sample()
             next_observe = env.step(action)
