@@ -12,7 +12,6 @@ def env(**kwargs):
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, 26**2 * 2, "executing the 'do nothing' action.")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
