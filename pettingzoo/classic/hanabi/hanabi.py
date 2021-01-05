@@ -22,11 +22,18 @@ Wrapper class around Deepmind's Hanabi Learning Environment.
 """
 
 
+class HanabiScorePenalty:
+    def __init__(self, env):
+        self.env = env
+
+    def __float__(self):
+        return -float(self.env.hanabi_env.state.score())
+
+
 def env(**kwargs):
-    env = raw_env(**kwargs)
-    player_losing_reward = -3
+    env = r_env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=player_losing_reward)
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(r_env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
