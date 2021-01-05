@@ -104,9 +104,6 @@ class raw_env(AECEnv):
 
         return {'observation': self.observation, 'action_mask': action_mask}
 
-    def seed(self, seed=None):
-        pass
-
     def reset(self):
         self.ch = CheckersRules()
         self.num_moves = 0

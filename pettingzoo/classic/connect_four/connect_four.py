@@ -38,9 +38,6 @@ class raw_env(AECEnv):
             'action_mask': spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8)
         }) for i in self.agents}
 
-    def seed(self, seed=None):
-        pass
-
     # Key
     # ----
     # blank space = 0

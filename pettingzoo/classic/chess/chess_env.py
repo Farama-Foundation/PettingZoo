@@ -44,9 +44,6 @@ class raw_env(AECEnv):
 
         self.agent_selection = None
 
-    def seed(self, seed=None):
-        pass
-
     def observe(self, agent):
         observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
         legal_moves = chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
