@@ -35,7 +35,6 @@ def env(**kwargs):
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(r_env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 

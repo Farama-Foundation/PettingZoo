@@ -11,9 +11,7 @@ from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    example_space = list(env.action_spaces.values())[0]
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, np.zeros(example_space.shape, dtype=example_space.dtype), "taking all zeros action")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
