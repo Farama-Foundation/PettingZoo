@@ -83,6 +83,9 @@ class raw_env(AECEnv, EzPickle):
         self.num_archers = num_archers
         self.num_knights = num_knights
 
+        # Represents agents to remove at end of cycle
+        self.kill_list = []
+
         # Initializing Pygame
         self.render_on = False
         pygame.init()
@@ -469,6 +472,17 @@ class raw_env(AECEnv, EzPickle):
         self.rewards[agent] = agent_name.score
         done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
+
+        _live_agents = self.agents[:]
+        # self.agents must be recreated
+        for k in self.kill_list:
+            self.dones[k] = True
+            _live_agents.remove(k)
+
+        # reset the kill list
+        self.kill_list = []
+
+        self._agent_selector.reinit(_live_agents)
 
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
