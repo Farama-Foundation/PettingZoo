@@ -1,5 +1,6 @@
 import time
 import random
+import numpy as np
 
 
 def average_total_reward(env, max_episodes=100, max_steps=10000000000):
@@ -26,8 +27,8 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
             total_steps += 1
             if done:
                 action = None
-            elif 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)
