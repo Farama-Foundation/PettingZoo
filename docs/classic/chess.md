@@ -21,7 +21,7 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 
 #### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves.
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 Like AlphaZero, the observation space is an 8x8 image representing the board. It has 20 channels representing:
 
@@ -42,7 +42,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 #### Legal Actions Mask
 
-The legal moves available for the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 #### Action Space
 
