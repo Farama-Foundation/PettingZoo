@@ -360,7 +360,6 @@ class CooperativePong(gym.Env):
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, 0, "doing nothing")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -423,9 +422,7 @@ class raw_env(AECEnv, EzPickle):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         agent = self.agent_selection
-        if np.isnan(action):
-            action = 0
-        elif not self.action_spaces[agent].contains(action):
+        if not self.action_spaces[agent].contains(action):
             raise Exception('Action for agent {} must be in Discrete({}).'
                             'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
 

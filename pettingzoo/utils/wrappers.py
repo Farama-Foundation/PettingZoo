@@ -116,65 +116,6 @@ class TerminateIllegalWrapper(BaseWrapper):
             super().step(action)
 
 
-class NanNoOpWrapper(BaseWrapper):
-    '''
-    this wrapper expects there to be a no_op_action parameter which
-    is the action to take in cases when nothing should be done.
-    '''
-    def __init__(self, env, no_op_action, no_op_policy):
-        super().__init__(env)
-        self._no_op_action = no_op_action
-        self._no_op_policy = no_op_policy
-
-    def step(self, action):
-        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
-            EnvLogger.warn_action_is_NaN(self._no_op_policy)
-            action = self._no_op_action
-        super().step(action)
-
-
-class NanZerosWrapper(BaseWrapper):
-    '''
-    this wrapper warns and executes a zeros action when nothing should be done.
-    Only for Box action spaces.
-    '''
-    def __init__(self, env):
-        super().__init__(env)
-        assert all(isinstance(space, Box) for space in self.action_spaces.values()), "should only use NanZerosWrapper for Box spaces. Use NanNoOpWrapper for discrete spaces"
-
-    def step(self, action):
-        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
-            EnvLogger.warn_action_is_NaN("taking the all zeros action")
-            action = np.zeros_like(action)
-        super().step(action)
-
-
-class NaNRandomWrapper(BaseWrapper):
-    '''
-    this wrapper takes a random action
-    '''
-    def __init__(self, env):
-        super().__init__(env)
-        assert all(isinstance(space, Discrete) for space in env.action_spaces.values()), "action space should be discrete for NaNRandomWrapper"
-        SEED = 0x33bb9cc9
-        self.np_random = np.random.RandomState(SEED)
-
-    def step(self, action):
-        if not (action is None and self.dones[self.agent_selection]) and np.isnan(action).any():
-            cur_info = self.infos[self.agent_selection]
-            if 'legal_moves' in cur_info:
-                backup_policy = "taking a random legal action"
-                EnvLogger.warn_action_is_NaN(backup_policy)
-                action = self.np_random.choice(cur_info['legal_moves'])
-            else:
-                backup_policy = "taking a random action"
-                EnvLogger.warn_action_is_NaN(backup_policy)
-                act_space = self.action_spaces[self.agent_selection]
-                action = self.np_random.choice(act_space.n)
-
-        super().step(action)
-
-
 class CaptureStdoutWrapper(BaseWrapper):
     def __init__(self, env):
         super().__init__(env)
