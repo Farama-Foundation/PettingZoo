@@ -61,21 +61,30 @@ def draw_line_matrix(matrix, color, a, b, resolution):
 
 
 class Renderer:
-    def __init__(self, env, map_size):
+    def __init__(self, env, map_size, mode):
         import pygame
-        pygame.init()
-        pygame.display.init()
         self.env = env
+        self.mode = mode
         self.handles = self.env.get_handles()
 
-        base_resolution = (map_size * 8, map_size * 8)
+        base_resolution = (map_size * 8, map_size * 8 + 7)
+        if mode == "human":
+            pygame.init()
+            pygame.display.init()
+            infoObject = pygame.display.Info()
+            screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
+            self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
+            self.display = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
+            canvas_resolution = (resolution[0], resolution[1])
+            self.canvas = pygame.Surface(canvas_resolution)
+            pygame.display.set_caption('MAgent Renderer Window')
+        elif mode == "rgb_array":
+            pygame.font.init()
+            self.resolution = base_resolution
+            self.display = pygame.Surface(base_resolution)
+            canvas_resolution = (base_resolution[0], base_resolution[1])
+            self.canvas = pygame.Surface(canvas_resolution)
 
-        infoObject = pygame.display.Info()
-        screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
-        self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
-        self.canvas = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
-
-        pygame.display.set_caption('MAgent Renderer Window')
         self.text_formatter = pygame.font.SysFont(None, text_size, True)
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
@@ -91,23 +100,24 @@ class Renderer:
         self.animation_progress = 0
 
     def get_banners(self, frame_id, resolution):
-        red = '{}'.format(np.sum(self.env.get_alive(self.handles[0]).astype(np.int32))), (200, 0, 0)
-        if len(self.handles) > 1:
+        groups = self.env._get_groups_info()
+
+        def form_txt(index):
+            handle = self.handles[index]
+            color = tuple([int(a) for a in groups[index][2:]])
+            return '{}'.format(np.sum(self.env.get_alive(handle).astype(np.int32))), color
+        if len(self.handles) == 1:
+            result = [(form_txt(0), )]
+        if len(self.handles) == 2:
             vs = ' vs ', (0, 0, 0)
-            blue = '{}'.format(np.sum(self.env.get_alive(self.handles[1]).astype(np.int32))), (0, 0, 200)
-            result = [(red, vs, blue)]
+            result = [(form_txt(0), vs, form_txt(1))]
+        elif len(self.handles) == 4:
+            vs = ' vs ', (0, 0, 0)
+            comma = ', ', (0, 0, 0)
+            result = [(form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))]
         else:
-            result = [(red, )]
+            raise RuntimeError("bad number of handles")
 
-        # tmp = '{} chance(s) remained'.format(
-        #     max(0, add_counter)), (0, 0, 0)
-        # result.append((tmp,))
-
-        # tmp = '{} / {} steps'.format(self.frame_id, total_step), (0, 0, 0)
-        # result.append((tmp,))
-        # if self.frame_id % add_interval == 0 and self.frame_id < total_step and add_counter > 0:
-        #     tmp = 'Please press your left mouse button to add agents', (0, 0, 0)
-        #     result.append((tmp,))
         return result
 
     def close(self):
@@ -126,7 +136,6 @@ class Renderer:
         view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
                          self.map_size[1] / 2 * grid_size - resolution[1] / 2]
         groups = self.groups
-        text_formatter = self.text_formatter
         banner_formatter = self.banner_formatter
         status = True
         triggered = False
@@ -143,29 +152,11 @@ class Renderer:
         )
 
         self.canvas.fill(background_rgb)
+        self.display.fill(background_rgb)
 
         if self.need_static_update or True:
             grids = pygame.Surface(resolution)
             grids.fill(background_rgb)
-
-            for i in range(x_range[0], x_range[1] + 1):
-                draw_line(
-                    self.canvas, grid_rgba[0],
-                    (i * grid_size - view_position[0], max(0, view_position[1]) - view_position[1]),
-                    (
-                        i * grid_size - view_position[0],
-                        min(view_position[1] + resolution[1], self.map_size[1] * grid_size) - view_position[1]
-                    )
-                )
-            for i in range(y_range[0], y_range[1] + 1):
-                draw_line(
-                    self.canvas, grid_rgba[0],
-                    (max(0, view_position[0]) - view_position[0], i * grid_size - view_position[1]),
-                    (
-                        min(view_position[0] + resolution[0], self.map_size[0] * grid_size) - view_position[0],
-                        i * grid_size - view_position[1]
-                    )
-                )
 
         if self.new_data is None or self.animation_progress > animation_total + animation_stop:
             pos, event = env._get_render_info(x_range, y_range)
@@ -237,20 +228,7 @@ class Renderer:
             if status or triggered or self.animation_progress < animation_total + animation_stop:
                 self.animation_progress += 1
 
-            text_window = text_formatter.render(
-                'Window: (%.1f, %.1f, %.1f, %.1f)' % (
-                    view_position[0], view_position[1],
-                    view_position[0] + resolution[0],
-                    view_position[1] + resolution[1]
-                ), True, text_rgb
-            )
-
-            text_grids = text_formatter.render('Numbers: %d' % len(self.new_data[0]), True, text_rgb)
-            # text_mouse = text_formatter.render('Mouse: (%d, %d)' % (mouse_x, mouse_y), True, text_rgb)
-
-            self.canvas.blit(text_window, (0, (text_size + text_spacing) / 1.5))
-            self.canvas.blit(text_grids, (0, (text_size + text_spacing) / 1.5 * 2))
-            # self.canvas.blit(text_mouse, (0, (text_size + text_spacing) / 1.5 * 3))
+            self.display.blit(self.canvas, (0, 7))
 
             height_now = 0
             for texts in self.get_banners(self.frame_id, resolution):
@@ -263,14 +241,15 @@ class Renderer:
                     height = max(height, text.get_height())
                 start = (resolution[0] - width) / 2.0
                 for b in content:
-                    self.canvas.blit(b[0], (start + b[1], height_now))
+                    self.display.blit(b[0], (start + b[1], height_now))
                 height_now += height + banner_spacing
 
         if self.need_static_update:
             self.need_static_update = False
 
-        observation = pygame.surfarray.pixels3d(self.canvas)
+        observation = pygame.surfarray.pixels3d(self.display)
         new_observation = np.copy(observation)
         del observation
-        pygame.display.flip()
+        if self.mode == 'human':
+            pygame.display.flip()
         return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
