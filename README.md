@@ -62,6 +62,10 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 ## Release History
 
+Version 2.5.0 (January 5, 2021)
+
+Refactors tests to be generally usable by third party environments. Added average reward calculating util, and made minor improvements to random_demo and save_obs utils. Removed black death argument from KAZ (it's now a wrapper in supersuit). Redid how illegal actions are handled in classic, by making observations dictionaries where one element is the observation and the other is a proper illegal action mask. Pistonball was refactored for readability, to run faster and to allow the number of pistons to be varied via argument. Waterworld was completely refactored with various major fixes. RLCard version was bumped (and includes bug fixes impacting environments). MAgent rendering looks much better now (versions not bumped). Major bug in the observation space of pursuit is fixed. Add Python 3.9 support. Update Gym version. Fixed multiwalker observation space, for good this time. Removed NaN wrapper. 
+
 Version 1.4.2 (November 25, 2020)
 
 Pistonball reward and miscellanious problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.
