@@ -134,8 +134,8 @@ def play_test(env, observation_0, num_cycles):
         prev_observe, reward, done, info = env.last()
         if done:
             action = None
-        elif 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
+        elif isinstance(prev_observe, dict) and 'action_mask' in prev_observe:
+            action = random.choice(np.flatnonzero(prev_observe['action_mask']))
         else:
             action = env.action_spaces[agent].sample()
 
@@ -176,8 +176,8 @@ def play_test(env, observation_0, num_cycles):
         obs, reward, done, info = env.last()
         if done:
             action = None
-        elif 'legal_moves' in env.infos[agent]:
-            action = random.choice(env.infos[agent]['legal_moves'])
+        elif isinstance(obs, dict) and 'action_mask' in obs:
+            action = random.choice(np.flatnonzero(obs['action_mask']))
         else:
             action = env.action_spaces[agent].sample()
         assert isinstance(done, bool), "Done from last is not True or False"
@@ -197,8 +197,8 @@ def test_action_flexibility(env):
         obs, reward, done, info = env.last()
         if done:
             action = None
-        elif 'legal_moves' in env.infos[agent]:
-            action = env.infos[agent]['legal_moves'][0]
+        elif isinstance(obs, dict) and 'action_mask' in obs:
+            action = random.choice(np.flatnonzero(obs['action_mask']))
         else:
             action = 0
         env.step(action)

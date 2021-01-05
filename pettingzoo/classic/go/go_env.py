@@ -34,7 +34,11 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.has_reset = False
 
-        self.observation_spaces = self._convert_to_dict([spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool) for _ in range(self.num_agents)])
+        self.observation_spaces = self._convert_to_dict(
+            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
+                          'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
+             for _ in range(self.num_agents)])
+
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
         self._agent_selector = agent_selector(self.agents)
@@ -85,7 +89,14 @@ class raw_env(AECEnv):
     def observe(self, agent):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
-        return np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+        observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+
+        legal_moves = self.next_legal_moves if agent == self.agent_selection else []
+        action_mask = np.zeros((self._N * self._N) + 1, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def step(self, action):
         if self.dones[self.agent_selection]:
@@ -96,9 +107,9 @@ class raw_env(AECEnv):
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
             self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
-            self.infos[next_player]['legal_moves'] = [self._N * self._N + 1]
+            self.next_legal_moves = [self._N * self._N]
         else:
-            self.infos[next_player]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+            self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._accumulate_rewards()
         self._dones_step_first()
@@ -113,8 +124,8 @@ class raw_env(AECEnv):
         self._cumulative_rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict([{'legal_moves': []} for _ in range(self.num_agents)])
-        self.infos[self.agent_selection]['legal_moves'] = self._encode_legal_actions(self._go.all_legal_moves())
+        self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
+        self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])
 
     def render(self, mode='human'):

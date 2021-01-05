@@ -1,5 +1,6 @@
 import time
 import random
+import numpy as np
 
 
 def performance_benchmark(env):
@@ -16,8 +17,8 @@ def performance_benchmark(env):
             obs, reward, done, info = env.last()
             if done:
                 action = None
-            elif 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)

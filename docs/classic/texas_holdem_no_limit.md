@@ -20,9 +20,11 @@ Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. A
 Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 
-#### Observation Space
+### Observation Space
 
-The observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
 
 |  Index  | Description                                                 |
 |:-------:|-------------------------------------------------------------|
@@ -35,7 +37,11 @@ The observation space is a vector of 72 boolean integers. The first 52 entries d
 | 62 - 66 | Chips raised in Round 3<br>_`62`: 0, `63`: 1, ..., `66`: 4_ |
 | 67 - 71 | Chips raised in Round 4<br>_`67`: 0, `68`: 1, ..., `71`: 4_ |
 
-#### Action Space
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
 
 | Action ID | Action |
 |:---------:|--------|
@@ -44,12 +50,8 @@ The observation space is a vector of 72 boolean integers. The first 52 entries d
 |     2     | Fold   |
 |     3     | Check  |
 
-#### Rewards
+### Rewards
 
 | Winner          | Loser           |
 | :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.

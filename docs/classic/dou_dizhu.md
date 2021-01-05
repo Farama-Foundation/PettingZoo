@@ -27,11 +27,13 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and yo
 dou_dizhu.env(opponents_hand_visible=False)
 ```
 
-`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0, 2, 3, and 4. 
+`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0, 2, 3, and 4.
 
-#### Observation Space
+### Observation Space
 
-The *Observation Space* is encoded in 6 planes each with 5x15 entries. For each plane, the 5 rows represent 0, 1, 2, 3, or 4 cards of the same rank and the 15 columns represents all possible ranks ("3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, Black Joker, and Red Joker"). The meaning of each plane is described in the table below:
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main *Observation Space* is encoded in 6 planes each with 5x15 entries. For each plane, the 5 rows represent 0, 1, 2, 3, or 4 cards of the same rank and the 15 columns represents all possible ranks ("3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, Black Joker, and Red Joker"). The meaning of each plane is described in the table below:
 
 | Plane | Description                                                  |
 | :---: | ------------------------------------------------------------ |
@@ -64,7 +66,13 @@ The *Observation Space* is encoded in 6 planes each with 5x15 entries. For each 
 |         13         | Black Joker |
 |         14         | Red Joker   |
 
-#### Action Space
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+
+### Action Space
 
 The raw size of the action space of Dou Dizhu is 27,472. Because of this, our implementation of Dou Dizhu abstracts the action space into 309 actions as shown below. Actions are abstracted by only focusing on the major combination and ignoring the kicker (e.g. a trio with single "4445" would be represented by "444&ast;"). As a reminder, suits are irrelevant in Dou Dizhu.
 
@@ -89,16 +97,10 @@ The raw size of the action space of Dou Dizhu is 27,472. Because of this, our im
 
 For example, you would use action `0` to play a single "3" card or action `30` to play a trio of "5".
 
-#### Rewards
+### Rewards
 
 We modified the reward structure compared to RLCard. Instead of rewarding `0` to the losing player, we assigned a `-1` reward to the losing agent.
 
 | Winner | Loser |
 | :----: | :---: |
 | +1     |   -1  |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
-
-
