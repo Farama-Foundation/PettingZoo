@@ -22,8 +22,11 @@ This environment uses [gym-backgammon](https://github.com/dellalibera/gym-backga
 
 The rules of backgammon can be found [here.](https://www.bkgm.com/rules.html)
 
-#### Observation Space
-The observation space has shape (198,). Entries 0-97 represent the positions of any white checkers, entries 98-195 represent the positions of any black checkers, and entries 196-197 encode the current player.
+### Observation Space
+
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space has shape (198,). Entries 0-97 represent the positions of any white checkers, entries 98-195 represent the positions of any black checkers, and entries 196-197 encode the current player.
 
 | Num       | Observation                                                         | Min  | Max  |
 | --------- | -----------------------------------------------------------------   | ---- | ---- |
@@ -61,7 +64,12 @@ Encoding of the current player:
 | WHITE   | [1.0, 0.0] |
 | BLACK   | [0.0, 1.0] |
 
-#### Action Space
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
 The action space for this environment is Discrete(26^2 * 2 + 1).
 
 An agent's turn involves rolling two dice and then performing an action based on those rolls. An action involves using the two dice values to move checkers from one point to another or off of the board.
@@ -103,7 +111,3 @@ The winner is the first player to remove all of their checkers from the board.
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for the other agent.

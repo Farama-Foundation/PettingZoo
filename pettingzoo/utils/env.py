@@ -16,7 +16,7 @@ class AECEnv:
         raise NotImplementedError
 
     def seed(self, seed=None):
-        raise NotImplementedError
+        pass
 
     def observe(self, agent):
         raise NotImplementedError
@@ -122,7 +122,7 @@ class ParallelEnv:
         raise NotImplementedError
 
     def seed(self, seed=None):
-        raise NotImplementedError
+        pass
 
     def step(self, actions):
         raise NotImplementedError

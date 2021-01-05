@@ -19,7 +19,7 @@ Go is a board game with 2 players, black and white. The black player starts by p
 
 Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minigo).
 
-#### Arguments
+### Arguments
 
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
@@ -27,9 +27,12 @@ Go takes two optional arguments that define the board size (int) and komi compen
 
 `g0_v1.env() # with default values`
 
-#### Observation Space
+### Observation Space
 
-The observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:, :, 0), represent the stones on the board for the current player while the second plane, (:, :, 1), encodes the stones of the opponent. The third plane, (:, :, 2), is all 1 if the current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is  
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+
+The main observation shape is a function of the board size _N_ and has a shape of (N, N, 3). The first plane, (:, :, 0), represent the stones on the board for the current player while the second plane, (:, :, 1), encodes the stones of the opponent. The third plane, (:, :, 2), is all 1 if the current player is `black_0` or all 0 if the player is `white_0`. The state of the board is represented with the top left corner as (0, 0). For example, a (9, 9) board is  
 ```
    0 1 2 3 4 5 6 7 8
  0 . . . . . . . . .  0
@@ -50,11 +53,15 @@ The observation shape is a function of the board size _N_ and has a shape of (N,
 |    1    | Opponent Player's stones<br>_'`0`: no stone, `1`: stone_  |
 |    2    | Player<br>_'`0`: white, `1`: black_                       |
 
-While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/). 
+While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
 
 
+#### Legal Actions Mask
 
-#### Action Space
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+
+### Action Space
 
 Similar to the observation space, the action space is dependent on the board size _N_.
 
@@ -68,12 +75,8 @@ Similar to the observation space, the action space is dependent on the board siz
 
 For example, you would use action `4` to place a stone on the board at the (0,3) location or action `N^2` to pass. You can transform a non-pass action `a` back into its 2D (x,y) coordinate by computing `(a//N, a%N)` The total action space is <img src="https://render.githubusercontent.com/render/math?math=N^2 %2B 1">.
 
-#### Rewards
+### Rewards
 
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
