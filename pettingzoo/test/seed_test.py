@@ -24,8 +24,8 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             obs, rew, done, info = new_env.last()
             if done:
                 action = None
-            elif 'legal_moves' in info:
-                action = sampler.choice(info['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = sampler.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = new_env.action_spaces[agent].sample()
             new_env.step(action)

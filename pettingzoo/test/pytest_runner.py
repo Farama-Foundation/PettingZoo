@@ -10,6 +10,8 @@ from .max_cycles_test import max_cycles_test
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_module(name, env_module):
+    if "classic" not in name:
+        return
     _env = env_module.env()
     api_test(_env)
     if "classic/" not in name:
