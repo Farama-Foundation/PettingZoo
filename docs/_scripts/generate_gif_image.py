@@ -20,10 +20,11 @@ def generate_data(nameline,module):
     env.reset()
     for step in range(100):
         for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
-            if env.dones[agent]:
+            obs, rew, done, info = env.last()
+            if done:
                 action = None
-            elif 'legal_moves' in env.infos[agent]:
-                action = random.choice(env.infos[agent]['legal_moves'])
+            elif isinstance(obs, dict) and 'action_mask' in obs:
+                action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)
