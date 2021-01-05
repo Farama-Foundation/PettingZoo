@@ -69,9 +69,6 @@ class raw_env(AECEnv):
 
         return {'observation': observation, 'action_mask': action_mask}
 
-    def seed(self, seed=None):
-        pass
-
     def _legal_moves(self):
         return [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
