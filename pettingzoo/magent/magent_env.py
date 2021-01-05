@@ -68,12 +68,14 @@ class magent_parallel_env(ParallelEnv):
 
     def render(self, mode="human"):
         if self._renderer is None:
-            self._renderer = Renderer(self.env, self.map_size)
+            self._renderer = Renderer(self.env, self.map_size, mode)
+        assert mode == self._renderer.mode, "mode must be consistent across render calls"
         return self._renderer.render(mode)
 
     def close(self):
         if self._renderer is not None:
             self._renderer.close()
+            self._renderer = None
 
     def reset(self):
         self.agents = self.possible_agents[:]
