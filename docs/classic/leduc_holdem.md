@@ -21,9 +21,11 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 
-#### Observation Space
+### Observation Space
 
-As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/games#leduc-holdem), the first 3 entries of the main observation space correspond to the player's hand (J, Q, and K) and the next 3 represent the public cards. Indexes 6 to 19 and 20 to 33 encode the number of chips by the current player and the opponent, respectively.
 
 |  Index  | Description                                                                  |
 |:-------:|------------------------------------------------------------------------------|
@@ -32,7 +34,12 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 |  6 - 20 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `20`: 14 chips_   |
 | 21 - 35 | Opponent's Chips<br>_`21`: 0 chips, `22`: 1 chip, ..., `35`: 14 chips_       |
 
-#### Action Space
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
 
 | Action ID | Action |
 |:---------:|--------|
@@ -41,12 +48,8 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 |     2     | Fold   |
 |     3     | Check  |
 
-#### Rewards
+### Rewards
 
 |      Winner       |       Loser       |
 | :---------------: | :---------------: |
 | +raised chips / 2 | -raised chips / 2 |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.

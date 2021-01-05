@@ -6,9 +6,9 @@ manual-control: "No"
 action-shape: "(4,)"
 action-values: "(-1, 1)"
 observation-shape: "(31,)"
-observation-values: "[-5.333,5.333]"
+observation-values: "[-inf,inf]"
 average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v5"
+import: "from pettingzoo.sisl import multiwalker_v6"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -26,7 +26,7 @@ Observation Space
 
 ```
 multiwalker.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=False,
+forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=True,
 max_cycles=500)
 ```
 

@@ -1,8 +1,6 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
-import pymunkoptions
-pymunkoptions.options["debug"] = False
 import pymunk
 import pymunk.pygame_util
 import math
@@ -46,35 +44,53 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"]}
 
-    def __init__(self, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, starting_angular_momentum=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
-        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, starting_angular_momentum, ball_mass, ball_friction, ball_elasticity, max_cycles)
-        self.agents = ["piston_" + str(r) for r in range(20)]
+    def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
+        self.n_pistons = n_pistons
+        self.piston_head_height = 11
+        self.piston_width = 40
+        self.piston_height = 40
+        self.piston_body_height = 23
+        self.piston_radius = 5
+        self.wall_width = 40
+        self.ball_radius = 40
+        self.screen_width = (2 * self.wall_width) + (self.piston_width * self.n_pistons)
+        self.screen_height = 560
+        y_high = self.screen_height - self.wall_width - self.piston_body_height
+        y_low = self.wall_width
+        obs_height = y_high - y_low
+
+        assert self.piston_width == self.wall_width, "Wall width and piston width must be equal for observation calculation"
+
+        self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
-        self.agent_name_mapping = dict(zip(self.agents, list(range(20))))
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.n_pistons))))
         self._agent_selector = agent_selector(self.agents)
+
+        self.observation_spaces = dict(
+            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(obs_height, self.piston_width * 3, 3), dtype=np.uint8)] * self.n_pistons))
         self.continuous = continuous
         if self.continuous:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * 20))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
         else:
-            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * 20))
-        self.observation_spaces = dict(
-            zip(self.agents, [gym.spaces.Box(low=0, high=255, shape=(200, 120, 3), dtype=np.uint8)] * 20))
+            self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons))
+
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
 
         self.renderOn = False
-        self.screen = pygame.Surface((960, 560))
+        self.screen = pygame.Surface((self.screen_width, self.screen_height))
         self.max_cycles = max_cycles
 
-        self.pistonSprite = get_image('piston.png')
+        self.piston_sprite = get_image('piston.png')
+        self.piston_body_sprite = get_image('piston_body.png')
         self.background = get_image('background.png')
         self.random_drop = random_drop
-        self.starting_angular_momentum = starting_angular_momentum
+        self.random_rotate = random_rotate
 
         self.pistonList = []
-        self.pistonRewards = []  # Keeps track of individual rewards
-        # Defines what "recent" means in terms of number of frames.
-        self.recentFrameLimit = 20
+        self.pistonRewards = []     # Keeps track of individual rewards
+        self.recentFrameLimit = 20  # Defines what "recent" means in terms of number of frames.
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
         self.local_ratio = local_ratio
@@ -84,17 +100,27 @@ class raw_env(AECEnv, EzPickle):
 
         self.done = False
 
-        self.velocity = 4
-        self.resolution = 16
+        self.pixels_per_position = 4
+        self.n_piston_positions = 16
 
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.background, (0, 0))
+        self.draw_background()
+        # self.screen.blit(self.background, (0, 0))
 
-        self.rect = pygame.Rect(80, 80, 800, 377)
+        self.render_rect = pygame.Rect(
+            self.wall_width,   # Left
+            self.wall_width,   # Top
+            self.screen_width - (2 * self.wall_width),                              # Width
+            self.screen_height - (2 * self.wall_width) - self.piston_body_height    # Height
+        )
 
-        # blit background image if ball goes out of bounds. Ball radius is 40
+        # Blit background image if ball goes out of bounds. Ball radius is 40
         self.valid_ball_position_rect = pygame.Rect(
-            self.rect.left + 40, self.rect.top + 40, self.rect.width - 80, self.rect.height - 80)
+            self.render_rect.left + self.ball_radius,          # Left
+            self.render_rect.top + self.ball_radius,           # Top
+            self.render_rect.width - (2 * self.ball_radius),   # Width
+            self.render_rect.height - (2 * self.ball_radius)   # Height
+        )
 
         self.frames = 0
         self.display_wait = 0.0
@@ -109,31 +135,43 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
         i = self.agent_name_mapping[agent]
-        x_low = 40 * (i + 1)
-        x_high = 40 * (i + 4)
-        cropped = np.array(observation[x_low:x_high, 257:457, :])
+        # Set x bounds to include 40px left and 40px right of piston
+        x_high = self.wall_width + self.piston_width * (i + 2)
+        x_low = self.wall_width + self.piston_width * (i - 1)
+        y_high = self.screen_height - self.wall_width - self.piston_body_height
+        y_low = self.wall_width
+        cropped = np.array(observation[x_low:x_high, y_low:y_high, :])
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
         return observation
 
     def enable_render(self):
-        self.screen = pygame.display.set_mode((960, 560))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.renderOn = True
-        self.screen.blit(self.background, (0, 0))
+        # self.screen.blit(self.background, (0, 0))
+        self.draw_background()
         self.draw()
 
     def close(self):
         if not self.closed:
             self.closed = True
             if self.renderOn:
-                self.screen = pygame.Surface((960, 560))
+                self.screen = pygame.Surface((self.screen_width, self.screen_height))
                 self.renderOn = False
                 pygame.event.pump()
                 pygame.display.quit()
 
     def add_walls(self):
-        walls = [pymunk.Segment(self.space.static_body, (80, 80), (880, 80), 1), pymunk.Segment(self.space.static_body, (80, 80), (80, 480), 1), pymunk.Segment(
-            self.space.static_body, (80, 480), (880, 480), 1), pymunk.Segment(self.space.static_body, (880, 80), (880, 480), 1)]
+        top_left = (self.wall_width, self.wall_width)
+        top_right = (self.screen_width - self.wall_width, self.wall_width)
+        bot_left = (self.wall_width, self.screen_height - self.wall_width)
+        bot_right = (self.screen_width - self.wall_width, self.screen_height - self.wall_width)
+        walls = [
+            pymunk.Segment(self.space.static_body, top_left, top_right, 1),     # Top wall
+            pymunk.Segment(self.space.static_body, top_left, bot_left, 1),      # Left wall
+            pymunk.Segment(self.space.static_body, bot_left, bot_right, 1),     # Bottom wall
+            pymunk.Segment(self.space.static_body, top_right, bot_right, 1)     # Right
+        ]
         for wall in walls:
             wall.friction = .64
             self.space.add(wall)
@@ -145,7 +183,7 @@ class raw_env(AECEnv, EzPickle):
         body = pymunk.Body(mass, inertia)
         body.position = x, y
         # radians per second
-        if self.starting_angular_momentum:
+        if self.random_rotate:
             body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
         shape.friction = b_friction
@@ -156,7 +194,7 @@ class raw_env(AECEnv, EzPickle):
     def add_piston(self, space, x, y):
         piston = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         piston.position = x, y
-        segment = pymunk.Segment(piston, (0, 0), (30, 0), 5)
+        segment = pymunk.Segment(piston, (0, 0), (self.piston_width - (2 * self.piston_radius), 0), self.piston_radius)
         segment.friction = .64
         segment.color = pygame.color.THECOLORS["blue"]
         space.add(segment)
@@ -165,14 +203,14 @@ class raw_env(AECEnv, EzPickle):
     def move_piston(self, piston, v):
 
         def cap(y):
-            if y > 451:
-                y = 451
-            elif y < 451 - (16 * self.velocity):
-                y = 451 - (16 * self.velocity)
+            maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
+            if y > maximum_piston_y:
+                y = maximum_piston_y
+            elif y < maximum_piston_y - (self.n_piston_positions * self.pixels_per_position):
+                y = maximum_piston_y - (self.n_piston_positions * self.pixels_per_position)
             return y
 
-        piston.position = (piston.position[0], cap(
-            piston.position[1] - v * self.velocity))
+        piston.position = (piston.position[0], cap(piston.position[1] - v * self.pixels_per_position))
 
     def reset(self):
         self.space = pymunk.Space(threaded=False)
@@ -183,36 +221,47 @@ class raw_env(AECEnv, EzPickle):
         self.space.iterations = 10  # 10 is default in PyMunk
 
         self.pistonList = []
-        for i in range(20):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston = self.add_piston(self.space, 85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
+        maximum_piston_y = self.screen_height - self.wall_width - (self.piston_height - self.piston_head_height)
+        for i in range(self.n_pistons):
+            # Multiply by 0.5 to use only the lower half of possible positions
+            possible_y_displacements = np.arange(0, .5 * self.pixels_per_position * self.n_piston_positions, self.pixels_per_position)
+            piston = self.add_piston(
+                self.space,
+                self.wall_width + self.piston_radius + self.piston_width * i,       # x position
+                maximum_piston_y - self.np_random.choice(possible_y_displacements)  # y position
+            )
+            piston.velociy = 0
             self.pistonList.append(piston)
 
-        self.offset = 0
+        self.horizontal_offset = 0
+        self.vertical_offset = 0
+        horizontal_offset_range = 30
+        vertical_offset_range = 15
         if self.random_drop:
-            self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball = self.add_ball(
-            800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1), self.ball_mass, self.ball_friction, self.ball_elasticity)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
-
-        self.has_reset = True
-        for i, piston in enumerate(self.pistonList):
-            temp_range = np.arange(0, .5 * self.velocity * self.resolution, self.velocity)
-            piston.position = (85 + 40 * i, 451 - temp_range[self.np_random.randint(0, len(temp_range))])
-            piston.velociy = 0
-
-        self.offset = 0
-        if self.random_drop:
-            self.offset = self.np_random.randint(-30, 30 + 1)
-        self.ball.position = (800 + self.offset, 350 + self.np_random.randint(-15, 15 + 1))
+            self.vertical_offset = self.np_random.randint(-vertical_offset_range, vertical_offset_range + 1)
+            self.horizontal_offset = self.np_random.randint(-horizontal_offset_range, horizontal_offset_range + 1)
+        ball_x = (self.screen_width
+                  - self.wall_width
+                  - self.ball_radius
+                  - horizontal_offset_range
+                  + self.horizontal_offset)
+        ball_y = (self.screen_height
+                  - self.wall_width
+                  - self.piston_body_height
+                  - self.ball_radius
+                  - (0.5 * self.pixels_per_position * self.n_piston_positions)
+                  - vertical_offset_range
+                  + self.vertical_offset)
+        self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
-        if self.starting_angular_momentum:
+        if self.random_rotate:
             self.ball.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
-        self.lastX = int(self.ball.position[0] - 40)
-        self.distance = self.lastX - 80
-        self.screen.blit(self.background, (0, 0))
+
+        self.lastX = int(self.ball.position[0] - self.ball_radius)
+        self.distance = self.lastX - self.wall_width
+
+        self.draw_background()
         self.draw()
 
         self.agents = self.possible_agents[:]
@@ -220,6 +269,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
+        self.has_reset = True
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
@@ -228,28 +278,71 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
+    def draw_background(self):
+        outer_walls = pygame.Rect(
+            0,   # Left
+            0,   # Top
+            self.screen_width,      # Width
+            self.screen_height,     # Height
+        )
+        outer_wall_color = (58, 64, 65)
+        pygame.draw.rect(self.screen, outer_wall_color, outer_walls)
+        inner_walls = pygame.Rect(
+            self.wall_width / 2,   # Left
+            self.wall_width / 2,   # Top
+            self.screen_width - self.wall_width,      # Width
+            self.screen_height - self.wall_width,     # Height
+        )
+        inner_wall_color = (68, 76, 77)
+        pygame.draw.rect(self.screen, inner_wall_color, inner_walls)
+        self.draw_pistons()
+
+    def draw_pistons(self):
+        piston_color = (65, 159, 221)
+        x_pos = self.wall_width
+        for piston in self.pistonList:
+            self.screen.blit(self.piston_body_sprite, (x_pos, self.screen_height - self.wall_width - self.piston_body_height))
+            # Height is the size of the blue part of the piston. 6 is the piston base height (the gray part at the bottom)
+            height = self.screen_height - self.wall_width - self.piston_body_height - (piston.position[1] + self.piston_radius) + (self.piston_body_height - 6)
+            body_rect = pygame.Rect(
+                piston.position[0] + self.piston_radius + 1,    # +1 to match up to piston graphics
+                piston.position[1] + self.piston_radius + 1,
+                18,
+                height
+            )
+            pygame.draw.rect(self.screen, piston_color, body_rect)
+            x_pos += self.piston_width
+
     def draw(self):
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
-            self.screen.blit(self.background, (0, 0))
+            # self.screen.blit(self.background, (0, 0))
+            self.draw_background()
 
-        pygame.draw.rect(self.screen, (255, 255, 255), self.rect)
-        pygame.draw.circle(self.screen, (65, 159, 221), (int(
-            self.ball.position[0]), int(self.ball.position[1])), 40)
-        pygame.draw.line(self.screen, (58, 64, 65), (int(self.ball.position[0]), int(self.ball.position[1])), (int(self.ball.position[0]) + 39 * np.cos(
-            self.ball.angle), int(self.ball.position[1]) + 39 * np.sin(self.ball.angle)), 3)  # 39 because it kept sticking over by 1 at 40
+        ball_x = int(self.ball.position[0])
+        ball_y = int(self.ball.position[1])
+
+        color = (255, 255, 255)
+        pygame.draw.rect(self.screen, color, self.render_rect)
+        color = (65, 159, 221)
+        pygame.draw.circle(self.screen, color, (ball_x, ball_y), self.ball_radius)
+
+        line_end_x = ball_x + (self.ball_radius - 1) * np.cos(self.ball.angle)
+        line_end_y = ball_y + (self.ball_radius - 1) * np.sin(self.ball.angle)
+        color = (58, 64, 65)
+        pygame.draw.line(self.screen, color, (ball_x, ball_y), (line_end_x, line_end_y), 3)  # 39 because it kept sticking over by 1 at 40
 
         for piston in self.pistonList:
-            self.screen.blit(self.pistonSprite,
-                             (piston.position[0] - 5, piston.position[1] - 5))
+            self.screen.blit(self.piston_sprite, (piston.position[0] - self.piston_radius, piston.position[1] - self.piston_radius))
+        self.draw_pistons()
 
     def get_nearby_pistons(self):
         # first piston = leftmost
         nearby_pistons = []
-        ball_pos = int(self.ball.position[0] - 40)
+        ball_pos = int(self.ball.position[0] - self.ball_radius)
         closest = abs(self.pistonList[0].position.x - ball_pos)
         closest_piston_index = 0
-        for i in range(len(self.pistonList)):
+        for i in range(self.n_pistons):
             next_distance = abs(self.pistonList[i].position.x - ball_pos)
             if next_distance < closest:
                 closest = next_distance
@@ -258,7 +351,7 @@ class raw_env(AECEnv, EzPickle):
         if closest_piston_index > 0:
             nearby_pistons.append(closest_piston_index - 1)
         nearby_pistons.append(closest_piston_index)
-        if closest_piston_index < len(self.pistonList) - 1:
+        if closest_piston_index < self.n_pistons - 1:
             nearby_pistons.append(closest_piston_index + 1)
 
         return nearby_pistons
@@ -268,7 +361,7 @@ class raw_env(AECEnv, EzPickle):
         return local_reward
 
     def render(self, mode="human"):
-        if not self.renderOn and mode == "human":
+        if not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
@@ -279,6 +372,7 @@ class raw_env(AECEnv, EzPickle):
     def step(self, action):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
+
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
@@ -288,21 +382,21 @@ class raw_env(AECEnv, EzPickle):
 
         self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
-            newX = int(self.ball.position[0] - 40)
-            if newX <= 81:
+            ball_min_x = int(self.ball.position[0] - self.ball_radius)
+            if ball_min_x <= self.wall_width + 1:
                 self.done = True
             self.draw()
-            local_reward = self.get_local_reward(self.lastX, newX)
-            # opposite order due to moving right to left
-            global_reward = (100 / self.distance) * (self.lastX - newX)
+            local_reward = self.get_local_reward(self.lastX, ball_min_x)
+            # Opposite order due to moving right to left
+            global_reward = (100 / self.distance) * (self.lastX - ball_min_x)
             if not self.done:
-                global_reward -= 0.1
-            total_reward = [global_reward * (1 - self.local_ratio)] * 20  # start with global reward
+                global_reward += self.time_penalty
+            total_reward = [global_reward * (1 - self.local_ratio)] * self.n_pistons  # start with global reward
             local_pistons_to_reward = self.get_nearby_pistons()
             for index in local_pistons_to_reward:
                 total_reward[index] += local_reward * self.local_ratio
             self.rewards = dict(zip(self.agents, total_reward))
-            self.lastX = newX
+            self.lastX = ball_min_x
             self.frames += 1
         else:
             self._clear_rewards()

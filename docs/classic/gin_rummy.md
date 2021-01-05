@@ -33,11 +33,13 @@ gin_rummy.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = Fal
 
 `gin_reward`:  reward received by a player who goes gin
 
-`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the unknown cards and the observation space will only include planes 0 to 3. 
+`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the unknown cards and the observation space will only include planes 0 to 3.
 
-#### Observation Space
+### Observation Space
 
-The observation space is 5x52 with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered by suit (spades, hearts, diamonds, then clubs) and within each suit are ordered by rank (from Ace to King).
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is 5x52 with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered by suit (spades, hearts, diamonds, then clubs) and within each suit are ordered by rank (from Ace to King).
 
 | Row Index | Description                                    |
 |:---------:|------------------------------------------------|
@@ -54,7 +56,11 @@ The observation space is 5x52 with the rows representing different planes and co
 |    26 - 38   | Diamonds<br>_`26`: Ace, `27`: 2, ..., `38`: King_ |
 |    39 - 51   | Clubs<br>_`39`: Ace, `40`: 2, ..., `51`: King_    |
 
-#### Action Space
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
 
 There are 110 actions in Gin Rummy.
 
@@ -71,7 +77,7 @@ There are 110 actions in Gin Rummy.
 
 For example, you would use action `2` to draw a card or action `3` to pick up a discarded card.
 
-#### Rewards
+### Rewards
 
 At the end of the game, a player who gins is awarded 1 point, a player who knocks is awarded 0.5 points, and the losing player receives a reward equal to the negative of their deadwood count.
 
@@ -86,7 +92,3 @@ If the hand is declared dead, both players get a reward equal to negative of the
 Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
 
 Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.

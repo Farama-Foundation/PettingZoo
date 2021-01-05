@@ -255,7 +255,7 @@ class BipedalWalker(Agent):
     @property
     def observation_space(self):
         # 24 original obs (joints, etc), 2 displacement obs for each neighboring walker, 3 for package
-        return spaces.Box(low=np.float32(-LIDAR_RANGE), high=np.float32(LIDAR_RANGE), shape=(24 + 4 + 3,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-np.inf), high=np.float32(np.inf), shape=(24 + 4 + 3,), dtype=np.float32)
 
     @property
     def action_space(self):

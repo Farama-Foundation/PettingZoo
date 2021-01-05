@@ -22,11 +22,18 @@ Wrapper class around Deepmind's Hanabi Learning Environment.
 """
 
 
+class HanabiScorePenalty:
+    def __init__(self, env):
+        self.env = env
+
+    def __float__(self):
+        return -float(self.env.hanabi_env.state.score())
+
+
 def env(**kwargs):
-    env = raw_env(**kwargs)
-    player_losing_reward = -3
+    env = r_env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=player_losing_reward)
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(r_env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.NaNRandomWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -151,10 +158,14 @@ class raw_env(AECEnv, EzPickle):
 
         # Set action_spaces and observation_spaces based on params in hanabi_env
         self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
-        self.observation_spaces = {player_name: spaces.Box(low=0,
-                                                           high=1,
-                                                           shape=(self.hanabi_env.vectorized_observation_shape()[0],),
-                                                           dtype=np.float32)
+        self.observation_spaces = {player_name: spaces.Dict({'observation': spaces.Box(low=0,
+                                                                                       high=1,
+                                                                                       shape=(
+                                                                                        self.hanabi_env.vectorized_observation_shape()[
+                                                                                       0],),
+                                                                                       dtype=np.float32),
+                                                             'action_mask': spaces.Box(low=0, high=1, shape=(
+                                                             self.hanabi_env.num_moves(),), dtype=np.int8)})
                                    for player_name in self.agents}
 
     def seed(self, seed=None):
@@ -273,7 +284,16 @@ class raw_env(AECEnv, EzPickle):
             self._dones_step_first()
 
     def observe(self, agent_name: str):
-        return np.array(self.infos[agent_name]['observations_vectorized'], np.float32) if agent_name in self.infos else np.zeros_like(self.observation_spaces[agent_name].low)
+        observation = np.array(self.infos[agent_name]['observations_vectorized'],
+                               np.float32) if agent_name in self.infos else np.zeros_like(
+            self.observation_spaces[agent_name].low)
+
+        legal_moves = self.infos[agent_name]['legal_moves']
+        action_mask = np.zeros(self.hanabi_env.num_moves(), int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
 
     def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
