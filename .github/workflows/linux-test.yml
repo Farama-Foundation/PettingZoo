@@ -1,0 +1,48 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  linux-test:
+
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        export AUDIODEV=null
+        sudo apt-get install swig
+        sudo apt install freeglut3-dev
+        sudo apt-get install unrar
+        pip install -r requirements.txt
+        pip install AutoROM
+        pip install flake8 pytest
+        AutoROM -v
+    - name: Full python tests
+      run: |
+        pytest ./pettingzoo/test/pytest_runner.py
+        pytest ./pettingzoo/test/all_parameter_combs.py
+    - name: Flake 8 tests
+      run: |
+        bash ./check_style.sh
+    - name: Print tests
+      run: |
+        python -m pettingzoo.test.print_test
+    - name: Source distribution test
+      run: |
+        python setup.py sdist
+        pip install dist/*.tar.gz
