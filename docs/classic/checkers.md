@@ -22,7 +22,9 @@ Checkers (also called Draughts) is a 2-player turn based game. Our implementatio
 
 #### Observation Space
 
-The observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board.
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board.
 
 The board is rotated and the planes are shifted to accommodate the current player. During the black player's turn, the top row provided by the `render` function is stored in row 0 of the observation. During the white player's turn, the top row is stored in row 7 of the observation. Additionally, the first two planes of the observation represent the men and kings of the current agent stored in `agent_selection` (The agent that must act next). The last two planes represent the other player's pieces.
 
@@ -34,6 +36,10 @@ The board is rotated and the planes are shifted to accommodate the current playe
 | 3     | Other Player's Kings   |
 
 Note that there are only 32 occupiable spaces (the dark colored spaced on a real game board) in the game of checkers. On even numbered rows (starting with 0) the second square is the first occupiable position. On odd numbered rows, the first square is occupiable.
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 #### Action Space
 
@@ -55,7 +61,3 @@ When an action is chosen, the environment automatically decides whether the prov
 |   +1   |  -1   |
 
 In the event of a tie, both players receive a reward of 0.
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.

@@ -19,11 +19,11 @@ agent-labels: "agents= ['player_1', 'player_2']"
 
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 
-#### Observation Space
+### Observation Space
 
 The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-Like AlphaZero, the observation space is an 8x8 image representing the board. It has 20 channels representing:
+Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:
 
 * Channels 0 - 3: Castling rights:
   * Channel 0: All ones if white can castle queenside
@@ -44,7 +44,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
-#### Action Space
+### Action Space
 
 From the AlphaZero chess paper:
 
@@ -60,7 +60,7 @@ We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a/(8*73), (a/73)%8, a%(8*8))`
 
-#### Rewards
+### Rewards
 
 | Winner | Loser |
 | :----: | :---: |

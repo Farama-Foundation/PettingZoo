@@ -20,9 +20,12 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you 
 
 
 
-#### Observation Space
+### Observation Space
 
-The observation space has a (6, 34, 4) shape with the first index representing the encoding plane. The contents of each plane are described in the table below:
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+
+The main observation space has a (6, 34, 4) shape with the first index representing the encoding plane. The contents of each plane are described in the table below:
 
 | Plane | Description               |
 |:-----:|---------------------------|
@@ -33,7 +36,7 @@ The observation space has a (6, 34, 4) shape with the first index representing t
 |   4   | Public piles of player_2  |
 |   5   | Public piles of player_3  |
 
-##### Encoding per Plane
+#### Encoding per Plane
 
 | Plane Row Index | Description                                   |
 |:---------------:|-----------------------------------------------|
@@ -55,7 +58,11 @@ The observation space has a (6, 34, 4) shape with the first index representing t
 |          2         | Tile Set 3  |
 |          3         | Tile Set 4  |
 
-#### Action Space
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
 
 The action space, as described by RLCard, is
 
@@ -78,12 +85,8 @@ The action space, as described by RLCard, is
 
 For example, you would use action `34` to pong or action `37` to stand.
 
-#### Rewards
+### Rewards
 
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
-
-#### Legal Moves
-
-The legal moves available for each agent, found in `env.infos[agent]['legal_moves']`, are updated after each step. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
