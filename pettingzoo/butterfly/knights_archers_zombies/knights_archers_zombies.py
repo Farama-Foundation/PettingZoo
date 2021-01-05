@@ -473,16 +473,17 @@ class raw_env(AECEnv, EzPickle):
         done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
 
-        _live_agents = self.agents[:]
-        # self.agents must be recreated
-        for k in self.kill_list:
-            self.dones[k] = True
-            _live_agents.remove(k)
+        if self._agent_selector.is_last():
+            _live_agents = self.agents[:]
 
-        # reset the kill list
-        self.kill_list = []
+            for k in self.kill_list:
+                self.dones[k] = True
+                _live_agents.remove(k)
 
-        self._agent_selector.reinit(_live_agents)
+            # reset the kill list
+            self.kill_list = []
+
+            self._agent_selector.reinit(_live_agents)
 
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
