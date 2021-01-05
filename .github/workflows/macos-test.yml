@@ -10,7 +10,7 @@ on:
 jobs:
   macos-test:
 
-    runs-on: macos-latest
+    runs-on: macos-11.1
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
