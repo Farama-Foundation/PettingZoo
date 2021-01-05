@@ -85,7 +85,6 @@ class Renderer:
             canvas_resolution = (base_resolution[0], base_resolution[1])
             self.canvas = pygame.Surface(canvas_resolution)
 
-
         self.text_formatter = pygame.font.SysFont(None, text_size, True)
         self.banner_formatter = pygame.font.SysFont(None, banner_size, True)
         self.bigscreen_formatter = pygame.font.SysFont(None, bigscreen_size, True)
@@ -115,7 +114,7 @@ class Renderer:
         elif len(self.handles) == 4:
             vs = ' vs ', (0, 0, 0)
             comma = ', ', (0, 0, 0)
-            result = [(form_txt(0),comma,form_txt(1), vs, form_txt(2), comma, form_txt(3))]
+            result = [(form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))]
         else:
             raise RuntimeError("bad number of handles")
 
@@ -137,7 +136,6 @@ class Renderer:
         view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
                          self.map_size[1] / 2 * grid_size - resolution[1] / 2]
         groups = self.groups
-        text_formatter = self.text_formatter
         banner_formatter = self.banner_formatter
         status = True
         triggered = False
@@ -230,7 +228,7 @@ class Renderer:
             if status or triggered or self.animation_progress < animation_total + animation_stop:
                 self.animation_progress += 1
 
-            self.display.blit(self.canvas,(0,7))
+            self.display.blit(self.canvas, (0, 7))
 
             height_now = 0
             for texts in self.get_banners(self.frame_id, resolution):
