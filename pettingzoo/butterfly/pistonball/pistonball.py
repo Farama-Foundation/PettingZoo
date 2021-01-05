@@ -27,12 +27,9 @@ def get_image(path):
 def env(**kwargs):
     env = raw_env(**kwargs)
     if env.continuous:
-        default_val = np.zeros((1,))
         env = wrappers.ClipOutOfBoundsWrapper(env)
     else:
-        default_val = 1
         env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.NanNoOpWrapper(env, default_val, "setting action to {}".format(default_val))
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 

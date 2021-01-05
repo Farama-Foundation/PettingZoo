@@ -37,10 +37,6 @@ class EnvLogger():
         EnvLogger._generic_warning("[WARNING]: Received an action {} that was outside action space {}. Environment is {}".format(action, action_space, backup_policy))
 
     @staticmethod
-    def warn_action_is_NaN(backup_policy):
-        EnvLogger._generic_warning("[WARNING]: Received an NaN action. Environment is {}".format(backup_policy))
-
-    @staticmethod
     def warn_close_unrendered_env():
         EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
 

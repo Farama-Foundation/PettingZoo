@@ -10,8 +10,6 @@ def make_env(raw_env):
     def env(**kwargs):
         env = raw_env(**kwargs)
         env = wrappers.AssertOutOfBoundsWrapper(env)
-        backup_policy = "taking zero action (no movement, communication 0)"
-        env = wrappers.NanNoOpWrapper(env, 0, backup_policy)
         env = wrappers.OrderEnforcingWrapper(env)
         return env
     return env

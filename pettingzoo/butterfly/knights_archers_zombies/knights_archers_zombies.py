@@ -28,8 +28,6 @@ def get_image(path):
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
-    default_val = 1
-    env = wrappers.NanNoOpWrapper(env, default_val, "setting action to 1")
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
