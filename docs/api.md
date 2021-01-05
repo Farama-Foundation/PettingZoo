@@ -133,6 +133,21 @@ for step in range(max_cycles):
 
 ## Utils
 
+### Average Total Reward Util
+
+The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
+
+This value is important for establishing the simplest possible baseline: the random policy. 
+
+```
+from pettingzoo.utils import average_total_reward
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+average_total_reward(env, max_episodes=100, max_steps=10000000000)
+```
+
+Where `max_episodes` and `max_stpes` both limit the total number of evaluations (when the first is hit evaluation stops)
+
 ### Manual Control
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
