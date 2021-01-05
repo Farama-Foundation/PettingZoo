@@ -30,7 +30,10 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(9) for i in self.agents}
-        self.observation_spaces = {i: spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8) for i in self.agents}
+        self.observation_spaces = {i: spaces.Dict({
+                                        'observation': spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8),
+                                        'action_mask': spaces.Box(low=0, high=1, shape=(9,), dtype=np.int8)
+                                  }) for i in self.agents}
 
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
@@ -56,10 +59,18 @@ class raw_env(AECEnv):
 
         cur_p_board = np.equal(board_vals, cur_player + 1)
         opp_p_board = np.equal(board_vals, opp_player + 1)
-        return np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
 
-    def seed(self, seed=None):
-        pass
+        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        legal_moves = self._legal_moves() if agent == self.agent_selection else []
+
+        action_mask = np.zeros(9, int)
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {'observation': observation, 'action_mask': action_mask}
+
+    def _legal_moves(self):
+        return [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action):
@@ -74,8 +85,6 @@ class raw_env(AECEnv):
         # list of valid actions (indexes in board)
         # next_agent = self.agents[(self.agents.index(self.agent_selection) + 1) % len(self.agents)]
         next_agent = self._agent_selector.next()
-        self.infos[self.agent_selection]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
-        self.infos[next_agent]['legal_moves'] = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
         if self.board.check_game_over():
             winner = self.board.check_for_winner()
@@ -110,8 +119,7 @@ class raw_env(AECEnv):
         self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
-        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in self.agents}
-
+        self.infos = {i: {} for i in self.agents}
         # selects the first agent
         self._agent_selector.reinit(self.agents)
         self._agent_selector.reset()

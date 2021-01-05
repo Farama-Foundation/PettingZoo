@@ -40,9 +40,6 @@ class raw_env(AECEnv):
         self.display_wait = 0.0
         self.reinit()
 
-    def seed(self, seed=None):
-        pass
-
     def reinit(self):
         self.agents = self.possible_agents[:]
         self._agent_selector = agent_selector(self.agents)
