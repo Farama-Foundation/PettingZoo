@@ -32,7 +32,7 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
                 action = env.action_spaces[agent].sample()
             env.step(action)
 
-    num_episodes = episode + 1
+        num_episodes = episode + 1
     print("Average total reward", total_reward / num_episodes)
 
     return total_reward / num_episodes
