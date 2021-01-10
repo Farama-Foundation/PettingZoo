@@ -10,8 +10,6 @@ from .max_cycles_test import max_cycles_test
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_module(name, env_module):
-    if "classic" not in name:
-        return
     _env = env_module.env()
     api_test(_env)
     if "classic/" not in name:
@@ -19,4 +17,8 @@ def test_module(name, env_module):
 
     if "prospector" not in name:
         seed_test(env_module.env, 50)
+
     max_cycles_test(env_module, name)
+
+    recreated_env = pickle.loads(pickle.dumps(_env))
+    api_test(recreated_env)
