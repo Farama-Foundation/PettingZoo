@@ -1,7 +1,5 @@
 import numpy as np
 
-from six.moves import xrange
-
 from scipy.ndimage import zoom
 
 
@@ -13,8 +11,8 @@ def rectangle_map(xs, ys, xb=0.3, yb=0.2):
     """
 
     rmap = np.zeros((xs, ys), dtype=np.int32)
-    for i in xrange(xs):
-        for j in xrange(ys):
+    for i in range(xs):
+        for j in range(ys):
             # are we in the rectnagle in x dim?
             if (float(i) / xs) > xb and (float(i) / xs) < (1.0 - xb):
                 # are we in the rectangle in y dim?
@@ -42,7 +40,7 @@ def gen_map(xs, ys, n_obs, randomizer, center_bounds=[0.0, 1.0], length_bounds=[
     ll, lu = length_bounds
     if gmap is None:
         gmap = np.zeros((xs, ys), dtype=np.int32)
-    for _ in xrange(n_obs):
+    for _ in range(n_obs):
         xc = randomizer.uniform(cl, cu)
         yc = randomizer.uniform(cl, cu)
         xl = randomizer.uniform(ll, lu)
@@ -85,8 +83,8 @@ def add_rectangle(input_map, xc, yc, xl, yl):
     x_lbound, x_upbound = np.clip([x_lbound, x_upbound], 0, xs)
     y_lbound, y_upbound = np.clip([y_lbound, y_upbound], 0, ys)
 
-    for i in xrange(x_lbound, x_upbound):
-        for j in xrange(y_lbound, y_upbound):
+    for i in range(x_lbound, x_upbound):
+        for j in range(y_lbound, y_upbound):
             input_map[j, i] = -1
     return input_map
 
