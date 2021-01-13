@@ -1,7 +1,5 @@
 import numpy as np
 
-from six.moves import xrange
-
 from .discrete_agent import DiscreteAgent
 
 #################################################################
@@ -20,7 +18,7 @@ def create_agents(nagents, map_matrix, obs_range, randomizer, flatten=False, ran
     xs, ys = map_matrix.shape
     agents = []
     expanded_mat = np.zeros((xs + 2, ys + 2))
-    for i in xrange(nagents):
+    for i in range(nagents):
         xinit, yinit = (0, 0)
         if randinit:
             xinit, yinit = feasible_position_exp(
@@ -65,8 +63,8 @@ def set_agents(agent_matrix, map_matrix):
 
     agents = []
     xs, ys = agent_matrix.shape
-    for i in xrange(xs):
-        for j in xrange(ys):
+    for i in range(xs):
+        for j in range(ys):
             n_agents = agent_matrix[i, j]
             if n_agents > 0:
                 if map_matrix[i, j] == -1:
