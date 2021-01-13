@@ -42,7 +42,7 @@ class raw_env(AECEnv, EzPickle):
     metadata = {'render.modes': ['human', "rgb_array"]}
 
     def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
-        EzPickle.__init__(self, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
+        EzPickle.__init__(self, n_pistons, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40
