@@ -468,6 +468,7 @@ class raw_env(AECEnv, EzPickle):
 
         self._clear_rewards()
         self.rewards[agent] = agent_name.score
+        agent_name.score = 0
         done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
 
