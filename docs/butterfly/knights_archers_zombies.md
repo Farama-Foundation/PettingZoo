@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
-average-total-reward: "241.8"
+average-total-reward: "2.95"
 import: "from pettingzoo.butterfly import knights_archers_zombies_v6"
 agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
