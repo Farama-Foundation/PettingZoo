@@ -1,4 +1,4 @@
-from pettingzoo.utils.observation_saver import save_observation
+from pettingzoo.utils import save_observation
 import gym
 import numpy as np
 
