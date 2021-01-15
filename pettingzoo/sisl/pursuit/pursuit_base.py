@@ -7,7 +7,7 @@ import numpy as np
 from gym import spaces
 from gym.utils import seeding
 
-
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 
 from .utils import agent_utils
