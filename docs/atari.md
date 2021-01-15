@@ -15,7 +15,7 @@ Most games have two players, with the exception of Warlords and a couple of Pong
 The ALE has been studied extensively and a few notable problems have been identified:
 
 * **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/PettingZoo-Team/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
-* **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this is a frame stack of the previous 4 observations (see example below for implementation).
+* **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this computing the pixel-wise maximum of the previous 2 observations (see example below for implementation).
 
 ### Preprocessing
 
@@ -28,23 +28,27 @@ pip install supersuit
 Here is some example usage for the Atari preprocessing:
 
 ```python
-from supersuit import resize, frame_skip, frame_stack, sticky_actions
+import supersuit
 from pettingzoo.atari import space_invaders_v1
 
 env = space_invaders_v1.env()
 
+# as per openai baseline's MaxAndSKip wrapper, maxes over the last 2 frames
+# to deal with frame flickering
+env = supersuit.max_observation_v0(env, 2)
+
 # repeat_action_probability is set to 0.25 to introduce non-determinism to the system
-env = sticky_actions(env, repeat_action_probability=0.25)
-
-# downscale observation for faster processing
-env = resize(env, (84, 84))
-
-# allow agent to see everything on the screen despite Atari's flickering screen problem
-env = frame_stack(env, 4)
+env = supersuit.sticky_actions_v0(env, repeat_action_probability=0.25)
 
 # skip frames for faster processing and less control
 # to be compatable with gym, use frame_skip(env, (2,5))
-env = frame_skip(env, 4)
+env = supersuit.frame_skip_v0(env, 4)
+
+# downscale observation for faster processing
+env = supersuit.resize_v0(env, 84, 84)
+
+# allow agent to see everything on the screen despite Atari's flickering screen problem
+env = supersuit.frame_stack_v1(env, 4)
 ```
 
 ### Common Parameters
