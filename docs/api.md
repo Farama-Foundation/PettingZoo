@@ -5,8 +5,8 @@
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
 ```python
-from pettingzoo.butterfly import pistonball_v1
-env = pistonball_v1.env()
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
