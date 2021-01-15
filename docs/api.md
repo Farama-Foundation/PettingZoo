@@ -170,13 +170,13 @@ random_demo(env, render=True, cycles=100000000)
 
 ### Observation Saving
 
-If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to.
+If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
 ```python
 from pettingzoo.utils import save_observation
-save_observation(env, agent=agent, all_agents=False, save_dir=os.getcwd())
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+env.reset()
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
-save_observation(env, agent=None, all_agents=True, save_dir=os.getcwd())
 ```
 
-The first function will save the current observation for the specified agent. The second function will save the current observation based on the currently selected agent. The last function will save the current observations of all agents in the environment.
