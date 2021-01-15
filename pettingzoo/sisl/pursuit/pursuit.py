@@ -1,3 +1,5 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 from .pursuit_base import Pursuit as _env
 from .manual_control import manual_control
 from pettingzoo import AECEnv
