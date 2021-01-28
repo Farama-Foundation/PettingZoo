@@ -4,9 +4,6 @@ import pytest
 from .all_modules import all_environments
 from.api_test import api_test
 
-from .seed_test import seed_test, check_environment_deterministic
-from .render_test import render_test
-
 
 parameterized_envs = [
     (boxing_v1.env, dict(obs_type="grayscale_image")),
@@ -74,6 +71,8 @@ parameterized_envs = [
     (hanabi_v3.env, dict(random_start_player=False)),
     (hanabi_v3.env, dict(random_start_player=True)),
 
+
+    # Commented out due to rare segfault 
     # (tiger_deer_v3.env, dict(minimap_mode=True)),
     # (battle_v2.env, dict(minimap_mode=False)),
     # (adversarial_pursuit_v2.env, dict(map_size=15)),

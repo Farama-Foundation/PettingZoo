@@ -1,7 +1,5 @@
 import os
 
-
-# add more dir names here
 dir_names = ["butterfly", "sisl", "magent", "mpe"]
 
 had_error = False
