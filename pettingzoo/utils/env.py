@@ -88,9 +88,9 @@ class AECEnv:
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return self.metadata.get('name', repr(self))
+            return self.metadata.get('name', self.__class__.__name__)
         else:
-            return repr(self)
+            return self.__class__.__name__
 
 
 class AECIterable:
@@ -153,6 +153,6 @@ class ParallelEnv:
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return self.metadata.get('name', repr(self))
+            return self.metadata.get('name', self.__class__.__name__)
         else:
-            return repr(self)
+            return self.__class__.__name__
