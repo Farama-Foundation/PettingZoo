@@ -133,6 +133,8 @@ def generate_map(env, map_size, handles):
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
+    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "combined_arms_v3"}
+
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
         assert map_size >= 16, "size of map must be at least 16"

@@ -20,8 +20,6 @@ def make_env(raw_env):
 
 
 class magent_parallel_env(ParallelEnv):
-    metadata = {'render.modes': ['human', 'rgb_array']}
-
     def __init__(self, env, active_handles, names, map_size, max_cycles, reward_range, minimap_mode):
         self.map_size = map_size
         self.max_cycles = max_cycles

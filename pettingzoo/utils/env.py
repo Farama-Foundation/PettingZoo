@@ -86,6 +86,12 @@ class AECEnv:
         observation = self.observe(agent) if observe else None
         return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
 
+    def __str__(self):
+        if hasattr(self, 'metadata'):
+            return f"<{self.metadata.get('name', repr(self))}>"
+        else:
+            return f"<{self}>"
+
 
 class AECIterable:
     def __init__(self, env, max_iter):
@@ -144,3 +150,9 @@ class ParallelEnv:
     @property
     def env_done(self):
         return not self.agents
+
+    def __str__(self):
+        if hasattr(self, 'metadata'):
+            return f"<{self.metadata.get('name', repr(self))}>"
+        else:
+            return f"<{self}>"
