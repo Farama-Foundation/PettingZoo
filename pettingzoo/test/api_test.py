@@ -1,12 +1,9 @@
 import pettingzoo
-from pettingzoo.utils import agent_selector
 import warnings
 import numpy as np
-from copy import copy
 import gym
 import random
 import re
-import os
 
 
 def test_observation(observation, observation_0):
@@ -258,7 +255,7 @@ def api_test(env, num_cycles=10, render=False, verbose_progress=False):
 
     progress_report("Finished test_rewards_dones")
 
-    # test that if env has overridden render(), they must have overridden close() as well
+    # Test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
     base_close = pettingzoo.utils.env.AECEnv.close
     if base_render != env.__class__.render:
