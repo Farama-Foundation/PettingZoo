@@ -88,9 +88,9 @@ class AECEnv:
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return f"<{self.metadata.get('name', repr(self))}>"
+            return self.metadata.get('name', repr(self))
         else:
-            return f"<{self}>"
+            return repr(self)
 
 
 class AECIterable:
@@ -153,6 +153,6 @@ class ParallelEnv:
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return f"<{self.metadata.get('name', repr(self))}>"
+            return self.metadata.get('name', repr(self))
         else:
-            return f"<{self}>"
+            return repr(self)
