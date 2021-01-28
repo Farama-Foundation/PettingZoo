@@ -1,6 +1,5 @@
 import sys
 from .api_test import api_test
-from .bombardment_test import bombardment_test
 from .performance_benchmark import performance_benchmark
 from .manual_control_test import manual_control_test
 from .all_modules import all_environments, manual_environments

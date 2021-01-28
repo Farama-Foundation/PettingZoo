@@ -6,7 +6,6 @@ performance=True
 save_obs=True
 num_cycles=1000
 
-# runs all tests in .travis.yml
 pytest pettingzoo/test/pytest_runner.py
 bash ./check_style.sh
 python3 -m pettingzoo.test.print_test

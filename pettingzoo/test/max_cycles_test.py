@@ -1,6 +1,3 @@
-import warnings
-
-
 def max_cycles_test(mod, name):
     if "classic/" in name:
         return
