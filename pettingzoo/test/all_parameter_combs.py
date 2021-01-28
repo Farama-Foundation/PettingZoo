@@ -71,8 +71,7 @@ parameterized_envs = [
     (hanabi_v3.env, dict(random_start_player=False)),
     (hanabi_v3.env, dict(random_start_player=True)),
 
-
-    # Commented out due to rare segfault 
+    # Commented out due to rare segfault
     # (tiger_deer_v3.env, dict(minimap_mode=True)),
     # (battle_v2.env, dict(minimap_mode=False)),
     # (adversarial_pursuit_v2.env, dict(map_size=15)),
