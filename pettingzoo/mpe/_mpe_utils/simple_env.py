@@ -16,13 +16,12 @@ def make_env(raw_env):
 
 
 class SimpleEnv(AECEnv):
-
-    metadata = {'render.modes': ['human', 'rgb_array']}
-
     def __init__(self, scenario, world, max_cycles, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.seed()
+
+        self.metadata = {'render.modes': ['human', 'rgb_array']}
 
         self.max_cycles = max_cycles
         self.scenario = scenario

@@ -200,9 +200,6 @@ class BallSprite(pygame.sprite.Sprite):
 
 
 class CooperativePong(gym.Env):
-
-    metadata = {'render.modes': ['human', "rgb_array"]}
-
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
@@ -369,7 +366,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human', "rgb_array"]}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "cooperative_pong_v2"}
 
     def __init__(self, **kwargs):
         EzPickle.__init__(self, **kwargs)

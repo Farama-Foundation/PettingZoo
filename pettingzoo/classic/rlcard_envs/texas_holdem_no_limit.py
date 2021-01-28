@@ -20,7 +20,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human'], "name": "texas_holdem_no_limit_v2"}
 
     def __init__(self):
         super().__init__("no-limit-holdem", 2, (54,))

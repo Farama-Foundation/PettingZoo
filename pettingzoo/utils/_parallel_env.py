@@ -68,3 +68,6 @@ class _parallel_env_wrapper(AECEnv):
 
     def close(self):
         self.env.close()
+
+    def __str__(self):
+        return str(self.env)

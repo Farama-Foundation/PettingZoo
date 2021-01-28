@@ -22,7 +22,7 @@ def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
         agent_list = env.agents[:]
     for a in agent_list:
         _check_observation_saveable(env, a)
-        save_folder = "{}/{}".format(save_dir, env.__module__)
+        save_folder = "{}/{}".format(save_dir, str(env).replace("<","_").replace(">","_"))
         os.makedirs(save_folder, exist_ok=True)
 
         observation = env.observe(a)

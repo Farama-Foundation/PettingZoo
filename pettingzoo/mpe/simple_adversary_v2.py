@@ -8,6 +8,7 @@ class raw_env(SimpleEnv):
         scenario = Scenario()
         world = scenario.make_world(N=2)
         super().__init__(scenario, world, max_cycles)
+        self.metadata['name'] = "simple_adversary_v2"
 
 
 env = make_env(raw_env)

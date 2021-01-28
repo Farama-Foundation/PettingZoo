@@ -18,7 +18,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', "rgb_array"]}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'waterworld_v3'}
 
     def __init__(self, *args, **kwargs):
         super().__init__()

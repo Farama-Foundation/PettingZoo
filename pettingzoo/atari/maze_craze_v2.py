@@ -1,5 +1,6 @@
 from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 import warnings
+import os
 
 
 avaliable_versions = {
@@ -16,7 +17,7 @@ def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
     assert 0 <= visibilty_level < 4, "visibility level must be between 0 and 4, where 0 is 100% visiblity and 3 is 0% visibility"
     base_mode = (avaliable_versions[game_version] - 1) * 4
     mode = base_mode + visibilty_level
-    return BaseAtariEnv(game="maze_craze", num_players=2, mode_num=mode, **kwargs)
+    return BaseAtariEnv(game="maze_craze", num_players=2, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs)
 
 
 env = base_env_wrapper_fn(raw_env)

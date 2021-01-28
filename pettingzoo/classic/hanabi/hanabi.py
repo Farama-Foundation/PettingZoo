@@ -42,7 +42,7 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human'], "name": "hanabi_v3"}
 
     # set of all required params
     required_keys: set = {
