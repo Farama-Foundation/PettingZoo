@@ -24,30 +24,30 @@ Each agent receives an observation composed of various physical properties of it
 
 This table enumerates the observation space:
 
-| Index: [start, end) | Description                                                  |   Values    |
-| :-----------------: | ------------------------------------------------------------ | :---------: |
-|          0          | Hull angle                                                   |  [0, 2*pi]  |
-|          1          | Hull angular velocity                                        | [-inf, inf] |
-|          2          | X Velocity                                                   |   [-1, 1]   |
-|          3          | Y Velocity                                                   |   [-1, 1]   |
-|          4          | Hip joint 1 angle                                            | [-inf, inf] |
-|          5          | Hip joint 1 speed                                            | [-inf, inf] |
-|          6          | Knee joint 1 angle                                           | [-inf, inf] |
-|          7          | Knee joint 1 speed                                           | [-inf, inf] |
-|          8          | Leg 1 ground contact flag                                    |   {0, 1}    |
-|          9          | Hip joint 1 angle                                            | [-inf, inf] |
-|         10          | Hip joint 2 speed                                            | [-inf, inf] |
-|         11          | Knee joint 2 angle                                           | [-inf, inf] |
-|         12          | Knee joint 2 speed                                           | [-inf, inf] |
-|         13          | Leg 2 ground contact flag                                    |   {0, 1}    |
-|        14-23        | LIDAR sensor readings                                        | [-inf, inf] |
-|         24          | Left neighbor relative X position (0.0 for leftmost walker) (Noisy) | [-inf, inf] |
-|         25          | Left neighbor relative Y position (0.0 for leftmost walker) (Noisy) | [-inf, inf] |
-|         26          | Right neighbor relative X position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
-|         27          | Right neighbor relative Y position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
-|         28          | Walker X position relative to package (0 for left edge, 1 for right edge) | [-inf, inf] |
-|         29          | Walker Y position relative to package                        | [-inf, inf] |
-|         30          | Package angle                                                | [-inf, inf] |
+| Index: [start, end) | Description                                |   Values    |
+| :-----------------: | ------------------------------------------ | :---------: |
+|          0          | Hull angle                                 |  [0, 2*pi]  |
+|          1          | Hull angular velocity                      | [-inf, inf] |
+|          2          | X Velocity                                 |   [-1, 1]   |
+|          3          | Y Velocity                                 |   [-1, 1]   |
+|          4          | Hip joint 1 angle                          | [-inf, inf] |
+|          5          | Hip joint 1 speed                          | [-inf, inf] |
+|          6          | Knee joint 1 angle                         | [-inf, inf] |
+|          7          | Knee joint 1 speed                         | [-inf, inf] |
+|          8          | Leg 1 ground contact flag                  |   {0, 1}    |
+|          9          | Hip joint 1 angle                          | [-inf, inf] |
+|         10          | Hip joint 2 speed                          | [-inf, inf] |
+|         11          | Knee joint 2 angle                         | [-inf, inf] |
+|         12          | Knee joint 2 speed                         | [-inf, inf] |
+|         13          | Leg 2 ground contact flag                  |   {0, 1}    |
+|        14-23        | LIDAR sensor readings                      | [-inf, inf] |
+|         24          | Left neighbor relative X position (Noisy)  | [-inf, inf] |
+|         25          | Left neighbor relative Y position (Noisy)  | [-inf, inf] |
+|         26          | Right neighbor relative X position (Noisy) | [-inf, inf] |
+|         27          | Right neighbor relative Y position (Noisy) | [-inf, inf] |
+|         28          | Walker X position relative to package      | [-inf, inf] |
+|         29          | Walker Y position relative to package      | [-inf, inf] |
+|         30          | Package angle                              | [-inf, inf] |
 ### Arguments
 
 ```
