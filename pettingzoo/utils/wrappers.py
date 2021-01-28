@@ -70,7 +70,7 @@ class BaseWrapper(AECEnv):
         self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
-        return '<{}{}>'.format(type(self).__name__, str(self.env))
+        return '{}<{}>'.format(type(self).__name__, str(self.env))
 
 
 class TerminateIllegalWrapper(BaseWrapper):
@@ -248,6 +248,6 @@ class OrderEnforcingWrapper(BaseWrapper):
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return str(self.env) if self.__class__ is OrderEnforcingWrapper else '<{}{}>'.format(type(self).__name__, str(self.env))
+            return str(self.env) if self.__class__ is OrderEnforcingWrapper else '{}<{}>'.format(type(self).__name__, str(self.env))
         else:
             return repr(self)
