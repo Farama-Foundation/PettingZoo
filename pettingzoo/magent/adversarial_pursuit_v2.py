@@ -69,6 +69,8 @@ def get_config(map_size, minimap_mode, tag_penalty):
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
+    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "adversarial_pursuit_v2"}
+
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
         assert map_size >= 7, "size of map must be at least 7"

@@ -39,7 +39,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"]}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v3"}
 
     def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
         EzPickle.__init__(self, n_pistons, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)

@@ -1,4 +1,5 @@
 from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+import os
 
 avaliable_2p_versions = {
     "classic": 4,
@@ -28,7 +29,7 @@ def raw_env(num_players=2, game_version="classic", **kwargs):
     versions = avaliable_2p_versions if num_players == 2 else avaliable_4p_versions
     assert game_version in versions, f"pong version {game_version} not supported for number of players {num_players}. Avaliable options are {list(versions)}"
     mode = versions[game_version]
-    return BaseAtariEnv(game="pong", num_players=num_players, mode_num=mode, **kwargs)
+    return BaseAtariEnv(game="pong", num_players=num_players, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs)
 
 
 env = base_env_wrapper_fn(raw_env)

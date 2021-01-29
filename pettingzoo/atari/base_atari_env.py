@@ -25,9 +25,6 @@ def BaseAtariEnv(**kwargs):
 
 
 class ParallelAtariEnv(ParallelEnv, EzPickle):
-
-    metadata = {'render.modes': ['human', 'rgb_array']}
-
     def __init__(
             self,
             game,
@@ -36,6 +33,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed=None,
             obs_type='rgb_image',
             full_action_space=True,
+            env_name=None,
             max_cycles=100000,
             auto_rom_install_path=None):
         """Frameskip should be either a tuple (indicating a random range to
@@ -48,6 +46,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             seed,
             obs_type,
             full_action_space,
+            env_name,
             max_cycles,
             auto_rom_install_path,
         )
@@ -57,6 +56,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.full_action_space = full_action_space
         self.num_players = num_players
         self.max_cycles = max_cycles
+        if env_name is None:
+            env_name = "custom_" + game
+        self.metadata = {'render.modes': ['human', 'rgb_array'], 'name': env_name}
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()

@@ -24,7 +24,7 @@ class raw_env(AECEnv):
     """Two-player environment for rock paper scissors.
     The observation is simply the last opponent action."""
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
     def __init__(self):
         self.agents = ["player_" + str(r) for r in range(2)]

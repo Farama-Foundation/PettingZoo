@@ -20,7 +20,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human'], "name": "leduc_holdem_v2"}
 
     def __init__(self):
         super().__init__("leduc-holdem", 2, (36,))
