@@ -19,7 +19,7 @@ Rock Paper Scissors Lizard Spock is a variation of the traditional Rock Paper Sc
 
 #### Observation Space
 
-The observation space is a scalar value with 6 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 5 represents no action taken yet. Rock is represented with 0, paper with 1, scissors with 2, lizard with 3, and Spock with 4.
+The observation is the last opponent action and its space is a scalar value with 6 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 5 represents no action taken yet. Rock is represented with 0, paper with 1, scissors with 2, lizard with 3, and Spock with 4.
 
 | Value  |  Observation |
 | :----: | :---------:  |
