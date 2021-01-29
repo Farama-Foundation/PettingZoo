@@ -95,7 +95,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
-        self.metadata = {'render.modes': ['human', "rgb_array"]}
+        self.metadata = {'render.modes': ['human', "rgb_array"], 'name': "prison_v2"}
         self.infos = {}
         self.rendering = False
         self.max_cycles = max_cycles

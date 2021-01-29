@@ -69,6 +69,9 @@ class BaseWrapper(AECEnv):
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards
 
+    def __str__(self):
+        return '{}<{}>'.format(type(self).__name__, str(self.env))
+
 
 class TerminateIllegalWrapper(BaseWrapper):
     '''
@@ -115,6 +118,9 @@ class TerminateIllegalWrapper(BaseWrapper):
         else:
             super().step(action)
 
+    def __str__(self):
+        return str(self.env)
+
 
 class CaptureStdoutWrapper(BaseWrapper):
     def __init__(self, env):
@@ -132,6 +138,9 @@ class CaptureStdoutWrapper(BaseWrapper):
                 val = stdout.getvalue()
             return val
 
+    def __str__(self):
+        return str(self.env)
+
 
 class AssertOutOfBoundsWrapper(BaseWrapper):
     '''
@@ -145,6 +154,9 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
     def step(self, action):
         assert (action is None and self.dones[self.agent_selection]) or self.action_spaces[self.agent_selection].contains(action), "action is not in action space"
         super().step(action)
+
+    def __str__(self):
+        return str(self.env)
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):
@@ -164,6 +176,9 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             action = np.clip(action, space.low, space.high)
 
         super().step(action)
+
+    def __str__(self):
+        return str(self.env)
 
 
 class OrderEnforcingWrapper(BaseWrapper):
@@ -230,3 +245,9 @@ class OrderEnforcingWrapper(BaseWrapper):
     def reset(self):
         self._has_reset = True
         super().reset()
+
+    def __str__(self):
+        if hasattr(self, 'metadata'):
+            return str(self.env) if self.__class__ is OrderEnforcingWrapper else '{}<{}>'.format(type(self).__name__, str(self.env))
+        else:
+            return repr(self)

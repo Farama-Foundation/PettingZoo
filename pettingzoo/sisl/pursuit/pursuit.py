@@ -23,7 +23,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"]}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'pursuit_v3'}
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)

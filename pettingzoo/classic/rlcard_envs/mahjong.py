@@ -18,7 +18,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human']}
+    metadata = {'render.modes': ['human'], "name": "mahjong_v2"}
 
     def __init__(self):
         super().__init__("mahjong", 4, (6, 34, 4))
