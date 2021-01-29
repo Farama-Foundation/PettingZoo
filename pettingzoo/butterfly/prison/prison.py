@@ -1,6 +1,5 @@
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
-import pygame
 import os
 import numpy as np
 from gym import spaces
@@ -10,6 +9,7 @@ from gym.utils import seeding
 from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+import pygame
 
 
 def get_image(path):
