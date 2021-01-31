@@ -68,10 +68,9 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `seed(seed=None)`: Reseeds the environment. `reset()` must be called after `seed()`, and before `step()`.
 
-`render(mode='human')`: Displays a rendered frame from the environment, if supported. Environments may support different render modes.
+`render(mode='human')`: Displays a rendered frame from the environment, if supported. Alternate render modes in the default environments are `'rgb_array'` which returns a numpy array and is supported by all environments outside of classic, and `'ansi'` which returns the strings printed (specific to classic environments).
 
 `close()`: Closes the rendering window.
-
 
 ## Noteable Idioms
 
