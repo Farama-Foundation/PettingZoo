@@ -510,13 +510,11 @@ class raw_env(AECEnv, EzPickle):
         if not self.render_on and mode == "human":
             # sets self.render_on to true and initializes display
             self.enable_render()
-        if mode == "rgb_array":
+
+        observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
+        if mode == "human":
             pygame.display.flip()
-            observation = np.array(pygame.surfarray.pixels3d(self.screen))
-            observation = np.transpose(observation, axes=(1, 0, 2))
-            return observation
-        elif mode == "human":
-            pygame.display.flip()
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def close(self):
         if not self.closed:

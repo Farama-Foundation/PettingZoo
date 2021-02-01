@@ -138,7 +138,8 @@ class raw_env(AECEnv, EzPickle):
         y_high = self.screen_height - self.wall_width - self.piston_body_height
         y_low = self.wall_width
         cropped = np.array(observation[x_low:x_high, y_low:y_high, :])
-        observation = np.transpose(observation, axes=(1, 0, 2))
+        observation = np.rot90(cropped, k=3)
+        observation = np.fliplr(observation)
         return observation
 
     def enable_render(self):
@@ -361,13 +362,9 @@ class raw_env(AECEnv, EzPickle):
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
-        if mode == "rgb_array":
-            pygame.display.flip()
-            observation = np.array(pygame.surfarray.pixels3d(self.screen))
-            observation = np.transpose(observation, axes=(1, 0, 2))
-            return observation
-        elif mode == "human":
-            pygame.display.flip()
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        pygame.display.flip()
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def step(self, action):
         if self.dones[self.agent_selection]:
