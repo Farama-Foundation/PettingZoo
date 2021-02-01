@@ -81,7 +81,6 @@ class raw_env(AECEnv):
             self.roll = roll
 
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def observe(self, agent):
         action_mask = np.zeros(1353, int)

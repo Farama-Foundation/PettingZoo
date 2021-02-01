@@ -231,7 +231,6 @@ class raw_env(AECEnv):
         self.dones[self.agent_order[1]] = winner is not None
 
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def render(self, mode="human"):
         board = self.ch.flat_board()

@@ -794,7 +794,6 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent_id] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def reset(self):
         self.screen = pg.Surface(const.SCREEN_SIZE)

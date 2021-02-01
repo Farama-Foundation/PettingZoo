@@ -101,7 +101,6 @@ class raw_env(AECEnv):
             self.agent_selection = next_agent
 
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def reset(self):
         # reset environment
