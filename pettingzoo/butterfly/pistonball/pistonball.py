@@ -363,8 +363,10 @@ class raw_env(AECEnv, EzPickle):
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        observation = np.rot90(observation, k=3)
+        observation = np.fliplr(observation)
         pygame.display.flip()
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        return observation if mode == "rgb_array" else None
 
     def step(self, action):
         if self.dones[self.agent_selection]:
