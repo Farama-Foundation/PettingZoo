@@ -229,6 +229,8 @@ class OrderEnforcingWrapper(BaseWrapper):
         self._has_reset = False
 
     def step(self, action):
+        if np.isnan(action):
+            EnvLogger.error_nan_action()
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
         elif not self.agents:

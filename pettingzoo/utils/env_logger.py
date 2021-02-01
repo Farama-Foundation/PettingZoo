@@ -64,6 +64,10 @@ class EnvLogger():
     def error_render_before_reset():
         assert False, "reset() needs to be called before render"
 
+    @staticmethod
+    def error_nan_action():
+        assert False, "step() cannot take in a nan action"
+
 
 class EnvWarningHandler(logging.Handler):
     def __init__(self, *args, mqueue, **kwargs):
