@@ -279,8 +279,7 @@ class raw_env(AECEnv, EzPickle):
             p = self.prisoners[agent]
             x1, y1, x2, y2 = p.window
             sub_screen = np.array(capture[x1:x2, y1:y2, :])
-            sub_screen = np.rot90(sub_screen, k=3)
-            sub_screen = np.fliplr(sub_screen)
+            sub_screen = np.transpose(sub_screen, axes=(1, 0, 2))
             return sub_screen
 
     def reinit(self):
@@ -360,10 +359,13 @@ class raw_env(AECEnv, EzPickle):
                     self.screen.blit(self.background_append, (0, h))
             self.rendering = True
 
-        observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if mode == "human":
+        if mode == "rgb_array":
             pygame.display.flip()
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            observation = np.array(pygame.surfarray.pixels3d(self.screen))
+            observation = np.transpose(observation, axes=(1, 0, 2))
+            return observation
+        elif mode == "human":
+            pygame.display.flip()
 
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven
