@@ -80,7 +80,6 @@ class raw_env(AECEnv):
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
