@@ -436,7 +436,6 @@ class raw_env(AECEnv, EzPickle):
 
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
 # added in by Justin Terry (which is why he's shown as the creator in the git history)

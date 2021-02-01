@@ -102,7 +102,6 @@ class raw_env(AECEnv):
             self.set_game_result(result_val)
 
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def render(self, mode='human'):
         print(self.board)

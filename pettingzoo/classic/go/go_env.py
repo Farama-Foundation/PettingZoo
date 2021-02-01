@@ -110,7 +110,6 @@ class raw_env(AECEnv):
             self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def reset(self):
         self.has_reset = True

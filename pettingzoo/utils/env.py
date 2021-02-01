@@ -40,12 +40,10 @@ class AECEnv:
         return not self.agents
 
     def _dones_step_first(self):
-        dones = self.dones
-        _dones_order = [agent for agent in self.agents if dones[agent]]
-        if len(_dones_order):
-            self._dones_iter = iter(_dones_order)
+        _dones_order = [agent for agent in self.agents if self.dones[agent]]
+        if _dones_order:
             self._skip_agent_selection = self.agent_selection
-            self.agent_selection = next(self._dones_iter)
+            self.agent_selection = _dones_order[0]
         return self.agent_selection
 
     def _clear_rewards(self):
@@ -57,11 +55,15 @@ class AECEnv:
             self._cumulative_rewards[agent] += reward
 
     def _find_next_agent(self):
-        try:
-            self.agent_selection = next(self._dones_iter)
-        except StopIteration:
-            if self.agents:
+        _dones_order = [agent for agent in self.agents if self.dones[agent]]
+        if _dones_order:
+            if getattr(self, '_skip_agent_selection', None) is None:
+                self._skip_agent_selection = self.agent_selection
+            self.agent_selection = _dones_order[0]
+        else:
+            if getattr(self, '_skip_agent_selection', None) is not None:
                 self.agent_selection = self._skip_agent_selection
+            self._skip_agent_selection = None
 
     def _remove_done_agent(self, agent):
         assert self.dones[agent], "an agent that was not done as attemted to be removed"

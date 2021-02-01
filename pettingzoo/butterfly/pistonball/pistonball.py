@@ -412,6 +412,5 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
 
 # Game art created by Justin Terry

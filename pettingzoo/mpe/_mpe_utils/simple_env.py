@@ -161,7 +161,6 @@ class SimpleEnv(AECEnv):
 
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
 
     def render(self, mode='human'):
         from . import rendering
