@@ -287,17 +287,15 @@ class CooperativePong(gym.Env):
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
-        if mode == "rgb_array":
+        observation = pygame.surfarray.pixels3d(self.screen)
+        if mode == "human":
             pygame.display.flip()
-            observation = np.array(pygame.surfarray.pixels3d(self.screen))
-            observation = np.transpose(observation, axes=(1, 0, 2))
-            return observation
-        elif mode == "human":
-            pygame.display.flip()
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self, agent):
         observation = pygame.surfarray.pixels3d(self.screen)
-        observation = np.transpose(observation, axes=(1, 0, 2))
+        observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
+        observation = np.fliplr(observation)  # laid out in the correct order
         if agent == self.agents[0]:
             return observation[:, :int(observation.shape[1] / 2), :]
         elif agent == self.agents[1]:
