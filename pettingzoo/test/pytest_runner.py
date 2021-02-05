@@ -19,7 +19,8 @@ def test_module(name, env_module):
     if "prospector" not in name:
         seed_test(env_module.env, 50)
 
-    max_cycles_test(env_module, name)
+    if "classic/" not in name:
+        max_cycles_test(env_module)
 
     recreated_env = pickle.loads(pickle.dumps(_env))
     api_test(recreated_env)
