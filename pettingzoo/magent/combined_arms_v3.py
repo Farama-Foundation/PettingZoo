@@ -7,7 +7,7 @@ import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from .magent_env import magent_parallel_env, make_env
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.from_parallel import from_parallel_wrapper
 from pettingzoo.utils.to_parallel import parallel_wrapper_fn
 from gym.utils import EzPickle
 
@@ -26,7 +26,7 @@ def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minim
 
 
 def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
-    return _parallel_env_wrapper(parallel_env(map_size, max_cycles, minimap_mode, **reward_args))
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, **reward_args))
 
 
 env = make_env(raw_env)

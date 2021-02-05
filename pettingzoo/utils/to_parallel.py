@@ -1,10 +1,10 @@
 from pettingzoo.utils.env import AECEnv
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
+from pettingzoo.utils.from_parallel import from_parallel_wrapper
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 from pettingzoo.utils.env import ParallelEnv
 
 
-class to_parallel(ParallelEnv):
+class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         self.aec_env = aec_env
         self.observation_spaces = aec_env.observation_spaces
@@ -53,15 +53,23 @@ class to_parallel(ParallelEnv):
 def parallel_wrapper_fn(env_fn):
     def par_fn(**kwargs):
         env = env_fn(**kwargs)
-        env = to_parallel(env)
+        env = to_parallel_wrapper(env)
         return env
     return par_fn
 
 
+def to_parallel(aec_env):
+    if isinstance(aec_env, from_parallel_wrapper):
+        return aec_env.env
+    else:
+        par_env = to_parallel_wrapper(par_env)
+        return par_env
+
+
 def from_parallel(par_env):
-    if isinstance(par_env, to_parallel):
+    if isinstance(par_env, to_parallel_wrapper):
         return par_env.aec_env
     else:
-        aec_env = _parallel_env_wrapper(par_env)
+        aec_env = from_parallel_wrapper(par_env)
         ordered_env = OrderEnforcingWrapper(aec_env)
         return ordered_env

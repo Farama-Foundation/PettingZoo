@@ -1,3 +1,20 @@
+
+# Example custom environment
+
+
+
+# Utility wrappers
+
+We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.
+
+* `BaseWrapper`: all AECEnv wrappers should inherit from this base class
+* `TerminateIllegalWrapper`: which handles illegal move logic for classic games
+* `CaptureStdoutWrapper`: which takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead.
+* `AssertOutOfBoundsWrapper`: Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces.
+* `ClipOutOfBoundsWrapper`: Clips the input action to fit in the continuous action space (emitting a warning if it does so). Applied to continuous environments in pettingzoo.
+* `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or .dones attribute is accessed before reset(), or if seed() and then step() is called before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
+
+
 # Tests
 
 PettingZoo has a number of tests which it puts environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
@@ -79,7 +96,7 @@ env = pistonball_v3.env()
 performance_benchmark(env)
 ```
 
-### Save obs test
+### Save observation test
 
 The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.
 
