@@ -3,7 +3,7 @@ from pettingzoo import AECEnv
 import copy
 
 
-class _parallel_env_wrapper(AECEnv):
+class from_parallel_wrapper(AECEnv):
 
     def __init__(self, parallel_env):
         self.metadata = parallel_env.metadata
