@@ -37,7 +37,10 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
 
     if "prospector" not in env_id:
         seed_test(env_module.env, num_cycles)
-    max_cycles_test(env_module, env_id)
+
+    if "classic/" not in env_id:
+        max_cycles_test(env_module)
+
     # error_test(env_module.env())
 
     if save_obs:
@@ -45,6 +48,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
 
     if render:
         try:
+            assert len(_env.metadata.get('render.modes')) >= 2
             render_test(_env)
         except Exception as e:
             error_collected.append("Render Test:" + str(e))
