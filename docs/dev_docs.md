@@ -15,6 +15,57 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 * `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or .dones attribute is accessed before reset(), or if seed() and then step() is called before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
 
 
+# Utils
+
+### Average Total Reward Util
+
+The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
+
+This value is important for establishing the simplest possible baseline: the random policy.
+
+```
+from pettingzoo.utils import average_total_reward
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+average_total_reward(env, max_episodes=100, max_steps=10000000000)
+```
+
+Where `max_episodes` and `max_stpes` both limit the total number of evaluations (when the first is hit evaluation stops)
+
+### Manual Control
+
+Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
+
+```python
+from pettingzoo.butterfly import prison_v2
+prison_v2.manual_control(<environment parameters>)
+```
+
+Environments say if they support this functionality in their documentation, and what the specific controls are.
+
+### Random Demo
+
+You can also easily get a quick impression of them by watching a random policy control all the actions:
+
+```python
+from pettingzoo.utils import random_demo
+random_demo(env, render=True, cycles=100000000)
+```
+
+### Observation Saving
+
+If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
+
+```python
+from pettingzoo.utils import save_observation
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+env.reset()
+save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
+```
+
+
+
 # Tests
 
 PettingZoo has a number of tests which it puts environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
