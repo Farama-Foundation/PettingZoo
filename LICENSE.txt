@@ -11,8 +11,8 @@ is owned by Justin Terry. The Secret Code font was also released under
 the MIT license by Matthew Welch (http://www.squaregear.net/fonts/).
 The MIT and Apache 2.0 licenses are included below.
 
-Justin Terry releases the elements of this repository not held by original
-authors under the following slightly modified MIT license:
+Justin Terry releases the elements of this repository he has copyright to
+under the following slightly modified MIT license:
 
 --------------------------------------------------------------------------------
 
