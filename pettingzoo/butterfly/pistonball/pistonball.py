@@ -249,6 +249,10 @@ class raw_env(AECEnv, EzPickle):
                   - (0.5 * self.pixels_per_position * self.n_piston_positions)
                   - vertical_offset_range
                   + self.vertical_offset)
+
+        # Ensure ball starts somewhere right of the left wall
+        ball_x = max(ball_x, self.wall_width + self.ball_radius + 1)
+
         self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
