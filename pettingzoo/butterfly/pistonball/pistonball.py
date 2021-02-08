@@ -58,6 +58,7 @@ class raw_env(AECEnv, EzPickle):
         obs_height = y_high - y_low
 
         assert self.piston_width == self.wall_width, "Wall width and piston width must be equal for observation calculation"
+        assert self.n_pistons > 1, "n_pistons must be greater than 1"
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
