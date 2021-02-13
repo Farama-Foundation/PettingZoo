@@ -6,8 +6,8 @@ from gym.utils import seeding, EzPickle
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
-from pettingzoo.utils.from_parallel import from_parallel_wrapper
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import from_parallel_wrapper
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 

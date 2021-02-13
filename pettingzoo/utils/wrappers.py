@@ -3,7 +3,7 @@ import copy
 from gym.spaces import Box, Discrete
 from gym import spaces
 import warnings
-from pettingzoo import AECEnv
+from pettingzoo.utils.env import AECEnv
 
 from .env_logger import EnvLogger
 from .capture_stdout import capture_stdout
