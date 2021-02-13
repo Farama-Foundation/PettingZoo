@@ -18,7 +18,7 @@ def to_parallel(aec_env):
     if isinstance(aec_env, from_parallel_wrapper):
         return aec_env.env
     else:
-        par_env = to_parallel_wrapper(par_env)
+        par_env = to_parallel_wrapper(aec_env)
         return par_env
 
 

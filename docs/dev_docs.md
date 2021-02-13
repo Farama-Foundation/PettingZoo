@@ -202,12 +202,19 @@ Note that it also changes when rewards are allocated to agents. All rewards are 
 from pettingzoo.utils import to_parallel
 from pettingzoo.butterfly import pistonball_v3
 env = pistonball_v3.env()
-api_test(env, num_cycles=10, verbose_progress=False)
+env = to_parallel(env)
 ```
 
 #### Parallel to AEC
 
+Any parallel environment can be efficiently converted to an AEC environment with the `from_parallel` wrapper.
 
+```
+from pettingzoo.utils import from_parallel
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.parallel_env()
+env = from_parallel(env)
+```
 
 ### Utility wrappers
 
