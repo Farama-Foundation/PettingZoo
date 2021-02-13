@@ -3,7 +3,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 import numpy as np
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def env(**kwargs):

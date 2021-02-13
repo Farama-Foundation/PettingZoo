@@ -13,7 +13,7 @@ from pettingzoo.utils import wrappers
 from . import constants as const
 from . import utils
 from .manual_control import manual_control
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 import math
 import os

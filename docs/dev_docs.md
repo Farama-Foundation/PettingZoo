@@ -1,7 +1,7 @@
 
 # Example custom environment
 
-This is a carefully commented version of the PettingZoo rps environment. 
+This is a carefully commented version of the PettingZoo rps environment.
 
 ```python
 from gym.spaces import Discrete
@@ -181,7 +181,35 @@ class raw_env(AECEnv):
 
 ```
 
-# Utility wrappers
+# Wrappers
+
+A wrapper is a environment transformation which takes in an environment as input, and outputs a new environment which is similar to the inputted environment but some transformation or validation applied.
+
+### Conversion wrappers
+
+As we provide both the AEC API and the Parallel API, we also provide wrappers to convert back and forth between the two APIs.
+
+#### AEC to Parallel
+
+An environment can be converted from an AEC environment to a parallel environment with the `to_parallel` wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:
+
+1. The environment steps in a cycle, i.e. it steps through every live agent in order.
+2. The environment does not update the observations of the agents except at the end of a cycle.
+
+Note that it also changes when rewards are allocated to agents. All rewards are given at the end of each cycle, which is slightly different than in the AEC model.
+
+```
+from pettingzoo.utils import to_parallel
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+api_test(env, num_cycles=10, verbose_progress=False)
+```
+
+#### Parallel to AEC
+
+
+
+### Utility wrappers
 
 We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.
 
@@ -192,55 +220,6 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 * `ClipOutOfBoundsWrapper`: Clips the input action to fit in the continuous action space (emitting a warning if it does so). Applied to continuous environments in pettingzoo.
 * `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or .dones attribute is accessed before reset(), or if seed() and then step() is called before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
 
-
-# Utils
-
-### Average Total Reward Util
-
-The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
-
-This value is important for establishing the simplest possible baseline: the random policy.
-
-```
-from pettingzoo.utils import average_total_reward
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
-average_total_reward(env, max_episodes=100, max_steps=10000000000)
-```
-
-Where `max_episodes` and `max_stpes` both limit the total number of evaluations (when the first is hit evaluation stops)
-
-### Manual Control
-
-Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
-
-```python
-from pettingzoo.butterfly import prison_v2
-prison_v2.manual_control(<environment parameters>)
-```
-
-Environments say if they support this functionality in their documentation, and what the specific controls are.
-
-### Random Demo
-
-You can also easily get a quick impression of them by watching a random policy control all the actions:
-
-```python
-from pettingzoo.utils import random_demo
-random_demo(env, render=True, cycles=100000000)
-```
-
-### Observation Saving
-
-If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
-
-```python
-from pettingzoo.utils import save_observation
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
-env.reset()
-save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
-```
 
 
 

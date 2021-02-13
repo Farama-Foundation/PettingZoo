@@ -8,7 +8,7 @@ import numpy as np
 import pygame
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def env(**kwargs):
