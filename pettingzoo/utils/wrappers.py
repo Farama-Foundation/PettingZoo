@@ -215,6 +215,8 @@ class OrderEnforcingWrapper(BaseWrapper):
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:
             raise AttributeError("{} cannot be accessed before reset".format(value))
+        elif value == "state_space":
+            raise AttributeError("Environment {} has no {} attribute implemented yet.".format(str(self.env), value))
         else:
             raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
 

@@ -4,4 +4,4 @@ env = backgammon_v2.env()
 
 env.reset()
 
-flag =env.state()
+flag = env.state_space
