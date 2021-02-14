@@ -483,8 +483,8 @@ class raw_env(AECEnv, EzPickle):
             self.kill_list = []
 
             self._agent_selector.reinit(_live_agents)
-
-        self.agent_selection = self._agent_selector.next()
+        if len(self._agent_selector.agent_order):
+            self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
         self._dones_step_first()
