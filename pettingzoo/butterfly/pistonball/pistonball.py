@@ -195,7 +195,7 @@ class raw_env(AECEnv, EzPickle):
         segment = pymunk.Segment(piston, (0, 0), (self.piston_width - (2 * self.piston_radius), 0), self.piston_radius)
         segment.friction = .64
         segment.color = pygame.color.THECOLORS["blue"]
-        space.add(segment)
+        space.add(piston, segment)
         return piston
 
     def move_piston(self, piston, v):
