@@ -37,6 +37,9 @@ class _parallel_env_wrapper(AECEnv):
     def observe(self, agent):
         return self._observations[agent]
 
+    def state(self):
+        return self.env.state()
+        
     def step(self, action):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)

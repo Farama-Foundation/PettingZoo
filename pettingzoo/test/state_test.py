@@ -66,6 +66,17 @@ def test_state(env, num_cycles):
             warnings.warn("State is not NumPy array")
 
 
-def state_test(env, num_cycles=10):
+def test_parallel_env(parallel_env):
+
+    parallel_env.reset()
+
+    assert isinstance(parallel_env.state_space, gym.spaces.Space), "State space for each parallel environment must extend gym.spaces.Space"
+
+    state_0 = parallel_env.state()
+    assert parallel_env.state_space.contains(state_0), "ParallelEnvironment's state is outside of it's state space"
+
+
+def state_test(env, parallel_env, num_cycles=10):
     test_state_space(env)
     test_state(env, num_cycles)
+    test_parallel_env(parallel_env)

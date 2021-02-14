@@ -21,7 +21,7 @@ def test_module(name, env_module):
         seed_test(env_module.env, 50)
 
     if "butterfly/" in name:
-        state_test(_env)
+        state_test(_env, env_module.parallel_env())
 
     max_cycles_test(env_module, name)
 
