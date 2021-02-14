@@ -137,6 +137,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
+        self.state_space = Box(low=0, high=255, shape=(self.HEIGHT, self.WIDTH, 3), dtype=np.uint8)
         self.display_wait = 0.0
         self.possible_agents = self.agents[:]
 
@@ -389,6 +390,15 @@ class raw_env(AECEnv, EzPickle):
             cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
 
         return np.swapaxes(cropped, 1, 0)
+    
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.WINDOW).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def step(self, action):
         if self.dones[self.agent_selection]:
