@@ -1,5 +1,5 @@
 
-# Example custom environment
+## Example custom environment
 
 This is a carefully commented version of the PettingZoo rps environment.
 
@@ -181,7 +181,7 @@ class raw_env(AECEnv):
 
 ```
 
-# Wrappers
+## Wrappers
 
 A wrapper is a environment transformation which takes in an environment as input, and outputs a new environment which is similar to the inputted environment but some transformation or validation applied.
 
@@ -227,10 +227,39 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 * `ClipOutOfBoundsWrapper`: Clips the input action to fit in the continuous action space (emitting a warning if it does so). Applied to continuous environments in pettingzoo.
 * `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or .dones attribute is accessed before reset(), or if seed() and then step() is called before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
 
+All of the above can be applied to your environment with:
 
+```
+from pettingzoo.utils import OrderEnforcingWrapper
+from pettingzoo.butterfly import pistonball_v3
+env = pistonball_v3.env()
+env = OrderEnforcingWrapper(env)
+```
 
+## Developer Utils
 
-# Tests
+The utils directory contains a few functions which are helpful for debugging environments. These are documented in the API docs.
+
+The utils directory also contain some classes which are only helpful for developing new environments. These are documented below.
+
+### Agent selector
+
+The `agent_selector` class steps in a cycle
+
+It can be used as follows to cycle through the list of agents:
+
+```python
+from pettingzoo.utils import agent_selector
+agents = ["agent_1", "agent_2", "agent_3"]
+selector = agent_selector(agents)
+agent_selection = selector.reset()
+# agent_selection will be "agent_1"
+for i in range(100):
+    agent_selection = selector.next()
+    # will select "agent_2, agent_3, agent_1, agent_2, agent_3, ..."
+```
+
+## Tests
 
 PettingZoo has a number of tests which it puts environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
 
