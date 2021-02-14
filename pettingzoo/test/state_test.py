@@ -31,7 +31,6 @@ def test_state(env, num_cycles):
     state_0 = env.state()
     for agent in env.agent_iter(env.num_agents * num_cycles):
         observation, reward, done, info = env.last(observe=False)
-        print('ok')
         if done:
             action = None
         else:
@@ -39,7 +38,6 @@ def test_state(env, num_cycles):
 
         env.step(action)
         new_state = env.state()
-        print(env.state_space)
         assert env.state_space.contains(new_state), "Environment's state is outside of it's state space"
         if isinstance(new_state, np.ndarray):
             if np.isinf(new_state).any():
