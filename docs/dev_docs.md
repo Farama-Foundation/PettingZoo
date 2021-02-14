@@ -259,6 +259,22 @@ for i in range(100):
     # will select "agent_2, agent_3, agent_1, agent_2, agent_3, ..."
 ```
 
+### Depreciated Module
+
+The DepreciatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and to new ones. If you wish to create a similar versioning system, this may be helfpul.
+
+For example, when the user tries to import the `prospector_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
+```
+from pettingzoo.utils.depreciated_module import DepreciatedModule
+prospector_v0 = DepreciatedModule("prospector", "v0", "v3")
+```
+This declaration tells the user that `prospector_v0` is depreciated and `prospector_v3` should be used instead. In particular, it gives the following error:
+```
+from pettingzoo.butterfly import prospector_v0
+prospector_v0.env()
+# pettingzoo.utils.depreciated_module.DeprecatedEnv: prospector_v0 is now depreciated, use prospector_v3 instead
+```
+
 ## Tests
 
 PettingZoo has a number of tests which it puts environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
