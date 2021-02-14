@@ -143,7 +143,7 @@ class raw_env(AECEnv, EzPickle):
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
         return observation
-    
+
     def state(self):
         '''
         Returns an observation of the global environment

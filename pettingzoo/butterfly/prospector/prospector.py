@@ -740,7 +740,7 @@ class raw_env(AECEnv, EzPickle):
         self.last_observation[agent] = sub_screen
 
         return sub_screen
-    
+
     def state(self):
         '''
         Returns an observation of the global environment

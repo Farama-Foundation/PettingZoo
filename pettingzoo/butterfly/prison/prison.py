@@ -283,7 +283,7 @@ class raw_env(AECEnv, EzPickle):
             sub_screen = np.rot90(sub_screen, k=3)
             sub_screen = np.fliplr(sub_screen)
             return sub_screen
-    
+
     def state(self):
         '''
         Returns an observation of the global environment
