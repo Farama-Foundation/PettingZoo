@@ -218,7 +218,7 @@ class CooperativePong(gym.Env):
         # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
-        self.state_space = gym.spaces.Box(low=0, high=255, shape=((original_shape[0], original_shape[1] * 2, 3)), dtype=np.uint8)
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
 
         self.renderOn = False
 
