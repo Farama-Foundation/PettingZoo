@@ -62,4 +62,7 @@ class BaseWrapper(AECEnv):
         self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
+        '''
+        returns a name which looks like: "max_observation<space_invaders_v1>"
+        '''
         return '{}<{}>'.format(type(self).__name__, str(self.env))
