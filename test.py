@@ -1,7 +1,8 @@
-from pettingzoo.classic import backgammon_v2
+from pettingzoo.butterfly import cooperative_pong_v2
 
-env = backgammon_v2.env()
+env = cooperative_pong_v2.parallel_env()
 
 env.reset()
 
-flag = env.state_space
+obs = env.state()
+

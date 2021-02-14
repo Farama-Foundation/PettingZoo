@@ -49,6 +49,9 @@ class to_parallel(ParallelEnv):
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
 
+    def state(self):
+        return self.aec_env.state()
+
     def render(self, mode="human"):
         return self.aec_env.render(mode)
 
