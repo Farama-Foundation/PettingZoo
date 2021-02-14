@@ -37,6 +37,12 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
+        # Not every environment has the .state_space attribute implemented
+        try:
+            self.state_space = self.env.state_space
+        except AttributeError:
+            pass
+
     def seed(self, seed=None):
         self.env.seed(seed)
 
@@ -68,6 +74,9 @@ class BaseWrapper(AECEnv):
         self.infos = self.env.infos
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards
+
+    def state(self):
+        return self.env.state()
 
     def __str__(self):
         return '{}<{}>'.format(type(self).__name__, str(self.env))
@@ -243,6 +252,11 @@ class OrderEnforcingWrapper(BaseWrapper):
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(agent)
+
+    def state(self):
+        if not self._has_reset:
+            EnvLogger.error_state_before_reset()
+        return super().state()
 
     def agent_iter(self, max_iter=2**63):
         if not self._has_reset:

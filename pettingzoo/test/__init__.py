@@ -7,3 +7,5 @@ from .parallel_test import parallel_play_test
 from .bombardment_test import bombardment_test
 from .performance_benchmark import performance_benchmark
 from .manual_control_test import manual_control_test
+from .state_test import state_test
+

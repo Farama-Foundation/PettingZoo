@@ -217,6 +217,8 @@ class CooperativePong(gym.Env):
         original_color_shape = (original_shape[0], original_shape[1], 3)
         # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
+        # define the global space of the environment or state
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=((original_shape[0], original_shape[1] * 2, 3)), dtype=np.uint8)
 
         self.renderOn = False
 
@@ -301,6 +303,15 @@ class CooperativePong(gym.Env):
         elif agent == self.agents[1]:
             return observation[:, int(observation.shape[1] / 2):, :]
 
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
+
     def draw(self):
         # draw background
         # pygame.display.get_surface().fill((0, 0, 0))
@@ -381,6 +392,7 @@ class raw_env(AECEnv, EzPickle):
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.state_space = self.env.state_space
         # dicts
         self.observations = {}
         self.rewards = self.env.rewards
@@ -408,6 +420,10 @@ class raw_env(AECEnv, EzPickle):
     def observe(self, agent):
         obs = self.env.observe(agent)
         return obs
+
+    def state(self):
+        state = self.env.state()
+        return state
 
     def close(self):
         self.env.close()
