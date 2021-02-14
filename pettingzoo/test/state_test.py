@@ -37,7 +37,7 @@ def test_state(env, num_cycles):
         else:
             action = env.action_spaces[agent].sample()
 
-        # env.step(action)
+        env.step(action)
         new_state = env.state()
         print(env.state_space)
         assert env.state_space.contains(new_state), "Environment's state is outside of it's state space"
@@ -66,6 +66,7 @@ def test_state(env, num_cycles):
                 warnings.warn("The state contains negative numbers and is in the shape of a graphical observation. This might be a bad thing.")
         else:
             warnings.warn("State is not NumPy array")
+
 
 def state_test(env, num_cycles=10):
     test_state_space(env)

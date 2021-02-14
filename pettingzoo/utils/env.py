@@ -23,7 +23,7 @@ class AECEnv:
 
     def render(self, mode='human'):
         raise NotImplementedError
-    
+
     def state(self):
         raise NotImplementedError
 

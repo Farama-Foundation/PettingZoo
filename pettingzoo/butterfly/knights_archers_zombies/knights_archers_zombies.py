@@ -390,7 +390,7 @@ class raw_env(AECEnv, EzPickle):
             cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
 
         return np.swapaxes(cropped, 1, 0)
-    
+
     def state(self):
         '''
         Returns an observation of the global environment
