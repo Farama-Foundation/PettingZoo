@@ -24,6 +24,9 @@ class AECEnv:
     def render(self, mode='human'):
         raise NotImplementedError
 
+    def state(self):
+        raise NotImplementedError('state() method has not been implemented in the environment {}.'.format(self.metadata.get('name', self.__class__.__name__)))
+
     def close(self):
         pass
 
