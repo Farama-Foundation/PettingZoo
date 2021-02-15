@@ -217,7 +217,7 @@ class Fence(pg.sprite.Sprite):
         self.shape.collision_type = CollisionTypes.BOUNDARY
 
         self.body.position = utils.flipy(body_pos)
-        space.add(self.shape)
+        space.add(self.body, self.shape)
 
     def full_draw(self, screen):
         for rect in self.rects:
@@ -242,7 +242,7 @@ class Bank(pg.sprite.Sprite):
 
         self.body.position = utils.flipy(pos)
         self.space = space
-        self.space.add(self.shape, self.body)
+        self.space.add(self.body, self.shape)
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
@@ -325,7 +325,7 @@ class Water(object):
 
         self.body.position = utils.flipy(pos)
         self.space = space
-        self.space.add(self.shape)
+        self.space.add(self.body, self.shape)
 
     def generate_debris(self, rng):
         self.debris = []
