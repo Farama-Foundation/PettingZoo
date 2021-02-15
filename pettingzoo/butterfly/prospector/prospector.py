@@ -561,6 +561,8 @@ class raw_env(AECEnv, EzPickle):
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
 
+        self.state_space = spaces.Box(low=0, high=255, shape=((const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3)), dtype=np.uint8)
+
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
@@ -738,6 +740,15 @@ class raw_env(AECEnv, EzPickle):
         self.last_observation[agent] = sub_screen
 
         return sub_screen
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pg.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def step(self, action):
         if self.dones[self.agent_selection]:

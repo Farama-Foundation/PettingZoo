@@ -136,6 +136,7 @@ class raw_env(AECEnv, EzPickle):
                 self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
                 self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
+        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls(num_floors)
@@ -282,6 +283,15 @@ class raw_env(AECEnv, EzPickle):
             sub_screen = np.rot90(sub_screen, k=3)
             sub_screen = np.fliplr(sub_screen)
             return sub_screen
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def reinit(self):
         self.done_val = False
