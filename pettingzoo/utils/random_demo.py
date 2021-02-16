@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-def random_demo(env, render=True, cycles=100000000):
+def random_demo(env, render=True, episodes=1):
     '''
     Runs an env object with random actions.
     '''
@@ -17,8 +17,9 @@ def random_demo(env, render=True, cycles=100000000):
 
     total_reward = 0
     done = False
+    run_episodes = 0
 
-    for cycle in range(cycles):
+    while True:
         for agent in env.agent_iter(len(env.agents)):
             if render:
                 env.render()
@@ -34,12 +35,15 @@ def random_demo(env, render=True, cycles=100000000):
                 action = env.action_spaces[agent].sample()
             env.step(action)
 
-    print("Total reward", total_reward, "done", done)
+            run_episodes += 1
 
-    if render:
-        env.render()
-        time.sleep(2)
+        if run_episodes == episodes:
+            if render:
+                env.close()
+            break
+        else:
+            env.reset()
 
-    env.close()
+    print("Average total reward", total_reward/episodes)
 
     return total_reward
