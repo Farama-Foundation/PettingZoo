@@ -32,7 +32,6 @@ class raw_env(AECEnv):
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(
             zip(self.agents, self.env.observation_space))
-        self.display_wait = 0.03
         self.has_reset = False
 
     def seed(self, seed=None):
