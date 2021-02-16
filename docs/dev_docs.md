@@ -1,3 +1,11 @@
+# Developer Documentation
+
+Are you looking to create a new environment based on the PettingZoo API?
+This page is for you. It contains:
+
+* Example environment implementations,
+* Documentation for the wrappers and utilities used in PettingZoo
+* Documentation for the API compliance tests.
 
 ## Example custom environment
 
@@ -10,13 +18,24 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 
-# Game specific global constants can just be put in the file
+
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
 NONE = 3
 MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
+REWARD_MAP = {
+    (ROCK, ROCK): (0, 0),
+    (ROCK, PAPER): (-1, 1),
+    (ROCK, SCISSORS): (1, -1),
+    (PAPER, ROCK): (1, -1),
+    (PAPER, PAPER): (0, 0),
+    (PAPER, SCISSORS): (-1, 1),
+    (SCISSORS, ROCK): (-1, 1),
+    (SCISSORS, PAPER): (1, -1),
+    (SCISSORS, SCISSORS): (0, 0),
+}
 
 
 def env():
@@ -24,8 +43,8 @@ def env():
     The env function wraps the environment in 3 wrappers by default. These
     wrappers contain logic that is common to many pettingzoo environments.
     We recomend you use at least the OrderEnforcingWrapper on your own environment
-    to provide sane error message. You can
-    find full documentation for these methods elsewhere in the developer documentation.
+    to provide sane error messages. You can find full documentation for these methods
+    elsewhere in the developer documentation.
     '''
     env = raw_env()
     env = wrappers.CaptureStdoutWrapper(env)
@@ -39,7 +58,7 @@ class raw_env(AECEnv):
     The metadata holds environment constants. From gym, we inherit the "render.modes",
     metadata which specifies which modes can be put into the render() method.
     At least human mode should be supported.
-    The "name"  metadata allows the environment to be pretty printed.
+    The "name" metadata allows the environment to be pretty printed.
     '''
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
@@ -56,15 +75,14 @@ class raw_env(AECEnv):
         self.possible_agents = ["player_" + str(r) for r in range(2)]
         self.agent_name_mapping = dict(zip(self.possible_agents, list(range(len(self.possible_agents)))))
 
+        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
         self.action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self.observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
-
-        self.display_wait = 0.0
 
     def render(self, mode="human"):
         '''
         Renders the environment. In human mode, it can print to terminal, open
-        up a graphical window, or open up some other way a human can see and understand.
+        up a graphical window, or open up some other display that a human can see and understand.
         '''
         if len(self.agents) == 2:
             string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
@@ -84,7 +102,7 @@ class raw_env(AECEnv):
     def close(self):
         '''
         Close should release any graphical displays, subprocesses, network connections
-        or any other environment data which should  not be kept around after the
+        or any other environment data which should not be kept around after the
         user is no longer using the environment.
         '''
         pass
@@ -101,9 +119,7 @@ class raw_env(AECEnv):
         And must set up the environment so that render(), step(), and observe()
         can be called without issues.
 
-        Here it sets up the state dictionary
-        which is used by step() and the observations dictionary which is used by step()
-        and observe()
+        Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
         '''
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
@@ -131,9 +147,9 @@ class raw_env(AECEnv):
         And any internal state used by observe() or render()
         '''
         if self.dones[self.agent_selection]:
-            # handles stepping an agent which is done
-            # takes in the None action, and moved agent_selection to the next
-            # done agent or if there are no more done agents, to the next live agent
+            # handles stepping an agent which is already done
+            # accepts a None action for the one agent, and moves the agent_selection to
+            # the next done agent,  or if there are no more done agents, to the next live agent
             return self._was_done_step(action)
 
         agent = self.agent_selection
@@ -149,17 +165,7 @@ class raw_env(AECEnv):
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
             # rewards for all agents are placed in the .rewards dictionary
-            self.rewards[self.agents[0]], self.rewards[self.agents[1]] = {
-                (ROCK, ROCK): (0, 0),
-                (ROCK, PAPER): (-1, 1),
-                (ROCK, SCISSORS): (1, -1),
-                (PAPER, ROCK): (1, -1),
-                (PAPER, PAPER): (0, 0),
-                (PAPER, SCISSORS): (-1, 1),
-                (SCISSORS, ROCK): (-1, 1),
-                (SCISSORS, PAPER): (1, -1),
-                (SCISSORS, SCISSORS): (0, 0),
-            }[(self.state[self.agents[0]], self.state[self.agents[1]])]
+            self.rewards[self.agents[0]], self.rewards[self.agents[1]] = REWARD_MAP[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
             # The dones dictionary must be updated for all players.
@@ -189,13 +195,24 @@ from pettingzoo import ParallelEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils import from_parallel
 
-# Game specific global constants can just be put in the file
+
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
 NONE = 3
 MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
+REWARD_MAP = {
+    (ROCK, ROCK): (0, 0),
+    (ROCK, PAPER): (-1, 1),
+    (ROCK, SCISSORS): (1, -1),
+    (PAPER, ROCK): (1, -1),
+    (PAPER, PAPER): (0, 0),
+    (PAPER, SCISSORS): (-1, 1),
+    (SCISSORS, ROCK): (-1, 1),
+    (SCISSORS, PAPER): (1, -1),
+    (SCISSORS, SCISSORS): (0, 0),
+}
 
 
 def env():
@@ -203,8 +220,8 @@ def env():
     The env function wraps the environment in 3 wrappers by default. These
     wrappers contain logic that is common to many pettingzoo environments.
     We recomend you use at least the OrderEnforcingWrapper on your own environment
-    to provide sane error message. You can
-    find full documentation for these methods elsewhere in the developer documentation.
+    to provide sane error messages. You can find full documentation for these methods
+    elsewhere in the developer documentation.
     '''
     env = raw_env()
     env = wrappers.CaptureStdoutWrapper(env)
@@ -228,8 +245,7 @@ class parallel_env(ParallelEnv):
 
     def __init__(self):
         '''
-        The init method takes in environment arguments and
-         should define the following attributes:
+        The init method takes in environment arguments and should define the following attributes:
         - possible_agents
         - action_spaces
         - observation_spaces
@@ -239,15 +255,14 @@ class parallel_env(ParallelEnv):
         self.possible_agents = ["player_" + str(r) for r in range(2)]
         self.agent_name_mapping = dict(zip(self.possible_agents, list(range(len(self.possible_agents)))))
 
+        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
         self.action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self.observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
-
-        self.display_wait = 0.0
 
     def render(self, mode="human"):
         '''
         Renders the environment. In human mode, it can print to terminal, open
-        up a graphical window, or open up some other way a human can see and understand.
+        up a graphical window, or open up some other display that a human can see and understand.
         '''
         if len(self.agents) == 2:
             string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
@@ -258,19 +273,18 @@ class parallel_env(ParallelEnv):
     def close(self):
         '''
         Close should release any graphical displays, subprocesses, network connections
-        or any other environment data which should  not be kept around after the
+        or any other environment data which should not be kept around after the
         user is no longer using the environment.
         '''
         pass
 
     def reset(self):
         '''
-        Reset needs to initialize the `agents` attribute
-        And must set up the environment so that render(), and step()
-        can be called without issues.
+        Reset needs to initialize the `agents` attribute and must set up the
+        environment so that render(), and step() can be called without issues.
 
         Here it initializes the `num_moves` variable which counts the number of
-        hands are played.
+        hands that are played.
 
         Returns the observations for each agent
         '''
@@ -288,19 +302,14 @@ class parallel_env(ParallelEnv):
         - infos
         dicts where each dict looks like {agent_1: item_1, agent_2: item_2}
         '''
-        # rewards for all agents are placed in the rewards dictionary to be ret
+        # If a user passes in actions with no agents, then just return empty observations, etc.
+        if not actions:
+            self.agents = []
+            return {}, {}, {}, {}
+
+        # rewards for all agents are placed in the rewards dictionary to be returned
         rewards = {}
-        rewards[self.agents[0]], rewards[self.agents[1]] = {
-            (ROCK, ROCK): (0, 0),
-            (ROCK, PAPER): (-1, 1),
-            (ROCK, SCISSORS): (1, -1),
-            (PAPER, ROCK): (1, -1),
-            (PAPER, PAPER): (0, 0),
-            (PAPER, SCISSORS): (-1, 1),
-            (SCISSORS, ROCK): (-1, 1),
-            (SCISSORS, PAPER): (1, -1),
-            (SCISSORS, SCISSORS): (0, 0),
-        }[(actions[self.agents[0]], actions[self.agents[1]])]
+        rewards[self.agents[0]], rewards[self.agents[1]] = REWARD_MAP[(actions[self.agents[0]], actions[self.agents[1]])]
 
         self.num_moves += 1
         env_done = self.num_moves >= NUM_ITERS
@@ -319,7 +328,7 @@ class parallel_env(ParallelEnv):
 
 ## Wrappers
 
-A wrapper is a environment transformation which takes in an environment as input, and outputs a new environment which is similar to the inputted environment but some transformation or validation applied.
+A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied.
 
 ### Conversion wrappers
 
@@ -332,7 +341,7 @@ An environment can be converted from an AEC environment to a parallel environmen
 1. The environment steps in a cycle, i.e. it steps through every live agent in order.
 2. The environment does not update the observations of the agents except at the end of a cycle.
 
-Note that it also changes when rewards are allocated to agents. All rewards are given at the end of each cycle, which is slightly different than in the AEC model.
+Most parallel environments in PettingZoo only allocate rewards at the end of a cycle. In these environments, the reward scheme of the AEC API an the parallel API is equivalent.  If an AEC environment does allocate rewards within a cycle, then the rewards will be allocated at different timesteps in the AEC environment an the Parallel environment. In particular, the AEC environment will allocate all rewards from one time the agent steps to the next time, while the Parallel environment will allocate all rewards from when the first agent stepped to the last agent stepped.
 
 ```
 from pettingzoo.utils import to_parallel
@@ -356,14 +365,14 @@ env = from_parallel(env)
 
 We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.
 
-* `BaseWrapper`: all AECEnv wrappers should inherit from this base class
-* `TerminateIllegalWrapper`: which handles illegal move logic for classic games
-* `CaptureStdoutWrapper`: which takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead.
+* `BaseWrapper`: All AECEnv wrappers should inherit from this base class
+* `TerminateIllegalWrapper`: Handles illegal move logic for classic games
+* `CaptureStdoutWrapper`: Takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead.
 * `AssertOutOfBoundsWrapper`: Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces.
 * `ClipOutOfBoundsWrapper`: Clips the input action to fit in the continuous action space (emitting a warning if it does so). Applied to continuous environments in pettingzoo.
-* `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or .dones attribute is accessed before reset(), or if seed() and then step() is called before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
+* `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or the .dones attribute is accessed before reset(), or if seed() is called and then step() is used before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
 
-All of the above can be applied to your environment with:
+You can apply these wrappers to your environment in a similar manner to the below example:
 
 ```
 from pettingzoo.utils import OrderEnforcingWrapper
@@ -380,7 +389,7 @@ The utils directory also contain some classes which are only helpful for develop
 
 ### Agent selector
 
-The `agent_selector` class steps in a cycle
+The `agent_selector` class steps through agents in a cycle
 
 It can be used as follows to cycle through the list of agents:
 
@@ -392,28 +401,28 @@ agent_selection = selector.reset()
 # agent_selection will be "agent_1"
 for i in range(100):
     agent_selection = selector.next()
-    # will select "agent_2, agent_3, agent_1, agent_2, agent_3, ..."
+    # will select "agent_2", "agent_3", "agent_1", "agent_2", "agent_3", ..."
 ```
 
-### Depreciated Module
+### Deprecated Module
 
-The DepreciatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and to new ones. If you wish to create a similar versioning system, this may be helfpul.
+The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.
 
 For example, when the user tries to import the `prospector_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
 ```
-from pettingzoo.utils.depreciated_module import DepreciatedModule
-prospector_v0 = DepreciatedModule("prospector", "v0", "v3")
+from pettingzoo.utils.deprecated_module import DeprecatedModule
+prospector_v0 = DeprecatedModule("prospector", "v0", "v3")
 ```
-This declaration tells the user that `prospector_v0` is depreciated and `prospector_v3` should be used instead. In particular, it gives the following error:
+This declaration tells the user that `prospector_v0` is deprecated and `prospector_v3` should be used instead. In particular, it gives the following error:
 ```
 from pettingzoo.butterfly import prospector_v0
 prospector_v0.env()
-# pettingzoo.utils.depreciated_module.DeprecatedEnv: prospector_v0 is now depreciated, use prospector_v3 instead
+# pettingzoo.utils.deprecated_module.DeprecatedEnv: prospector_v0 is now deprecated, use prospector_v3 instead
 ```
 
 ## Tests
 
-PettingZoo has a number of tests which it puts environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
+PettingZoo has a number of compliance tests for environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
 
 ### API test
 
@@ -433,15 +442,15 @@ The optional arguments are:
 *  `num_cycles`: runs the environment for that many cycles and checks that the output is consistent with the API.
 * `verbose_progress`: Prints out messages to indicate partial completion of the test. Useful for debugging environments.
 
-### Parallel Play test
+### Parallel API test
 
-This is an analogous version of the API test, but for parallel environments. You can use this environment like:
+This is an analogous version of the API test, but for parallel environments. You can use this test like:
 
 ```
-from pettingzoo.test import parallel_play_test
+from pettingzoo.test import parallel_api_test
 from pettingzoo.butterfly import pistonball_v3
 env = pistonball_v3.parallel_env()
-parallel_play_test(env, num_cycles=10)
+parallel_api_test(env, num_cycles=10)
 ```
 
 ### Seed Test
@@ -457,11 +466,11 @@ env_fn = pistonball_v3.env
 seed_test(env_fn, num_cycles=10)
 ```
 
-The optional argument, `num_cycles`, indicates how long the environment will be run for to check determinism. Some environments only fail the test long after initialization.
+The optional argument, `num_cycles`, indicates how long the environment will be run to check for determinism. Some environments only fail the test long after initialization.
 
 ### Max Cycles Test
 
-The max cycles test tests that the `max_cycles` environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a `max_cycles` argument, you should not run this test. The reason this test exists is that there are a lot of one-off differences possible when implementing `max_cycles`. An example test usage looks like:
+The max cycles test tests that the `max_cycles` environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a `max_cycles` argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing `max_cycles`. An example test usage looks like:
 
 ```
 from pettingzoo.test import max_cycles_test
@@ -472,7 +481,7 @@ max_cycles_test(env)
 
 ### Render test
 
-The render test checks that rendering 1) does not crash and 2) gives output of the correct type given a mode. The render test supports testing `'human'`, `'ansi'`, and `'rgb_array'` modes.
+The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode. The render test supports testing `'human'`, `'ansi'`, and `'rgb_array'` modes.
 
 ```
 from pettingzoo.test import render_test
@@ -483,7 +492,7 @@ render_test(env)
 
 ### Performance benchmark test
 
-To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test needs manual inspection to use:
+To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:
 
 ```
 from pettingzoo.test import performance_benchmark
