@@ -16,7 +16,7 @@ cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
-## Interacting with Environments
+## Interacting With Environments
 
 Environments can be interacted with using a similar interface to Gym:
 
@@ -86,7 +86,7 @@ Agents can die and generate during the course of an environment. If an agent die
 
 You can get the number of agents with `len(env.agents)`, and the maximum possible number of agents with `len(env.possible_agents)`.
 
-### Environment as agent
+### Environment as an Agent
 
 In certain cases, separating agent from environment actions is helpful for studying. This can be done by treating the environment as an agent. We encourage calling the environment actor `env` in env.agents, and having it take `None` as an action.
 
