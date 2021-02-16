@@ -150,9 +150,6 @@ class from_parallel_wrapper(AECEnv):
     def render(self, mode="human"):
         return self.env.render(mode)
 
-    def state(self):
-        return self.env.state()
-
     def close(self):
         self.env.close()
 
