@@ -400,7 +400,6 @@ class raw_env(AECEnv, EzPickle):
         self.infos = self.env.infos
 
         self.score = self.env.score
-        self.display_wait = 0.0
 
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
