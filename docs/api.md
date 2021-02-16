@@ -52,6 +52,8 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
+`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
+
 `dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
@@ -61,6 +63,8 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `observe(agent)`: Returns the observation an agent currently can make. `last()` calls this function.
+
+`state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
 
 `rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:
 
