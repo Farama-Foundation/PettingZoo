@@ -1,6 +1,6 @@
 # Developer Documentation
 
-This documentation overviews creating new environments and relevant useful wrappers, utilities and tests) included in PettingZoo designed for the creation of new environments.
+This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.
 
 ## Example Custom Environment
 
