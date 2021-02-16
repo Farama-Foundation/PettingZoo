@@ -1,15 +1,10 @@
 # Developer Documentation
 
-Are you looking to create a new environment based on the PettingZoo API?
-This page is for you. It contains:
+This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.
 
-* Example environment implementations,
-* Documentation for the wrappers and utilities used in PettingZoo
-* Documentation for the API compliance tests.
+## Example Custom Environment
 
-## Example custom environment
-
-This is a carefully commented version of the PettingZoo rps environment.
+This is a carefully commented version of the PettingZoo rock paper scissors environment.
 
 ```python
 from gym.spaces import Discrete
@@ -187,7 +182,7 @@ class raw_env(AECEnv):
 
 ```
 
-## Example custom Parallel Environment
+## Example Custom Parallel Environment
 
 ```python
 from gym.spaces import Discrete
@@ -332,7 +327,7 @@ A wrapper is an environment transformation that takes in an environment as input
 
 ### Conversion wrappers
 
-As we provide both the AEC API and the Parallel API, we also provide wrappers to convert back and forth between the two APIs.
+As we provide both the AEC API and the Parallel API, we also provide wrappers to convert environments back and forth between the two APIs.
 
 #### AEC to Parallel
 
@@ -361,7 +356,7 @@ env = pistonball_v3.parallel_env()
 env = from_parallel(env)
 ```
 
-### Utility wrappers
+### Utility Wrappers
 
 We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.
 
@@ -424,7 +419,7 @@ prospector_v0.env()
 
 PettingZoo has a number of compliance tests for environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
 
-### API test
+### API Test
 
 PettingZoo's API has a number of features and requirements. To make sure your environment is consistent with the API, we have the api_test. Below is an example:
 
@@ -442,7 +437,7 @@ The optional arguments are:
 *  `num_cycles`: runs the environment for that many cycles and checks that the output is consistent with the API.
 * `verbose_progress`: Prints out messages to indicate partial completion of the test. Useful for debugging environments.
 
-### Parallel API test
+### Parallel API Test
 
 This is an analogous version of the API test, but for parallel environments. You can use this test like:
 
@@ -479,7 +474,7 @@ env = pistonball_v3.env()
 max_cycles_test(env)
 ```
 
-### Render test
+### Render Test
 
 The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode. The render test supports testing `'human'`, `'ansi'`, and `'rgb_array'` modes.
 
@@ -490,7 +485,7 @@ env = pistonball_v3.env()
 render_test(env)
 ```
 
-### Performance benchmark test
+### Performance Benchmark Test
 
 To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:
 
@@ -501,7 +496,7 @@ env = pistonball_v3.env()
 performance_benchmark(env)
 ```
 
-### Save observation test
+### Save Observation Test
 
 The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.
 
