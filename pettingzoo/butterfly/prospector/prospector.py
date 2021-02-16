@@ -453,7 +453,7 @@ class raw_env(AECEnv, EzPickle):
         prospec_handoff_gold_reward=1,
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
-        max_cycles=900,
+        max_cycles=450,
     ):
         EzPickle.__init__(
             self,
