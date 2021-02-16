@@ -12,6 +12,12 @@ class to_parallel(ParallelEnv):
         self.possible_agents = aec_env.possible_agents
         self.metadata = aec_env.metadata
 
+        # Not every environment has the .state_space attribute implemented
+        try:
+            self.state_space = aec_env.state_space
+        except AttributeError:
+            pass
+
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
 
@@ -42,6 +48,9 @@ class to_parallel(ParallelEnv):
         self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
+
+    def state(self):
+        return self.aec_env.state()
 
     def render(self, mode="human"):
         return self.aec_env.render(mode)

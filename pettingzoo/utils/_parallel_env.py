@@ -13,6 +13,12 @@ class _parallel_env_wrapper(AECEnv):
         self.action_spaces = self.env.action_spaces
         self.observation_spaces = self.env.observation_spaces
 
+        # Not every environment has the .state_space attribute implemented
+        try:
+            self.state_space = self.aec_env.state_space
+        except AttributeError:
+            pass
+
     def seed(self, seed=None):
         self.env.seed(seed)
 
@@ -30,6 +36,9 @@ class _parallel_env_wrapper(AECEnv):
 
     def observe(self, agent):
         return self._observations[agent]
+
+    def state(self):
+        return self.env.state()
 
     def step(self, action):
         if self.dones[self.agent_selection]:
