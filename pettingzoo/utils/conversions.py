@@ -40,7 +40,7 @@ class to_parallel_wrapper(ParallelEnv):
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.env.state_space
+            self.state_space = self.aec_env.state_space
         except AttributeError:
             pass
 
@@ -96,7 +96,7 @@ class from_parallel_wrapper(AECEnv):
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.aec_env.state_space
+            self.state_space = self.env.state_space
         except AttributeError:
             pass
 
