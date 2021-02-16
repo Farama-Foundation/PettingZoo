@@ -38,6 +38,12 @@ class to_parallel_wrapper(ParallelEnv):
         self.possible_agents = aec_env.possible_agents
         self.metadata = aec_env.metadata
 
+        # Not every environment has the .state_space attribute implemented
+        try:
+            self.state_space = self.env.state_space
+        except AttributeError:
+            pass
+
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
 
