@@ -72,6 +72,7 @@ class raw_env(AECEnv, EzPickle):
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
         else:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons))
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=(self.screen_height, self.screen_width, 3), dtype=np.uint8)
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -143,6 +144,15 @@ class raw_env(AECEnv, EzPickle):
         observation = np.fliplr(observation)
         return observation
 
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
+
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.renderOn = True
@@ -195,7 +205,7 @@ class raw_env(AECEnv, EzPickle):
         segment = pymunk.Segment(piston, (0, 0), (self.piston_width - (2 * self.piston_radius), 0), self.piston_radius)
         segment.friction = .64
         segment.color = pygame.color.THECOLORS["blue"]
-        space.add(segment)
+        space.add(piston, segment)
         return piston
 
     def move_piston(self, piston, v):

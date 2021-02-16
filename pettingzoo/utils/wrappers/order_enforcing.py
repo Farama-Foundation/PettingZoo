@@ -68,6 +68,11 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_observe_before_reset()
         return super().observe(agent)
 
+    def state(self):
+        if not self._has_reset:
+            EnvLogger.error_state_before_reset()
+        return super().state()
+
     def agent_iter(self, max_iter=2**63):
         if not self._has_reset:
             EnvLogger.error_agent_iter_before_reset()
