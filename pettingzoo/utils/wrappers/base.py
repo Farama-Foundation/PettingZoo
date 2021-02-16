@@ -51,6 +51,9 @@ class BaseWrapper(AECEnv):
     def observe(self, agent):
         return self.env.observe(agent)
 
+    def state(self):
+        return self.env.state()
+
     def step(self, action):
         self.env.step(action)
 

@@ -51,6 +51,13 @@ class AECEnv:
         '''
         raise NotImplementedError
 
+    def state(self):
+        '''
+        State returns a global view of the environment appropriate for
+        centralized training decentralized execution methods like QMIX
+        '''
+        raise NotImplementedError('state() method has not been implemented in the environment {}.'.format(self.metadata.get('name', self.__class__.__name__)))
+
     def close(self):
         '''
         Closes the rendering window, subprocesses, network connections, or any other resources
@@ -225,6 +232,13 @@ class ParallelEnv:
         Closes the rendering window.
         '''
         pass
+
+    def state(self):
+        '''
+        State returns a global view of the environment appropriate for
+        centralized training decentralized execution methods like QMIX
+        '''
+        raise NotImplementedError('state() method has not been implemented in the environment {}.'.format(self.metadata.get('name', self.__class__.__name__)))
 
     @property
     def num_agents(self):
