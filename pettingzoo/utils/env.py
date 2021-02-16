@@ -193,7 +193,7 @@ class AECIterator:
 class ParallelEnv:
     '''
     The Parallel environment steps every live agent at once. If you are unsure if you
-    have implemented a ParallelEnv correctly, try running the `parallel_play_test` in
+    have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     '''
     def reset(self):

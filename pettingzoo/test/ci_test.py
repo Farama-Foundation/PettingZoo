@@ -8,7 +8,7 @@ from .render_test import render_test
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
-from .parallel_test import parallel_play_test
+from .parallel_test import parallel_api_test
 
 assert len(sys.argv) == 7, "ci_test expects 5 arguments: env_id, num_cycles, render, manual_control, performance, save_obs"
 
@@ -33,7 +33,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
         error_collected.append("API Test: " + str(e))
 
     if "classic/" not in env_id:
-        parallel_play_test(env_module.parallel_env(), num_cycles=num_cycles)
+        parallel_api_test(env_module.parallel_env(), num_cycles=num_cycles)
 
     if "prospector" not in env_id:
         seed_test(env_module.env, num_cycles)
