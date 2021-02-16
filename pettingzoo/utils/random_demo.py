@@ -44,6 +44,6 @@ def random_demo(env, render=True, episodes=1):
         else:
             env.reset()
 
-    print("Average total reward", total_reward/episodes)
+    print("Average total reward", total_reward / episodes)
 
     return total_reward
