@@ -15,6 +15,10 @@ header:
         buttonlink: https://github.com/PettingZoo-Team/PettingZoo
         icon: /assets/img/github_icon.svg
         iconsize: 80%
+      - button: Dev Docs
+        buttonlink: /dev_docs
+        icon: /assets/img/dev_doc_icon.svg
+        iconsize: 80%
 
 services:
     title: "Usage"
