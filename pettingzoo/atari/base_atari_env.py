@@ -6,8 +6,8 @@ from gym.utils import seeding, EzPickle
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import from_parallel_wrapper
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -21,7 +21,7 @@ def base_env_wrapper_fn(raw_env_fn):
 
 
 def BaseAtariEnv(**kwargs):
-    return _parallel_env_wrapper(ParallelAtariEnv(**kwargs))
+    return from_parallel_wrapper(ParallelAtariEnv(**kwargs))
 
 
 class ParallelAtariEnv(ParallelEnv, EzPickle):

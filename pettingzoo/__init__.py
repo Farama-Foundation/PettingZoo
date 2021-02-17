@@ -1,5 +1,4 @@
-from pettingzoo.utils.env import AECEnv
-import pettingzoo.utils
+from pettingzoo.utils import AECEnv, ParallelEnv
 import sys
 
 # Initializing pygame initializes audio connections through SDL. SDL uses alsa by default on all Linux systems

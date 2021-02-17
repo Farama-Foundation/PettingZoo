@@ -15,7 +15,7 @@ from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):
