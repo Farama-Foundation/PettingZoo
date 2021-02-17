@@ -168,7 +168,7 @@ You can also easily get a quick impression of them by watching a random policy c
 
 ```python
 from pettingzoo.utils import random_demo
-random_demo(env, render=True, cycles=100000000)
+random_demo(env, render=True, episodes=1)
 ```
 
 ### Observation Saving
