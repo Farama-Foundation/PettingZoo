@@ -122,7 +122,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
         self.frames = 0
-        self.display_wait = 0.0
 
         self.has_reset = False
         self.closed = False

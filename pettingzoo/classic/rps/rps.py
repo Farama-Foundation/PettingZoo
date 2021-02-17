@@ -34,7 +34,6 @@ class raw_env(AECEnv):
         self.action_spaces = {agent: Discrete(3) for agent in self.agents}
         self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
 
-        self.display_wait = 0.0
         self.reinit()
 
     def reinit(self):
