@@ -15,7 +15,7 @@ from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):
@@ -138,7 +138,6 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
         self.state_space = Box(low=0, high=255, shape=(self.HEIGHT, self.WIDTH, 3), dtype=np.uint8)
-        self.display_wait = 0.0
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)

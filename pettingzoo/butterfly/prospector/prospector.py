@@ -13,7 +13,7 @@ from pettingzoo.utils import wrappers
 from . import constants as const
 from . import utils
 from .manual_control import manual_control
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 import math
 import os
@@ -453,7 +453,7 @@ class raw_env(AECEnv, EzPickle):
         prospec_handoff_gold_reward=1,
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
-        max_cycles=900,
+        max_cycles=450,
     ):
         EzPickle.__init__(
             self,

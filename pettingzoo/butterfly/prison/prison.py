@@ -6,7 +6,7 @@ from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -87,7 +87,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    def __init__(self, continuous=False, vector_observation=False, max_cycles=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+    def __init__(self, continuous=False, vector_observation=False, max_cycles=150, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         EzPickle.__init__(self, continuous, vector_observation, max_cycles, num_floors, synchronized_start, identical_aliens, random_aliens)
         num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]

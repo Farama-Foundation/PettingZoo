@@ -4,7 +4,7 @@ from pettingzoo.utils import agent_selector
 import numpy as np
 from gym.utils import EzPickle
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def env(**kwargs):
@@ -34,7 +34,6 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(
             zip(self.agents, self.env.observation_space))
         self.steps = 0
-        self.display_wait = 0.04
 
     def seed(self, seed=None):
         self.env.seed(seed)

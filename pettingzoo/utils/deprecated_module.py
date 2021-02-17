@@ -1,10 +1,11 @@
-from pettingzoo.utils.error import DeprecatedEnv
+class DeprecatedEnv(ImportError):
+    pass
 
 
-class DepreciatedModule:
+class DeprecatedModule:
     def __init__(self, name, old_version, new_version):
         def env(*args, **kwargs):
-            raise DeprecatedEnv(f"{name}_{old_version} is now depreciated, use {name}_{new_version} instead")
+            raise DeprecatedEnv(f"{name}_{old_version} is now deprecated, use {name}_{new_version} instead")
 
         self.env = env
         self.raw_env = env

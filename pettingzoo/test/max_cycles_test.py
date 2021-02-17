@@ -1,6 +1,4 @@
-def max_cycles_test(mod, name):
-    if "classic/" in name:
-        return
+def max_cycles_test(mod):
     max_cycles = 5
     parallel_env = mod.parallel_env(max_cycles=max_cycles)
 

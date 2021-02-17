@@ -7,7 +7,7 @@ from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
@@ -400,7 +400,6 @@ class raw_env(AECEnv, EzPickle):
         self.infos = self.env.infos
 
         self.score = self.env.score
-        self.display_wait = 0.0
 
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))

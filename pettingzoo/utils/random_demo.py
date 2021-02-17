@@ -1,28 +1,21 @@
-import time
 import random
 import numpy as np
 
 
-def random_demo(env, render=True, cycles=100000000):
+def random_demo(env, render=True, episodes=1):
     '''
     Runs an env object with random actions.
     '''
 
-    env.reset()
-
-    if hasattr(env, 'display_wait'):
-        display_wait = env.display_wait
-    else:
-        display_wait = 0.0
-
     total_reward = 0
     done = False
+    completed_episodes = 0
 
-    for cycle in range(cycles):
+    while completed_episodes < episodes:
+        env.reset()
         for agent in env.agent_iter(len(env.agents)):
             if render:
                 env.render()
-                time.sleep(display_wait)
 
             obs, reward, done, _ = env.last()
             total_reward += reward
@@ -34,12 +27,11 @@ def random_demo(env, render=True, cycles=100000000):
                 action = env.action_spaces[agent].sample()
             env.step(action)
 
-    print("Total reward", total_reward, "done", done)
+        completed_episodes += 1
 
     if render:
-        env.render()
-        time.sleep(2)
+        env.close()
 
-    env.close()
+    print("Average total reward", total_reward / episodes)
 
     return total_reward

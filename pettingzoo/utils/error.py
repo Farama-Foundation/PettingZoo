@@ -1,2 +1,0 @@
-class DeprecatedEnv(ImportError):
-    pass
