@@ -12,7 +12,7 @@ from pettingzoo.utils import agent_selector
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 _image_library = {}
 
@@ -122,7 +122,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
         self.frames = 0
-        self.display_wait = 0.0
 
         self.has_reset = False
         self.closed = False

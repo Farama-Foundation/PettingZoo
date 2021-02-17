@@ -4,14 +4,14 @@
 
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
-```python
+```
 from pettingzoo.butterfly import pistonball_v3
 env = pistonball_v3.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
-```python
+```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
@@ -20,7 +20,7 @@ right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=Fa
 
 Environments can be interacted with using a similar interface to Gym:
 
-```python
+```
 env.reset()
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
@@ -99,7 +99,7 @@ In certain cases, separating agent from environment actions is helpful for study
 
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
-```python
+```
 env = prospector_v3.raw_env(<environment parameters>)
 ```
 
@@ -111,7 +111,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 
 Environments can be interacted with as follows:
 
-```python
+```
 parallel_env = pistonball_v1.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
@@ -134,13 +134,16 @@ for step in range(max_cycles):
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
+
 ## Utils
+
+PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.
 
 ### Average Total Reward Util
 
 The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
 
-This value is important for establishing the simplest possible baseline: the random policy. 
+This value is important for establishing the simplest possible baseline: the random policy.
 
 ```
 from pettingzoo.utils import average_total_reward
@@ -155,7 +158,7 @@ Where `max_episodes` and `max_stpes` both limit the total number of evaluations 
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
-```python
+```
 from pettingzoo.butterfly import prison_v2
 prison_v2.manual_control(<environment parameters>)
 ```
@@ -166,7 +169,7 @@ Environments say if they support this functionality in their documentation, and 
 
 You can also easily get a quick impression of them by watching a random policy control all the actions:
 
-```python
+```
 from pettingzoo.utils import random_demo
 random_demo(env, render=True, episodes=1)
 ```
@@ -175,11 +178,10 @@ random_demo(env, render=True, episodes=1)
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
-```python
+```
 from pettingzoo.utils import save_observation
 from pettingzoo.butterfly import pistonball_v3
 env = pistonball_v3.env()
 env.reset()
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
 ```
-
