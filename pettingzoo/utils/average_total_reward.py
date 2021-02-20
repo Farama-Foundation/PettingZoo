@@ -21,7 +21,7 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
 
         env.reset()
         for agent in env.agent_iter():
-            obs, reward, done, _ = env.last()
+            obs, reward, done, _ = env.last(observe=False)
             total_reward += reward
             total_steps += 1
             if done:

@@ -533,7 +533,7 @@ class raw_env(AECEnv, EzPickle):
             f = Fence(w_type, s_pos, b_pos, verts, self.space)
             self.fences.append(f)
 
-        self.metadata = {"render.modes": ["human", "rgb_array"], 'name': "prospector_v3"}
+        self.metadata = {"render.modes": ["human", "rgb_array"], 'name': "prospector_v4"}
 
         self.action_spaces = {}
         for p in self.prospectors:

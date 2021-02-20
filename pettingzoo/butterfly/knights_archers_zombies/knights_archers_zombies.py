@@ -37,7 +37,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "knights_archers_zombies_v6"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "knights_archers_zombies_v7"}
 
     def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
         EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, line_death, max_cycles)
