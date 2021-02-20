@@ -5,8 +5,8 @@
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
 ```
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -100,7 +100,7 @@ In certain cases, separating agent from environment actions is helpful for study
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
 ```
-env = prospector_v3.raw_env(<environment parameters>)
+env = prospector_v4.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
@@ -147,8 +147,8 @@ This value is important for establishing the simplest possible baseline: the ran
 
 ```
 from pettingzoo.utils import average_total_reward
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
@@ -159,8 +159,8 @@ Where `max_episodes` and `max_stpes` both limit the total number of evaluations 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ```
-from pettingzoo.butterfly import prison_v2
-prison_v2.manual_control(<environment parameters>)
+from pettingzoo.butterfly import prison_v3
+prison_v3.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.
@@ -180,8 +180,8 @@ If the agents in a game make observations that are images then the observations 
 
 ```
 from pettingzoo.utils import save_observation
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 env.reset()
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
 ```

@@ -340,8 +340,8 @@ Most parallel environments in PettingZoo only allocate rewards at the end of a c
 
 ```
 from pettingzoo.utils import to_parallel
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 env = to_parallel(env)
 ```
 
@@ -351,8 +351,8 @@ Any parallel environment can be efficiently converted to an AEC environment with
 
 ```
 from pettingzoo.utils import from_parallel
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.parallel_env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.parallel_env()
 env = from_parallel(env)
 ```
 
@@ -371,8 +371,8 @@ You can apply these wrappers to your environment in a similar manner to the belo
 
 ```
 from pettingzoo.utils import OrderEnforcingWrapper
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 env = OrderEnforcingWrapper(env)
 ```
 
@@ -408,11 +408,11 @@ For example, when the user tries to import the `prospector_v0` environment, they
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 prospector_v0 = DeprecatedModule("prospector", "v0", "v3")
 ```
-This declaration tells the user that `prospector_v0` is deprecated and `prospector_v3` should be used instead. In particular, it gives the following error:
+This declaration tells the user that `prospector_v0` is deprecated and `prospector_v4` should be used instead. In particular, it gives the following error:
 ```
 from pettingzoo.butterfly import prospector_v0
 prospector_v0.env()
-# pettingzoo.utils.deprecated_module.DeprecatedEnv: prospector_v0 is now deprecated, use prospector_v3 instead
+# pettingzoo.utils.deprecated_module.DeprecatedEnv: prospector_v0 is now deprecated, use prospector_v4 instead
 ```
 
 ## Tests
@@ -425,8 +425,8 @@ PettingZoo's API has a number of features and requirements. To make sure your en
 
 ```
 from pettingzoo.test import api_test
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 api_test(env, num_cycles=10, verbose_progress=False)
 ```
 
@@ -443,8 +443,8 @@ This is an analogous version of the API test, but for parallel environments. You
 
 ```
 from pettingzoo.test import parallel_api_test
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.parallel_env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.parallel_env()
 parallel_api_test(env, num_cycles=10)
 ```
 
@@ -456,8 +456,8 @@ The seed test takes in a function that creates a pettingzoo environment. For exa
 
 ```
 from pettingzoo.test import seed_test
-from pettingzoo.butterfly import pistonball_v3
-env_fn = pistonball_v3.env
+from pettingzoo.butterfly import pistonball_v4
+env_fn = pistonball_v4.env
 seed_test(env_fn, num_cycles=10)
 ```
 
@@ -469,8 +469,8 @@ The max cycles test tests that the `max_cycles` environment argument exists and 
 
 ```
 from pettingzoo.test import max_cycles_test
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 max_cycles_test(env)
 ```
 
@@ -480,8 +480,8 @@ The render test checks that rendering 1) does not crash and 2) produces output o
 
 ```
 from pettingzoo.test import render_test
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 render_test(env)
 ```
 
@@ -491,8 +491,8 @@ To make sure we do not have performance regressions, we have the performance ben
 
 ```
 from pettingzoo.test import performance_benchmark
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 performance_benchmark(env)
 ```
 
@@ -502,7 +502,7 @@ The save observation test is to visually inspect the observations of games with 
 
 ```
 from pettingzoo.test import test_save_obs
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 test_save_obs(env)
 ```
