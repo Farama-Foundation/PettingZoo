@@ -8,7 +8,7 @@ action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
 average-total-reward: "18.17"
-import: "from pettingzoo.butterfly import prison_v2"
+import: "from pettingzoo.butterfly import prison_v3"
 agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
