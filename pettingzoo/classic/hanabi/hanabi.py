@@ -280,7 +280,6 @@ class raw_env(AECEnv, EzPickle):
             # sets current reward for 0 to intialize reward accumulation
             self._cumulative_rewards[agent_on_turn] = 0
             self._accumulate_rewards()
-            self._dones_step_first()
 
     def observe(self, agent_name: str):
         observation = np.array(self.infos[agent_name]['observations_vectorized'],

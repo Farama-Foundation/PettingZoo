@@ -12,7 +12,7 @@ from pettingzoo.utils import agent_selector
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 _image_library = {}
 
@@ -39,9 +39,9 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v4"}
 
-    def __init__(self, n_pistons=20, local_ratio=0.2, time_penalty=-0.1, continuous=False, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=900):
+    def __init__(self, n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
         EzPickle.__init__(self, n_pistons, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.n_pistons = n_pistons
         self.piston_head_height = 11
@@ -58,6 +58,7 @@ class raw_env(AECEnv, EzPickle):
         obs_height = y_high - y_low
 
         assert self.piston_width == self.wall_width, "Wall width and piston width must be equal for observation calculation"
+        assert self.n_pistons > 1, "n_pistons must be greater than 1"
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
@@ -71,6 +72,7 @@ class raw_env(AECEnv, EzPickle):
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
         else:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons))
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=(self.screen_height, self.screen_width, 3), dtype=np.uint8)
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -120,7 +122,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
         self.frames = 0
-        self.display_wait = 0.0
 
         self.has_reset = False
         self.closed = False
@@ -141,6 +142,15 @@ class raw_env(AECEnv, EzPickle):
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
         return observation
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
@@ -194,7 +204,7 @@ class raw_env(AECEnv, EzPickle):
         segment = pymunk.Segment(piston, (0, 0), (self.piston_width - (2 * self.piston_radius), 0), self.piston_radius)
         segment.friction = .64
         segment.color = pygame.color.THECOLORS["blue"]
-        space.add(segment)
+        space.add(piston, segment)
         return piston
 
     def move_piston(self, piston, v):
@@ -249,6 +259,10 @@ class raw_env(AECEnv, EzPickle):
                   - (0.5 * self.pixels_per_position * self.n_piston_positions)
                   - vertical_offset_range
                   + self.vertical_offset)
+
+        # Ensure ball starts somewhere right of the left wall
+        ball_x = max(ball_x, self.wall_width + self.ball_radius + 1)
+
         self.ball = self.add_ball(ball_x, ball_y, self.ball_mass, self.ball_friction, self.ball_elasticity)
         self.ball.angle = 0
         self.ball.velocity = (0, 0)
@@ -409,6 +423,5 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
 
 # Game art created by Justin Terry

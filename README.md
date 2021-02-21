@@ -23,7 +23,7 @@ To install the pettingzoo base library, use `pip install pettingzoo`.
 
 This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install pettingzoo[atari]` or use `pip install pettingzoo[all]` to install all dependencies.
 
-We support Python 3.6, 3.7 and 3.8 on Linux and macOS.
+We support Python 3.6, 3.7 and 3.8 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## API
 
@@ -32,8 +32,8 @@ PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https:/
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:
@@ -72,11 +72,3 @@ To cite this project in publication, please use
   year={2020}
 }
 ```
-
-## OS Support
-
-We support Linux and macOS, and conduct CI testing on both. We will accept PRs related to Windows, but do not officially support it.
-
-## Reward Program
-
-We have a sort bug/documentation error bounty program, inspired by [Donald Knuth's reward checks](https://en.wikipedia.org/wiki/Knuth_reward_check). People who make mergable PRs which properly address meaningful problems in the code, or which make meaningful improvements to the documentation, can receive a negotiable check for "hexadecimal dollar" ($2.56) mailed to them, or sent to them via PayPal. To redeem this, just send an email to justinkterry@gmail.com with your mailing address or PayPal address. We also pay out 32 cents for small fixes. This reward extends to libraries maintained by the PettingZoo team that PettingZoo depends on.

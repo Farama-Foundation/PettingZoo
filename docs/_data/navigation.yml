@@ -7,3 +7,6 @@ nav:
 
   - title: "Github"
     url: "https://github.com/PettingZoo-Team/PettingZoo"
+
+  - title: "Dev Docs"
+    url: "/dev_docs"
