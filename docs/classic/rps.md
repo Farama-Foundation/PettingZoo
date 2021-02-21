@@ -19,7 +19,7 @@ Rock, Paper, Scissors is a 2-player hand game where each player chooses either r
 
 #### Observation Space
 
-The observation space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
+The observation is the last oppoent action and its space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
 
 | Value  |  Observation |
 | :----: | :---------:  |

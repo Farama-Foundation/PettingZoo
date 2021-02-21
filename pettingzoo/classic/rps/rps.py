@@ -4,10 +4,10 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 
-rock = 0
-paper = 1
-scissors = 2
-none = 3
+ROCK = 0
+PAPER = 1
+SCISSORS = 2
+NONE = 3
 MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 
@@ -34,7 +34,6 @@ class raw_env(AECEnv):
         self.action_spaces = {agent: Discrete(3) for agent in self.agents}
         self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
 
-        self.display_wait = 0.0
         self.reinit()
 
     def reinit(self):
@@ -45,8 +44,8 @@ class raw_env(AECEnv):
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
-        self.state = {agent: none for agent in self.agents}
-        self.observations = {agent: none for agent in self.agents}
+        self.state = {agent: NONE for agent in self.agents}
+        self.observations = {agent: NONE for agent in self.agents}
         self.num_moves = 0
 
     def render(self, mode="human"):
@@ -74,15 +73,15 @@ class raw_env(AECEnv):
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
             self.rewards[self.agents[0]], self.rewards[self.agents[1]] = {
-                (rock, rock): (0, 0),
-                (rock, paper): (-1, 1),
-                (rock, scissors): (1, -1),
-                (paper, rock): (1, -1),
-                (paper, paper): (0, 0),
-                (paper, scissors): (-1, 1),
-                (scissors, rock): (-1, 1),
-                (scissors, paper): (1, -1),
-                (scissors, scissors): (0, 0),
+                (ROCK, ROCK): (0, 0),
+                (ROCK, PAPER): (-1, 1),
+                (ROCK, SCISSORS): (1, -1),
+                (PAPER, ROCK): (1, -1),
+                (PAPER, PAPER): (0, 0),
+                (PAPER, SCISSORS): (-1, 1),
+                (SCISSORS, ROCK): (-1, 1),
+                (SCISSORS, PAPER): (1, -1),
+                (SCISSORS, SCISSORS): (0, 0),
             }[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
@@ -92,10 +91,9 @@ class raw_env(AECEnv):
             for i in self.agents:
                 self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
-            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = none
+            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = NONE
             self._clear_rewards()
 
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
-        self._dones_step_first()

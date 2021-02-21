@@ -1,7 +1,7 @@
 gym>=0.18.0
 pygame==2.0.0
 numpy>=1.18.0
-pymunk==5.7.0
+pymunk==6.0.0
 box2d-py==2.3.5
 python-chess==0.31.4
 rlcard==0.2.8

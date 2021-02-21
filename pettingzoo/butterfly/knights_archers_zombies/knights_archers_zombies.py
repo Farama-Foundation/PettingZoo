@@ -15,7 +15,7 @@ from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):
@@ -37,7 +37,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "knights_archers_zombies_v6"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "knights_archers_zombies_v7"}
 
     def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
         EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, line_death, max_cycles)
@@ -137,7 +137,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
         self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
-        self.display_wait = 0.0
+        self.state_space = Box(low=0, high=255, shape=(self.HEIGHT, self.WIDTH, 3), dtype=np.uint8)
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
@@ -390,6 +390,15 @@ class raw_env(AECEnv, EzPickle):
 
         return np.swapaxes(cropped, 1, 0)
 
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.WINDOW).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
+
     def step(self, action):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
@@ -483,8 +492,8 @@ class raw_env(AECEnv, EzPickle):
             self.kill_list = []
 
             self._agent_selector.reinit(_live_agents)
-
-        self.agent_selection = self._agent_selector.next()
+        if len(self._agent_selector.agent_order):
+            self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
         self._dones_step_first()

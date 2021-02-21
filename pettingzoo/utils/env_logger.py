@@ -64,6 +64,18 @@ class EnvLogger():
     def error_render_before_reset():
         assert False, "reset() needs to be called before render"
 
+    @staticmethod
+    def error_agent_iter_before_reset():
+        assert False, "reset() needs to be called before agent_iter"
+
+    @staticmethod
+    def error_nan_action():
+        assert False, "step() cannot take in a nan action"
+
+    @staticmethod
+    def error_state_before_reset():
+        assert False, "reset() needs to be called before state"
+
 
 class EnvWarningHandler(logging.Handler):
     def __init__(self, *args, mqueue, **kwargs):

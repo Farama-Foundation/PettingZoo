@@ -1,4 +1,4 @@
-def parallel_play_test(par_env, num_cycles=10):
+def parallel_api_test(par_env, num_cycles=10):
     MAX_RESETS = 2
     for n_resets in range(MAX_RESETS):
         obs = par_env.reset()

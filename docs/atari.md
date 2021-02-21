@@ -27,7 +27,7 @@ pip install supersuit
 
 Here is some example usage for the Atari preprocessing:
 
-```python
+```
 import supersuit
 from pettingzoo.atari import space_invaders_v1
 
@@ -55,7 +55,7 @@ env = supersuit.frame_stack_v1(env, 4)
 
 All the Atari environments have the following environment parameters:
 
-```python
+```
 <atari_game>.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
 ```
 
