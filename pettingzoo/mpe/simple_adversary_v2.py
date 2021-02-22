@@ -4,7 +4,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):
-    def __init__(self, N=2, max_cycles=25):
+    def __init__(self, N=2, max_cycles=100):
         scenario = Scenario()
         world = scenario.make_world(N)
         super().__init__(scenario, world, max_cycles)
