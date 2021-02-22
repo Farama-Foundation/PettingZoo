@@ -13,7 +13,7 @@ def random_demo(env, render=True, episodes=1):
 
     while completed_episodes < episodes:
         env.reset()
-        for agent in env.agent_iter(len(env.agents)):
+        for agent in env.agent_iter():
             if render:
                 env.render()
 
