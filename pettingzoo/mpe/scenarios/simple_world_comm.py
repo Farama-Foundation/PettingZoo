@@ -249,7 +249,7 @@ class Scenario(BaseScenario):
             comm.append(other.state.c)
 
             oth_f = [self.is_collision(other, world.forests[i]) for i in range(len(world.forests))]
-            
+
             # without forest vis
             for i in range(len(world.forests)):
                 if inf[i] and oth_f[i]:
