@@ -55,5 +55,5 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
-`num_forests`: number of forests that hide agents inside from being seen
+`num_forests`: number of forests that can hide agents inside from being seen
 
