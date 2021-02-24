@@ -25,7 +25,7 @@ avaliable_4p_versions = {
 
 
 def raw_env(num_players=2, game_version="classic", **kwargs):
-    assert num_players == 2 or num_players == 4
+    assert num_players == 2 or num_players == 4, "pong only supports 2 or 4 players"
     versions = avaliable_2p_versions if num_players == 2 else avaliable_4p_versions
     assert game_version in versions, f"pong version {game_version} not supported for number of players {num_players}. Avaliable options are {list(versions)}"
     mode = versions[game_version]
