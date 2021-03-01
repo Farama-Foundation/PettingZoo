@@ -26,6 +26,6 @@ model = PPO2.load("policy")
 env.reset()
 for agent in env.agent_iter():
     obs, reward, done, info = env.last()
-    act = model.predict(obs) if not done else None
+    act = model.predict(obs)[0] if not done else None
     env.step(act)
     env.render()
