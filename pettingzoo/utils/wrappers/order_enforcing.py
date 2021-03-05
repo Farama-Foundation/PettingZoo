@@ -42,16 +42,6 @@ class OrderEnforcingWrapper(BaseWrapper):
         self._has_rendered = True
         return super().render(mode)
 
-    def close(self):
-        super().close()
-        if not self._has_rendered:
-            EnvLogger.warn_close_unrendered_env()
-        if not self._has_reset:
-            EnvLogger.warn_close_before_reset()
-
-        self._has_rendered = False
-        self._has_reset = False
-
     def step(self, action):
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
