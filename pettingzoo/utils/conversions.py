@@ -44,6 +44,10 @@ class to_parallel_wrapper(ParallelEnv):
         except AttributeError:
             pass
 
+    @property
+    def unwrapped(self):
+        return self.aec_env.unwrapped
+
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
 
@@ -100,6 +104,10 @@ class from_parallel_wrapper(AECEnv):
         except AttributeError:
             pass
 
+    @property
+    def unwrapped(self):
+        return self.env.unwrapped
+
     def seed(self, seed=None):
         self.env.seed(seed)
 
@@ -123,6 +131,7 @@ class from_parallel_wrapper(AECEnv):
 
     def step(self, action):
         if self.dones[self.agent_selection]:
+            del self._actions[self.agent_selection]
             return self._was_done_step(action)
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
