@@ -9,7 +9,6 @@ import random
 import re
 
 
-
 def test_observation(observation, observation_0):
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():

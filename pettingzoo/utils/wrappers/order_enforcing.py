@@ -24,7 +24,9 @@ class OrderEnforcingWrapper(BaseWrapper):
         raises an error message when data is gotten from the env
         which should only be gotten after reset
         '''
-        if value == "agent_order":
+        if value == "unwrapped":
+            return self.env.unwrapped
+        elif value == "agent_order":
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:
             raise AttributeError("{} cannot be accessed before reset".format(value))

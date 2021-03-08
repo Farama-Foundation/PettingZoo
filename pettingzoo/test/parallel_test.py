@@ -1,6 +1,7 @@
 from pettingzoo.utils.conversions import to_parallel_wrapper, from_parallel_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
 
+
 def parallel_api_test(par_env, num_cycles=10):
     assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, from_parallel_wrapper)
