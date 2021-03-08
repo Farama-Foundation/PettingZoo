@@ -37,7 +37,7 @@ class BaseWrapper(AECEnv):
 
     @property
     def unwrapped(self):
-        return self.env
+        return self.env.unwrapped
 
     def seed(self, seed=None):
         self.env.seed(seed)

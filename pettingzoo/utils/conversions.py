@@ -46,7 +46,7 @@ class to_parallel_wrapper(ParallelEnv):
 
     @property
     def unwrapped(self):
-        return self.aec_env
+        return self.aec_env.unwrapped
 
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
@@ -106,7 +106,7 @@ class from_parallel_wrapper(AECEnv):
 
     @property
     def unwrapped(self):
-        return self.env
+        return self.env.unwrapped
 
     def seed(self, seed=None):
         self.env.seed(seed)
