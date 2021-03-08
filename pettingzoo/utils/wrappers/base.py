@@ -35,6 +35,10 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
+    @property
+    def unwrapped(self):
+        return self.env.unwrapped
+
     def seed(self, seed=None):
         self.env.seed(seed)
 

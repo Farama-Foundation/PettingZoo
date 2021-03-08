@@ -168,6 +168,10 @@ class AECEnv:
         else:
             return self.__class__.__name__
 
+    @property
+    def unwrapped(self):
+        return self
+
 
 class AECIterable:
     def __init__(self, env, max_iter):
@@ -260,3 +264,7 @@ class ParallelEnv:
             return self.metadata.get('name', self.__class__.__name__)
         else:
             return self.__class__.__name__
+
+    @property
+    def unwrapped(self):
+        return self

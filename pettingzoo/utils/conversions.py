@@ -44,6 +44,10 @@ class to_parallel_wrapper(ParallelEnv):
         except AttributeError:
             pass
 
+    @property
+    def unwrapped(self):
+        return self.aec_env.unwrapped
+
     def seed(self, seed=None):
         return self.aec_env.seed(seed)
 
@@ -99,6 +103,10 @@ class from_parallel_wrapper(AECEnv):
             self.state_space = self.env.state_space
         except AttributeError:
             pass
+
+    @property
+    def unwrapped(self):
+        return self.env.unwrapped
 
     def seed(self, seed=None):
         self.env.seed(seed)
