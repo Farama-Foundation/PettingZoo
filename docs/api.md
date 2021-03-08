@@ -82,6 +82,14 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
+### Unwrapping an environment
+
+If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
+
+```
+base_env = prospector_v4.env().unwrapped
+```
+
 ### Variable Numbers of Agents (Death)
 
 Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
@@ -101,12 +109,6 @@ Environments are by default wrapped in a handful of lightweight wrappers that ha
 
 ```
 env = prospector_v4.raw_env(<environment parameters>)
-```
-
-If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers, you can use the `.unwrapped` attribute. If the environment is already a raw environment, the `.unwrapped` attribute will just return itself.
-
-```
-raw_env = prospector_v4.env().unwrapped
 ```
 
 ## Parallel API
