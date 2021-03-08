@@ -77,6 +77,10 @@ class AECEnv:
     def env_done(self):
         return not self.agents
 
+    @property
+    def unwrapped(self):
+        return self
+        
     def _dones_step_first(self):
         '''
         Makes .agent_selection point to first done agent. Stores old value of agent_selection
