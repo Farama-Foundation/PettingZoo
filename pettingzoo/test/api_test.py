@@ -1,9 +1,13 @@
+from pettingzoo.utils.conversions import to_parallel_wrapper, from_parallel_wrapper
+from pettingzoo.utils.wrappers import BaseWrapper
+
 import pettingzoo
 import warnings
 import numpy as np
 import gym
 import random
 import re
+
 
 
 def test_observation(observation, observation_0):
@@ -254,6 +258,11 @@ def api_test(env, num_cycles=10, verbose_progress=False):
     test_action_flexibility(env)
 
     progress_report("Finished test_rewards_dones")
+
+    # checks unwrapped attribute
+    assert not isinstance(env.unwrapped, to_parallel_wrapper)
+    assert not isinstance(env.unwrapped, from_parallel_wrapper)
+    assert not isinstance(env.unwrapped, BaseWrapper)
 
     # Test that if env has overridden render(), they must have overridden close() as well
     base_render = pettingzoo.utils.env.AECEnv.render
