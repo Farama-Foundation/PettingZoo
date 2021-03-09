@@ -112,13 +112,14 @@ def generate_map(env, map_size, handles):
     side = int(math.sqrt(n)) * 2
     pos = [[], []]
     ct = 0
-    for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
+    for x in range(max(width // 2 - gap - side, 1), width // 2 - gap - side + side, 2):
         for y in range((height - side) // 2, (height - side) // 2 + side, 2):
             pos[ct % 2].append([x, y])
         ct += 1
 
-    for x,y in pos[0] + pos[1]:
-        if not (0 < x < width-1 and 0 < y < height-1):
+    xct1 = ct
+    for x, y in pos[0] + pos[1]:
+        if not (0 < x < width - 1 and 0 < y < height - 1):
             assert False
     env.add_agents(handles[0], method="custom", pos=pos[0])
     env.add_agents(handles[1], method="custom", pos=pos[1])
@@ -128,13 +129,15 @@ def generate_map(env, map_size, handles):
     side = int(math.sqrt(n)) * 2
     pos = [[], []]
     ct = 0
-    for x in range(width // 2 + gap, width // 2 + gap + side, 2):
-        for y in range((height - side) // 2, (height - side) // 2 + side, 2):
+    for x in range(width // 2 + gap, min(width // 2 + gap + side, height - 1), 2):
+        for y in range((height - side) // 2, min((height - side) // 2 + side, height - 1), 2):
             pos[ct % 2].append([x, y])
         ct += 1
+        if xct1 <= ct:
+            break
 
-    for x,y in pos[0] + pos[1]:
-        if not (0 < x < width-1 and 0 < y < height-1):
+    for x, y in pos[0] + pos[1]:
+        if not (0 < x < width - 1 and 0 < y < height - 1):
             assert False
     env.add_agents(handles[2], method="custom", pos=pos[0])
     env.add_agents(handles[3], method="custom", pos=pos[1])
