@@ -19,14 +19,14 @@ minimap_mode_default = True
 default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
 
-def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
+def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles)
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
 
 
-def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **reward_args):
-    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, **reward_args))
+def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args))
 
 
 env = make_env(raw_env)
@@ -146,14 +146,14 @@ def generate_map(env, map_size, handles):
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {'render.modes': ['human', 'rgb_array'], 'name': "combined_arms_v3"}
 
-    def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+    def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         assert map_size >= 16, "size of map must be at least 16"
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
         names = ["redmelee", "redranged", "bluemele", "blueranged"]
-        super().__init__(env, env.get_handles(), names, map_size, max_cycles, reward_range, minimap_mode)
+        super().__init__(env, env.get_handles(), names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
 
     def generate_map(self):
         generate_map(self.env, self.map_size, self.handles)

@@ -74,6 +74,10 @@ parameterized_envs = [
     # Commented out due to rare segfault
     (tiger_deer_v3.env, dict(minimap_mode=True)),
     (battle_v2.env, dict(minimap_mode=False)),
+    (battlefield_v2.env, dict(minimap_mode=False, extra_features=False)),
+    (battlefield_v2.env, dict(minimap_mode=False, extra_features=True)),
+    (battlefield_v2.env, dict(minimap_mode=True, extra_features=False)),
+    (battlefield_v2.env, dict(minimap_mode=True, extra_features=True)),
     (adversarial_pursuit_v2.env, dict(map_size=15)),
     (battle_v2.env, dict(map_size=15)),
     (battlefield_v2.env, dict(map_size=46)),

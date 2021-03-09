@@ -18,14 +18,14 @@ minimap_mode_default = False
 default_env_args = dict(tiger_step_recover=-0.1, deer_attacked=-0.1)
 
 
-def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **env_args):
+def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **env_args):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
-    return _parallel_env(map_size, minimap_mode, env_env_args, max_cycles)
+    return _parallel_env(map_size, minimap_mode, env_env_args, max_cycles, extra_features)
 
 
-def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, **env_args):
-    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, **env_args))
+def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **env_args):
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args))
 
 
 env = make_env(raw_env)
@@ -80,8 +80,8 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {'render.modes': ['human', 'rgb_array'], 'name': "tiger_deer_v3"}
 
-    def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
+    def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         assert map_size >= 10, "size of map must be at least 10"
         env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
 
@@ -90,7 +90,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
 
         names = ["deer", "tiger"]
-        super().__init__(env, handles, names, map_size, max_cycles, reward_range, minimap_mode)
+        super().__init__(env, handles, names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
 
     def generate_map(self):
         env, map_size = self.env, self.map_size
