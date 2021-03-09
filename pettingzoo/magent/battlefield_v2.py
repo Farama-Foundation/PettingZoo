@@ -90,6 +90,9 @@ class _parallel_env(magent_parallel_env, EzPickle):
                 if 0 < x < width-1 and 0 < y < height-1:
                     pos.append([x, y, 0])
 
+        for x, y, _ in pos:
+            if not (0 < x < width-1 and 0 < y < height-1):
+                assert False
         env.add_agents(handles[leftID], method="custom", pos=pos)
 
         # right
