@@ -95,7 +95,7 @@ class magent_parallel_env(ParallelEnv):
             view, features = self.env.get_observation(handle)
 
             if self.minimap_mode and not self.extra_features:
-                features = features[:,-2:]
+                features = features[:, -2:]
 
             if self.minimap_mode or self.extra_features:
                 feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1)
