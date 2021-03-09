@@ -77,8 +77,8 @@ class _parallel_env(magent_parallel_env, EzPickle):
             pos.append((width / 2 + 5, y))
             pos.append((width / 2 + 4, y))
 
-        for x,y in pos:
-            if not (0 < x < width-1 and 0 < y < height-1):
+        for x, y in pos:
+            if not (0 < x < width - 1 and 0 < y < height - 1):
                 assert False
         env.add_walls(pos=pos, method="custom")
 
@@ -87,8 +87,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         pos = []
         for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
-                if 0 < x < width-1 and 0 < y < height-1:
-                    pos.append([x, y, 0])
+                pos.append([x, y, 0])
 
         for x, y, _ in pos:
             if not (0 < x < width - 1 and 0 < y < height - 1):
