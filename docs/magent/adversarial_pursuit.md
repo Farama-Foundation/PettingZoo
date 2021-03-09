@@ -5,7 +5,7 @@ agents: "75"
 manual-control: "No"
 action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
-observation-shape: "(9,9,15), (10,10,19)"
+observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
 import: "pettingzoo.magent import adversarial_pursuit_v2"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
@@ -46,15 +46,15 @@ my_team_presence| 1
 my_team_hp| 1
 other_team_presence| 1
 other_team_hp| 1
-binary_agent_id| 10
-one_hot_action| 9/Prey,13/Predator
-last_reward| 1
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)| 9/Prey,13/Predator
+last_reward(extra_features=True)| 1
 
 
 ### Arguments
 
 ```
-adversarial_pursuit_v2.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, max_cycles=500)
+adversarial_pursuit_v2.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, max_cycles=500, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 7.
@@ -64,3 +64,5 @@ adversarial_pursuit_v2.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, ma
 `tag_penalty`:  reward when red agents tag anything
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False

@@ -5,7 +5,7 @@ agents: "495"
 manual-control: "No"
 action-shape: "(33)"
 action-values: "Discrete(33)"
-observation-shape: "(15,15,43)"
+observation-shape: "(15,15,9)"
 observation-values: "[0,2]"
 import: "pettingzoo.magent import gather_v2"
 agent-labels: "agents= [ omnivore_[0-494] ]"
@@ -35,7 +35,7 @@ Reward is given as:
 
 #### Observation space
 
-The observation space is a 13x13 map with 41 channels, which are (in order):
+The observation space is a 15x15 map with 9 channels, which are (in order):
 
 name | number of channels
 --- | ---
@@ -46,15 +46,15 @@ omnivore_minimap| 1
 food_presense| 1
 food_hp| 1
 food_minimap| 1
-one_hot_action| 33
-last_reward| 1
+one_hot_action(extra_features=True)| 33
+last_reward(extra_features=True)| 1
 agent_position| 2
 
 
 ### Arguments
 
 ```
-gather_v2.env(minimap_mode=True, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500)
+gather_v2.env(minimap_mode=True, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
 ```
 
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
@@ -68,3 +68,5 @@ gather_v2.env(minimap_mode=True, step_reward=-0.01, attack_penalty=-0.1, dead_pe
 `attack_food_reward`:  Reward added for attacking a food
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
