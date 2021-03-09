@@ -20,9 +20,11 @@ def make_env(raw_env):
 
 
 class magent_parallel_env(ParallelEnv):
-    def __init__(self, env, active_handles, names, map_size, max_cycles, reward_range, minimap_mode):
+    def __init__(self, env, active_handles, names, map_size, max_cycles, reward_range, minimap_mode, extra_features):
         self.map_size = map_size
         self.max_cycles = max_cycles
+        self.minimap_mode = minimap_mode
+        self.extra_features = extra_features
         self.env = env
         self.handles = active_handles
         env.reset()
@@ -59,6 +61,9 @@ class magent_parallel_env(ParallelEnv):
         feature_spaces = [self.env.get_feature_space(handle) for handle in self.handles]
         assert all(len(tup) == 3 for tup in view_spaces)
         assert all(len(tup) == 1 for tup in feature_spaces)
+        for feature_space in feature_spaces:
+            if not self.extra_features:
+                feature_space[0] = 2 if self.minimap_mode else 0
         obs_spaces = [(view_space[:2] + (view_space[2] + feature_space[0],)) for view_space, feature_space in zip(view_spaces, feature_spaces)]
         return obs_spaces
 
@@ -87,9 +92,16 @@ class magent_parallel_env(ParallelEnv):
             ids = self.env.get_agent_id(handle)
             view, features = self.env.get_observation(handle)
 
-            feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1)
-            feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
-            fin_obs = np.concatenate([view, feat_img], axis=-1)
+            if self.minimap_mode and not self.extra_features:
+                features = features[-2:]
+
+            if self.minimap_mode or self.extra_features:
+				feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1))
+                feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
+                fin_obs = np.concatenate([view, feat_img], axis=-1)
+            else:
+                fin_obs = view
+
             for id, obs in zip(ids, fin_obs):
                 observes[id] = obs
 
