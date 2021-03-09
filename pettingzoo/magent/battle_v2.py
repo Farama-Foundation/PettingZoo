@@ -93,8 +93,14 @@ class _parallel_env(magent_parallel_env, EzPickle):
         pos = []
         for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
+                assert 0 < x < width-1 and 0 < y < height-1
                 pos.append([x, y, 0])
+        team1_size = len(pos)
         env.add_agents(handles[self.leftID], method="custom", pos=pos)
+
+        for x,y,_ in pos:
+            if not (0 < x < width-1 and 0 < y < height-1):
+                assert False
 
         # right
         n = init_num
@@ -102,5 +108,8 @@ class _parallel_env(magent_parallel_env, EzPickle):
         pos = []
         for x in range(width // 2 + gap, width // 2 + gap + side, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
+                assert 0 < x < width-1 and 0 < y < height-1
                 pos.append([x, y, 0])
+
+        pos = pos[:team1_size]
         env.add_agents(handles[self.rightID], method="custom", pos=pos)
