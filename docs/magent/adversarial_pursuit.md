@@ -21,6 +21,8 @@ Key: `move_N` means N separate actions, one to move to each of the N nearest squ
 
 Predator action options: `[do_nothing, move_4, tag_8]`
 
+Prey action options: `[do_nothing, move_8]`
+
 #### Reward
 
 Predator's reward is given as:
@@ -28,13 +30,26 @@ Predator's reward is given as:
 * 1 reward for tagging a prey
 * -0.2 reward for tagging anywhere (`tag_penalty` option)
 
-Prey action options: `[do_nothing, move_8]`
-
 Prey's reward is given as:
 
 * -1 reward for being tagged
 
-Observation space: `[obstacle, my_team_presence, my_team_presence_health, other_team_presence, other_team_presence_health, one_hot_action, last_reward]`
+
+#### Observation space
+
+The observation space is a 10x10 map for pursuers and a 9x9 map for the pursued. The contain the following channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle/off the map| 1
+my_team_presence| 1
+my_team_hp| 1
+other_team_presence| 1
+other_team_hp| 1
+binary_agent_id| 10
+one_hot_action| 9/Prey,13/Predator
+last_reward| 1
+
 
 ### Arguments
 
