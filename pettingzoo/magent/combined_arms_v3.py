@@ -116,6 +116,10 @@ def generate_map(env, map_size, handles):
         for y in range((height - side) // 2, (height - side) // 2 + side, 2):
             pos[ct % 2].append([x, y])
         ct += 1
+
+    for x,y in pos[0] + pos[1]:
+        if not (0 < x < width-1 and 0 < y < height-1):
+            assert False
     env.add_agents(handles[0], method="custom", pos=pos[0])
     env.add_agents(handles[1], method="custom", pos=pos[1])
 
@@ -128,6 +132,10 @@ def generate_map(env, map_size, handles):
         for y in range((height - side) // 2, (height - side) // 2 + side, 2):
             pos[ct % 2].append([x, y])
         ct += 1
+
+    for x,y in pos[0] + pos[1]:
+        if not (0 < x < width-1 and 0 < y < height-1):
+            assert False
     env.add_agents(handles[2], method="custom", pos=pos[0])
     env.add_agents(handles[3], method="custom", pos=pos[1])
 
