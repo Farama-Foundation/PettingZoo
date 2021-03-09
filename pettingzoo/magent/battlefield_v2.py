@@ -37,7 +37,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles)
-        assert map_size >= 45, "size of map must be at least 45"
+        assert map_size >= 46, "size of map must be at least 46"
         env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
@@ -91,7 +91,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
                     pos.append([x, y, 0])
 
         for x, y, _ in pos:
-            if not (0 < x < width-1 and 0 < y < height-1):
+            if not (0 < x < width - 1 and 0 < y < height - 1):
                 assert False
         env.add_agents(handles[leftID], method="custom", pos=pos)
 
@@ -103,7 +103,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
                 pos.append([x, y, 0])
 
-        for x,y,_ in pos:
-            if not (0 < x < width-1 and 0 < y < height-1):
+        for x, y, _ in pos:
+            if not (0 < x < width - 1 and 0 < y < height - 1):
                 assert False
         env.add_agents(handles[rightID], method="custom", pos=pos)
