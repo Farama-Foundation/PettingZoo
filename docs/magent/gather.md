@@ -7,7 +7,7 @@ action-shape: "(33)"
 action-values: "Discrete(33)"
 observation-shape: "(15,15,5)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import gather_v2"
+import: "pettingzoo.magent import gather_v3"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
@@ -54,7 +54,7 @@ agent_position(minimap_mode=True)| 2
 ### Arguments
 
 ```
-gather_v2.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
+gather_v3.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
 ```
 
 `minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
