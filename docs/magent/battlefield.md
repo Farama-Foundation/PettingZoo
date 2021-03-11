@@ -5,7 +5,7 @@ agents: "24"
 manual-control: "No"
 action-shape: "(21)"
 action-values: "Discrete(21)"
-observation-shape: "(13,13,9)"
+observation-shape: "(13,13,5)"
 observation-values: "[0,2]"
 import: "pettingzoo.magent import battlefield_v2"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
@@ -41,26 +41,26 @@ If multiple options apply, rewards are added.
 
 #### Observation space
 
-The observation space is a 13x13 map with 9 channels, which are (in order):
+The observation space is a 13x13 map with the below channels (in order):
 
 name | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1
 my_team_hp| 1
-my_team_minimap(default:minimap_mode=True)| 1
+my_team_minimap(minimap_mode=True)| 1
 other_team_presence| 1
 other_team_hp| 1
-other_team_minimap(default:minimap_mode=True)| 1
+other_team_minimap(minimap_mode=True)| 1
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 21
 last_reward(extra_features=True)| 1
-agent_position(default:minimap_mode=True)| 2
+agent_position(minimap_mode=True)| 2
 
 ### Arguments
 
 ```
-battle_v2.env(map_size=80, minimap_mode=True, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
+battle_v2.env(map_size=80, minimap_mode=False, step_reward-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Minimum size is 46.
