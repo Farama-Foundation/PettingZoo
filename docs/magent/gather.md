@@ -42,13 +42,13 @@ name | number of channels
 obstacle/off the map| 1
 omnivore_presence| 1
 omnivore_hp| 1
-omnivore_minimap| 1
+omnivore_minimap(default:minimap_mode=True)| 1
 food_presense| 1
 food_hp| 1
-food_minimap| 1
+food_minimap(default:minimap_mode=True)| 1
 one_hot_action(extra_features=True)| 33
 last_reward(extra_features=True)| 1
-agent_position| 2
+agent_position(default:minimap_mode=True)| 2
 
 
 ### Arguments

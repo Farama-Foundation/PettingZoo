@@ -51,7 +51,6 @@ other_team_hp| 1
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 5 Deer/9 Tiger
 last_reward(extra_features=True)| 1
-agent_position| 2
 
 ### Arguments
 

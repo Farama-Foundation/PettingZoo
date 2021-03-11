@@ -48,14 +48,14 @@ name | number of channels
 obstacle/off the map| 1
 my_team_presence| 1
 my_team_hp| 1
-my_team_minimap| 1
+my_team_minimap(default:minimap_mode=True)| 1
 other_team_presence| 1
 other_team_hp| 1
-other_team_minimap| 1
+other_team_minimap(default:minimap_mode=True)| 1
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 21
 last_reward(extra_features=True)| 1
-agent_position| 2
+agent_position(default:minimap_mode=True)| 2
 
 ### Arguments
 
