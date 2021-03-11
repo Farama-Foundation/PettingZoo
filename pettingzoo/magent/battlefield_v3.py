@@ -9,7 +9,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils.conversions import from_parallel_wrapper
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-from .battle_v2 import get_config, KILL_REWARD
+from .battle_v3 import get_config, KILL_REWARD
 from gym.utils import EzPickle
 
 
@@ -33,7 +33,7 @@ env = make_env(raw_env)
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "battlefield_v2"}
+    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "battlefield_v3"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)

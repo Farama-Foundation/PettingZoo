@@ -70,7 +70,7 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "gather_v2"}
+    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "gather_v3"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)

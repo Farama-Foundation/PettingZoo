@@ -7,7 +7,7 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,5)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import battle_v2"
+import: "pettingzoo.magent import battle_v3"
 agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
@@ -60,7 +60,7 @@ agent_position| 2
 ### Arguments
 
 ```
-battle_v2.env(map_size=45, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
+battle_v3.env(map_size=45, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 12.

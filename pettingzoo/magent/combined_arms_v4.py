@@ -144,7 +144,7 @@ def generate_map(env, map_size, handles):
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
-    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "combined_arms_v3"}
+    metadata = {'render.modes': ['human', 'rgb_array'], 'name': "combined_arms_v4"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
