@@ -5,7 +5,7 @@ agents: "162"
 manual-control: "No"
 action-shape: "(9),(25)"
 action-values: "Discrete(9),(25)"
-observation-shape: "(13,13,15)"
+observation-shape: "(13,13,9)"
 observation-values: "[0,2]"
 import: "pettingzoo.magent import combined_arms_v3"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
@@ -40,25 +40,25 @@ If multiple options apply, rewards are added.
 
 #### Observation space
 
-The observation space is a 13x13 map with 15 channels for Melee and 51 channels for Ranged units, which are (in order):
+The observation space is a 13x13 map with the below channels (in order):
 
 name | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1
 my_team_hp| 1
-my_team_minimap(default:minimap_mode=True)| 1
-Other teams presences/heaths/minimaps (in some order) | 9 default/6 if minimap_mode=False
+my_team_minimap(minimap_mode=True)| 1
+Other teams presences/heaths/minimaps (in some order) | 6 default/9 if minimap_mode=True
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 9 Melee/25 ranged
 last_reward(extra_features=True)| 1
-agent_position(default:minimap_mode=True)| 2
+agent_position(minimap_mode=True)| 2
 
 
 ### Arguments
 
 ```
-combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
+combined_arms_v3.env(map_size=45, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.

@@ -15,7 +15,7 @@ from gym.utils import EzPickle
 default_map_size = 45
 max_cycles_default = 1000
 KILL_REWARD = 5
-minimap_mode_default = True
+minimap_mode_default = False
 default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
 
