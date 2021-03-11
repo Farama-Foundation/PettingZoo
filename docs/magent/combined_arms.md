@@ -47,12 +47,12 @@ name | number of channels
 obstacle/off the map| 1
 my_team_presence| 1
 my_team_hp| 1
-my_team_minimap| 1
-Other teams presences/heaths/minimaps (in some order) | 9
+my_team_minimap(default:minimap_mode=True)| 1
+Other teams presences/heaths/minimaps (in some order) | 9 default/6 if minimap_mode=False
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 9 Melee/25 ranged
 last_reward(extra_features=True)| 1
-agent_position| 2
+agent_position(default:minimap_mode=True)| 2
 
 
 ### Arguments
