@@ -102,7 +102,7 @@ class magent_parallel_env(ParallelEnv):
                 feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
                 fin_obs = np.concatenate([view, feat_img], axis=-1)
             else:
-                fin_obs = view
+                fin_obs = np.copy(view)
 
             for id, obs in zip(ids, fin_obs):
                 observes[id] = obs
