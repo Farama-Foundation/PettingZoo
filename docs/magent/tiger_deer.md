@@ -6,7 +6,7 @@ agents: "121"
 manual-control: "No"
 action-shape: "(5),(9)"
 action-values: "Discrete(5),(9)"
-observation-shape: "(3,3,21), (9,9,25)"
+observation-shape: "(3,3,5), (9,9,5)"
 observation-values: "[0,2]"
 import: "pettingzoo.magent import tiger_deer_v3"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
@@ -39,7 +39,7 @@ Deer's reward scheme is:
 
 #### Observation space
 
-The observation space is a 3x3 map with 21 channels for deer and 9x9 map with 25 channels for tigers, which are (in order):
+The observation space is a 3x3 map with 5 channels for deer and 9x9 map with 5 channels for tigers, which are (in order):
 
 name | number of channels
 --- | ---
@@ -48,15 +48,14 @@ my_team_presence| 1
 my_team_hp| 1
 other_team_presence| 1
 other_team_hp| 1
-binary_agent_id| 10
-one_hot_action| 5 Deer/9 Tiger
-last_reward| 1
-agent_position| 2
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)| 5 Deer/9 Tiger
+last_reward(extra_features=True)| 1
 
 ### Arguments
 
 ```
-tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500)
+tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
@@ -68,3 +67,5 @@ tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer
 `deer_attacked`: Reward a deer gets for being attacked
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
