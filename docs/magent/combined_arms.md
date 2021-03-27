@@ -5,9 +5,9 @@ agents: "162"
 manual-control: "No"
 action-shape: "(9),(25)"
 action-values: "Discrete(9),(25)"
-observation-shape: "(13,13,35), (13,13,51)"
+observation-shape: "(13,13,9)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import combined_arms_v3"
+import: "pettingzoo.magent import combined_arms_v4"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
@@ -40,25 +40,25 @@ If multiple options apply, rewards are added.
 
 #### Observation space
 
-The observation space is a 13x13 map with 35 channels for Melee and 51 channels for Ranged units, which are (in order):
+The observation space is a 13x13 map with the below channels (in order):
 
 name | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1
 my_team_hp| 1
-my_team_minimap| 1
-Other teams presences/heaths/minimaps (in some order) | 9
-binary_agent_id| 10
-one_hot_action| 9 Melee/25 ranged
-last_reward| 1
-agent_position| 2
+my_team_minimap(minimap_mode=True)| 1
+Other teams presences/heaths/minimaps (in some order) | 6 default/9 if minimap_mode=True
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)| 9 Melee/25 ranged
+last_reward(extra_features=True)| 1
+agent_position(minimap_mode=True)| 2
 
 
 ### Arguments
 
 ```
-combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000)
+combined_arms_v4.env(map_size=45, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.
@@ -75,3 +75,5 @@ combined_arms_v3.env(map_size=45, minimap_mode=True, step_reward=-0.005, dead_pe
 `attack_opponent_reward`:  reward added for attacking an opponent
 
 `max_cycles`:  number of cycles (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
