@@ -6,7 +6,7 @@ from gym import spaces
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import seeding
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 from gym.utils import EzPickle
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
@@ -87,7 +87,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    def __init__(self, continuous=False, vector_observation=False, max_cycles=900, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
+    def __init__(self, continuous=False, vector_observation=False, max_cycles=150, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
         EzPickle.__init__(self, continuous, vector_observation, max_cycles, num_floors, synchronized_start, identical_aliens, random_aliens)
         num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]
@@ -95,7 +95,7 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
-        self.metadata = {'render.modes': ['human', "rgb_array"], 'name': "prison_v2"}
+        self.metadata = {'render.modes': ['human', "rgb_array"], 'name': "prison_v3"}
         self.infos = {}
         self.rendering = False
         self.max_cycles = max_cycles
@@ -136,6 +136,7 @@ class raw_env(AECEnv, EzPickle):
                 self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
                 self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
+        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls(num_floors)
@@ -282,6 +283,15 @@ class raw_env(AECEnv, EzPickle):
             sub_screen = np.rot90(sub_screen, k=3)
             sub_screen = np.fliplr(sub_screen)
             return sub_screen
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def reinit(self):
         self.done_val = False

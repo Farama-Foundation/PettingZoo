@@ -40,7 +40,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 ```
 simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
-                num_food=2, max_cycles=25)
+                num_food=2, max_cycles=25, num_forests=2)
 ```
 
 
@@ -54,4 +54,6 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 `num_food`:  number of food locations that good agents are rewarded at
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`num_forests`: number of forests that can hide agents inside from being seen
 

@@ -40,18 +40,18 @@ from pettingzoo.classic import go_v2
 from pettingzoo.classic import hanabi_v3
 from pettingzoo.classic import backgammon_v2
 
-from pettingzoo.butterfly import knights_archers_zombies_v6
-from pettingzoo.butterfly import pistonball_v3
+from pettingzoo.butterfly import knights_archers_zombies_v7
+from pettingzoo.butterfly import pistonball_v4
 from pettingzoo.butterfly import cooperative_pong_v2
-from pettingzoo.butterfly import prison_v2
-from pettingzoo.butterfly import prospector_v3
+from pettingzoo.butterfly import prison_v3
+from pettingzoo.butterfly import prospector_v4
 
-from pettingzoo.magent import battle_v2
+from pettingzoo.magent import battle_v3
 from pettingzoo.magent import adversarial_pursuit_v2
-from pettingzoo.magent import gather_v2
-from pettingzoo.magent import combined_arms_v3
+from pettingzoo.magent import gather_v3
+from pettingzoo.magent import combined_arms_v4
 from pettingzoo.magent import tiger_deer_v3
-from pettingzoo.magent import battlefield_v2
+from pettingzoo.magent import battlefield_v3
 
 from pettingzoo.mpe import simple_adversary_v2
 from pettingzoo.mpe import simple_crypto_v2
@@ -121,18 +121,18 @@ all_environments = {
     "classic/hanabi_v3": hanabi_v3,
     "classic/backgammon_v2": backgammon_v2,
 
-    "butterfly/knights_archers_zombies_v6": knights_archers_zombies_v6,
-    "butterfly/pistonball_v3": pistonball_v3,
+    "butterfly/knights_archers_zombies_v7": knights_archers_zombies_v7,
+    "butterfly/pistonball_v4": pistonball_v4,
     "butterfly/cooperative_pong_v2": cooperative_pong_v2,
-    "butterfly/prison_v2": prison_v2,
-    "butterfly/prospector_v3": prospector_v3,
+    "butterfly/prison_v3": prison_v3,
+    "butterfly/prospector_v4": prospector_v4,
 
-    # "magent/adversarial_pursuit": adversarial_pursuit_v2,
-    # "magent/battle": battle_v2,
-    # "magent/battlefield": battlefield_v2,
-    # "magent/combined_arms": combined_arms_v3,
-    # "magent/gather": gather_v2,
-    # "magent/tiger_deer": tiger_deer_v3,
+    "magent/adversarial_pursuit_v2": adversarial_pursuit_v2,
+    "magent/battle_v3": battle_v3,
+    "magent/battlefield_v3": battlefield_v3,
+    "magent/combined_arms_v4": combined_arms_v4,
+    "magent/gather_v3": gather_v3,
+    "magent/tiger_deer_v3": tiger_deer_v3,
 
     "mpe/simple_adversary_v2": simple_adversary_v2,
     "mpe/simple_crypto_v2": simple_crypto_v2,
