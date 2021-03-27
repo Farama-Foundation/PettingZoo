@@ -4,23 +4,23 @@
 
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
-```python
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+```
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
 
-```python
+```
 cooperative_pong.env(ball_speed=18, left_paddle_speed=25,
 right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
-## Interacting with Environments
+## Interacting With Environments
 
 Environments can be interacted with using a similar interface to Gym:
 
-```python
+```
 env.reset()
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
@@ -52,6 +52,8 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or reseting.
 
+`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
+
 `dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
 `dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
@@ -61,6 +63,8 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 `infos = {0:[first agent's info], 1:[second agent's info] ... n-1:[nth agent's info]}`
 
 `observe(agent)`: Returns the observation an agent currently can make. `last()` calls this function.
+
+`state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
 
 `rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:
 
@@ -78,6 +82,14 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
 
+### Unwrapping an environment
+
+If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
+
+```
+base_env = prospector_v4.env().unwrapped
+```
+
 ### Variable Numbers of Agents (Death)
 
 Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
@@ -86,7 +98,7 @@ Agents can die and generate during the course of an environment. If an agent die
 
 You can get the number of agents with `len(env.agents)`, and the maximum possible number of agents with `len(env.possible_agents)`.
 
-### Environment as agent
+### Environment as an Agent
 
 In certain cases, separating agent from environment actions is helpful for studying. This can be done by treating the environment as an agent. We encourage calling the environment actor `env` in env.agents, and having it take `None` as an action.
 
@@ -95,8 +107,8 @@ In certain cases, separating agent from environment actions is helpful for study
 
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
-```python
-env = prospector_v3.raw_env(<environment parameters>)
+```
+env = prospector_v4.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
@@ -107,7 +119,7 @@ In addition to the main API, we have a secondary parallel API for environments w
 
 Environments can be interacted with as follows:
 
-```python
+```
 parallel_env = pistonball_v1.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
@@ -130,18 +142,21 @@ for step in range(max_cycles):
 
 [SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
+
 ## Utils
+
+PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.
 
 ### Average Total Reward Util
 
 The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
 
-This value is important for establishing the simplest possible baseline: the random policy. 
+This value is important for establishing the simplest possible baseline: the random policy.
 
 ```
 from pettingzoo.utils import average_total_reward
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
@@ -151,9 +166,9 @@ Where `max_episodes` and `max_stpes` both limit the total number of evaluations 
 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
-```python
-from pettingzoo.butterfly import prison_v2
-prison_v2.manual_control(<environment parameters>)
+```
+from pettingzoo.butterfly import prison_v3
+prison_v3.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.
@@ -162,20 +177,19 @@ Environments say if they support this functionality in their documentation, and 
 
 You can also easily get a quick impression of them by watching a random policy control all the actions:
 
-```python
+```
 from pettingzoo.utils import random_demo
-random_demo(env, render=True, cycles=100000000)
+random_demo(env, render=True, episodes=1)
 ```
 
 ### Observation Saving
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
 
-```python
+```
 from pettingzoo.utils import save_observation
-from pettingzoo.butterfly import pistonball_v3
-env = pistonball_v3.env()
+from pettingzoo.butterfly import pistonball_v4
+env = pistonball_v4.env()
 env.reset()
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
 ```
-

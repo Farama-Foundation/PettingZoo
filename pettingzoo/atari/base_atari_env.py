@@ -6,8 +6,8 @@ from gym.utils import seeding, EzPickle
 from pettingzoo.utils import agent_selector, wrappers
 from gym import spaces
 import numpy as np
-from pettingzoo.utils._parallel_env import _parallel_env_wrapper
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import from_parallel_wrapper
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -21,7 +21,7 @@ def base_env_wrapper_fn(raw_env_fn):
 
 
 def BaseAtariEnv(**kwargs):
-    return _parallel_env_wrapper(ParallelAtariEnv(**kwargs))
+    return from_parallel_wrapper(ParallelAtariEnv(**kwargs))
 
 
 class ParallelAtariEnv(ParallelEnv, EzPickle):
@@ -198,3 +198,32 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             import pygame
             pygame.quit()
             self._screen = None
+
+    def clone_state(self):
+        """Clone emulator state w/o system state. Restoring this state will
+        *not* give an identical environment. For complete cloning and restoring
+        of the full state, see `{clone,restore}_full_state()`."""
+        state_ref = self.ale.cloneState()
+        state = self.ale.encodeState(state_ref)
+        self.ale.deleteState(state_ref)
+        return state
+
+    def restore_state(self, state):
+        """Restore emulator state w/o system state."""
+        state_ref = self.ale.decodeState(state)
+        self.ale.restoreState(state_ref)
+        self.ale.deleteState(state_ref)
+
+    def clone_full_state(self):
+        """Clone emulator state w/ system state including pseudorandomness.
+        Restoring this state will give an identical environment."""
+        state_ref = self.ale.cloneSystemState()
+        state = self.ale.encodeState(state_ref)
+        self.ale.deleteState(state_ref)
+        return state
+
+    def restore_full_state(self, state):
+        """Restore emulator state w/ system state including pseudorandomness."""
+        state_ref = self.ale.decodeState(state)
+        self.ale.restoreSystemState(state_ref)
+        self.ale.deleteState(state_ref)

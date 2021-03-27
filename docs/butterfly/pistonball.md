@@ -8,8 +8,8 @@ action-shape: "(1,)"
 action-values: "[-1, 1]"
 observation-shape: "(457, 120, 3)"
 observation-values: "(0, 255)"
-average-total-reward: "-1053.72"
-import: "from pettingzoo.butterfly import pistonball_v3"
+average-total-reward: "-88.1"
+import: "from pettingzoo.butterfly import pistonball_v4"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
@@ -28,7 +28,7 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 
 ### Arguments
 
-```Python
+```
 pistonball.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
 ```
 

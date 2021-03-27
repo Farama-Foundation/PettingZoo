@@ -13,7 +13,7 @@ from pettingzoo.utils import wrappers
 from . import constants as const
 from . import utils
 from .manual_control import manual_control
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 import math
 import os
@@ -217,7 +217,7 @@ class Fence(pg.sprite.Sprite):
         self.shape.collision_type = CollisionTypes.BOUNDARY
 
         self.body.position = utils.flipy(body_pos)
-        space.add(self.shape)
+        space.add(self.body, self.shape)
 
     def full_draw(self, screen):
         for rect in self.rects:
@@ -242,7 +242,7 @@ class Bank(pg.sprite.Sprite):
 
         self.body.position = utils.flipy(pos)
         self.space = space
-        self.space.add(self.shape, self.body)
+        self.space.add(self.body, self.shape)
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
@@ -325,7 +325,7 @@ class Water(object):
 
         self.body.position = utils.flipy(pos)
         self.space = space
-        self.space.add(self.shape)
+        self.space.add(self.body, self.shape)
 
     def generate_debris(self, rng):
         self.debris = []
@@ -453,7 +453,7 @@ class raw_env(AECEnv, EzPickle):
         prospec_handoff_gold_reward=1,
         banker_receive_gold_reward=1,
         banker_deposit_gold_reward=1,
-        max_cycles=900,
+        max_cycles=450,
     ):
         EzPickle.__init__(
             self,
@@ -533,7 +533,7 @@ class raw_env(AECEnv, EzPickle):
             f = Fence(w_type, s_pos, b_pos, verts, self.space)
             self.fences.append(f)
 
-        self.metadata = {"render.modes": ["human", "rgb_array"], 'name': "prospector_v3"}
+        self.metadata = {"render.modes": ["human", "rgb_array"], 'name': "prospector_v4"}
 
         self.action_spaces = {}
         for p in self.prospectors:
@@ -560,6 +560,8 @@ class raw_env(AECEnv, EzPickle):
             self.observation_spaces[b] = spaces.Box(
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
+
+        self.state_space = spaces.Box(low=0, high=255, shape=((const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3)), dtype=np.uint8)
 
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -738,6 +740,15 @@ class raw_env(AECEnv, EzPickle):
         self.last_observation[agent] = sub_screen
 
         return sub_screen
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pg.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def step(self, action):
         if self.dones[self.agent_selection]:

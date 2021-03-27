@@ -12,7 +12,7 @@ from pettingzoo.utils import agent_selector
 from .manual_control import manual_control
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
-from pettingzoo.utils.to_parallel import parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 _image_library = {}
 
@@ -39,7 +39,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v4"}
 
     def __init__(self, n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
         EzPickle.__init__(self, n_pistons, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
@@ -72,6 +72,7 @@ class raw_env(AECEnv, EzPickle):
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons))
         else:
             self.action_spaces = dict(zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons))
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=(self.screen_height, self.screen_width, 3), dtype=np.uint8)
 
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
@@ -121,7 +122,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
         self.frames = 0
-        self.display_wait = 0.0
 
         self.has_reset = False
         self.closed = False
@@ -142,6 +142,15 @@ class raw_env(AECEnv, EzPickle):
         observation = np.rot90(cropped, k=3)
         observation = np.fliplr(observation)
         return observation
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state = pygame.surfarray.pixels3d(self.screen).copy()
+        state = np.rot90(state, k=3)
+        state = np.fliplr(state)
+        return state
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
