@@ -47,7 +47,6 @@ setup(
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
     python_requires=">=3.6, <3.10",
-    data_files=[("", ["LICENSE.txt"])],
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
