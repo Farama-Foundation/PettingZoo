@@ -23,22 +23,22 @@ from pettingzoo.atari import volleyball_pong_v1
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
-from pettingzoo.classic import chess_v2
-from pettingzoo.classic import checkers_v2
+from pettingzoo.classic import chess_v3
+from pettingzoo.classic import checkers_v3
 from pettingzoo.classic import rps_v1
 from pettingzoo.classic import rpsls_v1
-from pettingzoo.classic import connect_four_v2
-from pettingzoo.classic import tictactoe_v2
-from pettingzoo.classic import leduc_holdem_v2
-from pettingzoo.classic import mahjong_v2
-from pettingzoo.classic import texas_holdem_v2
-from pettingzoo.classic import texas_holdem_no_limit_v2
-from pettingzoo.classic import uno_v2
-from pettingzoo.classic import dou_dizhu_v2
-from pettingzoo.classic import gin_rummy_v2
-from pettingzoo.classic import go_v2
-from pettingzoo.classic import hanabi_v3
-from pettingzoo.classic import backgammon_v2
+from pettingzoo.classic import connect_four_v3
+from pettingzoo.classic import tictactoe_v3
+from pettingzoo.classic import leduc_holdem_v3
+from pettingzoo.classic import mahjong_v3
+from pettingzoo.classic import texas_holdem_v3
+from pettingzoo.classic import texas_holdem_no_limit_v3
+from pettingzoo.classic import uno_v3
+from pettingzoo.classic import dou_dizhu_v3
+from pettingzoo.classic import gin_rummy_v3
+from pettingzoo.classic import go_v3
+from pettingzoo.classic import hanabi_v4
+from pettingzoo.classic import backgammon_v3
 
 from pettingzoo.butterfly import knights_archers_zombies_v7
 from pettingzoo.butterfly import pistonball_v4
@@ -104,22 +104,22 @@ all_environments = {
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
-    "classic/chess_v2": chess_v2,
-    "classic/checkers_v2": checkers_v2,
+    "classic/chess_v3": chess_v3,
+    "classic/checkers_v3": checkers_v3,
     "classic/rps_v1": rps_v1,
     "classic/rpsls_v1": rpsls_v1,
-    "classic/connect_four_v2": connect_four_v2,
-    "classic/tictactoe_v2": tictactoe_v2,
-    "classic/leduc_holdem_v2": leduc_holdem_v2,
-    "classic/mahjong_v2": mahjong_v2,
-    "classic/texas_holdem_v2": texas_holdem_v2,
-    "classic/texas_holdem_no_limit_v2": texas_holdem_no_limit_v2,
-    "classic/uno_v2": uno_v2,
-    "classic/dou_dizhu_v2": dou_dizhu_v2,
-    "classic/gin_rummy_v2": gin_rummy_v2,
-    "classic/go_v2": go_v2,
-    "classic/hanabi_v3": hanabi_v3,
-    "classic/backgammon_v2": backgammon_v2,
+    "classic/connect_four_v3": connect_four_v3,
+    "classic/tictactoe_v3": tictactoe_v3,
+    "classic/leduc_holdem_v3": leduc_holdem_v3,
+    "classic/mahjong_v3": mahjong_v3,
+    "classic/texas_holdem_v3": texas_holdem_v3,
+    "classic/texas_holdem_no_limit_v3": texas_holdem_no_limit_v3,
+    "classic/uno_v3": uno_v3,
+    "classic/dou_dizhu_v3": dou_dizhu_v3,
+    "classic/gin_rummy_v3": gin_rummy_v3,
+    "classic/go_v3": go_v3,
+    "classic/hanabi_v4": hanabi_v4,
+    "classic/backgammon_v3": backgammon_v3,
 
     "butterfly/knights_archers_zombies_v7": knights_archers_zombies_v7,
     "butterfly/pistonball_v4": pistonball_v4,

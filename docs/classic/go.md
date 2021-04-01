@@ -7,7 +7,7 @@ action-shape: "Discrete(170)"
 action-values: "Discrete(170)"
 observation-shape: "(170, 170, 3)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import go_v1"
+import: "from pettingzoo.classic import go_v3"
 agent-labels: "agents= ['black_0', 'white_0']"
 ---
 
