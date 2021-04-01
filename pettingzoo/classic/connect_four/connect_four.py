@@ -17,7 +17,7 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "connect_four_v2"}
+    metadata = {'render.modes': ['human'], "name": "connect_four_v3"}
 
     def __init__(self):
         super().__init__()

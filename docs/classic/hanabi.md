@@ -8,7 +8,7 @@ action-values: "Discrete(20)"
 observation-shape: "(658,)"
 observation-values: "[0,1]"
 average-total-reward: "0.0"
-import: "from pettingzoo.classic import hanabi_v2"
+import: "from pettingzoo.classic import hanabi_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
