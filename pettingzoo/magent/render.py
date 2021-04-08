@@ -11,12 +11,12 @@ attack_dot_size = 0.3
 text_rgb = (0, 0, 0)
 text_size = 16
 text_spacing = 3
-banner_size = 32
+banner_size = 25
 banner_spacing = 3
 bigscreen_size = 72
 bigscreen_spacing = 0
 grid_rgba = ((0, 0, 0), 30)
-grid_size = 7.5
+grid_size = 8
 
 
 def draw_line(surface, color, a, b):
