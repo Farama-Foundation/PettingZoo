@@ -19,7 +19,7 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "tictactoe_v2"}
+    metadata = {'render.modes': ['human'], "name": "tictactoe_v3"}
 
     def __init__(self):
         super().__init__()
@@ -53,7 +53,7 @@ class raw_env(AECEnv):
     #  [2,1,0]]
     def observe(self, agent):
         board_vals = np.array(self.board.squares).reshape(3, 3)
-        cur_player = self.possible_agents.index(self.agent_selection)
+        cur_player = self.possible_agents.index(agent)
         opp_player = (cur_player + 1) % 2
 
         cur_p_board = np.equal(board_vals, cur_player + 1)

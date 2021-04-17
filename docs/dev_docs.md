@@ -458,10 +458,17 @@ The seed test takes in a function that creates a pettingzoo environment. For exa
 from pettingzoo.test import seed_test
 from pettingzoo.butterfly import pistonball_v4
 env_fn = pistonball_v4.env
-seed_test(env_fn, num_cycles=10)
+seed_test(env_fn, num_cycles=10, test_kept_state=True)
 ```
 
-The optional argument, `num_cycles`, indicates how long the environment will be run to check for determinism. Some environments only fail the test long after initialization.
+Internally, there are two separate tests.
+
+1. Do two separate environments give the same result after the environment is seeded?
+2. Does a single environment give the same result after seed() then reset() is called?
+
+The first optional argument, `num_cycles`, indicates how long the environment will be run to check for determinism. Some environments only fail the test long after initialization.
+
+The second optional argument, `test_kept_state` allows the user to disable the second test. Some physics based environments fail this test due to barely detectable differences due to caches, etc, which are not important enough to matter.
 
 ### Max Cycles Test
 

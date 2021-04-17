@@ -11,12 +11,12 @@ attack_dot_size = 0.3
 text_rgb = (0, 0, 0)
 text_size = 16
 text_spacing = 3
-banner_size = 32
+banner_size = 20
 banner_spacing = 3
 bigscreen_size = 72
 bigscreen_spacing = 0
 grid_rgba = ((0, 0, 0), 30)
-grid_size = 7.5
+grid_size = 8
 
 
 def draw_line(surface, color, a, b):
@@ -67,7 +67,7 @@ class Renderer:
         self.mode = mode
         self.handles = self.env.get_handles()
 
-        base_resolution = (map_size * 8, map_size * 8 + 7)
+        base_resolution = (map_size * 8, map_size * 8 + 15)
         if mode == "human":
             pygame.init()
             pygame.display.init()
