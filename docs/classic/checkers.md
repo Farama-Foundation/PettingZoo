@@ -9,7 +9,7 @@ action-values: "Discrete(8*8*4)"
 observation-shape: "Box(8, 8, 4)"
 observation-values: "[0, 1]"
 num-states: "10^21"
-import: "from pettingzoo.classic import checkers_v1"
+import: "from pettingzoo.classic import checkers_v3"
 agent-labels: "agents= ['player_0', 'player_1']"
 
 ---

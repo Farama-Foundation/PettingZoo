@@ -5,10 +5,10 @@ actions: Either
 agents: "20"
 manual-control: "Yes"
 action-shape: "(1,)"
-action-values: "discrete (2)"
+action-values: "[-1, 1]"
 observation-shape: "(457, 120, 3)"
 observation-values: "(0, 255)"
-average-total-reward: "-88.1"
+average-total-reward: "-91.2"
 import: "from pettingzoo.butterfly import pistonball_v4"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---

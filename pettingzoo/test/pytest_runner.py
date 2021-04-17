@@ -17,8 +17,8 @@ def test_module(name, env_module):
     if "classic/" not in name:
         parallel_api_test(env_module.parallel_env())
 
-    if "prospector" not in name:
-        seed_test(env_module.env, 50)
+    test_kept_state = "prospector" not in name
+    seed_test(env_module.env, 50, test_kept_state)
 
     if "classic/" not in name:
         max_cycles_test(env_module)
