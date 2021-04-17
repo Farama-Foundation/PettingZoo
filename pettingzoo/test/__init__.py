@@ -1,5 +1,5 @@
 from .api_test import api_test
-from .render_test import render_test
+from .render_test import render_test, collect_render_results
 from .seed_test import seed_test
 from .save_obs_test import test_save_obs
 from .max_cycles_test import max_cycles_test
