@@ -483,13 +483,22 @@ max_cycles_test(env)
 
 ### Render Test
 
-The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode. The render test supports testing `'human'`, `'ansi'`, and `'rgb_array'` modes.
+The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports `'human'`, `'ansi'`, and `'rgb_array'` modes).
 
 ```
 from pettingzoo.test import render_test
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
 render_test(env)
+```
+
+The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.
+
+```
+custom_tests = {
+    "svg": lambda render_result: return isinstance(render_result, str)
+}
+render_test(env, custom_tests=custom_tests)
 ```
 
 ### Performance Benchmark Test
