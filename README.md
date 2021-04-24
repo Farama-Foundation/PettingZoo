@@ -12,7 +12,7 @@ Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pe
 
 PettingZoo includes the following families of environments:
 
-* [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (both cooperative and competitive)
+* [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
 * [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
 * [Classic](https://www.pettingzoo.ml/classic): Classical games including card games, board games, etc.
 * [MAgent](https://www.pettingzoo.ml/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
