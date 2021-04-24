@@ -48,7 +48,7 @@ This table enumerates the observation space with `speed_features = False`:
 | (2 * n_sensors) - (3 * n_sensors) | Food distance for each sensor                | [0, √2] |
 | (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, √2] |
 | (4 * n_sensors) - (5 * n_sensors) | Pursuer distance for each sensor             | [0, √2] |
-|          (5 * n_sensors)          | food                                         | {0, 1}  |
+|          (5 * n_sensors)          | Indicates whether agent collided with food   | {0, 1}  |
 |        (5 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1}  |
 
 ### Action Space

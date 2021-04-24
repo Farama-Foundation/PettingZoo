@@ -1,6 +1,6 @@
 ---
 layout: "docu"
-title: "Maze Craze: Blockade"
+title: "Maze Craze"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
