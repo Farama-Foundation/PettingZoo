@@ -447,7 +447,7 @@ class MultiWalkerEnv():
             rewards += self.terminate_reward
             done = [True] * self.n_walkers
         if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
-            done = True
+            done = [True] * self.n_walkers
         rewards += self.fall_reward * self.fallen_walkers
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
             rewards += self.terminate_reward
