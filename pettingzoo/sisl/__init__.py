@@ -1,11 +1,12 @@
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 
-multiwalker_v0 = DeprecatedModule("multiwalker", "v0", "v6")
-multiwalker_v1 = DeprecatedModule("multiwalker", "v1", "v6")
-multiwalker_v2 = DeprecatedModule("multiwalker", "v2", "v6")
-multiwalker_v3 = DeprecatedModule("multiwalker", "v3", "v6")
-multiwalker_v4 = DeprecatedModule("multiwalker", "v4", "v6")
-multiwalker_v5 = DeprecatedModule("multiwalker", "v5", "v6")
+multiwalker_v0 = DeprecatedModule("multiwalker", "v0", "v7")
+multiwalker_v1 = DeprecatedModule("multiwalker", "v1", "v7")
+multiwalker_v2 = DeprecatedModule("multiwalker", "v2", "v7")
+multiwalker_v3 = DeprecatedModule("multiwalker", "v3", "v7")
+multiwalker_v4 = DeprecatedModule("multiwalker", "v4", "v7")
+multiwalker_v5 = DeprecatedModule("multiwalker", "v5", "v7")
+multiwalker_v6 = DeprecatedModule("multiwalker", "v6", "v7")
 pursuit_v0 = DeprecatedModule("pursuit", "v0", "v3")
 pursuit_v1 = DeprecatedModule("pursuit", "v1", "v3")
 pursuit_v2 = DeprecatedModule("pursuit", "v2", "v3")
