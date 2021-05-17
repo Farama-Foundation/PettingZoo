@@ -160,7 +160,7 @@ env = pistonball_v4.env()
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
-Where `max_episodes` and `max_stpes` both limit the total number of evaluations (when the first is hit evaluation stops)
+Where `max_episodes` and `max_steps` both limit the total number of evaluations (when the first is hit evaluation stops)
 
 ### Manual Control
 
