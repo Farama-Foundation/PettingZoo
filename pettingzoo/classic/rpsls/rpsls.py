@@ -3,6 +3,7 @@ import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 ROCK = 0
 PAPER = 1
@@ -20,6 +21,8 @@ def env():
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv):
