@@ -22,6 +22,8 @@ Get the ball past the opponent.
 
 Scoring a point gives you +1 reward and your opponent -1 reward.
 
+Serves are timed: If the player does not serve within 2 seconds of receiving the ball, they receive -1 points, and the timer resets. This prevents one player from indefinitely stalling the game, but also means it is no longer a purely zero sum game.
+
 [Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
 #### Environment parameters
