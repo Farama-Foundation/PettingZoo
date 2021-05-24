@@ -1,4 +1,4 @@
-from pettingzoo.atari import basketball_pong_v1
+from pettingzoo.atari import basketball_pong_v2
 from pettingzoo.atari import boxing_v1
 from pettingzoo.atari import combat_plane_v1
 from pettingzoo.atari import combat_tank_v1
@@ -6,20 +6,20 @@ from pettingzoo.atari import double_dunk_v2
 from pettingzoo.atari import entombed_competitive_v2
 from pettingzoo.atari import entombed_cooperative_v2
 from pettingzoo.atari import flag_capture_v1
-from pettingzoo.atari import foozpong_v1
+from pettingzoo.atari import foozpong_v2
 from pettingzoo.atari import ice_hockey_v1
 from pettingzoo.atari import joust_v2
 from pettingzoo.atari import mario_bros_v2
 from pettingzoo.atari import maze_craze_v2
 from pettingzoo.atari import othello_v2
-from pettingzoo.atari import pong_v1
-from pettingzoo.atari import quadrapong_v2
+from pettingzoo.atari import pong_v2
+from pettingzoo.atari import quadrapong_v3
 from pettingzoo.atari import space_invaders_v1
 from pettingzoo.atari import space_war_v1
 from pettingzoo.atari import surround_v1
 from pettingzoo.atari import tennis_v2
 from pettingzoo.atari import video_checkers_v3
-from pettingzoo.atari import volleyball_pong_v1
+from pettingzoo.atari import volleyball_pong_v2
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
@@ -79,7 +79,7 @@ manual_environments = {
 }
 
 all_environments = {
-    "atari/basketball_pong_v1": basketball_pong_v1,
+    "atari/basketball_pong_v2": basketball_pong_v2,
     "atari/boxing_v1": boxing_v1,
     "atari/combat_tank_v1": combat_tank_v1,
     "atari/combat_plane_v1": combat_plane_v1,
@@ -87,20 +87,20 @@ all_environments = {
     "atari/entombed_cooperative_v2": entombed_cooperative_v2,
     "atari/entombed_competitive_v2": entombed_competitive_v2,
     "atari/flag_capture_v1": flag_capture_v1,
-    "atari/foozpong_v1": foozpong_v1,
+    "atari/foozpong_v2": foozpong_v2,
     "atari/joust_v2": joust_v2,
     "atari/ice_hockey_v1": ice_hockey_v1,
     "atari/maze_craze_v2": maze_craze_v2,
     "atari/mario_bros_v2": mario_bros_v2,
     "atari/othello_v2": othello_v2,
-    "atari/pong_v1": pong_v1,
-    "atari/quadrapong_v2": quadrapong_v2,
+    "atari/pong_v2": pong_v2,
+    "atari/quadrapong_v3": quadrapong_v3,
     "atari/space_invaders_v1": space_invaders_v1,
     "atari/space_war_v1": space_war_v1,
     "atari/surround_v1": surround_v1,
     "atari/tennis_v2": tennis_v2,
     "atari/video_checkers_v3": video_checkers_v3,
-    "atari/volleyball_pong_v1": volleyball_pong_v1,
+    "atari/volleyball_pong_v2": volleyball_pong_v2,
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
