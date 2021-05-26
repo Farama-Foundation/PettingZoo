@@ -40,7 +40,7 @@ class raw_env(AECEnv):
     def __init__(self, lizard_spock=False, max_cycles=150):
         self.max_cycles = max_cycles
         self.rpsls = lizard_spock
-        
+
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
@@ -66,7 +66,7 @@ class raw_env(AECEnv):
             self.observations = {agent: NONE_RPSLS for agent in self.agents}
         else:
             self.state = {agent: NONE_RPS for agent in self.agents}
-            self.observations = {agent: NONE_RPS for agent in self.agents} 
+            self.observations = {agent: NONE_RPS for agent in self.agents}
         self.num_moves = 0
 
     def render(self, mode="human"):
