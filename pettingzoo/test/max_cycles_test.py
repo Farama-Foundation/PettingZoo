@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def max_cycles_test(mod):
     max_cycles = 4
     parallel_env = mod.parallel_env(max_cycles=max_cycles)
@@ -15,16 +18,18 @@ def max_cycles_test(mod):
 
     env = mod.env(max_cycles=max_cycles)
     env.reset()
-    agent1_count = 0
-    agentn_count = 0
+    agent_counts = np.zeros(len(env.possible_agents))
     for a in env.agent_iter():
-        if a == env.possible_agents[0]:
-            agent1_count += 1
-        if a == env.possible_agents[-1]:
-            agentn_count += 1
+        # counts agent index
+        aidx = env.possible_agents.index(a)
+        agent_counts[aidx] += 1
+
         action = env.action_spaces[a].sample() if not env.dones[a] else None
         env.step(action)
 
     assert max_cycles == pstep
-    assert max_cycles == agent1_count - 1
-    assert max_cycles == agentn_count - 1
+    # does not check the minimum value because some agents might be killed before
+    # all the steps are complete. However, most agents should still be alive
+    # given a short number of cycles
+    assert max_cycles == np.max(agent_counts) - 1
+    assert max_cycles == np.median(agent_counts) - 1
