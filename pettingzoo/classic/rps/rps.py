@@ -13,8 +13,8 @@ MOVES = ["ROCK", "PAPER", "SCISSORS", "None"]
 NUM_ITERS = 100
 
 
-def env():
-    env = raw_env()
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -30,7 +30,9 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
-    def __init__(self):
+    def __init__(self, max_cycles=150):
+        self.max_cycles = max_cycles
+        
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
@@ -53,7 +55,10 @@ class raw_env(AECEnv):
         self.num_moves = 0
 
     def render(self, mode="human"):
-        string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
+        if len(self.agents) > 1:
+            string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
+        else:
+            string = ("Max number of cycles reached. Episode done.")
         print(string)
         return string
 
@@ -89,7 +94,8 @@ class raw_env(AECEnv):
             }[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
-            self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
+            print(self.num_moves)
+            self.dones = {agent: self.num_moves >= self.max_cycles for agent in self.agents}
 
             # observe the current state
             for i in self.agents:
