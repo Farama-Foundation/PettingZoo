@@ -1,6 +1,6 @@
 import os
 
-dir_names = ["butterfly", "sisl", "magent", "mpe", "atari"]
+dir_names = ["butterfly", "sisl", "magent", "mpe"]
 
 had_error = False
 
