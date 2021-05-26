@@ -2,7 +2,7 @@ from .all_modules import *  # noqa: F403
 
 import pytest
 from .all_modules import all_environments
-from pettingzoo.test.api_test import api_test
+from.api_test import api_test
 
 
 parameterized_envs = [

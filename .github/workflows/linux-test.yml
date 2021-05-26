@@ -33,14 +33,14 @@ jobs:
         AutoROM -v
     - name: Full python tests
       run: |
-        pytest ./test/pytest_runner.py
-        pytest ./test/all_parameter_combs.py
+        pytest ./pettingzoo/test/pytest_runner.py
+        pytest ./pettingzoo/test/all_parameter_combs.py
     - name: Flake 8 tests
       run: |
         bash ./check_style.sh
     - name: Print tests
       run: |
-        python -m test.print_test
+        python -m pettingzoo.test.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist
