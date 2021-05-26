@@ -8,10 +8,10 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
-LIZARD = 3
-SPOCK = 4
-NONE = 5
-MOVES = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK", "None"]
+NONE = 3
+LIZARD = 4
+SPOCK = 5
+MOVES = ["ROCK", "PAPER", "SCISSORS", "None", "LIZARD", "SPOCK"]
 
 
 def env(**kwargs):
