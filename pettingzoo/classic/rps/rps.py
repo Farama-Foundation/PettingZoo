@@ -5,13 +5,18 @@ from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+# rps actions
 ROCK = 0
 PAPER = 1
 SCISSORS = 2
-NONE = 3
-LIZARD = 4
-SPOCK = 5
-MOVES = ["ROCK", "PAPER", "SCISSORS", "None", "LIZARD", "SPOCK"]
+NONE_RPS = 3
+MOVES_RPS = ["ROCK", "PAPER", "SCISSORS", "None"]
+
+# rpsls actions
+LIZARD = 3
+SPOCK = 4
+NONE_RPSLS = 5
+MOVES_RPSLS = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK", "None"]
 
 
 def env(**kwargs):
@@ -32,8 +37,9 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
-    def __init__(self, max_cycles=150, lizard_spock=False):
+    def __init__(self, lizard_spock=False, max_cycles=150):
         self.max_cycles = max_cycles
+        self.rpsls = lizard_spock
         
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
@@ -55,13 +61,20 @@ class raw_env(AECEnv):
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
-        self.state = {agent: NONE for agent in self.agents}
-        self.observations = {agent: NONE for agent in self.agents}
+        if self.rpsls:
+            self.state = {agent: NONE_RPSLS for agent in self.agents}
+            self.observations = {agent: NONE_RPSLS for agent in self.agents}
+        else:
+            self.state = {agent: NONE_RPS for agent in self.agents}
+            self.observations = {agent: NONE_RPS for agent in self.agents} 
         self.num_moves = 0
 
     def render(self, mode="human"):
         if len(self.agents) > 1:
-            string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]))
+            if self.rpsls:
+                string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES_RPSLS[self.state[self.agents[0]]], MOVES_RPSLS[self.state[self.agents[1]]]))
+            else:
+                string = ("Current state: Agent1: {} , Agent2: {}".format(MOVES_RPS[self.state[self.agents[0]]], MOVES_RPS[self.state[self.agents[1]]]))
         else:
             string = ("Max number of cycles reached. Episode done.")
         print(string)
@@ -126,7 +139,10 @@ class raw_env(AECEnv):
             for i in self.agents:
                 self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
-            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = NONE
+            if self.rpsls:
+                self.state[self.agents[1 - self.agent_name_mapping[agent]]] = NONE_RPSLS
+            else:
+                self.state[self.agents[1 - self.agent_name_mapping[agent]]] = NONE_RPS
             self._clear_rewards()
 
         self._cumulative_rewards[self.agent_selection] = 0
