@@ -3,10 +3,10 @@ actions: "Discrete"
 title: "Rock Paper Scissors"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(3)"
-action-values: "Discrete(3)"
-observation-shape: "Discrete(4)"
-observation-values: "Discrete(4)"
+action-shape: "Discrete(3),(5)"
+action-values: "Discrete(3),(5)"
+observation-shape: "Discrete(4),(6)"
+observation-values: "Discrete(4),(6)"
 import: "from pettingzoo.classic import rps_v1"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
@@ -15,7 +15,19 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 
 
-Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock. 
+Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock.
+
+The game can be expanded to Rock Paper Scissors Lizard Spock. Rock Paper Scissors Lizard Spock is a variation of the traditional Rock Paper Scissors game, where the choices lizard and Spock are added as well. The interactions between Rock, Paper and Scissor are the same as the original with Rock beating scissors, scissors beating paper and paper beating rock. However, the new choices interact as follows: rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors beats lizard, lizard eats paper, paper beats Spock, and Spock destroys rock. As is in the original, each player reveal their choice at the same time, at which point the winner is determined.
+
+### Arguments
+
+```
+pistonball.env(lizard_spock=False, max_cycles=150)
+```
+
+`lizard_spock`:  Expands the game to Rock, Paper, Scissors, Lizard, Spock if True. Default False
+
+`max_cycles`:  after max_cycles steps all agents will return don
 
 #### Observation Space
 
