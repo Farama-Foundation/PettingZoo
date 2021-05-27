@@ -39,6 +39,7 @@ class SimpleEnv(AECEnv):
         # set spaces
         self.action_spaces = dict()
         self.observation_spaces = dict()
+        state_dim = 0
         for agent in self.world.agents:
             space_dim = 1
             if agent.movable:
@@ -47,14 +48,18 @@ class SimpleEnv(AECEnv):
                 space_dim *= self.world.dim_c
 
             obs_dim = len(self.scenario.observation(agent, self.world))
+            state_dim += obs_dim
             self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(obs_dim,), dtype=np.float32)
+        
+        self.state_space = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(state_dim,), dtype=np.float32)
 
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
 
         self.viewer = None
+
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
