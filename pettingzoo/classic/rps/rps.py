@@ -132,7 +132,7 @@ class raw_env(AECEnv):
             }[(self.state[self.agents[0]], self.state[self.agents[1]])]
 
             self.num_moves += 1
-            print(self.num_moves)
+
             self.dones = {agent: self.num_moves >= self.max_cycles for agent in self.agents}
 
             # observe the current state
