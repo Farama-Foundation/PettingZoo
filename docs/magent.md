@@ -20,7 +20,7 @@ Gather is a competitive free for all game where agents try to stay alive for as 
 
 ### Key Concepts
 
-* **Observation view**: All agents observe a box around themselves. They see whether the coordinates are empty, contain an obstacle, or contain an agent in any of the observation channels. If an agent in on a coordinate, that entry will contain the value (agent's HP / max agent HP).
+* **Observation view**: All agents observe a box around themselves. They see whether the coordinates are empty, contain an obstacle, or contain an agent in any of the observation channels. If an agent is on a coordinate, that entry will contain the value (agent's HP / max agent HP).
 
 * **Feature vector**: The feature vector contains information about the agent itself, rather than its surrounding. In normal mode it contains `<agent_id, action, last_reward>`, in minimap mode it also contains the agent position on the map, normalized to 0-1.
 
