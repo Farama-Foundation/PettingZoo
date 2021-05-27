@@ -51,7 +51,7 @@ class SimpleEnv(AECEnv):
             state_dim += obs_dim
             self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(obs_dim,), dtype=np.float32)
-        
+
         self.state_space = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(state_dim,), dtype=np.float32)
 
         self.steps = 0
@@ -60,12 +60,15 @@ class SimpleEnv(AECEnv):
 
         self.viewer = None
 
-
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
+
+    def state(self):
+        states = tuple([self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.agents])
+        return np.concatenate(states, axis=None)
 
     def reset(self):
         self.scenario.reset_world(self.world, self.np_random)
