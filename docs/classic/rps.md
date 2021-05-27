@@ -27,7 +27,7 @@ pistonball.env(lizard_spock=False, max_cycles=150)
 
 `lizard_spock`:  Expands the game to Rock, Paper, Scissors, Lizard, Spock if True. Default False
 
-`max_cycles`:  after max_cycles steps all agents will return don
+`max_cycles`:  after max_cycles steps all agents will return done.
 
 ### Observation Space
 
