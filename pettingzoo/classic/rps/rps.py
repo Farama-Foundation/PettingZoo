@@ -37,7 +37,7 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
-    def __init__(self, lizard_spock=False, max_cycles=150):
+    def __init__(self, lizard_spock=False, max_cycles=15):
         self.max_cycles = max_cycles
         self.rpsls = lizard_spock
 
