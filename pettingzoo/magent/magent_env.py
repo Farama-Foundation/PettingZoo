@@ -1,7 +1,9 @@
 from gym.spaces import Discrete, Box
 import numpy as np
+from operator import itemgetter
 import warnings
 import magent
+from numpy.core.fromnumeric import shape
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
@@ -39,6 +41,10 @@ class magent_parallel_env(ParallelEnv):
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        max_map_x = max(team_obs_shapes,key=itemgetter(1))[0]
+        max_map_y = max(team_obs_shapes,key=itemgetter(1))[1]
+        state_features = sum([pair[2]*team_sizes[n] for n, pair in enumerate(team_obs_shapes)])
+        self.state_space = Box(low=0., high=2., shape=(max_map_x, max_map_y, state_features), dtype=np.float32)
         reward_low, reward_high = reward_range
         if extra_features:
             for space in observation_space_list:
@@ -48,6 +54,8 @@ class magent_parallel_env(ParallelEnv):
 
         self.action_spaces = {agent: space for agent, space in zip(self.agents, action_spaces_list)}
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
+
+        # print(self.observation_spaces)
         self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
         self._renderer = None
         self.frames = 0
