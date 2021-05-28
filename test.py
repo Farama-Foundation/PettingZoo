@@ -2,7 +2,7 @@ from pettingzoo.magent import adversarial_pursuit_v2
 import random
 import numpy as np
 
-env = adversarial_pursuit_v2.env(minimap_mode=True, extra_features=True)
+env = adversarial_pursuit_v2.env(minimap_mode=False, extra_features=True)
 env.reset()
 for agent in env.agent_iter():
         # env.render()
