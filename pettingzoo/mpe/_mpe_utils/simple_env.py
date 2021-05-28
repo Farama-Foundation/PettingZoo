@@ -67,7 +67,7 @@ class SimpleEnv(AECEnv):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
 
     def state(self):
-        states = tuple([self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.agents])
+        states = tuple([self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.possible_agents])
         return np.concatenate(states, axis=None)
 
     def reset(self):
