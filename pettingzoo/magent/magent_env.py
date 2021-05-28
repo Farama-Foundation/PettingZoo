@@ -46,16 +46,20 @@ class magent_parallel_env(ParallelEnv):
         state_features = sum([pair[2]*team_sizes[n] for n, pair in enumerate(team_obs_shapes)])
         self.state_space = Box(low=0., high=2., shape=(max_map_x, max_map_y, state_features), dtype=np.float32)
         reward_low, reward_high = reward_range
+        current_state_feature_dim = 0
         if extra_features:
             for space in observation_space_list:
+                current_state_feature_dim += space.shape[2]
                 idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
+                idx_state = current_state_feature_dim - 3 if current_state_feature_dim else space.shape[2] - 1
                 space.low[:, :, idx] = reward_low
                 space.high[:, :, idx] = reward_high
+                self.state_space.low[:, :, idx_state] = reward_low
+                self.state_space.high[:, :, idx_state] = reward_high
 
         self.action_spaces = {agent: space for agent, space in zip(self.agents, action_spaces_list)}
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
 
-        # print(self.observation_spaces)
         self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
         self._renderer = None
         self.frames = 0
