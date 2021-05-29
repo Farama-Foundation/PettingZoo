@@ -41,17 +41,17 @@ class magent_parallel_env(ParallelEnv):
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
-        max_map_x = max(team_obs_shapes,key=itemgetter(1))[0]
-        max_map_y = max(team_obs_shapes,key=itemgetter(1))[1]
-        state_features = sum([pair[2]*team_sizes[n] for n, pair in enumerate(team_obs_shapes)])
-        self.state_space = Box(low=0., high=2., shape=(max_map_x, max_map_y, state_features), dtype=np.float32)
+        self.max_map_x = max(team_obs_shapes, key=itemgetter(1))[0]
+        self.max_map_y = max(team_obs_shapes, key=itemgetter(1))[1]
+        state_features = sum([pair[2] * team_size for team_size, pair in zip(team_sizes, team_obs_shapes)])
+        self.state_space = Box(low=0., high=2., shape=(self.max_map_x, self.max_map_y, state_features), dtype=np.float32)
         reward_low, reward_high = reward_range
         current_state_feature_dim = 0
         if extra_features:
             for space in observation_space_list:
                 current_state_feature_dim += space.shape[2]
                 idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
-                idx_state = current_state_feature_dim - 3 if current_state_feature_dim else space.shape[2] - 1
+                idx_state = current_state_feature_dim - 3 if minimap_mode else current_state_feature_dim - 1
                 space.low[:, :, idx] = reward_low
                 space.high[:, :, idx] = reward_high
                 self.state_space.low[:, :, idx_state] = reward_low
@@ -61,6 +61,7 @@ class magent_parallel_env(ParallelEnv):
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
 
         self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
+        self._zero_state_obs = {agent: np.zeros((self.max_map_x, self.max_map_y, space.shape[2])) for agent, space in self.observation_spaces.items()}
         self._renderer = None
         self.frames = 0
 
@@ -105,7 +106,6 @@ class magent_parallel_env(ParallelEnv):
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
             view, features = self.env.get_observation(handle)
-
             if self.minimap_mode and not self.extra_features:
                 features = features[:, -2:]
 
@@ -115,7 +115,6 @@ class magent_parallel_env(ParallelEnv):
                 fin_obs = np.concatenate([view, feat_img], axis=-1)
             else:
                 fin_obs = np.copy(view)
-
             for id, obs in zip(ids, fin_obs):
                 observes[id] = obs
 
@@ -138,6 +137,30 @@ class magent_parallel_env(ParallelEnv):
                 dones[ids] = ~self.env.get_alive(handle)
         ret_agents = set(self.agents)
         return {agent: bool(done) for agent, done in zip(self.possible_agents, dones) if agent in ret_agents}
+
+    def state(self):
+        '''
+        Returns an observation of the global environment
+        '''
+        state_observes = [None] * self.max_num_agents
+        for handle in self.handles:
+            ids = self.env.get_agent_id(handle)
+            view, features = self.env.get_observation(handle)
+            if self.minimap_mode and not self.extra_features:
+                features = features[:, -2:]
+
+            if self.minimap_mode or self.extra_features:
+                feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1)
+                feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
+                fin_obs = np.concatenate([view, feat_img], axis=-1)
+            else:
+                fin_obs = np.copy(view)
+            for id, obs in zip(ids, fin_obs):
+                # expand observations
+                state_observes[id] = np.pad(obs, ((0, self.max_map_x - obs.shape[0]), (0, self.max_map_y - obs.shape[1]), (0, 0)), 'constant', constant_values=(0, 0))
+
+        state = [obs if obs is not None else self._zero_state_obs[agent] for agent, obs in zip(self.possible_agents, state_observes)]
+        return np.concatenate(state, axis=-1)
 
     def step(self, all_actions):
         action_list = [0] * self.max_num_agents
