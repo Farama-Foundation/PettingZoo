@@ -15,7 +15,7 @@ def test_state_space(env):
         if np.any(np.equal(env.state_space.low, -np.inf)):
             warnings.warn("Environment's minimum state space value is -infinity. This is probably too low.")
         if np.any(np.equal(env.state_space.high, np.inf)):
-            warnings.warn("Environment's maxmimum state space value is infinity. This is probably too high")
+            warnings.warn("Environment's maximum state space value is infinity. This is probably too high")
         if np.any(np.equal(env.state_space.low, env.state_space.high)):
             warnings.warn("Environment's maximum and minimum state space values are equal")
         if np.any(np.greater(env.state_space.low, env.state_space.high)):
