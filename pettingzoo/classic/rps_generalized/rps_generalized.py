@@ -41,7 +41,7 @@ class raw_env(AECEnv):
     @property
     def len_moves(self) -> int:
         return len(self.moves)
-    
+
     @property
     def null_move(self) -> int:
         return self.len_moves
@@ -61,7 +61,7 @@ class raw_env(AECEnv):
         self.state = {agent: self.null_move for agent in self.agents}
         self.observations = {agent: self.null_move for agent in self.agents}
         self.num_moves = 0
-    
+
     def move_to_str(self, move: int) -> str:
         return "None" if move == self.null_move else self.moves[move]
 
