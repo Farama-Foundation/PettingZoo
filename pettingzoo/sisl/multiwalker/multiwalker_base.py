@@ -90,6 +90,7 @@ class BipedalWalker(Agent):
         self.hull = None
         self.init_x = init_x
         self.init_y = init_y
+        self.walker_id = -int(self.init_x)
         self._seed(seed)
 
     def _destroy(self):
@@ -108,7 +109,6 @@ class BipedalWalker(Agent):
 
     def _reset(self):
         self._destroy()
-
         init_x = self.init_x
         init_y = self.init_y
         self.hull = self.world.CreateDynamicBody(
@@ -118,8 +118,7 @@ class BipedalWalker(Agent):
                     vertices=[(x / SCALE, y / SCALE) for x, y in HULL_POLY]),
                 density=5.0,
                 friction=0.1,
-                categoryBits=0x002,
-                # maskBits=(0x001 & 0x002),  # collide only with ground
+                groupIndex=self.walker_id,
                 restitution=0.0)  # 0.99 bouncy
         )
         self.hull.color1 = (0.5, 0.4, 0.9)
@@ -137,8 +136,7 @@ class BipedalWalker(Agent):
                     shape=polygonShape(box=(LEG_W / 2, LEG_H / 2)),
                     density=1.0,
                     restitution=0.0,
-                    categoryBits=0x002,
-                    maskBits=0x001
+                    groupIndex=self.walker_id,
                 )  # collide with ground only
             )
             leg.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
@@ -165,8 +163,7 @@ class BipedalWalker(Agent):
                     shape=polygonShape(box=(0.8 * LEG_W / 2, LEG_H / 2)),
                     density=1.0,
                     restitution=0.0,
-                    categoryBits=0x0020,
-                    maskBits=0x001
+                    groupIndex=self.walker_id,
                 )
             )
             lower.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
@@ -685,8 +682,8 @@ class MultiWalkerEnv():
                     (self.terrain_x[i + 1], self.terrain_y[i + 1])]
             t = self.world.CreateStaticBody(fixtures=fixtureDef(
                 shape=edgeShape(vertices=poly),
-                friction=FRICTION,
-                categoryBits=0x0001,))
+                friction=FRICTION
+            ))
             color = (0.3, 1.0 if i % 2 == 0 else 0.8, 0.3)
             t.color1 = color
             t.color2 = color
