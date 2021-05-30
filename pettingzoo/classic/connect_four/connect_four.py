@@ -2,12 +2,18 @@ from pettingzoo import AECEnv
 from gym import spaces
 import numpy as np
 import warnings
+import os
 
 import pygame
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
+def get_image(path):
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + '/' + path)
+    return image
 
 def env():
     env = raw_env()
@@ -16,7 +22,6 @@ def env():
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
-
 
 class raw_env(AECEnv):
     metadata = {'render.modes': ['human'], "name": "connect_four_v3"}
@@ -28,8 +33,8 @@ class raw_env(AECEnv):
         # agent 0 -- 1
         # agent 1 -- 2
         # flat representation in row major order
-        self.screen_width = 1280
-        self.screen_height = 720
+        self.screen_width = 1287
+        self.screen_height = 1118
 
         self.board = [0] * (6 * 7)
 
@@ -43,14 +48,14 @@ class raw_env(AECEnv):
         }) for i in self.agents}
 
         pygame.init()
-        self.tile_size = self.screen_height/6
-        self.red_chip = pygame.image.load("RedChip.png")
-        self.red_chip = pygame.transform.scale(self.red_chip, (int(self.tile_size * .8), int(self.tile_size * .8)))
-        self.yellow_chip = pygame.image.load("YellowChip.png")
-        self.yellow_chip = pygame.transform.scale(self.yellow_chip, (int(self.tile_size * .8), int(self.tile_size * .8)))
+        self.tile_size = (self.screen_width * (91/99))/7
+        self.red_chip = get_image(os.path.join('img','C4RedPiece.png'))
+        self.red_chip = pygame.transform.scale(self.red_chip, (int(self.tile_size * (9/13)), int(self.tile_size * (9/13))))
+        self.black_chip = get_image(os.path.join('img','C4BlackPiece.png'))
+        self.black_chip = pygame.transform.scale(self.black_chip, (int(self.tile_size * (9/13)), int(self.tile_size * (9/13))))
 
-        self.board_tile = pygame.image.load("Connect 4 Board Tile.png")
-        self.board_tile = pygame.transform.scale(self.board_tile, (int(self.tile_size/6), int(self.tile_size/6)))
+        self.board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+        self.board_img = pygame.transform.scale(self.board_img, ((int(self.screen_width)), int(self.screen_height)))
 
         self.renderOn = False
         self.closed = False
@@ -143,6 +148,7 @@ class raw_env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
+        self.enable_render()
         self.draw()
 
     def enable_render(self):
@@ -166,13 +172,15 @@ class raw_env(AECEnv):
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def draw(self):
-        for i in range(0, 43):
-            self.screen.blit(self.board_tile, ((i % 7) * (self.tile_size) + (self.tile_size / 10), int((i / 7)) * (self.tile_size) + (self.tile_size / 10)))
+        for i in range(0, 42):
+            if self.board[i] == 1:
+                self.screen.blit(self.red_chip, ((i % 7) * (self.tile_size) + (self.tile_size * (6/13)), int((i / 7)) * (self.tile_size) + (self.tile_size * (6/13))))
+            elif self.board[i] == 2:
+                self.screen.blit(self.black_chip, ((i % 7) * (self.tile_size) + (self.tile_size * (6/13)), int((i / 7)) * (self.tile_size) + (self.tile_size * (6/13))))
         pygame.display.update()
 
     def draw_background(self):
-         for i in range(0, 43):
-            self.screen.blit(self.board_tile, ((i % 7) * self.tile_size, int((i / 7)) * self.tile_size))
+        self.screen.blit(self.board_img, (0,0))
 
     def close(self):
          if not self.closed:
