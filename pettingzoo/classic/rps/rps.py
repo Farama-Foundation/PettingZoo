@@ -5,18 +5,7 @@ from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-# rps actions
-ROCK = 0
-PAPER = 1
-SCISSORS = 2
-NONE_RPS = 3
-MOVES_RPS = ["ROCK", "PAPER", "SCISSORS", "None"]
-
-# rpsls actions
-LIZARD = 3
-SPOCK = 4
-NONE_RPSLS = 5
-MOVES_RPSLS = ["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK", "None"]
+NONE = 0
 
 
 def env(**kwargs):
@@ -37,19 +26,18 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
-    def __init__(self, lizard_spock=False, max_cycles=15):
+    def __init__(self, additional_actions=0, max_cycles=15):
+        assert additional_actions % 2 == 0, "additional_actions is not even. To expand the rock, paper, scissors game the number of additional actions must be even"
         self.max_cycles = max_cycles
-        self.rpsls = lizard_spock
-
+        self._moves = ["None", "ROCK", "PAPER", "SCISSORS", "SPOCK", "LIZARD"]
+        if additional_actions > 2:
+            for action in range(additional_actions - 2):
+                self._moves.append("ACTION_"f'{action + 6}')
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
-        if lizard_spock:
-            self.action_spaces = {agent: Discrete(5) for agent in self.agents}
-            self.observation_spaces = {agent: Discrete(6) for agent in self.agents}
-        else:
-            self.action_spaces = {agent: Discrete(3) for agent in self.agents}
-            self.observation_spaces = {agent: Discrete(4) for agent in self.agents}
+        self.action_spaces = {agent: Discrete(3 + additional_actions) for agent in self.agents}
+        self.observation_spaces = {agent: Discrete(4 + additional_actions) for agent in self.agents}
 
         self.reinit()
 
@@ -61,12 +49,10 @@ class raw_env(AECEnv):
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.dones = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
-        if self.rpsls:
-            self.state = {agent: NONE_RPSLS for agent in self.agents}
-            self.observations = {agent: NONE_RPSLS for agent in self.agents}
-        else:
-            self.state = {agent: NONE_RPS for agent in self.agents}
-            self.observations = {agent: NONE_RPS for agent in self.agents}
+        
+        self.state = {agent: NONE for agent in self.agents}
+        self.observations = {agent: NONE for agent in self.agents}
+
         self.num_moves = 0
 
     def render(self, mode="human"):
