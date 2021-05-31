@@ -59,6 +59,14 @@ parameterized_envs = [
     (go_v3.env, dict(board_size=13, komi=2.5)),
     (go_v3.env, dict(board_size=9, komi=0.)),
 
+    (rps_generalized_v1.env, dict(moves=["ROCK", "PAPER", "SCISSORS", "LIZARD", "SPOCK"], relations={
+        ("ROCK", "ROCK"): (0, 0), ("ROCK", "PAPER"): (-1, 1), ("ROCK", "SCISSORS"): (1, -1), ("ROCK", "LIZARD"): (1, -1), ("ROCK", "SPOCK"): (-1, 1),
+        ("PAPER", "ROCK"): (1, -1), ("PAPER", "PAPER"): (0, 0), ("PAPER", "SCISSORS"): (-1, 1), ("PAPER", "LIZARD"): (-1, 1), ("PAPER", "SPOCK"): (1, -1),
+        ("SCISSORS", "ROCK"): (-1, 1), ("SCISSORS", "PAPER"): (1, -1), ("SCISSORS", "SCISSORS"): (0, 0), ("SCISSORS", "LIZARD"): (1, -1), ("SCISSORS", "SPOCK"): (-1, 1),
+        ("LIZARD", "ROCK"): (-1, 1), ("LIZARD", "PAPER"): (1, -1), ("LIZARD", "SCISSORS"): (-1, 1), ("LIZARD", "LIZARD"): (0, 0), ("LIZARD", "SPOCK"): (1, -1),
+        ("SPOCK", "ROCK"): (1, -1), ("SPOCK", "PAPER"): (-1, 1), ("SPOCK", "SCISSORS"): (1, -1), ("SPOCK", "LIZARD"): (-1, 1), ("SPOCK", "SPOCK"): (0, 0),
+    })),
+
     (hanabi_v4.env, dict(colors=3)),
     (hanabi_v4.env, dict(ranks=3)),
     (hanabi_v4.env, dict(players=4)),

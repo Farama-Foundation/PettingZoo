@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional, Tuple
+from itertools import product
 from gym.spaces import Discrete
 import numpy as np
 from pettingzoo import AECEnv
@@ -9,8 +10,8 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 NUM_ITERS: int = 100
 
 
-def env(moves: List[str], relations: Dict[Tuple[str, str], Tuple[float, float]]) -> AECEnv:
-    env = raw_env(moves, relations)
+def env(**kwargs) -> AECEnv:
+    env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -26,8 +27,8 @@ class raw_env(AECEnv):
 
     metadata = {'render.modes': ['human'], 'name': 'rps_generalized_v1'}
 
-    def __init__(self, moves: List[str], relations: Dict[Tuple[str, str], Tuple[float, float]]) -> None:
-        self.moves: Dict[int, str] = self._parse_moves(moves)
+    def __init__(self, moves: Optional[List[str]] = None, relations: Optional[Dict[Tuple[str, str], Tuple[float, float]]] = None) -> None:
+        self.moves: Dict[int, str] = moves
         self.relations: Dict[Tuple[str, str], Tuple[float, float]] = relations
         self.agents: List[str] = ["player_" + str(r) for r in range(2)]
         self.possible_agents: List[str] = self.agents[:]
@@ -37,6 +38,40 @@ class raw_env(AECEnv):
         self.observation_spaces: Dict[str, Discrete] = {agent: Discrete(self.len_moves + 1) for agent in self.agents}
 
         self.reinit()
+
+    @property
+    def moves(self) -> Dict[int, str]:
+        return self._moves
+
+    @moves.setter
+    def moves(self, moves: Optional[List[str]]) -> None:
+        if moves is None:
+            self.moves = ["ROCK", "PAPER", "SCISSORS"]
+        else:
+            assert len(moves) == len(set(moves)), "duplicate elements in moves"
+            self._moves = dict(zip(range(len(moves)), moves))
+
+    @property
+    def relations(self) -> Dict[Tuple[str, str], Tuple[float, float]]:
+        return self._relations
+
+    @relations.setter
+    def relations(self, relations: Optional[Dict[Tuple[str, str], Tuple[float, float]]]) -> None:
+        if relations is None:
+            self.relations = {
+                ("ROCK", "ROCK"): (0, 0),
+                ("ROCK", "PAPER"): (-1, 1),
+                ("ROCK", "SCISSORS"): (1, -1),
+                ("PAPER", "ROCK"): (1, -1),
+                ("PAPER", "PAPER"): (0, 0),
+                ("PAPER", "SCISSORS"): (-1, 1),
+                ("SCISSORS", "ROCK"): (-1, 1),
+                ("SCISSORS", "PAPER"): (1, -1),
+                ("SCISSORS", "SCISSORS"): (0, 0),
+            }
+        else:
+            assert set(product(self.moves.values(), repeat=2)) == set(relations.keys()), "error in relations"
+            self._relations = relations
 
     @property
     def len_moves(self) -> int:
