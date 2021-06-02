@@ -22,11 +22,10 @@ The game can be expanded to have extra actions by adding new action pairs. Addin
 ### Arguments
 
 ```
-rps.env(additional_action_pairs=0, max_cycles=15)
+rps.env(num_actions=3, max_cycles=15)
 ```
 
-`additional_action_pairs`:  number of additional action pairs to expand the game of Rock, Paper, Scissors. If only one additional action pair is
-required, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
+`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
 
 `max_cycles`:  after max_cycles steps all agents will return done.
 
@@ -34,7 +33,7 @@ required, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
 
 #### Rock, Paper, Scissors
 
-If the game played is the standard Rock, Paper, Scissors, the observation is the last opponent action and its space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
+If 3 actions are required, the game played is the standard Rock, Paper, Scissors. The observation is the last opponent action and its space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
 
 | Value  |  Observation |
 | :----: | :---------:  |
@@ -45,7 +44,7 @@ If the game played is the standard Rock, Paper, Scissors, the observation is the
 
 #### Expanded Game
 
-If more action pairs are added to the game of Rock, Paper, Scissors, the observation is still the last opponent action and its space is a scalar with 4 + (2 * n) possible values, where n is the number of additional action pairs. The observation will as well be None until both players have acted and the largest possible scalar value for the space, 4 + (2 * n), represents no action taken yet. The additional actions are encoded in increasing order starting from the Scissors action. If only one additional action pair is required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation space with 2 additional action pairs.   
+If the number of actions required in the game is greater than 3, the observation is still the last opponent action and its space is a scalar with 1 + n possible values, where n is the number of actions. The observation will as well be None until both players have acted and the largest possible scalar value for the space, 1 + n, represents no action taken yet. The additional actions are encoded in increasing order starting from the 0 Rock action. If 5 actions are required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation space with 7 possible actions.   
 
 | Value  |  Observation |
 | :----: | :---------:  |
@@ -72,7 +71,7 @@ The action space is a scalar value with 3 possible values. The values are encode
 
 #### Expanded Game
 
-The action space is a scalar value with 3 + (2 * n) possible values, where n is the number of additional action pairs. The values for 2 additional action pairs are encoded as in the following table.
+The action space is a scalar value with n possible values, where n is the number of additional action pairs. The values for 7 possible actions are encoded as in the following table.
 
 | Value  |  Action |
 | :----: | :---------:  |

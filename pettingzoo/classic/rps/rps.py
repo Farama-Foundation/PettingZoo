@@ -19,31 +19,32 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv):
     """Two-player environment for rock paper scissors.
-    Expandable environment to rock paper scissors lizard spock.
+    Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
     The observation is simply the last opponent action."""
 
     metadata = {'render.modes': ['human'], "name": "rps_v1"}
 
-    def __init__(self, additional_action_pairs=0, max_cycles=15):
+    def __init__(self, num_actions=3, max_cycles=15):
         self.max_cycles = max_cycles
 
-        # extra actions can only be added in pairs
-        additional_actions = additional_action_pairs * 2
+        # number of actions must be odd and greater than 3
+        assert num_actions > 2, "The number of actions must be equal or greater than 3."
+        assert num_actions % 2 != 0, "The number of actions must be an odd number."
         self._moves = ["ROCK", "PAPER", "SCISSORS"]
-        if additional_actions:
+        if num_actions > 3:
             # expand to lizard, spock for first extra action pair
             self._moves.extend(("SPOCK", "LIZARD"))
-            for action in range(additional_actions - 2):
+            for action in range(num_actions - 5):
                 self._moves.append("ACTION_"f'{action + 6}')
         # none is last possible action, to satisfy discrete action space
         self._moves.append("None")
-        self._none = 3 + additional_actions
+        self._none = num_actions
 
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
-        self.action_spaces = {agent: Discrete(3 + additional_actions) for agent in self.agents}
-        self.observation_spaces = {agent: Discrete(4 + additional_actions) for agent in self.agents}
+        self.action_spaces = {agent: Discrete(num_actions) for agent in self.agents}
+        self.observation_spaces = {agent: Discrete(1 + num_actions) for agent in self.agents}
 
         self.reinit()
 
