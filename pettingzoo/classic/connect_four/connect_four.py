@@ -4,12 +4,12 @@ import numpy as np
 import warnings
 import os
 
-import pygame
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
 def get_image(path):
+    import pygame
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
@@ -33,8 +33,7 @@ class raw_env(AECEnv):
         # agent 0 -- 1
         # agent 1 -- 2
         # flat representation in row major order
-        self.screen_width = 1287
-        self.screen_height = 1118
+        self.screen = None
 
         self.board = [0] * (6 * 7)
 
@@ -46,22 +45,6 @@ class raw_env(AECEnv):
             'observation': spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8),
             'action_mask': spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8)
         }) for i in self.agents}
-
-        pygame.init()
-        self.tile_size = (self.screen_width * (91/99))/7
-        self.red_chip = get_image(os.path.join('img','C4RedPiece.png'))
-        self.red_chip = pygame.transform.scale(self.red_chip, (int(self.tile_size * (9/13)), int(self.tile_size * (9/13))))
-        self.black_chip = get_image(os.path.join('img','C4BlackPiece.png'))
-        self.black_chip = pygame.transform.scale(self.black_chip, (int(self.tile_size * (9/13)), int(self.tile_size * (9/13))))
-
-        self.board_img = get_image(os.path.join('img', 'Connect4Board.png'))
-        self.board_img = pygame.transform.scale(self.board_img, ((int(self.screen_width)), int(self.screen_height)))
-
-        self.renderOn = False
-        self.closed = False
-
-        self.screen = pygame.Surface((self.screen_width, self.screen_height))
-
         
 
 
@@ -130,10 +113,6 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-        if self.renderOn:
-            pygame.event.pump()
-        self.draw()
-
     def reset(self):
         # reset environment
         self.board = [0] * (6 * 7)
@@ -148,48 +127,49 @@ class raw_env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
-        self.enable_render()
-        self.draw()
-
-    def enable_render(self):
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        self.renderOn = True
-        self.draw()
-        self.draw_background()
-
-
     def render(self, mode='human'):
-        if not self.renderOn and mode == 'human':
-            # sets self.renderOn to true and initializes display
-            self.enable_render()
+        screen_width = 1287
+        screen_height = 1118
+        if mode == "human":
+            import pygame
+            pygame.init()
+
+            if self.screen is None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+            
+            #Load and scale all of the necessary images
+            tile_size = (screen_width * (91/99))/7
+
+            red_chip = get_image(os.path.join('img','C4RedPiece.png'))
+            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9/13)), int(tile_size * (9/13))))
+
+            black_chip = get_image(os.path.join('img','C4BlackPiece.png'))
+            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9/13)), int(tile_size * (9/13))))
+
+            board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+            board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
+
+            self.screen.blit(board_img, (0,0))
+
+            #Blit the necessary chips and their positions
+            for i in range(0, 42):
+                if self.board[i] == 1:
+                    self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6/13)), int((i / 7)) * (tile_size) + (tile_size * (6/13))))
+                elif self.board[i] == 2:
+                    self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6/13)), int((i / 7)) * (tile_size) + (tile_size * (6/13))))
+            
+            pygame.display.update()
 
         print("{}'s turn'".format(self.agent_selection))
         print(str(np.array(self.board).reshape(6, 7)))
 
-        observation = pygame.surfarray.pixels3d(self.screen)
-        if mode == "human":
-            pygame.display.flip()
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-
-    def draw(self):
-        for i in range(0, 42):
-            if self.board[i] == 1:
-                self.screen.blit(self.red_chip, ((i % 7) * (self.tile_size) + (self.tile_size * (6/13)), int((i / 7)) * (self.tile_size) + (self.tile_size * (6/13))))
-            elif self.board[i] == 2:
-                self.screen.blit(self.black_chip, ((i % 7) * (self.tile_size) + (self.tile_size * (6/13)), int((i / 7)) * (self.tile_size) + (self.tile_size * (6/13))))
-        pygame.display.update()
-
-    def draw_background(self):
-        self.screen.blit(self.board_img, (0,0))
-
     def close(self):
-         if not self.closed:
-            self.closed = True
-            if self.renderOn:
-                self.screen = pygame.Surface((self.screen_width, self.screen_height))
-                self.renderOn = False
-                pygame.event.pump()
-                pygame.display.quit()
+         if self.screen is not None:
+            import pygame
+            pygame.quit()
+            self.screen = None
+           
 
     def check_for_winner(self):
         board = np.array(self.board).reshape(6, 7)
