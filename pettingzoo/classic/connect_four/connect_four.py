@@ -132,7 +132,6 @@ class raw_env(AECEnv):
         screen_height = 1118
         if mode == "human":
             import pygame
-            pygame.init()
 
             if self.screen is None:
                 pygame.init()
