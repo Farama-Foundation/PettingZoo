@@ -8,12 +8,14 @@ import os
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
+
 def get_image(path):
     import pygame
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     return image
+
 
 def env():
     env = raw_env()
@@ -22,6 +24,7 @@ def env():
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
 
 class raw_env(AECEnv):
     metadata = {'render.modes': ['human'], "name": "connect_four_v3"}
@@ -45,8 +48,6 @@ class raw_env(AECEnv):
             'observation': spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8),
             'action_mask': spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8)
         }) for i in self.agents}
-        
-
 
     # Key
     # ----
@@ -136,39 +137,38 @@ class raw_env(AECEnv):
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            
-            #Load and scale all of the necessary images
-            tile_size = (screen_width * (91/99))/7
 
-            red_chip = get_image(os.path.join('img','C4RedPiece.png'))
-            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9/13)), int(tile_size * (9/13))))
+            # Load and scale all of the necessary images
+            tile_size = (screen_width * (91 / 99)) / 7
 
-            black_chip = get_image(os.path.join('img','C4BlackPiece.png'))
-            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9/13)), int(tile_size * (9/13))))
+            red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
+            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+
+            black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
+            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
 
             board_img = get_image(os.path.join('img', 'Connect4Board.png'))
             board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
 
-            self.screen.blit(board_img, (0,0))
+            self.screen.blit(board_img, (0, 0))
 
-            #Blit the necessary chips and their positions
+            # Blit the necessary chips and their positions
             for i in range(0, 42):
                 if self.board[i] == 1:
-                    self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6/13)), int((i / 7)) * (tile_size) + (tile_size * (6/13))))
+                    self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
                 elif self.board[i] == 2:
-                    self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6/13)), int((i / 7)) * (tile_size) + (tile_size * (6/13))))
-            
+                    self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+
             pygame.display.update()
 
         print("{}'s turn'".format(self.agent_selection))
         print(str(np.array(self.board).reshape(6, 7)))
 
     def close(self):
-         if self.screen is not None:
+        if self.screen is not None:
             import pygame
             pygame.quit()
             self.screen = None
-           
 
     def check_for_winner(self):
         board = np.array(self.board).reshape(6, 7)
