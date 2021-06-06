@@ -1,7 +1,7 @@
 from gym.spaces import Discrete, Box
 import numpy as np
 import warnings
-import magent
+import magent 
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
