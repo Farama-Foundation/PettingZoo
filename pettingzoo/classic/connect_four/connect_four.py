@@ -27,7 +27,7 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "connect_four_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], "name": "connect_four_v3"}
 
     def __init__(self):
         super().__init__()
@@ -161,8 +161,13 @@ class raw_env(AECEnv):
 
             pygame.display.update()
 
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
         print("{}'s turn'".format(self.agent_selection))
         print(str(np.array(self.board).reshape(6, 7)))
+
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+
 
     def close(self):
         if self.screen is not None:
@@ -189,13 +194,13 @@ class raw_env(AECEnv):
                 if board[r][c] == piece and board[r + 1][c] == piece and board[r + 2][c] == piece and board[r + 3][c] == piece:
                     return True
 
-        # Check positively sloped diaganols
+        # Check positively sloped diagonals
         for c in range(column_count - 3):
             for r in range(row_count - 3):
                 if board[r][c] == piece and board[r + 1][c + 1] == piece and board[r + 2][c + 2] == piece and board[r + 3][c + 3] == piece:
                     return True
 
-        # Check negatively sloped diaganols
+        # Check negatively sloped diagonals
         for c in range(column_count - 3):
             for r in range(3, row_count):
                 if board[r][c] == piece and board[r - 1][c + 1] == piece and board[r - 2][c + 2] == piece and board[r - 3][c + 3] == piece:
