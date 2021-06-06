@@ -44,12 +44,11 @@ class magent_parallel_env(ParallelEnv):
         observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
         # self.max_map_x = max(team_obs_shapes, key=itemgetter(1))[0]
         # self.max_map_y = max(team_obs_shapes, key=itemgetter(1))[1]
-        # state_features = sum([pair[2] * team_size for team_size, pair in zip(team_sizes, team_obs_shapes)])
+        # state_features = sum([pair[2] * team_size f   or team_size, pair in zip(team_sizes, team_obs_shapes)])
         self.base_state = np.zeros((map_size, map_size, 1 + len(team_sizes) * 2))
         walls = self.env._get_walls_info()
         wall_x, wall_y = zip(*walls)
         self.base_state[wall_x, wall_y, 0] = 1
-        print(self.base_state[:,:,0])
 
         self.state_space = Box(low=0., high=2., shape=(self.base_state.shape), dtype=np.float32)
         reward_low, reward_high = reward_range
@@ -117,7 +116,9 @@ class magent_parallel_env(ParallelEnv):
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
             view, features = self.env.get_observation(handle)
-            
+            print(ids)
+            print(features.shape)
+            print(features[0,:])
             if self.minimap_mode and not self.extra_features:
                 features = features[:, -2:]
             if self.minimap_mode or self.extra_features:
@@ -128,6 +129,7 @@ class magent_parallel_env(ParallelEnv):
                 fin_obs = np.copy(view)
             for id, obs in zip(ids, fin_obs):
                 observes[id] = obs
+            # print(fin_obs.shape)
             # print(handle)
             # print(fin_obs[0][fin_obs.shape[1]//2][fin_obs.shape[2]//2][2])
         ret_agents = set(self.agents)

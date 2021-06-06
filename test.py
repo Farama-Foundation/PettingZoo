@@ -1,9 +1,8 @@
-from math import e
-from pettingzoo.magent import combined_arms_v4
+from pettingzoo.magent import adversarial_pursuit_v2
 import random
 import numpy as np
 
-env = combined_arms_v4.env(map_size=16)
+env = adversarial_pursuit_v2.env(extra_features=True)
 env.reset()
 
 for agent in env.agent_iter():
@@ -18,5 +17,5 @@ for agent in env.agent_iter():
         action = random.choice(np.flatnonzero(obs['action_mask']))
     else:
         action = env.action_spaces[agent].sample()
-    env.state()
+    # env.state()
     env.step(action)
