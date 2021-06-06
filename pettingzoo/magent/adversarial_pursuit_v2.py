@@ -37,6 +37,7 @@ def get_config(map_size, minimap_mode, tag_penalty):
 
     cfg.set({"map_width": map_size, "map_height": map_size})
     cfg.set({"minimap_mode": minimap_mode})
+    cfg.set({"embedding_size": 10})
 
     options = {
         'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
