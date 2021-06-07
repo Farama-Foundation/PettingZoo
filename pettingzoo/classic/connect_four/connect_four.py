@@ -19,7 +19,6 @@ def get_image(path):
 
 def env():
     env = raw_env()
-    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -163,11 +162,7 @@ class raw_env(AECEnv):
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
-        print("{}'s turn'".format(self.agent_selection))
-        print(str(np.array(self.board).reshape(6, 7)))
-
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-
 
     def close(self):
         if self.screen is not None:
