@@ -30,6 +30,8 @@ Gather is a competitive free for all game where agents try to stay alive for as 
 
 * **Moving and attacking**: An agent can only act or move each step, so the action space is the concatenations of all possible moves and all possible attacks.
 
+* **State** *: A global observation of the environment can be retrieved by calling `env.state()`. The state observation is a 3D observation
+
 ### Termination
 
 The game terminates after all agents of either team have died. This means that in the battle environments, where HP heals over time instead of decays, the game will go on for a very long time with random actions.
