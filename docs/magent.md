@@ -30,7 +30,7 @@ Gather is a competitive free for all game where agents try to stay alive for as 
 
 * **Moving and attacking**: An agent can only act or move each step, so the action space is the concatenations of all possible moves and all possible attacks.
 
-* **State** *: A global observation of the environment can be retrieved by calling `env.state()`. The state observation is a 3D observation
+* **State** *: A global observation of the environment can be retrieved by calling `env.state()`. The state observation space is a 3D observation of the complete map with dimensions equal to the map size. The first channel shows the walls in the map, where each element represents if the coordinate is empty or has an obstacle. Concatenated to this channel there is another pair of channels for each agent type, which sees if the coordinates contain an agent of that type bined to the value (agent's HP/ max agent HP). If extra features or minimap mode are selected the respective feature vector is concatenated and bined to each agent in the observation state.
 
 ### Termination
 

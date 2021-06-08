@@ -1,7 +1,7 @@
 from gym.spaces import Discrete, Box
 import numpy as np
 import warnings
-import magent 
+import magent
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
@@ -10,7 +10,6 @@ from .magent_env import magent_parallel_env, make_env
 from pettingzoo.utils.conversions import from_parallel_wrapper
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 from gym.utils import EzPickle
-
 
 default_map_size = 45
 max_cycles_default = 1000
