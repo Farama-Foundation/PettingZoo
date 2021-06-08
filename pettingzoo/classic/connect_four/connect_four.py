@@ -2,14 +2,23 @@ from pettingzoo import AECEnv
 from gym import spaces
 import numpy as np
 import warnings
+import os
+
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
 
+def get_image(path):
+    import pygame
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + '/' + path)
+    return image
+
+
 def env():
     env = raw_env()
-    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -17,7 +26,7 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "connect_four_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], "name": "connect_four_v3"}
 
     def __init__(self):
         super().__init__()
@@ -26,6 +35,8 @@ class raw_env(AECEnv):
         # agent 0 -- 1
         # agent 1 -- 2
         # flat representation in row major order
+        self.screen = None
+
         self.board = [0] * (6 * 7)
 
         self.agents = ['player_0', 'player_1']
@@ -117,11 +128,47 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.reset()
 
     def render(self, mode='human'):
-        print("{}'s turn'".format(self.agent_selection))
-        print(str(np.array(self.board).reshape(6, 7)))
+        screen_width = 1287
+        screen_height = 1118
+        if mode == "human":
+            import pygame
+
+            if self.screen is None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+
+            # Load and scale all of the necessary images
+            tile_size = (screen_width * (91 / 99)) / 7
+
+            red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
+            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+
+            black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
+            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+
+            board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+            board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
+
+            self.screen.blit(board_img, (0, 0))
+
+            # Blit the necessary chips and their positions
+            for i in range(0, 42):
+                if self.board[i] == 1:
+                    self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                elif self.board[i] == 2:
+                    self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+
+            pygame.display.update()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def close(self):
-        pass
+        if self.screen is not None:
+            import pygame
+            pygame.quit()
+            self.screen = None
 
     def check_for_winner(self):
         board = np.array(self.board).reshape(6, 7)
@@ -142,13 +189,13 @@ class raw_env(AECEnv):
                 if board[r][c] == piece and board[r + 1][c] == piece and board[r + 2][c] == piece and board[r + 3][c] == piece:
                     return True
 
-        # Check positively sloped diaganols
+        # Check positively sloped diagonals
         for c in range(column_count - 3):
             for r in range(row_count - 3):
                 if board[r][c] == piece and board[r + 1][c + 1] == piece and board[r + 2][c + 2] == piece and board[r + 3][c + 3] == piece:
                     return True
 
-        # Check negatively sloped diaganols
+        # Check negatively sloped diagonals
         for c in range(column_count - 3):
             for r in range(3, row_count):
                 if board[r][c] == piece and board[r - 1][c + 1] == piece and board[r - 2][c + 2] == piece and board[r - 3][c + 3] == piece:
