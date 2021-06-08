@@ -1,17 +1,13 @@
 from gym.spaces import Discrete, Box
 import numpy as np
-from operator import add, itemgetter
 import warnings
 import magent
-from numpy.core.fromnumeric import shape
-from numpy.lib.function_base import insert
 from pettingzoo import AECEnv
 import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector, wrappers
 from gym.utils import seeding
 from pettingzoo.utils.env import ParallelEnv
-import matplotlib.pyplot as plt
 
 
 def make_env(raw_env):
