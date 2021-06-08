@@ -157,7 +157,7 @@ def play_test(env, observation_0, num_cycles):
             live_agents.remove(agent)
             has_finished.add(agent)
         assert env.agents == live_agents, "environment must delete agents as the game continues"
-        if env.env_done:
+        if not env.agents:
             assert has_finished == set(env.possible_agents), "not all agents finished, some were skipped over"
             break
 
