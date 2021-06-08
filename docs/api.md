@@ -44,7 +44,11 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `agents`: A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
+`num_agents`: The length of the agents list.
+
 `possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or reseting.
+
+`max_num_agents`: The length of the possible_agents list.
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
@@ -76,7 +80,7 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `close()`: Closes the rendering window.
 
-## Noteable Idioms
+## Notable Idioms
 
 ### Checking if the entire environment is done
 
@@ -93,10 +97,6 @@ base_env = prospector_v4.env().unwrapped
 ### Variable Numbers of Agents (Death)
 
 Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
-
-### Number of agents
-
-You can get the number of agents with `len(env.agents)`, and the maximum possible number of agents with `len(env.possible_agents)`.
 
 ### Environment as an Agent
 
@@ -130,7 +130,7 @@ for step in range(max_cycles):
 
 ### Full API
 
-`agents`, `num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
+`agents`, `num_agents`, `possible_agents`, `max_num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
 
 `render(mode='human')`, `seed(seed=None)`, `close()` are methods as described above in the main API description.
 
