@@ -73,10 +73,6 @@ class AECEnv:
     def max_num_agents(self):
         return len(self.possible_agents)
 
-    @property
-    def env_done(self):
-        return not self.agents
-
     def _dones_step_first(self):
         '''
         Makes .agent_selection point to first done agent. Stores old value of agent_selection
@@ -251,10 +247,6 @@ class ParallelEnv:
     @property
     def max_num_agents(self):
         return len(self.possible_agents)
-
-    @property
-    def env_done(self):
-        return not self.agents
 
     def __str__(self):
         '''
