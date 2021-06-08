@@ -37,7 +37,7 @@ Prey's reward is given as:
 
 #### Observation space
 
-The observation space is a 10x10 map for pursuers and a 9x9 map for the pursued. The contain the following channels, which are (in order):
+The observation space is a 10x10 map for pursuers and a 9x9 map for the pursued. They contain the following channels, which are (in order):
 
 name | number of channels
 --- | ---
@@ -50,6 +50,21 @@ binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 9/Prey,13/Predator
 last_reward(extra_features=True)| 1
 
+### State space
+
+The observation space is a 45x45 map. It contains the following channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle map| 1
+prey_presence| 1
+prey_hp| 1
+predator_presence| 1
+predator_hp| 1
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)|  13 (max action space)
+last_reward(extra_features=True)| 1
+agent_position(minimap_mode=True)| 2
 
 ### Arguments
 
