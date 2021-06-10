@@ -84,9 +84,9 @@ class magent_parallel_env(ParallelEnv):
     def _calc_state_shape(self):
         feature_spaces = [self.env.get_feature_space(handle) for handle in self._all_handles]
 
-        state_depth = max(feature_spaces)[0] * self.extra_features + 1 + len(self._all_handles) * 2
-        if self.minimap_mode and not self.extra_features:
-            state_depth += 2
+        # map channel and agent pair channel. Remove global agent position when minimap mode and extra features
+        state_depth = (max(feature_spaces)[0] - 2) * self.extra_features + 1 + len(self._all_handles) * 2
+
         return (self.map_size, self.map_size, state_depth)
 
     def render(self, mode="human"):
@@ -157,26 +157,18 @@ class magent_parallel_env(ParallelEnv):
             pos = self.env.get_pos(handle)
             pos_x, pos_y = zip(*pos)
             state[pos_x, pos_y, 1 + handle.value * 2] = 1
-            state[pos_x, pos_y, 2 + handle.value * 2] = np.copy(view[:, view.shape[1] // 2, view.shape[2] // 2, 2])
+            state[pos_x, pos_y, 2 + handle.value * 2] = view[:, view.shape[1] // 2, view.shape[2] // 2, 2]
 
             if self.extra_features:
                 add_zeros = np.zeros((features.shape[0], state.shape[2] - (1 + len(self.team_sizes) * 2 + features.shape[1])))
-                if self.minimap_mode:
-                    id = -3
-                else:
-                    id = -1
 
-                rewards = features[:, id]
-                actions = features[:, :id]
+                rewards = features[:, -1]
+                actions = features[:, :-1]
                 actions = np.concatenate((actions, add_zeros), axis=1)
                 rewards = rewards.reshape(len(rewards), 1)
                 state_features = np.hstack((actions, rewards))
 
-                if self.minimap_mode:
-                    state[pos_x, pos_y, -2:] = np.copy(features[:, -2:])
-                    state[pos_x, pos_y, 1 + len(self.team_sizes) * 2:-2] = state_features
-                else:
-                    state[pos_x, pos_y, 1 + len(self.team_sizes) * 2:] = state_features
+                state[pos_x, pos_y, 1 + len(self.team_sizes) * 2:] = state_features
         return state
 
     def step(self, all_actions):
