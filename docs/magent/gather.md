@@ -63,7 +63,6 @@ food_presence| 1
 food_hp| 1
 one_hot_action(extra_features=True)|  33 (max action space)
 last_reward(extra_features=True)| 1
-agent_position(minimap_mode=True)| 2
 
 ### Arguments
 
