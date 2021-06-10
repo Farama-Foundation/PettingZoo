@@ -4,7 +4,16 @@ from gym import spaces
 from . import go
 from . import coords
 import numpy as np
+import os
 from pettingzoo.utils import wrappers
+
+
+def get_image(path):
+    import pygame
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    image = pygame.image.load(cwd + '/' + path)
+    return image
 
 
 def env(**kwargs):
@@ -18,7 +27,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human'], "name": "go_v3"}
+    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v3"}
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
@@ -126,7 +135,47 @@ class raw_env(AECEnv):
         self._last_obs = self.observe(self.agents[0])
 
     def render(self, mode='human'):
+        screen_width = 1287
+        screen_height = 1118
+
+        if mode == "human":
+            import pygame
+
+            if self.screen is None:
+                pygame.init()
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
+
+            # Load and scale all of the necessary images
+            tile_size = (screen_width * (91 / 99)) / 7
+
+            red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
+            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+
+            black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
+            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+
+            board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+            board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
+
+            self.screen.blit(board_img, (0, 0))
+
+            # Blit the necessary chips and their positions
+            for i in range(0, 19):
+                for j in range (0, 19):
+                    if self._go.board[i][j] == -1:
+                        self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)),
+                                                    int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                    elif self._go.board[i][j] == 1:
+                        self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)),
+                                                      int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+
+            pygame.display.update()
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+
         print(self._go)
+
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def close(self):
         pass
