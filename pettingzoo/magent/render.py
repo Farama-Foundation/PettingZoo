@@ -66,7 +66,6 @@ class Renderer:
         self.env = env
         self.mode = mode
         self.handles = self.env.get_handles()
-
         base_resolution = (map_size * 8, map_size * 8 + 15)
         if mode == "human":
             pygame.init()
@@ -137,6 +136,7 @@ class Renderer:
         grid_map = np.zeros((resolution[0], resolution[1], 3), dtype=np.int16)
         view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
                          self.map_size[1] / 2 * grid_size - resolution[1] / 2]
+
         groups = self.groups
         banner_formatter = self.banner_formatter
         status = True

@@ -57,6 +57,21 @@ one_hot_action(extra_features=True)| 21
 last_reward(extra_features=True)| 1
 agent_position(minimap_mode=True)| 2
 
+### State space
+
+The observation space is a 80x80 map. It contains the following channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle map| 1
+team_0_presence| 1
+team_0_hp| 1
+team_1_presence| 1
+team_1_hp| 1
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)|  21
+last_reward(extra_features=True)| 1
+
 ### Arguments
 
 ```
