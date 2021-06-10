@@ -64,7 +64,6 @@ predator_hp| 1
 binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)|  13 (max action space)
 last_reward(extra_features=True)| 1
-agent_position(minimap_mode=True)| 2
 
 ### Arguments
 
