@@ -50,6 +50,19 @@ one_hot_action(extra_features=True)| 33
 last_reward(extra_features=True)| 1
 agent_position(minimap_mode=True)| 2
 
+### State space
+
+The observation space is a 200x200 map. It contains the following channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle map| 1
+omnivore_presence| 1
+omnivore_hp| 1
+food_presence| 1
+food_hp| 1
+one_hot_action(extra_features=True)|  33 (max action space)
+last_reward(extra_features=True)| 1
 
 ### Arguments
 

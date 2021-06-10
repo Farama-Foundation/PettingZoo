@@ -54,6 +54,24 @@ one_hot_action(extra_features=True)| 9 Melee/25 ranged
 last_reward(extra_features=True)| 1
 agent_position(minimap_mode=True)| 2
 
+### State space
+
+The observation space is a 45x45 map. It contains the following channels, which are (in order):
+
+name | number of channels
+--- | ---
+obstacle map | 1
+melee_team_1_presence | 1
+melee_team_1_hp | 1
+ranged_team_1_presence| 1
+ranged_team_1_hp | 1
+melee_team_2_presence | 1
+melee_team_2_hp | 1
+ranged_team_2_presence | 1
+ranged_team_2_hp | 1
+binary_agent_id(extra_features=True)| 10
+one_hot_action(extra_features=True)|  25 (max action space)
+last_reward(extra_features=True)| 1
 
 ### Arguments
 

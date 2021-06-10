@@ -11,7 +11,6 @@ from pettingzoo.utils.conversions import from_parallel_wrapper
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 from gym.utils import EzPickle
 
-
 default_map_size = 45
 max_cycles_default = 1000
 KILL_REWARD = 5
