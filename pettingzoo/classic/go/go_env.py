@@ -18,7 +18,6 @@ def get_image(path):
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -40,6 +39,8 @@ class raw_env(AECEnv):
         self.agents = ['black_0', 'white_0']
         self.possible_agents = self.agents[:]
         self.has_reset = False
+
+        self.screen = None
 
         self.observation_spaces = self._convert_to_dict(
             [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
@@ -135,8 +136,8 @@ class raw_env(AECEnv):
         self._last_obs = self.observe(self.agents[0])
 
     def render(self, mode='human'):
-        screen_width = 1287
-        screen_height = 1118
+        screen_width = 1026
+        screen_height = 1026
 
         if mode == "human":
             import pygame
@@ -145,16 +146,17 @@ class raw_env(AECEnv):
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
 
+            pygame.event.get()
             # Load and scale all of the necessary images
-            tile_size = (screen_width * (91 / 99)) / 7
+            tile_size = (screen_width) / 19
 
-            red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
-            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+            black_stone = get_image(os.path.join('img', 'BlackStone.png'))
+            black_stone = pygame.transform.scale(black_stone, (int(tile_size), int(tile_size)))
 
-            black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
-            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+            white_stone = get_image(os.path.join('img', 'WhiteStone.png'))
+            white_stone = pygame.transform.scale(white_stone, (int(tile_size), int(tile_size)))
 
-            board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+            board_img = get_image(os.path.join('img', 'GO_Board.png'))
             board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
 
             self.screen.blit(board_img, (0, 0))
@@ -163,17 +165,13 @@ class raw_env(AECEnv):
             for i in range(0, 19):
                 for j in range (0, 19):
                     if self._go.board[i][j] == -1:
-                        self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)),
-                                                    int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                        self.screen.blit(black_stone, ((i * (tile_size)), int(j) * (tile_size)))
                     elif self._go.board[i][j] == 1:
-                        self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)),
-                                                      int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                        self.screen.blit(white_stone, ((i * (tile_size)), int(j) * (tile_size)))
 
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-
-        print(self._go)
 
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
