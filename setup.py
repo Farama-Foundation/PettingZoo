@@ -1,5 +1,4 @@
 from setuptools import find_packages, setup
-
 with open("README.md", "r") as fh:
     long_description = ""
     header_count = 0
@@ -47,7 +46,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
     python_requires=">=3.6, <3.10",
-    packages=find_packages(".", "pettingzoo"),
+    packages=["pettingzoo"] + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
     install_requires=[
         "numpy>=1.18.0",
