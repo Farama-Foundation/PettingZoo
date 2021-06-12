@@ -21,7 +21,7 @@ Gin Rummy is a 2-player card game with a 52 card deck. The objective is to combi
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-### Environment arguments
+### Arguments
 
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 

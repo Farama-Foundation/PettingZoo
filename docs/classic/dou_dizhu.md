@@ -21,7 +21,7 @@ The "Landlord" plays first by putting down a combination of cards. The next play
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-### Environment parameters
+### Arguments
 
 ```
 dou_dizhu.env(opponents_hand_visible=False)
