@@ -19,7 +19,7 @@ Uno is shedding game involving 2 players. At the beginning, each player receives
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-### Environment parameters
+### Arguments
 
 ```
 uno.env(opponents_hand_visible=False)
