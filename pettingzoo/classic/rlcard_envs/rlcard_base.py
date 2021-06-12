@@ -14,6 +14,7 @@ class RLCardBase(AECEnv):
         super().__init__()
         self.name = name
         self.env = rlcard.make(name)
+        self.screen = None
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
         self.possible_agents = self.agents[:]
