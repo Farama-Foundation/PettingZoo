@@ -1,7 +1,8 @@
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 
-adversarial_pursuit_v0 = DeprecatedModule("adversarial_pursuit", "v0", "v2")
-adversarial_pursuit_v1 = DeprecatedModule("adversarial_pursuit", "v1", "v2")
+adversarial_pursuit_v0 = DeprecatedModule("adversarial_pursuit", "v0", "v3")
+adversarial_pursuit_v1 = DeprecatedModule("adversarial_pursuit", "v1", "v3")
+adversarial_pursuit_v2 = DeprecatedModule("adversarial_pursuit", "v2", "v3")
 battle_v0 = DeprecatedModule("battle", "v0", "v3")
 battle_v1 = DeprecatedModule("battle", "v1", "v3")
 battle_v2 = DeprecatedModule("battle", "v2", "v3")

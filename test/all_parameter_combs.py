@@ -78,7 +78,7 @@ parameterized_envs = [
     (battlefield_v3.env, dict(minimap_mode=False, extra_features=True)),
     (battlefield_v3.env, dict(minimap_mode=True, extra_features=False)),
     (battlefield_v3.env, dict(minimap_mode=True, extra_features=True)),
-    (adversarial_pursuit_v2.env, dict(map_size=15)),
+    (adversarial_pursuit_v3.env, dict(map_size=15)),
     (battle_v3.env, dict(map_size=15)),
     (battlefield_v3.env, dict(map_size=46)),
     (combined_arms_v5.env, dict(map_size=16)),

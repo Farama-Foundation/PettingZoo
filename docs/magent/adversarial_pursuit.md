@@ -7,7 +7,7 @@ action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
 observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
-import: "pettingzoo.magent import adversarial_pursuit_v2"
+import: "pettingzoo.magent import adversarial_pursuit_v3"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
@@ -68,7 +68,7 @@ last_reward(extra_features=True)| 1
 ### Arguments
 
 ```
-adversarial_pursuit_v2.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, max_cycles=500, extra_features=False)
+adversarial_pursuit_v3.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, max_cycles=500, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 7.
