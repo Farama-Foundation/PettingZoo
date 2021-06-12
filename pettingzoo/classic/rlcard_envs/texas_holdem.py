@@ -35,8 +35,19 @@ class raw_env(RLCardBase):
         super().__init__("limit-holdem", 2, (72,))
 
     def render(self, mode='human'):
+
+        def calculate_width(self, screen_width, i):
+            return int(((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))))
+
+        def calculate_offset(hand, j, tile_size):
+            return int((len(hand) * (tile_size / 2)) - ((j) * tile_size))
+
+        def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
+            return int(multiplier * screen_height / divisor + tile_size * offset)
+
         screen_width = 1600
         screen_height = 1000
+
         if mode == "human":
             import pygame
 
@@ -62,34 +73,34 @@ class raw_env(RLCardBase):
                     card_img = pygame.transform.scale(card_img, (int(tile_size * (142 / 197)), int(tile_size)))
                     # Players with even id go above public cards
                     if i % 2 == 0:
-                        self.screen.blit(card_img, (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))) - (len(state['hand']) * (tile_size / 2)) + ((j) * tile_size)), int(screen_height / 4 - tile_size))))
+                        self.screen.blit(card_img, ((calculate_width(self, screen_width, i) - calculate_offset(state['hand'], j, tile_size)), calculate_height(screen_height, 4, 1, tile_size, -1)))
                     # Players with odd id go below public cards
                     else:
-                        self.screen.blit(card_img, (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))) - (len(state['hand']) * (tile_size / 2)) + ((j) * tile_size)), int(3 * screen_height / 4))))
+                        self.screen.blit(card_img, ((calculate_width(self, screen_width, i) - calculate_offset(state['hand'], j, tile_size)), calculate_height(screen_height, 4, 3, tile_size, 0)))
 
                 # Load and blit text for player name
                 text = font.render(player, True, white)
                 textRect = text.get_rect()
                 if i % 2 == 0:
-                    textRect.center = (((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))),  int(screen_height / 4 - (5 / 4) * tile_size))
+                    textRect.center = (calculate_width(self, screen_width, i),  calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
                 else:
-                    textRect.center = (((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))), int(3 * screen_height / 4 - tile_size / 4))
+                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
                 self.screen.blit(text, textRect)
 
                 # Load and blit number of poker chips for each player
                 text = font.render('Chips: ' + str(state['my_chips']), True, white)
                 textRect = text.get_rect()
                 if i % 2 == 0:
-                    textRect.center = (((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))),  int(screen_height / 4 + (1 / 4) * tile_size))
+                    textRect.center = (calculate_width(self, screen_width, i),  calculate_height(screen_height, 4, 1, tile_size, (1 / 4)))
                 else:
-                    textRect.center = (((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))), int(3 * screen_height / 4 + tile_size * (5 / 4)))
+                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, (5 / 4)))
                 self.screen.blit(text, textRect)
 
             # Load and blit public cards
             for i, card in enumerate(state['public_cards']):
                 card_img = get_image(os.path.join('img', card + '.png'))
                 card_img = pygame.transform.scale(card_img, (int(tile_size * (142 / 197)), int(tile_size)))
-                self.screen.blit(card_img, ((((screen_width / 2) - (len(state['public_cards']) * (tile_size / 2)) + (i * tile_size)), screen_height / 2 - tile_size / 2)))
+                self.screen.blit(card_img, ((((screen_width / 2) - calculate_offset(state['public_cards'], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)))))
 
             pygame.display.update()
 
