@@ -82,7 +82,7 @@ class raw_env(RLCardBase):
                 text = font.render(player, True, white)
                 textRect = text.get_rect()
                 if i % 2 == 0:
-                    textRect.center = (calculate_width(self, screen_width, i),  calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
+                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
                 else:
                     textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
                 self.screen.blit(text, textRect)
@@ -91,7 +91,7 @@ class raw_env(RLCardBase):
                 text = font.render('Chips: ' + str(state['my_chips']), True, white)
                 textRect = text.get_rect()
                 if i % 2 == 0:
-                    textRect.center = (calculate_width(self, screen_width, i),  calculate_height(screen_height, 4, 1, tile_size, (1 / 4)))
+                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, (1 / 4)))
                 else:
                     textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, (5 / 4)))
                 self.screen.blit(text, textRect)
