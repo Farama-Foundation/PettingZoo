@@ -163,7 +163,7 @@ class raw_env(AECEnv):
 
             # Blit the necessary chips and their positions
             for i in range(0, 19):
-                for j in range (0, 19):
+                for j in range(0, 19):
                     if self._go.board[i][j] == -1:
                         self.screen.blit(black_stone, ((i * (tile_size)), int(j) * (tile_size)))
                     elif self._go.board[i][j] == 1:
