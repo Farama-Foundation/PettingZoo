@@ -166,11 +166,11 @@ class raw_env(AECEnv):
             for i in range(1, size - 1):
                 for j in range(1, size - 1):
                     self.screen.blit(tile_img, ((i * (tile_size)), int(j) * (tile_size)))
-            
+
             for i in range(1, 9):
                 tile_img = get_image(os.path.join('img', 'GO_Tile' + str(i) + '.png'))
                 tile_img = pygame.transform.scale(tile_img, ((int(tile_size * (7 / 6))), int(tile_size * (7 / 6))))
-                for j in range (1, size - 1):
+                for j in range(1, size - 1):
                     if i == 1:
                         self.screen.blit(tile_img, (0, int(j) * (tile_size)))
                     elif i == 2:
