@@ -249,8 +249,6 @@ class CooperativePong(gym.Env):
         self.score = 0
 
     def reset(self):
-        # does not return observations
-
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
@@ -294,14 +292,11 @@ class CooperativePong(gym.Env):
             pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
-    def observe(self, agent):
+    def observe(self):
         observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
-        if agent == self.agents[0]:
-            return observation[:, :int(observation.shape[1] / 2), :]
-        elif agent == self.agents[1]:
-            return observation[:, int(observation.shape[1] / 2):, :]
+        return observation
 
     def state(self):
         '''
@@ -313,22 +308,17 @@ class CooperativePong(gym.Env):
         return state
 
     def draw(self):
-        # draw background
-        # pygame.display.get_surface().fill((0, 0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), self.area)
-        # draw ball and paddles
         self.p0.draw(self.screen)
         self.p1.draw(self.screen)
         self.ball.draw(self.screen)
 
     def step(self, action, agent):
-        '''
-        Does not return anything
-        '''
 
         # update p0, p1 accordingly
         # action: 0: do nothing,
-        # action: 1: p[i] move up, 2: p[i] move down
+        # action: 1: p[i] move up
+        # action: 2: p[i] move down
         if agent == self.agents[0]:
             self.rewards = {a: 0 for a in self.agents}
             self.p0.update(self.area, action)
@@ -416,8 +406,8 @@ class raw_env(AECEnv, EzPickle):
         self.dones = self.env.dones
         self.infos = self.env.infos
 
-    def observe(self, agent):
-        obs = self.env.observe(agent)
+    def observe(self):
+        obs = self.env.observe()
         return obs
 
     def state(self):
