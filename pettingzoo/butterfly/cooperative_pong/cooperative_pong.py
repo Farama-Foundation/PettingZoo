@@ -12,7 +12,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
 
-KERNEL_WINDOW_LENGTH = 1
+KERNEL_WINDOW_LENGTH = 2
 
 
 def get_image(path):
@@ -25,11 +25,11 @@ def deg_to_rad(deg):
 
 
 def get_flat_shape(width, height):
-    return int(width * height / (2 * KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
+    return int(width * height / (KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
 
 
 def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (2 * KERNEL_WINDOW_LENGTH)), 1)
+    return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle(randomizer):
