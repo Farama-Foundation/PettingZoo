@@ -197,7 +197,7 @@ class BallSprite(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
-class CooperativePong(gym.Env):
+class CooperativePong:
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
