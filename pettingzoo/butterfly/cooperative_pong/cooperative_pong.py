@@ -33,7 +33,7 @@ def original_obs_shape(screen_width, screen_height):
 
 
 def get_valid_angle(randomizer):
-    # generates an angle in [0, 2*np.pi) that \
+    # generates an angle in [0, 2*np.pi) that
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
     ver_deg_range = 25
@@ -154,8 +154,6 @@ class BallSprite(pygame.sprite.Sprite):
         return (done_x or done_y)
 
     def move_single_axis(self, dx, dy, area, p0, p1):
-        # returns done
-
         # move ball rect
         self.rect.x += dx
         self.rect.y += dy
@@ -215,7 +213,7 @@ class CooperativePong(gym.Env):
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         original_shape = original_obs_shape(self.s_width, self.s_height)
         original_color_shape = (original_shape[0], original_shape[1], 3)
-        # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
+
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
         self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
