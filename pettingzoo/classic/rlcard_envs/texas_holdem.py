@@ -37,7 +37,7 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
 
         def calculate_width(self, screen_width, i):
-            return int(((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)))))
+            return int((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2)))))
 
         def calculate_offset(hand, j, tile_size):
             return int((len(hand) * (tile_size / 2)) - ((j) * tile_size))
@@ -45,8 +45,8 @@ class raw_env(RLCardBase):
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
-        screen_width = 1600
         screen_height = 1000
+        screen_width = int(screen_height + np.ceil(len(self.possible_agents) / 2) * (screen_height / 5))
 
         if mode == "human":
             import pygame
@@ -57,9 +57,9 @@ class raw_env(RLCardBase):
 
             pygame.event.get()
             # Setup dimensions for card size and setup for colors
-            tile_size = screen_width / 10
+            tile_size = screen_height * 1.6 / 10
 
-            bg_color = (31, 153, 131)
+            bg_color = (7, 99, 36)
             white = (255, 255, 255)
             self.screen.fill(bg_color)
             font = pygame.font.Font('freesansbold.ttf', 36)
