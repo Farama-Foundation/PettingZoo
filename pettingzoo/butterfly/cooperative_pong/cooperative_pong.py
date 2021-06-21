@@ -29,7 +29,7 @@ def get_flat_shape(width, height):
 
 
 def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (KERNEL_WINDOW_LENGTH)), 1)
+    return (int(screen_height * 2 / KERNEL_WINDOW_LENGTH), int(screen_width * 2 / (KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle(randomizer):
@@ -213,7 +213,6 @@ class CooperativePong:
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         original_shape = original_obs_shape(self.s_width, self.s_height)
         original_color_shape = (original_shape[0], original_shape[1], 3)
-
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
         self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
