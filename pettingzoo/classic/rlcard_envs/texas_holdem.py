@@ -103,7 +103,7 @@ class raw_env(RLCardBase):
                 if i % 2 == 0:
                     textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, 0) - ((state['my_chips'] + 1) * tile_size / 20))
                 else:
-                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1)* tile_size / 20))
+                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1) * tile_size / 20))
                 self.screen.blit(text, textRect)
 
             # Load and blit public cards
