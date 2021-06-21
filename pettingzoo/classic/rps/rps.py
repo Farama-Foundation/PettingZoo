@@ -55,7 +55,7 @@ class raw_env(AECEnv):
         self.observation_spaces = {agent: Discrete(1 + num_actions) for agent in self.agents}
 
         self.screen = None
-        self.history = [0] * (2  * 5)
+        self.history = [0] * (2 * 5)
 
         self.reinit()
 
@@ -109,7 +109,7 @@ class raw_env(AECEnv):
             for i, move in enumerate(self.history[0:10]):
                 # Scale images, shrink the size as later moves from the history are blit
                 paper = pygame.transform.scale(paper, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (14 / 12))))
-                rock = pygame.transform.scale(rock, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (10/ 13))))
+                rock = pygame.transform.scale(rock, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (10 / 13))))
                 scissors = pygame.transform.scale(scissors, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (14 / 13))))
                 spock = pygame.transform.scale(spock, (int(screen_width / (i + 13)), int(screen_width / (i + 13))))
                 lizard = pygame.transform.scale(lizard, (int(screen_width / (i + 13) * (9 / 18)), int(screen_width / (i + 13))))
@@ -135,10 +135,10 @@ class raw_env(AECEnv):
 
             # Scale images and set alpha to completely opaque
             paper = pygame.transform.scale(paper, (int(screen_width / 5), int(screen_width / 5 * (14 / 12))))
-            rock = pygame.transform.scale(rock, (int(screen_width / 5), int(screen_width / 5 * (10/ 13))))
+            rock = pygame.transform.scale(rock, (int(screen_width / 5), int(screen_width / 5 * (10 / 13))))
             scissors = pygame.transform.scale(scissors, (int(screen_width / 5), int(screen_width / 5 * (14 / 13))))
             spock = pygame.transform.scale(spock, (int(screen_width / 5), int(screen_width / 5)))
-            lizard = pygame.transform.scale(lizard, (int(screen_width / 5  * (9 / 18)), int(screen_width / 5)))
+            lizard = pygame.transform.scale(lizard, (int(screen_width / 5 * (9 / 18)), int(screen_width / 5)))
             paper.set_alpha(255)
             rock.set_alpha(255)
             scissors.set_alpha(255)
@@ -166,7 +166,7 @@ class raw_env(AECEnv):
                         self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_width / 5), screen_height / 5))
                     if self._moves[self.state[self.agents[1]]] != 'None':
                         self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
-            
+
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
