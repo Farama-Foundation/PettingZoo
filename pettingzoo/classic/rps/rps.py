@@ -111,8 +111,8 @@ class raw_env(AECEnv):
                 paper = pygame.transform.scale(paper, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (14 / 12))))
                 rock = pygame.transform.scale(rock, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (10/ 13))))
                 scissors = pygame.transform.scale(scissors, (int(screen_width / (i + 13)), int(screen_width / (i + 13) * (14 / 13))))
-                spock = pygame.transform.scale(scissors, (int(screen_width / (i + 13)), int(screen_width / (i + 13))))
-                lizard = spock = pygame.transform.scale(scissors, (int(screen_width / (i + 13) * (9 / 18)), int(screen_width / (i + 13))))
+                spock = pygame.transform.scale(spock, (int(screen_width / (i + 13)), int(screen_width / (i + 13))))
+                lizard = pygame.transform.scale(lizard, (int(screen_width / (i + 13) * (9 / 18)), int(screen_width / (i + 13))))
 
                 # Fade images out the farther they are in the history via alpha
                 paper.set_alpha(255 - 40 * np.ceil((i + 1) / 2))
@@ -137,8 +137,8 @@ class raw_env(AECEnv):
             paper = pygame.transform.scale(paper, (int(screen_width / 5), int(screen_width / 5 * (14 / 12))))
             rock = pygame.transform.scale(rock, (int(screen_width / 5), int(screen_width / 5 * (10/ 13))))
             scissors = pygame.transform.scale(scissors, (int(screen_width / 5), int(screen_width / 5 * (14 / 13))))
-            spock = pygame.transform.scale(rock, (int(screen_width / 5), int(screen_width / 5)))
-            lizard = pygame.transform.scale(rock, (int(screen_width / 5) * (9 / 18), int(screen_width / 5)))
+            spock = pygame.transform.scale(spock, (int(screen_width / 5), int(screen_width / 5)))
+            lizard = pygame.transform.scale(lizard, (int(screen_width / 5  * (9 / 18)), int(screen_width / 5)))
             paper.set_alpha(255)
             rock.set_alpha(255)
             scissors.set_alpha(255)
@@ -160,9 +160,9 @@ class raw_env(AECEnv):
                         self.screen.blit(paper, ((screen_width / 2) + offset(i, screen_width / 5), screen_height / 5))
                     elif self._moves[self.state[self.agents[i]]] == 'SCISSORS':
                         self.screen.blit(scissors, ((screen_width / 2) + offset(i, screen_width / 5), screen_height / 5))
-                    elif move == 'SPOCK':
+                    elif self._moves[self.state[self.agents[i]]] == 'SPOCK':
                         self.screen.blit(spock, ((screen_width / 2) + offset(i, screen_width / 5), screen_height / 5))
-                    elif move == 'LIZARD':
+                    elif self._moves[self.state[self.agents[i]]] == 'LIZARD':
                         self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_width / 5), screen_height / 5))
                     if self._moves[self.state[self.agents[1]]] != 'None':
                         self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
