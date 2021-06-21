@@ -62,7 +62,6 @@ class raw_env(RLCardBase):
             bg_color = (7, 99, 36)
             white = (255, 255, 255)
             self.screen.fill(bg_color)
-            font = pygame.font.Font('freesansbold.ttf', 36)
 
             # Load and blit all images for each card in each player's hand
             for i, player in enumerate(self.possible_agents):
@@ -79,6 +78,7 @@ class raw_env(RLCardBase):
                         self.screen.blit(card_img, ((calculate_width(self, screen_width, i) - calculate_offset(state['hand'], j, tile_size)), calculate_height(screen_height, 4, 3, tile_size, 0)))
 
                 # Load and blit text for player name
+                font = pygame.font.Font('freesansbold.ttf', 36)
                 text = font.render(player, True, white)
                 textRect = text.get_rect()
                 if i % 2 == 0:
@@ -88,12 +88,22 @@ class raw_env(RLCardBase):
                 self.screen.blit(text, textRect)
 
                 # Load and blit number of poker chips for each player
-                text = font.render('Chips: ' + str(state['my_chips']), True, white)
+                font = pygame.font.Font('freesansbold.ttf', 24)
+                text = font.render(str(state['my_chips']), True, white)
+                chip_img = get_image(os.path.join('img', 'PokerChip.png'))
+                chip_img = pygame.transform.scale(chip_img, (int(tile_size / 2), int(tile_size * 5 / 16)))
                 textRect = text.get_rect()
+                # Blit poker chip img
+                for j in range(0, state['my_chips']):
+                    if i % 2 == 0:
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 1, tile_size, 0) - (j * tile_size / 20)))
+                    else:
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 3, tile_size, 1) - (j * tile_size / 20)))
+                # Blit text number
                 if i % 2 == 0:
-                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, (1 / 4)))
+                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, 0) - ((state['my_chips'] + 1) * tile_size / 20))
                 else:
-                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, (5 / 4)))
+                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1)* tile_size / 20))
                 self.screen.blit(text, textRect)
 
             # Load and blit public cards
