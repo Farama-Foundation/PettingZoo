@@ -54,6 +54,7 @@ class raw_env(RLCardBase):
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
+                pygame.font.init()
                 self.screen = pygame.Surface((screen_width, screen_height))
         if mode == "human":
             pygame.event.get()
@@ -79,28 +80,27 @@ class raw_env(RLCardBase):
                 else:
                     self.screen.blit(card_img, ((calculate_width(self, screen_width, i) - calculate_offset(state['hand'], j, tile_size)), calculate_height(screen_height, 4, 3, tile_size, 0)))
 
-            if mode == "human":
-                # Load and blit text for player name
-                font = pygame.font.Font('freesansbold.ttf', 36)
-                text = font.render(player, True, white)
-                textRect = text.get_rect()
-                if i % 2 == 0:
-                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
-                else:
-                    textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
-                self.screen.blit(text, textRect)
+            # Load and blit text for player name
+            font = pygame.font.Font('freesansbold.ttf', 36)
+            text = font.render(player, True, white)
+            textRect = text.get_rect()
+            if i % 2 == 0:
+                textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
+            else:
+                textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
+            self.screen.blit(text, textRect)
 
-                # Load and blit number of poker chips for each player
-                font = pygame.font.Font('freesansbold.ttf', 24)
-                text = font.render(str(state['my_chips']), True, white)
-                textRect = text.get_rect()
+            # Load and blit number of poker chips for each player
+            font = pygame.font.Font('freesansbold.ttf', 24)
+            text = font.render(str(state['my_chips']), True, white)
+            textRect = text.get_rect()
 
-                # Blit text number
-                if i % 2 == 0:
-                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, 0) - ((state['my_chips'] + 1) * tile_size / 20))
-                else:
-                    textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1) * tile_size / 20))
-                self.screen.blit(text, textRect)
+            # Blit text number
+            if i % 2 == 0:
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, 0) - ((state['my_chips'] + 1) * tile_size / 20))
+            else:
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1) * tile_size / 20))
+            self.screen.blit(text, textRect)
 
             chip_img = get_image(os.path.join('img', 'PokerChip.png'))
             chip_img = pygame.transform.scale(chip_img, (int(tile_size / 2), int(tile_size * 5 / 16)))
