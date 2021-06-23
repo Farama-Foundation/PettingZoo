@@ -5,6 +5,7 @@ from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 import os
+import pygame
 
 
 def get_image(path):
@@ -74,92 +75,96 @@ class raw_env(AECEnv):
         self.num_moves = 0
 
     def render(self, mode="human"):
+        def offset(i, size):
+            if i == 0:
+                return -(size * (3 / 2))
+            else:
+                return size * (1 / 2)
+
         screen_width = 800
         screen_height = 1000
-        if mode == "human":
-            # Calculate offset from center for different sized images
-            def offset(i, size):
-                if i == 0:
-                    return -(size * (3 / 2))
-                else:
-                    return size * (1 / 2)
-            import pygame
 
-            if self.screen is None:
+        if self.screen is None:
+            if mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
+            else:
+                self.screen = pygame.Surface((screen_width, screen_height))
+            if mode == "human":
+                pygame.event.get()
 
-            self.screen = pygame.display.set_mode((screen_width, screen_height))
+        # Load and all of the necessary images
+        paper = get_image(os.path.join('img', 'Paper.png'))
+        rock = get_image(os.path.join('img', 'Rock.png'))
+        scissors = get_image(os.path.join('img', 'Scissors.png'))
+        spock = get_image(os.path.join('img', 'Spock.png'))
+        lizard = get_image(os.path.join('img', 'Lizard.png'))
 
-            # Load and all of the necessary images
-            paper = get_image(os.path.join('img', 'Paper.png'))
-            rock = get_image(os.path.join('img', 'Rock.png'))
-            scissors = get_image(os.path.join('img', 'Scissors.png'))
-            spock = get_image(os.path.join('img', 'Spock.png'))
-            lizard = get_image(os.path.join('img', 'Lizard.png'))
+        # Scale images in history
+        paper = pygame.transform.scale(paper, (int(screen_height / 9), int(screen_height / 9 * (14 / 12))))
+        rock = pygame.transform.scale(rock, (int(screen_height / 9), int(screen_height / 9 * (10 / 13))))
+        scissors = pygame.transform.scale(scissors, (int(screen_height / 9), int(screen_height / 9 * (14 / 13))))
+        spock = pygame.transform.scale(spock, (int(screen_height / 9), int(screen_height / 9)))
+        lizard = pygame.transform.scale(lizard, (int(screen_height / 9 * (9 / 18)), int(screen_height / 9)))
 
-            # Scale images in history
-            paper = pygame.transform.scale(paper, (int(screen_height / 9), int(screen_height / 9 * (14 / 12))))
-            rock = pygame.transform.scale(rock, (int(screen_height / 9), int(screen_height / 9 * (10 / 13))))
-            scissors = pygame.transform.scale(scissors, (int(screen_height / 9), int(screen_height / 9 * (14 / 13))))
-            spock = pygame.transform.scale(spock, (int(screen_height / 9), int(screen_height / 9)))
-            lizard = pygame.transform.scale(lizard, (int(screen_height / 9 * (9 / 18)), int(screen_height / 9)))
+        # Set background color
+        bg = (220, 220, 220)
+        self.screen.fill(bg)
 
-            # Set background color
-            bg = (220, 220, 220)
-            self.screen.fill(bg)
-
+        if mode == "human":
             # Set font properties
             black = (0, 0, 0)
             font = pygame.font.Font('freesansbold.ttf', 32)
 
-            for i, move in enumerate(self.history[0:10]):
-                # Blit move history
-                if move == 'ROCK':
-                    self.screen.blit(rock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
-                elif move == 'PAPER':
-                    self.screen.blit(paper, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
-                elif move == 'SCISSORS':
-                    self.screen.blit(scissors, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
-                elif move == 'SPOCK':
-                    self.screen.blit(spock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
-                elif move == 'LIZARD':
-                    self.screen.blit(lizard, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+        for i, move in enumerate(self.history[0:10]):
+            # Blit move history
+            if move == 'ROCK':
+                self.screen.blit(rock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+            elif move == 'PAPER':
+                self.screen.blit(paper, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+            elif move == 'SCISSORS':
+                self.screen.blit(scissors, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+            elif move == 'SPOCK':
+                self.screen.blit(spock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+            elif move == 'LIZARD':
+                self.screen.blit(lizard, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
 
-            # Scale images in current game
-            paper = pygame.transform.scale(paper, (int(screen_height / 7), int(screen_height / 7 * (14 / 12))))
-            rock = pygame.transform.scale(rock, (int(screen_height / 7), int(screen_height / 7 * (10 / 13))))
-            scissors = pygame.transform.scale(scissors, (int(screen_height / 7), int(screen_height / 7 * (14 / 13))))
-            spock = pygame.transform.scale(spock, (int(screen_height / 7), int(screen_height / 7)))
-            lizard = pygame.transform.scale(lizard, (int(screen_height / 7 * (9 / 18)), int(screen_height / 7)))
-            paper.set_alpha(255)
-            rock.set_alpha(255)
-            scissors.set_alpha(255)
-            spock.set_alpha(255)
-            lizard.set_alpha(255)
+        # Scale images in current game
+        paper = pygame.transform.scale(paper, (int(screen_height / 7), int(screen_height / 7 * (14 / 12))))
+        rock = pygame.transform.scale(rock, (int(screen_height / 7), int(screen_height / 7 * (10 / 13))))
+        scissors = pygame.transform.scale(scissors, (int(screen_height / 7), int(screen_height / 7 * (14 / 13))))
+        spock = pygame.transform.scale(spock, (int(screen_height / 7), int(screen_height / 7)))
+        lizard = pygame.transform.scale(lizard, (int(screen_height / 7 * (9 / 18)), int(screen_height / 7)))
+        paper.set_alpha(255)
+        rock.set_alpha(255)
+        scissors.set_alpha(255)
+        spock.set_alpha(255)
+        lizard.set_alpha(255)
 
-            if len(self.agents) > 1:
-                for i in range(0, 2):
+        if len(self.agents) > 1:
+            for i in range(0, 2):
+                if mode == "human":
                     # Text for each agent
                     text = font.render('Agent ' + str(i + 1), True, black)
                     textRect = text.get_rect()
                     textRect.center = ((screen_width * 6 / 10) + offset(i, screen_height / 7), screen_height / 16)
                     self.screen.blit(text, textRect)
 
-                    # Blit agent action
-                    if self._moves[self.state[self.agents[i]]] == 'ROCK':
-                        self.screen.blit(rock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
-                    elif self._moves[self.state[self.agents[i]]] == 'PAPER':
-                        self.screen.blit(paper, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
-                    elif self._moves[self.state[self.agents[i]]] == 'SCISSORS':
-                        self.screen.blit(scissors, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
-                    elif self._moves[self.state[self.agents[i]]] == 'SPOCK':
-                        self.screen.blit(spock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
-                    elif self._moves[self.state[self.agents[i]]] == 'LIZARD':
-                        self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
-                    if self._moves[self.state[self.agents[1]]] != 'None':
-                        self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
+                # Blit agent action
+                if self._moves[self.state[self.agents[i]]] == 'ROCK':
+                    self.screen.blit(rock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
+                elif self._moves[self.state[self.agents[i]]] == 'PAPER':
+                    self.screen.blit(paper, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
+                elif self._moves[self.state[self.agents[i]]] == 'SCISSORS':
+                    self.screen.blit(scissors, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
+                elif self._moves[self.state[self.agents[i]]] == 'SPOCK':
+                    self.screen.blit(spock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
+                elif self._moves[self.state[self.agents[i]]] == 'LIZARD':
+                    self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 10))
+                if self._moves[self.state[self.agents[1]]] != 'None':
+                    self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
 
+        if mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
