@@ -16,6 +16,13 @@ def get_image(path):
     return image
 
 
+def get_font(path, size):
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    font = pygame.font.Font((cwd + '/' + path), size)
+    return font
+
+
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
@@ -89,7 +96,7 @@ class raw_env(AECEnv):
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
-                pygame.init.font()
+                pygame.font.init()
                 self.screen = pygame.Surface((screen_width, screen_height))
         if mode == "human":
             pygame.event.get()
@@ -114,7 +121,7 @@ class raw_env(AECEnv):
 
         # Set font properties
         black = (0, 0, 0)
-        font = pygame.font.Font('freesansbold.ttf', 32)
+        font = get_font((os.path.join('font', 'Minecraft.ttf')), 32)
 
         for i, move in enumerate(self.history[0:10]):
             # Blit move history
