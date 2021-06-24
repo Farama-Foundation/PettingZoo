@@ -13,11 +13,17 @@ import os
 
 
 def get_image(path):
-    import pygame
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     return image
+
+
+def get_font(path, size):
+    from os import path as os_path
+    cwd = os_path.dirname(__file__)
+    font = pygame.font.Font((cwd + '/' + path), size)
+    return font
 
 
 def env(**kwargs):
@@ -81,8 +87,8 @@ class raw_env(RLCardBase):
                     self.screen.blit(card_img, ((calculate_width(self, screen_width, i) - calculate_offset(state['hand'], j, tile_size)), calculate_height(screen_height, 4, 3, tile_size, 0)))
 
             # Load and blit text for player name
-            font = pygame.font.Font('freesansbold.ttf', 36)
-            text = font.render(player, True, white)
+            font = get_font(os.path.join('font', 'Minecraft.ttf'), 36)
+            text = font.render("Player " + str(i + 1), True, white)
             textRect = text.get_rect()
             if i % 2 == 0:
                 textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
@@ -91,7 +97,7 @@ class raw_env(RLCardBase):
             self.screen.blit(text, textRect)
 
             # Load and blit number of poker chips for each player
-            font = pygame.font.Font('freesansbold.ttf', 24)
+            font = get_font(os.path.join('font', 'Minecraft.ttf'), 24)
             text = font.render(str(state['my_chips']), True, white)
             textRect = text.get_rect()
 
