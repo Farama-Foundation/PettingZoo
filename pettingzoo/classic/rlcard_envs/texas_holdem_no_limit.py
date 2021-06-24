@@ -25,7 +25,6 @@ def get_font(path, size):
     return font
 
 
-
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
