@@ -27,7 +27,6 @@ def get_font(path, size):
 
 def env(**kwargs):
     env = raw_env(**kwargs)
-    env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -36,7 +35,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human'], "name": "texas_holdem_no_limit_v3"}
+    metadata = {'render.modes': ['human', 'rgb_array'], "name": "texas_holdem_no_limit_v3"}
 
     def __init__(self):
         super().__init__("no-limit-holdem", 2, (54,))
@@ -56,7 +55,10 @@ class raw_env(RLCardBase):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
         screen_height = 1000
-        screen_width = int(screen_height + np.ceil(len(self.possible_agents) / 2) * (screen_height / 5))
+        if np.ceil(len(self.possible_agents) / 2) > 1:
+            screen_width = int(screen_height * (4 / 10) + (np.ceil(len(self.possible_agents) / 2) - 1) * (screen_height / 2))
+        else:
+            screen_width = int(screen_height * (4 / 10) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 45 / 100))
 
         if self.screen is None:
             if mode == "human":

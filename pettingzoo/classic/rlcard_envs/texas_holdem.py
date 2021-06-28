@@ -53,7 +53,10 @@ class raw_env(RLCardBase):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
         screen_height = 1000
-        screen_width = int(screen_height + np.ceil(len(self.possible_agents) / 2) * (screen_height / 5))
+        if np.ceil(len(self.possible_agents) / 2) > 1:
+            screen_width = int(screen_height * (4 / 10) + (np.ceil(len(self.possible_agents) / 2) - 1) * (screen_height / 2))
+        else:
+            screen_width = int(screen_height * (4 / 10) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 45 / 100))
 
         if self.screen is None:
             if mode == "human":
