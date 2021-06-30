@@ -82,14 +82,14 @@ class raw_env(AECEnv):
         self.num_moves = 0
 
     def render(self, mode="human"):
-        def offset(i, size):
+        def offset(i, size, offset=0):
             if i == 0:
-                return -(size * (3 / 2))
+                return -(size) - offset
             else:
-                return size * (1 / 2)
+                return offset
 
-        screen_height = 750
-        screen_width = int(screen_height / 2)
+        screen_height = 350
+        screen_width = int(screen_height * 5 / 14)
 
         if self.screen is None:
             if mode == "human":
@@ -121,20 +121,20 @@ class raw_env(AECEnv):
 
         # Set font properties
         black = (0, 0, 0)
-        font = get_font((os.path.join('font', 'Minecraft.ttf')), 32)
+        font = get_font((os.path.join('font', 'Minecraft.ttf')), int(screen_height / 25))
 
         for i, move in enumerate(self.history[0:10]):
             # Blit move history
             if move == 'ROCK':
-                self.screen.blit(rock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+                self.screen.blit(rock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
             elif move == 'PAPER':
-                self.screen.blit(paper, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+                self.screen.blit(paper, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
             elif move == 'SCISSORS':
-                self.screen.blit(scissors, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+                self.screen.blit(scissors, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
             elif move == 'SPOCK':
-                self.screen.blit(spock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+                self.screen.blit(spock, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
             elif move == 'LIZARD':
-                self.screen.blit(lizard, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
+                self.screen.blit(lizard, ((screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126), (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2))))
 
         # Scale images in current game
         paper = pygame.transform.scale(paper, (int(screen_height / 7), int(screen_height / 7 * (14 / 12))))
@@ -148,20 +148,20 @@ class raw_env(AECEnv):
                 # Text for each agent
                 text = font.render('Agent ' + str(i + 1), True, black)
                 textRect = text.get_rect()
-                textRect.center = ((screen_width * 6 / 10) + offset(i, screen_height / 7), screen_height / 40)
+                textRect.center = ((screen_width / 2) + offset(i, 0, screen_width * 11 / 40), screen_height / 40)
                 self.screen.blit(text, textRect)
 
                 # Blit agent action
                 if self._moves[self.state[self.agents[i]]] == 'ROCK':
-                    self.screen.blit(rock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 12))
+                    self.screen.blit(rock, ((screen_width / 2) + offset(i, screen_height / 7, screen_height / 42), screen_height / 12))
                 elif self._moves[self.state[self.agents[i]]] == 'PAPER':
-                    self.screen.blit(paper, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 12))
+                    self.screen.blit(paper, ((screen_width / 2) + offset(i, screen_height / 7, screen_height / 42), screen_height / 12))
                 elif self._moves[self.state[self.agents[i]]] == 'SCISSORS':
-                    self.screen.blit(scissors, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 12))
+                    self.screen.blit(scissors, ((screen_width / 2) + offset(i, screen_height / 7, screen_height / 42), screen_height / 12))
                 elif self._moves[self.state[self.agents[i]]] == 'SPOCK':
-                    self.screen.blit(spock, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 12))
+                    self.screen.blit(spock, ((screen_width / 2) + offset(i, screen_height / 7, screen_height / 42), screen_height / 12))
                 elif self._moves[self.state[self.agents[i]]] == 'LIZARD':
-                    self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_height / 7), screen_height / 12))
+                    self.screen.blit(lizard, ((screen_width / 2) + offset(i, screen_height / 7, screen_height / 42), screen_height / 12))
                 if self._moves[self.state[self.agents[1]]] != 'None':
                     self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
 
