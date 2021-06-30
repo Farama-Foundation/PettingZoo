@@ -44,7 +44,7 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
 
         def calculate_width(self, screen_width, i):
-            return int((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2)))))
+            return int(((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))) + (tile_size * 55 / 394))
 
         def calculate_offset(hand, j, tile_size):
             return int((len(hand) * (tile_size / 2)) - ((j) * tile_size))
@@ -53,10 +53,7 @@ class raw_env(RLCardBase):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
         screen_height = 1000
-        if np.ceil(len(self.possible_agents) / 2) > 1:
-            screen_width = int(screen_height * (4 / 10) + (np.ceil(len(self.possible_agents) / 2) - 1) * (screen_height / 2))
-        else:
-            screen_width = int(screen_height * (4 / 10) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 45 / 100))
+        screen_width = int(screen_height * (1 / 10) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2))
 
         if self.screen is None:
             if mode == "human":
@@ -74,6 +71,16 @@ class raw_env(RLCardBase):
         bg_color = (7, 99, 36)
         white = (255, 255, 255)
         self.screen.fill(bg_color)
+
+        chips = {0: {'value': 10000, 'img': 'ChipOrange.png', 'number': 0},
+                 1: {'value': 5000, 'img': 'ChipPink.png', 'number': 0},
+                 2: {'value': 1000, 'img': 'ChipYellow.png', 'number': 0},
+                 3: {'value': 100, 'img': 'ChipBlack.png', 'number': 0},
+                 4: {'value': 50, 'img': 'ChipBlue.png', 'number': 0},
+                 5: {'value': 25, 'img': 'ChipGreen.png', 'number': 0},
+                 6: {'value': 10, 'img': 'ChipLightBlue.png', 'number': 0},
+                 7: {'value': 5, 'img': 'ChipRed.png', 'number': 0},
+                 8: {'value': 1, 'img': 'ChipWhite.png', 'number': 0}}
 
         # Load and blit all images for each card in each player's hand
         for i, player in enumerate(self.possible_agents):
@@ -94,9 +101,9 @@ class raw_env(RLCardBase):
             text = font.render("Player " + str(i + 1), True, white)
             textRect = text.get_rect()
             if i % 2 == 0:
-                textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
+                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
             else:
-                textRect.center = (calculate_width(self, screen_width, i), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
+                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
             self.screen.blit(text, textRect)
 
             # Load and blit number of poker chips for each player
@@ -104,28 +111,43 @@ class raw_env(RLCardBase):
             text = font.render(str(state['my_chips']), True, white)
             textRect = text.get_rect()
 
+            # Calculate number of each chip
+            total = (state['my_chips'])
+            height = 0
+            for key in chips:
+                num = total / chips[key]['value']
+                chips[key]['number'] = int(num)
+                total %= chips[key]['value']
+
+                chip_img = get_image(os.path.join('img', chips[key]['img']))
+                chip_img = pygame.transform.scale(chip_img, (int(tile_size / 2), int(tile_size * 16 / 45)))
+
+                # Blit poker chip img
+                for j in range(0, int(chips[key]['number'])):
+                    if i % 2 == 0:
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 1, tile_size, -3 / 10) - ((j + height) * tile_size / 15)))
+                    else:
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 3, tile_size, 7 / 10) - ((j + height) * tile_size / 15)))
+                height += chips[key]['number']
+
             # Blit text number
             if i % 2 == 0:
-                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, 0) - ((state['my_chips'] + 1) * tile_size / 20))
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, -3 / 10) - ((height + 1) * tile_size / 15))
             else:
-                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1) - ((state['my_chips'] + 1) * tile_size / 20))
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 7 / 10) - ((height + 1) * tile_size / 15))
             self.screen.blit(text, textRect)
-
-            chip_img = get_image(os.path.join('img', 'PokerChip.png'))
-            chip_img = pygame.transform.scale(chip_img, (int(tile_size / 2), int(tile_size * 5 / 16)))
-
-            # Blit poker chip img
-            for j in range(0, state['my_chips']):
-                if i % 2 == 0:
-                    self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 1, tile_size, 0) - (j * tile_size / 20)))
-                else:
-                    self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 3, tile_size, 1) - (j * tile_size / 20)))
 
         # Load and blit public cards
         for i, card in enumerate(state['public_cards']):
             card_img = get_image(os.path.join('img', card + '.png'))
             card_img = pygame.transform.scale(card_img, (int(tile_size * (142 / 197)), int(tile_size)))
-            self.screen.blit(card_img, ((((screen_width / 2) - calculate_offset(state['public_cards'], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)))))
+            if len(state['public_cards']) <= 3:
+                self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)))))
+            else:
+                if i <= 2:
+                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'][:3], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -1))))
+                else:
+                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'][3:], i - 3, tile_size)), calculate_height(screen_height, 2, 1, tile_size, 0))))
 
         if mode == "human":
             pygame.display.update()
