@@ -1,9 +1,8 @@
 from pettingzoo import AECEnv
 from gym import spaces
 import numpy as np
-import warnings
 import os
-
+import pygame
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
@@ -130,34 +129,37 @@ class raw_env(AECEnv):
     def render(self, mode='human'):
         screen_width = 1287
         screen_height = 1118
-        if mode == "human":
-            import pygame
-
-            if self.screen is None:
+        if self.screen is None:
+            if mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
+            else:
+                self.screen = pygame.Surface((screen_width, screen_height))
+        if mode == "human":
+            pygame.event.get()
 
-            # Load and scale all of the necessary images
-            tile_size = (screen_width * (91 / 99)) / 7
+        # Load and scale all of the necessary images
+        tile_size = (screen_width * (91 / 99)) / 7
 
-            red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
-            red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+        red_chip = get_image(os.path.join('img', 'C4RedPiece.png'))
+        red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
 
-            black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
-            black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
+        black_chip = get_image(os.path.join('img', 'C4BlackPiece.png'))
+        black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
 
-            board_img = get_image(os.path.join('img', 'Connect4Board.png'))
-            board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
+        board_img = get_image(os.path.join('img', 'Connect4Board.png'))
+        board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
 
-            self.screen.blit(board_img, (0, 0))
+        self.screen.blit(board_img, (0, 0))
 
-            # Blit the necessary chips and their positions
-            for i in range(0, 42):
-                if self.board[i] == 1:
-                    self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
-                elif self.board[i] == 2:
-                    self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+        # Blit the necessary chips and their positions
+        for i in range(0, 42):
+            if self.board[i] == 1:
+                self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+            elif self.board[i] == 2:
+                self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
 
+        if mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))

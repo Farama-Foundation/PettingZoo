@@ -12,7 +12,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
 
-KERNEL_WINDOW_LENGTH = 1
+KERNEL_WINDOW_LENGTH = 2
 
 
 def get_image(path):
@@ -25,15 +25,15 @@ def deg_to_rad(deg):
 
 
 def get_flat_shape(width, height):
-    return int(width * height / (2 * KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
+    return int(width * height / (KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
 
 
 def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height / KERNEL_WINDOW_LENGTH), int(screen_width / (2 * KERNEL_WINDOW_LENGTH)), 1)
+    return (int(screen_height * 2 / KERNEL_WINDOW_LENGTH), int(screen_width * 2 / (KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle(randomizer):
-    # generates an angle in [0, 2*np.pi) that \
+    # generates an angle in [0, 2*np.pi) that
     # excludes (90 +- ver_deg_range), (270 +- ver_deg_range), (0 +- hor_deg_range), (180 +- hor_deg_range)
     # (65, 115), (245, 295), (170, 190), (0, 10), (350, 360)
     ver_deg_range = 25
@@ -154,8 +154,6 @@ class BallSprite(pygame.sprite.Sprite):
         return (done_x or done_y)
 
     def move_single_axis(self, dx, dy, area, p0, p1):
-        # returns done
-
         # move ball rect
         self.rect.x += dx
         self.rect.y += dy
@@ -199,7 +197,7 @@ class BallSprite(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
 
 
-class CooperativePong(gym.Env):
+class CooperativePong:
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super(CooperativePong, self).__init__()
 
@@ -215,7 +213,6 @@ class CooperativePong(gym.Env):
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         original_shape = original_obs_shape(self.s_width, self.s_height)
         original_color_shape = (original_shape[0], original_shape[1], 3)
-        # self.observation_space = [gym.spaces.Box(low=0.0, high=1.0, shape=(original_shape), dtype=np.float32) for _ in range(self.num_agents)]
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
         self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
@@ -249,8 +246,6 @@ class CooperativePong(gym.Env):
         self.score = 0
 
     def reset(self):
-        # does not return observations
-
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
@@ -294,14 +289,11 @@ class CooperativePong(gym.Env):
             pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
-    def observe(self, agent):
+    def observe(self):
         observation = pygame.surfarray.pixels3d(self.screen)
         observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
-        if agent == self.agents[0]:
-            return observation[:, :int(observation.shape[1] / 2), :]
-        elif agent == self.agents[1]:
-            return observation[:, int(observation.shape[1] / 2):, :]
+        return observation
 
     def state(self):
         '''
@@ -313,22 +305,17 @@ class CooperativePong(gym.Env):
         return state
 
     def draw(self):
-        # draw background
-        # pygame.display.get_surface().fill((0, 0, 0))
         pygame.draw.rect(self.screen, (0, 0, 0), self.area)
-        # draw ball and paddles
         self.p0.draw(self.screen)
         self.p1.draw(self.screen)
         self.ball.draw(self.screen)
 
     def step(self, action, agent):
-        '''
-        Does not return anything
-        '''
 
         # update p0, p1 accordingly
         # action: 0: do nothing,
-        # action: 1: p[i] move up, 2: p[i] move down
+        # action: 1: p[i] move up
+        # action: 2: p[i] move down
         if agent == self.agents[0]:
             self.rewards = {a: 0 for a in self.agents}
             self.p0.update(self.area, action)
@@ -417,7 +404,7 @@ class raw_env(AECEnv, EzPickle):
         self.infos = self.env.infos
 
     def observe(self, agent):
-        obs = self.env.observe(agent)
+        obs = self.env.observe()
         return obs
 
     def state(self):
