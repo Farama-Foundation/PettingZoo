@@ -30,7 +30,7 @@ class RLCardBase(AECEnv):
 
         self.observation_spaces = self._convert_to_dict(
             [spaces.Dict({'observation': spaces.Box(low=0.0, high=1.0, shape=obs_shape, dtype=self._dtype),
-                          'action_mask': spaces.Box(low=0, high=1, shape=(self.env.game.get_action_num(),),
+                          'action_mask': spaces.Box(low=0, high=1, shape=(self.env.game.get_num_actions(),),
                                                     dtype=np.int8)}) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
 
