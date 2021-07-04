@@ -32,8 +32,9 @@ Press 'M' key to spawn a new knight.
 ### Arguments
 
 ```
-knights_archers_zombies.env(spawn_rate=20, num_knights=2, num_archers=2,
-killable_knights=True, killable_archers=True, black_death=True, line_death=True, pad_observation=True, max_cycles=900)
+knights_archers_zombies_v7.env(spawn_rate=20, num_knights=2, num_archers=2,
+killable_knights=True, killable_archers=True, black_death=True, line_death=True,
+pad_observation=True, max_cycles=900)
 ```
 
 
@@ -52,3 +53,10 @@ killable_knights=True, killable_archers=True, black_death=True, line_death=True,
 `line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 
 `pad_observation`:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
+
+
+### Version History
+
+v5: Misc fixes (1.5.2)
+v4: Fixed observation and rendering issues (1.4.2)
+v3: Misc bug fixes, bumped PyGame and PyMunk version (1.4.0)

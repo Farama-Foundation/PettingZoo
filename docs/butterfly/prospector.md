@@ -127,3 +127,9 @@ gold from a prospector.
 gold into a bank.
 
 `max_cycles`: The number of frames the game should run for.
+
+
+### Version History
+
+v4: Changed default argument for `max_cycles` (1.6.0)
+v3: Misc fixes, bumped PyGame and PyMunk version (1.4.0)

@@ -33,7 +33,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to combat-tank are
 
 ```
-combat_tank.env(has_maze=False, is_invisible=False, billiard_hit=False)
+combat_tank_v1.env(has_maze=False, is_invisible=False, billiard_hit=False)
 ```
 
 `has_maze`:  Set to true to have the map be a maze instead of an open field
