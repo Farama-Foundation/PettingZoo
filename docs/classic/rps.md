@@ -22,7 +22,7 @@ The game can be expanded to have extra actions by adding new action pairs. Addin
 ### Arguments
 
 ```
-rps.env(num_actions=3, max_cycles=15)
+rps_v1.env(num_actions=3, max_cycles=15)
 ```
 
 `num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.

@@ -64,7 +64,11 @@ When multiple agents (depending on `n_coop`) capture food together each agent re
 ### Arguments
 
 ```
-waterworld.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, sensor_range=0.2,radius=0.015, obstacle_radius=0.2, obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.01, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
+waterworld_v3.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20,
+sensor_range=0.2,radius=0.015, obstacle_radius=0.2,
+obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.01, evader_speed=0.01,
+poison_speed=0.01, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01,
+thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 ```
 
 `n_pursuers`: number of pursuing archea (agents)
@@ -104,3 +108,7 @@ waterworld.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20, s
 `speed_features`: toggles whether pursuing archea (agent) sensors detect speed of other objects and archea
 
 `max_cycles`: After max_cycles steps all agents will return done
+
+
+v3: Refactor and major bug fixes (1.5.0)
+v2: Misc bug fixes (1.4.0)

@@ -22,7 +22,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can 
 ### Arguments
 
 ```
-uno.env(opponents_hand_visible=False)
+uno_v3.env(opponents_hand_visible=False)
 ```
 
 `opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0 to 3.
