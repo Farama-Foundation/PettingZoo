@@ -84,7 +84,7 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 ### Version History
 
-v7: Fixed problem with walker collisions (1.8.2)
-v6: Fixed observation space and made large improvements to code quality (1.5.0)
-v5: Fixes to reward structure, added arguments (1.4.2)
-v4: Misc bug fixes (1.4.0)
+* v7: Fixed problem with walker collisions (1.8.2)
+* v6: Fixed observation space and made large improvements to code quality (1.5.0)
+* v5: Fixes to reward structure, added arguments (1.4.2)
+* v4: Misc bug fixes (1.4.0)

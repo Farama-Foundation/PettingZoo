@@ -62,6 +62,6 @@ catch_reward=5.0, urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 ### Version History
 
-v3: Observation space bug fixed (1.5.0)
-v2: Misc bug fixes (1.4.0)
+* v3: Observation space bug fixed (1.5.0)
+* v2: Misc bug fixes (1.4.0)
 
