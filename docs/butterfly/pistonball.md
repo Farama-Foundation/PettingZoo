@@ -57,6 +57,6 @@ ball_elasticity=1.5, max_cycles=125)
 
 ### Version History
 
-v4: Changed default arguments for `max_cycles` and `continuous` (1.6.0)
-v3: Refactor, added number of pistons argument, minor visual changes (1.5.0)
-v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v4: Changed default arguments for `max_cycles` and `continuous` (1.6.0)
+* v3: Refactor, added number of pistons argument, minor visual changes (1.5.0)
+* v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)

@@ -48,5 +48,5 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 
 ### Version History
 
-v3: Changed default argument for `max_cycles`  (1.6.0)
-v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v3: Changed default argument for `max_cycles`  (1.6.0)
+* v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)

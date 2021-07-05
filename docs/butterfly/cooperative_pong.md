@@ -46,4 +46,4 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 ### Version History
 
-v2: Misc fixes (1.4.0)
+* v2: Misc fixes (1.4.0)
