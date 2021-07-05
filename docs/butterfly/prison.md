@@ -50,3 +50,5 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 
 * v3: Changed default argument for `max_cycles`  (1.6.0)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v1: Fix to continuous mode (1.0.1)
+* v0: Initial versions release (1.0.0)

@@ -47,3 +47,5 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 ### Version History
 
 * v2: Misc fixes (1.4.0)
+* v1: Fixed bug in how `dones` were computed (1.3.1)
+* v0: Initial versions release (1.0.0)
