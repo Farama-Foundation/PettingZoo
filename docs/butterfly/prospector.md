@@ -131,5 +131,5 @@ gold into a bank.
 
 ### Version History
 
-v4: Changed default argument for `max_cycles` (1.6.0)
-v3: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v4: Changed default argument for `max_cycles` (1.6.0)
+* v3: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
