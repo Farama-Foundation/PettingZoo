@@ -110,5 +110,5 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 `max_cycles`: After max_cycles steps all agents will return done
 
 
-v3: Refactor and major bug fixes (1.5.0)
-v2: Misc bug fixes (1.4.0)
+* v3: Refactor and major bug fixes (1.5.0)
+* v2: Misc bug fixes (1.4.0)
