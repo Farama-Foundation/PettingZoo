@@ -33,7 +33,8 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to Space Invaders are
 
 ```
-space_invaders.env(alternating_control=False, moving_shields=True, zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
+space_invaders_v1.env(alternating_control=False, moving_shields=True,
+zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 ```
 
 `alternating_control`:  Only one of the two players has an option to fire at one time. If you fire, your opponent can then fire. However, you can't hoard the firing ability forever, eventually, control shifts to your opponent anyways.

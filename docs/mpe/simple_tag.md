@@ -34,7 +34,7 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 ### Arguments
 
 ```
-simple_tag.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_cycles=25)
+simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2 , max_cycles=25)
 ```
 
 

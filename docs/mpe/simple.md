@@ -22,7 +22,7 @@ Observation space: `[self_vel, landmark_rel_position]`
 ### Arguments
 
 ```
-simple.env(max_cycles=25)
+simple_v2.env(max_cycles=25)
 ```
 
 

@@ -23,7 +23,8 @@ Hanabi is a 2-5 player cooperative game where players work together to form fire
 Hanabi takes in a number of arguments defining the size and complexity of the game. Default is a full 2 player hanabi game.
 
 ```
-hanabi_v1.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8, max_life_tokens=3, observation_type=1)
+hanabi_v4.env(colors=5, rank=5, players=2, hand_size=5, max_information_tokens=8,
+max_life_tokens=3, observation_type=1)
 ```
 
 `colors`: Number of colors the cards can take (affects size of deck)
