@@ -68,7 +68,8 @@ last_reward(extra_features=True)| 1
 ### Arguments
 
 ```
-adversarial_pursuit_v3.env(map_size=45, minimap_mode=False, tag_penalty=-0.2, max_cycles=500, extra_features=False)
+adversarial_pursuit_v3.env(map_size=45, minimap_mode=False, tag_penalty=-0.2,
+max_cycles=500, extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 7.
