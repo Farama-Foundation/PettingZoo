@@ -57,7 +57,7 @@ pad_observation=True, max_cycles=900)
 
 ### Version History
 
-* v7: Changed pymunk version (1.6.0)
+* v7: Minor bug fix relating to end of episode crash (1.6.0)
 * v6: Fixed reward structure (1.5.2)
 * v5: Removed black death argument (1.5.0)
 * v4: Fixed observation and rendering issues (1.4.2)
