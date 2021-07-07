@@ -34,7 +34,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to Volleyball Pong are
 
 ```
-volleyball_pong.env(num_players=4)
+volleyball_pong_v2.env(num_players=4)
 ```
 
 `num_players`:  Number of players (must be either 2 or 4)

@@ -29,7 +29,7 @@ Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_speaker_listener.env(max_cycles=25)
+simple_speaker_listener_v2.env(max_cycles=25)
 ```
 
 

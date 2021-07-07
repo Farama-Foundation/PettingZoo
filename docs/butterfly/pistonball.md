@@ -29,7 +29,9 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 ### Arguments
 
 ```
-pistonball.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+pistonball_v4.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True,
+random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3,
+ball_elasticity=1.5, max_cycles=125)
 ```
 
 `n_pistons`: The number of pistons (agents) in the environment.
@@ -51,3 +53,12 @@ pistonball.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, 
 `ball_elasticity`:  Sets the elasticity of the ball physics object
 
 `max_cycles`:  after max_cycles steps all agents will return done
+
+
+### Version History
+
+* v4: Changed default arguments for `max_cycles` and `continuous`, bumped PyMunk version (1.6.0)
+* v3: Refactor, added number of pistons argument, minor visual changes (1.5.0)
+* v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v1: Fix to continuous mode (1.0.1)
+* v0: Initial versions release (1.0.0)
