@@ -4,7 +4,7 @@ title: "Simple World Comm"
 agents: "6"
 manual-control: "No"
 action-shape: "(5),(20)"
-action-values: "Discrete(5),(20)/Box(0.0, 1.0, (5)), Box(0.0, 1.0, (20))"
+action-values: "Discrete(5),(20)/Box(0.0, 1.0, (5)), Box(0.0, 1.0, (9))"
 observation-shape: "(28),(34)"
 observation-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_world_comm_v2"
@@ -31,10 +31,11 @@ Good agent action space: `[no_action, move_left, move_right, move_down, move_up]
 
 Normal adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Adversary leader action space: `[say_0, say_1, say_2, say_3] X [no_action, move_left, move_right, move_down, move_up]`
+Adversary leader discrete action space: `[say_0, say_1, say_2, say_3] X [no_action, move_left, move_right, move_down, move_up]`
 
 Where X is the Cartesian product (giving a total action space of 50).
 
+Adversary leader continuous action space: `[no_action, move_left, move_right, move_down, move_up, say_0, say_1, say_2, say_3]`
 
 ### Arguments
 
