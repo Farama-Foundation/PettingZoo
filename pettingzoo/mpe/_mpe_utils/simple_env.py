@@ -138,10 +138,14 @@ class SimpleEnv(AECEnv):
                 agent.action.u[1] += action[0][3] - action[0][4]
             else:
                 # process discrete action
-                if action[0] == 1: agent.action.u[0] = -1.0
-                if action[0] == 2: agent.action.u[0] = +1.0
-                if action[0] == 3: agent.action.u[1] = -1.0
-                if action[0] == 4: agent.action.u[1] = +1.0
+                if action[0] == 1:
+                    agent.action.u[0] = -1.0
+                if action[0] == 2:
+                    agent.action.u[0] = +1.0
+                if action[0] == 3:
+                    agent.action.u[1] = -1.0
+                if action[0] == 4:
+                    agent.action.u[1] = +1.0
             sensitivity = 5.0
             if agent.accel is not None:
                 sensitivity = agent.accel
