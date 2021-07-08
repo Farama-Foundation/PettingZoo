@@ -4,10 +4,10 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):
-    def __init__(self, N=2, max_cycles=25):
+    def __init__(self, N=2, max_cycles=25, continuous_actions=True):
         scenario = Scenario()
         world = scenario.make_world(N)
-        super().__init__(scenario, world, max_cycles)
+        super().__init__(scenario, world, max_cycles, continuous_actions)
         self.metadata['name'] = "simple_adversary_v2"
 
 
