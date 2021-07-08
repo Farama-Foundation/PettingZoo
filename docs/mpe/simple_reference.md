@@ -30,7 +30,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference.env(local_ratio=0.5, max_cycles=25)
+simple_reference_v2.env(local_ratio=0.5, max_cycles=25)
 ```
 
 
