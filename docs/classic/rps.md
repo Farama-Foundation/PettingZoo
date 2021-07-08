@@ -7,7 +7,7 @@ action-shape: "Discrete(3)"
 action-values: "Discrete(3)"
 observation-shape: "Discrete(4)"
 observation-values: "Discrete(4)"
-import: "from pettingzoo.classic import rps_v1"
+import: "from pettingzoo.classic import rps_v2"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -22,7 +22,7 @@ The game can be expanded to have extra actions by adding new action pairs. Addin
 ### Arguments
 
 ```
-rps.env(num_actions=3, max_cycles=15)
+rps_v2.env(num_actions=3, max_cycles=15)
 ```
 
 `num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.

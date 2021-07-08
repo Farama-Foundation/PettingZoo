@@ -25,7 +25,7 @@ from pettingzoo.atari import warlords_v2
 
 from pettingzoo.classic import chess_v3
 from pettingzoo.classic import checkers_v3
-from pettingzoo.classic import rps_v1
+from pettingzoo.classic import rps_v2
 from pettingzoo.classic import connect_four_v3
 from pettingzoo.classic import tictactoe_v3
 from pettingzoo.classic import leduc_holdem_v3
@@ -105,7 +105,7 @@ all_environments = {
 
     "classic/chess_v3": chess_v3,
     "classic/checkers_v3": checkers_v3,
-    "classic/rps_v1": rps_v1,
+    "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,
     "classic/leduc_holdem_v3": leduc_holdem_v3,
