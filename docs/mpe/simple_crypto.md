@@ -1,10 +1,10 @@
 ---
-actions: "Discrete"
+actions: "Discrete/Continuous"
 title: "Simple Crypto"
 agents: "2"
 manual-control: "No"
 action-shape: "(4)"
-action-values: "Discrete(4)"
+action-values: "Discrete(4)/Box(0.0, 1.0, (4))"
 observation-shape: "(4),(8)"
 observation-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_crypto_v2"
@@ -35,9 +35,11 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 ### Arguments
 
 ```
-simple_crypto_v2.env(max_cycles=25)
+simple_crypto_v2.env(max_cycles=25, continuous_actions=False)
 ```
 
 
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
