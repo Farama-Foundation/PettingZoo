@@ -36,7 +36,7 @@ extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["ma
 
 
 setup(
-    name='pettingzoo',
+    name='PettingZoo',
     version=get_version(),
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
