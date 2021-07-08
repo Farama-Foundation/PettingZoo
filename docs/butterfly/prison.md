@@ -28,7 +28,7 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 ### Arguments
 
 ```
-prison.env(vector_observation=False, continuous=False, synchronized_start=False,
+prison_v3.env(vector_observation=False, continuous=False, synchronized_start=False,
 identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 ```
 
@@ -44,3 +44,11 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 `identical_aliens`:  If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
 
 `random_aliens`:  If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
+
+
+### Version History
+
+* v3: Changed default argument for `max_cycles`  (1.6.0)
+* v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v1: Fix to continuous mode (1.0.1)
+* v0: Initial versions release (1.0.0)

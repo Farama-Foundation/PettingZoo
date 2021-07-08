@@ -32,7 +32,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to Basketball_Pong are
 
 ```
-basketball_pong.env(num_players=2)
+basketball_pong_v2.env(num_players=2)
 ```
 
 `num_players`:  Number of players (must be either 2 or 4)

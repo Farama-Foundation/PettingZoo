@@ -76,7 +76,9 @@ last_reward(extra_features=True)| 1
 ### Arguments
 
 ```
-combined_arms_v5.env(map_size=45, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000, extra_features=False)
+combined_arms_v5.env(map_size=45, minimap_mode=False, step_reward=-0.005,
+dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000,
+extra_features=False)
 ```
 
 `map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.

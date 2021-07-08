@@ -39,7 +39,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to combat-plane are
 
 ```
-combat_plane.env(game_version="jet", guided_missile=True)
+combat_plane_v1.env(game_version="jet", guided_missile=True)
 ```
 
 `game_version`:  Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)
