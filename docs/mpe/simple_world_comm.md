@@ -1,10 +1,10 @@
 ---
-actions: "Discrete"
+actions: "Discrete/Continuous"
 title: "Simple World Comm"
 agents: "6"
 manual-control: "No"
 action-shape: "(5),(20)"
-action-values: "Discrete(5),(20)"
+action-values: "Discrete(5),(20)/Box(0.0, 1.0, (5)), Box(0.0, 1.0, (20))"
 observation-shape: "(28),(34)"
 observation-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_world_comm_v2"
@@ -40,7 +40,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 ```
 simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
-                num_food=2, max_cycles=25, num_forests=2)
+                num_food=2, max_cycles=25, num_forests=2, continuous_actions=False)
 ```
 
 
@@ -56,4 +56,6 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `num_forests`: number of forests that can hide agents inside from being seen
+
+`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
 

@@ -1,10 +1,10 @@
 ---
-actions: "Discrete"
+actions: "Discrete/Continuous"
 title: "Simple Adversary"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"
-action-values: "Discrete(5)"
+action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
 observation-shape: "(8),(10)"
 observation-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_adversary_v2"
@@ -28,7 +28,7 @@ Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_adversary_v2.env(N=2, max_cycles=25)
+simple_adversary_v2.env(N=2, max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -36,3 +36,5 @@ simple_adversary_v2.env(N=2, max_cycles=25)
 `N`:  number of good agents and landmarks
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`continuous_actions`: Whether agent action spaces are discrete(default) or continuous

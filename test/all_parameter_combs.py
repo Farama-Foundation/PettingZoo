@@ -92,6 +92,14 @@ parameterized_envs = [
     (simple_world_comm_v2.env, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3)),
     (simple_world_comm_v2.env, dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1)),
 
+    (simple_adversary_v2.env, dict(N=4, continuous_actions=False)),
+    (simple_reference_v2.env, dict(local_ratio=0.2, continuous_actions=False)),
+    (simple_spread_v2.env, dict(N=5, continuous_actions=False)),
+    (simple_tag_v2.env, dict(num_good=5, num_adversaries=10, num_obstacles=4, continuous_actions=False)),
+    (simple_tag_v2.env, dict(num_good=1, num_adversaries=1, num_obstacles=1, continuous_actions=False)),
+    (simple_world_comm_v2.env, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3, continuous_actions=False)),
+    (simple_world_comm_v2.env, dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1, continuous_actions=False)),
+
     (multiwalker_v7.env, dict(n_walkers=10)),
     (multiwalker_v7.env, dict(local_ratio=0.5)),
     (multiwalker_v7.env, dict(terminate_on_fall=False)),

@@ -1,10 +1,10 @@
 ---
-actions: "Discrete"
+actions: "Discrete/Continuous"
 title: "Simple Spread"
 agents: "3"
 manual-control: "No"
 action-shape: "(5)"
-action-values: "Discrete(5)"
+action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-115.6"
@@ -27,7 +27,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ```
-simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25)
+simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -37,3 +37,5 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25)
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`continuous_actions`: Whether agent action spaces are discrete(default) or continuous

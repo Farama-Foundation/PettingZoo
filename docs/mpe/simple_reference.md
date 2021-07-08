@@ -1,10 +1,10 @@
 ---
-actions: "Discrete"
+actions: "Discrete/Continuous"
 title: "Simple Reference"
 agents: "2"
 manual-control: "No"
 action-shape: "(50)"
-action-values: "Discrete(50)"
+action-values: "Discrete(50)/Box(0.0, 1.0, (50))"
 observation-shape: "(21)"
 observation-values: "(-inf,inf)"
 average-total-reward: "-57.1"
@@ -30,7 +30,7 @@ Where X is the Cartesian product (giving a total action space of 50).
 
 
 ```
-simple_reference_v2.env(local_ratio=0.5, max_cycles=25)
+simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -38,3 +38,6 @@ simple_reference_v2.env(local_ratio=0.5, max_cycles=25)
 `local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+

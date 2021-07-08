@@ -19,7 +19,7 @@ def make_env(raw_env):
 
 
 class SimpleEnv(AECEnv):
-    def __init__(self, scenario, world, max_cycles, continuous_actions, local_ratio=None):
+    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.seed()
