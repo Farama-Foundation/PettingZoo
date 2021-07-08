@@ -31,7 +31,7 @@ Good agent action space: `[no_action, move_left, move_right, move_down, move_up]
 
 Normal adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
-Adversary leader observation space: `[say_0, say_1, say_2, say_3] X [no_action, move_left, move_right, move_down, move_up]`
+Adversary leader action space: `[say_0, say_1, say_2, say_3] X [no_action, move_left, move_right, move_down, move_up]`
 
 Where X is the Cartesian product (giving a total action space of 50).
 
