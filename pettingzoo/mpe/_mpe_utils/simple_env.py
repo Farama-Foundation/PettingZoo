@@ -45,11 +45,14 @@ class SimpleEnv(AECEnv):
         self.observation_spaces = dict()
         state_dim = 0
         for agent in self.world.agents:
-            space_dim = 1
+            space_dim = 0
             if agent.movable:
-                space_dim *= self.world.dim_p * 2 + 1
+                space_dim = self.world.dim_p * 2 + 1
             if not agent.silent:
-                space_dim *= self.world.dim_c
+                if self.continuous_actions:
+                    space_dim += self.world.dim_c
+                else:
+                    space_dim *= self.world.dim_c
 
             obs_dim = len(self.scenario.observation(agent, self.world))
             state_dim += obs_dim
@@ -100,11 +103,14 @@ class SimpleEnv(AECEnv):
             scenario_action = []
             if agent.movable:
                 mdim = self.world.dim_p * 2 + 1
-                scenario_action.append(action % mdim)
-                action //= mdim
+                if self.continuous_actions:
+                    scenario_action.append(action[0:mdim])
+                    action = action[mdim:]
+                else:
+                    scenario_action.append(action % mdim)
+                    action //= mdim
             if not agent.silent:
                 scenario_action.append(action)
-
             self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
@@ -126,8 +132,6 @@ class SimpleEnv(AECEnv):
     def _set_action(self, action, agent, action_space, time=None):
         agent.action.u = np.zeros(self.world.dim_p)
         agent.action.c = np.zeros(self.world.dim_c)
-        # process action
-        # TODO: Fix MultiDiscrete
 
         if agent.movable:
             # physical action
