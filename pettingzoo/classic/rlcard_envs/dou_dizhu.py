@@ -34,9 +34,10 @@ class raw_env(RLCardBase):
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
         if self._opponents_hand_visible:
-            observation = obs['obs'].astype(self._dtype)
+            observation = np.zeros(901, dtype=self._dtype)
+            observation[:len(obs['obs'])] = obs['obs'].astype(self._dtype)
         else:
-            observation = obs['obs'][[0, 2, 3, 4], :, :].astype(self._dtype)
+            observation = np.concatenate((obs['obs'][:54].astype(self._dtype), obs['obs'][108:648].astype(self._dtype)))
 
         legal_moves = self.next_legal_moves
         action_mask = np.zeros(309, int)
