@@ -25,7 +25,7 @@ class raw_env(RLCardBase):
         self._opponents_hand_visible = opponents_hand_visible
         self.agents = ['landlord_0', 'peasant_0', 'peasant_1']
         num_planes = 901 if self._opponents_hand_visible else 594
-        super().__init__("doudizhu", 3, num_planes)
+        super().__init__("doudizhu", 3, (num_planes,))
 
     def _scale_rewards(self, reward):
         # Maps 1 to 1 and 0 to -1
