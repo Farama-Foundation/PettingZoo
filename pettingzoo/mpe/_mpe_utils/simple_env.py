@@ -228,20 +228,19 @@ class SimpleEnv(AECEnv):
                     idx += 1
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        # for agent in self.world.agents:
-        idx = 0
         for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
                 word = '_'
+            elif self.continuous_actions:
+                word = str([f"{comm:.2f}" for comm in other.state.c])
             else:
                 word = alphabet[np.argmax(other.state.c)]
 
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            idx += 1
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
