@@ -15,8 +15,7 @@ import supersuit as ss
 import argparse
 from importlib import import_module
 from ray.tune import CLIReporter
-import wandb
-wandb.init()
+import os
 
 def parse_args():
     # Environment
@@ -187,7 +186,7 @@ def main(args):
             "episodes_total": args.num_episodes,
         },
         checkpoint_freq=args.checkpoint_freq,
-        local_dir=args.local_dir + "/" + args.env_name,
+        local_dir=os.path.join(args.local_dir, args.env_name),
         restore=args.restore,
         verbose = 2
     )
