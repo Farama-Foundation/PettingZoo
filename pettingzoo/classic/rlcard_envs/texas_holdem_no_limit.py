@@ -46,16 +46,16 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
 
         def calculate_width(self, screen_width, i):
-            return int(((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))) + (tile_size * 55 / 394))
+            return int(((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))) + (tile_size * 31 / 616))
 
         def calculate_offset(hand, j, tile_size):
-            return int((len(hand) * (tile_size / 2)) - ((j) * tile_size))
+            return int((len(hand) * (tile_size * 23 / 56)) - ((j) * (tile_size * 23 / 28)))
 
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
         screen_height = 1000
-        screen_width = int(screen_height * (1 / 10) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2))
+        screen_width = int(screen_height * (1 / 20) + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2))
 
         if self.screen is None:
             if mode == "human":
@@ -68,7 +68,7 @@ class raw_env(RLCardBase):
             pygame.event.get()
 
         # Setup dimensions for card size and setup for colors
-        tile_size = screen_height * 1.6 / 10
+        tile_size = screen_height * 2 / 10
 
         bg_color = (7, 99, 36)
         white = (255, 255, 255)
@@ -103,9 +103,9 @@ class raw_env(RLCardBase):
             text = font.render("Player " + str(i + 1), True, white)
             textRect = text.get_rect()
             if i % 2 == 0:
-                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 1, tile_size, -(5 / 4)))
+                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)))
             else:
-                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 3, tile_size, -(1 / 4)))
+                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 3, tile_size, (23 / 20)))
             self.screen.blit(text, textRect)
 
             # Load and blit number of poker chips for each player
@@ -127,16 +127,16 @@ class raw_env(RLCardBase):
                 # Blit poker chip img
                 for j in range(0, int(chips[key]['number'])):
                     if i % 2 == 0:
-                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 1, tile_size, -3 / 10) - ((j + height) * tile_size / 15)))
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 1, tile_size, -1 / 2) - ((j + height) * tile_size / 15)))
                     else:
-                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 3, tile_size, 7 / 10) - ((j + height) * tile_size / 15)))
+                        self.screen.blit(chip_img, ((calculate_width(self, screen_width, i) + tile_size * (8 / 10)), calculate_height(screen_height, 4, 3, tile_size, 1 / 2) - ((j + height) * tile_size / 15)))
                 height += chips[key]['number']
 
             # Blit text number
             if i % 2 == 0:
-                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, -3 / 10) - ((height + 1) * tile_size / 15))
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 1, tile_size, -1 / 2) - ((height + 1) * tile_size / 15))
             else:
-                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 7 / 10) - ((height + 1) * tile_size / 15))
+                textRect.center = ((calculate_width(self, screen_width, i) + tile_size * (21 / 20)), calculate_height(screen_height, 4, 3, tile_size, 1 / 2) - ((height + 1) * tile_size / 15))
             self.screen.blit(text, textRect)
 
         # Load and blit public cards
@@ -144,12 +144,12 @@ class raw_env(RLCardBase):
             card_img = get_image(os.path.join('img', card + '.png'))
             card_img = pygame.transform.scale(card_img, (int(tile_size * (142 / 197)), int(tile_size)))
             if len(state['public_cards']) <= 3:
-                self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)))))
+                self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 31 / 616)) - calculate_offset(state['public_cards'], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -(1 / 2)))))
             else:
                 if i <= 2:
-                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'][:3], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -1))))
+                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 31 / 616)) - calculate_offset(state['public_cards'][:3], i, tile_size)), calculate_height(screen_height, 2, 1, tile_size, -21 / 20))))
                 else:
-                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 55 / 394)) - calculate_offset(state['public_cards'][3:], i - 3, tile_size)), calculate_height(screen_height, 2, 1, tile_size, 0))))
+                    self.screen.blit(card_img, (((((screen_width / 2) + (tile_size * 31 / 616)) - calculate_offset(state['public_cards'][3:], i - 3, tile_size)), calculate_height(screen_height, 2, 1, tile_size, 1 / 20))))
 
         if mode == "human":
             pygame.display.update()
