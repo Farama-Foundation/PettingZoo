@@ -13,7 +13,9 @@ class RLCardBase(AECEnv):
     def __init__(self, name, num_players, obs_shape):
         super().__init__()
         self.name = name
-        self.env = rlcard.make(name)
+        self.env = rlcard.make(name, config={'allow_step_back': False,
+                                             'seed': None,
+                                             'game_num_players': num_players})
         self.screen = None
         if not hasattr(self, "agents"):
             self.agents = [f'player_{i}' for i in range(num_players)]
@@ -29,9 +31,9 @@ class RLCardBase(AECEnv):
 
         self.observation_spaces = self._convert_to_dict(
             [spaces.Dict({'observation': spaces.Box(low=0.0, high=1.0, shape=obs_shape, dtype=self._dtype),
-                          'action_mask': spaces.Box(low=0, high=1, shape=(self.env.game.get_action_num(),),
+                          'action_mask': spaces.Box(low=0, high=1, shape=(self.env.game.get_num_actions(),),
                                                     dtype=np.int8)}) for _ in range(self.num_agents)])
-        self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_action_num()) for _ in range(self.num_agents)])
+        self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.game.get_num_actions()) for _ in range(self.num_agents)])
 
     def seed(self, seed=None):
         self.env = rlcard.make(self.name, config={"seed": seed})
@@ -53,7 +55,7 @@ class RLCardBase(AECEnv):
         observation = obs['obs'].astype(self._dtype)
 
         legal_moves = self.next_legal_moves
-        action_mask = np.zeros(self.env.game.get_action_num(), int)
+        action_mask = np.zeros(self.env.game.get_num_actions(), int)
         for i in legal_moves:
             action_mask[i] = 1
 
