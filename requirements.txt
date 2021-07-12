@@ -4,7 +4,7 @@ numpy>=1.18.0
 pymunk==6.0.0
 box2d-py==2.3.5
 python-chess==0.31.4
-rlcard==0.2.8
+rlcard==1.0.2
 pynput
 hanabi_learning_environment==0.0.1
 multi_agent_ale_py==0.1.10
