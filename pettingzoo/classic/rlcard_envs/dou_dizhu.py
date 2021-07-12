@@ -27,8 +27,8 @@ class raw_env(RLCardBase):
         obs_dimension = 901 if self._opponents_hand_visible else 847
         super().__init__("doudizhu", 3, (obs_dimension, ))
         self.observation_spaces = self._convert_to_dict([spaces.Dict(
-            {'observation': spaces.Box(low=0.0, high=1.0, shape=(obs_dimension, )
-             if agent == 'landlord_0' else (obs_dimension - 111, ), dtype=self._dtype),
+            {'observation': spaces.Box(low=0.0, high=1.0, shape=(obs_dimension - 111, )
+             if agent == 'landlord_0' else (obs_dimension, ), dtype=self._dtype),
              'action_mask': spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=self._dtype)}) 
              for agent in self.agents])
 
