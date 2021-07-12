@@ -40,7 +40,7 @@ class raw_env(RLCardBase):
             observation = np.concatenate((obs['obs'][:54].astype(self._dtype), obs['obs'][108:648].astype(self._dtype)))
 
         legal_moves = self.next_legal_moves
-        action_mask = np.zeros(309, int)
+        action_mask = np.zeros(27472, int)
         for i in legal_moves:
             action_mask[i] = 1
 
