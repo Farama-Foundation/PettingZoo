@@ -55,7 +55,7 @@ class raw_env(AECEnv):
     At least human mode should be supported.
     The "name" metadata allows the environment to be pretty printed.
     '''
-    metadata = {'render.modes': ['human'], "name": "rps_v1"}
+    metadata = {'render.modes': ['human'], "name": "rps_v2"}
 
     def __init__(self):
         '''
@@ -236,7 +236,7 @@ def raw_env():
 
 
 class parallel_env(ParallelEnv):
-    metadata = {'render.modes': ['human'], "name": "rps_v1"}
+    metadata = {'render.modes': ['human'], "name": "rps_v2"}
 
     def __init__(self):
         '''
