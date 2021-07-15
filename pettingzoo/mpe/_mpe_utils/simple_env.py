@@ -45,11 +45,12 @@ class SimpleEnv(AECEnv):
         self.observation_spaces = dict()
         state_dim = 0
         for agent in self.world.agents:
-            space_dim = 1
             if agent.movable:
                 space_dim = self.world.dim_p * 2 + 1
             elif self.continuous_actions:
                 space_dim = 0
+            else:
+                space_dim = 1
             if not agent.silent:
                 if self.continuous_actions:
                     space_dim += self.world.dim_c
@@ -234,7 +235,7 @@ class SimpleEnv(AECEnv):
             if np.all(other.state.c == 0):
                 word = '_'
             elif self.continuous_actions:
-                word = str([f"{comm:.2f}" for comm in other.state.c])
+                word = '[' + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
             else:
                 word = alphabet[np.argmax(other.state.c)]
 
