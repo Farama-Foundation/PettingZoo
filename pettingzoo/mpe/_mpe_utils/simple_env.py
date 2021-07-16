@@ -9,14 +9,17 @@ from pettingzoo.utils import wrappers
 def make_env(raw_env):
     def env(**kwargs):
         env = raw_env(**kwargs)
-        env = wrappers.AssertOutOfBoundsWrapper(env)
+        if env.continuous_actions:
+            env = wrappers.ClipOutOfBoundsWrapper(env)
+        else:
+            env = wrappers.AssertOutOfBoundsWrapper(env)
         env = wrappers.OrderEnforcingWrapper(env)
         return env
     return env
 
 
 class SimpleEnv(AECEnv):
-    def __init__(self, scenario, world, max_cycles, local_ratio=None):
+    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
         super(SimpleEnv, self).__init__()
 
         self.seed()
@@ -26,6 +29,7 @@ class SimpleEnv(AECEnv):
         self.max_cycles = max_cycles
         self.scenario = scenario
         self.world = world
+        self.continuous_actions = continuous_actions
         self.local_ratio = local_ratio
 
         self.scenario.reset_world(self.world, self.np_random)
@@ -41,15 +45,24 @@ class SimpleEnv(AECEnv):
         self.observation_spaces = dict()
         state_dim = 0
         for agent in self.world.agents:
-            space_dim = 1
             if agent.movable:
-                space_dim *= self.world.dim_p * 2 + 1
+                space_dim = self.world.dim_p * 2 + 1
+            elif self.continuous_actions:
+                space_dim = 0
+            else:
+                space_dim = 1
             if not agent.silent:
-                space_dim *= self.world.dim_c
+                if self.continuous_actions:
+                    space_dim += self.world.dim_c
+                else:
+                    space_dim *= self.world.dim_c
 
             obs_dim = len(self.scenario.observation(agent, self.world))
             state_dim += obs_dim
-            self.action_spaces[agent.name] = spaces.Discrete(space_dim)
+            if self.continuous_actions:
+                self.action_spaces[agent.name] = spaces.Box(low=0, high=1, shape=(space_dim,))
+            else:
+                self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(obs_dim,), dtype=np.float32)
 
         self.state_space = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(state_dim,), dtype=np.float32)
@@ -93,11 +106,14 @@ class SimpleEnv(AECEnv):
             scenario_action = []
             if agent.movable:
                 mdim = self.world.dim_p * 2 + 1
-                scenario_action.append(action % mdim)
-                action //= mdim
+                if self.continuous_actions:
+                    scenario_action.append(action[0:mdim])
+                    action = action[mdim:]
+                else:
+                    scenario_action.append(action % mdim)
+                    action //= mdim
             if not agent.silent:
                 scenario_action.append(action)
-
             self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
@@ -119,21 +135,24 @@ class SimpleEnv(AECEnv):
     def _set_action(self, action, agent, action_space, time=None):
         agent.action.u = np.zeros(self.world.dim_p)
         agent.action.c = np.zeros(self.world.dim_c)
-        # process action
 
         if agent.movable:
             # physical action
             agent.action.u = np.zeros(self.world.dim_p)
-            # process discrete action
-            if action[0] == 1:
-                agent.action.u[0] = -1.0
-            if action[0] == 2:
-                agent.action.u[0] = +1.0
-            if action[0] == 3:
-                agent.action.u[1] = -1.0
-            if action[0] == 4:
-                agent.action.u[1] = +1.
-
+            if self.continuous_actions:
+                # Process continuous action as in OpenAI MPE
+                agent.action.u[0] += action[0][1] - action[0][2]
+                agent.action.u[1] += action[0][3] - action[0][4]
+            else:
+                # process discrete action
+                if action[0] == 1:
+                    agent.action.u[0] = -1.0
+                if action[0] == 2:
+                    agent.action.u[0] = +1.0
+                if action[0] == 3:
+                    agent.action.u[1] = -1.0
+                if action[0] == 4:
+                    agent.action.u[1] = +1.0
             sensitivity = 5.0
             if agent.accel is not None:
                 sensitivity = agent.accel
@@ -141,9 +160,11 @@ class SimpleEnv(AECEnv):
             action = action[1:]
         if not agent.silent:
             # communication action
-            agent.action.c = np.zeros(self.world.dim_c)
-
-            agent.action.c[action[0]] = 1.0
+            if self.continuous_actions:
+                agent.action.c = action[0]
+            else:
+                agent.action.c = np.zeros(self.world.dim_c)
+                agent.action.c[action[0]] = 1.0
             action = action[1:]
         # make sure we used all elements of action
         assert len(action) == 0
@@ -208,20 +229,19 @@ class SimpleEnv(AECEnv):
                     idx += 1
 
         alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        # for agent in self.world.agents:
-        idx = 0
         for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
                 word = '_'
+            elif self.continuous_actions:
+                word = '[' + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
             else:
                 word = alphabet[np.argmax(other.state.c)]
 
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
-            idx += 1
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
