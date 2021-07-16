@@ -283,7 +283,7 @@ class TextLine:
         self.label = pyglet.text.Label(text,
                                        font_name=font,
                                        color=(0, 0, 0, 255),
-                                       font_size=25,
+                                       font_size=20,
                                        x=0, y=self.idx * 40 + 20,
                                        anchor_x="left", anchor_y="bottom")
 
