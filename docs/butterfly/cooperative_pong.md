@@ -10,7 +10,7 @@ action-values: "[0, 1]"
 observation-shape: "(280, 480, 3)"
 observation-values: "[0, 255]"
 average-total-reward: "-92.9"
-import: "from pettingzoo.butterfly import cooperative_pong_v2"
+import: "from pettingzoo.butterfly import cooperative_pong_v3"
 agent-labels: "agents= ['paddle_0', 'paddle_1']"
 aec-diagram: "cooperative_pong_aec.png"
 ---
@@ -28,7 +28,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 ### Arguments
 
 ```
-cooperative_pong_v2.env(ball_speed=9, left_paddle_speed=12,
+cooperative_pong_v3.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```
 
@@ -46,6 +46,7 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 ### Version History
 
+* v3: Change observation space to include entire screen (1.10.0)
 * v2: Misc fixes (1.4.0)
 * v1: Fixed bug in how `dones` were computed (1.3.1)
 * v0: Initial versions release (1.0.0)
