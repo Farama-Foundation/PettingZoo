@@ -35,7 +35,7 @@ from pettingzoo.classic import texas_holdem_no_limit_v3
 from pettingzoo.classic import uno_v3
 from pettingzoo.classic import dou_dizhu_v3
 from pettingzoo.classic import gin_rummy_v3
-from pettingzoo.classic import go_v3
+from pettingzoo.classic import go_v4
 from pettingzoo.classic import hanabi_v4
 from pettingzoo.classic import backgammon_v3
 
@@ -115,7 +115,7 @@ all_environments = {
     "classic/uno_v3": uno_v3,
     "classic/dou_dizhu_v3": dou_dizhu_v3,
     "classic/gin_rummy_v3": gin_rummy_v3,
-    "classic/go_v3": go_v3,
+    "classic/go_v4": go_v4,
     "classic/hanabi_v4": hanabi_v4,
     "classic/backgammon_v3": backgammon_v3,
 

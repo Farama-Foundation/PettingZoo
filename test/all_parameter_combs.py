@@ -56,8 +56,8 @@ parameterized_envs = [
                              prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
                              banker_deposit_gold_reward=1, max_cycles=900)),
 
-    (go_v3.env, dict(board_size=13, komi=2.5)),
-    (go_v3.env, dict(board_size=9, komi=0.)),
+    (go_v4.env, dict(board_size=13, komi=2.5)),
+    (go_v4.env, dict(board_size=9, komi=0.)),
 
     (hanabi_v4.env, dict(colors=3)),
     (hanabi_v4.env, dict(ranks=3)),
