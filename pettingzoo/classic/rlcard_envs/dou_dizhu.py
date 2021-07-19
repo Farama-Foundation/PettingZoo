@@ -29,7 +29,7 @@ class raw_env(RLCardBase):
         self.observation_spaces = self._convert_to_dict([spaces.Dict(
             {'observation': spaces.Box(low=0.0, high=1.0, shape=(obs_dimension - 111, )
              if agent == 'landlord_0' else (obs_dimension, ), dtype=self._dtype),
-             'action_mask': spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=self._dtype)}) 
+             'action_mask': spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=self._dtype)})
              for agent in self.agents])
 
     def _scale_rewards(self, reward):
@@ -41,7 +41,7 @@ class raw_env(RLCardBase):
         if self._opponents_hand_visible:
             observation = obs['obs'].astype(self._dtype)
         else:
-            observation = np.delete(obs['obs'], range(54,108)).astype(self._dtype)
+            observation = np.delete(obs['obs'], range(54, 108)).astype(self._dtype)
 
         legal_moves = self.next_legal_moves
         action_mask = np.zeros(27472, int)
