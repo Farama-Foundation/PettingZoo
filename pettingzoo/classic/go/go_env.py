@@ -52,6 +52,8 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
+        self.board_history = np.zeros((board_size, board_size, 8))
+
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
         go.N = self._N
@@ -121,6 +123,9 @@ class raw_env(AECEnv):
             self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._accumulate_rewards()
+
+        self.board_history = np.dstack((self._go.board, self.board_history[:, :, :-1]))
+
 
     def reset(self):
         self.has_reset = True
