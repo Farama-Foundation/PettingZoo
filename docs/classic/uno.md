@@ -100,3 +100,11 @@ For example, you would use action `6` to put down a red "6" card or action `60` 
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
+
+### Arguments
+
+```
+uno.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
