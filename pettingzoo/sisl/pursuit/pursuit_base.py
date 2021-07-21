@@ -397,7 +397,7 @@ class Pursuit():
         ai = 0
         rems = 0
         xpur, ypur = np.nonzero(self.model_state[1])
-        purs_sur = np.zeros(self.n_pursuers, dtype=np.bool)
+        purs_sur = np.zeros(self.n_pursuers, dtype=bool)
         for i in range(self.n_evaders):
             if self.evaders_gone[i]:
                 continue
