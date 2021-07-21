@@ -163,8 +163,8 @@ def play_test(env, observation_0, num_cycles):
 
         if isinstance(env.observation_spaces[agent], gym.spaces.Box):
             assert env.observation_spaces[agent].dtype == prev_observe.dtype
-        if not env.observation_spaces[agent].contains(prev_observe):
-            print("Out of bounds observation: ", prev_observe)
+        assert env.observation_spaces[agent].contains(prev_observe), \
+            ("Out of bounds observation: " + str(prev_observe))
 
         assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
