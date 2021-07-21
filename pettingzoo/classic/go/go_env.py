@@ -101,7 +101,7 @@ class raw_env(AECEnv):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
 
-        observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+        observation = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
         action_mask = np.zeros((self._N * self._N) + 1, int)
