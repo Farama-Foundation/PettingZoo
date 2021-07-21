@@ -44,7 +44,7 @@ class raw_env(AECEnv):
         self.screen = None
 
         self.observation_spaces = self._convert_to_dict(
-            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
+            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=bool),
                           'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
              for _ in range(self.num_agents)])
 
@@ -52,8 +52,8 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
-        self.current_agent_planes_history = np.zeros((board_size, board_size, 8))
-        self.opponent_agent_planes_history = np.zeros((board_size, board_size, 8))
+        self.board_history = np.zeros((board_size, board_size, 8))
+        self.observation_history = np.zeros((board_size, board_size, 17))
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -69,16 +69,16 @@ class raw_env(AECEnv):
 
     def _encode_player_plane(self, agent):
         if agent == self.possible_agents[0]:
-            return np.zeros([self._N, self._N], dtype=np.bool)
+            return np.zeros([self._N, self._N], dtype=bool)
         else:
-            return np.ones([self._N, self._N], dtype=np.bool)
+            return np.ones([self._N, self._N], dtype=bool)
 
     def _encode_board_planes(self, agent):
         agent_factor = go.BLACK if agent == self.possible_agents[0] else go.WHITE
         current_agent_plane_idx = np.where(self._go.board == agent_factor)
         opponent_agent_plane_idx = np.where(self._go.board == -agent_factor)
-        current_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
-        opponent_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
+        current_agent_plane = np.zeros([self._N, self._N], dtype=bool)
+        opponent_agent_plane = np.zeros([self._N, self._N], dtype=bool)
         current_agent_plane[current_agent_plane_idx] = 1
         opponent_agent_plane[opponent_agent_plane_idx] = 1
         return current_agent_plane, opponent_agent_plane
@@ -102,10 +102,10 @@ class raw_env(AECEnv):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
 
-        self.current_agent_planes_history = np.dstack((current_agent_plane, self.current_agent_planes_history[:, :, :-1]))
-        self.opponent_agent_planes_history = np.dstack((opponent_agent_plane, self.opponent_agent_planes_history[:, :, :-1]))
+        self.board_history = np.dstack((current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2]))
 
-        observation = np.dstack((self.current_agent_planes_history, self.opponent_agent_planes_history, player_plane))
+        observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+        self.observation_history = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
         action_mask = np.zeros((self._N * self._N) + 1, int)
