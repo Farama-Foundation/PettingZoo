@@ -33,7 +33,7 @@ class raw_env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {name: spaces.Dict({
-            'observation': spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=np.bool),
+            'observation': spaces.Box(low=0, high=1, shape=(8, 8, 20), dtype=bool),
             'action_mask': spaces.Box(low=0, high=1, shape=(4672,), dtype=np.int8)
         }) for name in self.agents}
 
