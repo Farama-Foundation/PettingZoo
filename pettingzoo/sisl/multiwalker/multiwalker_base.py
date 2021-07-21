@@ -367,7 +367,7 @@ class MultiWalkerEnv():
         self.world.contactListener_bug_workaround = ContactDetector(self)
         self.world.contactListener = self.world.contactListener_bug_workaround
         self.game_over = False
-        self.fallen_walkers = np.zeros(self.n_walkers, dtype=np.bool)
+        self.fallen_walkers = np.zeros(self.n_walkers, dtype=bool)
         self.prev_shaping = np.zeros(self.n_walkers)
         self.prev_package_shaping = 0.0
         self.scroll = 0.0
