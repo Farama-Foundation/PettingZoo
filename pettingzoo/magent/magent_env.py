@@ -137,7 +137,7 @@ class magent_parallel_env(ParallelEnv):
         return {agent: float(rew) for agent, rew in zip(self.possible_agents, rewards) if agent in ret_agents}
 
     def _all_dones(self, step_done=False):
-        dones = np.ones(self.max_num_agents, dtype=np.bool)
+        dones = np.ones(self.max_num_agents, dtype=bool)
         if not step_done:
             for handle in self.handles:
                 ids = self.env.get_agent_id(handle)
