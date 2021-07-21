@@ -52,8 +52,7 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
-        self.board_history = np.zeros((board_size, board_size, 8))
-        self.observation_history = np.zeros((board_size, board_size, 17))
+        self.board_history = np.zeros((board_size, board_size, 16), dtype=bool)
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -102,10 +101,7 @@ class raw_env(AECEnv):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
 
-        self.board_history = np.dstack((current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2]))
-
         observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
-        self.observation_history = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
         action_mask = np.zeros((self._N * self._N) + 1, int)
@@ -119,6 +115,8 @@ class raw_env(AECEnv):
             return self._was_done_step(action)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
+        current_agent_plane, opponent_agent_plane = self._encode_board_planes(self.agent_selection)
+        self.board_history = np.dstack((current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2]))
         next_player = self._agent_selector.next()
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
