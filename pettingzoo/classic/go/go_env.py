@@ -52,7 +52,7 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
-        self.board_history = np.zeros((board_size, board_size, 16), dtype=bool)
+        self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -140,6 +140,7 @@ class raw_env(AECEnv):
         self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
         self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])
+        self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
     def render(self, mode='human'):
         screen_width = 1026
