@@ -44,7 +44,7 @@ class raw_env(AECEnv):
         self.screen = None
 
         self.observation_spaces = self._convert_to_dict(
-            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=bool),
+            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 17), dtype=bool),
                           'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
              for _ in range(self.num_agents)])
 
