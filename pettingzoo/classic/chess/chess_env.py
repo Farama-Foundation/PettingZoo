@@ -47,7 +47,7 @@ class raw_env(AECEnv):
 
     def observe(self, agent):
         observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
-        observation = np.dstack(observation[:, :, :7], self.board_history)
+        observation = np.dstack((observation[:, :, :7], self.board_history))
         legal_moves = chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
 
         action_mask = np.zeros(4672, int)
