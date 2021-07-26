@@ -25,7 +25,7 @@ class raw_env(RLCardBase):
     def __init__(self, opponents_hand_visible=False):
         self._opponents_hand_visible = opponents_hand_visible
         num_planes = 7 if self._opponents_hand_visible else 4
-        super().__init__("uno", (num_planes, 4, 15))
+        super().__init__("uno", 2, (num_planes, 4, 15))
 
     def observe(self, agent):
         obs = self.env.get_state(self._name_to_int(agent))
