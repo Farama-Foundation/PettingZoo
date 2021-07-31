@@ -13,7 +13,7 @@ class Zombie(pygame.sprite.Sprite):
     def __init__(self, randomizer):
         super().__init__()
         img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'zombie.png'))
+        self.image = pygame.image.load(os.path.join(img_path, 'zombie.png')).convert()
         self.rect = self.image.get_rect(center=(50, 50))
         self.randomizer = randomizer
 

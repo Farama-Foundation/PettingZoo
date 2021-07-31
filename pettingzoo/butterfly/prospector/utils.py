@@ -1,15 +1,12 @@
 import pygame as pg
 from pymunk import Vec2d
-
 import os
-import math
-
 from . import constants as const
 
 
 def load_image(path: list) -> pg.Surface:  # All images stored in data/
     cwd = os.path.dirname(__file__)
-    img = pg.image.load(os.path.join(cwd, "data", *path))
+    img = pg.image.load(os.path.join(cwd, "data", *path)).convert()
     sfc = pg.Surface(img.get_size(), flags=pg.SRCALPHA)
     sfc.blit(img, (0, 0))
     return sfc
