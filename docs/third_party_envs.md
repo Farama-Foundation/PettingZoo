@@ -1,4 +1,4 @@
-# StarCraft Multi-Agent Challenge
+## StarCraft Multi-Agent Challenge
 https://github.com/oxwhirl/smac
 
 Collection of widely used StarCraft2 based cooperative environments.
