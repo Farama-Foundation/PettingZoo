@@ -15,7 +15,7 @@ import pygame
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + '/' + path)
+    image = pygame.image.load(cwd + '/' + path).convert()
     return image
 
 
