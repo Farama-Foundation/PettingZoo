@@ -1,10 +1,10 @@
-StarCraft Multi-Agent Challenge
+# StarCraft Multi-Agent Challenge
 https://github.com/oxwhirl/smac
 
 Collection of widely used StarCraft2 based cooperative environments.
 
 
-Hearthstone Battlegrounds Simulator 
+# Hearthstone Battlegrounds Simulator 
 https://github.com/JDBumgardner/stone_ground_hearth_battles
 
 PettingZoo environment wrapper for Blizzard's Hearthstone game.
