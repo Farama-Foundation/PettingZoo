@@ -199,9 +199,9 @@ class raw_env(AECEnv):
         # Blit the necessary chips and their positions
         for i in range(0, size):
             for j in range(0, size):
-                if self._go.board[i][j] == -1:
+                if self._go.board[i][j] == go.BLACK:
                     self.screen.blit(black_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
-                elif self._go.board[i][j] == 1:
+                elif self._go.board[i][j] == go.WHITE:
                     self.screen.blit(white_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
 
         if mode == "human":
