@@ -2,6 +2,8 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 import os
+from .img import get_image
+
 
 ZOMBIE_Y_SPEED = 5
 ZOMBIE_X_SPEED = 30
@@ -12,8 +14,7 @@ class Zombie(pygame.sprite.Sprite):
 
     def __init__(self, randomizer):
         super().__init__()
-        img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'zombie.png')).convert()
+        self.image = get_image(os.path.join('img', 'zombie.png'))
         self.rect = self.image.get_rect(center=(50, 50))
         self.randomizer = randomizer
 

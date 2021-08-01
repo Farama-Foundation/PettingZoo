@@ -3,6 +3,8 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 import math
 import os
+from .img import get_image
+
 
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
@@ -20,8 +22,7 @@ class Arrow(pygame.sprite.Sprite):
     def __init__(self, archer):
         super().__init__()
         self.image = pygame.Surface([6, 6])
-        img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'arrow.png')).convert()
+        self.image = get_image(os.path.join('img', 'arrow.png'))
         self.archer = archer
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
@@ -54,8 +55,7 @@ class Sword(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
-        img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'mace.png')).convert()
+        self.image = get_image(os.path.join('img', 'mace.png'))
         self.knight = knight
         self.rect = self.image.get_rect(center=self.knight.rect.center)
         self.direction = self.knight.direction
