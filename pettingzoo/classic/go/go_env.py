@@ -13,8 +13,10 @@ def get_image(path):
     import pygame
     from os import path as os_path
     cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + '/' + path).load()
-    return image
+    image = pygame.image.load(cwd + '/' + path)
+    sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
+    sfc.blit(image, (0, 0))
+    return sfc
 
 
 def env(**kwargs):
