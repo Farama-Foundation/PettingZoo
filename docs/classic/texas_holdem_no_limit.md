@@ -55,3 +55,11 @@ The legal moves available to the current agent are found in the `action_mask` el
 | Winner          | Loser           |
 | :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
+
+### Arguments
+
+```
+texas_holdem_no_limit_v3.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
