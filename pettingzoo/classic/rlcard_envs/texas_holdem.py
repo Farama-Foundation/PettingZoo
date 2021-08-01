@@ -38,8 +38,8 @@ class raw_env(RLCardBase):
 
     metadata = {'render.modes': ['human', 'rgb_array'], "name": "texas_holdem_v3"}
 
-    def __init__(self):
-        super().__init__("limit-holdem", 2, (72,))
+    def __init__(self, num_players=2):
+        super().__init__("limit-holdem", num_players, (72,))
 
     def render(self, mode='human'):
 
