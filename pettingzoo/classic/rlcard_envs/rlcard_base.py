@@ -13,6 +13,7 @@ class RLCardBase(AECEnv):
     def __init__(self, name, num_players, obs_shape):
         super().__init__()
         self.name = name
+        self.num_players = num_players
         config = {'allow_step_back': False,
                   'seed': None,
                   'game_num_players': num_players}
@@ -38,7 +39,10 @@ class RLCardBase(AECEnv):
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.num_actions) for _ in range(self.num_agents)])
 
     def seed(self, seed=None):
-        self.env = rlcard.make(self.name, config={"seed": seed})
+        config = {'allow_step_back': False,
+                  'seed': seed,
+                  'game_num_players': self.num_players}
+        self.env = rlcard.make(self.name, config)
 
     def _scale_rewards(self, reward):
         print('scale rewards: ', reward)
