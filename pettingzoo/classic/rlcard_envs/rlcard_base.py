@@ -45,7 +45,6 @@ class RLCardBase(AECEnv):
         self.env = rlcard.make(self.name, config)
 
     def _scale_rewards(self, reward):
-        print('scale rewards: ', reward)
         return reward
 
     def _int_to_name(self, ind):
@@ -55,7 +54,6 @@ class RLCardBase(AECEnv):
         return self.possible_agents.index(name)
 
     def _convert_to_dict(self, list_of_list):
-        print(list_of_list)
         return dict(zip(self.possible_agents, list_of_list))
 
     def observe(self, agent):
