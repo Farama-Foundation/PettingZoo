@@ -15,11 +15,6 @@ from gym.utils import EzPickle
 KERNEL_WINDOW_LENGTH = 2
 
 
-def get_image(path):
-    image = pygame.image.load(path)
-    return image
-
-
 def deg_to_rad(deg):
     return deg * np.pi / 180
 
@@ -133,8 +128,7 @@ class PaddleSprite(pygame.sprite.Sprite):
 
 
 class BallSprite(pygame.sprite.Sprite):
-    def __init__(self, randomizer, dims, speed, bounce_randomness=False):  # def __init__(self, image, speed):
-        # self.surf = get_image(image)
+    def __init__(self, randomizer, dims, speed, bounce_randomness=False):
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed_val = speed

@@ -4,6 +4,7 @@ import pygame
 import math
 import os
 from .weapons import Arrow, Sword
+from .img import get_image
 
 WIDTH = 1280
 HEIGHT = 720
@@ -18,8 +19,7 @@ class Archer(pygame.sprite.Sprite):
 
     def __init__(self, agent_name):
         super().__init__()
-        img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'archer.png'))
+        self.image = get_image(os.path.join('img', 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
         self.org_image = self.image.copy()
         self.angle = 0
@@ -79,8 +79,7 @@ class Archer(pygame.sprite.Sprite):
 class Knight(pygame.sprite.Sprite):
     def __init__(self, agent_name):
         super().__init__()
-        img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'img'))
-        self.image = pygame.image.load(os.path.join(img_path, 'knight.png'))
+        self.image = get_image(os.path.join('img', 'knight.png'))
         self.rect = self.image.get_rect(center=(KNIGHT_X, KNIGHT_Y))
         self.org_image = self.image.copy()
         self.angle = 0
