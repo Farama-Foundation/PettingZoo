@@ -74,6 +74,6 @@ last_reward(extra_features=True)| 1
 ### Version History
 
 * v3: Fixed bugs and changed default parameters (1.7.0)
-* v2: Added new arguments (1.4.2)
+* v2: Added new arguments, changes to rewards (1.4.2)
 * v1: Observation space fixes (1.4.0)
 * v0: Initial versions release (1.0.0)

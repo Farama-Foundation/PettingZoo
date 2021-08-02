@@ -103,7 +103,7 @@ last_reward(extra_features=True)| 1
 
 * v5: Fixed observation space order (1.9.0)
 * v4: Fixed bugs and changed default parameters (1.7.0)
-* v3: Added new arguments (1.4.2)
+* v3: Added new arguments, fixes to observation space, changes to rewards (1.4.2)
 * v2: Observation space fixes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
