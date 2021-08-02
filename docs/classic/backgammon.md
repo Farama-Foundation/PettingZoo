@@ -111,3 +111,10 @@ The winner is the first player to remove all of their checkers from the board.
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
+
+### Version History
+
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped version of all environments due to breaking API changes (1.4.0)
+* v1: ???
+* v0: Initial versions release (1.0.0)

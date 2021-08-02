@@ -7,12 +7,19 @@ action-shape: "Discrete(4)"
 action-values: "Discrete(4)"
 observation-shape: "(72,)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import texas_holdem_v3"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 {% include info_box.md %}
 
+### Arguments
+
+```
+texas_holdem_no_limit_v4.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
 
 
 Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.
@@ -56,10 +63,10 @@ The legal moves available to the current agent are found in the `action_mask` el
 | :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
 
-### Arguments
+### Version History
 
-```
-texas_holdem_no_limit_v3.env(num_players=2)
-```
-
-`num_players`: Sets the number of players in the game. Minimum is 2.
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)

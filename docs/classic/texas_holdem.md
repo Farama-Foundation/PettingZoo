@@ -7,17 +7,23 @@ action-shape: "Discrete(103)"
 action-values: "Discrete(103)"
 observation-shape: "(54,)"
 observation-values: "[0, 100]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v3"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 {% include info_box.md %}
 
-
-
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+### Arguments
+
+```
+texas_holdem_v4.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
 
 ### Observation Space
 
@@ -53,10 +59,10 @@ The legal moves available to the current agent are found in the `action_mask` el
 | :-------------: | :-------------: |
 | +raised chips/2 | -raised chips/2 |
 
-### Arguments
+### Version History
 
-```
-texas_holdem_v3.env(num_players=2)
-```
-
-`num_players`: Sets the number of players in the game. Minimum is 2.
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)

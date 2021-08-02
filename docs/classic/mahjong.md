@@ -7,7 +7,7 @@ action-shape: "Discrete(38)"
 action-values: "Discrete(38)"
 observation-shape: "(6, 34, 4)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import mahjong_v3"
+import: "from pettingzoo.classic import mahjong_v4"
 agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 ---
 {% include info_box.md %}
@@ -90,3 +90,11 @@ For example, you would use action `34` to pong or action `37` to stand.
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)

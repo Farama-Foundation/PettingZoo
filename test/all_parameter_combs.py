@@ -24,17 +24,17 @@ parameterized_envs = [
 
     (space_invaders_v1.env, dict(alternating_control=True, moving_shields=True, zigzaging_bombs=True, fast_bomb=True, invisible_invaders=True)),
 
-    (leduc_holdem_v3.env, dict(num_players=2)),
-    (leduc_holdem_v3.env, dict(num_players=3)),
-    (leduc_holdem_v3.env, dict(num_players=4)),
+    (leduc_holdem_v4.env, dict(num_players=2)),
+    (leduc_holdem_v4.env, dict(num_players=3)),
+    (leduc_holdem_v4.env, dict(num_players=4)),
 
-    (texas_holdem_v3.env, dict(num_players=2)),
-    (texas_holdem_v3.env, dict(num_players=3)),
-    (texas_holdem_v3.env, dict(num_players=4)),
+    (texas_holdem_v4.env, dict(num_players=2)),
+    (texas_holdem_v4.env, dict(num_players=3)),
+    (texas_holdem_v4.env, dict(num_players=4)),
 
-    (texas_holdem_no_limit_v3.env, dict(num_players=2)),
-    (texas_holdem_no_limit_v3.env, dict(num_players=3)),
-    (texas_holdem_no_limit_v3.env, dict(num_players=4)),
+    (texas_holdem_no_limit_v4.env, dict(num_players=2)),
+    (texas_holdem_no_limit_v4.env, dict(num_players=3)),
+    (texas_holdem_no_limit_v4.env, dict(num_players=4)),
 
     (knights_archers_zombies_v7.env, dict(spawn_rate=50)),
     (knights_archers_zombies_v7.env, dict(num_knights=4, num_archers=5)),
@@ -68,8 +68,8 @@ parameterized_envs = [
                              prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
                              banker_deposit_gold_reward=1, max_cycles=900)),
 
-    (go_v4.env, dict(board_size=13, komi=2.5)),
-    (go_v4.env, dict(board_size=9, komi=0.)),
+    (go_v5.env, dict(board_size=13, komi=2.5)),
+    (go_v5.env, dict(board_size=9, komi=0.)),
 
     (hanabi_v4.env, dict(colors=3)),
     (hanabi_v4.env, dict(ranks=3)),
