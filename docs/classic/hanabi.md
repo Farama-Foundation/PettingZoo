@@ -127,3 +127,12 @@ Blue 1, Blue 2, Red 1, Green 1, Green 2, Green 3
 At the end of the game, the total score would be 2 + 1 + 3 = 6
 
 If an illegal action is taken, the game terminates and the one player that took the illegal action loses. Like an ordinary loss, their final reward will be the negation of all reward received so far. The reward of the other players will not be affected by the illegal action.
+
+
+### Version History
+
+* v4: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v3: Fixed default parameters (1.4.2)
+* v2: Bumped version of all environments due to breaking API changes (1.4.0)
+* v1: ???
+* v0: Initial versions release (1.0.0)

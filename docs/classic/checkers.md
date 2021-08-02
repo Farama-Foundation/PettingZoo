@@ -61,3 +61,11 @@ When an action is chosen, the environment automatically decides whether the prov
 |   +1   |  -1   |
 
 In the event of a tie, both players receive a reward of 0.
+
+
+### Version History
+
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped version of all environments due to breaking API changes (1.4.0)
+* v1: ???
+* v0: Initial versions release (1.0.0)

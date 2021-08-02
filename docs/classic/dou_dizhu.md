@@ -7,7 +7,7 @@ action-shape: "Discrete(27472)"
 action-values: "Discrete(27472)"
 observation-shape: "(901,),(790,)"
 observation-values: "[0,1]"
-import: "from pettingzoo.classic import dou_dizhu_v3"
+import: "from pettingzoo.classic import dou_dizhu_v4"
 agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 
@@ -24,7 +24,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and yo
 ### Arguments
 
 ```
-dou_dizhu_v3.env(opponents_hand_visible=False)
+dou_dizhu_v4.env(opponents_hand_visible=False)
 ```
 
 `opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands.
@@ -124,3 +124,11 @@ We modified the reward structure compared to RLCard. Instead of rewarding `0` to
 | Winner | Loser |
 | :----: | :---: |
 | +1     |   -1  |
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (major changes to observation and action space) (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)
