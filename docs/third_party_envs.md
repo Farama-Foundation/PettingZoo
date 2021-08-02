@@ -29,10 +29,9 @@ Collection of prisoner's dilemma games as pettingzoo environments
 
 
 ## Caroline's Ant Thing
-[add]
+https://github.com/chorsch/ants
 
-[add]
-
+Simplified simulation of an ant colony
 
 ## Generalized Rock Paper Scissors
 https://github.com/afozk95/PettingZoo/tree/add_generalized_rps
