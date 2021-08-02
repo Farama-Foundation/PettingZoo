@@ -28,7 +28,7 @@ extras = {
     "butterfly": ["pygame==2.0.0", "pymunk==6.0.0"],
     "magent": ["magent==0.1.14"],
     "mpe": ["pyglet>=1.4.0"],
-    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5"],
+    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "pyglet>=1.4.0"],
     "tests": ["pynput"]
 }
 
