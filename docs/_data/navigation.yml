@@ -1,12 +1,18 @@
 nav:
-  - title: "APi"
+  - title: "GitHub"
+    url: "https://github.com/PettingZoo-Team/PettingZoo"
+
+  - title: "API"
     url: "/api"
+
+  - title: "Environment Creation"
+    url: "environment_creation"
 
   - title: "Environments"
     url: "/envs"
 
-  - title: "Github"
-    url: "https://github.com/PettingZoo-Team/PettingZoo"
+  - title: "Tutorials"
+    url: "/tutorials"
 
-  - title: "Dev Docs"
-    url: "/dev_docs"
+  - title: "Third Party Environments"
+    url: "/third_party_environments"
