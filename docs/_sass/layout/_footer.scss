@@ -1,11 +1,12 @@
 // Styling for the footer
 .footer {
   padding: 25px 0;
-  text-align: center;
+  text-align: left;
   span.copyright {
     font-size: 90%;
     line-height: 40px;
     text-transform: none;
+    margin-top: 98%;
     @include heading-font;
   }
   ul.quicklinks {
