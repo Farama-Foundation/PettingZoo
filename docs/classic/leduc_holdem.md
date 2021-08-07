@@ -8,7 +8,7 @@ action-values: "Discrete(4)"
 observation-shape: "(36,)"
 observation-values: "[0, 1]"
 num-states: "10^2"
-import: "from pettingzoo.classic import leduc_holdem_v3"
+import: "from pettingzoo.classic import leduc_holdem_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -20,6 +20,13 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+### Arguments
+
+```
+leduc_holdem_v4.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
 
 ### Observation Space
 
@@ -53,3 +60,12 @@ The legal moves available to the current agent are found in the `action_mask` el
 |      Winner       |       Loser       |
 | :---------------: | :---------------: |
 | +raised chips / 2 | -raised chips / 2 |
+
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)

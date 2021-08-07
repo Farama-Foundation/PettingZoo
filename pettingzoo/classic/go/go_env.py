@@ -14,7 +14,9 @@ def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
-    return image
+    sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
+    sfc.blit(image, (0, 0))
+    return sfc
 
 
 def env(**kwargs):
@@ -27,7 +29,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v4"}
+    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v5"}
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
@@ -44,13 +46,15 @@ class raw_env(AECEnv):
         self.screen = None
 
         self.observation_spaces = self._convert_to_dict(
-            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 3), dtype=np.bool),
+            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 17), dtype=bool),
                           'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
              for _ in range(self.num_agents)])
 
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
 
         self._agent_selector = agent_selector(self.agents)
+
+        self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
@@ -66,16 +70,16 @@ class raw_env(AECEnv):
 
     def _encode_player_plane(self, agent):
         if agent == self.possible_agents[0]:
-            return np.zeros([self._N, self._N], dtype=np.bool)
+            return np.zeros([self._N, self._N], dtype=bool)
         else:
-            return np.ones([self._N, self._N], dtype=np.bool)
+            return np.ones([self._N, self._N], dtype=bool)
 
     def _encode_board_planes(self, agent):
         agent_factor = go.BLACK if agent == self.possible_agents[0] else go.WHITE
         current_agent_plane_idx = np.where(self._go.board == agent_factor)
         opponent_agent_plane_idx = np.where(self._go.board == -agent_factor)
-        current_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
-        opponent_agent_plane = np.zeros([self._N, self._N], dtype=np.bool)
+        current_agent_plane = np.zeros([self._N, self._N], dtype=bool)
+        opponent_agent_plane = np.zeros([self._N, self._N], dtype=bool)
         current_agent_plane[current_agent_plane_idx] = 1
         opponent_agent_plane[opponent_agent_plane_idx] = 1
         return current_agent_plane, opponent_agent_plane
@@ -98,7 +102,8 @@ class raw_env(AECEnv):
     def observe(self, agent):
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(agent)
         player_plane = self._encode_player_plane(agent)
-        observation = np.dstack((current_agent_plane, opponent_agent_plane, player_plane))
+
+        observation = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
         action_mask = np.zeros((self._N * self._N) + 1, int)
@@ -112,6 +117,8 @@ class raw_env(AECEnv):
             return self._was_done_step(action)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
+        current_agent_plane, opponent_agent_plane = self._encode_board_planes(self.agent_selection)
+        self.board_history = np.dstack((current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2]))
         next_player = self._agent_selector.next()
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
@@ -135,6 +142,7 @@ class raw_env(AECEnv):
         self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
         self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])
+        self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
     def render(self, mode='human'):
         screen_width = 1026
@@ -193,9 +201,9 @@ class raw_env(AECEnv):
         # Blit the necessary chips and their positions
         for i in range(0, size):
             for j in range(0, size):
-                if self._go.board[i][j] == -1:
+                if self._go.board[i][j] == go.BLACK:
                     self.screen.blit(black_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
-                elif self._go.board[i][j] == 1:
+                elif self._go.board[i][j] == go.WHITE:
                     self.screen.blit(white_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
 
         if mode == "human":

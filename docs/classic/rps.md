@@ -90,3 +90,9 @@ The action space is a scalar value with n possible values, where n is the number
 | +1     | -1    |
 
 If the game ends in a draw, both players will receive a reward of 0.
+
+### Version History
+
+* v2: Merge RPS and rock paper lizard scissors spock environments, add num_actions and max_cycles arguments (1.9.0)
+* v1: Bumped version of all environments due to breaking API changes (1.4.0)
+* v0: Initial versions release (1.0.0)

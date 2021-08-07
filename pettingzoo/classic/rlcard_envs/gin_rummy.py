@@ -25,7 +25,7 @@ def env(**kwargs):
 
 class raw_env(RLCardBase, EzPickle):
 
-    metadata = {'render.modes': ['human'], "name": "gin_rummy_v3"}
+    metadata = {'render.modes': ['human'], "name": "gin_rummy_v4"}
 
     def __init__(self, knock_reward: float = 0.5, gin_reward: float = 1.0, opponents_hand_visible=False):
         EzPickle.__init__(self, knock_reward, gin_reward)
