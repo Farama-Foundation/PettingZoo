@@ -1,7 +1,7 @@
 <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-side" id="mainNav">
+  <nav class="navbar navbar-expand-lg fixed-side" id="mainNav">
     <div class="container">
-	  <a class="navbar-brand js-scroll-trigger" href="{{ site.baseurl }}/#">
+	  <a class="navbar-brand" href="{{ site.baseurl }}/#">
           {%- if site.logo -%}
             <!-- <img height="{{ site.logo.height | default: 52 }}" src="{{ site.logo.path }}"/> -->
             <img height="216px" src="{{ site.logo.path }}"/>
@@ -14,17 +14,37 @@
       </div>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase">
-		{%- for link in site.data.navigation.nav -%}
-		  <li class="nav-item">
-		  {%- if link.url -%}
-		    <a class="nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
-		  {%- else if link.section -%}
-		    <a class="nav-link js-scroll-trigger" href="{{ site.baseurl }}/#{{ link.section }}">{{ link.title }}</a>
-		  {%- else -%}
-		    <a class="nav-link js-scroll-trigger" href="#">{{ link.title }}</a>
-		  {%- endif -%}
+        {%- for link in site.data.navigation.nav -%}
+          <li class="nav-item">
+          {%- if link.url -%}
+            <a class="nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
+            {%- if link.sublinks -%}
+              <img class="navbar-arrow" height="20px" src="{{ site.data.img.nav.arrow }}"/>
+            {%- endif -%}
+            <ul class="nav-submenu text-uppercase">
+              {%- for sublink in link.sublinks -%}
+              <li class="nav-subitem nav-item">
+                <a class="nav-link js-scroll-trigger" href="{{ sublink.url }}">{{ sublink.title }}</a>
+                {%- if sublink.subsublinks -%}
+                  <img class="navbar-arrow" height="20px" src="{{ site.data.img.nav.arrow }}"/>
+                {%- endif -%}
+                <ul class="nav-subsubmenu text-uppercase">
+                {%- for subsublink in sublink.subsublinks -%}
+                  <li class="nav-subsubitem nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                  </li>
+                {%- endfor -%}
+                </ul>
+              </li>
+              {%- endfor -%}
+            </ul>
+          {%- else if link.section -%}
+            <a class="nav-link js-scroll-trigger" href="{{ site.baseurl }}/#{{ link.section }}">{{ link.title }}</a>
+          {%- else -%}
+            <a class="nav-link js-scroll-trigger" href="#">{{ link.title }}</a>
+          {%- endif -%}
           </li>
-		{% endfor %}
+        {% endfor %}
         </ul>
       </div>
       
