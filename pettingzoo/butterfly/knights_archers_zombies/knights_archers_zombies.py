@@ -16,13 +16,7 @@ from gym.utils import seeding
 from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-
-def get_image(path):
-    from os import path as os_path
-    cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + '/' + path)
-    return image
+from .src.img import get_image
 
 
 def env(**kwargs):

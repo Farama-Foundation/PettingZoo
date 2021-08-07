@@ -21,7 +21,9 @@ def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
-    return image
+    sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
+    sfc.blit(image, (0, 0))
+    return sfc
 
 
 def env(**kwargs):
@@ -152,8 +154,9 @@ class raw_env(AECEnv, EzPickle):
         state = np.fliplr(state)
         return state
 
-    def enable_render(self):
+    def enable_render(self, mode):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))
         self.draw_background()
@@ -372,12 +375,16 @@ class raw_env(AECEnv, EzPickle):
         return local_reward
 
     def render(self, mode="human"):
-        if not self.renderOn:
+        if mode == 'human' and not self.renderOn:
             # sets self.renderOn to true and initializes display
-            self.enable_render()
+            self.enable_render
+
+        self.draw_background()
+        self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        pygame.display.flip()
+        if mode == 'human':
+            pygame.display.flip()
         return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def step(self, action):
