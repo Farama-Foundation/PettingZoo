@@ -3922,6 +3922,10 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     /* padding: .5rem 1rem */
 }
 
+.api-navbar {
+    padding: 0rem 2rem;
+}
+
 .navbar>.container, .navbar>.container-fluid {
     display: -ms-flexbox;
     display: block;
@@ -3956,6 +3960,13 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     margin-bottom: 25px;
     margin-left: 50px;
 }
+
+.api-navbar-nav {
+    margin-top: 0px!important;
+    background-color: rgba(0, 0, 0, 0)!important;
+}
+
+
 
 .navbar-nav {
     display: -ms-flexbox;
@@ -4021,6 +4032,10 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     background: #eee;   
 }  
 
+.navbar-collapse .api-navbar-nav li {
+    background: #fff;   
+}  
+
 .navbar-collapse ul ul {  
     position: absolute;  
     visibility: hidden;
@@ -4042,6 +4057,20 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 .navbar-collapse li li:hover ul {
     visibility: visible;
 }
+
+.api-collapse {
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.api-collapse li {  
+    list-style: none;  
+    position: relative;
+}  
 
 .navbar-arrow {
     position: absolute;
@@ -7578,7 +7607,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     color: white;
 }
 
-.fixed-side {
+.fixed-left {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -7586,6 +7615,16 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     width: 19%;
     z-index: 1030
 }
+
+.fixed-right {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 24%;
+    z-index: 1030
+}
+
 
 .fixed-margin {
     left: 20%;
@@ -7619,12 +7658,21 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 
 @media (min-width:1440px) {
-    .fixed-side {
+    .fixed-left {
         position: fixed;
         left: 0;
         bottom: 0;
         top: 0;
         width: 267px;
+        z-index: 1030
+    }
+
+    .fixed-right {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 341px;
         z-index: 1030
     }
 

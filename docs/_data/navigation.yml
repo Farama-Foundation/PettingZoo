@@ -6,46 +6,46 @@ nav:
     url: "/api"
     sublinks:
       - title: "Initializing Environments"
-        url: "/initializing_environments"
+        url: "/api#initializing-environments"
 
       - title: "Interacting With Environments"
-        url: "/interacting_with_environments"
+        url: "/api#interacting-with-environments"
 
       - title: "Additional Environment API"
-        url: "/additional_environment_api"
+        url: "/api#additional-environment-api"
 
       - title: "Notable Idioms"
-        url: "/notable_idioms"
+        url: "/api#notable-idioms"
 
       - title: "Raw Environments"
-        url: "/raw_env"
+        url: "/api#raw-environments"
 
       - title: "Parallel API"
-        url: "/parallel_api"
+        url: "/api#parallel-api"
 
       - title: "SuperSuit"
-        url: "/supersuit"
+        url: "/api#supersuit"
 
       - title: "Utils"
-        url: "/utils"
+        url: "/api#utils"
 
   - title: "Environment Creation"
     url: "/environment_creation"
     sublinks:
       - title: "Example Custom Environment"
-        url: "/example_custom_environment"
+        url: "/environment_creation#example-custom-environment"
 
       - title: "Example Custom Parallel Environment"
-        url: "/example_custom_parallel_environment"
+        url: "/environment_creation#example-custom-parallel-environment"
 
       - title: "Wrappers"
-        url: "/wrappers"
+        url: "/environment_creation#wrappers"
 
       - title: "Developer Utils"
-        url: "/developer_utils"
+        url: "/environment_creation#developer-utils"
 
       - title: "Tests"
-        url: "/tests"
+        url: "/environment_creation#tests"
 
   - title: "Environments"
     url: "/envs"
@@ -245,21 +245,43 @@ nav:
   - title: "Third Party Environments"
     url: "/third_party_environments"
 
-Environments:
-  - title: "Atari"
-    url: "/atari"
+api:
+  - title: "Initializing Environments"
+    url: "/api#initializing-environments"
 
-  - title: "Butterfly"
-    url: "/butterly"
+  - title: "Interacting With Environments"
+    url: "/api#interacting-with-environments"
 
-  - title: "Classic"
-    url: "/classic"
+  - title: "Additional Environment API"
+    url: "/api#additional-environment-api"
 
-  - title: "MAgent"
-    url: "/magent"
+  - title: "Notable Idioms"
+    url: "/api#notable-idioms"
 
-  - title: "MPE"
-    url: "/mpe"
+  - title: "Raw Environments"
+    url: "/api#raw-environments"
 
-  - title: "SISL"
-    url: "/sisl"
+  - title: "Parallel API"
+    url: "/api#parallel-api"
+
+  - title: "SuperSuit"
+    url: "/api#supersuit"
+
+  - title: "Utils"
+    url: "/api#utils"
+
+environment_creation:
+      - title: "Example Custom Environment"
+        url: "/environment_creation#example-custom-environment"
+
+      - title: "Example Custom Parallel Environment"
+        url: "/environment_creation#example-custom-parallel-environment"
+
+      - title: "Wrappers"
+        url: "/environment_creation#wrappers"
+
+      - title: "Developer Utils"
+        url: "/environment_creation#developer-utils"
+
+      - title: "Tests"
+        url: "/environment_creation#tests"
