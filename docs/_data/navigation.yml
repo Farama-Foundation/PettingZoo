@@ -4,15 +4,262 @@ nav:
 
   - title: "API"
     url: "/api"
+    sublinks:
+      - title: "Initializing Environments"
+        url: "/initializing_environments"
+
+      - title: "Interacting With Environments"
+        url: "/interacting_with_environments"
+
+      - title: "Additional Environment API"
+        url: "/additional_environment_api"
+
+      - title: "Notable Idioms"
+        url: "/notable_idioms"
+
+      - title: "Raw Environments"
+        url: "/raw_env"
+
+      - title: "Parallel API"
+        url: "/parallel_api"
+
+      - title: "SuperSuit"
+        url: "/supersuit"
+
+      - title: "Utils"
+        url: "/utils"
 
   - title: "Environment Creation"
-    url: "environment_creation"
+    url: "/environment_creation"
+    sublinks:
+      - title: "Example Custom Environment"
+        url: "/example_custom_environment"
+
+      - title: "Example Custom Parallel Environment"
+        url: "/example_custom_parallel_environment"
+
+      - title: "Wrappers"
+        url: "/wrappers"
+
+      - title: "Developer Utils"
+        url: "/developer_utils"
+
+      - title: "Tests"
+        url: "/tests"
 
   - title: "Environments"
     url: "/envs"
+    sublinks:
+      - title: "Atari"
+        url: "/atari"
+        subsublinks:
+          - title: "Basketball Pong"
+            url: "/atari/basketball_pong"
+            
+          - title: "Boxing"
+            url: "/atari/boxing"
+
+          - title: "Combat: Plane"
+            url: "/atari/combat_plane"
+
+          - title: "Combat: Tank"
+            url: "/atari/combat_tank"
+
+          - title: "Double Dunk"
+            url: "/atari/double_dunk"
+            
+          - title: "Entombed: Competitive"
+            url: "/atari/entombed_competitive"
+
+          - title: "Entombed: Cooperative"
+            url: "/atari/entombed_cooperative"
+
+          - title: "Flag Capture"
+            url: "/atari/flag_capture"
+
+          - title: "Foozpong"
+            url: "/atari/foozpong"
+            
+          - title: "Ice Hockey"
+            url: "/atari/ice_hockey"
+
+          - title: "Joust"
+            url: "/atari/joust"
+
+          - title: "Mario Bros"
+            url: "/atari/mario_bros"
+
+          - title: "Maze Craze"
+            url: "/atari/maze_craze"
+            
+          - title: "Othello"
+            url: "/atari/othello"
+
+          - title: "Pong"
+            url: "/atari/pong"
+
+          - title: "Quadrapong"
+            url: "/atari/quadrapong"
+          
+          - title: "Space Invaders"
+            url: "/atari/space_invaders"
+            
+          - title: "Space War"
+            url: "/atari/space_war"
+
+          - title: "Surround"
+            url: "/atari/surround"
+
+          - title: "Tennis"
+            url: "/atari/tennis"
+
+          - title: "Video Checkers"
+            url: "/atari/video_checkers"
+            
+          - title: "Volleyball Pong"
+            url: "/atari/volleyball_pong"
+
+          - title: "Warlords"
+            url: "/atari/warlords"
+
+          - title: "Wizard of Wor"
+            url: "/atari/wizard_of_wor"
+
+      - title: "Butterfly"
+        url: "/butterfly"
+        subsublinks:
+          - title: "Cooperative Pong"
+            url: "/butterfly/cooperative_pong"
+            
+          - title: "Knights Archers Zombies ('KAZ')"
+            url: "/butterfly/knights_archers_zombies"
+
+          - title: "Pistonball"
+            url: "/butterfly/pistonball"
+            
+          - title: "Prison"
+            url: "/butterfly/prison"
+            
+          - title: "Prospector"
+            url: "/butterfly/prospector"
+
+      - title: "Classic"
+        url: "/classic"
+        subsublinks:
+          - title: "Backgammon"
+            url: "/classic/backgammon"
+            
+          - title: "Checkers"
+            url: "/classic/checkers"
+
+          - title: "Chess"
+            url: "/classic/chess"
+            
+          - title: "Connect Four"
+            url: "/classic/connect_four"
+            
+          - title: "Dou Dizhu"
+            url: "/classic/dou_dizhu"
+          
+          - title: "Gin Rummy"
+            url: "/classic/gin_rummy"
+
+          - title: "Go"
+            url: "/classic/go"
+
+          - title: "Hanabi"
+            url: "/classic/hanabi"
+
+          - title: "Leduc Hold'em"
+            url: "/classic/leduc_holdem"
+
+          - title: "Mahjong"
+            url: "/classic/dou_dizhu"
+
+          - title: "Rock Paper Scissors"
+            url: "/classic/rps"
+
+      - title: "MAgent"
+        url: "/magent"
+        subsublinks:
+          - title: "Adversarial Pursuit"
+            url: "/magent/adversarial_pursuit"
+
+          - title: "Battle"
+            url: "/magent/battle"
+
+          - title: "Battlefield"
+            url: "/magent/battlefield"
+
+          - title: "Combined Arms"
+            url: "/magent/combined_arms"
+
+          - title: "Gather"
+            url: "/magent/gather"
+
+          - title: "Tiger-Deer"
+            url: "/magent/tiger_deer"
+
+      - title: "MPE"
+        url: "/mpe"
+        subsublinks:
+          - title: "Simple"
+            url: "/mpe/simple"
+
+          - title: "Simple Adversary"
+            url: "/mpe/simple_adversary"
+
+          - title: "Simple Crypto"
+            url: "/mpe/simple_crypto"
+
+          - title: "Simple Push"
+            url: "/mpe/simple_push"
+
+          - title: "Simple Speaker Listener"
+            url: "/mpe/simple_speaker_listener"
+
+          - title: "Simple Spread"
+            url: "/mpe/simple_spread"
+
+          - title: "Simple Tag"
+            url: "/mpe/simple_tag"
+
+          - title: "Simple World Comm"
+            url: "/mpe/simple_world_comm"
+
+      - title: "SISL"
+        url: "/sisl"
+        subsublinks:
+          - title: "Multiwalker"
+            url: "/sisl/multiwalker"
+
+          - title: "Pursuit"
+            url: "/sisl/pursuit"
+
+          - title: "Waterworld"
+            url: "/sisl/waterworld"
 
   - title: "Tutorials"
     url: "/tutorials"
 
   - title: "Third Party Environments"
     url: "/third_party_environments"
+
+Environments:
+  - title: "Atari"
+    url: "/atari"
+
+  - title: "Butterfly"
+    url: "/butterly"
+
+  - title: "Classic"
+    url: "/classic"
+
+  - title: "MAgent"
+    url: "/magent"
+
+  - title: "MPE"
+    url: "/mpe"
+
+  - title: "SISL"
+    url: "/sisl"

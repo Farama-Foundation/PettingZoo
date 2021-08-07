@@ -564,6 +564,7 @@ pre code {
     margin-left: auto;
     margin-right: auto;
     border-style: none;
+    margin-bottom: 5%;
 }
 
 .no-gutters {
@@ -1203,7 +1204,6 @@ pre code {
         max-width: 91.666667%
     }
     .col-lg-12 {
-        padding-top: 5%;
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
         max-width: 100%
@@ -3918,7 +3918,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     align-items: center;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    background: linear-gradient(20deg, rgba(48,97,255,1) 0%, rgba(228,86,124,1) 90%, rgba(235,107,91,1) 100%);
+    background: linear-gradient(30deg, rgba(48,97,255,1) 0%, rgba(228,86,124,1) 90%, rgba(235,107,91,1) 100%);
     /* padding: .5rem 1rem */
 }
 
@@ -3992,6 +3992,61 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     flex-grow: 1;
     -ms-flex-align: center;
     align-items: center
+}
+   
+.navbar-collapse li {  
+    list-style: none;  
+    position: relative;
+}  
+
+.navbar-collapse li li {  
+    list-style: none;  
+    position: relative;
+    background: #fff;  
+    left: 227px;
+    top: -52.96px;
+    width: 267px;
+}
+
+.navbar-collapse li li li{  
+    list-style: none;  
+    position: relative;
+    background: #fff;  
+    left: 227px;
+    width: 267px;
+    top: -52.96px;
+}
+
+.navbar-collapse ul li:hover {
+    background: #eee;   
+}  
+
+.navbar-collapse ul ul {  
+    position: absolute;  
+    visibility: hidden;
+}  
+
+.navbar-collapse ul li:hover ul {  
+    visibility: visible;
+}
+
+.navbar-collapse ul ul ul {
+    position: absolute;
+    visibility: hidden;
+}
+
+.navbar-collapse li:hover ul ul {
+    visibility: hidden;
+}
+
+.navbar-collapse li li:hover ul {
+    visibility: visible;
+}
+
+.navbar-arrow {
+    position: absolute;
+    top: 16.465px;
+    right: 0;
 }
 
 .navbar-toggler {
@@ -7535,6 +7590,33 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 .fixed-margin {
     left: 20%;
 }
+
+.purple_rectangle {
+    background: #BA90F9;
+    padding-bottom: .5em;
+}
+
+.usage {
+    padding-top: 2%;
+}
+   
+.divMenu ul  
+{  
+     line-height: 25px;  
+}  
+    .divMenu ul ul {  
+        position: absolute;  
+        visibility: hidden;  
+        top: 27px;  
+    }  
+   
+    .divMenu ul li:hover ul {  
+        visibility: visible;  
+    }  
+   
+    .divMenu a:hover {
+        font-weight: bold;  
+    }
 
 @media (min-width:1440px) {
     .fixed-side {
