@@ -90,6 +90,6 @@ For example, you would use action `4` to place a stone on the board at the (0,3)
 * v5: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
 * v4: Fixed bug in how black and white pieces were saved in observation space (1.10.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
-* v2: Bumped version of all environments due to breaking API changes (1.4.0)
-* v1: ???
+* v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
