@@ -129,6 +129,6 @@ We modified the reward structure compared to RLCard. Instead of rewarding `0` to
 
 * v4: Upgrade to RLCard 1.0.3 (major changes to observation and action space) (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
-* v2: Bumped RLCard version, bug fixes (1.5.0)
-* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
