@@ -7,7 +7,7 @@ action-shape: "Discrete(362)"
 action-values: "Discrete(362)"
 observation-shape: "(19, 19, 3)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import go_v4"
+import: "from pettingzoo.classic import go_v5"
 agent-labels: "agents= ['black_0', 'white_0']"
 ---
 
@@ -24,7 +24,7 @@ Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minig
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
 ```
-go_v4.env(board_size = 19, komi = 7.5)
+go_v5.env(board_size = 19, komi = 7.5)
 ```
 
 `board_size`: The length of each size of the board.
@@ -84,3 +84,12 @@ For example, you would use action `4` to place a stone on the board at the (0,3)
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
+
+### Version History
+
+* v5: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
+* v4: Fixed bug in how black and white pieces were saved in observation space (1.10.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped version of all environments due to breaking API changes (1.4.0)
+* v1: ???
+* v0: Initial versions release (1.0.0)

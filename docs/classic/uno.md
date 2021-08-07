@@ -7,7 +7,7 @@ action-shape: "Discrete(61)"
 action-values: "Discrete(61)"
 observation-shape: "(7, 4, 15)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import uno_v3"
+import: "from pettingzoo.classic import uno_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -22,7 +22,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can 
 ### Arguments
 
 ```
-uno_v3.env(opponents_hand_visible=False)
+uno_v4.env(opponents_hand_visible=False)
 ```
 
 `opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the opponent' hands and the observation space will only include planes 0 to 3.
@@ -100,3 +100,11 @@ For example, you would use action `6` to put down a red "6" card or action `60` 
 | Winner | Loser |
 | :----: | :---: |
 | +1     | -1    |
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes (1.5.0)
+* v1: Bumped RLCard version, fixed observation space (1.4.0)
+* v0: Initial versions release (1.0.0)

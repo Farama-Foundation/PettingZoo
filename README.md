@@ -27,18 +27,18 @@ We support Python 3.6, 3.7, 3.8 and 3.9 on Linux and macOS. We will accept PRs r
 
 ## API
 
-PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/abs/2009.13051), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
+PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/pdf/2009.14471.pdf), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
 
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
-```
+```python
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:
 
-```
+```python
 env.reset()
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()

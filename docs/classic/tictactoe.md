@@ -49,3 +49,10 @@ _________
 | +1     | -1    |
 
 If the game ends in a draw, both players will receive a reward of 0.
+
+### Version History
+
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped version of all environments due to breaking API changes (1.4.0)
+* v1: ???
+* v0: Initial versions release (1.0.0)

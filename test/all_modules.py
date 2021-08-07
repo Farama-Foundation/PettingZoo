@@ -23,19 +23,19 @@ from pettingzoo.atari import volleyball_pong_v2
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
-from pettingzoo.classic import chess_v3
+from pettingzoo.classic import chess_v4
 from pettingzoo.classic import checkers_v3
 from pettingzoo.classic import rps_v2
 from pettingzoo.classic import connect_four_v3
 from pettingzoo.classic import tictactoe_v3
-from pettingzoo.classic import leduc_holdem_v3
-from pettingzoo.classic import mahjong_v3
-from pettingzoo.classic import texas_holdem_v3
-from pettingzoo.classic import texas_holdem_no_limit_v3
-from pettingzoo.classic import uno_v3
-from pettingzoo.classic import dou_dizhu_v3
-from pettingzoo.classic import gin_rummy_v3
-from pettingzoo.classic import go_v4
+from pettingzoo.classic import leduc_holdem_v4
+from pettingzoo.classic import mahjong_v4
+from pettingzoo.classic import texas_holdem_v4
+from pettingzoo.classic import texas_holdem_no_limit_v4
+from pettingzoo.classic import uno_v4
+from pettingzoo.classic import dou_dizhu_v4
+from pettingzoo.classic import gin_rummy_v4
+from pettingzoo.classic import go_v5
 from pettingzoo.classic import hanabi_v4
 from pettingzoo.classic import backgammon_v3
 
@@ -103,19 +103,19 @@ all_environments = {
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
-    "classic/chess_v3": chess_v3,
+    "classic/chess_v4": chess_v4,
     "classic/checkers_v3": checkers_v3,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,
-    "classic/leduc_holdem_v3": leduc_holdem_v3,
-    "classic/mahjong_v3": mahjong_v3,
-    "classic/texas_holdem_v3": texas_holdem_v3,
-    "classic/texas_holdem_no_limit_v3": texas_holdem_no_limit_v3,
-    "classic/uno_v3": uno_v3,
-    "classic/dou_dizhu_v3": dou_dizhu_v3,
-    "classic/gin_rummy_v3": gin_rummy_v3,
-    "classic/go_v4": go_v4,
+    "classic/leduc_holdem_v4": leduc_holdem_v4,
+    "classic/mahjong_v4": mahjong_v4,
+    "classic/texas_holdem_v4": texas_holdem_v4,
+    "classic/texas_holdem_no_limit_v4": texas_holdem_no_limit_v4,
+    "classic/uno_v4": uno_v4,
+    "classic/dou_dizhu_v4": dou_dizhu_v4,
+    "classic/gin_rummy_v4": gin_rummy_v4,
+    "classic/go_v5": go_v5,
     "classic/hanabi_v4": hanabi_v4,
     "classic/backgammon_v3": backgammon_v3,
 
