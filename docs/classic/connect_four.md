@@ -42,6 +42,6 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 ### Version History
 
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
-* v2: Bumped version of all environments due to breaking API changes (1.4.0)
-* v1: ???
+* v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
