@@ -17,6 +17,23 @@ agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 
 In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8 health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.
 
+### Arguments
+
+```
+tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
+```
+
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+`tiger_step_recover`: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
+
+`deer_attacked`: Reward a deer gets for being attacked
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
 
 #### Action Space
 
@@ -52,20 +69,11 @@ binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)| 5 Deer/9 Tiger
 last_reward(extra_features=True)| 1
 
-### Arguments
 
-```
-tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
-```
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
+### Version History
 
-`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
-
-`tiger_step_recover`: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
-
-`deer_attacked`: Reward a deer gets for being attacked
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`extra_features`: Adds additional features to observation (see table). Default False
+* v3: Fixed bugs and changed default parameters (1.7.0)
+* v2: Added new arguments, changes to rewards (1.4.2)
+* v1: Observation space fixes (1.4.0)
+* v0: Initial versions release (1.0.0)

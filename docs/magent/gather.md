@@ -17,6 +17,27 @@ agent-labels: "agents= [ omnivore_[0-494] ]"
 
 In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
 
+### Arguments
+
+```
+gather_v3.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1,
+dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
+```
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+`step_reward`:  reward added unconditionally
+
+`dead_penalty`:  reward added when killed
+
+`attack_penalty`:  reward added for attacking
+
+`attack_food_reward`:  Reward added for attacking a food
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
+
 #### Action Space
 
 Key: `move_N` means N separate actions, one to move to each of the N nearest squares on the grid.
@@ -64,23 +85,11 @@ food_hp| 1
 one_hot_action(extra_features=True)|  33 (max action space)
 last_reward(extra_features=True)| 1
 
-### Arguments
 
-```
-gather_v3.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1,
-dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
-```
 
-`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+### Version History
 
-`step_reward`:  reward added unconditionally
-
-`dead_penalty`:  reward added when killed
-
-`attack_penalty`:  reward added for attacking
-
-`attack_food_reward`:  Reward added for attacking a food
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`extra_features`: Adds additional features to observation (see table). Default False
+* v3: Fixed bugs and changed default parameters (1.7.0)
+* v2: Added new arguments (1.4.2)
+* v1: Observation space fixes (1.4.0)
+* v0: Initial versions release (1.0.0)
