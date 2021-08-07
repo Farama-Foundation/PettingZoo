@@ -132,7 +132,7 @@ If an illegal action is taken, the game terminates and the one player that took 
 ### Version History
 
 * v4: Fixed bug in arbitrary calls to observe() (1.8.0)
-* v3: Fixed default parameters (1.4.2)
-* v2: Bumped version of all environments due to breaking API changes (1.4.0)
-* v1: ???
+* v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v2: Fixed default parameters (1.4.2)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
