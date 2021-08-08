@@ -243,7 +243,7 @@ nav:
     url: "/tutorials"
 
   - title: "Third Party Environments"
-    url: "/third_party_environments"
+    url: "/third_party_envs"
 
 api:
   - title: "Initializing Environments"

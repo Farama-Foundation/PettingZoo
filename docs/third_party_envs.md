@@ -1,3 +1,5 @@
+# Third-Party Environments
+
 ## StarCraft Multi-Agent Challenge
 https://github.com/oxwhirl/smac
 
