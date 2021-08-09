@@ -28,7 +28,7 @@ https://github.com/arjun-prakash/pz_dilemma
 Collection of prisoner's dilemma games as pettingzoo environments
 
 
-## Caroline's Ant Thing
+## Ants
 https://github.com/chorsch/ants
 
 Simplified simulation of an ant colony
