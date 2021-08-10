@@ -18,9 +18,3 @@ This tutorials is a draft that should be complete by the end of September; impro
 https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/rllib_pistonball.py
 https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/render_rllib_pistonball.py
 https://gist.github.com/benblack769/7ea33e31d31a819d25bf64fb2bf1d430
-
-## Learning MPE PettingZoo Environments with MPE
-[TBD]
-
-Rohan Potdar is currently working on writing this tutorial.
-
