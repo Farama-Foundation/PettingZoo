@@ -15,7 +15,15 @@ agent-labels: "agents= ['paddle_0', 'paddle_1']"
 aec-diagram: "cooperative_pong_aec.png"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default. Obser2ation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, both agents receive a combined reward of `100 / max_cycles` (default 0.11), if they successfully complete a frame. Otherwise, each agent receive a reward of `-100` and the game ends.
@@ -50,3 +58,4 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 * v2: Misc fixes (1.4.0)
 * v1: Fixed bug in how `dones` were computed (1.3.1)
 * v0: Initial versions release (1.0.0)
+</div>

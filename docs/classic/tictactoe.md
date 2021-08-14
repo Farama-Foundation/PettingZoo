@@ -11,7 +11,15 @@ import: "from pettingzoo.classic import tictactoe_v3"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -56,3 +64,4 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v2: Bumped version of all environments due to breaking API changes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
+</div>

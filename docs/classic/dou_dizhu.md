@@ -11,7 +11,15 @@ import: "from pettingzoo.classic import dou_dizhu_v4"
 agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -132,3 +140,4 @@ We modified the reward structure compared to RLCard. Instead of rewarding `0` to
 * v2: Bumped RLCard version, bug fixes (1.5.0)
 * v1: Bumped RLCard version, fixed observation space (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

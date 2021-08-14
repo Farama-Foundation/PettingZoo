@@ -12,7 +12,15 @@ import: "from pettingzoo.mpe import simple_spread_v2"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -39,3 +47,4 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+</div>

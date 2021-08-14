@@ -11,7 +11,15 @@ import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
 
@@ -66,3 +74,4 @@ The legal moves available to the current agent are found in the `action_mask` el
 * v2: Bumped RLCard version, bug fixes (1.5.0)
 * v1: Bumped RLCard version, fixed observation space (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

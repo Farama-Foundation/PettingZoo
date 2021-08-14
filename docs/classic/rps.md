@@ -11,7 +11,15 @@ import: "from pettingzoo.classic import rps_v2"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -96,3 +104,4 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v2: Merge RPS and rock paper lizard scissors spock environments, add num_actions and max_cycles arguments (1.9.0)
 * v1: Bumped version of all environments due to breaking API changes (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

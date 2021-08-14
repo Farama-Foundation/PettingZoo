@@ -11,7 +11,15 @@ import: "from pettingzoo.mpe import simple_v2"
 agent-labels: "agents= [agent_0]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -31,3 +39,4 @@ simple_v2.env(max_cycles=25, continuous_actions=False)
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
 
+</div>

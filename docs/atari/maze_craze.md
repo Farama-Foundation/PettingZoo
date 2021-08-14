@@ -12,7 +12,15 @@ import: "from pettingzoo.atari import maze_craze_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -41,3 +49,4 @@ maze_craze.env(game_version="robbers", visibilty_level=0)
 `game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
 
 `visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
+</div>

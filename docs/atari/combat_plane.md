@@ -12,7 +12,15 @@ import: "from pettingzoo.atari import combat_jet_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -45,3 +53,4 @@ combat_plane_v1.env(game_version="jet", guided_missile=True)
 `game_version`:  Accepted arguments are "jet" or "bi-plane". Whether the plane is a bi-plane or a jet. (Jets move faster)
 
 `guided_missile`:  Whether the missile can be directed after being fired, or whether it is on a fixed path.
+</div>

@@ -12,7 +12,15 @@ import: "from pettingzoo.sisl import waterworld_v3"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea, called pursuers attempt to consume food while avoiding poison. The agents in waterworld are the pursuers, while food and poison belong to the environment. Poison has a radius which is 0.75 times the size of the pursuer radius, while food has a radius 2 times the size of the pursuer radius. Depending on the input parameters, multiple pursuers may need to work together to consume food, creating a dynamic that is both cooperative and competitive. Similarly, rewards can be distributed globally to all pursuers, or applied locally to specific pursuers. The environment is a continuous 2D space, and each pursuer has a position with x and y values each in the range [0,1]. Agents can not move beyond barriers at the minimum and maximum x and y values. Agents act by choosing a thrust vector to add to their current velocity. Each pursuer has a number of evenly spaced sensors which can read the speed and direction of objects near the pursuer. This information is reported in the observation space, and can be used to navigate the environment.
 
@@ -114,3 +122,4 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
 * v0: Initial versions release (1.0.0)
+</div>

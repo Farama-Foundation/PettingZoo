@@ -12,7 +12,15 @@ import: "from pettingzoo.classic import hanabi_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -136,3 +144,4 @@ If an illegal action is taken, the game terminates and the one player that took 
 * v2: Bumped version of all environments due to breaking API changes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
+</div>

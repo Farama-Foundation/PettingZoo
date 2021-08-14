@@ -12,7 +12,15 @@ import: "from pettingzoo.atari import combat_tank_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -41,3 +49,4 @@ combat_tank_v1.env(has_maze=False, is_invisible=False, billiard_hit=False)
 `is_invisible`:  If true, tanks are invisible unless they are firing or are running into a wall.
 
 `billiard_hit`:  If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
+</div>

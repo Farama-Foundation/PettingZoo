@@ -13,7 +13,15 @@ agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -52,3 +60,4 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
 * v1: Fix to continuous mode (1.0.1)
 * v0: Initial versions release (1.0.0)
+</div>

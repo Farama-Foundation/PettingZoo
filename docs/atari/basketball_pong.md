@@ -17,6 +17,9 @@ agent-labels: "agents= ['first_0', 'second_0']"
 </div>
 
 <div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
 
 A competitive game of control.
 
@@ -38,3 +41,5 @@ basketball_pong_v2.env(num_players=2)
 ```
 
 `num_players`:  Number of players (must be either 2 or 4)
+
+</div>

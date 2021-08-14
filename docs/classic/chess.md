@@ -13,7 +13,15 @@ import: "pettingzoo.classic.chess_v4"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -73,3 +81,4 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 * v2: Bumped version of all environments due to breaking API changes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
+</div>
