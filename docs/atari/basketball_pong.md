@@ -12,9 +12,11 @@ import: "from pettingzoo.atari import basketball_pong_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
 
-
+<div class="docu-content" markdown="1">
 
 A competitive game of control.
 

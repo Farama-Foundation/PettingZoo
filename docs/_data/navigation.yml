@@ -55,6 +55,7 @@ nav:
         subsublinks:
           - title: "Basketball Pong"
             url: "/atari/basketball_pong"
+            img: /assets/img/aec/atari_basketball_pong_aec.svg
             
           - title: "Boxing"
             url: "/atari/boxing"

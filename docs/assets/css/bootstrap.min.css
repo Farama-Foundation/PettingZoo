@@ -510,6 +510,20 @@ pre code {
     overflow-y: scroll
 }
 
+.selection-container {
+    box-sizing: border-box;
+    display: flex;
+    margin-right: 0;
+    margin-left: 300px;
+}
+
+.docu-container {
+    box-sizing: border-box;
+    display: flex;
+    margin-right: 0;
+    margin-left: 300px;
+}
+
 .container {
     width: 100%;
     /* padding-right: 15px;
@@ -3824,6 +3838,14 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     padding-left: 0;
     margin-bottom: 0;
     list-style: none
+}
+
+.nav-subsubmenu {
+    max-height: 318px;
+    display: flex;
+    overflow-y: visible;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .nav-link {
@@ -7679,6 +7701,42 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     .fixed-margin {
         left: 281px;
     }
+}
+
+.selection-table-container {
+    width: 50%;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.selection-content {
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.docu-info {
+    width: 50%;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.docu-content {
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 10px;
+    overflow-x: auto;
 }
 
 @supports ((position:-webkit-sticky) or (position:sticky)) {
