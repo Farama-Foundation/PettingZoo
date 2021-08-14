@@ -154,7 +154,7 @@ class raw_env(AECEnv, EzPickle):
         state = np.fliplr(state)
         return state
 
-    def enable_render(self, mode):
+    def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
         self.renderOn = True
@@ -377,7 +377,7 @@ class raw_env(AECEnv, EzPickle):
     def render(self, mode="human"):
         if mode == 'human' and not self.renderOn:
             # sets self.renderOn to true and initializes display
-            self.enable_render
+            self.enable_render()
 
         self.draw_background()
         self.draw()
