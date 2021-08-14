@@ -31,6 +31,8 @@
                 <ul class="nav-subsubmenu text-uppercase">
                 {%- for subsublink in sublink.subsublinks -%}
                   <li class="nav-subsubitem nav-item">
+                    {% assign img_link = "/assets/img/icons/" | append: sublink.title | append: "/" | append: "._" | append: subsublink.title | replace: " ", "" | replace: ":", "" | append: ".png" %}
+                    <!-- <img height="10px" style="display:inline" src="{{ img_link }}"> -->
                     <a class="nav-link js-scroll-trigger" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
                   </li>
                 {%- endfor -%}
