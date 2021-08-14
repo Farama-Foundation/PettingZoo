@@ -11,7 +11,15 @@ import: "from pettingzoo.mpe import simple_world_comm_v2"
 agent-labels: "agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -60,3 +68,4 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
 
+</div>

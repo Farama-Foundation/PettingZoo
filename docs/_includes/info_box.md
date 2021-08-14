@@ -37,7 +37,3 @@ Agents | `{{ page.agent-labels }}`
 
 </div>
 
-
-<div class="appear_big" markdown="1">
-## {{page.title}}
-</div>

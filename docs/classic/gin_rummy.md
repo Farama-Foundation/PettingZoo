@@ -13,7 +13,15 @@ import: "from pettingzoo.classic import gin_rummy_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -100,3 +108,4 @@ Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
 * v2: Bumped RLCard version, bug fixes (1.5.0) 
 * v1: Bumped RLCard version, fixed observation space (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

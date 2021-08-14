@@ -13,7 +13,15 @@ import: "from pettingzoo.butterfly import knights_archers_zombies_v7"
 agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -65,3 +73,4 @@ pad_observation=True, max_cycles=900)
 * v2: Fixed bug in how `dones` were computed (1.3.1)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+</div>

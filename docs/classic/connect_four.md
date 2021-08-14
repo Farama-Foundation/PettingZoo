@@ -11,7 +11,15 @@ import: "from pettingzoo.classic import connect_four_v3"
 agent-labels: "agents= ['player_0', 'player_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -45,3 +53,4 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v2: Bumped version of all environments due to breaking API changes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
+</div>

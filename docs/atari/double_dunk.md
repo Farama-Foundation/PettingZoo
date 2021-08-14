@@ -12,7 +12,15 @@ import: "from pettingzoo.atari import double_dunk_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 An adversarial game that combines control and precise selection.
@@ -32,3 +40,4 @@ Scoring should be familar to basketball fans (2-3 points per successful shot).
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+</div>

@@ -11,7 +11,15 @@ import: "pettingzoo.magent import battlefield_v3"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -104,3 +112,4 @@ last_reward(extra_features=True)| 1
 * v2: Added new arguments (1.4.2)
 * v1: Observation space fixes (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

@@ -11,7 +11,15 @@ import: "from pettingzoo.mpe import simple_adversary_v2"
 agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -38,3 +46,4 @@ simple_adversary_v2.env(N=2, max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+</div>

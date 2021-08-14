@@ -11,7 +11,15 @@ import: "pettingzoo.magent import combined_arms_v5"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -107,3 +115,4 @@ last_reward(extra_features=True)| 1
 * v2: Observation space fixes (1.4.0)
 * v1: ???
 * v0: Initial versions release (1.0.0)
+</div>

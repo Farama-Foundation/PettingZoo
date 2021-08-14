@@ -12,7 +12,15 @@ import: "from pettingzoo.butterfly import prospector_v4"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -136,3 +144,4 @@ gold into a bank.
 * v2: Numerous bug fixes (1.3.5)
 * v1: Fixed prospector agents leaving game area (1.3.4)
 * v0: Initial versions release (1.0.0)
+</div>

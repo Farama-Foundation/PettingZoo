@@ -12,7 +12,15 @@ import: "from pettingzoo.sisl import pursuit_v3"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big" markdown="1">
+## {{page.title}}
+</div>
+
 
 
 
@@ -66,3 +74,4 @@ catch_reward=5.0, urgency_reward=0.0, surround=True, constraint_window=1.0)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
 * v0: Initial versions release (1.0.0)
+</div>
