@@ -29,7 +29,8 @@ extras = {
     "magent": ["magent==0.1.14"],
     "mpe": ["pyglet>=1.4.0"],
     "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "pyglet>=1.4.0"],
-    "tests": ["pynput"]
+    "other": ["pillow>=8.0.1"],
+    "tests": ["pynput"],
 }
 
 extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]
