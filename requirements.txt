@@ -11,3 +11,4 @@ multi_agent_ale_py==0.1.10
 magent==0.1.14
 pyglet>=1.4.0
 pillow>=8.0.1
+scipy>=1.4.1
