@@ -1,1 +1,4 @@
-flake8 --ignore "E501,E731,E74,E402,F401,W503,F405,E121,E122,E126" pettingzoo/ test/
+# See setup.cfg for codespell and flake8 settings
+bandit --recursive --skip B101,B301,B303,B311,B403,B404,B603,B607 .
+codespell || true  # Adjust after pull request #448 lands
+flake8 pettingzoo/ test/
