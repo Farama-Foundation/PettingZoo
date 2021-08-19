@@ -24,7 +24,7 @@ then the player is rewarded -1, and the timer resets. This prevents one player f
 
 Once play begins, each team has two players. You only control
 one at a time, and and which one you control depends on the selected play.
-Scoring should be familar to basketball fans (2-3 points per successful shot).
+Scoring should be familiar to basketball fans (2-3 points per successful shot).
 
 [Official double dunk manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=153)
 

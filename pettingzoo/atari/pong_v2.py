@@ -27,7 +27,7 @@ avaliable_4p_versions = {
 def raw_env(num_players=2, game_version="classic", **kwargs):
     assert num_players == 2 or num_players == 4, "pong only supports 2 or 4 players"
     versions = avaliable_2p_versions if num_players == 2 else avaliable_4p_versions
-    assert game_version in versions, f"pong version {game_version} not supported for number of players {num_players}. Avaliable options are {list(versions)}"
+    assert game_version in versions, f"pong version {game_version} not supported for number of players {num_players}. Available options are {list(versions)}"
     mode = versions[game_version]
     return BaseAtariEnv(game="pong", num_players=num_players, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs)
 

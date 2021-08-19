@@ -12,7 +12,7 @@ class DiscreteAgent(Agent):
 
     # constructor
     def __init__(self, xs, ys, map_matrix, randomizer, obs_range=3, n_channels=3, seed=1, flatten=False):
-        # map_matrix is the may of the enviroment (-1 are buildings)
+        # map_matrix is the may of the environment (-1 are buildings)
         # n channels is the number of observation channels
 
         self.random_state = randomizer
