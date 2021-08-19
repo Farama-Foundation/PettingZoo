@@ -2,8 +2,6 @@
     <img src="PettingZoo_Text.png" width="500px"/>
 </p>
 
-[![Build Status](https://github.com/PettingZoo-Team/PettingZoo/workflows/Python%20tests/badge.svg)](https://github.com/PettingZoo-Team/PettingZoo/actions?query=workflow%3A%22Python+tests%22)
-
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
 
 Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
