@@ -11,7 +11,6 @@ on:
 
 jobs:
   linux-test:
-
     runs-on: ubuntu-20.04
     strategy:
       matrix:
@@ -25,17 +24,14 @@ jobs:
     - name: Install dependencies
       run: |
         export AUDIODEV=null
-        sudo apt-get install swig
-        sudo apt-get install unrar
-        pip install -r requirements.txt
-        pip install AutoROM
-        pip install flake8 pytest
+        sudo apt-get install swig unrar
+        pip install AutoROM bandit codespell flake8 pytest -r requirements.txt
         AutoROM -v
-    - name: Full python tests
+    - name: Full Python tests
       run: |
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
-    - name: Flake 8 tests
+    - name: Bandit, Codespell, and Flake 8 tests
       run: |
         bash ./check_style.sh
     - name: Print tests
