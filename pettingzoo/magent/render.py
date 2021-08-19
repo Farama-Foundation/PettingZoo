@@ -103,8 +103,8 @@ class Renderer:
 
         def form_txt(index):
             handle = self.handles[index]
-            color = tuple([int(a) for a in groups[index][2:]])
-            return '{}'.format(np.sum(self.env.get_alive(handle).astype(np.int32))), color
+            color = tuple(int(a) for a in groups[index][2:])
+            return f'{np.sum(self.env.get_alive(handle).astype(np.int32))}', color
         if len(self.handles) == 1:
             result = [(form_txt(0), )]
         if len(self.handles) == 2:

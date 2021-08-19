@@ -44,7 +44,7 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
 
         def calculate_width(self, screen_width, i):
-            return int(((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))) + (tile_size * 31 / 616))
+            return int((screen_width / (np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)) + (tile_size * 31 / 616))
 
         def calculate_offset(hand, j, tile_size):
             return int((len(hand) * (tile_size * 23 / 56)) - ((j) * (tile_size * 23 / 28)))
@@ -101,9 +101,9 @@ class raw_env(RLCardBase):
             text = font.render("Player " + str(i + 1), True, white)
             textRect = text.get_rect()
             if i % 2 == 0:
-                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)))
+                textRect.center = ((screen_width / (np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)), calculate_height(screen_height, 4, 1, tile_size, -(22 / 20)))
             else:
-                textRect.center = (((((screen_width / ((np.ceil(len(self.possible_agents) / 2) + 1)) * np.ceil((i + 1) / 2))))), calculate_height(screen_height, 4, 3, tile_size, (23 / 20)))
+                textRect.center = ((screen_width / (np.ceil(len(self.possible_agents) / 2) + 1) * np.ceil((i + 1) / 2)), calculate_height(screen_height, 4, 3, tile_size, (23 / 20)))
             self.screen.blit(text, textRect)
 
             # Load and blit number of poker chips for each player

@@ -10,10 +10,10 @@ for name in dir_names:
     for _dir, subdirs, files in os.walk(root_dir):
         for file in files:
             if file.endswith(".py"):
-                with open(os.path.join(_dir, file), 'r') as f:
+                with open(os.path.join(_dir, file)) as f:
                     for line in f:
                         if line.lstrip().startswith("print"):
-                            print("File: {} has a print statement. Please remove it.".format(os.path.join(_dir, file)))
+                            print(f"File: {os.path.join(_dir, file)} has a print statement. Please remove it.")
                             had_error = True
                             break
 

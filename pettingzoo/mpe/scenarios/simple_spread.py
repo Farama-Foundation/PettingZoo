@@ -14,7 +14,7 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
-            agent.name = 'agent_{}'.format(i)
+            agent.name = f'agent_{i}'
             agent.collide = True
             agent.silent = True
             agent.size = 0.15

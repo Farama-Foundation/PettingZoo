@@ -295,7 +295,7 @@ class Gold(pg.sprite.Sprite):
         self.image = self.image.convert_alpha()
 
 
-class Water(object):
+class Water:
     def __init__(self, pos, verts, space, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = math.ceil(const.WATER_HEIGHT / const.TILE_SIZE)
@@ -357,7 +357,7 @@ class Water(object):
         self.debris_tile = self.debris_tile.convert_alpha()
 
 
-class Background(object):
+class Background:
     def __init__(self, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = (

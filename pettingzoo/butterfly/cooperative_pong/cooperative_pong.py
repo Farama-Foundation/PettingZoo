@@ -193,7 +193,7 @@ class BallSprite(pygame.sprite.Sprite):
 
 class CooperativePong:
     def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
-        super(CooperativePong, self).__init__()
+        super().__init__()
 
         pygame.init()
         self.num_agents = 2
