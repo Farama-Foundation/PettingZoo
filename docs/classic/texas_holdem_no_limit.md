@@ -7,7 +7,7 @@ action-shape: "Discrete(4)"
 action-values: "Discrete(4)"
 observation-shape: "(72,)"
 observation-values: "[0, 1]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v5"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -16,7 +16,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 ### Arguments
 
 ```
-texas_holdem_no_limit_v4.env(num_players=2)
+texas_holdem_no_limit_v5.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
@@ -65,6 +65,7 @@ The legal moves available to the current agent are found in the `action_mask` el
 
 ### Version History
 
+* v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
