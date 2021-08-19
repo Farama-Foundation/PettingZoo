@@ -29,9 +29,9 @@ class OrderEnforcingWrapper(BaseWrapper):
         elif value == "agent_order":
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:
-            raise AttributeError("{} cannot be accessed before reset".format(value))
+            raise AttributeError(f"{value} cannot be accessed before reset")
         else:
-            raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, value))
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{value}'")
 
     def seed(self, seed=None):
         self._has_reset = False
@@ -77,7 +77,7 @@ class OrderEnforcingWrapper(BaseWrapper):
 
     def __str__(self):
         if hasattr(self, 'metadata'):
-            return str(self.env) if self.__class__ is OrderEnforcingWrapper else '{}<{}>'.format(type(self).__name__, str(self.env))
+            return str(self.env) if self.__class__ is OrderEnforcingWrapper else f'{type(self).__name__}<{str(self.env)}>'
         else:
             return repr(self)
 

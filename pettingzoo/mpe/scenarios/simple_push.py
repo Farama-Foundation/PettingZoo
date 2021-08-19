@@ -17,7 +17,7 @@ class Scenario(BaseScenario):
             agent.adversary = True if i < num_adversaries else False
             base_name = "adversary" if agent.adversary else "agent"
             base_index = i if i < num_adversaries else i - num_adversaries
-            agent.name = '{}_{}'.format(base_name, base_index)
+            agent.name = f'{base_name}_{base_index}'
             agent.collide = True
             agent.silent = True
         # add landmarks

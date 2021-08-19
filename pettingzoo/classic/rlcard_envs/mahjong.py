@@ -26,9 +26,9 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
         for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
-            print("\n======== {}'s Hand ========".format(player))
+            print(f"\n======== {player}'s Hand ========")
             print(', '.join([c.get_str() for c in state['current_hand']]))
-            print("\n{}'s Piles: ".format(player), ', '.join([c.get_str() for pile in state['players_pile'][self._name_to_int(player)] for c in pile]))
+            print(f"\n{player}'s Piles: ", ', '.join([c.get_str() for pile in state['players_pile'][self._name_to_int(player)] for c in pile]))
         print("\n======== Tiles on Table ========")
         print(', '.join([c.get_str() for c in state['table']]))
         print('\n')

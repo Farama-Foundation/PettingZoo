@@ -69,7 +69,7 @@ class raw_env(RLCardBase, EzPickle):
     def render(self, mode='human'):
         for player in self.possible_agents:
             state = self.env.game.round.players[self._name_to_int(player)].hand
-            print("\n===== {}'s Hand =====".format(player))
+            print(f"\n===== {player}'s Hand =====")
             print_card([c.__str__()[::-1] for c in state])
         state = self.env.game.get_state(0)
         print("\n==== Top Discarded Card ====")

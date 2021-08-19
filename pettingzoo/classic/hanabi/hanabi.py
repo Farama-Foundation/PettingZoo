@@ -147,7 +147,7 @@ class raw_env(AECEnv, EzPickle):
         self.hanabi_env: HanabiEnv = HanabiEnv(config=self._config)
 
         # List of agent names
-        self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
+        self.agents = [f"player_{i}" for i in range(self.hanabi_env.players)]
         self.possible_agents = self.agents[:]
 
         self.agent_selection: str
