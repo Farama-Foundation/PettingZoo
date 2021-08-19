@@ -46,15 +46,15 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `num_agents`: The length of the agents list.
 
-`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or reseting.
+`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
 
 `max_num_agents`: The length of the possible_agents list.
 
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
-`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or reseting.
+`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
-`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or reseting.
+`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
 `state_space`: The space of a global observation of the environment. Not all environments will support this feature.
 

@@ -15,7 +15,7 @@ agent-labels: "agents= [agent_0]"
 
 
 
-In this environment a single agent sees a landmark position and is rewarded based on how close it gets to the landmark (Euclidian distance). This is not a multiagent environment, and is primarily intended for debugging purposes.
+In this environment a single agent sees a landmark position and is rewarded based on how close it gets to the landmark (Euclidean distance). This is not a multiagent environment, and is primarily intended for debugging purposes.
 
 Observation space: `[self_vel, landmark_rel_position]`
 
