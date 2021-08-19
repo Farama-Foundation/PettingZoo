@@ -19,12 +19,36 @@ A large-scale team battle. Agents are rewarded for their individual performance,
 
 Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 
+### Arguments
+
+```
+battle_v3.env(map_size=45, minimap_mode=False, step_reward=-0.005,
+dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2,
+max_cycles=1000, extra_features=False)
+```
+
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 12.
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+
+`step_reward`:  reward after every step
+
+`dead_penalty`:  reward when killed
+
+`attack_penalty`:  reward when attacking anything
+
+`attack_opponent_reward`:  reward added for attacking an opponent
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
+
 #### Action space
 
 Key: `move_N` means N separate actions, one to move to each of the N nearest squares on the grid.
 
 Action options: `[do_nothing, move_12, attack_8]`
-
 
 #### Reward
 
@@ -71,27 +95,10 @@ binary_agent_id(extra_features=True)| 10
 one_hot_action(extra_features=True)|  21
 last_reward(extra_features=True)| 1
 
-### Arguments
 
-```
-battle_v3.env(map_size=45, minimap_mode=False, step_reward=-0.005,
-dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2,
-max_cycles=1000, extra_features=False)
-```
+### Version History
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 12.
-
-`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
-
-
-`step_reward`:  reward after every step
-
-`dead_penalty`:  reward when killed
-
-`attack_penalty`:  reward when attacking anything
-
-`attack_opponent_reward`:  reward added for attacking an opponent
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`extra_features`: Adds additional features to observation (see table). Default False
+* v3: Fixed bugs and changed default parameters (1.7.0)
+* v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v1: Agent order under death changed (1.3.0)
+* v0: Initial versions release (1.0.0)

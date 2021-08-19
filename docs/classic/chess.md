@@ -9,7 +9,7 @@ action-values: "Discrete(4672)"
 observation-shape: "(8,8,20)"
 observation-values: "[0,1]"
 num-states: "?"
-import: "pettingzoo.classic.chess_v3"
+import: "pettingzoo.classic.chess_v4"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
@@ -42,7 +42,7 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -62,6 +62,14 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 
 ### Rewards
 
-| Winner | Loser | Draw | 
+| Winner | Loser | Draw |
 | :----: | :---: | :---: |
-| +1     | -1    | 0 | 
+| +1     | -1    | 0 |
+
+### Version History
+
+* v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v0: Initial versions release (1.0.0)

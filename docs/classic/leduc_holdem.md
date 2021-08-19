@@ -8,7 +8,7 @@ action-values: "Discrete(4)"
 observation-shape: "(36,)"
 observation-values: "[0, 1]"
 num-states: "10^2"
-import: "from pettingzoo.classic import leduc_holdem_v3"
+import: "from pettingzoo.classic import leduc_holdem_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -20,6 +20,13 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
+### Arguments
+
+```
+leduc_holdem_v4.env(num_players=2)
+```
+
+`num_players`: Sets the number of players in the game. Minimum is 2.
 
 ### Observation Space
 
@@ -37,7 +44,7 @@ As described by [RLCard](https://github.com/datamllab/rlcard/blob/master/docs/ga
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -53,3 +60,12 @@ The legal moves available to the current agent are found in the `action_mask` el
 |      Winner       |       Loser       |
 | :---------------: | :---------------: |
 | +raised chips / 2 | -raised chips / 2 |
+
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v0: Initial versions release (1.0.0)

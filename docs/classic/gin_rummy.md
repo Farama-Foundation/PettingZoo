@@ -9,7 +9,7 @@ action-values: "Discrete(110)"
 observation-shape: "(5, 52)"
 observation-values: "[0,1]"
 num-states: "10^52"
-import: "from pettingzoo.classic import gin_rummy_v3"
+import: "from pettingzoo.classic import gin_rummy_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -26,7 +26,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and yo
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 
 ```
-gin_rummy_v3.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
+gin_rummy_v4.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
 ```
 
 `knock_reward`:  reward received by a player who knocks
@@ -58,7 +58,7 @@ The main observation space is 5x52 with the rows representing different planes a
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -92,3 +92,11 @@ If the hand is declared dead, both players get a reward equal to negative of the
 Note that the defaults are slightly different from those in RLcard- their default reward for knocking is 0.2.
 
 Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
+
+### Version History
+
+* v4: Upgrade to RLCard 1.0.3 (1.11.0)
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v0: Initial versions release (1.0.0)

@@ -14,7 +14,9 @@ def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
-    return image
+    sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
+    sfc.blit(image, (0, 0))
+    return sfc
 
 
 def env(**kwargs):
@@ -27,7 +29,7 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v4"}
+    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v5"}
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
@@ -199,9 +201,9 @@ class raw_env(AECEnv):
         # Blit the necessary chips and their positions
         for i in range(0, size):
             for j in range(0, size):
-                if self._go.board[i][j] == -1:
+                if self._go.board[i][j] == go.BLACK:
                     self.screen.blit(black_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
-                elif self._go.board[i][j] == 1:
+                elif self._go.board[i][j] == go.WHITE:
                     self.screen.blit(white_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
 
         if mode == "human":
