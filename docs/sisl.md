@@ -1,4 +1,4 @@
-## SISL Enviroments
+## SISL Environments
 
 {% include bigtable.html group="sisl/" avg_rew=1 %}
 

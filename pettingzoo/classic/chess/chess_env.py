@@ -97,7 +97,7 @@ class raw_env(AECEnv):
 
         is_stale_or_checkmate = not any(next_legal_moves)
 
-        # claim draw is set to be true to allign with normal tournament rules
+        # claim draw is set to be true to align with normal tournament rules
         is_repetition = self.board.is_repetition(3)
         is_50_move_rule = self.board.can_claim_fifty_moves()
         is_claimable_draw = is_repetition or is_50_move_rule
