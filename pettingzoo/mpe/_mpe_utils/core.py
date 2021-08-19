@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class EntityState(object):  # physical/external base state of all entites
+class EntityState(object):  # physical/external base state of all entities
     def __init__(self):
         # physical position
         self.p_pos = None
