@@ -1,21 +1,25 @@
 import sys
+
 from pettingzoo.test.api_test import api_test
-from pettingzoo.test.performance_benchmark import performance_benchmark
 from pettingzoo.test.manual_control_test import manual_control_test
-from .all_modules import all_environments, manual_environments, all_prefixes
-from pettingzoo.test.render_test import render_test
-from pettingzoo.test.seed_test import seed_test
-from pettingzoo.test.save_obs_test import test_save_obs
 from pettingzoo.test.max_cycles_test import max_cycles_test
 from pettingzoo.test.parallel_test import parallel_api_test
+from pettingzoo.test.performance_benchmark import performance_benchmark
+from pettingzoo.test.render_test import render_test
+from pettingzoo.test.save_obs_test import test_save_obs
+from pettingzoo.test.seed_test import seed_test
 
-assert len(sys.argv) == 7, "ci_test expects 5 arguments: env_id, num_cycles, render, manual_control, performance, save_obs"
+from .all_modules import all_environments, all_prefixes, manual_environments
+
+assert (
+    len(sys.argv) == 7
+), "ci_test expects 5 arguments: env_id, num_cycles, render, manual_control, performance, save_obs"
 
 num_cycles = int(sys.argv[2])
-render = sys.argv[3] == 'True'
-manual_control = sys.argv[4] == 'True'
-performance = sys.argv[5] == 'True'
-save_obs = sys.argv[6] == 'True'
+render = sys.argv[3] == "True"
+manual_control = sys.argv[4] == "True"
+performance = sys.argv[5] == "True"
+save_obs = sys.argv[6] == "True"
 
 
 env_id = sys.argv[1]
@@ -46,7 +50,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
 
     if render:
         try:
-            assert len(_env.metadata.get('render.modes')) >= 2
+            assert len(_env.metadata.get("render.modes")) >= 2
             render_test(_env)
         except Exception as e:
             error_collected.append("Render Test:" + str(e))
@@ -69,7 +73,9 @@ if env_id in all_prefixes:
     warning_map = {}
     for e in all_environments:
         if e.startswith(env_id):
-            warning_map[e] = perform_ci_test(e, num_cycles, render, manual_control, performance, save_obs)
+            warning_map[e] = perform_ci_test(
+                e, num_cycles, render, manual_control, performance, save_obs
+            )
     f = open("test_output.txt", "w")
     for warn in warning_map:
         warn_list = warning_map[warn]

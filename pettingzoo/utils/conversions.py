@@ -1,8 +1,8 @@
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils.env import AECEnv
 import copy
+
+from pettingzoo.utils import agent_selector
+from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
-from pettingzoo.utils.env import ParallelEnv
 
 
 def parallel_wrapper_fn(env_fn):
@@ -10,6 +10,7 @@ def parallel_wrapper_fn(env_fn):
         env = env_fn(**kwargs)
         env = to_parallel_wrapper(env)
         return env
+
     return par_fn
 
 
@@ -54,7 +55,11 @@ class to_parallel_wrapper(ParallelEnv):
     def reset(self):
         self.aec_env.reset()
         self.agents = self.aec_env.agents
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        observations = {
+            agent: self.aec_env.observe(agent)
+            for agent in self.aec_env.agents
+            if not self.aec_env.dones[agent]
+        }
         return observations
 
     def step(self, actions):
@@ -69,9 +74,13 @@ class to_parallel_wrapper(ParallelEnv):
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
                 if self.aec_env.dones[agent]:
-                    raise AssertionError(f"expected agent {agent} got done agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent termination (setting an agent's self.dones entry to True) to happen only at the end of a cycle.")
+                    raise AssertionError(
+                        f"expected agent {agent} got done agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent termination (setting an agent's self.dones entry to True) to happen only at the end of a cycle."
+                    )
                 else:
-                    raise AssertionError(f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle.")
+                    raise AssertionError(
+                        f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle."
+                    )
             obs, rew, done, info = self.aec_env.last()
             self.aec_env.step(actions[agent])
             for agent in self.aec_env.agents:
@@ -80,7 +89,9 @@ class to_parallel_wrapper(ParallelEnv):
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
         self.agents = self.aec_env.agents
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+        observations = {
+            agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
+        }
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):
@@ -164,7 +175,12 @@ class from_parallel_wrapper(AECEnv):
     def last(self, observe=True):
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
-        return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
+        return (
+            observation,
+            self._cumulative_rewards[agent],
+            self.dones[agent],
+            self.infos[agent],
+        )
 
     def render(self, mode="human"):
         return self.env.render(mode)

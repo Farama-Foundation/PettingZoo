@@ -1,10 +1,14 @@
-from pettingzoo.butterfly import pistonball_v4
+import os
+
 import numpy as np
 from array2gif import write_gif
-import os
+
+from pettingzoo.butterfly import pistonball_v4
+
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 GRAYSCALE_WEIGHTS = np.array([0.299, 0.587, 0.114], dtype=np.float32)
+
 
 # print(GRAYSCALE_WEIGHTS@np.array([68,76,77]))
 def change_observation(obs):
@@ -12,9 +16,9 @@ def change_observation(obs):
     return obs
 
 
-DOWN = np.array([-1.])
-UP = np.array([1.])
-HOLD = np.array([0.])
+DOWN = np.array([-1.0])
+UP = np.array([1.0])
+HOLD = np.array([0.0])
 count = 0
 
 
@@ -35,9 +39,9 @@ def policy(obs):
 
     first_piston_vals = np.equal(obs, 73)
     uniques, counts = np.unique(obs, return_counts=True)
-    pi1 = 200 - np.argmax(first_piston_vals[:,11])
-    pi2 = 200 - np.argmax(first_piston_vals[:,51])
-    pi3 = 200 - np.argmax(first_piston_vals[:,91])
+    pi1 = 200 - np.argmax(first_piston_vals[:, 11])
+    pi2 = 200 - np.argmax(first_piston_vals[:, 51])
+    pi3 = 200 - np.argmax(first_piston_vals[:, 91])
     if pi1 == 200:
         action = DOWN
     elif pi3 == 200:
@@ -59,7 +63,18 @@ def policy(obs):
 
 
 def main():
-    env = pistonball_v4.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+    env = pistonball_v4.env(
+        n_pistons=20,
+        local_ratio=0,
+        time_penalty=-0.1,
+        continuous=True,
+        random_drop=True,
+        random_rotate=True,
+        ball_mass=0.75,
+        ball_friction=0.3,
+        ball_elasticity=1.5,
+        max_cycles=125,
+    )
     total_reward = 0
     obs_list = []
     NUM_RESETS = 1
@@ -72,12 +87,14 @@ def main():
             env.step(act)
             total_reward += rew
             i += 1
-            if i % (len(env.possible_agents)+1) == 0:
-                obs_list.append(np.transpose(env.render(mode='rgb_array'), axes=(1, 0, 2)))
+            if i % (len(env.possible_agents) + 1) == 0:
+                obs_list.append(
+                    np.transpose(env.render(mode="rgb_array"), axes=(1, 0, 2))
+                )
 
     env.close()
-    print("average total reward: ", total_reward/NUM_RESETS)
-    write_gif(obs_list, 'pistonball_ben.gif', fps=15)
+    print("average total reward: ", total_reward / NUM_RESETS)
+    write_gif(obs_list, "pistonball_ben.gif", fps=15)
 
 
 if __name__ == "__main__":

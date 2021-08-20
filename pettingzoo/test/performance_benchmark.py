@@ -1,5 +1,6 @@
-import time
 import random
+import time
+
 import numpy as np
 
 
@@ -13,12 +14,14 @@ def performance_benchmark(env):
 
     while True:
         cycles += 1
-        for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
+        for agent in env.agent_iter(
+            env.num_agents
+        ):  # step through every agent once with observe=True
             obs, reward, done, info = env.last()
             if done:
                 action = None
-            elif isinstance(obs, dict) and 'action_mask' in obs:
-                action = random.choice(np.flatnonzero(obs['action_mask']))
+            elif isinstance(obs, dict) and "action_mask" in obs:
+                action = random.choice(np.flatnonzero(obs["action_mask"]))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)

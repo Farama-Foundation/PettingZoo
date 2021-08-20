@@ -1,21 +1,24 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
 import os
+
 import numpy as np
 from gym import spaces
-from .manual_control import manual_control
-from pettingzoo.utils import wrappers
-from gym.utils import seeding
+from gym.utils import EzPickle, seeding
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-from gym.utils import EzPickle
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+from .manual_control import manual_control
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 
 
 def get_image(path):
     from os import path as os_path
+
     cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + '/' + path)
+    image = pygame.image.load(cwd + "/" + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
     sfc.blit(image, (0, 0))
     return sfc
@@ -88,16 +91,42 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):
-
-    def __init__(self, continuous=False, vector_observation=False, max_cycles=150, num_floors=4, synchronized_start=False, identical_aliens=False, random_aliens=False):
-        EzPickle.__init__(self, continuous, vector_observation, max_cycles, num_floors, synchronized_start, identical_aliens, random_aliens)
+    def __init__(
+        self,
+        continuous=False,
+        vector_observation=False,
+        max_cycles=150,
+        num_floors=4,
+        synchronized_start=False,
+        identical_aliens=False,
+        random_aliens=False,
+    ):
+        EzPickle.__init__(
+            self,
+            continuous,
+            vector_observation,
+            max_cycles,
+            num_floors,
+            synchronized_start,
+            identical_aliens,
+            random_aliens,
+        )
         num_agents = 2 * num_floors
         self.agents = ["prisoner_" + str(s) for s in range(0, num_agents)]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
-        self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
+        self.sprite_list = [
+            "sprites/alien",
+            "sprites/drone",
+            "sprites/glowy",
+            "sprites/reptile",
+            "sprites/ufo",
+            "sprites/bunny",
+            "sprites/robot",
+            "sprites/tank",
+        ]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
-        self.metadata = {'render.modes': ['human', "rgb_array"], 'name': "prison_v3"}
+        self.metadata = {"render.modes": ["human", "rgb_array"], "name": "prison_v3"}
         self.infos = {}
         self.rendering = False
         self.max_cycles = max_cycles
@@ -106,16 +135,16 @@ class raw_env(AECEnv, EzPickle):
         self.num_frames = 0
         self.done_val = False
         self.num_floors = num_floors
-        self.background = get_image('background.png')
-        self.background_append = get_image('background_append.png')
-        self.dynamic_background = get_image('blit_background.png')
-        self.dynamic_background_append = get_image('blit_background_append.png')
+        self.background = get_image("background.png")
+        self.background_append = get_image("background_append.png")
+        self.dynamic_background = get_image("blit_background.png")
+        self.dynamic_background_append = get_image("blit_background_append.png")
         self.velocity = 24
         self.continuous = continuous
         self.vector_obs = vector_observation
         self.synchronized_start = synchronized_start
         self.identical_aliens = identical_aliens
-        if (self.identical_aliens):
+        if self.identical_aliens:
             self.random_aliens = False
         else:
             self.random_aliens = random_aliens
@@ -125,7 +154,9 @@ class raw_env(AECEnv, EzPickle):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32)
+                self.action_spaces[a] = spaces.Box(
+                    low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32
+                )
         else:
             for a in self.agents:
                 self.action_spaces[a] = spaces.Discrete(3)
@@ -135,10 +166,16 @@ class raw_env(AECEnv, EzPickle):
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
+                self.observation_spaces[a] = spaces.Box(
+                    low=-300, high=300, shape=(1,), dtype=np.float32
+                )
             else:
-                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
-        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
+                self.observation_spaces[a] = spaces.Box(
+                    low=0, high=255, shape=(100, 300, 3), dtype=np.uint8
+                )
+        self.state_space = spaces.Box(
+            low=0, high=255, shape=(650, 750, 3), dtype=np.uint8
+        )
 
         self.walls = []
         self.create_walls(num_floors)
@@ -152,8 +189,7 @@ class raw_env(AECEnv, EzPickle):
         self.np_random, seed = seeding.np_random(seed)
 
     def create_walls(self, num_floors):
-        self.walls = [(0, 0, 50, 700), (350, 0, 50, 700),
-                      (700, 0, 50, 700)]
+        self.walls = [(0, 0, 50, 700), (350, 0, 50, 700), (700, 0, 50, 700)]
         # roof of prison
         self.walls.append((50, 0, 300, 50))
         self.walls.append((400, 0, 300, 50))
@@ -214,7 +250,13 @@ class raw_env(AECEnv, EzPickle):
             if not self.synchronized_start:
                 x_noise = self.np_random.randint(-20, 20 + 1)
             self.prisoners[agent_name] = self.create_prisoner(
-                x_pos + x_noise, y_pos - chosen_sprites_heights[p_count], l_bound, r_bound, view_window, agent_name)
+                x_pos + x_noise,
+                y_pos - chosen_sprites_heights[p_count],
+                l_bound,
+                r_bound,
+                view_window,
+                agent_name,
+            )
             self.prisoners[agent_name].set_sprite(chosen_sprites_imgs[p_count])
             p_count += 1
 
@@ -231,24 +273,31 @@ class raw_env(AECEnv, EzPickle):
             movement = movement[0]
         prisoner.update_sprite(movement)
         if self.continuous:
-            prisoner.position = (
-                prisoner.position[0] + movement, prisoner.position[1])
+            prisoner.position = (prisoner.position[0] + movement, prisoner.position[1])
         else:
             prisoner.position = (
-                prisoner.position[0] + movement * self.velocity, prisoner.position[1])
+                prisoner.position[0] + movement * self.velocity,
+                prisoner.position[1],
+            )
         reward = 0
         if prisoner.position[0] < prisoner.left_bound:
             prisoner.position = (prisoner.left_bound, prisoner.position[1])
             if prisoner.first_touch == -1:
                 prisoner.first_touch = prisoner.left_bound
-            if prisoner.first_touch != prisoner.left_bound and prisoner.last_touch == prisoner.right_bound:
+            if (
+                prisoner.first_touch != prisoner.left_bound
+                and prisoner.last_touch == prisoner.right_bound
+            ):
                 reward = 1
             prisoner.last_touch = prisoner.left_bound
         if prisoner.position[0] > prisoner.right_bound:
             prisoner.position = (prisoner.right_bound, prisoner.position[1])
             if prisoner.first_touch == -1:
                 prisoner.first_touch = prisoner.right_bound
-            if prisoner.first_touch != prisoner.right_bound and prisoner.last_touch == prisoner.left_bound:
+            if (
+                prisoner.first_touch != prisoner.right_bound
+                and prisoner.last_touch == prisoner.left_bound
+            ):
                 reward = 1
             prisoner.last_touch = prisoner.right_bound
         return reward
@@ -287,9 +336,9 @@ class raw_env(AECEnv, EzPickle):
             return sub_screen
 
     def state(self):
-        '''
+        """
         Returns an observation of the global environment
-        '''
+        """
         state = pygame.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
@@ -344,7 +393,7 @@ class raw_env(AECEnv, EzPickle):
         if self._agent_selector.is_last():
             self.num_frames += 1
 
-        if (self.num_frames >= self.max_cycles):
+        if self.num_frames >= self.max_cycles:
             self.done_val = True
             for d in self.dones:
                 self.dones[d] = True
@@ -357,7 +406,7 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         if not self.rendering and mode == "human":
             pygame.display.init()
             old_screen = self.screen
@@ -374,7 +423,9 @@ class raw_env(AECEnv, EzPickle):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if mode == "human":
             pygame.display.flip()
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        return (
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        )
 
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven

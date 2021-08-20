@@ -1,10 +1,10 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from gym import spaces
-import numpy as np
 import warnings
 
-from pettingzoo.utils import wrappers
+import numpy as np
+from gym import spaces
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 
 from .board import Board
 
@@ -19,7 +19,7 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "tictactoe_v3"}
+    metadata = {"render.modes": ["human"], "name": "tictactoe_v3"}
 
     def __init__(self):
         super().__init__()
@@ -29,14 +29,21 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {i: spaces.Discrete(9) for i in self.agents}
-        self.observation_spaces = {i: spaces.Dict({
-                                        'observation': spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8),
-                                        'action_mask': spaces.Box(low=0, high=1, shape=(9,), dtype=np.int8)
-                                  }) for i in self.agents}
+        self.observation_spaces = {
+            i: spaces.Dict(
+                {
+                    "observation": spaces.Box(
+                        low=0, high=1, shape=(3, 3, 2), dtype=np.int8
+                    ),
+                    "action_mask": spaces.Box(low=0, high=1, shape=(9,), dtype=np.int8),
+                }
+            )
+            for i in self.agents
+        }
 
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
-        self.infos = {i: {'legal_moves': list(range(0, 9))} for i in self.agents}
+        self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
@@ -66,7 +73,7 @@ class raw_env(AECEnv):
         for i in legal_moves:
             action_mask[i] = 1
 
-        return {'observation': observation, 'action_mask': action_mask}
+        return {"observation": observation, "action_mask": action_mask}
 
     def _legal_moves(self):
         return [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
@@ -76,7 +83,7 @@ class raw_env(AECEnv):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         # check if input action is a valid move (0 == empty spot)
-        assert (self.board.squares[action] == 0), "played illegal move"
+        assert self.board.squares[action] == 0, "played illegal move"
         # play turn
         self.board.play_turn(self.agents.index(self.agent_selection), action)
 
@@ -123,14 +130,14 @@ class raw_env(AECEnv):
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         def getSymbol(input):
             if input == 0:
-                return '-'
+                return "-"
             elif input == 1:
-                return 'X'
+                return "X"
             else:
-                return 'O'
+                return "O"
 
         board = list(map(getSymbol, self.board.squares))
 

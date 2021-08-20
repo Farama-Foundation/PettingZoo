@@ -1,10 +1,12 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import math
 import os
-from .img import get_image
 
+import pygame
+
+from .img import get_image
 
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
@@ -18,11 +20,10 @@ i = 1
 
 
 class Arrow(pygame.sprite.Sprite):
-
     def __init__(self, archer):
         super().__init__()
         self.image = pygame.Surface([6, 6])
-        self.image = get_image(os.path.join('img', 'arrow.png'))
+        self.image = get_image(os.path.join("img", "arrow.png"))
         self.archer = archer
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.direction = self.archer.direction
@@ -50,12 +51,11 @@ class Arrow(pygame.sprite.Sprite):
 
 
 class Sword(pygame.sprite.Sprite):
-
     def __init__(self, knight):
         super().__init__()
         self.image = pygame.Surface((4, 25), pygame.SRCALPHA)
         # self.image.fill(GRAY)
-        self.image = get_image(os.path.join('img', 'mace.png'))
+        self.image = get_image(os.path.join("img", "mace.png"))
         self.knight = knight
         self.rect = self.image.get_rect(center=self.knight.rect.center)
         self.direction = self.knight.direction
@@ -80,8 +80,12 @@ class Sword(pygame.sprite.Sprite):
 
                 angle = math.radians(self.knight.angle + 90 + self.speed * self.phase)
                 self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
-                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
+                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (
+                    math.cos(angle) * (self.knight.rect.width / 2)
+                )
+                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (
+                    math.sin(angle) * (self.knight.rect.height / 2)
+                )
             else:
                 self.phase = self.MAX_PHASE
                 self.active = False
