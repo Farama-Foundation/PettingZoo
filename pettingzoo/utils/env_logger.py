@@ -34,7 +34,7 @@ class EnvLogger():
 
     @staticmethod
     def warn_action_out_of_bound(action, action_space, backup_policy):
-        EnvLogger._generic_warning("[WARNING]: Received an action {} that was outside action space {}. Environment is {}".format(action, action_space, backup_policy))
+        EnvLogger._generic_warning(f"[WARNING]: Received an action {action} that was outside action space {action_space}. Environment is {backup_policy}")
 
     @staticmethod
     def warn_close_unrendered_env():

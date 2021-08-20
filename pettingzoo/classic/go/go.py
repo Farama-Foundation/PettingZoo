@@ -91,7 +91,7 @@ def replay_position(position, result):
 
 def find_reached(board, c):
     color = board[c]
-    chain = set([c])
+    chain = {c}
     reached = set()
     frontier = [c]
     while frontier:
@@ -232,7 +232,7 @@ class LibertyTracker():
 
         # suicide is illegal
         if len(self.groups[new_group.id].liberties) == 0:
-            raise IllegalMove("Move at {} would commit suicide!\n".format(c))
+            raise IllegalMove(f"Move at {c} would commit suicide!\n")
 
         return captured_stones
 
@@ -380,7 +380,7 @@ class Position():
                 return False
         # it's possible to suicide by connecting several friendly groups
         # each of which had one liberty.
-        potential_libs -= set([move])
+        potential_libs -= {move}
         return not potential_libs
 
     def is_move_legal(self, move):
@@ -511,7 +511,7 @@ class Position():
             unassigned_spaces = np.where(working_board == EMPTY)
             c = unassigned_spaces[0][0], unassigned_spaces[1][0]
             territory, borders = find_reached(working_board, c)
-            border_colors = set(working_board[b] for b in borders)
+            border_colors = {working_board[b] for b in borders}
             X_border = BLACK in border_colors
             O_border = WHITE in border_colors
             if X_border and not O_border:

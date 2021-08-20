@@ -92,4 +92,4 @@ def to_gtp(coord):
     if coord is None:
         return 'pass'
     y, x = coord
-    return '{}{}'.format(_GTP_COLUMNS[x], go.N - y)
+    return f'{_GTP_COLUMNS[x]}{go.N - y}'

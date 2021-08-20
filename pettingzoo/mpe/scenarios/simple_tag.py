@@ -18,7 +18,7 @@ class Scenario(BaseScenario):
             agent.adversary = True if i < num_adversaries else False
             base_name = "adversary" if agent.adversary else "agent"
             base_index = i if i < num_adversaries else i - num_adversaries
-            agent.name = '{}_{}'.format(base_name, base_index)
+            agent.name = f'{base_name}_{base_index}'
             agent.collide = True
             agent.silent = True
             agent.size = 0.075 if agent.adversary else 0.05
@@ -115,7 +115,7 @@ class Scenario(BaseScenario):
         adversaries = self.adversaries(world)
         if shape:  # reward can optionally be shaped (decreased reward for increased distance from agents)
             for adv in adversaries:
-                rew -= 0.1 * min([np.sqrt(np.sum(np.square(a.state.p_pos - adv.state.p_pos))) for a in agents])
+                rew -= 0.1 * min(np.sqrt(np.sum(np.square(a.state.p_pos - adv.state.p_pos))) for a in agents)
         if agent.collide:
             for ag in agents:
                 for adv in adversaries:
