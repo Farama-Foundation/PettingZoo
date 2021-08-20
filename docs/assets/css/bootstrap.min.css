@@ -53,7 +53,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -3960,11 +3960,10 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-brand {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     padding-top: .3125rem;
     padding-bottom: .3125rem;
-    padding-left: 23px;
-    margin-right: 1rem;
     font-size: 1.25rem;
     line-height: inherit;
     white-space: nowrap
@@ -3974,21 +3973,10 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     text-decoration: none
 }
 
-.navbar-text {
-    color: #fff;
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 22px;
-    margin-bottom: 25px;
-    margin-left: 50px;
-}
-
 .api-navbar-nav {
     margin-top: 0px!important;
     background-color: rgba(0, 0, 0, 0)!important;
 }
-
-
 
 .navbar-nav {
     display: -ms-flexbox;
@@ -4013,9 +4001,16 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-text {
-    display: inline-block;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 10;
+    line-height: 22px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
     padding-top: .5rem;
-    padding-bottom: .5rem
+    padding-bottom: .5rem;
+    padding-right: .5rem
 }
 
 .navbar-collapse {
@@ -4036,17 +4031,15 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     list-style: none;  
     position: relative;
     background: #fff;  
-    left: 227px;
+    left: 100%;
     top: -52.96px;
-    width: 267px;
 }
 
 .navbar-collapse li li li{  
     list-style: none;  
     position: relative;
     background: #fff;  
-    left: 227px;
-    width: 267px;
+    left: 100%;
     top: -52.96px;
 }
 
@@ -4097,7 +4090,22 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 .navbar-arrow {
     position: absolute;
     top: 16.465px;
+    height: 20px;
     right: 0;
+}
+
+.icon {
+    float: left;
+    position: absolute;
+    top: 18px;
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.env-icon {
+    float: left;
+    height: 1.75rem;  
+    margin-right: .25rem;
 }
 
 .navbar-toggler {
@@ -7700,6 +7708,24 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 
     .fixed-margin {
         left: 281px;
+    }
+
+    .navbar-collapse li li {  
+        list-style: none;  
+        position: relative;
+        background: #fff;  
+        left: 227px;
+        top: -52.96px;
+        width: 267px;
+    }
+
+    .navbar-collapse li li li{  
+        list-style: none;  
+        position: relative;
+        background: #fff;  
+        left: 227px;
+        width: 267px;
+        top: -52.96px;
     }
 }
 

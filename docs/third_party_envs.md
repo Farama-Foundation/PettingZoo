@@ -1,3 +1,7 @@
+---
+title: "third-party-envs"
+---
+
 # Third-Party Environments
 
 ## StarCraft Multi-Agent Challenge

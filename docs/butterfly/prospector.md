@@ -7,6 +7,8 @@ action-shape: "(3,), (2,)"
 action-values: "[-1, 1]"
 observation-shape: "(150, 150, 3), (154, 154, 3)"
 observation-values: "(0, 255)"
+state-shape: "(720, 1280, 3)"
+state-values: "(0, 255)"
 average-total-reward: "0"
 import: "from pettingzoo.butterfly import prospector_v4"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
@@ -18,6 +20,7 @@ agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospect
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 
