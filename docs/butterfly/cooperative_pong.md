@@ -9,6 +9,8 @@ action-values: "[0, 5]"
 action-values: "[0, 1]"
 observation-shape: "(280, 480, 3)"
 observation-values: "[0, 255]"
+state-shape: "(560, 960, 3)"
+state-values: "(0, 255)"
 average-total-reward: "-92.9"
 import: "from pettingzoo.butterfly import cooperative_pong_v3"
 agent-labels: "agents= ['paddle_0', 'paddle_1']"
@@ -21,6 +23,7 @@ aec-diagram: "cooperative_pong_aec.png"
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 

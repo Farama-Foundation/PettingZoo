@@ -1,3 +1,7 @@
+---
+title: "tutorials"
+---
+
 # Tutorials
 
 ##  Multi-Agent Deep Reinforcement Learning in 13 Lines of Code Using PettingZoo

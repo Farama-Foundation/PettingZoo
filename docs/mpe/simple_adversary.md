@@ -7,6 +7,8 @@ action-shape: "(5)"
 action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
 observation-shape: "(8),(10)"
 observation-values: "(-inf,inf)"
+state-shape: "(-inf,inf)"
+state-values: 
 import: "from pettingzoo.mpe import simple_adversary_v2"
 agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 ---
@@ -17,6 +19,7 @@ agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 

@@ -17,6 +17,7 @@ agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 

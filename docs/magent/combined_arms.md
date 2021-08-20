@@ -17,6 +17,7 @@ agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blu
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 

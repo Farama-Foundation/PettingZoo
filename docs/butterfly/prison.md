@@ -7,6 +7,8 @@ action-shape: "(1,)"
 action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
+state-shape: "(650, 750, 3)"
+state-values: "(0, 255)"
 average-total-reward: "2.77"
 import: "from pettingzoo.butterfly import prison_v3"
 agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
@@ -19,6 +21,7 @@ agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 
 <div class="docu-content" markdown="1">
 <div class="appear_big" markdown="1">
+{% include env_icon.md %}
 ## {{page.title}}
 </div>
 
