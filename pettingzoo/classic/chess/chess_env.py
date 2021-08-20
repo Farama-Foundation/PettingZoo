@@ -26,7 +26,7 @@ class raw_env(AECEnv):
 
         self.board = chess.Board()
 
-        self.agents = ["player_{}".format(i) for i in range(2)]
+        self.agents = [f"player_{i}" for i in range(2)]
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)

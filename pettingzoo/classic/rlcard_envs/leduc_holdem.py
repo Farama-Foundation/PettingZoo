@@ -28,7 +28,7 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
         for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
-            print("\n=============== {}'s Hand ===============".format(player))
+            print(f"\n=============== {player}'s Hand ===============")
             print_card(state['hand'])
             print("\n{}'s Chips: {}".format(player, state['my_chips']))
         print('\n================= Public Cards =================')

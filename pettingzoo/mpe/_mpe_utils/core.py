@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class EntityState(object):  # physical/external base state of all entities
+class EntityState:  # physical/external base state of all entities
     def __init__(self):
         # physical position
         self.p_pos = None
@@ -11,12 +11,12 @@ class EntityState(object):  # physical/external base state of all entities
 
 class AgentState(EntityState):  # state of agents (including communication and internal/mental state)
     def __init__(self):
-        super(AgentState, self).__init__()
+        super().__init__()
         # communication utterance
         self.c = None
 
 
-class Action(object):  # action of the agent
+class Action:  # action of the agent
     def __init__(self):
         # physical action
         self.u = None
@@ -24,7 +24,7 @@ class Action(object):  # action of the agent
         self.c = None
 
 
-class Entity(object):  # properties and state of physical world entity
+class Entity:  # properties and state of physical world entity
     def __init__(self):
         # name
         self.name = ''
@@ -53,12 +53,12 @@ class Entity(object):  # properties and state of physical world entity
 
 class Landmark(Entity):  # properties of landmark entities
     def __init__(self):
-        super(Landmark, self).__init__()
+        super().__init__()
 
 
 class Agent(Entity):  # properties of agent entities
     def __init__(self):
-        super(Agent, self).__init__()
+        super().__init__()
         # agents are movable by default
         self.movable = True
         # cannot send communication signals
@@ -79,7 +79,7 @@ class Agent(Entity):  # properties of agent entities
         self.action_callback = None
 
 
-class World(object):  # multi-agent world
+class World:  # multi-agent world
     def __init__(self):
         # list of agents and entities (can change at execution-time!)
         self.agents = []

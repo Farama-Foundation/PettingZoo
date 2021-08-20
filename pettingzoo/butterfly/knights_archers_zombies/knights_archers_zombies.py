@@ -98,21 +98,21 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(num_archers):
             name = "archer_" + str(i)
-            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer(agent_name=name)
-            self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
-            self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
-            self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
-            self.agent_list.append(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
+            self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
+            self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
+            self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
+            self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
             if i != num_archers - 1:
                 self.archer_player_num += 1
 
         for i in range(num_knights):
             name = "knight_" + str(i)
-            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight(agent_name=name)
-            self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
-            self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
-            self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
-            self.agent_list.append(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
+            self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
+            self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
+            self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])
+            self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
             if i != num_knights - 1:
                 self.knight_player_num += 1
 
@@ -216,9 +216,9 @@ class raw_env(AECEnv, EzPickle):
                 if not self.sword_list:      # Sword List is Empty
                     if not self.knight_killed:
                         for i in range(0, self.knight_player_num + 1):
-                            self.sword_dict['sword{0}'.format(i)] = Sword((self.knight_dict['knight{0}'.format(i)]))
-                            self.sword_list.add(self.sword_dict[('sword{0}'.format(i))])
-                            self.all_sprites.add(self.sword_dict[('sword{0}'.format(i))])
+                            self.sword_dict[f'sword{i}'] = Sword(self.knight_dict[f'knight{i}'])
+                            self.sword_list.add(self.sword_dict[(f'sword{i}')])
+                            self.all_sprites.add(self.sword_dict[(f'sword{i}')])
                         self.sword_spawn_rate = 1
                         self.knight_killed = False
                     else:
@@ -235,9 +235,9 @@ class raw_env(AECEnv, EzPickle):
                 if not self.archer_killed:
                     for i in range(0, self.archer_player_num + 1):
                         if i == self.agent_index:
-                            self.arrow_dict[('arrow{0}'.format(i))] = Arrow(self.archer_dict[('archer{0}'.format(i))])
-                            self.arrow_list.add(self.arrow_dict[('arrow{0}'.format(i))])
-                            self.all_sprites.add(self.arrow_dict[('arrow{0}'.format(i))])
+                            self.arrow_dict[(f'arrow{i}')] = Arrow(self.archer_dict[(f'archer{i}')])
+                            self.arrow_list.add(self.arrow_dict[(f'arrow{i}')])
+                            self.all_sprites.add(self.arrow_dict[(f'arrow{i}')])
                     self.arrow_spawn_rate = 1
                     self.archer_killed = False
                 else:
@@ -565,21 +565,21 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
-            self.archer_dict["archer{0}".format(self.archer_player_num)] = Archer(agent_name=name)
-            self.archer_dict["archer{0}".format(self.archer_player_num)].offset(i * 50, 0)
-            self.archer_list.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
-            self.all_sprites.add(self.archer_dict["archer{0}".format(self.archer_player_num)])
-            self.agent_list.append(self.archer_dict["archer{0}".format(self.archer_player_num)])
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
+            self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
+            self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
+            self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
+            self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
             if i != self.num_archers - 1:
                 self.archer_player_num += 1
 
         for i in range(self.num_knights):
             name = "knight_" + str(i)
-            self.knight_dict["knight{0}".format(self.knight_player_num)] = Knight(agent_name=name)
-            self.knight_dict["knight{0}".format(self.knight_player_num)].offset(i * 50, 0)
-            self.knight_list.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
-            self.all_sprites.add(self.knight_dict["knight{0}".format(self.knight_player_num)])
-            self.agent_list.append(self.knight_dict["knight{0}".format(self.knight_player_num)])
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
+            self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
+            self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
+            self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])
+            self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
             if i != self.num_knights - 1:
                 self.knight_player_num += 1
 
