@@ -1,10 +1,10 @@
-from .base import BaseWrapper
+from ..env import AECIterable, AECIterator
 from ..env_logger import EnvLogger
-from ..env import AECIterator, AECIterable
+from .base import BaseWrapper
 
 
 class OrderEnforcingWrapper(BaseWrapper):
-    '''
+    """
     check all call orders:
 
     * error on getting rewards, dones, infos, agent_selection before reset
@@ -12,7 +12,8 @@ class OrderEnforcingWrapper(BaseWrapper):
     * error on iterating without stepping or resetting environment.
     * warn on calling close before render or reset
     * warn on calling step after environment is done
-    '''
+    """
+
     def __init__(self, env):
         self._has_reset = False
         self._has_rendered = False
@@ -20,27 +21,38 @@ class OrderEnforcingWrapper(BaseWrapper):
         super().__init__(env)
 
     def __getattr__(self, value):
-        '''
+        """
         raises an error message when data is gotten from the env
         which should only be gotten after reset
-        '''
+        """
         if value == "unwrapped":
             return self.env.unwrapped
         elif value == "agent_order":
-            raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
-        elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:
+            raise AttributeError(
+                "agent_order has been removed from the API. Please consider using agent_iter instead."
+            )
+        elif value in {
+            "rewards",
+            "dones",
+            "infos",
+            "agent_selection",
+            "num_agents",
+            "agents",
+        }:
             raise AttributeError(f"{value} cannot be accessed before reset")
         else:
-            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{value}'")
+            raise AttributeError(
+                f"'{type(self).__name__}' object has no attribute '{value}'"
+            )
 
     def seed(self, seed=None):
         self._has_reset = False
         super().seed(seed)
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
-        assert mode in self.metadata['render.modes']
+        assert mode in self.metadata["render.modes"]
         self._has_rendered = True
         return super().render(mode)
 
@@ -65,7 +77,7 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_state_before_reset()
         return super().state()
 
-    def agent_iter(self, max_iter=2**63):
+    def agent_iter(self, max_iter=2 ** 63):
         if not self._has_reset:
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)
@@ -76,8 +88,12 @@ class OrderEnforcingWrapper(BaseWrapper):
         super().reset()
 
     def __str__(self):
-        if hasattr(self, 'metadata'):
-            return str(self.env) if self.__class__ is OrderEnforcingWrapper else f'{type(self).__name__}<{str(self.env)}>'
+        if hasattr(self, "metadata"):
+            return (
+                str(self.env)
+                if self.__class__ is OrderEnforcingWrapper
+                else f"{type(self).__name__}<{str(self.env)}>"
+            )
         else:
             return repr(self)
 
@@ -90,6 +106,8 @@ class AECOrderEnforcingIterable(AECIterable):
 class AECOrderEnforcingIterator(AECIterator):
     def __next__(self):
         agent = super().__next__()
-        assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`"
+        assert (
+            self.env._has_updated
+        ), "need to call step() or reset() in a loop over `agent_iter`"
         self.env._has_updated = False
         return agent

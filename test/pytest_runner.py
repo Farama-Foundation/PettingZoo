@@ -1,12 +1,15 @@
-import pytest
-import pickle
-from .all_modules import all_environments
-from pettingzoo.test.api_test import api_test
-from pettingzoo.test.seed_test import seed_test
-from pettingzoo.test.parallel_test import parallel_api_test
-from pettingzoo.test.max_cycles_test import max_cycles_test
-from pettingzoo.test.state_test import state_test
 import os
+import pickle
+
+import pytest
+
+from pettingzoo.test.api_test import api_test
+from pettingzoo.test.max_cycles_test import max_cycles_test
+from pettingzoo.test.parallel_test import parallel_api_test
+from pettingzoo.test.seed_test import seed_test
+from pettingzoo.test.state_test import state_test
+
+from .all_modules import all_environments
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))

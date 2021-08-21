@@ -1,4 +1,5 @@
 import math
+
 import magent
 import numpy as np
 
@@ -21,24 +22,48 @@ grid_size = 8
 
 def draw_line(surface, color, a, b):
     import pygame
+
     pygame.draw.line(
-        surface, color,
+        surface,
+        color,
         (int(round(a[0])), int(round(a[1]))),
-        (int(round(b[0])), int(round(b[1])))
+        (int(round(b[0])), int(round(b[1]))),
     )
 
 
 def draw_rect(surface, color, a, w, h):
     import pygame
-    pygame.draw.rect(surface, color, pygame.Rect(*map(int, (
-        round(a[0]), round(a[1]),
-        round(w + a[0] - round(a[0])),
-        round(h + a[1] - round(a[1]))))))
+
+    pygame.draw.rect(
+        surface,
+        color,
+        pygame.Rect(
+            *map(
+                int,
+                (
+                    round(a[0]),
+                    round(a[1]),
+                    round(w + a[0] - round(a[0])),
+                    round(h + a[1] - round(a[1])),
+                ),
+            )
+        ),
+    )
 
 
 def draw_rect_matrix(matrix, color, a, w, h, resolution):
-    x, y, w, h = map(int, (round(a[0]), round(a[1]), round(w + a[0] - round(a[0])), round(h + a[1] - round(a[1]))))
-    matrix[max(x, 0):min(x + w, resolution[0]), max(y, 0):min(h + y, resolution[1]), :] = color
+    x, y, w, h = map(
+        int,
+        (
+            round(a[0]),
+            round(a[1]),
+            round(w + a[0] - round(a[0])),
+            round(h + a[1] - round(a[1])),
+        ),
+    )
+    matrix[
+        max(x, 0) : min(x + w, resolution[0]), max(y, 0) : min(h + y, resolution[1]), :
+    ] = color
 
 
 def draw_line_matrix(matrix, color, a, b, resolution):
@@ -48,14 +73,14 @@ def draw_line_matrix(matrix, color, a, b, resolution):
     b = map(int, (round(b[0]), round(b[1])))
     if a[0] == b[0]:
         if a[1] > b[1]:
-            matrix[a[0], b[1]:a[1] + 1] = color
+            matrix[a[0], b[1] : a[1] + 1] = color
         else:
-            matrix[a[0], a[1]:b[1] + 1] = color
+            matrix[a[0], a[1] : b[1] + 1] = color
     elif a[1] == b[1]:
         if a[0] > b[0]:
-            matrix[b[0]:a[0] + 1, a[1]] = color
+            matrix[b[0] : a[0] + 1, a[1]] = color
         else:
-            matrix[a[0]:b[0] + 1, a[1]] = color
+            matrix[a[0] : b[0] + 1, a[1]] = color
     else:
         raise NotImplementedError
 
@@ -63,6 +88,7 @@ def draw_line_matrix(matrix, color, a, b, resolution):
 class Renderer:
     def __init__(self, env, map_size, mode):
         import pygame
+
         self.env = env
         self.mode = mode
         self.handles = self.env.get_handles()
@@ -72,11 +98,13 @@ class Renderer:
             pygame.display.init()
             infoObject = pygame.display.Info()
             screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
-            self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
+            self.resolution = resolution = np.min(
+                [screen_size, base_resolution], axis=0
+            )
             self.display = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
             canvas_resolution = (resolution[0], resolution[1])
             self.canvas = pygame.Surface(canvas_resolution)
-            pygame.display.set_caption('MAgent Renderer Window')
+            pygame.display.set_caption("MAgent Renderer Window")
         elif mode == "rgb_array":
             pygame.font.init()
             self.resolution = base_resolution
@@ -104,16 +132,19 @@ class Renderer:
         def form_txt(index):
             handle = self.handles[index]
             color = tuple(int(a) for a in groups[index][2:])
-            return f'{np.sum(self.env.get_alive(handle).astype(np.int32))}', color
+            return f"{np.sum(self.env.get_alive(handle).astype(np.int32))}", color
+
         if len(self.handles) == 1:
-            result = [(form_txt(0), )]
+            result = [(form_txt(0),)]
         if len(self.handles) == 2:
-            vs = ' vs ', (0, 0, 0)
+            vs = " vs ", (0, 0, 0)
             result = [(form_txt(0), vs, form_txt(1))]
         elif len(self.handles) == 4:
-            vs = ' vs ', (0, 0, 0)
-            comma = ', ', (0, 0, 0)
-            result = [(form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))]
+            vs = " vs ", (0, 0, 0)
+            comma = ", ", (0, 0, 0)
+            result = [
+                (form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))
+            ]
         else:
             raise RuntimeError("bad number of handles")
 
@@ -121,12 +152,14 @@ class Renderer:
 
     def close(self):
         import pygame
+
         pygame.display.quit()
         pygame.quit()
 
     def render(self, mode):
         import os
-        os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+        os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
         import pygame
 
         env = self.env
@@ -134,8 +167,10 @@ class Renderer:
         resolution = self.resolution
 
         grid_map = np.zeros((resolution[0], resolution[1], 3), dtype=np.int16)
-        view_position = [self.map_size[0] / 2 * grid_size - resolution[0] / 2,
-                         self.map_size[1] / 2 * grid_size - resolution[1] / 2]
+        view_position = [
+            self.map_size[0] / 2 * grid_size - resolution[0] / 2,
+            self.map_size[1] / 2 * grid_size - resolution[1] / 2,
+        ]
 
         groups = self.groups
         banner_formatter = self.banner_formatter
@@ -145,12 +180,18 @@ class Renderer:
         # y_range: which horizontal gridlines should be shown on the display
         x_range = (
             max(0, int(math.floor(max(0, view_position[0]) / grid_size))),
-            min(self.map_size[0], int(math.ceil(max(0, view_position[0] + resolution[0]) / grid_size)))
+            min(
+                self.map_size[0],
+                int(math.ceil(max(0, view_position[0] + resolution[0]) / grid_size)),
+            ),
         )
 
         y_range = (
             max(0, int(math.floor(max(0, view_position[1]) / grid_size))),
-            min(self.map_size[1], int(math.ceil(max(0, view_position[1] + resolution[1]) / grid_size)))
+            min(
+                self.map_size[1],
+                int(math.ceil(max(0, view_position[1] + resolution[1]) / grid_size)),
+            ),
         )
 
         self.canvas.fill(background_rgb)
@@ -160,7 +201,10 @@ class Renderer:
             grids = pygame.Surface(resolution)
             grids.fill(background_rgb)
 
-        if self.new_data is None or self.animation_progress > animation_total + animation_stop:
+        if (
+            self.new_data is None
+            or self.animation_progress > animation_total + animation_stop
+        ):
             pos, event = env._get_render_info(x_range, y_range)
             buffered_new_data = pos, event
 
@@ -178,10 +222,23 @@ class Renderer:
                 pygame.pixelcopy.surface_to_array(grid_map, self.canvas)
                 for wall in env._get_walls_info():
                     x, y = wall[0], wall[1]
-                    if x >= x_range[0] and x <= x_range[1] and y >= y_range[0] and y <= y_range[1]:
-                        draw_rect_matrix(grid_map, (127, 127, 127),
-                                         (x * grid_size - view_position[0], y * grid_size - view_position[1]),
-                                         grid_size, grid_size, resolution)
+                    if (
+                        x >= x_range[0]
+                        and x <= x_range[1]
+                        and y >= y_range[0]
+                        and y <= y_range[1]
+                    ):
+                        draw_rect_matrix(
+                            grid_map,
+                            (127, 127, 127),
+                            (
+                                x * grid_size - view_position[0],
+                                y * grid_size - view_position[1],
+                            ),
+                            grid_size,
+                            grid_size,
+                            resolution,
+                        )
             pygame.pixelcopy.array_to_surface(self.canvas, grid_map)
 
             for key in self.new_data[0]:
@@ -190,13 +247,14 @@ class Renderer:
                 now_prop = new_prop
                 now_group = new_group
                 draw_rect(
-                    self.canvas, (int(now_group[2]), int(now_group[3]), int(now_group[4])),
+                    self.canvas,
+                    (int(now_group[2]), int(now_group[3]), int(now_group[4])),
                     (
                         now_prop[0] * grid_size - view_position[0],
-                        now_prop[1] * grid_size - view_position[1]
+                        now_prop[1] * grid_size - view_position[1],
                     ),
                     now_group[0] * grid_size,
-                    now_group[1] * grid_size
+                    now_group[1] * grid_size,
                 )
 
             for key, event_x, event_y in self.new_data[1]:
@@ -207,27 +265,43 @@ class Renderer:
                 now_prop = new_prop
                 now_group = new_group
                 draw_line(
-                    self.canvas, attack_line_rgb,
+                    self.canvas,
+                    attack_line_rgb,
                     (
-                        now_prop[0] * grid_size - view_position[0] + now_group[0] / 2 * grid_size,
-                        now_prop[1] * grid_size - view_position[1] + now_group[1] / 2 * grid_size
+                        now_prop[0] * grid_size
+                        - view_position[0]
+                        + now_group[0] / 2 * grid_size,
+                        now_prop[1] * grid_size
+                        - view_position[1]
+                        + now_group[1] / 2 * grid_size,
                     ),
                     (
                         event_x * grid_size - view_position[0] + grid_size / 2,
-                        event_y * grid_size - view_position[1] + grid_size / 2
-                    )
+                        event_y * grid_size - view_position[1] + grid_size / 2,
+                    ),
                 )
                 draw_rect(
-                    self.canvas, attack_dot_rgb,
+                    self.canvas,
+                    attack_dot_rgb,
                     (
-                        event_x * grid_size - view_position[0] + grid_size / 2 - attack_dot_size * grid_size / 2,
-                        event_y * grid_size - view_position[1] + grid_size / 2 - attack_dot_size * grid_size / 2,
+                        event_x * grid_size
+                        - view_position[0]
+                        + grid_size / 2
+                        - attack_dot_size * grid_size / 2,
+                        event_y * grid_size
+                        - view_position[1]
+                        + grid_size / 2
+                        - attack_dot_size * grid_size / 2,
                     ),
                     attack_dot_size * grid_size,
-                    attack_dot_size * grid_size
+                    attack_dot_size * grid_size,
                 )
 
-            if status or triggered or self.animation_progress < animation_total + animation_stop:
+            if (
+                status
+                or triggered
+                or self.animation_progress < animation_total + animation_stop
+            ):
                 self.animation_progress += 1
 
             self.display.blit(self.canvas, (0, 7))
@@ -237,7 +311,9 @@ class Renderer:
                 content = []
                 width, height = 0, 0
                 for text in texts:
-                    text = banner_formatter.render(text[0], True, pygame.Color(*text[1]))
+                    text = banner_formatter.render(
+                        text[0], True, pygame.Color(*text[1])
+                    )
                     content.append((text, width))
                     width += text.get_width()
                     height = max(height, text.get_height())
@@ -252,6 +328,10 @@ class Renderer:
         observation = pygame.surfarray.pixels3d(self.display)
         new_observation = np.copy(observation)
         del observation
-        if self.mode == 'human':
+        if self.mode == "human":
             pygame.display.flip()
-        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        return (
+            np.transpose(new_observation, axes=(1, 0, 2))
+            if mode == "rgb_array"
+            else None
+        )

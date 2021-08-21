@@ -1,5 +1,4 @@
 import numpy as np
-
 from scipy.ndimage import zoom
 
 
@@ -35,7 +34,15 @@ def complex_map(xs, ys):
     return cmap
 
 
-def gen_map(xs, ys, n_obs, randomizer, center_bounds=[0.0, 1.0], length_bounds=[0.1, 0.5], gmap=None):
+def gen_map(
+    xs,
+    ys,
+    n_obs,
+    randomizer,
+    center_bounds=[0.0, 1.0],
+    length_bounds=[0.1, 0.5],
+    gmap=None,
+):
     cl, cu = center_bounds
     ll, lu = length_bounds
     if gmap is None:
@@ -49,7 +56,12 @@ def gen_map(xs, ys, n_obs, randomizer, center_bounds=[0.0, 1.0], length_bounds=[
     return gmap
 
 
-def multi_scale_map(xs, ys, randomizer, scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.05, 0.1]), (150, [0.01, 0.05])]):
+def multi_scale_map(
+    xs,
+    ys,
+    randomizer,
+    scales=[(3, [0.2, 0.3]), (10, [0.1, 0.2]), (30, [0.05, 0.1]), (150, [0.01, 0.05])],
+):
     gmap = np.zeros((xs, ys), dtype=np.int32)
     for scale in scales:
         n, lb = scale
@@ -99,10 +111,10 @@ def resize(scale, old_mats):
 def simple_soccer_map(xs=6, ys=9):
     assert xs % 2 == 0, "xs must be even"
     smap = np.zeros((xs, ys), dtype=np.int32)
-    smap[0:xs / 2 - 1, 0] = -1
-    smap[xs / 2 + 1:xs, 0] = -1
-    smap[0:xs / 2 - 1, ys - 1] = -1
-    smap[xs / 2 + 1:xs, ys - 1] = -1
+    smap[0 : xs / 2 - 1, 0] = -1
+    smap[xs / 2 + 1 : xs, 0] = -1
+    smap[0 : xs / 2 - 1, ys - 1] = -1
+    smap[xs / 2 + 1 : xs, ys - 1] = -1
     return smap
 
 

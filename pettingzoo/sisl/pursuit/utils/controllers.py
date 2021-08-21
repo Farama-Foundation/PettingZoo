@@ -20,7 +20,6 @@ class RandomPolicy:
 
 
 class SingleActionPolicy:
-
     def __init__(self, a):
         self.action = a
 

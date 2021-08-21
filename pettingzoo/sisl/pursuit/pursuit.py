@@ -1,14 +1,16 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-from .pursuit_base import Pursuit as _env
-from .manual_control import manual_control
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import numpy as np
 import pygame
-from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .manual_control import manual_control
+from .pursuit_base import Pursuit as _env
 
 
 def env(**kwargs):
@@ -23,7 +25,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'pursuit_v3'}
+    metadata = {"render.modes": ["human", "rgb_array"], "name": "pursuit_v3"}
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
@@ -36,8 +38,7 @@ class raw_env(AECEnv, EzPickle):
         # spaces
         self.n_act_agents = self.env.act_dims[0]
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(
-            zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.steps = 0
         self.closed = False
 
@@ -68,7 +69,9 @@ class raw_env(AECEnv, EzPickle):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         agent = self.agent_selection
-        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
+        self.env.step(
+            action, self.agent_name_mapping[agent], self._agent_selector.is_last()
+        )
         for k in self.dones:
             if self.env.frames >= self.env.max_cycles:
                 self.dones[k] = True

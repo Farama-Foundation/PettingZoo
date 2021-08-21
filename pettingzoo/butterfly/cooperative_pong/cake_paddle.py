@@ -1,12 +1,12 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 
 RENDER_RATIO = 2
 
 
 class CakePaddle(pygame.sprite.Sprite):
-
     def __init__(self, speed=12):
         # surf is the right-most (largest) tier of the cake
         self.surf = pygame.Surface((30 // RENDER_RATIO, 120 // RENDER_RATIO))
@@ -49,7 +49,7 @@ class CakePaddle(pygame.sprite.Sprite):
             self.rect4 = self.rect4.move(movepos)
 
     def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
-        '''
+        """
 
         Parameters
         ----------
@@ -64,7 +64,7 @@ class CakePaddle(pygame.sprite.Sprite):
         b_rect: new ball rect
         b_speed: new ball speed
 
-        '''
+        """
         if self.rect4.colliderect(b_rect):
             is_collision = True
             if dx > 0:
