@@ -7,6 +7,8 @@ action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
 observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
+state-shape: "(45, 45, 29)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import adversarial_pursuit_v3"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---

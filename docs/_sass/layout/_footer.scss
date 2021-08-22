@@ -3,6 +3,8 @@
   padding: 25px 0;
   text-align: left;
   span.copyright {
+    display:flex;
+    flex-direction: column;
     font-size: 90%;
     line-height: 40px;
     text-transform: none;
