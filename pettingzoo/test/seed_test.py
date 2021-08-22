@@ -27,7 +27,7 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             elif isinstance(obs, dict) and 'action_mask' in obs:
                 action = sampler.choice(np.flatnonzero(obs['action_mask']))
             else:
-                action = new_env.action_spaces[agent].sample()
+                action = new_env.action_space(agent).sample()
             new_env.step(action)
             cur_hashes.append(hash_obsevation(obs))
             cur_hashes.append(float(rew))
@@ -36,8 +36,9 @@ def calc_hash(new_env, rand_issue, max_env_iters):
 
 
 def seed_action_spaces(env):
-    for i, (agent, space) in enumerate(sorted(env.action_spaces.items())):
-        space.seed(42 + i)
+    if hasattr(env, 'action_spaces'):
+        for i, (agent, space) in enumerate(sorted(env.action_spaces.items())):
+            space.seed(42 + i)
 
 
 def check_environment_deterministic(env1, env2, num_cycles):

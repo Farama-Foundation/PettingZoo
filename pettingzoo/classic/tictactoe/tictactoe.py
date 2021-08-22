@@ -68,6 +68,12 @@ class raw_env(AECEnv):
 
         return {'observation': observation, 'action_mask': action_mask}
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def _legal_moves(self):
         return [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0]
 
