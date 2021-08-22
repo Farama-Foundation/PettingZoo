@@ -78,6 +78,12 @@ class raw_env(AECEnv):
 
         self.reset()
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def observe(self, agent):
         # Use self.ch.flatboard to update self.observation
         board = self.ch.flat_board()

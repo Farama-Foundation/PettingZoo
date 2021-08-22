@@ -38,6 +38,12 @@ class RLCardBase(AECEnv):
                                                     dtype=np.int8)}) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.num_actions) for _ in range(self.num_agents)])
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         config = {'allow_step_back': False,
                   'seed': seed,

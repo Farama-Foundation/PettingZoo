@@ -1,3 +1,4 @@
+import warnings
 '''
 Base environment definitions
 
@@ -64,6 +65,28 @@ class AECEnv:
         that should be released.
         '''
         pass
+
+    def observation_space(self, agent):
+        '''
+        Takes in agent and returns the observation space for that agent.
+
+        MUST return the same value for the same agent name
+
+        Default implementation is to return the observation_spaces dict
+        '''
+        warnings.warn("Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.")
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        '''
+        Takes in agent and returns the action space for that agent.
+
+        MUST return the same value for the same agent name
+
+        Default implementation is to return the action_spaces dict
+        '''
+        warnings.warn("Your environment should override the action_space function. Attempting to use the action_spaces dict attribute.")
+        return self.action_spaces[agent]
 
     @property
     def num_agents(self):
@@ -239,6 +262,28 @@ class ParallelEnv:
         centralized training decentralized execution methods like QMIX
         '''
         raise NotImplementedError('state() method has not been implemented in the environment {}.'.format(self.metadata.get('name', self.__class__.__name__)))
+
+    def observation_space(self, agent):
+        '''
+        Takes in agent and returns the observation space for that agent.
+
+        MUST return the same value for the same agent name
+
+        Default implementation is to return the observation_spaces dict
+        '''
+        warnings.warn("Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.")
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        '''
+        Takes in agent and returns the action space for that agent.
+
+        MUST return the same value for the same agent name
+
+        Default implementation is to return the action_spaces dict
+        '''
+        warnings.warn("Your environment should override the action_space function. Attempting to use the action_spaces dict attribute.")
+        return self.action_spaces[agent]
 
     @property
     def num_agents(self):

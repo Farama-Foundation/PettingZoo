@@ -46,6 +46,12 @@ class raw_env(AECEnv):
             for i in self.agents}
         self.double_roll = 0
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         self.np_random = np.random.RandomState(seed)
 

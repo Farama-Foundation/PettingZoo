@@ -136,6 +136,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         obs = self._observe()
         return {agent: obs for agent in self.agents}
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def _observe(self):
         if self.obs_type == 'ram':
             bytes = self.ale.getRAM()

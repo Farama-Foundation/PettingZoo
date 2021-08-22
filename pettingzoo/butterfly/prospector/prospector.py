@@ -741,6 +741,12 @@ class raw_env(AECEnv, EzPickle):
 
         return sub_screen
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def state(self):
         '''
         Returns an observation of the global environment

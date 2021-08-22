@@ -20,7 +20,7 @@ def performance_benchmark(env):
             elif isinstance(obs, dict) and 'action_mask' in obs:
                 action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
-                action = env.action_spaces[agent].sample()
+                action = env.action_space(agent).sample()
             env.step(action)
             turn += 1
 

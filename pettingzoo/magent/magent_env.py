@@ -64,6 +64,12 @@ class magent_parallel_env(ParallelEnv):
         self._renderer = None
         self.frames = 0
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         if seed is None:
             seed = seeding.create_seed(seed, max_bytes=4)

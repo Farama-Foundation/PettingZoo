@@ -3,6 +3,7 @@ from pettingzoo.utils.env import AECEnv
 import copy
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 from pettingzoo.utils.env import ParallelEnv
+import warnings
 
 
 def parallel_wrapper_fn(env_fn):
@@ -33,9 +34,19 @@ def from_parallel(par_env):
 class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         self.aec_env = aec_env
-        self.observation_spaces = aec_env.observation_spaces
-        self.action_spaces = aec_env.action_spaces
-        self.possible_agents = aec_env.possible_agents
+
+        # try to access these parameters for backwards compatability
+        try:
+            self._observation_spaces = self.aec_env.observation_spaces
+            self._action_spaces = self.aec_env.action_spaces
+        except AttributeError:
+            pass
+
+        try:
+            self.possible_agents = aec_env.possible_agents
+        except AttributeError:
+            pass
+
         self.metadata = aec_env.metadata
 
         # Not every environment has the .state_space attribute implemented
@@ -43,6 +54,28 @@ class to_parallel_wrapper(ParallelEnv):
             self.state_space = self.aec_env.state_space
         except AttributeError:
             pass
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return self._observation_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return self._action_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.aec_env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.aec_env.action_space(agent)
 
     @property
     def unwrapped(self):
@@ -97,11 +130,18 @@ class from_parallel_wrapper(AECEnv):
     def __init__(self, parallel_env):
         self.metadata = parallel_env.metadata
         self.env = parallel_env
-        self.possible_agents = self.env.possible_agents
 
-        self.action_spaces = self.env.action_spaces
-        self.observation_spaces = self.env.observation_spaces
+        try:
+            self.possible_agents = parallel_env.possible_agents
+        except AttributeError:
+            pass
 
+        # try to access these parameters for backwards compatability
+        try:
+            self._observation_spaces = self.env.observation_spaces
+            self._action_spaces = self.env.action_spaces
+        except AttributeError:
+            pass
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = self.env.state_space
@@ -111,6 +151,28 @@ class from_parallel_wrapper(AECEnv):
     @property
     def unwrapped(self):
         return self.env.unwrapped
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return self._observation_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return self._action_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.env.action_space(agent)
 
     def seed(self, seed=None):
         self.env.seed(seed)
