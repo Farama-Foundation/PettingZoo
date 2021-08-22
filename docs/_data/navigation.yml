@@ -175,10 +175,22 @@ nav:
             url: "/classic/leduc_holdem"
 
           - title: "Mahjong"
-            url: "/classic/dou_dizhu"
+            url: "/classic/mahjong"
 
           - title: "Rock Paper Scissors"
             url: "/classic/rps"
+
+          - title: "Texas Hold'em No Limit"
+            url: "/classic/texas_holdem_no_limit"
+
+          - title: "Texas Hold'em"
+            url: "/classic/texas_holdem"
+
+          - title: "Tic Tac Toe"
+            url: "/classic/tictactoe"
+          
+          - title: "Uno"
+            url: "/classic/uno"
 
       - title: "MAgent"
         url: "/magent"

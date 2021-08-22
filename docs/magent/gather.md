@@ -7,6 +7,8 @@ action-shape: "(33)"
 action-values: "Discrete(33)"
 observation-shape: "(15,15,5)"
 observation-values: "[0,2]"
+state-shape: "(200, 200, 39)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import gather_v3"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---

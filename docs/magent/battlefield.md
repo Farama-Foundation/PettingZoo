@@ -7,6 +7,8 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,5)"
 observation-values: "[0,2]"
+state-shape: "(80, 80, 37)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import battlefield_v3"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---

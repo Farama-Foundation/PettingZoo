@@ -7,6 +7,8 @@ action-shape: "(5)"
 action-values: "Discrete(5)/Box(0.0, 1.0, (50))"
 observation-shape: "(14),(16)"
 observation-values: "(-inf,inf)"
+state-shape: "(62,)"
+state-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_tag_v2"
 agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
