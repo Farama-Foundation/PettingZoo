@@ -510,34 +510,6 @@ pre code {
     overflow-y: scroll
 }
 
-.selection-container {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    margin-right: 0;
-}
-
-.env-container {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    margin-right: 0;
-}
-
-.docu-container {
-    box-sizing: border-box;
-    display: flex;
-    margin-right: 0;
-}
-
-.doccontainer.container {
-    width: 50vw;
-    /* padding-right: 15px;
-    padding-left: 15px; */
-    margin-right: auto;
-    margin-left: auto
-}
-
 .container {
     width: 100%;
     /* padding-right: 15px;
@@ -585,14 +557,6 @@ pre code {
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px
-}
-
-.home-img {
-    display:block;
-    margin-left: auto;
-    margin-right: auto;
-    border-style: none;
-    margin-bottom: 5%;
 }
 
 .no-gutters {
@@ -3854,19 +3818,6 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     list-style: none
 }
 
-.nav-submenu {
-    width: 100%;
-}
-
-.nav-subsubmenu {
-    padding-inline-start: 0px;
-    max-height: 318px;
-    display: flex;
-    overflow-y: visible;
-    flex-direction: column;
-    flex-wrap: wrap;
-}
-
 .nav-link {
     display: block;
     padding: .5rem 1rem
@@ -3963,78 +3914,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     /* padding: .5rem 1rem */
 }
 
-.api-navbar {
-    padding: 0rem 2rem;
-}
 
-@media (max-width: 992px) {
-    .api-navbar {
-        padding: 0rem 2rem;
-        visibility: hidden;
-    }
-    .navbar-brand {
-        visibility: hidden;
-    }
-    .navbar-text {
-        position: fixed;
-        top: 2%;
-        left: 40%;
-        padding-left: 8px;
-    }
-    .doccontainer.container {
-        margin-top: 25%;
-        z-index: 0;
-        width: 80vh;
-    }
-    .shorten {
-        height: 100%;
-    }
-    .navbar-site-title {
-        height: 100%;
-    }
-    .markdown-body {
-        margin-top: 25%;
-    }
-    .selection-content {
-        float:none;
-        box-sizing: border-box;
-        padding: 10px;
-        overflow-x: auto;
-    }
-    .selection-table-container {
-        float: none;
-        padding: 10px;
-        overflow-x: auto;
-    }
-    .docu-info {
-        overflow-y: auto;
-        padding: 10px;
-        overflow-x: auto;
-    }
-    .docu-content {
-        box-sizing: border-box;
-        height: 100vh;
-        overflow-y: auto;
-        padding: 10px;
-        overflow-x: auto;
-    }
-    .navbar-nav {
-        position: fixed;
-        left: 0;
-        top: 10vh;
-        margin-top: 0px;
-    }
-    .menu-btn {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 10vw;
-        height: 10vh;
-    }
-    .navbar-arrow {
-        visibility: hidden;
-    }
-}
 
 .navbar>.container, .navbar>.container-fluid {
     display: -ms-flexbox;
@@ -4059,11 +3939,6 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 
 .navbar-brand:focus, .navbar-brand:hover {
     text-decoration: none
-}
-
-.api-navbar-nav {
-    margin-top: 0px!important;
-    background-color: rgba(0, 0, 0, 0)!important;
 }
 
 .navbar-nav {
@@ -4109,93 +3984,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     align-items: center
 }
    
-.navbar-collapse li {  
-    list-style: none;  
-    position: relative;
-}
 
-.navbar-collapse li li {  
-    list-style: none;  
-    position: relative;
-    background: #fff;  
-    left: 100%;
-    top: -52.96px;
-}
-
-.navbar-collapse li li li{  
-    list-style: none;  
-    position: relative;
-    background: #fff;  
-    left: 100%;
-    top: -52.96px;
-    z-index: 10;
-}
-
-.navbar-collapse ul li:hover {
-    background: #eee;   
-}  
-
-.navbar-collapse .api-navbar-nav li {
-    background: #fff;   
-}  
-
-.navbar-collapse ul ul {  
-    position: absolute;  
-    visibility: hidden;
-}  
-@media(min-width:992px) {
-    .navbar-collapse ul li:hover ul {  
-        visibility: visible;
-    }
-}
-
-.navbar-collapse ul ul ul {
-    position: absolute;
-    visibility: hidden;
-}
-
-.navbar-collapse li:hover ul ul {
-    visibility: hidden;
-}
-
-.navbar-collapse li li:hover ul {
-    visibility: visible;
-}
-
-.api-collapse {
-    -ms-flex-preferred-size: 100%;
-    flex-basis: 100%;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    -ms-flex-align: center;
-    align-items: center
-}
-
-.api-collapse li {  
-    list-style: none;  
-    position: relative;
-}  
-
-.navbar-arrow {
-    position: absolute;
-    top: 16.465px;
-    height: 20px;
-    right: 0;
-}
-
-.icon {
-    float: left;
-    position: absolute;
-    top: 18px;
-    max-width: 20px;
-    max-height: 20px;
-}
-
-.env-icon {
-    float: left;
-    height: 1.75rem;  
-    margin-right: .25rem;
-}
 
 .navbar-toggler {
     padding: .25rem .75rem;
