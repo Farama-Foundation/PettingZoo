@@ -38,7 +38,7 @@ def test_observation(observation, observation_0):
             warnings.warn("Observation numpy array is all zeros.")
         if not np.all(observation >= 0) and (
             len(observation.shape) == 2
-            or (len(observation.shape) == 3 and observation.shape[2] in (1,3))
+            or (len(observation.shape) == 3 and observation.shape[2] in (1, 3))
         ):
             warnings.warn(
                 "The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
