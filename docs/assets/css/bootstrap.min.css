@@ -3984,6 +3984,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     .doccontainer.container {
         margin-top: 25%;
         z-index: 0;
+        width: 80vh;
     }
     .shorten {
         height: 100%;
