@@ -17,9 +17,7 @@ from pettingzoo.butterfly import pistonball_v4
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
-parser = argparse.ArgumentParser(
-    description="Render pretrained policy loaded from checkpoint"
-)
+parser = argparse.ArgumentParser(description="Render pretrained policy loaded from checkpoint")
 parser.add_argument(
     "checkpoint_path",
     help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v4/PPO/PPO_pistonball_v4_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
@@ -80,9 +78,7 @@ for agent in env.agent_iter():
     if done:
         action = None
     else:
-        action, _, _ = PPOagent.get_policy("policy_0").compute_single_action(
-            observation
-        )
+        action, _, _ = PPOagent.get_policy("policy_0").compute_single_action(observation)
 
     env.step(action)
     i += 1
@@ -92,6 +88,4 @@ env.close()
 
 
 print(reward_sum)
-frame_list[0].save(
-    "out.gif", save_all=True, append_images=frame_list[1:], duration=3, loop=0
-)
+frame_list[0].save("out.gif", save_all=True, append_images=frame_list[1:], duration=3, loop=0)

@@ -13,9 +13,7 @@ for name in dir_names:
                 with open(os.path.join(_dir, file)) as f:
                     for line in f:
                         if line.lstrip().startswith("print"):
-                            print(
-                                f"File: {os.path.join(_dir, file)} has a print statement. Please remove it."
-                            )
+                            print(f"File: {os.path.join(_dir, file)} has a print statement. Please remove it.")
                             had_error = True
                             break
 

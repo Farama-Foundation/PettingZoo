@@ -126,9 +126,7 @@ class BipedalWalker(Agent):
         self.hull = self.world.CreateDynamicBody(
             position=(init_x, init_y),
             fixtures=fixtureDef(
-                shape=polygonShape(
-                    vertices=[(x / SCALE, y / SCALE) for x, y in HULL_POLY]
-                ),
+                shape=polygonShape(vertices=[(x / SCALE, y / SCALE) for x, y in HULL_POLY]),
                 density=5.0,
                 friction=0.1,
                 groupIndex=self.walker_id,
@@ -137,9 +135,7 @@ class BipedalWalker(Agent):
         )
         self.hull.color1 = (0.5, 0.4, 0.9)
         self.hull.color2 = (0.3, 0.3, 0.5)
-        self.hull.ApplyForceToCenter(
-            (self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM), 0), True
-        )
+        self.hull.ApplyForceToCenter((self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM), 0), True)
 
         self.legs = []
         self.joints = []
@@ -214,21 +210,13 @@ class BipedalWalker(Agent):
     def apply_action(self, action):
 
         self.joints[0].motorSpeed = float(SPEED_HIP * np.sign(action[0]))
-        self.joints[0].maxMotorTorque = float(
-            MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1)
-        )
+        self.joints[0].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1))
         self.joints[1].motorSpeed = float(SPEED_KNEE * np.sign(action[1]))
-        self.joints[1].maxMotorTorque = float(
-            MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1)
-        )
+        self.joints[1].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[1]), 0, 1))
         self.joints[2].motorSpeed = float(SPEED_HIP * np.sign(action[2]))
-        self.joints[2].maxMotorTorque = float(
-            MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1)
-        )
+        self.joints[2].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[2]), 0, 1))
         self.joints[3].motorSpeed = float(SPEED_KNEE * np.sign(action[3]))
-        self.joints[3].maxMotorTorque = float(
-            MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1)
-        )
+        self.joints[3].maxMotorTorque = float(MOTORS_TORQUE * np.clip(np.abs(action[3]), 0, 1))
 
     def get_observation(self):
         pos = self.hull.position
@@ -280,9 +268,7 @@ class BipedalWalker(Agent):
 
     @property
     def action_space(self):
-        return spaces.Box(
-            low=np.float32(-1), high=np.float32(1), shape=(4,), dtype=np.float32
-        )
+        return spaces.Box(low=np.float32(-1), high=np.float32(1), shape=(4,), dtype=np.float32)
 
 
 class MultiWalkerEnv:
@@ -346,13 +332,8 @@ class MultiWalkerEnv:
 
         init_x = TERRAIN_STEP * TERRAIN_STARTPAD / 2
         init_y = TERRAIN_HEIGHT + 2 * LEG_H
-        self.start_x = [
-            init_x + WALKER_SEPERATION * i * TERRAIN_STEP for i in range(self.n_walkers)
-        ]
-        self.walkers = [
-            BipedalWalker(self.world, init_x=sx, init_y=init_y, seed=self.seed_val)
-            for sx in self.start_x
-        ]
+        self.start_x = [init_x + WALKER_SEPERATION * i * TERRAIN_STEP for i in range(self.n_walkers)]
+        self.walkers = [BipedalWalker(self.world, init_x=sx, init_y=init_y, seed=self.seed_val) for sx in self.start_x]
         self.num_agents = len(self.walkers)
         self.observation_space = [agent.observation_space for agent in self.walkers]
         self.action_space = [agent.action_space for agent in self.walkers]
@@ -457,9 +438,7 @@ class MultiWalkerEnv:
             yd = (self.package.position.y - y) / self.package_length
             neighbor_obs.append(self.np_random.normal(xd, self.position_noise))
             neighbor_obs.append(self.np_random.normal(yd, self.position_noise))
-            neighbor_obs.append(
-                self.np_random.normal(self.package.angle, self.angle_noise)
-            )
+            neighbor_obs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(walker_obs + neighbor_obs))
 
             # shaping = 130 * pos[0] / SCALE
@@ -472,11 +451,7 @@ class MultiWalkerEnv:
         rewards += package_shaping - self.prev_package_shaping
         self.prev_package_shaping = package_shaping
 
-        self.scroll = (
-            xpos.mean()
-            - VIEWPORT_W / SCALE / 5
-            - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
-        )
+        self.scroll = xpos.mean() - VIEWPORT_W / SCALE / 5 - (self.n_walkers - 1) * WALKER_SEPERATION * TERRAIN_STEP
 
         done = [False] * self.n_walkers
         if self.game_over or pos[0] < 0:
@@ -509,10 +484,7 @@ class MultiWalkerEnv:
             self.last_obs = mod_obs
             global_reward = rewards.mean()
             local_reward = rewards * self.local_ratio
-            self.last_rewards = (
-                global_reward * (1.0 - self.local_ratio)
-                + local_reward * self.local_ratio
-            )
+            self.last_rewards = global_reward * (1.0 - self.local_ratio) + local_reward * self.local_ratio
             self.last_dones = done
             self.frames = self.frames + 1
 
@@ -564,13 +536,11 @@ class MultiWalkerEnv:
             [
                 (self.scroll, 0),
                 (
-                    self.scroll
-                    + VIEWPORT_W * self.package_scale / SCALE * render_scale,
+                    self.scroll + VIEWPORT_W * self.package_scale / SCALE * render_scale,
                     0,
                 ),
                 (
-                    self.scroll
-                    + VIEWPORT_W * self.package_scale / SCALE * render_scale,
+                    self.scroll + VIEWPORT_W * self.package_scale / SCALE * render_scale,
                     VIEWPORT_H / SCALE * self.package_scale * render_scale,
                 ),
                 (self.scroll, VIEWPORT_H / SCALE * self.package_scale * render_scale),
@@ -582,9 +552,7 @@ class MultiWalkerEnv:
                 continue
             if x1 > self.scroll / 2 + VIEWPORT_W / SCALE * self.package_scale:
                 continue
-            self.viewer.draw_polygon(
-                [(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1)
-            )
+            self.viewer.draw_polygon([(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1))
         for poly, color in self.terrain_poly:
             if poly[1][0] < self.scroll:
                 continue
@@ -596,11 +564,7 @@ class MultiWalkerEnv:
         i = self.lidar_render
         for walker in self.walkers:
             if i < 2 * len(walker.lidar):
-                l = (
-                    walker.lidar[i]
-                    if i < len(walker.lidar)
-                    else walker.lidar[len(walker.lidar) - i - 1]
-                )
+                l = walker.lidar[i] if i < len(walker.lidar) else walker.lidar[len(walker.lidar) - i - 1]
                 self.viewer.draw_polyline([l.p1, l.p2], color=(1, 0, 0), linewidth=1)
 
         for obj in self.drawlist:
@@ -608,12 +572,8 @@ class MultiWalkerEnv:
                 trans = f.body.transform
                 if type(f.shape) is circleShape:
                     t = rendering.Transform(translation=trans * f.shape.pos)
-                    self.viewer.draw_circle(
-                        f.shape.radius, 30, color=obj.color1
-                    ).add_attr(t)
-                    self.viewer.draw_circle(
-                        f.shape.radius, 30, color=obj.color2, filled=False, linewidth=2
-                    ).add_attr(t)
+                    self.viewer.draw_circle(f.shape.radius, 30, color=obj.color1).add_attr(t)
+                    self.viewer.draw_circle(f.shape.radius, 30, color=obj.color2, filled=False, linewidth=2).add_attr(t)
                 else:
                     path = [trans * v for v in f.shape.vertices]
                     self.viewer.draw_polygon(path, color=obj.color1)
@@ -623,9 +583,7 @@ class MultiWalkerEnv:
         flagy1 = TERRAIN_HEIGHT
         flagy2 = flagy1 + 50 / SCALE
         x = TERRAIN_STEP * 3
-        self.viewer.draw_polyline(
-            [(x, flagy1), (x, flagy2)], color=(0, 0, 0), linewidth=2
-        )
+        self.viewer.draw_polyline([(x, flagy1), (x, flagy2)], color=(0, 0, 0), linewidth=2)
         f = [
             (x, flagy2),
             (x, flagy2 - 10 / SCALE),
@@ -642,12 +600,7 @@ class MultiWalkerEnv:
         self.package = self.world.CreateDynamicBody(
             position=(init_x, init_y),
             fixtures=fixtureDef(
-                shape=polygonShape(
-                    vertices=[
-                        (x * self.package_scale / SCALE, y / SCALE)
-                        for x, y in PACKAGE_POLY
-                    ]
-                ),
+                shape=polygonShape(vertices=[(x * self.package_scale / SCALE, y / SCALE) for x, y in PACKAGE_POLY]),
                 density=1.0,
                 friction=0.5,
                 categoryBits=0x004,
@@ -687,19 +640,13 @@ class MultiWalkerEnv:
                     (x, y - 4 * TERRAIN_STEP),
                 ]
                 t = self.world.CreateStaticBody(
-                    fixtures=fixtureDef(
-                        shape=polygonShape(vertices=poly), friction=FRICTION
-                    )
+                    fixtures=fixtureDef(shape=polygonShape(vertices=poly), friction=FRICTION)
                 )
                 t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
                 self.terrain.append(t)
                 t = self.world.CreateStaticBody(
                     fixtures=fixtureDef(
-                        shape=polygonShape(
-                            vertices=[
-                                (p[0] + TERRAIN_STEP * counter, p[1]) for p in poly
-                            ]
-                        ),
+                        shape=polygonShape(vertices=[(p[0] + TERRAIN_STEP * counter, p[1]) for p in poly]),
                         friction=FRICTION,
                     )
                 )
@@ -722,9 +669,7 @@ class MultiWalkerEnv:
                     (x, y + counter * TERRAIN_STEP),
                 ]
                 t = self.world.CreateStaticBody(
-                    fixtures=fixtureDef(
-                        shape=polygonShape(vertices=poly), friction=FRICTION
-                    )
+                    fixtures=fixtureDef(shape=polygonShape(vertices=poly), friction=FRICTION)
                 )
                 t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
                 self.terrain.append(t)
@@ -754,9 +699,7 @@ class MultiWalkerEnv:
                         ),
                     ]
                     t = self.world.CreateStaticBody(
-                        fixtures=fixtureDef(
-                            shape=polygonShape(vertices=poly), friction=FRICTION
-                        )
+                        fixtures=fixtureDef(shape=polygonShape(vertices=poly), friction=FRICTION)
                     )
                     t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
                     self.terrain.append(t)
@@ -785,9 +728,7 @@ class MultiWalkerEnv:
                 (self.terrain_x[i], self.terrain_y[i]),
                 (self.terrain_x[i + 1], self.terrain_y[i + 1]),
             ]
-            t = self.world.CreateStaticBody(
-                fixtures=fixtureDef(shape=edgeShape(vertices=poly), friction=FRICTION)
-            )
+            t = self.world.CreateStaticBody(fixtures=fixtureDef(shape=edgeShape(vertices=poly), friction=FRICTION))
             color = (0.3, 1.0 if i % 2 == 0 else 0.8, 0.3)
             t.color1 = color
             t.color2 = color
@@ -805,12 +746,8 @@ class MultiWalkerEnv:
             y = VIEWPORT_H / SCALE * 3 / 4
             poly = [
                 (
-                    x
-                    + 15 * TERRAIN_STEP * math.sin(3.14 * 2 * a / 5)
-                    + self.np_random.uniform(0, 5 * TERRAIN_STEP),
-                    y
-                    + 5 * TERRAIN_STEP * math.cos(3.14 * 2 * a / 5)
-                    + self.np_random.uniform(0, 5 * TERRAIN_STEP),
+                    x + 15 * TERRAIN_STEP * math.sin(3.14 * 2 * a / 5) + self.np_random.uniform(0, 5 * TERRAIN_STEP),
+                    y + 5 * TERRAIN_STEP * math.cos(3.14 * 2 * a / 5) + self.np_random.uniform(0, 5 * TERRAIN_STEP),
                 )
                 for a in range(5)
             ]

@@ -34,9 +34,7 @@ def parallel_env(
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
-    )
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
 
 
 def raw_env(
@@ -46,9 +44,7 @@ def raw_env(
     extra_features=False,
     **reward_args
 ):
-    return from_parallel_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
-    )
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args))
 
 
 env = make_env(raw_env)
@@ -158,31 +154,15 @@ def load_config(
     )
 
     # kill reward
-    cfg.add_reward_rule(
-        gw.Event(arm0_0, "kill", arm1_0), receiver=arm0_0, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm0_0, "kill", arm1_1), receiver=arm0_0, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm0_1, "kill", arm1_0), receiver=arm0_1, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm0_1, "kill", arm1_1), receiver=arm0_1, value=KILL_REWARD
-    )
+    cfg.add_reward_rule(gw.Event(arm0_0, "kill", arm1_0), receiver=arm0_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_0, "kill", arm1_1), receiver=arm0_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_1, "kill", arm1_0), receiver=arm0_1, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm0_1, "kill", arm1_1), receiver=arm0_1, value=KILL_REWARD)
 
-    cfg.add_reward_rule(
-        gw.Event(arm1_0, "kill", arm0_0), receiver=arm1_0, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm1_0, "kill", arm0_1), receiver=arm1_0, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm1_1, "kill", arm0_0), receiver=arm1_1, value=KILL_REWARD
-    )
-    cfg.add_reward_rule(
-        gw.Event(arm1_1, "kill", arm0_1), receiver=arm1_1, value=KILL_REWARD
-    )
+    cfg.add_reward_rule(gw.Event(arm1_0, "kill", arm0_0), receiver=arm1_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_0, "kill", arm0_1), receiver=arm1_0, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_1, "kill", arm0_0), receiver=arm1_1, value=KILL_REWARD)
+    cfg.add_reward_rule(gw.Event(arm1_1, "kill", arm0_1), receiver=arm1_1, value=KILL_REWARD)
 
     return cfg
 
@@ -217,9 +197,7 @@ def generate_map(env, map_size, handles):
     pos = [[], []]
     ct = 0
     for x in range(width // 2 + gap, min(width // 2 + gap + side, height - 1), 2):
-        for y in range(
-            (height - side) // 2, min((height - side) // 2 + side, height - 1), 2
-        ):
+        for y in range((height - side) // 2, min((height - side) // 2 + side, height - 1), 2):
             pos[ct % 2].append([x, y])
         ct += 1
         if xct1 <= ct:
@@ -236,9 +214,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {"render.modes": ["human", "rgb_array"], "name": "combined_arms_v5"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
-        )
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         assert map_size >= 16, "size of map must be at least 16"
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))

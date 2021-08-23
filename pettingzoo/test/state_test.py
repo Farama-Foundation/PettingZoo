@@ -12,39 +12,22 @@ def test_state_space(env):
     assert isinstance(
         env.state_space, gym.spaces.Space
     ), "State space for each environment must extend gym.spaces.Space"
-    if not (
-        isinstance(env.state_space, gym.spaces.Box)
-        or isinstance(env.state_space, gym.spaces.Discrete)
-    ):
-        warnings.warn(
-            "State space for each environment probably should be gym.spaces.box or gym.spaces.discrete"
-        )
+    if not (isinstance(env.state_space, gym.spaces.Box) or isinstance(env.state_space, gym.spaces.Discrete)):
+        warnings.warn("State space for each environment probably should be gym.spaces.box or gym.spaces.discrete")
 
     if isinstance(env.state_space, gym.spaces.Box):
         if np.any(np.equal(env.state_space.low, -np.inf)):
-            warnings.warn(
-                "Environment's minimum state space value is -infinity. This is probably too low."
-            )
+            warnings.warn("Environment's minimum state space value is -infinity. This is probably too low.")
         if np.any(np.equal(env.state_space.high, np.inf)):
-            warnings.warn(
-                "Environment's maxmimum state space value is infinity. This is probably too high"
-            )
+            warnings.warn("Environment's maxmimum state space value is infinity. This is probably too high")
         if np.any(np.equal(env.state_space.low, env.state_space.high)):
-            warnings.warn(
-                "Environment's maximum and minimum state space values are equal"
-            )
+            warnings.warn("Environment's maximum and minimum state space values are equal")
         if np.any(np.greater(env.state_space.low, env.state_space.high)):
-            assert (
-                False
-            ), "Environment's minimum state space value is greater than it's maximum"
+            assert False, "Environment's minimum state space value is greater than it's maximum"
         if env.state_space.low.shape != env.state_space.shape:
-            assert (
-                False
-            ), "Environment's state_space.low and state_space have different shapes"
+            assert False, "Environment's state_space.low and state_space have different shapes"
         if env.state_space.high.shape != env.state_space.shape:
-            assert (
-                False
-            ), "Environment's state_space.high and state_space have different shapes"
+            assert False, "Environment's state_space.high and state_space have different shapes"
 
 
 def test_state(env, num_cycles):
@@ -59,14 +42,10 @@ def test_state(env, num_cycles):
 
         env.step(action)
         new_state = env.state()
-        assert env.state_space.contains(
-            new_state
-        ), "Environment's state is outside of it's state space"
+        assert env.state_space.contains(new_state), "Environment's state is outside of it's state space"
         if isinstance(new_state, np.ndarray):
             if np.isinf(new_state).any():
-                warnings.warn(
-                    "State contains infinity (np.inf) or negative infinity (-np.inf)"
-                )
+                warnings.warn("State contains infinity (np.inf) or negative infinity (-np.inf)")
             if np.isnan(new_state).any():
                 warnings.warn("State contains NaNs")
             if len(new_state.shape) > 3:
@@ -77,9 +56,7 @@ def test_state(env, num_cycles):
                 warnings.warn("State is a single number")
             if not isinstance(new_state, state_0.__class__):
                 warnings.warn("State between Observations are different classes")
-            if (new_state.shape != state_0.shape) and (
-                len(new_state.shape) == len(state_0.shape)
-            ):
+            if (new_state.shape != state_0.shape) and (len(new_state.shape) == len(state_0.shape)):
                 warnings.warn("States are different shapes")
             if len(new_state.shape) != len(state_0.shape):
                 warnings.warn("States have different number of dimensions")
@@ -108,9 +85,7 @@ def test_parallel_env(parallel_env):
     ), "State space for each parallel environment must extend gym.spaces.Space"
 
     state_0 = parallel_env.state()
-    assert parallel_env.state_space.contains(
-        state_0
-    ), "ParallelEnvironment's state is outside of it's state space"
+    assert parallel_env.state_space.contains(state_0), "ParallelEnvironment's state is outside of it's state space"
 
 
 def state_test(env, parallel_env, num_cycles=10):

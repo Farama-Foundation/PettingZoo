@@ -18,18 +18,12 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
 
     def step(self, action):
         space = self.action_spaces[self.agent_selection]
-        if not (
-            action is None and self.dones[self.agent_selection]
-        ) and not space.contains(action):
-            assert (
-                space.shape == action.shape
-            ), f"action should have shape {space.shape}, has shape {action.shape}"
+        if not (action is None and self.dones[self.agent_selection]) and not space.contains(action):
+            assert space.shape == action.shape, f"action should have shape {space.shape}, has shape {action.shape}"
             if np.isnan(action).any():
                 EnvLogger.error_nan_action()
 
-            EnvLogger.warn_action_out_of_bound(
-                action=action, action_space=space, backup_policy="clipping to space"
-            )
+            EnvLogger.warn_action_out_of_bound(action=action, action_space=space, backup_policy="clipping to space")
             action = np.clip(action, space.low, space.high)
 
         super().step(action)

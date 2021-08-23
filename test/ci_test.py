@@ -73,9 +73,7 @@ if env_id in all_prefixes:
     warning_map = {}
     for e in all_environments:
         if e.startswith(env_id):
-            warning_map[e] = perform_ci_test(
-                e, num_cycles, render, manual_control, performance, save_obs
-            )
+            warning_map[e] = perform_ci_test(e, num_cycles, render, manual_control, performance, save_obs)
     f = open("test_output.txt", "w")
     for warn in warning_map:
         warn_list = warning_map[warn]

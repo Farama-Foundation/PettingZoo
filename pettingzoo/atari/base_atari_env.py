@@ -112,9 +112,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.action_mapping = action_mapping
 
         if obs_type == "ram":
-            observation_space = gym.spaces.Box(
-                low=0, high=255, dtype=np.uint8, shape=(128,)
-            )
+            observation_space = gym.spaces.Box(low=0, high=255, dtype=np.uint8, shape=(128,))
         else:
             (screen_width, screen_height) = self.ale.getScreenDims()
             if obs_type == "rgb_image":
@@ -132,12 +130,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.agents = [f"{player_names[n]}_0" for n in range(num_players)]
         self.possible_agents = self.agents[:]
 
-        self.action_spaces = {
-            agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents
-        }
-        self.observation_spaces = {
-            agent: observation_space for agent in self.possible_agents
-        }
+        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents}
+        self.observation_spaces = {agent: observation_space for agent in self.possible_agents}
 
         self._screen = None
         self.seed(seed)
@@ -182,20 +176,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
-            dones = {
-                agent: int(life) < 0
-                for agent, life in zip(self.possible_agents, lives)
-                if agent in self.agents
-            }
+            dones = {agent: int(life) < 0 for agent, life in zip(self.possible_agents, lives) if agent in self.agents}
             self.dones = dones
 
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
-        rewards = {
-            agent: rew
-            for agent, rew in zip(self.possible_agents, rewards)
-            if agent in self.agents
-        }
+        rewards = {agent: rew for agent, rew in zip(self.possible_agents, rewards) if agent in self.agents}
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         return observations, rewards, dones, infos
 
@@ -211,17 +197,11 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             zoom_factor = 4
             if self._screen is None:
                 pygame.init()
-                self._screen = pygame.display.set_mode(
-                    (screen_width * zoom_factor, screen_height * zoom_factor)
-                )
+                self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
 
-            myImage = pygame.image.fromstring(
-                image.tobytes(), image.shape[:2][::-1], "RGB"
-            )
+            myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
 
-            myImage = pygame.transform.scale(
-                myImage, (screen_width * zoom_factor, screen_height * zoom_factor)
-            )
+            myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
 
             self._screen.blit(myImage, (0, 0))
 

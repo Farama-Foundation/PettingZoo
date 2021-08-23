@@ -32,9 +32,7 @@ class raw_env(AECEnv):
         self.observation_spaces = {
             i: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=0, high=1, shape=(3, 3, 2), dtype=np.int8
-                    ),
+                    "observation": spaces.Box(low=0, high=1, shape=(3, 3, 2), dtype=np.int8),
                     "action_mask": spaces.Box(low=0, high=1, shape=(9,), dtype=np.int8),
                 }
             )

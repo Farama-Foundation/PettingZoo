@@ -73,12 +73,8 @@ class raw_env(AECEnv):
         self.observation_spaces = {
             name: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=0, high=1, shape=(8, 8, 4), dtype="float64"
-                    ),
-                    "action_mask": spaces.Box(
-                        low=0, high=1, shape=(256,), dtype=np.int8
-                    ),
+                    "observation": spaces.Box(low=0, high=1, shape=(8, 8, 4), dtype="float64"),
+                    "action_mask": spaces.Box(low=0, high=1, shape=(256,), dtype=np.int8),
                 }
             )
             for name in self.agents
@@ -221,9 +217,7 @@ class raw_env(AECEnv):
         else:
             self.num_moves += 1
             action = self._parse_action(action)
-            self.board, turn, last_moved_piece, moves, winner = self.ch.move(
-                action[0], action[1]
-            )
+            self.board, turn, last_moved_piece, moves, winner = self.ch.move(action[0], action[1])
 
             self.agent_selection = "player_0" if turn == "black" else "player_1"
 
@@ -297,9 +291,7 @@ class CheckersRules:
         },
     }
 
-    def __init__(
-        self, board=None, turn="black", last_moved_piece=None, empty_corner=True
-    ):
+    def __init__(self, board=None, turn="black", last_moved_piece=None, empty_corner=True):
         """
         Args:
             empty_corner : bool
@@ -371,9 +363,7 @@ class CheckersRules:
 
     @staticmethod
     def board_equal(board1, board2):
-        return CheckersRules.immutable_board(board1) == CheckersRules.immutable_board(
-            board2
-        )
+        return CheckersRules.immutable_board(board1) == CheckersRules.immutable_board(board2)
 
     @property
     def board(self):
@@ -502,15 +492,9 @@ class CheckersRules:
             jumps = []
             for type in ["men", "kings"]:
                 for sq in self._board[self._turn][type]:
-                    jumps += itertools.product(
-                        [sq], self.available_jumps(self._turn, type, sq)
-                    )
+                    jumps += itertools.product([sq], self.available_jumps(self._turn, type, sq))
         else:
-            piece_type = (
-                "men"
-                if self._last_moved_piece in self._board[self._turn]["men"]
-                else "kings"
-            )
+            piece_type = "men" if self._last_moved_piece in self._board[self._turn]["men"] else "kings"
             jumps = itertools.product(
                 [self._last_moved_piece],
                 self.available_jumps(self._turn, piece_type, self._last_moved_piece),
@@ -526,9 +510,7 @@ class CheckersRules:
         # No jumps available
         for type in ["men", "kings"]:
             for sq in self._board[self._turn][type]:
-                all_moves += itertools.product(
-                    [sq], self.available_simple_moves(self._turn, type, sq)
-                )
+                all_moves += itertools.product([sq], self.available_simple_moves(self._turn, type, sq))
         return all_moves
 
     def pos2sq(self, row, col):
@@ -554,9 +536,7 @@ class CheckersRules:
 
     def flat_board(self):
         # Empty board
-        board = (
-            np.ones((self.size, self.size), dtype="int") * CheckersRules.empty_square
-        )
+        board = np.ones((self.size, self.size), dtype="int") * CheckersRules.empty_square
         # Place the pieces
         for sq in self._board["black"]["men"]:
             row, col = self.sq2pos(sq)

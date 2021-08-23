@@ -29,18 +29,14 @@ def create_agents(
     for i in range(nagents):
         xinit, yinit = (0, 0)
         if randinit:
-            xinit, yinit = feasible_position_exp(
-                randomizer, map_matrix, expanded_mat, constraints=constraints
-            )
+            xinit, yinit = feasible_position_exp(randomizer, map_matrix, expanded_mat, constraints=constraints)
             # fill expanded_mat
             expanded_mat[xinit + 1, yinit + 1] = -1
             expanded_mat[xinit + 2, yinit + 1] = -1
             expanded_mat[xinit, yinit + 1] = -1
             expanded_mat[xinit + 1, yinit + 2] = -1
             expanded_mat[xinit + 1, yinit] = -1
-        agent = DiscreteAgent(
-            xs, ys, map_matrix, randomizer, obs_range=obs_range, flatten=flatten
-        )
+        agent = DiscreteAgent(xs, ys, map_matrix, randomizer, obs_range=obs_range, flatten=flatten)
         agent.set_position(xinit, yinit)
         agents.append(agent)
     return agents

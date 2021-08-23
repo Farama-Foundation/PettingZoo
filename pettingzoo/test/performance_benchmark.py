@@ -14,9 +14,7 @@ def performance_benchmark(env):
 
     while True:
         cycles += 1
-        for agent in env.agent_iter(
-            env.num_agents
-        ):  # step through every agent once with observe=True
+        for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
             obs, reward, done, info = env.last()
             if done:
                 action = None

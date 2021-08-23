@@ -40,15 +40,11 @@ class EnvLogger:
 
     @staticmethod
     def warn_close_unrendered_env():
-        EnvLogger._generic_warning(
-            "[WARNING]: Called close on an unrendered environment."
-        )
+        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
 
     @staticmethod
     def warn_close_before_reset():
-        EnvLogger._generic_warning(
-            "[WARNING]: reset() needs to be called before close."
-        )
+        EnvLogger._generic_warning("[WARNING]: reset() needs to be called before close.")
 
     @staticmethod
     def warn_on_illegal_move():
@@ -66,9 +62,7 @@ class EnvLogger:
 
     @staticmethod
     def warn_step_after_done():
-        EnvLogger._generic_warning(
-            "[WARNING]: step() called after all agents are done. Should reset() first."
-        )
+        EnvLogger._generic_warning("[WARNING]: step() called after all agents are done. Should reset() first.")
 
     @staticmethod
     def error_render_before_reset():

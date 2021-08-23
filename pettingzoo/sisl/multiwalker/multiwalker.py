@@ -84,10 +84,7 @@ class raw_env(AECEnv, EzPickle):
             for d in self.dones:
                 self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
             self.agent_name_mapping = {
-                agent: i
-                for i, (agent, done) in enumerate(
-                    zip(self.possible_agents, self.env.get_last_dones())
-                )
+                agent: i for i, (agent, done) in enumerate(zip(self.possible_agents, self.env.get_last_dones()))
             }
             iter_agents = self.agents[:]
             for a, d in self.dones.items():

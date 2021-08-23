@@ -15,9 +15,7 @@ def bombardment_test(env, cycles=10000):
     for i in range(cycles):
         if i == cycles / 2:
             print("\t50% through bombardment test")
-        for agent in env.agent_iter(
-            env.num_agents
-        ):  # step through every agent once with observe=True
+        for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
             obs, reward, done, info = env.last()
             if done:
                 action = None

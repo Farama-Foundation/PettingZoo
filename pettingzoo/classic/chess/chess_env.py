@@ -38,12 +38,8 @@ class raw_env(AECEnv):
         self.observation_spaces = {
             name: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=0, high=1, shape=(8, 8, 111), dtype=bool
-                    ),
-                    "action_mask": spaces.Box(
-                        low=0, high=1, shape=(4672,), dtype=np.int8
-                    ),
+                    "observation": spaces.Box(low=0, high=1, shape=(8, 8, 111), dtype=bool),
+                    "action_mask": spaces.Box(low=0, high=1, shape=(4672,), dtype=np.int8),
                 }
             )
             for name in self.agents
@@ -58,13 +54,9 @@ class raw_env(AECEnv):
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
 
     def observe(self, agent):
-        observation = chess_utils.get_observation(
-            self.board, self.possible_agents.index(agent)
-        )
+        observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
         observation = np.dstack((observation[:, :, :7], self.board_history))
-        legal_moves = (
-            chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
-        )
+        legal_moves = chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
 
         action_mask = np.zeros(4672, int)
         for i in legal_moves:
@@ -102,9 +94,7 @@ class raw_env(AECEnv):
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         next_board = chess_utils.get_observation(self.board, current_agent)
-        self.board_history = np.dstack(
-            (next_board[:, :, 7:], self.board_history[:, :, :-13])
-        )
+        self.board_history = np.dstack((next_board[:, :, 7:], self.board_history[:, :, :-13]))
         self.agent_selection = self._agent_selector.next()
 
         chosen_move = chess_utils.action_to_move(self.board, action, current_index)

@@ -79,9 +79,7 @@ def get_display(spec):
     elif isinstance(spec, str):
         return pyglet.canvas.Display(spec)
     else:
-        raise error.Error(
-            f"Invalid display specification: {spec}. (Must be a string like :0 or None.)"
-        )
+        raise error.Error(f"Invalid display specification: {spec}. (Must be a string like :0 or None.)")
 
 
 class Viewer:
@@ -122,9 +120,7 @@ class Viewer:
         assert right > left and top > bottom
         scalex = self.width / (right - left)
         scaley = self.height / (top - bottom)
-        self.transform = Transform(
-            translation=(-left * scalex, -bottom * scaley), scale=(scalex, scaley)
-        )
+        self.transform = Transform(translation=(-left * scalex, -bottom * scaley), scale=(scalex, scaley))
 
     def add_geom(self, geom):
         self.geoms.append(geom)
@@ -194,9 +190,7 @@ class Viewer:
 
     def get_array(self):
         self.window.flip()
-        image_data = (
-            pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-        )
+        image_data = pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
         self.window.flip()
         arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep="")
         arr = arr.reshape(self.height, self.width, 4)
@@ -248,9 +242,7 @@ class Transform(Attr):
 
     def enable(self):
         glPushMatrix()
-        glTranslatef(
-            self.translation[0], self.translation[1], 0
-        )  # translate to GL loc ppint
+        glTranslatef(self.translation[0], self.translation[1], 0)  # translate to GL loc ppint
         glRotatef(RAD2DEG * self.rotation, 0, 0, 1.0)
         glScalef(self.scale[0], self.scale[1], 1)
 
@@ -455,9 +447,7 @@ class Image(Geom):
         self.flip = False
 
     def render1(self):
-        self.img.blit(
-            -self.width / 2, -self.height / 2, width=self.width, height=self.height
-        )
+        self.img.blit(-self.width / 2, -self.height / 2, width=self.width, height=self.height)
 
 
 class SimpleImageViewer:
@@ -469,9 +459,7 @@ class SimpleImageViewer:
     def imshow(self, arr):
         if self.window is None:
             height, width, channels = arr.shape
-            self.window = pyglet.window.Window(
-                width=width, height=height, display=self.display
-            )
+            self.window = pyglet.window.Window(width=width, height=height, display=self.display)
             self.width = width
             self.height = height
             self.isopen = True
@@ -480,9 +468,7 @@ class SimpleImageViewer:
             self.width,
             3,
         ), "You passed in an image with the wrong number shape"
-        image = pyglet.image.ImageData(
-            self.width, self.height, "RGB", arr.tobytes(), pitch=self.width * -3
-        )
+        image = pyglet.image.ImageData(self.width, self.height, "RGB", arr.tobytes(), pitch=self.width * -3)
         self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()

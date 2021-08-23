@@ -154,9 +154,7 @@ class raw_env(AECEnv, EzPickle):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(
-                    low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32
-                )
+                self.action_spaces[a] = spaces.Box(low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
                 self.action_spaces[a] = spaces.Discrete(3)
@@ -166,16 +164,10 @@ class raw_env(AECEnv, EzPickle):
         for a in self.agents:
             self.last_observation[a] = None
             if vector_observation:
-                self.observation_spaces[a] = spaces.Box(
-                    low=-300, high=300, shape=(1,), dtype=np.float32
-                )
+                self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
-                self.observation_spaces[a] = spaces.Box(
-                    low=0, high=255, shape=(100, 300, 3), dtype=np.uint8
-                )
-        self.state_space = spaces.Box(
-            low=0, high=255, shape=(650, 750, 3), dtype=np.uint8
-        )
+                self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
+        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls(num_floors)
@@ -284,20 +276,14 @@ class raw_env(AECEnv, EzPickle):
             prisoner.position = (prisoner.left_bound, prisoner.position[1])
             if prisoner.first_touch == -1:
                 prisoner.first_touch = prisoner.left_bound
-            if (
-                prisoner.first_touch != prisoner.left_bound
-                and prisoner.last_touch == prisoner.right_bound
-            ):
+            if prisoner.first_touch != prisoner.left_bound and prisoner.last_touch == prisoner.right_bound:
                 reward = 1
             prisoner.last_touch = prisoner.left_bound
         if prisoner.position[0] > prisoner.right_bound:
             prisoner.position = (prisoner.right_bound, prisoner.position[1])
             if prisoner.first_touch == -1:
                 prisoner.first_touch = prisoner.right_bound
-            if (
-                prisoner.first_touch != prisoner.right_bound
-                and prisoner.last_touch == prisoner.left_bound
-            ):
+            if prisoner.first_touch != prisoner.right_bound and prisoner.last_touch == prisoner.left_bound:
                 reward = 1
             prisoner.last_touch = prisoner.right_bound
         return reward
@@ -423,9 +409,7 @@ class raw_env(AECEnv, EzPickle):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
 
 # Sprites other than bunny and tank purchased from https://nebelstern.itch.io/futura-seven

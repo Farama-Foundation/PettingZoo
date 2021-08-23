@@ -35,7 +35,5 @@ class raw_env(RLCardBase):
             print_card(state["hand"])
             print("\n{}'s Chips: {}".format(player, state["my_chips"]))
         print("\n================= Public Cards =================")
-        print_card(state["public_card"]) if state["public_card"] is not None else print(
-            "No public cards."
-        )
+        print_card(state["public_card"]) if state["public_card"] is not None else print("No public cards.")
         print("\n")

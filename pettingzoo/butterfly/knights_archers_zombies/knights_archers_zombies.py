@@ -123,9 +123,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(num_archers):
             name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
-                agent_name=name
-            )
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
             self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
             self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
@@ -135,9 +133,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(num_knights):
             name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
-                agent_name=name
-            )
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
             self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
             self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])
@@ -161,18 +157,11 @@ class raw_env(AECEnv, EzPickle):
         self.observation_spaces = dict(
             zip(
                 self.agents,
-                [
-                    Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8)
-                    for _ in enumerate(self.agents)
-                ],
+                [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)],
             )
         )
-        self.action_spaces = dict(
-            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
-        )
-        self.state_space = Box(
-            low=0, high=255, shape=(self.HEIGHT, self.WIDTH, 3), dtype=np.uint8
-        )
+        self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
+        self.state_space = Box(low=0, high=255, shape=(self.HEIGHT, self.WIDTH, 3), dtype=np.uint8)
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
@@ -291,17 +280,11 @@ class raw_env(AECEnv, EzPickle):
 
         # Spawning Swords for Players
         def spawnSword(self):
-            if (
-                self.action == 5
-                and self.sword_spawn_rate == 0
-                and self.agent_list[self.agent_index].is_knight
-            ):
+            if self.action == 5 and self.sword_spawn_rate == 0 and self.agent_list[self.agent_index].is_knight:
                 if not self.sword_list:  # Sword List is Empty
                     if not self.knight_killed:
                         for i in range(0, self.knight_player_num + 1):
-                            self.sword_dict[f"sword{i}"] = Sword(
-                                self.knight_dict[f"knight{i}"]
-                            )
+                            self.sword_dict[f"sword{i}"] = Sword(self.knight_dict[f"knight{i}"])
                             self.sword_list.add(self.sword_dict[(f"sword{i}")])
                             self.all_sprites.add(self.sword_dict[(f"sword{i}")])
                         self.sword_spawn_rate = 1
@@ -325,17 +308,11 @@ class raw_env(AECEnv, EzPickle):
 
         # Spawning Arrows for Players
         def spawnArrow(self):
-            if (
-                self.action == 5
-                and self.arrow_spawn_rate == 0
-                and self.agent_list[self.agent_index].is_archer
-            ):
+            if self.action == 5 and self.arrow_spawn_rate == 0 and self.agent_list[self.agent_index].is_archer:
                 if not self.archer_killed:
                     for i in range(0, self.archer_player_num + 1):
                         if i == self.agent_index:
-                            self.arrow_dict[(f"arrow{i}")] = Arrow(
-                                self.archer_dict[(f"archer{i}")]
-                            )
+                            self.arrow_dict[(f"arrow{i}")] = Arrow(self.archer_dict[(f"archer{i}")])
                             self.arrow_list.add(self.arrow_dict[(f"arrow{i}")])
                             self.all_sprites.add(self.arrow_dict[(f"arrow{i}")])
                     self.arrow_spawn_rate = 1
@@ -504,9 +481,7 @@ class raw_env(AECEnv, EzPickle):
             endx = 512 + upper_x_bound - max_x
             endy = 512 + upper_y_bound - max_y
             cropped = np.zeros_like(self.observation_spaces[agent].low)
-            cropped[startx:endx, starty:endy, :] = screen[
-                lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
-            ]
+            cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
 
         return np.swapaxes(cropped, 1, 0)
 
@@ -618,14 +593,10 @@ class raw_env(AECEnv, EzPickle):
                 self.zombie_spawn_rate,
                 self.zombie_list,
                 self.all_sprites,
-            ) = self.spawn_zombie(
-                self.zombie_spawn_rate, self.zombie_list, self.all_sprites
-            )
+            ) = self.spawn_zombie(self.zombie_spawn_rate, self.zombie_list, self.all_sprites)
 
             # Stab the Sword
-            self.sword_list, self.all_sprites = self.sword_stab(
-                self.sword_list, self.all_sprites
-            )
+            self.sword_list, self.all_sprites = self.sword_stab(self.sword_list, self.all_sprites)
 
             # Zombie Kills the Arrow
             (
@@ -633,9 +604,7 @@ class raw_env(AECEnv, EzPickle):
                 self.arrow_list,
                 self.all_sprites,
                 self.score,
-            ) = self.zombie_arrow(
-                self.zombie_list, self.arrow_list, self.all_sprites, self.score
-            )
+            ) = self.zombie_arrow(self.zombie_list, self.arrow_list, self.all_sprites, self.score)
 
             # Zombie Kills the Sword
             (
@@ -643,9 +612,7 @@ class raw_env(AECEnv, EzPickle):
                 self.sword_list,
                 self.all_sprites,
                 self.score,
-            ) = self.zombie_sword(
-                self.zombie_list, self.sword_list, self.all_sprites, self.score
-            )
+            ) = self.zombie_sword(self.zombie_list, self.sword_list, self.all_sprites, self.score)
 
             # Zombie Kills the Archer
             if self.killable_archers:
@@ -744,9 +711,7 @@ class raw_env(AECEnv, EzPickle):
         observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
         if mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def close(self):
         if not self.closed:
@@ -794,9 +759,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
-                agent_name=name
-            )
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
             self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
             self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
@@ -806,9 +769,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_knights):
             name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
-                agent_name=name
-            )
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
             self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
             self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])

@@ -46,9 +46,7 @@ class Scenario(BaseScenario):
         world.landmarks[1].color = np.array([0.15, 0.65, 0.15])
         world.landmarks[2].color = np.array([0.15, 0.15, 0.65])
         # special colors for goals
-        world.agents[0].goal_a.color = world.agents[0].goal_b.color + np.array(
-            [0.45, 0.45, 0.45]
-        )
+        world.agents[0].goal_a.color = world.agents[0].goal_b.color + np.array([0.45, 0.45, 0.45])
         # set random initial states
         for agent in world.agents:
             agent.state.p_pos = np_random.uniform(-1, +1, world.dim_p)

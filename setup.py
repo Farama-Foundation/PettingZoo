@@ -61,8 +61,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
     python_requires=">=3.6, <3.10",
-    packages=["pettingzoo"]
-    + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
+    packages=["pettingzoo"] + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
     install_requires=["numpy>=1.18.0", "gym>=0.18.0"],
     classifiers=[

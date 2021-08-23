@@ -17,13 +17,7 @@ def raw_env(has_maze=False, is_invisible=False, billiard_hit=False, **kwargs):
     }
     mode = start_mapping[(is_invisible, billiard_hit)] + has_maze
 
-    return BaseAtariEnv(
-        game="combat",
-        num_players=2,
-        mode_num=mode,
-        env_name=os.path.basename(__file__)[:-3],
-        **kwargs
-    )
+    return BaseAtariEnv(game="combat", num_players=2, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs)
 
 
 env = base_env_wrapper_fn(raw_env)

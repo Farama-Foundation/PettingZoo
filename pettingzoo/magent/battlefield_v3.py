@@ -34,9 +34,7 @@ def parallel_env(
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
-    )
+    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
 
 
 def raw_env(
@@ -46,9 +44,7 @@ def raw_env(
     extra_features=False,
     **reward_args
 ):
-    return from_parallel_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
-    )
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args))
 
 
 env = make_env(raw_env)
@@ -58,13 +54,9 @@ class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {"render.modes": ["human", "rgb_array"], "name": "battlefield_v3"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
-        )
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         assert map_size >= 46, "size of map must be at least 46"
-        env = magent.GridWorld(
-            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
-        )
+        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))

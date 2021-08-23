@@ -165,9 +165,7 @@ class Banker(pg.sprite.Sprite):
 
     def update_gold(self):
         if self.body.nugget is not None:
-            self.body.nugget.update(
-                self.body.position, self.body.angle + (math.pi / 2), True
-            )
+            self.body.nugget.update(self.body.position, self.body.angle + (math.pi / 2), True)
 
     def convert_img(self):
         self.image = self.image.convert_alpha()
@@ -286,9 +284,7 @@ class Gold(pg.sprite.Sprite):
         self.body.position = new_pos
         self.body.angular_velocity = 0
         self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotozoom(
-            self.orig_image, math.degrees(self.body.angle), 1
-        )
+        self.image = pg.transform.rotozoom(self.orig_image, math.degrees(self.body.angle), 1)
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def convert_img(self):
@@ -310,9 +306,7 @@ class Water:
         for row in range(self.num_rows):
             new_row = []
             for col in range(self.num_cols):
-                rect = pg.Rect(
-                    col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size
-                )
+                rect = pg.Rect(col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size)
                 new_row.append(rect)
             self.rects.append(new_row)
 
@@ -360,9 +354,7 @@ class Water:
 class Background:
     def __init__(self, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
-        self.num_rows = (
-            math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE) + 1
-        )
+        self.num_rows = math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE) + 1
 
         self.tile = utils.load_image(["sand_tile.png"])
 
@@ -498,15 +490,10 @@ class raw_env(AECEnv, EzPickle):
         self.all_sprites = pg.sprite.RenderUpdates()
         self.gold = []
 
-        self.water = Water(
-            const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.rng
-        )
+        self.water = Water(const.WATER_INFO[0], const.WATER_INFO[1], self.space, self.rng)
 
         # Generate random positions for each prospector agent
-        prospector_info = [
-            (i, utils.rand_pos("prospector", self.rng))
-            for i in range(const.NUM_PROSPECTORS)
-        ]
+        prospector_info = [(i, utils.rand_pos("prospector", self.rng)) for i in range(const.NUM_PROSPECTORS)]
         self.prospectors = {}
         for num, pos in prospector_info:
             prospector = Prospector(pos, self.space, num, self.all_sprites)
@@ -514,9 +501,7 @@ class raw_env(AECEnv, EzPickle):
             self.prospectors[identifier] = prospector
             self.agents.append(identifier)
 
-        banker_info = [
-            (i, utils.rand_pos("banker", self.rng)) for i in range(const.NUM_BANKERS)
-        ]
+        banker_info = [(i, utils.rand_pos("banker", self.rng)) for i in range(const.NUM_BANKERS)]
         self.bankers = {}
         for num, pos in banker_info:
             banker = Banker(pos, self.space, num, self.all_sprites)
@@ -540,29 +525,21 @@ class raw_env(AECEnv, EzPickle):
 
         self.action_spaces = {}
         for p in self.prospectors:
-            self.action_spaces[p] = spaces.Box(
-                low=np.float32(-1.0), high=np.float32(1.0), shape=(3,)
-            )
+            self.action_spaces[p] = spaces.Box(low=np.float32(-1.0), high=np.float32(1.0), shape=(3,))
 
         for b in self.bankers:
-            self.action_spaces[b] = spaces.Box(
-                low=np.float32(-1.0), high=np.float32(1.0), shape=(2,)
-            )
+            self.action_spaces[b] = spaces.Box(low=np.float32(-1.0), high=np.float32(1.0), shape=(2,))
 
         self.observation_spaces = {}
         self.last_observation = {}
 
         for p in self.prospectors:
             self.last_observation[p] = None
-            self.observation_spaces[p] = spaces.Box(
-                low=0, high=255, shape=const.PROSPEC_OBSERV_SHAPE, dtype=np.uint8
-            )
+            self.observation_spaces[p] = spaces.Box(low=0, high=255, shape=const.PROSPEC_OBSERV_SHAPE, dtype=np.uint8)
 
         for b in self.bankers:
             self.last_observation[b] = None
-            self.observation_spaces[b] = spaces.Box(
-                low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
-            )
+            self.observation_spaces[b] = spaces.Box(low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8)
 
         self.state_space = spaces.Box(
             low=0,
@@ -612,10 +589,7 @@ class raw_env(AECEnv, EzPickle):
             # gold_sprite is None if gold was handed off to the bank right before
             #   calling this collision handler
             # This collision handler is only for prospector -> banker gold handoffs
-            if (
-                gold_sprite is None
-                or gold_sprite.parent_body.sprite_type != "prospector"
-            ):
+            if gold_sprite is None or gold_sprite.parent_body.sprite_type != "prospector":
                 return True
 
             banker_body = banker_shape.body
@@ -680,21 +654,15 @@ class raw_env(AECEnv, EzPickle):
             return False
 
         # Create the collision event generators
-        gold_dispenser = self.space.add_collision_handler(
-            CollisionTypes.PROSPECTOR, CollisionTypes.WATER
-        )
+        gold_dispenser = self.space.add_collision_handler(CollisionTypes.PROSPECTOR, CollisionTypes.WATER)
 
         gold_dispenser.begin = add_gold
 
-        handoff_gold = self.space.add_collision_handler(
-            CollisionTypes.BANKER, CollisionTypes.GOLD
-        )
+        handoff_gold = self.space.add_collision_handler(CollisionTypes.BANKER, CollisionTypes.GOLD)
 
         handoff_gold.begin = handoff_gold_handler
 
-        gold_score = self.space.add_collision_handler(
-            CollisionTypes.GOLD, CollisionTypes.BANK
-        )
+        gold_score = self.space.add_collision_handler(CollisionTypes.GOLD, CollisionTypes.BANK)
 
         gold_score.begin = gold_score_handler
 
@@ -725,24 +693,16 @@ class raw_env(AECEnv, EzPickle):
         pad_x = side_len - s_x
 
         if x > const.SCREEN_WIDTH - delta:  # Right side of the screen
-            sub_screen = np.pad(
-                sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode="constant"
-            )
+            sub_screen = np.pad(sub_screen, pad_width=((0, pad_x), (0, 0), (0, 0)), mode="constant")
         elif x < 0 + delta:
-            sub_screen = np.pad(
-                sub_screen, pad_width=((pad_x, 0), (0, 0), (0, 0)), mode="constant"
-            )
+            sub_screen = np.pad(sub_screen, pad_width=((pad_x, 0), (0, 0), (0, 0)), mode="constant")
 
         pad_y = side_len - s_y
 
         if y > const.SCREEN_HEIGHT - delta:  # Bottom of the screen
-            sub_screen = np.pad(
-                sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode="constant"
-            )
+            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (0, pad_y), (0, 0)), mode="constant")
         elif y < 0 + delta:
-            sub_screen = np.pad(
-                sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode="constant"
-            )
+            sub_screen = np.pad(sub_screen, pad_width=((0, 0), (pad_y, 0), (0, 0)), mode="constant")
 
         sub_screen = np.rot90(sub_screen, k=3)
         sub_screen = np.fliplr(sub_screen).astype(np.uint8)

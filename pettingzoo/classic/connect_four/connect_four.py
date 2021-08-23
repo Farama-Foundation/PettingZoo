@@ -50,9 +50,7 @@ class raw_env(AECEnv):
         self.observation_spaces = {
             i: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=0, high=1, shape=(6, 7, 2), dtype=np.int8
-                    ),
+                    "observation": spaces.Box(low=0, high=1, shape=(6, 7, 2), dtype=np.int8),
                     "action_mask": spaces.Box(low=0, high=1, shape=(7,), dtype=np.int8),
                 }
             )
@@ -154,19 +152,13 @@ class raw_env(AECEnv):
         tile_size = (screen_width * (91 / 99)) / 7
 
         red_chip = get_image(os.path.join("img", "C4RedPiece.png"))
-        red_chip = pygame.transform.scale(
-            red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
-        )
+        red_chip = pygame.transform.scale(red_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
 
         black_chip = get_image(os.path.join("img", "C4BlackPiece.png"))
-        black_chip = pygame.transform.scale(
-            black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
-        )
+        black_chip = pygame.transform.scale(black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13))))
 
         board_img = get_image(os.path.join("img", "Connect4Board.png"))
-        board_img = pygame.transform.scale(
-            board_img, ((int(screen_width)), int(screen_height))
-        )
+        board_img = pygame.transform.scale(board_img, ((int(screen_width)), int(screen_height)))
 
         self.screen.blit(board_img, (0, 0))
 
@@ -194,9 +186,7 @@ class raw_env(AECEnv):
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def close(self):
         if self.screen is not None:

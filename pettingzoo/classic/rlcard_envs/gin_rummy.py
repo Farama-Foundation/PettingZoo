@@ -48,15 +48,9 @@ class raw_env(RLCardBase, EzPickle):
     def _get_payoff(self, player: GinRummyPlayer, game) -> float:
         going_out_action = game.round.going_out_action
         going_out_player_id = game.round.going_out_player_id
-        if (
-            going_out_player_id == player.player_id
-            and type(going_out_action) is KnockAction
-        ):
+        if going_out_player_id == player.player_id and type(going_out_action) is KnockAction:
             payoff = self._knock_reward
-        elif (
-            going_out_player_id == player.player_id
-            and type(going_out_action) is GinAction
-        ):
+        elif going_out_player_id == player.player_id and type(going_out_action) is GinAction:
             payoff = self._gin_reward
         else:
             hand = player.hand

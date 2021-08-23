@@ -56,9 +56,7 @@ class to_parallel_wrapper(ParallelEnv):
         self.aec_env.reset()
         self.agents = self.aec_env.agents
         observations = {
-            agent: self.aec_env.observe(agent)
-            for agent in self.aec_env.agents
-            if not self.aec_env.dones[agent]
+            agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]
         }
         return observations
 
@@ -89,9 +87,7 @@ class to_parallel_wrapper(ParallelEnv):
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
         self.agents = self.aec_env.agents
-        observations = {
-            agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
-        }
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):

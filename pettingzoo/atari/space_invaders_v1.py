@@ -12,18 +12,10 @@ def raw_env(
     **kwargs
 ):
     mode = 33 + (
-        moving_shields * 1
-        + zigzaging_bombs * 2
-        + fast_bomb * 4
-        + invisible_invaders * 8
-        + alternating_control * 16
+        moving_shields * 1 + zigzaging_bombs * 2 + fast_bomb * 4 + invisible_invaders * 8 + alternating_control * 16
     )
     return BaseAtariEnv(
-        game="space_invaders",
-        num_players=2,
-        mode_num=mode,
-        env_name=os.path.basename(__file__)[:-3],
-        **kwargs
+        game="space_invaders", num_players=2, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs
     )
 
 

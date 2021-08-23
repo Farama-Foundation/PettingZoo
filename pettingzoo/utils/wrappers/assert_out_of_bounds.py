@@ -16,11 +16,9 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
         ), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
     def step(self, action):
-        assert (
-            action is None and self.dones[self.agent_selection]
-        ) or self.action_spaces[self.agent_selection].contains(
-            action
-        ), "action is not in action space"
+        assert (action is None and self.dones[self.agent_selection]) or self.action_spaces[
+            self.agent_selection
+        ].contains(action), "action is not in action space"
         super().step(action)
 
     def __str__(self):

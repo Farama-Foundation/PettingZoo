@@ -32,9 +32,7 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self._agent_order)
         self.infos = {i: {} for i in self.agents}
 
-        self.action_spaces = {
-            name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents
-        }
+        self.action_spaces = {name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents}
 
         low = np.zeros((198,))
         high = np.ones((198,))
@@ -47,12 +45,8 @@ class raw_env(AECEnv):
         self.observation_spaces = {
             i: spaces.Dict(
                 {
-                    "observation": spaces.Box(
-                        low=np.float32(low), high=np.float32(high), dtype=np.float32
-                    ),
-                    "action_mask": spaces.Box(
-                        low=0, high=1, shape=(1353,), dtype=np.int8
-                    ),
+                    "observation": spaces.Box(low=np.float32(low), high=np.float32(high), dtype=np.float32),
+                    "action_mask": spaces.Box(low=0, high=1, shape=(1353,), dtype=np.int8),
                 }
             )
             for i in self.agents
@@ -97,9 +91,7 @@ class raw_env(AECEnv):
 
     def observe(self, agent):
         action_mask = np.zeros(1353, int)
-        observation = np.array(
-            self.game.get_board_features(agent), dtype=np.float32
-        ).reshape(
+        observation = np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(
             198,
         )
         # only current agent can make legal moves

@@ -192,9 +192,7 @@ class BallSprite(pygame.sprite.Sprite):
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p0.process_collision(
-                    self.rect, dx, dy, self.speed, 1
-                )
+                is_collision, self.rect, self.speed = p0.process_collision(self.rect, dx, dy, self.speed, 1)
                 if is_collision:
                     self.speed = [
                         self.speed[0] + np.sign(self.speed[0]) * r_val,
@@ -202,9 +200,7 @@ class BallSprite(pygame.sprite.Sprite):
                     ]
             # ball in right half
             else:
-                is_collision, self.rect, self.speed = p1.process_collision(
-                    self.rect, dx, dy, self.speed, 2
-                )
+                is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 2)
                 if is_collision:
                     self.speed = [
                         self.speed[0] + np.sign(self.speed[0]) * r_val,
@@ -236,9 +232,7 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
-        self.screen = pygame.Surface(
-            (self.s_width, self.s_height)
-        )  # (960, 720) # (640, 480) # (100, 200)
+        self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
 
         # define action and observation spaces
@@ -246,15 +240,11 @@ class CooperativePong:
         original_shape = original_obs_shape(self.s_width, self.s_height)
         original_color_shape = (original_shape[0], original_shape[1], 3)
         self.observation_space = [
-            gym.spaces.Box(
-                low=0, high=255, shape=(original_color_shape), dtype=np.uint8
-            )
+            gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8)
             for _ in range(self.num_agents)
         ]
         # define the global space of the environment or state
-        self.state_space = gym.spaces.Box(
-            low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8
-        )
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
 
         self.renderOn = False
 
@@ -264,15 +254,11 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = PaddleSprite(
-            (20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed
-        )
+        self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
-            self.p1 = PaddleSprite(
-                (20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed
-            )
+            self.p1 = PaddleSprite((20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed)
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
@@ -338,15 +324,11 @@ class CooperativePong:
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        observation = np.rot90(
-            observation, k=3
-        )  # now the obs is laid out as H, W as rows and cols
+        observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
         return observation
 

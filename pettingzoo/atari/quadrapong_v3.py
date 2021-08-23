@@ -7,11 +7,7 @@ def raw_env(**kwargs):
     mode = 33
     num_players = 4
     return BaseAtariEnv(
-        game="pong",
-        num_players=num_players,
-        mode_num=mode,
-        env_name=os.path.basename(__file__)[:-3],
-        **kwargs
+        game="pong", num_players=num_players, mode_num=mode, env_name=os.path.basename(__file__)[:-3], **kwargs
     )
 
 

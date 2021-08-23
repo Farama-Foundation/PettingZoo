@@ -69,9 +69,7 @@ class raw_env(AECEnv, EzPickle):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         agent = self.agent_selection
-        self.env.step(
-            action, self.agent_name_mapping[agent], self._agent_selector.is_last()
-        )
+        self.env.step(action, self.agent_name_mapping[agent], self._agent_selector.is_last())
         for k in self.dones:
             if self.env.frames >= self.env.max_cycles:
                 self.dones[k] = True

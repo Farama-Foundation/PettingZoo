@@ -15,9 +15,7 @@ def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
         warnings.warn(
             "maze_craze has different versions of the game via the `game_version` argument, consider overriding."
         )
-    assert (
-        game_version in avaliable_versions
-    ), f"`game_version` parameter must be one of {avaliable_versions.keys()}"
+    assert game_version in avaliable_versions, f"`game_version` parameter must be one of {avaliable_versions.keys()}"
     assert (
         0 <= visibilty_level < 4
     ), "visibility level must be between 0 and 4, where 0 is 100% visibility and 3 is 0% visibility"

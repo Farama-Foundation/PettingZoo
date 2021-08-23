@@ -21,9 +21,7 @@ def make_env(raw_env):
 
 
 class SimpleEnv(AECEnv):
-    def __init__(
-        self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None
-    ):
+    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
         super().__init__()
 
         self.seed()
@@ -40,9 +38,7 @@ class SimpleEnv(AECEnv):
 
         self.agents = [agent.name for agent in self.world.agents]
         self.possible_agents = self.agents[:]
-        self._index_map = {
-            agent.name: idx for idx, agent in enumerate(self.world.agents)
-        }
+        self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
 
         self._agent_selector = agent_selector(self.agents)
 
@@ -66,9 +62,7 @@ class SimpleEnv(AECEnv):
             obs_dim = len(self.scenario.observation(agent, self.world))
             state_dim += obs_dim
             if self.continuous_actions:
-                self.action_spaces[agent.name] = spaces.Box(
-                    low=0, high=1, shape=(space_dim,)
-                )
+                self.action_spaces[agent.name] = spaces.Box(low=0, high=1, shape=(space_dim,))
             else:
                 self.action_spaces[agent.name] = spaces.Discrete(space_dim)
             self.observation_spaces[agent.name] = spaces.Box(
@@ -95,15 +89,11 @@ class SimpleEnv(AECEnv):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
-        return self.scenario.observation(
-            self.world.agents[self._index_map[agent]], self.world
-        ).astype(np.float32)
+        return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
 
     def state(self):
         states = tuple(
-            self.scenario.observation(
-                self.world.agents[self._index_map[agent]], self.world
-            ).astype(np.float32)
+            self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
             for agent in self.possible_agents
         )
         return np.concatenate(states, axis=None)
@@ -150,10 +140,7 @@ class SimpleEnv(AECEnv):
         for agent in self.world.agents:
             agent_reward = float(self.scenario.reward(agent, self.world))
             if self.local_ratio is not None:
-                reward = (
-                    global_reward * (1 - self.local_ratio)
-                    + agent_reward * self.local_ratio
-                )
+                reward = global_reward * (1 - self.local_ratio) + agent_reward * self.local_ratio
             else:
                 reward = agent_reward
 

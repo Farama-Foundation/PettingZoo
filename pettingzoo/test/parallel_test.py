@@ -47,7 +47,5 @@ def parallel_api_test(par_env, num_cycles=10):
                     live_agents.remove(agent)
             has_finished |= {agent for agent, d in done.items() if d}
             if not par_env.agents:
-                assert has_finished == set(
-                    par_env.possible_agents
-                ), "not all agents finished, some were skipped over"
+                assert has_finished == set(par_env.possible_agents), "not all agents finished, some were skipped over"
                 break

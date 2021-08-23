@@ -28,9 +28,7 @@ def parallel_env(
 ):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
-    return _parallel_env(
-        map_size, minimap_mode, env_env_args, max_cycles, extra_features
-    )
+    return _parallel_env(map_size, minimap_mode, env_env_args, max_cycles, extra_features)
 
 
 def raw_env(
@@ -40,9 +38,7 @@ def raw_env(
     extra_features=False,
     **env_args
 ):
-    return from_parallel_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args)
-    )
+    return from_parallel_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args))
 
 
 env = make_env(raw_env)
@@ -94,9 +90,7 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
     e2 = gw.Event(b, "attack", c)
     tiger_attack_rew = 1
     # reward is halved because the reward is double counted
-    cfg.add_reward_rule(
-        e1 & e2, receiver=[a, b], value=[tiger_attack_rew / 2, tiger_attack_rew / 2]
-    )
+    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[tiger_attack_rew / 2, tiger_attack_rew / 2])
     cfg.add_reward_rule(e1, receiver=[c], value=[deer_attacked])
 
     return cfg
@@ -106,13 +100,9 @@ class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {"render.modes": ["human", "rgb_array"], "name": "tiger_deer_v3"}
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
-        )
+        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         assert map_size >= 10, "size of map must be at least 10"
-        env = magent.GridWorld(
-            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
-        )
+        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
 
         handles = env.get_handles()
         reward_vals = np.array([1, -1] + list(reward_args.values()))

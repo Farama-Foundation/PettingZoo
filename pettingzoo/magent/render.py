@@ -61,9 +61,7 @@ def draw_rect_matrix(matrix, color, a, w, h, resolution):
             round(h + a[1] - round(a[1])),
         ),
     )
-    matrix[
-        max(x, 0) : min(x + w, resolution[0]), max(y, 0) : min(h + y, resolution[1]), :
-    ] = color
+    matrix[max(x, 0) : min(x + w, resolution[0]), max(y, 0) : min(h + y, resolution[1]), :] = color
 
 
 def draw_line_matrix(matrix, color, a, b, resolution):
@@ -98,9 +96,7 @@ class Renderer:
             pygame.display.init()
             infoObject = pygame.display.Info()
             screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)
-            self.resolution = resolution = np.min(
-                [screen_size, base_resolution], axis=0
-            )
+            self.resolution = resolution = np.min([screen_size, base_resolution], axis=0)
             self.display = pygame.display.set_mode(resolution, pygame.DOUBLEBUF, 0)
             canvas_resolution = (resolution[0], resolution[1])
             self.canvas = pygame.Surface(canvas_resolution)
@@ -142,9 +138,7 @@ class Renderer:
         elif len(self.handles) == 4:
             vs = " vs ", (0, 0, 0)
             comma = ", ", (0, 0, 0)
-            result = [
-                (form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))
-            ]
+            result = [(form_txt(0), comma, form_txt(1), vs, form_txt(2), comma, form_txt(3))]
         else:
             raise RuntimeError("bad number of handles")
 
@@ -201,10 +195,7 @@ class Renderer:
             grids = pygame.Surface(resolution)
             grids.fill(background_rgb)
 
-        if (
-            self.new_data is None
-            or self.animation_progress > animation_total + animation_stop
-        ):
+        if self.new_data is None or self.animation_progress > animation_total + animation_stop:
             pos, event = env._get_render_info(x_range, y_range)
             buffered_new_data = pos, event
 
@@ -222,12 +213,7 @@ class Renderer:
                 pygame.pixelcopy.surface_to_array(grid_map, self.canvas)
                 for wall in env._get_walls_info():
                     x, y = wall[0], wall[1]
-                    if (
-                        x >= x_range[0]
-                        and x <= x_range[1]
-                        and y >= y_range[0]
-                        and y <= y_range[1]
-                    ):
+                    if x >= x_range[0] and x <= x_range[1] and y >= y_range[0] and y <= y_range[1]:
                         draw_rect_matrix(
                             grid_map,
                             (127, 127, 127),
@@ -268,12 +254,8 @@ class Renderer:
                     self.canvas,
                     attack_line_rgb,
                     (
-                        now_prop[0] * grid_size
-                        - view_position[0]
-                        + now_group[0] / 2 * grid_size,
-                        now_prop[1] * grid_size
-                        - view_position[1]
-                        + now_group[1] / 2 * grid_size,
+                        now_prop[0] * grid_size - view_position[0] + now_group[0] / 2 * grid_size,
+                        now_prop[1] * grid_size - view_position[1] + now_group[1] / 2 * grid_size,
                     ),
                     (
                         event_x * grid_size - view_position[0] + grid_size / 2,
@@ -284,24 +266,14 @@ class Renderer:
                     self.canvas,
                     attack_dot_rgb,
                     (
-                        event_x * grid_size
-                        - view_position[0]
-                        + grid_size / 2
-                        - attack_dot_size * grid_size / 2,
-                        event_y * grid_size
-                        - view_position[1]
-                        + grid_size / 2
-                        - attack_dot_size * grid_size / 2,
+                        event_x * grid_size - view_position[0] + grid_size / 2 - attack_dot_size * grid_size / 2,
+                        event_y * grid_size - view_position[1] + grid_size / 2 - attack_dot_size * grid_size / 2,
                     ),
                     attack_dot_size * grid_size,
                     attack_dot_size * grid_size,
                 )
 
-            if (
-                status
-                or triggered
-                or self.animation_progress < animation_total + animation_stop
-            ):
+            if status or triggered or self.animation_progress < animation_total + animation_stop:
                 self.animation_progress += 1
 
             self.display.blit(self.canvas, (0, 7))
@@ -311,9 +283,7 @@ class Renderer:
                 content = []
                 width, height = 0, 0
                 for text in texts:
-                    text = banner_formatter.render(
-                        text[0], True, pygame.Color(*text[1])
-                    )
+                    text = banner_formatter.render(text[0], True, pygame.Color(*text[1]))
                     content.append((text, width))
                     width += text.get_width()
                     height = max(height, text.get_height())
@@ -330,8 +300,4 @@ class Renderer:
         del observation
         if self.mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(new_observation, axes=(1, 0, 2))
-            if mode == "rgb_array"
-            else None
-        )
+        return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None

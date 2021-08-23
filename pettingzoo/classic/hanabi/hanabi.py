@@ -35,9 +35,7 @@ class HanabiScorePenalty:
 def env(**kwargs):
     env = r_env = raw_env(**kwargs)
     env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.TerminateIllegalWrapper(
-        env, illegal_reward=HanabiScorePenalty(r_env)
-    )
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(r_env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
@@ -163,9 +161,7 @@ class raw_env(AECEnv, EzPickle):
         self.reset()
 
         # Set action_spaces and observation_spaces based on params in hanabi_env
-        self.action_spaces = {
-            name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents
-        }
+        self.action_spaces = {name: spaces.Discrete(self.hanabi_env.num_moves()) for name in self.agents}
         self.observation_spaces = {
             player_name: spaces.Dict(
                 {
@@ -203,19 +199,13 @@ class raw_env(AECEnv, EzPickle):
     ):
 
         if not (2 <= colors <= 5):
-            raise ValueError(
-                f"Config parameter {colors} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {colors} is out of bounds. See description in hanabi.py.")
 
         elif not (2 <= ranks <= 5):
-            raise ValueError(
-                f"Config parameter {ranks} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {ranks} is out of bounds. See description in hanabi.py.")
 
         elif not (2 <= players <= 5):
-            raise ValueError(
-                f"Config parameter {players} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {players} is out of bounds. See description in hanabi.py.")
 
         elif not (players <= colors):
             raise ValueError(
@@ -223,9 +213,7 @@ class raw_env(AECEnv, EzPickle):
             )
 
         elif not (2 <= hand_size <= 5):
-            raise ValueError(
-                f"Config parameter {hand_size} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {hand_size} is out of bounds. See description in hanabi.py.")
 
         elif not (0 <= max_information_tokens):
             raise ValueError(
@@ -233,14 +221,10 @@ class raw_env(AECEnv, EzPickle):
             )
 
         elif not (1 <= max_life_tokens):
-            raise ValueError(
-                f"Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {max_life_tokens} is out of bounds. See description in hanabi.py.")
 
         elif not (0 <= observation_type <= 1):
-            raise ValueError(
-                f"Config parameter {observation_type} is out of bounds. See description in hanabi.py."
-            )
+            raise ValueError(f"Config parameter {observation_type} is out of bounds. See description in hanabi.py.")
 
     @property
     def observation_vector_dim(self):
@@ -308,9 +292,7 @@ class raw_env(AECEnv, EzPickle):
         agent_on_turn = self.agent_selection
 
         if action not in self.legal_moves:
-            raise ValueError(
-                "Illegal action. Please choose between legal actions, as documented in dict self.infos"
-            )
+            raise ValueError("Illegal action. Please choose between legal actions, as documented in dict self.infos")
 
         else:
             # Iterate agent_selection
@@ -320,9 +302,7 @@ class raw_env(AECEnv, EzPickle):
             all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
             # Update internal state
-            self._process_latest_observations(
-                obs=all_observations, reward=reward, done=done
-            )
+            self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
             # sets current reward for 0 to initialize reward accumulation
             self._cumulative_rewards[agent_on_turn] = 0
@@ -342,9 +322,7 @@ class raw_env(AECEnv, EzPickle):
 
         return {"observation": observation, "action_mask": action_mask}
 
-    def _process_latest_observations(
-        self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False
-    ):
+    def _process_latest_observations(self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False):
         """Updates internal state"""
 
         self.latest_observations = obs
@@ -354,13 +332,11 @@ class raw_env(AECEnv, EzPickle):
         # Here we have to deal with the player index with offset = 1
         self.infos = {
             player_name: dict(
-                legal_moves=self.latest_observations["player_observations"][
-                    int(player_name[-1])
-                ]["legal_moves_as_int"],
+                legal_moves=self.latest_observations["player_observations"][int(player_name[-1])]["legal_moves_as_int"],
                 # legal_moves_as_dict=self.latest_observations['player_observations'][int(player_name[-1])]['legal_moves'],
-                observations_vectorized=self.latest_observations["player_observations"][
-                    int(player_name[-1])
-                ]["vectorized"],
+                observations_vectorized=self.latest_observations["player_observations"][int(player_name[-1])][
+                    "vectorized"
+                ],
                 # observations=self.latest_observations['player_observations'][int(player_name[-1])
             )
             for player_name in self.agents

@@ -66,9 +66,7 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self.action_spaces = {agent: Discrete(num_actions) for agent in self.agents}
-        self.observation_spaces = {
-            agent: Discrete(1 + num_actions) for agent in self.agents
-        }
+        self.observation_spaces = {agent: Discrete(1 + num_actions) for agent in self.agents}
 
         self.screen = None
         self.history = [0] * (2 * 5)
@@ -117,21 +115,11 @@ class raw_env(AECEnv):
         lizard = get_image(os.path.join("img", "Lizard.png"))
 
         # Scale images in history
-        paper = pygame.transform.scale(
-            paper, (int(screen_height / 9), int(screen_height / 9 * (14 / 12)))
-        )
-        rock = pygame.transform.scale(
-            rock, (int(screen_height / 9), int(screen_height / 9 * (10 / 13)))
-        )
-        scissors = pygame.transform.scale(
-            scissors, (int(screen_height / 9), int(screen_height / 9 * (14 / 13)))
-        )
-        spock = pygame.transform.scale(
-            spock, (int(screen_height / 9), int(screen_height / 9))
-        )
-        lizard = pygame.transform.scale(
-            lizard, (int(screen_height / 9 * (9 / 18)), int(screen_height / 9))
-        )
+        paper = pygame.transform.scale(paper, (int(screen_height / 9), int(screen_height / 9 * (14 / 12))))
+        rock = pygame.transform.scale(rock, (int(screen_height / 9), int(screen_height / 9 * (10 / 13))))
+        scissors = pygame.transform.scale(scissors, (int(screen_height / 9), int(screen_height / 9 * (14 / 13))))
+        spock = pygame.transform.scale(spock, (int(screen_height / 9), int(screen_height / 9)))
+        lizard = pygame.transform.scale(lizard, (int(screen_height / 9 * (9 / 18)), int(screen_height / 9)))
 
         # Set background color
         bg = (255, 255, 255)
@@ -139,9 +127,7 @@ class raw_env(AECEnv):
 
         # Set font properties
         black = (0, 0, 0)
-        font = get_font(
-            (os.path.join("font", "Minecraft.ttf")), int(screen_height / 25)
-        )
+        font = get_font((os.path.join("font", "Minecraft.ttf")), int(screen_height / 25))
 
         for i, move in enumerate(self.history[0:10]):
             # Blit move history
@@ -149,79 +135,49 @@ class raw_env(AECEnv):
                 self.screen.blit(
                     rock,
                     (
-                        (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
-                        (screen_height * 7 / 24)
-                        + ((screen_height / 7) * np.floor(i / 2)),
+                        (screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126),
+                        (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
             elif move == "PAPER":
                 self.screen.blit(
                     paper,
                     (
-                        (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
-                        (screen_height * 7 / 24)
-                        + ((screen_height / 7) * np.floor(i / 2)),
+                        (screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126),
+                        (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
             elif move == "SCISSORS":
                 self.screen.blit(
                     scissors,
                     (
-                        (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
-                        (screen_height * 7 / 24)
-                        + ((screen_height / 7) * np.floor(i / 2)),
+                        (screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126),
+                        (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
             elif move == "SPOCK":
                 self.screen.blit(
                     spock,
                     (
-                        (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
-                        (screen_height * 7 / 24)
-                        + ((screen_height / 7) * np.floor(i / 2)),
+                        (screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126),
+                        (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
             elif move == "LIZARD":
                 self.screen.blit(
                     lizard,
                     (
-                        (screen_width / 2)
-                        + offset(
-                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
-                        ),
-                        (screen_height * 7 / 24)
-                        + ((screen_height / 7) * np.floor(i / 2)),
+                        (screen_width / 2) + offset((i + 1) % 2, screen_height / 9, screen_height * 7 / 126),
+                        (screen_height * 7 / 24) + ((screen_height / 7) * np.floor(i / 2)),
                     ),
                 )
 
         # Scale images in current game
-        paper = pygame.transform.scale(
-            paper, (int(screen_height / 7), int(screen_height / 7 * (14 / 12)))
-        )
-        rock = pygame.transform.scale(
-            rock, (int(screen_height / 7), int(screen_height / 7 * (10 / 13)))
-        )
-        scissors = pygame.transform.scale(
-            scissors, (int(screen_height / 7), int(screen_height / 7 * (14 / 13)))
-        )
-        spock = pygame.transform.scale(
-            spock, (int(screen_height / 7), int(screen_height / 7))
-        )
-        lizard = pygame.transform.scale(
-            lizard, (int(screen_height / 7 * (9 / 18)), int(screen_height / 7))
-        )
+        paper = pygame.transform.scale(paper, (int(screen_height / 7), int(screen_height / 7 * (14 / 12))))
+        rock = pygame.transform.scale(rock, (int(screen_height / 7), int(screen_height / 7 * (10 / 13))))
+        scissors = pygame.transform.scale(scissors, (int(screen_height / 7), int(screen_height / 7 * (14 / 13))))
+        spock = pygame.transform.scale(spock, (int(screen_height / 7), int(screen_height / 7)))
+        lizard = pygame.transform.scale(lizard, (int(screen_height / 7 * (9 / 18)), int(screen_height / 7)))
 
         if len(self.agents) > 1:
             for i in range(0, 2):
@@ -239,8 +195,7 @@ class raw_env(AECEnv):
                     self.screen.blit(
                         rock,
                         (
-                            (screen_width / 2)
-                            + offset(i, screen_height / 7, screen_height / 42),
+                            (screen_width / 2) + offset(i, screen_height / 7, screen_height / 42),
                             screen_height / 12,
                         ),
                     )
@@ -248,8 +203,7 @@ class raw_env(AECEnv):
                     self.screen.blit(
                         paper,
                         (
-                            (screen_width / 2)
-                            + offset(i, screen_height / 7, screen_height / 42),
+                            (screen_width / 2) + offset(i, screen_height / 7, screen_height / 42),
                             screen_height / 12,
                         ),
                     )
@@ -257,8 +211,7 @@ class raw_env(AECEnv):
                     self.screen.blit(
                         scissors,
                         (
-                            (screen_width / 2)
-                            + offset(i, screen_height / 7, screen_height / 42),
+                            (screen_width / 2) + offset(i, screen_height / 7, screen_height / 42),
                             screen_height / 12,
                         ),
                     )
@@ -266,8 +219,7 @@ class raw_env(AECEnv):
                     self.screen.blit(
                         spock,
                         (
-                            (screen_width / 2)
-                            + offset(i, screen_height / 7, screen_height / 42),
+                            (screen_width / 2) + offset(i, screen_height / 7, screen_height / 42),
                             screen_height / 12,
                         ),
                     )
@@ -275,24 +227,19 @@ class raw_env(AECEnv):
                     self.screen.blit(
                         lizard,
                         (
-                            (screen_width / 2)
-                            + offset(i, screen_height / 7, screen_height / 42),
+                            (screen_width / 2) + offset(i, screen_height / 7, screen_height / 42),
                             screen_height / 12,
                         ),
                     )
                 if self._moves[self.state[self.agents[1]]] != "None":
-                    self.history = [
-                        self._moves[self.state[self.agents[i]]]
-                    ] + self.history[:-1]
+                    self.history = [self._moves[self.state[self.agents[i]]]] + self.history[:-1]
 
         if mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self, agent):
         # observation of one agent is the previous state of the other
@@ -334,15 +281,11 @@ class raw_env(AECEnv):
 
             self.num_moves += 1
 
-            self.dones = {
-                agent: self.num_moves >= self.max_cycles for agent in self.agents
-            }
+            self.dones = {agent: self.num_moves >= self.max_cycles for agent in self.agents}
 
             # observe the current state
             for i in self.agents:
-                self.observations[i] = self.state[
-                    self.agents[1 - self.agent_name_mapping[i]]
-                ]
+                self.observations[i] = self.state[self.agents[1 - self.agent_name_mapping[i]]]
         else:
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = self._none
 

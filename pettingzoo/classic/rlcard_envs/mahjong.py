@@ -33,13 +33,7 @@ class raw_env(RLCardBase):
             print(", ".join([c.get_str() for c in state["current_hand"]]))
             print(
                 f"\n{player}'s Piles: ",
-                ", ".join(
-                    [
-                        c.get_str()
-                        for pile in state["players_pile"][self._name_to_int(player)]
-                        for c in pile
-                    ]
-                ),
+                ", ".join([c.get_str() for pile in state["players_pile"][self._name_to_int(player)] for c in pile]),
             )
         print("\n======== Tiles on Table ========")
         print(", ".join([c.get_str() for c in state["table"]]))

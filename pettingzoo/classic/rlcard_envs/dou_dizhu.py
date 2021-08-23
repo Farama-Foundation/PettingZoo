@@ -36,9 +36,7 @@ class raw_env(RLCardBase):
                         "observation": spaces.Box(
                             low=0.0,
                             high=1.0,
-                            shape=(obs_dimension - 111,)
-                            if agent == "landlord_0"
-                            else (obs_dimension,),
+                            shape=(obs_dimension - 111,) if agent == "landlord_0" else (obs_dimension,),
                             dtype=self._dtype,
                         ),
                         "action_mask": spaces.Box(

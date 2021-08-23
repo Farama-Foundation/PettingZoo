@@ -5,11 +5,7 @@ from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_
 
 def raw_env(**kwargs):
     return BaseAtariEnv(
-        game="warlords",
-        num_players=4,
-        mode_num=None,
-        env_name=os.path.basename(__file__)[:-3],
-        **kwargs
+        game="warlords", num_players=4, mode_num=None, env_name=os.path.basename(__file__)[:-3], **kwargs
     )
 
 

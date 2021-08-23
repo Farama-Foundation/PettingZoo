@@ -16,9 +16,7 @@ class raw_env(SimpleEnv):
         continuous_actions=False,
     ):
         scenario = Scenario()
-        world = scenario.make_world(
-            num_good, num_adversaries, num_obstacles, num_food, num_forests
-        )
+        world = scenario.make_world(num_good, num_adversaries, num_obstacles, num_food, num_forests)
         super().__init__(scenario, world, max_cycles, continuous_actions)
         self.metadata["name"] = "simple_world_comm_v2"
 

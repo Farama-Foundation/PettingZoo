@@ -88,9 +88,7 @@ def main():
             total_reward += rew
             i += 1
             if i % (len(env.possible_agents) + 1) == 0:
-                obs_list.append(
-                    np.transpose(env.render(mode="rgb_array"), axes=(1, 0, 2))
-                )
+                obs_list.append(np.transpose(env.render(mode="rgb_array"), axes=(1, 0, 2)))
 
     env.close()
     print("average total reward: ", total_reward / NUM_RESETS)

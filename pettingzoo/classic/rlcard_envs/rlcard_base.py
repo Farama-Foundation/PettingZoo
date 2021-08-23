@@ -40,12 +40,8 @@ class RLCardBase(AECEnv):
             [
                 spaces.Dict(
                     {
-                        "observation": spaces.Box(
-                            low=0.0, high=1.0, shape=obs_shape, dtype=self._dtype
-                        ),
-                        "action_mask": spaces.Box(
-                            low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8
-                        ),
+                        "observation": spaces.Box(low=0.0, high=1.0, shape=obs_shape, dtype=self._dtype),
+                        "action_mask": spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8),
                     }
                 )
                 for _ in range(self.num_agents)
@@ -93,13 +89,9 @@ class RLCardBase(AECEnv):
         next_player = self._int_to_name(next_player_id)
         self._last_obs = self.observe(self.agent_selection)
         if self.env.is_over():
-            self.rewards = self._convert_to_dict(
-                self._scale_rewards(self.env.get_payoffs())
-            )
+            self.rewards = self._convert_to_dict(self._scale_rewards(self.env.get_payoffs()))
             self.next_legal_moves = []
-            self.dones = self._convert_to_dict(
-                [True if self.env.is_over() else False for _ in range(self.num_agents)]
-            )
+            self.dones = self._convert_to_dict([True if self.env.is_over() else False for _ in range(self.num_agents)])
         else:
             self.next_legal_moves = obs["legal_actions"]
         self._cumulative_rewards[self.agent_selection] = 0
@@ -112,13 +104,9 @@ class RLCardBase(AECEnv):
         self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
         self.rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
-        self._cumulative_rewards = self._convert_to_dict(
-            [0 for _ in range(self.num_agents)]
-        )
+        self._cumulative_rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
         self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
-        self.infos = self._convert_to_dict(
-            [{"legal_moves": []} for _ in range(self.num_agents)]
-        )
+        self.infos = self._convert_to_dict([{"legal_moves": []} for _ in range(self.num_agents)])
         self.next_legal_moves = list(sorted(obs["legal_actions"]))
         self._last_obs = obs["obs"]
 

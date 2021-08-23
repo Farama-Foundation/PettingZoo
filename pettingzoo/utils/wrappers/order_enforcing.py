@@ -28,9 +28,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         if value == "unwrapped":
             return self.env.unwrapped
         elif value == "agent_order":
-            raise AttributeError(
-                "agent_order has been removed from the API. Please consider using agent_iter instead."
-            )
+            raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {
             "rewards",
             "dones",
@@ -41,9 +39,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         }:
             raise AttributeError(f"{value} cannot be accessed before reset")
         else:
-            raise AttributeError(
-                f"'{type(self).__name__}' object has no attribute '{value}'"
-            )
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{value}'")
 
     def seed(self, seed=None):
         self._has_reset = False
@@ -90,9 +86,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     def __str__(self):
         if hasattr(self, "metadata"):
             return (
-                str(self.env)
-                if self.__class__ is OrderEnforcingWrapper
-                else f"{type(self).__name__}<{str(self.env)}>"
+                str(self.env) if self.__class__ is OrderEnforcingWrapper else f"{type(self).__name__}<{str(self.env)}>"
             )
         else:
             return repr(self)
@@ -106,8 +100,6 @@ class AECOrderEnforcingIterable(AECIterable):
 class AECOrderEnforcingIterator(AECIterator):
     def __next__(self):
         agent = super().__next__()
-        assert (
-            self.env._has_updated
-        ), "need to call step() or reset() in a loop over `agent_iter`"
+        assert self.env._has_updated, "need to call step() or reset() in a loop over `agent_iter`"
         self.env._has_updated = False
         return agent

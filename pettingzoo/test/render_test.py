@@ -26,9 +26,7 @@ def collect_render_results(env, mode):
 
 def render_test(env, custom_tests={}):
     render_modes = env.metadata.get("render.modes")
-    assert (
-        render_modes is not None
-    ), "Environment's that support rendering must define render modes in metadata"
+    assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
     for mode in render_modes:
         render_results = collect_render_results(env, mode)
         for res in render_results:
@@ -36,10 +34,7 @@ def render_test(env, custom_tests={}):
                 assert custom_tests[mode](res)
             if mode == "rgb_array":
                 assert (
-                    isinstance(res, np.ndarray)
-                    and len(res.shape) == 3
-                    and res.shape[2] == 3
-                    and res.dtype == np.uint8
+                    isinstance(res, np.ndarray) and len(res.shape) == 3 and res.shape[2] == 3 and res.dtype == np.uint8
                 ), f"rgb_array mode must return a valid image array, is {res}"
             if mode == "ansi":
                 assert isinstance(

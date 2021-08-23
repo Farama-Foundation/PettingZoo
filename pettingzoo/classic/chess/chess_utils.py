@@ -95,11 +95,7 @@ def get_pawn_promotion_move(diff):
 
 
 def get_pawn_promotion_num(promotion):
-    assert (
-        promotion == chess.KNIGHT
-        or promotion == chess.BISHOP
-        or promotion == chess.ROOK
-    )
+    assert promotion == chess.KNIGHT or promotion == chess.BISHOP or promotion == chess.ROOK
     return 0 if promotion == chess.KNIGHT else (1 if promotion == chess.BISHOP else 2)
 
 
@@ -122,11 +118,7 @@ def get_move_plane(move):
         return KNIGHT_OFFSET + get_knight_dir(difference)
     else:
         if move.promotion is not None and move.promotion != chess.QUEEN:
-            return (
-                UNDER_OFFSET
-                + 3 * get_pawn_promotion_move(difference)
-                + get_pawn_promotion_num(move.promotion)
-            )
+            return UNDER_OFFSET + 3 * get_pawn_promotion_move(difference) + get_pawn_promotion_num(move.promotion)
         else:
             return QUEEN_OFFSET + get_queen_plane(difference)
 
@@ -142,11 +134,7 @@ def action_to_move(board, action, player):
     mirr_move = mirror_move(base_move) if player else base_move
     if mirr_move.promotion == chess.QUEEN:
         mirr_move.promotion = None
-    if (
-        mirr_move.promotion is None
-        and str(board.piece_at(mirr_move.from_square)).lower() == "p"
-        and base_coord[1] == 6
-    ):
+    if mirr_move.promotion is None and str(board.piece_at(mirr_move.from_square)).lower() == "p" and base_coord[1] == 6:
         mirr_move.promotion = chess.QUEEN
     return mirr_move
 

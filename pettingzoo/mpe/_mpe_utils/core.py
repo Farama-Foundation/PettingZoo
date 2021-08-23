@@ -9,9 +9,7 @@ class EntityState:  # physical/external base state of all entities
         self.p_vel = None
 
 
-class AgentState(
-    EntityState
-):  # state of agents (including communication and internal/mental state)
+class AgentState(EntityState):  # state of agents (including communication and internal/mental state)
     def __init__(self):
         super().__init__()
         # communication utterance
@@ -137,11 +135,7 @@ class World:  # multi-agent world
         # set applied forces
         for i, agent in enumerate(self.agents):
             if agent.movable:
-                noise = (
-                    np.random.randn(*agent.action.u.shape) * agent.u_noise
-                    if agent.u_noise
-                    else 0.0
-                )
+                noise = np.random.randn(*agent.action.u.shape) * agent.u_noise if agent.u_noise else 0.0
                 p_force[i] = agent.action.u + noise
         return p_force
 
@@ -172,16 +166,11 @@ class World:  # multi-agent world
             if p_force[i] is not None:
                 entity.state.p_vel += (p_force[i] / entity.mass) * self.dt
             if entity.max_speed is not None:
-                speed = np.sqrt(
-                    np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1])
-                )
+                speed = np.sqrt(np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1]))
                 if speed > entity.max_speed:
                     entity.state.p_vel = (
                         entity.state.p_vel
-                        / np.sqrt(
-                            np.square(entity.state.p_vel[0])
-                            + np.square(entity.state.p_vel[1])
-                        )
+                        / np.sqrt(np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1]))
                         * entity.max_speed
                     )
             entity.state.p_pos += entity.state.p_vel * self.dt
@@ -191,11 +180,7 @@ class World:  # multi-agent world
         if agent.silent:
             agent.state.c = np.zeros(self.dim_c)
         else:
-            noise = (
-                np.random.randn(*agent.action.c.shape) * agent.c_noise
-                if agent.c_noise
-                else 0.0
-            )
+            noise = np.random.randn(*agent.action.c.shape) * agent.c_noise if agent.c_noise else 0.0
             agent.state.c = agent.action.c + noise
 
     # get collision forces for any contact between two entities

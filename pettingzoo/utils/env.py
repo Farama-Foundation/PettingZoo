@@ -146,9 +146,7 @@ class AECEnv:
 
         # removes done agent
         agent = self.agent_selection
-        assert self.dones[
-            agent
-        ], "an agent that was not done as attempted to be removed"
+        assert self.dones[agent], "an agent that was not done as attempted to be removed"
         del self.dones[agent]
         del self.rewards[agent]
         del self._cumulative_rewards[agent]
