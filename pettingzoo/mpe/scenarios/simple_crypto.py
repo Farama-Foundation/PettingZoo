@@ -6,8 +6,7 @@ adversary to goal. Adversary is rewarded for its distance to the goal.
 
 
 import numpy as np
-
-from .._mpe_utils.core import Agent, Landmark, World
+from .._mpe_utils.core import World, Agent, Landmark
 from .._mpe_utils.scenario import BaseScenario
 
 
@@ -18,6 +17,7 @@ class CryptoAgent(Agent):
 
 
 class Scenario(BaseScenario):
+
     def make_world(self):
         world = World()
         # set any world properties first
@@ -32,14 +32,12 @@ class Scenario(BaseScenario):
             agent.collide = False
             agent.speaker = True if i == 2 else False
             agent.movable = False
-            base_name = (
-                "eve" if agent.adversary else ("alice" if agent.speaker else "bob")
-            )
-            agent.name = f"{base_name}_0"
+            base_name = "eve" if agent.adversary else ("alice" if agent.speaker else "bob")
+            agent.name = f'{base_name}_0'
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
         for i, landmark in enumerate(world.landmarks):
-            landmark.name = "landmark %d" % i
+            landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
         return world
@@ -81,9 +79,7 @@ class Scenario(BaseScenario):
 
     # return all agents that are not adversaries
     def good_listeners(self, world):
-        return [
-            agent for agent in world.agents if not agent.adversary and not agent.speaker
-        ]
+        return [agent for agent in world.agents if not agent.adversary and not agent.speaker]
 
     # return all agents that are not adversaries
     def good_agents(self, world):
@@ -94,11 +90,7 @@ class Scenario(BaseScenario):
         return [agent for agent in world.agents if agent.adversary]
 
     def reward(self, agent, world):
-        return (
-            self.adversary_reward(agent, world)
-            if agent.adversary
-            else self.agent_reward(agent, world)
-        )
+        return self.adversary_reward(agent, world) if agent.adversary else self.agent_reward(agent, world)
 
     def agent_reward(self, agent, world):
         # Agents rewarded if Bob can reconstruct message, but adversary (Eve) cannot

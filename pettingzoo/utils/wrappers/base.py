@@ -2,10 +2,10 @@ from pettingzoo.utils.env import AECEnv
 
 
 class BaseWrapper(AECEnv):
-    """
+    '''
     Creates a wrapper around `env` parameter. Extend this class
     to create a useful wrapper.
-    """
+    '''
 
     def __init__(self, env):
         super().__init__()
@@ -45,7 +45,7 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
+    def render(self, mode='human'):
         return self.env.render(mode)
 
     def reset(self):
@@ -75,7 +75,7 @@ class BaseWrapper(AECEnv):
         self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
-        """
+        '''
         returns a name which looks like: "max_observation<space_invaders_v1>"
-        """
-        return f"{type(self).__name__}<{str(self.env)}>"
+        '''
+        return f'{type(self).__name__}<{str(self.env)}>'

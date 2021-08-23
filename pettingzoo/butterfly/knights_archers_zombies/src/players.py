@@ -1,13 +1,10 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+import pygame
 import math
 import os
-
-import pygame
-
-from .img import get_image
 from .weapons import Arrow, Sword
+from .img import get_image
 
 WIDTH = 1280
 HEIGHT = 720
@@ -19,9 +16,10 @@ ANGLE_RATE = 10
 
 
 class Archer(pygame.sprite.Sprite):
+
     def __init__(self, agent_name):
         super().__init__()
-        self.image = get_image(os.path.join("img", "archer.png"))
+        self.image = get_image(os.path.join('img', 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
         self.org_image = self.image.copy()
         self.angle = 0
@@ -81,7 +79,7 @@ class Archer(pygame.sprite.Sprite):
 class Knight(pygame.sprite.Sprite):
     def __init__(self, agent_name):
         super().__init__()
-        self.image = get_image(os.path.join("img", "knight.png"))
+        self.image = get_image(os.path.join('img', 'knight.png'))
         self.rect = self.image.get_rect(center=(KNIGHT_X, KNIGHT_Y))
         self.org_image = self.image.copy()
         self.angle = 0

@@ -1,18 +1,14 @@
 import os
-
-import gym
 import numpy as np
+import gym
 from gym.utils import seeding
-
+from .cake_paddle import CakePaddle, RENDER_RATIO
+from .manual_control import manual_control
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .cake_paddle import RENDER_RATIO, CakePaddle
-from .manual_control import manual_control
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
 from gym.utils import EzPickle
 
@@ -28,11 +24,7 @@ def get_flat_shape(width, height):
 
 
 def original_obs_shape(screen_width, screen_height):
-    return (
-        int(screen_height * 2 / KERNEL_WINDOW_LENGTH),
-        int(screen_width * 2 / (KERNEL_WINDOW_LENGTH)),
-        1,
-    )
+    return (int(screen_height * 2 / KERNEL_WINDOW_LENGTH), int(screen_width * 2 / (KERNEL_WINDOW_LENGTH)), 1)
 
 
 def get_valid_angle(randomizer):
@@ -51,13 +43,7 @@ def get_valid_angle(randomizer):
     d2 = deg_to_rad(0 + hor_deg_range)
 
     angle = 0
-    while (
-        (angle > a1 and angle < b1)
-        or (angle > a2 and angle < b2)
-        or (angle > c1 and angle < d1)
-        or (angle > c2)
-        or (angle < d2)
-    ):
+    while ((angle > a1 and angle < b1) or (angle > a2 and angle < b2) or (angle > c1 and angle < d1) or (angle > c2) or (angle < d2)):
         angle = 2 * np.pi * randomizer.rand()
 
     return angle
@@ -95,7 +81,7 @@ class PaddleSprite(pygame.sprite.Sprite):
                 self.rect = newpos
 
     def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
-        """
+        '''
 
         Parameters
         ----------
@@ -109,7 +95,7 @@ class PaddleSprite(pygame.sprite.Sprite):
         b_rect: new ball rect
         b_speed: new ball speed
 
-        """
+        '''
         if paddle_type == 1:
             if self.rect.colliderect(b_rect):
                 is_collision = True
@@ -146,10 +132,7 @@ class BallSprite(pygame.sprite.Sprite):
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed_val = speed
-        self.speed = [
-            int(self.speed_val * np.cos(np.pi / 4)),
-            int(self.speed_val * np.sin(np.pi / 4)),
-        ]
+        self.speed = [int(self.speed_val * np.cos(np.pi / 4)), int(self.speed_val * np.sin(np.pi / 4))]
         self.bounce_randomness = bounce_randomness
         self.done = False
         self.hit = False
@@ -162,7 +145,7 @@ class BallSprite(pygame.sprite.Sprite):
             done_x = self.move_single_axis(self.speed[0], 0, area, p0, p1)
         if self.speed[1] != 0:
             done_y = self.move_single_axis(0, self.speed[1], area, p0, p1)
-        return done_x or done_y
+        return (done_x or done_y)
 
     def move_single_axis(self, dx, dy, area, p0, p1):
         # move ball rect
@@ -192,24 +175,14 @@ class BallSprite(pygame.sprite.Sprite):
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p0.process_collision(
-                    self.rect, dx, dy, self.speed, 1
-                )
+                is_collision, self.rect, self.speed = p0.process_collision(self.rect, dx, dy, self.speed, 1)
                 if is_collision:
-                    self.speed = [
-                        self.speed[0] + np.sign(self.speed[0]) * r_val,
-                        self.speed[1] + np.sign(self.speed[1]) * r_val,
-                    ]
+                    self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
             # ball in right half
             else:
-                is_collision, self.rect, self.speed = p1.process_collision(
-                    self.rect, dx, dy, self.speed, 2
-                )
+                is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 2)
                 if is_collision:
-                    self.speed = [
-                        self.speed[0] + np.sign(self.speed[0]) * r_val,
-                        self.speed[1] + np.sign(self.speed[1]) * r_val,
-                    ]
+                    self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
 
         return False
 
@@ -219,16 +192,7 @@ class BallSprite(pygame.sprite.Sprite):
 
 
 class CooperativePong:
-    def __init__(
-        self,
-        randomizer,
-        ball_speed=9,
-        left_paddle_speed=12,
-        right_paddle_speed=12,
-        cake_paddle=True,
-        max_cycles=900,
-        bounce_randomness=False,
-    ):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
         super().__init__()
 
         pygame.init()
@@ -236,25 +200,16 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
-        self.screen = pygame.Surface(
-            (self.s_width, self.s_height)
-        )  # (960, 720) # (640, 480) # (100, 200)
+        self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
 
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         original_shape = original_obs_shape(self.s_width, self.s_height)
         original_color_shape = (original_shape[0], original_shape[1], 3)
-        self.observation_space = [
-            gym.spaces.Box(
-                low=0, high=255, shape=(original_color_shape), dtype=np.uint8
-            )
-            for _ in range(self.num_agents)
-        ]
+        self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
-        self.state_space = gym.spaces.Box(
-            low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8
-        )
+        self.state_space = gym.spaces.Box(low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8)
 
         self.renderOn = False
 
@@ -264,25 +219,16 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = PaddleSprite(
-            (20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed
-        )
+        self.p0 = PaddleSprite((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed)
         else:
-            self.p1 = PaddleSprite(
-                (20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed
-            )
+            self.p1 = PaddleSprite((20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed)
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
-        self.ball = BallSprite(
-            randomizer,
-            (20 // RENDER_RATIO, 20 // RENDER_RATIO),
-            ball_speed,
-            bounce_randomness,
-        )
+        self.ball = BallSprite(randomizer, (20 // RENDER_RATIO, 20 // RENDER_RATIO), ball_speed, bounce_randomness)
         self.randomizer = randomizer
 
         self.reinit()
@@ -299,10 +245,7 @@ class CooperativePong:
         # set the direction to an angle between [0, 2*np.pi)
         angle = get_valid_angle(self.randomizer)
         # angle = deg_to_rad(89)
-        self.ball.speed = [
-            int(self.ball.speed_val * np.cos(angle)),
-            int(self.ball.speed_val * np.sin(angle)),
-        ]
+        self.ball.speed = [int(self.ball.speed_val * np.cos(angle)), int(self.ball.speed_val * np.sin(angle))]
 
         self.p0.rect.midleft = self.area.midleft
         self.p1.rect.midright = self.area.midright
@@ -330,7 +273,7 @@ class CooperativePong:
         self.renderOn = True
         self.draw()
 
-    def render(self, mode="human"):
+    def render(self, mode='human'):
         if not self.renderOn and mode == "human":
             # sets self.renderOn to true and initializes display
             self.enable_render()
@@ -338,22 +281,18 @@ class CooperativePong:
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-        )
+        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
 
     def observe(self):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        observation = np.rot90(
-            observation, k=3
-        )  # now the obs is laid out as H, W as rows and cols
+        observation = np.rot90(observation, k=3)  # now the obs is laid out as H, W as rows and cols
         observation = np.fliplr(observation)  # laid out in the correct order
         return observation
 
     def state(self):
-        """
+        '''
         Returns an observation of the global environment
-        """
+        '''
         state = pygame.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
@@ -419,7 +358,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
-    metadata = {"render.modes": ["human", "rgb_array"], "name": "cooperative_pong_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "cooperative_pong_v3"}
 
     def __init__(self, **kwargs):
         EzPickle.__init__(self, **kwargs)
@@ -469,7 +408,7 @@ class raw_env(AECEnv, EzPickle):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
+    def render(self, mode='human'):
         return self.env.render(mode)
 
     def step(self, action):
@@ -477,10 +416,8 @@ class raw_env(AECEnv, EzPickle):
             return self._was_done_step(action)
         agent = self.agent_selection
         if not self.action_spaces[agent].contains(action):
-            raise Exception(
-                "Action for agent {} must be in Discrete({})."
-                "It is currently {}".format(agent, self.action_spaces[agent].n, action)
-            )
+            raise Exception('Action for agent {} must be in Discrete({}).'
+                            'It is currently {}'.format(agent, self.action_spaces[agent].n, action))
 
         self.env.step(action, agent)
         # select next agent and observe
@@ -493,7 +430,6 @@ class raw_env(AECEnv, EzPickle):
 
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
-
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
 # added in by Justin Terry (which is why he's shown as the creator in the git history)

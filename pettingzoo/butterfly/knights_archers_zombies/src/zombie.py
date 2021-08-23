@@ -1,11 +1,9 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
-import os
-
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
-
+import os
 from .img import get_image
+
 
 ZOMBIE_Y_SPEED = 5
 ZOMBIE_X_SPEED = 30
@@ -13,9 +11,10 @@ WIDTH = 1280
 
 
 class Zombie(pygame.sprite.Sprite):
+
     def __init__(self, randomizer):
         super().__init__()
-        self.image = get_image(os.path.join("img", "zombie.png"))
+        self.image = get_image(os.path.join('img', 'zombie.png'))
         self.rect = self.image.get_rect(center=(50, 50))
         self.randomizer = randomizer
 
@@ -25,7 +24,7 @@ class Zombie(pygame.sprite.Sprite):
         # Wobbling in X-Y Direction
         self.rect.y += ZOMBIE_Y_SPEED
 
-        if self.rect.y % 15 == 0:
+        if (self.rect.y % 15 == 0):
             if self.rect.x > 15 and self.rect.x < 1265:
                 if rand_x in [1, 3, 6]:
                     self.rect.x += ZOMBIE_X_SPEED

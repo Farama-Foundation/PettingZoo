@@ -1,9 +1,7 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
-import numpy as np
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
-
+import numpy as np
 from . import constants as const
 
 
@@ -20,9 +18,10 @@ def manual_control(**kwargs):
 
     while not done:
         clock.tick(const.FPS)
-        agent_actions = [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)] + [
-            np.array([0, 0]) for _ in range(const.NUM_BANKERS)
-        ]
+        agent_actions = (
+            [np.array([0, 0, 0]) for _ in range(const.NUM_PROSPECTORS)]
+            + [np.array([0, 0]) for _ in range(const.NUM_BANKERS)]
+        )
         for event in pygame.event.get():
             # Use left/right arrow keys to switch between agents
             # Use WASD to control bankers

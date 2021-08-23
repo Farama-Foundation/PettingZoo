@@ -1,13 +1,11 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
-import numpy as np
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
+import numpy as np
 
 
 def manual_control(**kwargs):
     from .prison import env as _env
-
     env = _env(**kwargs)
     env.reset()
     clock = pygame.time.Clock()
@@ -15,7 +13,7 @@ def manual_control(**kwargs):
     y = 0
     prisoner_mapping = {}
     for prisoner in env.agents:
-        prisoner_mapping[env.infos[prisoner]["map_tuple"]] = prisoner
+        prisoner_mapping[env.infos[prisoner]['map_tuple']] = prisoner
     while True:
         clock.tick(30)
         agent_actions = {agent: 1 for agent in env.agents}
@@ -34,10 +32,12 @@ def manual_control(**kwargs):
                     y = min(3, y + 1)
                 elif event.key == pygame.K_j:
                     num_actions += 1
-                    agent_actions[prisoner_mapping[(x, y)]] = 0
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 0
                 elif event.key == pygame.K_k:
                     num_actions += 1
-                    agent_actions[prisoner_mapping[(x, y)]] = 2
+                    agent_actions[prisoner_mapping[
+                        (x, y)]] = 2
                 elif event.key == pygame.K_ESCAPE:
                     test_done = True
         for i in env.agents:

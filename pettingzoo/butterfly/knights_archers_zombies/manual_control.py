@@ -1,14 +1,11 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import time
-
 import pygame
 
 
 def manual_control(**kwargs):
     from .knights_archers_zombies import env as _env
-
     env = _env(**kwargs)
     env.reset()
     done = False

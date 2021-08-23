@@ -1,7 +1,6 @@
-from pettingzoo.utils.conversions import parallel_wrapper_fn
-
 from ._mpe_utils.simple_env import SimpleEnv, make_env
 from .scenarios.simple import Scenario
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):
@@ -9,7 +8,7 @@ class raw_env(SimpleEnv):
         scenario = Scenario()
         world = scenario.make_world()
         super().__init__(scenario, world, max_cycles, continuous_actions)
-        self.metadata["name"] = "simple_v2"
+        self.metadata['name'] = "simple_v2"
 
 
 env = make_env(raw_env)

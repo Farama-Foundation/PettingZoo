@@ -1,11 +1,10 @@
+from .multiwalker_base import MultiWalkerEnv as _env
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector
 import numpy as np
 from gym.utils import EzPickle
-
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .multiwalker_base import MultiWalkerEnv as _env
 
 
 def env(**kwargs):
@@ -20,7 +19,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {"render.modes": ["human", "rgb_array"], "name": "multiwalker_v7"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'multiwalker_v7'}
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
@@ -32,7 +31,8 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(
+            zip(self.agents, self.env.observation_space))
         self.steps = 0
 
     def seed(self, seed=None):
@@ -59,10 +59,9 @@ class raw_env(AECEnv, EzPickle):
         self.env.render(mode)
 
         import pyglet
-
         buffer = pyglet.image.get_buffer_manager().get_color_buffer()
         image_data = buffer.get_image_data()
-        arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep="")
+        arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
         arr = arr.reshape(buffer.height, buffer.width, 4)
         arr = arr[::-1, :, 0:3]
         return arr if mode == "rgb_array" else None
@@ -83,12 +82,7 @@ class raw_env(AECEnv, EzPickle):
                 self.rewards[r] = last_rewards[self.agent_name_mapping[r]]
             for d in self.dones:
                 self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
-            self.agent_name_mapping = {
-                agent: i
-                for i, (agent, done) in enumerate(
-                    zip(self.possible_agents, self.env.get_last_dones())
-                )
-            }
+            self.agent_name_mapping = {agent: i for i, (agent, done) in enumerate(zip(self.possible_agents, self.env.get_last_dones()))}
             iter_agents = self.agents[:]
             for a, d in self.dones.items():
                 if d:

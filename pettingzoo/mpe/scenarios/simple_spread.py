@@ -1,6 +1,5 @@
 import numpy as np
-
-from .._mpe_utils.core import Agent, Landmark, World
+from .._mpe_utils.core import World, Agent, Landmark
 from .._mpe_utils.scenario import BaseScenario
 
 
@@ -15,14 +14,14 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
-            agent.name = f"agent_{i}"
+            agent.name = f'agent_{i}'
             agent.collide = True
             agent.silent = True
             agent.size = 0.15
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
         for i, landmark in enumerate(world.landmarks):
-            landmark.name = "landmark %d" % i
+            landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
         return world
@@ -49,10 +48,7 @@ class Scenario(BaseScenario):
         occupied_landmarks = 0
         min_dists = 0
         for l in world.landmarks:
-            dists = [
-                np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
-                for a in world.agents
-            ]
+            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
             min_dists += min(dists)
             rew -= min(dists)
             if min(dists) < 0.1:
@@ -82,10 +78,7 @@ class Scenario(BaseScenario):
     def global_reward(self, world):
         rew = 0
         for l in world.landmarks:
-            dists = [
-                np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
-                for a in world.agents
-            ]
+            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
             rew -= min(dists)
         return rew
 
@@ -106,6 +99,4 @@ class Scenario(BaseScenario):
                 continue
             comm.append(other.state.c)
             other_pos.append(other.state.p_pos - agent.state.p_pos)
-        return np.concatenate(
-            [agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + comm
-        )
+        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + comm)

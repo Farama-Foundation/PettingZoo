@@ -1,14 +1,12 @@
-import math
-import warnings
-
-import magent
+from gym.spaces import Discrete, Box
 import numpy as np
-from gym.spaces import Box, Discrete
-from gym.utils import seeding
-
+import warnings
+import magent
 from pettingzoo import AECEnv
+import math
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector, wrappers
+from gym.utils import seeding
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -18,22 +16,11 @@ def make_env(raw_env):
         env = wrappers.AssertOutOfBoundsWrapper(env)
         env = wrappers.OrderEnforcingWrapper(env)
         return env
-
     return env_fn
 
 
 class magent_parallel_env(ParallelEnv):
-    def __init__(
-        self,
-        env,
-        active_handles,
-        names,
-        map_size,
-        max_cycles,
-        reward_range,
-        minimap_mode,
-        extra_features,
-    ):
+    def __init__(self, env, active_handles, names, map_size, max_cycles, reward_range, minimap_mode, extra_features):
         self.map_size = map_size
         self.max_cycles = max_cycles
         self.minimap_mode = minimap_mode
@@ -44,29 +31,17 @@ class magent_parallel_env(ParallelEnv):
         env.reset()
         self.generate_map()
         self.team_sizes = team_sizes = [env.get_num(handle) for handle in self.handles]
-        self.agents = [
-            f"{names[j]}_{i}"
-            for j in range(len(team_sizes))
-            for i in range(team_sizes[j])
-        ]
+        self.agents = [f"{names[j]}_{i}" for j in range(len(team_sizes)) for i in range(team_sizes[j])]
         self.possible_agents = self.agents[:]
 
         num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
-        action_spaces_list = [
-            Discrete(num_actions[j])
-            for j in range(len(team_sizes))
-            for i in range(team_sizes[j])
-        ]
+        action_spaces_list = [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         state_shape = self._calc_state_shape()
-        observation_space_list = [
-            Box(low=0.0, high=2.0, shape=team_obs_shapes[j], dtype=np.float32)
-            for j in range(len(team_sizes))
-            for i in range(team_sizes[j])
-        ]
+        observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
 
-        self.state_space = Box(low=0.0, high=2.0, shape=state_shape, dtype=np.float32)
+        self.state_space = Box(low=0., high=2., shape=state_shape, dtype=np.float32)
         reward_low, reward_high = reward_range
 
         if extra_features:
@@ -74,25 +49,14 @@ class magent_parallel_env(ParallelEnv):
                 idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
                 space.low[:, :, idx] = reward_low
                 space.high[:, :, idx] = reward_high
-            idx_state = (
-                self.state_space.shape[2] - 3
-                if minimap_mode
-                else self.state_space.shape[2] - 1
-            )
+            idx_state = self.state_space.shape[2] - 3 if minimap_mode else self.state_space.shape[2] - 1
             self.state_space.low[:, :, idx_state] = reward_low
             self.state_space.high[:, :, idx_state] = reward_high
 
-        self.action_spaces = {
-            agent: space for agent, space in zip(self.agents, action_spaces_list)
-        }
-        self.observation_spaces = {
-            agent: space for agent, space in zip(self.agents, observation_space_list)
-        }
+        self.action_spaces = {agent: space for agent, space in zip(self.agents, action_spaces_list)}
+        self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
 
-        self._zero_obs = {
-            agent: np.zeros_like(space.low)
-            for agent, space in self.observation_spaces.items()
-        }
+        self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
         self.base_state = np.zeros(self.state_space.shape)
         walls = self.env._get_walls_info()
         wall_x, wall_y = zip(*walls)
@@ -114,32 +78,21 @@ class magent_parallel_env(ParallelEnv):
         for feature_space in feat_size:
             if not self.extra_features:
                 feature_space[0] = 2 if self.minimap_mode else 0
-        obs_spaces = [
-            (view_space[:2] + (view_space[2] + feature_space[0],))
-            for view_space, feature_space in zip(view_spaces, feat_size)
-        ]
+        obs_spaces = [(view_space[:2] + (view_space[2] + feature_space[0],)) for view_space, feature_space in zip(view_spaces, feat_size)]
         return obs_spaces
 
     def _calc_state_shape(self):
-        feature_spaces = [
-            self.env.get_feature_space(handle) for handle in self._all_handles
-        ]
+        feature_spaces = [self.env.get_feature_space(handle) for handle in self._all_handles]
 
         # map channel and agent pair channel. Remove global agent position when minimap mode and extra features
-        state_depth = (
-            (max(feature_spaces)[0] - 2) * self.extra_features
-            + 1
-            + len(self._all_handles) * 2
-        )
+        state_depth = (max(feature_spaces)[0] - 2) * self.extra_features + 1 + len(self._all_handles) * 2
 
         return (self.map_size, self.map_size, state_depth)
 
     def render(self, mode="human"):
         if self._renderer is None:
             self._renderer = Renderer(self.env, self.map_size, mode)
-        assert (
-            mode == self._renderer.mode
-        ), "mode must be consistent across render calls"
+        assert mode == self._renderer.mode, "mode must be consistent across render calls"
         return self._renderer.render(mode)
 
     def close(self):
@@ -173,11 +126,7 @@ class magent_parallel_env(ParallelEnv):
                 observes[id] = obs
 
         ret_agents = set(self.agents)
-        return {
-            agent: obs if obs is not None else self._zero_obs[agent]
-            for agent, obs in zip(self.possible_agents, observes)
-            if agent in ret_agents
-        }
+        return {agent: obs if obs is not None else self._zero_obs[agent] for agent, obs in zip(self.possible_agents, observes) if agent in ret_agents}
 
     def _all_rewards(self):
         rewards = np.zeros(self.max_num_agents)
@@ -185,11 +134,7 @@ class magent_parallel_env(ParallelEnv):
             ids = self.env.get_agent_id(handle)
             rewards[ids] = self.env.get_reward(handle)
         ret_agents = set(self.agents)
-        return {
-            agent: float(rew)
-            for agent, rew in zip(self.possible_agents, rewards)
-            if agent in ret_agents
-        }
+        return {agent: float(rew) for agent, rew in zip(self.possible_agents, rewards) if agent in ret_agents}
 
     def _all_dones(self, step_done=False):
         dones = np.ones(self.max_num_agents, dtype=bool)
@@ -198,16 +143,12 @@ class magent_parallel_env(ParallelEnv):
                 ids = self.env.get_agent_id(handle)
                 dones[ids] = ~self.env.get_alive(handle)
         ret_agents = set(self.agents)
-        return {
-            agent: bool(done)
-            for agent, done in zip(self.possible_agents, dones)
-            if agent in ret_agents
-        }
+        return {agent: bool(done) for agent, done in zip(self.possible_agents, dones) if agent in ret_agents}
 
     def state(self):
-        """
+        '''
         Returns an observation of the global environment
-        """
+        '''
         state = np.copy(self.base_state)
 
         for handle in self._all_handles:
@@ -216,18 +157,10 @@ class magent_parallel_env(ParallelEnv):
             pos = self.env.get_pos(handle)
             pos_x, pos_y = zip(*pos)
             state[pos_x, pos_y, 1 + handle.value * 2] = 1
-            state[pos_x, pos_y, 2 + handle.value * 2] = view[
-                :, view.shape[1] // 2, view.shape[2] // 2, 2
-            ]
+            state[pos_x, pos_y, 2 + handle.value * 2] = view[:, view.shape[1] // 2, view.shape[2] // 2, 2]
 
             if self.extra_features:
-                add_zeros = np.zeros(
-                    (
-                        features.shape[0],
-                        state.shape[2]
-                        - (1 + len(self.team_sizes) * 2 + features.shape[1]),
-                    )
-                )
+                add_zeros = np.zeros((features.shape[0], state.shape[2] - (1 + len(self.team_sizes) * 2 + features.shape[1])))
 
                 rewards = features[:, -1]
                 actions = features[:, :-1]
@@ -235,7 +168,7 @@ class magent_parallel_env(ParallelEnv):
                 rewards = rewards.reshape(len(rewards), 1)
                 state_features = np.hstack((actions, rewards))
 
-                state[pos_x, pos_y, 1 + len(self.team_sizes) * 2 :] = state_features
+                state[pos_x, pos_y, 1 + len(self.team_sizes) * 2:] = state_features
         return state
 
     def step(self, all_actions):
@@ -249,9 +182,7 @@ class magent_parallel_env(ParallelEnv):
         start_point = 0
         for i in range(len(self.handles)):
             size = self.team_sizes[i]
-            self.env.set_action(
-                self.handles[i], all_actions[start_point : (start_point + size)]
-            )
+            self.env.set_action(self.handles[i], all_actions[start_point:(start_point + size)])
             start_point += size
 
         self.frames += 1

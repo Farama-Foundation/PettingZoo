@@ -7,15 +7,7 @@ from .discrete_agent import DiscreteAgent
 #################################################################
 
 
-def create_agents(
-    nagents,
-    map_matrix,
-    obs_range,
-    randomizer,
-    flatten=False,
-    randinit=False,
-    constraints=None,
-):
+def create_agents(nagents, map_matrix, obs_range, randomizer, flatten=False, randinit=False, constraints=None):
     """
     Initializes the agents on a map (map_matrix)
     -nagents: the number of agents to put on the map
@@ -30,17 +22,16 @@ def create_agents(
         xinit, yinit = (0, 0)
         if randinit:
             xinit, yinit = feasible_position_exp(
-                randomizer, map_matrix, expanded_mat, constraints=constraints
-            )
+                randomizer,
+                map_matrix, expanded_mat, constraints=constraints)
             # fill expanded_mat
             expanded_mat[xinit + 1, yinit + 1] = -1
             expanded_mat[xinit + 2, yinit + 1] = -1
             expanded_mat[xinit, yinit + 1] = -1
             expanded_mat[xinit + 1, yinit + 2] = -1
             expanded_mat[xinit + 1, yinit] = -1
-        agent = DiscreteAgent(
-            xs, ys, map_matrix, randomizer, obs_range=obs_range, flatten=flatten
-        )
+        agent = DiscreteAgent(xs, ys, map_matrix, randomizer,
+                              obs_range=obs_range, flatten=flatten)
         agent.set_position(xinit, yinit)
         agents.append(agent)
     return agents
@@ -67,7 +58,8 @@ def feasible_position_exp(randomizer, map_matrix, expanded_mat, constraints=None
 def set_agents(agent_matrix, map_matrix):
     # check input sizes
     if agent_matrix.shape != map_matrix.shape:
-        raise ValueError("Agent configuration and map matrix have mis-matched sizes")
+        raise ValueError(
+            "Agent configuration and map matrix have mis-matched sizes")
 
     agents = []
     xs, ys = agent_matrix.shape
@@ -77,8 +69,7 @@ def set_agents(agent_matrix, map_matrix):
             if n_agents > 0:
                 if map_matrix[i, j] == -1:
                     raise ValueError(
-                        "Trying to place an agent into a building: check map matrix and agent configuration"
-                    )
+                        "Trying to place an agent into a building: check map matrix and agent configuration")
                 agent = DiscreteAgent(xs, ys, map_matrix)
                 agent.set_position(i, j)
                 agents.append(agent)

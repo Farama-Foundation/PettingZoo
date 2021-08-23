@@ -1,8 +1,6 @@
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import time
-
 import numpy as np
 import pygame
 
@@ -35,10 +33,10 @@ def manual_control(**kwargs):
                     # Backspace to reset
                     env.reset()
                     i = 19
-                if event.key == pygame.K_a and time.time() - start > 0.1:
+                if event.key == pygame.K_a and time.time() - start > .1:
                     i = (i - 1) if (i != 0) else i
                     start = time.time()
-                if event.key == pygame.K_d and time.time() - start > 0.1:
+                if event.key == pygame.K_d and time.time() - start > .1:
                     i = (i + 1) if (i != num_agents - 1) else i
                     start = time.time()
                 if event.key == pygame.K_s:
