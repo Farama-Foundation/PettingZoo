@@ -82,10 +82,16 @@ class magent_parallel_env(ParallelEnv):
         return obs_spaces
 
     def _calc_state_shape(self):
-        feature_spaces = [self.env.get_feature_space(handle) for handle in self._all_handles]
-
+        feature_spaces = [
+            self.env.get_feature_space(handle) for handle in self._all_handles
+        ]
+        self._minimap_features = 2 if self.minimap_mode else 0
         # map channel and agent pair channel. Remove global agent position when minimap mode and extra features
-        state_depth = (max(feature_spaces)[0] - 2) * self.extra_features + 1 + len(self._all_handles) * 2
+        state_depth = (
+            (max(feature_spaces)[0] - self._minimap_features) * self.extra_features
+            + 1
+            + len(self._all_handles) * 2
+        )
 
         return (self.map_size, self.map_size, state_depth)
 
@@ -160,10 +166,16 @@ class magent_parallel_env(ParallelEnv):
             state[pos_x, pos_y, 2 + handle.value * 2] = view[:, view.shape[1] // 2, view.shape[2] // 2, 2]
 
             if self.extra_features:
-                add_zeros = np.zeros((features.shape[0], state.shape[2] - (1 + len(self.team_sizes) * 2 + features.shape[1])))
+                add_zeros = np.zeros(
+                    (
+                        features.shape[0],
+                        state.shape[2]
+                        - (1 + len(self.team_sizes) * 2 + features.shape[1] - self._minimap_features),
+                    )
+                )
 
-                rewards = features[:, -1]
-                actions = features[:, :-1]
+                rewards = features[:, -1 - self._minimap_features]
+                actions = features[:, :-1 - self._minimap_features]
                 actions = np.concatenate((actions, add_zeros), axis=1)
                 rewards = rewards.reshape(len(rewards), 1)
                 state_features = np.hstack((actions, rewards))
