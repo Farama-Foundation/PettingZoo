@@ -20,7 +20,8 @@ jobs:
       run: |
         export AUDIODEV=null
         brew install swig rar
-        pip install AutoROM pytest -r requirements.txt
+        pip install pytest -r requirements.txt
+        pip install git+https://github.com/JesseFarebro/AutoROM
         AutoROM -v
     - name: Full Python tests
       run: |
