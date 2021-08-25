@@ -124,10 +124,10 @@ class magent_parallel_env(ParallelEnv):
         feature_spaces = [
             self.env.get_feature_space(handle) for handle in self._all_handles
         ]
-
+        self._minimap_features = 2 if self.minimap_mode else 0
         # map channel and agent pair channel. Remove global agent position when minimap mode and extra features
         state_depth = (
-            (max(feature_spaces)[0] - 2) * self.extra_features
+            (max(feature_spaces)[0] - self._minimap_features) * self.extra_features
             + 1
             + len(self._all_handles) * 2
         )
@@ -225,12 +225,12 @@ class magent_parallel_env(ParallelEnv):
                     (
                         features.shape[0],
                         state.shape[2]
-                        - (1 + len(self.team_sizes) * 2 + features.shape[1]),
+                        - (1 + len(self.team_sizes) * 2 + features.shape[1] - self._minimap_features),
                     )
                 )
 
-                rewards = features[:, -1]
-                actions = features[:, :-1]
+                rewards = features[:, -1 - self._minimap_features]
+                actions = features[:, :-1 - self._minimap_features]
                 actions = np.concatenate((actions, add_zeros), axis=1)
                 rewards = rewards.reshape(len(rewards), 1)
                 state_features = np.hstack((actions, rewards))
