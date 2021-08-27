@@ -70,7 +70,15 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         else:
             start = Path(auto_rom_install_path).resolve()
 
-        final = start / "ROM" / game / f"{game}.bin"
+        # start looking in local directory
+        final = start / f"{game}.bin"
+        if not final.exists():
+            # if that doesn't work, look in 'roms'
+            final = start / "roms" / f"{game}.bin"
+
+        if not final.exists():
+            # use old AutoROM install path as backup
+            final = start / "ROM" / game / f"{game}.bin"
 
         if not final.exists():
             raise OSError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM) "
