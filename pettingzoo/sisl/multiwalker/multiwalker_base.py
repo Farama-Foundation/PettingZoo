@@ -1,11 +1,13 @@
 import copy
 import math
-import numpy as np
-from gym import spaces
-from gym.utils import seeding
+
 import Box2D
+import numpy as np
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
+from gym import spaces
+from gym.utils import seeding
+
 from .._utils import Agent
 
 MAX_AGENTS = 40

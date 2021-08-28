@@ -1,10 +1,15 @@
 """
 2D rendering framework
 """
+import math
 import os
 import sys
 
+import numpy as np
 from gym import error
+from pyglet.gl import (GL_BLEND, GL_LINE_LOOP, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_LINE_STIPPLE,
+                       GL_LINE_STRIP, GL_LINES, GL_NICEST, GL_ONE_MINUS_SRC_ALPHA, GL_POINTS,
+                       GL_POLYGON, GL_QUADS, GL_SRC_ALPHA, GL_TRIANGLES)
 
 try:
     import pyglet
@@ -17,9 +22,6 @@ except ImportError:
     raise ImportError("""Error occurred while running `from pyglet.gl import ...`
             HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'""")
 
-from pyglet.gl import GL_BLEND, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_NICEST, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_LINE_STIPPLE, GL_POINTS, GL_QUADS, GL_LINE_LOOP, GL_POLYGON, GL_TRIANGLES, GL_LINE_STRIP, GL_LINES
-import math
-import numpy as np
 
 if "Apple" in sys.version:
     if 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:

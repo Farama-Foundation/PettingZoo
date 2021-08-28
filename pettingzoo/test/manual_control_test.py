@@ -1,6 +1,6 @@
 import random
-import time
 import threading
+import time
 
 
 def inp_handler(name):
