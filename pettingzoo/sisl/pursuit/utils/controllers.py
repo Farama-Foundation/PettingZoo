@@ -5,7 +5,7 @@ import numpy as np
 #################################################################
 
 
-class RandomPolicy(object):
+class RandomPolicy:
 
     # constructor
     def __init__(self, n_actions, rng):
@@ -19,7 +19,7 @@ class RandomPolicy(object):
         return self.rng.randint(self.n_actions)
 
 
-class SingleActionPolicy(object):
+class SingleActionPolicy:
 
     def __init__(self, a):
         self.action = a

@@ -44,7 +44,7 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
         for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
-            print("\n\n=============== {}'s Hand ===============".format(player))
+            print(f"\n\n=============== {player}'s Hand ===============")
             UnoCard.print_cards(state['hand'])
         print('\n\n================= Target Card =================')
         UnoCard.print_cards(state['target'], wild_color=True)

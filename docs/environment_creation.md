@@ -41,7 +41,7 @@ def env():
     '''
     The env function wraps the environment in 3 wrappers by default. These
     wrappers contain logic that is common to many pettingzoo environments.
-    We recomend you use at least the OrderEnforcingWrapper on your own environment
+    We recommend you use at least the OrderEnforcingWrapper on your own environment
     to provide sane error messages. You can find full documentation for these methods
     elsewhere in the developer documentation.
     '''
@@ -218,7 +218,7 @@ def env():
     '''
     The env function wraps the environment in 3 wrappers by default. These
     wrappers contain logic that is common to many pettingzoo environments.
-    We recomend you use at least the OrderEnforcingWrapper on your own environment
+    We recommend you use at least the OrderEnforcingWrapper on your own environment
     to provide sane error messages. You can find full documentation for these methods
     elsewhere in the developer documentation.
     '''

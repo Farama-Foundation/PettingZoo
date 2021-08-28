@@ -1,4 +1,3 @@
-
 def get_valid_actions(env, roll):
     a = env.game.get_valid_plays(env.colors[env.agent_selection], roll)
     return a
@@ -111,7 +110,7 @@ def double_roll(moves):
         if len(move) > 1:
             out.append((move[0], move[1]))
         else:
-            out.append((move[0]))
+            out.append(move[0])
     return out
 
 

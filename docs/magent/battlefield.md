@@ -112,7 +112,7 @@ last_reward(extra_features=True)| 1
 ### Version History
 
 * v3: Fixed bugs and changed default parameters (1.7.0)
-* v2: Added new arguments (1.4.2)
-* v1: Observation space fixes (1.4.0)
+* v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v1: Agent order under death changed (1.3.0)
 * v0: Initial versions release (1.0.0)
 </div>

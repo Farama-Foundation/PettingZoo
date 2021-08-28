@@ -28,7 +28,7 @@ appropriate responses to your opponent are key.
 
 The players have two minutes (around 1200 steps) to duke it
 out in the ring. Each step, they can move and punch.
-Sucessful punches score points,
+Successful punches score points,
 1 point for a long jab, 2 for a close power punch,
 and 100 points for a KO (which also will end the game).
 Whenever you score a number of points, you are rewarded by

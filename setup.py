@@ -1,5 +1,5 @@
 from setuptools import find_packages, setup
-with open("README.md", "r") as fh:
+with open("README.md") as fh:
     long_description = ""
     header_count = 0
     for line in fh:
@@ -28,11 +28,12 @@ extras = {
     "butterfly": ["pygame==2.0.0", "pymunk==6.0.0"],
     "magent": ["magent==0.1.14"],
     "mpe": ["pyglet>=1.4.0"],
-    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "pyglet>=1.4.0"],
-    "tests": ["pynput"]
+    "sisl": ["pygame==2.0.0", "box2d-py==2.3.5", "pyglet>=1.4.0", "scipy>=1.4.1"],
+    "other": ["pillow>=8.0.1"],
+    "tests": ["pynput"],
 }
 
-extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]
+extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]+extras["other"]
 
 
 setup(

@@ -40,7 +40,7 @@ env = supersuit.max_observation_v0(env, 2)
 env = supersuit.sticky_actions_v0(env, repeat_action_probability=0.25)
 
 # skip frames for faster processing and less control
-# to be compatable with gym, use frame_skip(env, (2,5))
+# to be compatible with gym, use frame_skip(env, (2,5))
 env = supersuit.frame_skip_v0(env, 4)
 
 # downscale observation for faster processing
