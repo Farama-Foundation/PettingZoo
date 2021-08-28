@@ -1,15 +1,17 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
 import os
+
 import numpy as np
-from gym import spaces
-from .manual_control import manual_control
-from pettingzoo.utils import wrappers
-from gym.utils import seeding
-from pettingzoo.utils.conversions import parallel_wrapper_fn
-from gym.utils import EzPickle
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import pygame
+from gym import spaces
+from gym.utils import EzPickle, seeding
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .manual_control import manual_control
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 def get_image(path):

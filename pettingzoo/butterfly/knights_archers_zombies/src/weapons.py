@@ -1,9 +1,11 @@
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
 import math
 import os
+
+import pygame
+
 from .img import get_image
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 BLACK = (0, 0, 0)

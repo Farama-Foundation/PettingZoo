@@ -1,6 +1,7 @@
-import numpy as np
-import gym
 import os
+
+import gym
+import numpy as np
 from PIL import Image
 
 

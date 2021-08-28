@@ -4,16 +4,16 @@ from os.path import join
 from subprocess import call
 
 import numpy as np
+import pygame
 from gym import spaces
 from gym.utils import seeding
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
-
-from .utils import agent_utils
+from .utils import agent_utils, two_d_maps
 from .utils.agent_layer import AgentLayer
 from .utils.controllers import RandomPolicy, SingleActionPolicy
-from .utils import two_d_maps
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 
 
 class Pursuit():

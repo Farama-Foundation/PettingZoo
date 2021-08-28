@@ -1,11 +1,12 @@
-from gym.spaces import Discrete
-import numpy as np
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils import wrappers
-from pettingzoo.utils.conversions import parallel_wrapper_fn
 import os
+
+import numpy as np
 import pygame
+from gym.spaces import Discrete
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):

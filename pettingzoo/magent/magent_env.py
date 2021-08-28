@@ -1,12 +1,14 @@
-from gym.spaces import Discrete, Box
-import numpy as np
-import warnings
-import magent
-from pettingzoo import AECEnv
 import math
+import warnings
+
+import magent
+import numpy as np
+from gym.spaces import Box, Discrete
+from gym.utils import seeding
+
+from pettingzoo import AECEnv
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector, wrappers
-from gym.utils import seeding
 from pettingzoo.utils.env import ParallelEnv
 
 

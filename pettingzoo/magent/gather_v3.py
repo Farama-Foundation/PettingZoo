@@ -1,16 +1,17 @@
-from gym.spaces import Discrete, Box
-import numpy as np
-import warnings
-import magent
-from pettingzoo import AECEnv
 import math
-from pettingzoo.magent.render import Renderer
-from pettingzoo.utils import agent_selector
-from .magent_env import magent_parallel_env, make_env
-from pettingzoo.utils.conversions import parallel_wrapper_fn
-from pettingzoo.utils.conversions import from_parallel_wrapper
+import warnings
+
+import magent
+import numpy as np
+from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
+from pettingzoo import AECEnv
+from pettingzoo.magent.render import Renderer
+from pettingzoo.utils import agent_selector
+from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
+
+from .magent_env import magent_parallel_env, make_env
 
 map_size = 200
 max_cycles_default = 500

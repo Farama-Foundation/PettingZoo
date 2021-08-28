@@ -1,8 +1,8 @@
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils.env import AECEnv
 import copy
+
+from pettingzoo.utils import agent_selector
+from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
-from pettingzoo.utils.env import ParallelEnv
 
 
 def parallel_wrapper_fn(env_fn):

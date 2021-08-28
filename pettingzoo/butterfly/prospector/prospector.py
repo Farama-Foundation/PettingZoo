@@ -1,25 +1,26 @@
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame as pg
-import pymunk as pm
-from pymunk import Vec2d
-from gym import spaces
-from gym.utils import seeding
-import numpy as np
-
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils import wrappers
-from . import constants as const
-from . import utils
-from .manual_control import manual_control
-from pettingzoo.utils.conversions import parallel_wrapper_fn
-
+import itertools as it
 import math
 import os
 from enum import IntEnum, auto
-import itertools as it
-from gym.utils import EzPickle
+
+import numpy as np
+import pygame as pg
+import pymunk as pm
+from gym import spaces
+from gym.utils import EzPickle, seeding
+from pymunk import Vec2d
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from . import constants as const
+from . import utils
+from .manual_control import manual_control
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+
 
 
 class CollisionTypes(IntEnum):
