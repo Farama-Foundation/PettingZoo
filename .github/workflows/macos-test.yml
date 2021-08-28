@@ -9,7 +9,6 @@ on:
 
 jobs:
   macos-test:
-
     runs-on: macos-10.15
     steps:
     - uses: actions/checkout@v2
@@ -21,11 +20,9 @@ jobs:
       run: |
         export AUDIODEV=null
         brew install swig rar
-        pip install -r requirements.txt
-        pip install AutoROM
-        pip install flake8 pytest
+        pip install AutoROM pytest -r requirements.txt
         AutoROM -v
-    - name: Full python tests
+    - name: Full Python tests
       run: |
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py

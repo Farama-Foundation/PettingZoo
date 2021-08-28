@@ -202,7 +202,7 @@ class raw_env(AECEnv, EzPickle):
             self.prisoner_mapping[map_tuple_0] = map_count
             self.prisoner_mapping[map_tuple_1] = map_count + 1
             prisoner0_name = "prisoner_" + str(map_count)
-            prisoner1_name = "prisoner_" + str((map_count + 1))
+            prisoner1_name = "prisoner_" + str(map_count + 1)
             self.infos[prisoner0_name] = {"map_tuple": map_tuple_0}
             self.infos[prisoner1_name] = {"map_tuple": map_tuple_1}
             map_count += 2

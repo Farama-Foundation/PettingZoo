@@ -44,8 +44,8 @@ Press 'M' key to spawn a new knight.
 
 ```
 knights_archers_zombies_v7.env(spawn_rate=20, num_knights=2, num_archers=2,
-killable_knights=True, killable_archers=True, black_death=True, line_death=True,
-pad_observation=True, max_cycles=900)
+killable_knights=True, killable_archers=True, line_death=True, pad_observation=True,
+max_cycles=900)
 ```
 
 
@@ -58,8 +58,6 @@ pad_observation=True, max_cycles=900)
 `killable_knights`:  if set to False, knight agents cannot be killed by zombies.
 
 `killable_archers`:  if set to False, archer agents cannot be killed by zombies.
-
-`black_death`:  if set to True, agents who die will observe only black. If False, dead agents do not have reward, done, info or observations and are removed from agent list.
 
 `line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
 

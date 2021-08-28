@@ -67,7 +67,7 @@ and a banker depositing the gold into a bank. There is
 an individual reward, a group reward (for agents of the same type), and
 an other-group reward (for agents of the other type).
 
-By default, if a prospector retrives a nugget from the water, then
+By default, if a prospector retrieves a nugget from the water, then
 that prospector receives a reward of
 0.8, other
 prospectors will

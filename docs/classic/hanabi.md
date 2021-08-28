@@ -84,19 +84,19 @@ As players reveal info about their cards, the information revealed per card is a
 | 283-307 | Vector Representing Card that was last played   |  [0, 1]  |
 | 308-342 | Revealed Info of This Player's 0th Card         |  [0, 1]  |
 | 343-377 | Revealed Info of This Player's 1st Card         |  [0, 1]  |
-| 378-412 | Revealed Info of This Player's 2st Card         |  [0, 1]  |
-| 413-447 | Revealed Info of This Player's 3st Card         |  [0, 1]  |
-| 445-482 | Revealed Info of This Player's 4st Card         |  [0, 1]  |
+| 378-412 | Revealed Info of This Player's 2nd Card         |  [0, 1]  |
+| 413-447 | Revealed Info of This Player's 3rd Card         |  [0, 1]  |
+| 445-482 | Revealed Info of This Player's 4th Card         |  [0, 1]  |
 | 483-517 | Revealed Info of Other Player's 0th Card        |  [0, 1]  |
 | 518-552 | Revealed Info of Other Player's 1st Card        |  [0, 1]  |
-| 553-587 | Revealed Info of Other Player's 2st Card        |  [0, 1]  |
-| 588-622 | Revealed Info of Other Player's 3st Card        |  [0, 1]  |
-| 663-657 | Revealed Info of Other Player's 4st Card        |  [0, 1]  |
+| 553-587 | Revealed Info of Other Player's 2nd Card        |  [0, 1]  |
+| 588-622 | Revealed Info of Other Player's 3rd Card        |  [0, 1]  |
+| 663-657 | Revealed Info of Other Player's 4th Card        |  [0, 1]  |
 
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -141,8 +141,8 @@ If an illegal action is taken, the game terminates and the one player that took 
 ### Version History
 
 * v4: Fixed bug in arbitrary calls to observe() (1.8.0)
-* v3: Fixed default parameters (1.4.2)
-* v2: Bumped version of all environments due to breaking API changes (1.4.0)
-* v1: ???
+* v3: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v2: Fixed default parameters (1.4.2)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
 </div>

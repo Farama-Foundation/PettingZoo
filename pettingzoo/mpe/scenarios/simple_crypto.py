@@ -12,7 +12,7 @@ from .._mpe_utils.scenario import BaseScenario
 
 class CryptoAgent(Agent):
     def __init__(self):
-        super(CryptoAgent, self).__init__()
+        super().__init__()
         self.key = None
 
 
@@ -33,7 +33,7 @@ class Scenario(BaseScenario):
             agent.speaker = True if i == 2 else False
             agent.movable = False
             base_name = "eve" if agent.adversary else ("alice" if agent.speaker else "bob")
-            agent.name = '{}_0'.format(base_name)
+            agent.name = f'{base_name}_0'
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
         for i, landmark in enumerate(world.landmarks):

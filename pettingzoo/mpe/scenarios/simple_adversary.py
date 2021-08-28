@@ -19,7 +19,7 @@ class Scenario(BaseScenario):
             agent.adversary = True if i < num_adversaries else False
             base_name = "adversary" if agent.adversary else "agent"
             base_index = i if i < num_adversaries else i - num_adversaries
-            agent.name = '{}_{}'.format(base_name, base_index)
+            agent.name = f'{base_name}_{base_index}'
             agent.collide = False
             agent.silent = True
             agent.size = 0.15
@@ -85,7 +85,7 @@ class Scenario(BaseScenario):
         # Calculate negative reward for adversary
         adversary_agents = self.adversaries(world)
         if shaped_adv_reward:  # distance-based adversary reward
-            adv_rew = sum([np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in adversary_agents])
+            adv_rew = sum(np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in adversary_agents)
         else:  # proximity-based adversary reward (binary)
             adv_rew = 0
             for a in adversary_agents:
@@ -96,14 +96,14 @@ class Scenario(BaseScenario):
         good_agents = self.good_agents(world)
         if shaped_reward:  # distance-based agent reward
             pos_rew = -min(
-                [np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents])
+                np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents)
         else:  # proximity-based agent reward (binary)
             pos_rew = 0
-            if min([np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents]) \
+            if min(np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents) \
                     < 2 * agent.goal_a.size:
                 pos_rew += 5
             pos_rew -= min(
-                [np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents])
+                np.sqrt(np.sum(np.square(a.state.p_pos - a.goal_a.state.p_pos))) for a in good_agents)
         return pos_rew + adv_rew
 
     def adversary_reward(self, agent, world):

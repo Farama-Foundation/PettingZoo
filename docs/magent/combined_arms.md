@@ -115,7 +115,7 @@ last_reward(extra_features=True)| 1
 * v5: Fixed observation space order (1.9.0)
 * v4: Fixed bugs and changed default parameters (1.7.0)
 * v3: Added new arguments, fixes to observation space, changes to rewards (1.4.2)
-* v2: Observation space fixes (1.4.0)
-* v1: ???
+* v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v1: Agent order under death changed (1.3.0)
 * v0: Initial versions release (1.0.0)
 </div>
