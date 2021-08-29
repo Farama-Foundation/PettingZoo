@@ -1,28 +1,32 @@
 ---
 actions: "Discrete"
-title: "Texas Hold'em"
+title: "Texas Hold'em No Limit"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(4)"
-action-values: "Discrete(4)"
-observation-shape: "(72,)"
-observation-values: "[0, 1]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
+action-shape: "Discrete(103)"
+action-values: "Discrete(103)"
+observation-shape: "(54,)"
+observation-values: "[0, 100]"
+import: "from pettingzoo.classic import texas_holdem_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 {% include info_box.md %}
 
+Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
+
+Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
 ### Arguments
 
 ```
-texas_holdem_no_limit_v4.env(num_players=2)
+texas_holdem_no_limit_v5.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
 
 
-Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limitted version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.
+Texas Hold'em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limited version of Texas Hold'm, sometimes referred to as 'Limit Texas Hold'em'.
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
@@ -46,7 +50,7 @@ The main observation space is a vector of 72 boolean integers. The first 52 entr
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 
@@ -65,6 +69,7 @@ The legal moves available to the current agent are found in the `action_mask` el
 
 ### Version History
 
+* v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)

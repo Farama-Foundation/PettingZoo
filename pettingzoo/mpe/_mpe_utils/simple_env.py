@@ -20,7 +20,7 @@ def make_env(raw_env):
 
 class SimpleEnv(AECEnv):
     def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
-        super(SimpleEnv, self).__init__()
+        super().__init__()
 
         self.seed()
 
@@ -86,7 +86,7 @@ class SimpleEnv(AECEnv):
         return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
 
     def state(self):
-        states = tuple([self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.possible_agents])
+        states = tuple(self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.possible_agents)
         return np.concatenate(states, axis=None)
 
     def reset(self):

@@ -53,9 +53,9 @@ class raw_env(RLCardBase):
     def render(self, mode='human'):
         for player in self.possible_agents:
             state = self.env.game.get_state(self._name_to_int(player))
-            print("\n===== {}'s Hand =====".format(player))
+            print(f"\n===== {player}'s Hand =====")
             print(state['current_hand'])
         print('\n=========== Last 3 Actions ===========')
         for action in state['trace'][:-4:-1]:
-            print('{}: {}'.format(self._int_to_name(action[0]), action[1]))
+            print(f'{self._int_to_name(action[0])}: {action[1]}')
         print('\n')

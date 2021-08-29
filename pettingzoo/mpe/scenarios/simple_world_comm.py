@@ -23,7 +23,7 @@ class Scenario(BaseScenario):
             base_index = 0 if base_index < 0 else base_index
             base_name = "adversary" if agent.adversary else "agent"
             base_name = "leadadversary" if i == 0 else base_name
-            agent.name = '{}_{}'.format(base_name, base_index)
+            agent.name = f'{base_name}_{base_index}'
             agent.collide = True
             agent.leader = True if i == 0 else False
             agent.silent = True if i > 0 else False
@@ -177,7 +177,7 @@ class Scenario(BaseScenario):
         for food in world.food:
             if self.is_collision(agent, food):
                 rew += 2
-        rew -= 0.05 * min([np.sqrt(np.sum(np.square(food.state.p_pos - agent.state.p_pos))) for food in world.food])
+        rew -= 0.05 * min(np.sqrt(np.sum(np.square(food.state.p_pos - agent.state.p_pos))) for food in world.food)
 
         return rew
 
@@ -188,7 +188,7 @@ class Scenario(BaseScenario):
         agents = self.good_agents(world)
         adversaries = self.adversaries(world)
         if shape:
-            rew -= 0.1 * min([np.sqrt(np.sum(np.square(a.state.p_pos - agent.state.p_pos))) for a in agents])
+            rew -= 0.1 * min(np.sqrt(np.sum(np.square(a.state.p_pos - agent.state.p_pos))) for a in agents)
         if agent.collide:
             for ag in agents:
                 for adv in adversaries:

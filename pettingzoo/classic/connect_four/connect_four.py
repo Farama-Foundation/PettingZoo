@@ -163,9 +163,9 @@ class raw_env(AECEnv):
         # Blit the necessary chips and their positions
         for i in range(0, 42):
             if self.board[i] == 1:
-                self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                self.screen.blit(red_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int(i / 7) * (tile_size) + (tile_size * (6 / 13))))
             elif self.board[i] == 2:
-                self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int((i / 7)) * (tile_size) + (tile_size * (6 / 13))))
+                self.screen.blit(black_chip, ((i % 7) * (tile_size) + (tile_size * (6 / 13)), int(i / 7) * (tile_size) + (tile_size * (6 / 13))))
 
         if mode == "human":
             pygame.display.update()

@@ -150,7 +150,7 @@ def make_move_mapping(uci_move):
 
 def legal_moves(orig_board):
     '''
-    action space is a 8x8x73 dimentional array
+    action space is a 8x8x73 dimensional array
     Each of the 8×8
     positions identifies the square from which to “pick up” a piece. The first 56 planes encode
     possible ‘queen moves’ for any piece: a number of squares [1..7] in which the piece will be
@@ -179,8 +179,8 @@ def legal_moves(orig_board):
 
 def get_observation(orig_board, player):
     '''
-    Observation is an 8x8x(P + L) dimentional array
-    P is going to be your peices positions + your opponents peices positions
+    Observation is an 8x8x(P + L) dimensional array
+    P is going to be your pieces positions + your opponents pieces positions
     L is going to be some metadata such as repetition count,,
     '''
     board = orig_board

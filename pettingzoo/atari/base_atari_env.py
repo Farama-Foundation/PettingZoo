@@ -70,10 +70,18 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         else:
             start = Path(auto_rom_install_path).resolve()
 
-        final = start / "ROM" / game / f"{game}.bin"
+        # start looking in local directory
+        final = start / f"{game}.bin"
+        if not final.exists():
+            # if that doesn't work, look in 'roms'
+            final = start / "roms" / f"{game}.bin"
 
         if not final.exists():
-            raise IOError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM) "
+            # use old AutoROM install path as backup
+            final = start / "ROM" / game / f"{game}.bin"
+
+        if not final.exists():
+            raise OSError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/PettingZoo-Team/AutoROM) "
                           "or specify and double-check the path to your Atari rom using the `rom_path` argument.")
 
         self.rom_path = str(final)
@@ -85,7 +93,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             mode = all_modes[0]
         else:
             mode = mode_num
-            assert mode in all_modes, "mode_num parameter is wrong. Mode {} selected, only {} modes are supported".format(mode_num, str(list(all_modes)))
+            assert mode in all_modes, f"mode_num parameter is wrong. Mode {mode_num} selected, only {list(all_modes)} modes are supported"
 
         self.mode = mode
         self.ale.setMode(self.mode)
