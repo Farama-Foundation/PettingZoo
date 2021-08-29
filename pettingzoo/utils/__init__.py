@@ -5,4 +5,5 @@ from .average_total_reward import average_total_reward
 from .save_observation import save_observation
 from .conversions import to_parallel, from_parallel
 from .wrappers import BaseWrapper, TerminateIllegalWrapper, CaptureStdoutWrapper, \
-        AssertOutOfBoundsWrapper, ClipOutOfBoundsWrapper, OrderEnforcingWrapper
+        AssertOutOfBoundsWrapper, ClipOutOfBoundsWrapper, OrderEnforcingWrapper, \
+        BaseParallelWraper
