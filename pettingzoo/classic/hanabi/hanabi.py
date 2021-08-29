@@ -147,7 +147,7 @@ class raw_env(AECEnv, EzPickle):
         self.hanabi_env: HanabiEnv = HanabiEnv(config=self._config)
 
         # List of agent names
-        self.agents = ["player_{}".format(i) for i in range(self.hanabi_env.players)]
+        self.agents = [f"player_{i}" for i in range(self.hanabi_env.players)]
         self.possible_agents = self.agents[:]
 
         self.agent_selection: str
@@ -283,7 +283,7 @@ class raw_env(AECEnv, EzPickle):
             # Update internal state
             self._process_latest_observations(obs=all_observations, reward=reward, done=done)
 
-            # sets current reward for 0 to intialize reward accumulation
+            # sets current reward for 0 to initialize reward accumulation
             self._cumulative_rewards[agent_on_turn] = 0
             self._accumulate_rewards()
 

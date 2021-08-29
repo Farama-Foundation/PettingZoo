@@ -1,7 +1,7 @@
-class Agent(object):
+class Agent:
 
     def __new__(cls, *args, **kwargs):
-        agent = super(Agent, cls).__new__(cls)
+        agent = super().__new__(cls)
         return agent
 
     @property
@@ -13,4 +13,4 @@ class Agent(object):
         raise NotImplementedError()
 
     def __str__(self):
-        return '<{} instance>'.format(type(self).__name__)
+        return f'<{type(self).__name__} instance>'

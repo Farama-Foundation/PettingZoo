@@ -146,7 +146,7 @@ class AECEnv:
         2. Loads next agent into .agent_selection: if another agent is done, loads that one, otherwise load next live agent
         3. Clear the rewards dict
 
-        Highly recomended to use at the beginning of step as follows:
+        Highly recommended to use at the beginning of step as follows:
 
         def step(self, action):
             if self.dones[self.agent_selection]:
@@ -159,7 +159,7 @@ class AECEnv:
 
         # removes done agent
         agent = self.agent_selection
-        assert self.dones[agent], "an agent that was not done as attemted to be removed"
+        assert self.dones[agent], "an agent that was not done as attempted to be removed"
         del self.dones[agent]
         del self.rewards[agent]
         del self._cumulative_rewards[agent]

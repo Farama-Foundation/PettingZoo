@@ -1,21 +1,17 @@
 ---
 actions: "Discrete"
-title: "Texas Hold'em No Limit"
+title: "Texas Hold'em"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(103)"
-action-values: "Discrete(103)"
-observation-shape: "(54,)"
-observation-values: "[0, 100]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
+action-shape: "Discrete(4)"
+action-values: "Discrete(4)"
+observation-shape: "(72,)"
+observation-values: "[0, 1]"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v5"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 {% include info_box.md %}
-
-Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
-
-Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
 ### Arguments
 
@@ -42,7 +38,7 @@ The main observation space is similar to Texas Hold'em. The first 52 entries rep
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whos turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 

@@ -14,7 +14,7 @@ except ImportError:
 try:
     from pyglet.gl import glEnable, glHint, glLineWidth, glBlendFunc, glBegin, glPushMatrix, glTranslatef, glClearColor, glRotatef, glScalef, glPopMatrix, glColor4f, glLineStipple, glDisable, glVertex3f, glEnd, glVertex2f, gluOrtho2D
 except ImportError:
-    raise ImportError("""Error occured while running `from pyglet.gl import ...`
+    raise ImportError("""Error occurred while running `from pyglet.gl import ...`
             HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'""")
 
 from pyglet.gl import GL_BLEND, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_NICEST, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_LINE_STIPPLE, GL_POINTS, GL_QUADS, GL_LINE_LOOP, GL_POLYGON, GL_TRIANGLES, GL_LINE_STRIP, GL_LINES
@@ -40,10 +40,10 @@ def get_display(spec):
     elif isinstance(spec, str):
         return pyglet.canvas.Display(spec)
     else:
-        raise error.Error('Invalid display specification: {}. (Must be a string like :0 or None.)'.format(spec))
+        raise error.Error(f'Invalid display specification: {spec}. (Must be a string like :0 or None.)')
 
 
-class Viewer(object):
+class Viewer:
     def __init__(self, width, height, display=None):
         display = get_display(display)
 
@@ -167,7 +167,7 @@ def _add_attrs(geom, attrs):
         geom.set_linewidth(attrs["linewidth"])
 
 
-class Geom(object):
+class Geom:
     def __init__(self):
         self._color = Color((0, 0, 0, 1.0))
         self.attrs = [self._color]
@@ -189,7 +189,7 @@ class Geom(object):
         self._color.vec4 = (r, g, b, alpha)
 
 
-class Attr(object):
+class Attr:
     def enable(self):
         raise NotImplementedError
 
@@ -404,7 +404,7 @@ class Image(Geom):
         self.img.blit(-self.width / 2, -self.height / 2, width=self.width, height=self.height)
 
 
-class SimpleImageViewer(object):
+class SimpleImageViewer:
     def __init__(self, display=None):
         self.window = None
         self.isopen = False

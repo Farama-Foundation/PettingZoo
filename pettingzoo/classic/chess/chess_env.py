@@ -26,7 +26,7 @@ class raw_env(AECEnv):
 
         self.board = chess.Board()
 
-        self.agents = ["player_{}".format(i) for i in range(2)]
+        self.agents = [f"player_{i}" for i in range(2)]
         self.possible_agents = self.agents[:]
 
         self._agent_selector = agent_selector(self.agents)
@@ -103,7 +103,7 @@ class raw_env(AECEnv):
 
         is_stale_or_checkmate = not any(next_legal_moves)
 
-        # claim draw is set to be true to allign with normal tournament rules
+        # claim draw is set to be true to align with normal tournament rules
         is_repetition = self.board.is_repetition(3)
         is_50_move_rule = self.board.can_claim_fifty_moves()
         is_claimable_draw = is_repetition or is_50_move_rule

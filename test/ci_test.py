@@ -22,7 +22,7 @@ env_id = sys.argv[1]
 
 
 def perform_ci_test(env_id, num_cycles, render, manual_control, performance, save_obs):
-    print("running game {}".format(env_id))
+    print(f"running game {env_id}")
     env_module = all_environments[env_id]
     _env = env_module.env()
     error_collected = []
@@ -77,4 +77,4 @@ if env_id in all_prefixes:
             for w in warn_list:
                 f.write(warn + ": " + w + "\n")
 else:
-    print("Environment: '{}' not in the 'all_environments' list".format(env_id))
+    print(f"Environment: '{env_id}' not in the 'all_environments' list")

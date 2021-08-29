@@ -110,4 +110,4 @@ class BaseWrapper(AECEnv):
         '''
         returns a name which looks like: "max_observation<space_invaders_v1>"
         '''
-        return '{}<{}>'.format(type(self).__name__, str(self.env))
+        return f'{type(self).__name__}<{str(self.env)}>'
