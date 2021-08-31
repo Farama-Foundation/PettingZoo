@@ -49,9 +49,13 @@
 
 .api-navbar {
     padding: 0rem 2rem;
+    overflow-y: auto;
 }
 
 @media (max-width: 992px) {
+    .home-container {
+        margin-top: 10vh;
+    }
     .api-navbar {
         padding: 0rem 2rem;
         visibility: hidden;
@@ -61,7 +65,7 @@
     }
     .navbar-text {
         position: fixed;
-        top: 2%;
+        top: 1vh;
         left: 40%;
         padding-left: 8px;
     }
@@ -285,6 +289,9 @@
     }
 
 @media (min-width: 992px) {
+    .home-container {
+        margin-left: 20vw;
+    }
     .fixed-left {
         position: fixed;
         left: 0;
@@ -309,6 +316,9 @@
 }
 
 @media (min-width:1440px) {
+    .home-container {
+        margin-left: 267px;
+    }
     .fixed-left {
         position: fixed;
         left: 0;
@@ -363,6 +373,12 @@
         display: flex;
         margin-right: 0;
         margin-left: 300px;
+    }
+}
+
+@media (max-height: 100px) {
+    .copyright {
+        visibility: hidden;
     }
 }
 
