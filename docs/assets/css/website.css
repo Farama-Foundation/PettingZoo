@@ -376,9 +376,13 @@
     }
 }
 
-@media (max-height: 100px) {
+@media screen and (max-height: 850px) {
     .copyright {
         visibility: hidden;
+    }
+    .navbar-nav {
+        overflow-y: auto;
+        overflow-x: visible;
     }
 }
 
