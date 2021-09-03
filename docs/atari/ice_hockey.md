@@ -26,3 +26,8 @@ When you are on offense you must pass the puck between your two players (you con
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)

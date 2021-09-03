@@ -37,3 +37,9 @@ This is a timed game: if a player does not take a turn after 10 seconds, then th
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v2: ???
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
