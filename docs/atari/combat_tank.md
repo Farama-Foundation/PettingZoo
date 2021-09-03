@@ -41,3 +41,8 @@ combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
 `is_invisible`:  If true, tanks are invisible unless they are firing or are running into a wall.
 
 `billiard_hit`:  If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
+
+### Version History
+
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
