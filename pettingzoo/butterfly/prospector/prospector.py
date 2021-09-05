@@ -21,8 +21,6 @@ from .manual_control import manual_control
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
-
-
 class CollisionTypes(IntEnum):
     PROSPECTOR = auto()
     BOUNDARY = auto()
