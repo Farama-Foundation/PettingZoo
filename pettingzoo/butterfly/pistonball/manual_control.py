@@ -1,8 +1,10 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import time
+
 import numpy as np
 import pygame
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 def manual_control(**kwargs):

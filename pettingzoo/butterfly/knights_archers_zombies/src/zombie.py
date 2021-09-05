@@ -1,8 +1,10 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 import pygame
-import os
+
 from .img import get_image
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 ZOMBIE_Y_SPEED = 5

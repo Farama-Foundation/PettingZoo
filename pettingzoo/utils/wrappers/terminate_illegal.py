@@ -1,5 +1,5 @@
-from .base import BaseWrapper
 from ..env_logger import EnvLogger
+from .base import BaseWrapper
 
 
 class TerminateIllegalWrapper(BaseWrapper):
