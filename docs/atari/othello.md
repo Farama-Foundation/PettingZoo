@@ -40,6 +40,6 @@ Environment parameters are common to all Atari environments and are described in
 
 ### Version History
 
-* v2: ???
-* v1: Breaking changes to entire API (1.4.0)
+* v2: Breaking changes to entire API (1.4.0)
+* v1: Fixed othello auto reset issue (1.2.1)
 * v0: Initial versions release (1.0.0)

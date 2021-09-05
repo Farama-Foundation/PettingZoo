@@ -34,6 +34,6 @@ Environment parameters are common to all Atari environments and are described in
 ### Version History
 
 * v3: No action timer (1.9.0)
-* v2: ???
 * v1: Breaking changes to entire API (1.4.0)
+* v2: Fixed quadrapong rewards (1.2.0)
 * v0: Initial versions release (1.0.0)
