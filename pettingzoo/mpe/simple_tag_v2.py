@@ -1,6 +1,7 @@
+from pettingzoo.utils.conversions import parallel_wrapper_fn
+
 from ._mpe_utils.simple_env import SimpleEnv, make_env
 from .scenarios.simple_tag import Scenario
-from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 class raw_env(SimpleEnv):

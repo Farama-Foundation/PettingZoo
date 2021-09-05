@@ -1,6 +1,8 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 import pygame
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 RENDER_RATIO = 2
 

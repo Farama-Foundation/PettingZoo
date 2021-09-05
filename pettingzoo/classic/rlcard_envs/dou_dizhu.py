@@ -1,10 +1,13 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
-from gym import spaces
-import rlcard
 import random
+
 import numpy as np
+import rlcard
+from gym import spaces
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
+
 from .rlcard_base import RLCardBase
 
 

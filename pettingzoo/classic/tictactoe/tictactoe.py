@@ -1,10 +1,10 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from gym import spaces
-import numpy as np
 import warnings
 
-from pettingzoo.utils import wrappers
+import numpy as np
+from gym import spaces
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 
 from .board import Board
 

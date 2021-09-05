@@ -1,14 +1,17 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-from .pursuit_base import Pursuit as _env
-from .manual_control import manual_control
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
+
 import numpy as np
 import pygame
-from pettingzoo.utils import wrappers
 from gym.utils import EzPickle
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .manual_control import manual_control
+from .pursuit_base import Pursuit as _env
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 def env(**kwargs):
