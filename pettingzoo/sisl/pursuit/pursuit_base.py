@@ -15,7 +15,6 @@ from .utils.controllers import RandomPolicy, SingleActionPolicy
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
-
 class Pursuit():
 
     def __init__(self, **kwargs):
