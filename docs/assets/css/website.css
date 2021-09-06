@@ -66,6 +66,9 @@
         padding: 0rem 2rem;
         visibility: hidden;
     }
+    .navbar-nav {
+        padding-left: 10px;
+    }
     .navbar-brand {
         visibility: hidden;
     }
@@ -87,7 +90,7 @@
         height: 100%;
     }
     .markdown-body {
-        margin-top: 25%;
+        margin-top: 15vh;
     }
     .selection-content {
         float:none;
@@ -188,6 +191,9 @@
 @media(min-width:992px) {
     .navbar-collapse ul li:hover ul {  
         visibility: visible;
+    }
+    .navbar-nav {
+        padding-left: 0;
     }
 }
 

@@ -69,10 +69,10 @@ nav:
           - title: "Double Dunk"
             url: "/atari/double_dunk"
             
-          - title: "Entombed: Competitive"
+          - title: "Entombed: Comp"
             url: "/atari/entombed_competitive"
 
-          - title: "Entombed: Cooperative"
+          - title: "Entombed: Coop"
             url: "/atari/entombed_cooperative"
 
           - title: "Flag Capture"
@@ -129,10 +129,10 @@ nav:
       - title: "Butterfly"
         url: "/butterfly"
         subsublinks:
-          - title: "Cooperative Pong"
+          - title: "Coop Pong"
             url: "/butterfly/cooperative_pong"
             
-          - title: "Knights Archers Zombies ('KAZ')"
+          - title: "KAZ"
             url: "/butterfly/knights_archers_zombies"
 
           - title: "Pistonball"
@@ -177,10 +177,10 @@ nav:
           - title: "Mahjong"
             url: "/classic/mahjong"
 
-          - title: "Rock Paper Scissors"
+          - title: "RPS"
             url: "/classic/rps"
 
-          - title: "Texas Hold'em No Limit"
+          - title: "Hold'em No Limit"
             url: "/classic/texas_holdem_no_limit"
 
           - title: "Texas Hold'em"

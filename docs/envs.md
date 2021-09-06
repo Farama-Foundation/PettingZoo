@@ -1,5 +1,5 @@
 ---
-layout: timeline
+layout: timeline_layout
 ---
 
 {% include timeline.html %}

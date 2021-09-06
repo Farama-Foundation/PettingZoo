@@ -3946,7 +3946,6 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     display: block;
     -ms-flex-direction: column;
     flex-direction: column;
-    padding-left: 0;
     margin-bottom: 0;
     list-style: none;
     background-color: #fff
