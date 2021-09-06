@@ -1,18 +1,20 @@
+import math
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+import gym
+import numpy as np
 import pygame
 import pymunk
 import pymunk.pygame_util
-import math
-import numpy as np
-import gym
-from gym.utils import seeding
+from gym.utils import EzPickle, seeding
+
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from .manual_control import manual_control
-from pettingzoo.utils import wrappers
-from gym.utils import EzPickle
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .manual_control import manual_control
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 _image_library = {}
 

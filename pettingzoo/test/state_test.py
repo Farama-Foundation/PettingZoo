@@ -1,9 +1,11 @@
-import pettingzoo
-import warnings
-import numpy as np
-import gym
 import random
 import re
+import warnings
+
+import gym
+import numpy as np
+
+import pettingzoo
 
 
 def test_state_space(env):

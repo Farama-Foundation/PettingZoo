@@ -1,1 +1,1 @@
-from .waterworld.waterworld import env, raw_env, parallel_env
+from .waterworld.waterworld import env, parallel_env, raw_env

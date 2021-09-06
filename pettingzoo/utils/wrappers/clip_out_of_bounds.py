@@ -1,7 +1,8 @@
-from .base import BaseWrapper
-from gym.spaces import Box
 import numpy as np
+from gym.spaces import Box
+
 from ..env_logger import EnvLogger
+from .base import BaseWrapper
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):

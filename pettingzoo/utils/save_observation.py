@@ -1,6 +1,7 @@
-import numpy as np
-import gym
 import os
+
+import gym
+import numpy as np
 
 
 def _check_observation_saveable(env, agent):
