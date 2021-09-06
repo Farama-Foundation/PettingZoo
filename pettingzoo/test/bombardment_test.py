@@ -1,7 +1,9 @@
-from .api_test import test_observation
 import random
 from copy import copy
+
 import numpy as np
+
+from .api_test import test_observation
 
 
 def bombardment_test(env, cycles=10000):

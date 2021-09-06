@@ -1,16 +1,19 @@
 import os
-import numpy as np
+
 import gym
-from gym.utils import seeding
-from .cake_paddle import CakePaddle, RENDER_RATIO
-from .manual_control import manual_control
+import numpy as np
+import pygame
+from gym.utils import EzPickle, seeding
+
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .cake_paddle import RENDER_RATIO, CakePaddle
+from .manual_control import manual_control
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-import pygame
-from gym.utils import EzPickle
 
 KERNEL_WINDOW_LENGTH = 2
 

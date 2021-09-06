@@ -1,5 +1,6 @@
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 import os
+
+from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 
 avaliable_2p_versions = {
     "classic": 4,
