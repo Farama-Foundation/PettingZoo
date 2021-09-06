@@ -42,7 +42,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to combat-tank are
 
 ```
-combat_tank_v1.env(has_maze=False, is_invisible=False, billiard_hit=False)
+combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
 ```
 
 `has_maze`:  Set to true to have the map be a maze instead of an open field
@@ -50,4 +50,9 @@ combat_tank_v1.env(has_maze=False, is_invisible=False, billiard_hit=False)
 `is_invisible`:  If true, tanks are invisible unless they are firing or are running into a wall.
 
 `billiard_hit`:  If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
+
+### Version History
+
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
 </div>

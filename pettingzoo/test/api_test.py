@@ -1,12 +1,13 @@
-from pettingzoo.utils.conversions import to_parallel_wrapper, from_parallel_wrapper
-from pettingzoo.utils.wrappers import BaseWrapper
-
-import pettingzoo
-import warnings
-import numpy as np
-import gym
 import random
 import re
+import warnings
+
+import gym
+import numpy as np
+
+import pettingzoo
+from pettingzoo.utils.conversions import from_parallel_wrapper, to_parallel_wrapper
+from pettingzoo.utils.wrappers import BaseWrapper
 
 
 def test_observation(observation, observation_0):

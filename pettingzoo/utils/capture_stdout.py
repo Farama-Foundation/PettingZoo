@@ -1,6 +1,7 @@
-import numpy as np
 import io
 import sys
+
+import numpy as np
 
 
 class capture_stdout:
