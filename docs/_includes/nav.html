@@ -14,6 +14,7 @@
       <p>PettingZoo</p>
     </div>
     </div>
+    <div class="spacer"></div>
     <div class="menu-btn">
       <img class="menu-icon" src="{{ site.data.img.nav.menu }}"/>
       <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -27,22 +28,30 @@
             {%- endif -%}
             <ul class="nav-submenu text-uppercase">
               {%- for sublink in link.sublinks -%}
-              <li class="nav-subitem nav-item">
-                <a class="nav-link js-scroll-trigger" href="{{ sublink.url }}">{{ sublink.title }}</a>
-                {%- if sublink.subsublinks -%}
-                  <img class="navbar-arrow" height="20px" src="{{ site.data.img.nav.arrow }}"/>
+                {%- if link.title == "API" -%}
+                  <li class="nav-subitem-1 nav-item">
                 {%- endif -%}
-                <ul class="nav-subsubmenu text-uppercase">
-                {%- for subsublink in sublink.subsublinks -%}
-                  <li class="nav-subsubitem nav-item">
-                    {% assign img_link = "/assets/img/icons/" | append: sublink.title | append: "/" | | append: subsublink.title | replace: " ", "" | replace: ":", "" | append: ".png" %}
-                    <a href="{{ subsublink.url }}"><img class="icon" src="{{ img_link }}"></a>
-                    <a class="nav-link-icon nav-link js-scroll-trigger env-link" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                {%- if link.title == "Environments" -%}
+                  <li class="nav-subitem-3 nav-item">
+                {%- endif -%}
+                {%- if link.title == "Env Creation" -%}
+                  <li class="nav-subitem-2 nav-item">
+                {%- endif -%}
+                    <a class="nav-link js-scroll-trigger" href="{{ sublink.url }}">{{ sublink.title }}</a>
+                    {%- if sublink.subsublinks -%}
+                      <img class="navbar-arrow" height="20px" src="{{ site.data.img.nav.arrow }}"/>
+                    {%- endif -%}
+                    <ul class="nav-subsubmenu text-uppercase">
+                    {%- for subsublink in sublink.subsublinks -%}
+                      <li class="nav-subsubitem nav-item">
+                        {% assign img_link = "/assets/img/icons/" | append: sublink.title | append: "/" | | append: subsublink.title | replace: " ", "" | replace: ":", "" | append: ".png" %}
+                        <a href="{{ subsublink.url }}"><img class="icon" src="{{ img_link }}"></a>
+                        <a class="nav-link-icon nav-link js-scroll-trigger env-link" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                    </ul>
                   </li>
                 {%- endfor -%}
-                </ul>
-              </li>
-              {%- endfor -%}
             </ul>
           {%- else if link.section -%}
             <a class="nav-link js-scroll-trigger" href="{{ site.baseurl }}/#{{ link.section }}">{{ link.title }}</a>
