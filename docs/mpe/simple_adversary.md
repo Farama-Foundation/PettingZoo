@@ -18,7 +18,7 @@ agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 </div>
 
 <div class="docu-content" markdown="1">
-<div class="appear_big" markdown="1">
+<div class="appear_big env-title" markdown="1">
 {% include env_icon.md %}
 ## {{page.title}}
 </div>

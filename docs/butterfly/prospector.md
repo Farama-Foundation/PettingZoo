@@ -19,7 +19,7 @@ agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospect
 </div>
 
 <div class="docu-content" markdown="1">
-<div class="appear_big" markdown="1">
+<div class="appear_big env-title" markdown="1">
 {% include env_icon.md %}
 ## {{page.title}}
 </div>

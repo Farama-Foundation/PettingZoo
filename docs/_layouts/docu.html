@@ -8,6 +8,10 @@ background: grey
 
 <div class="doccontainer docu-container env-container" id="pagecontainer">
   <div class="markdown-body">
+    <div class="env-title-small">
+      {% include env_icon.md %}
+      <h2>{{page.title}}</h2>
+    </div>     
     {{ content }}
   </div>
 </div>
