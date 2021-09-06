@@ -1,9 +1,10 @@
-from pettingzoo import AECEnv
-from gym import spaces
-import numpy as np
 import os
-import pygame
 
+import numpy as np
+import pygame
+from gym import spaces
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 

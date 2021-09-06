@@ -1,12 +1,14 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
-from gym import spaces
-from . import go
-from . import coords
-import numpy as np
 import os
+
+import numpy as np
 import pygame
+from gym import spaces
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
+
+from . import coords, go
 
 
 def get_image(path):

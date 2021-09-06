@@ -1,9 +1,10 @@
-from gym import spaces
 import numpy as np
-from pettingzoo import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
+from gym import spaces
 from gym.utils import seeding
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
 
 
 def make_env(raw_env):

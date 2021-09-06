@@ -1,22 +1,5 @@
-from pettingzoo.utils.deprecated_module import DeprecatedModule
+from pettingzoo.utils.deprecated_module import depricated_handler
 
-adversarial_pursuit_v0 = DeprecatedModule("adversarial_pursuit", "v0", "v3")
-adversarial_pursuit_v1 = DeprecatedModule("adversarial_pursuit", "v1", "v3")
-adversarial_pursuit_v2 = DeprecatedModule("adversarial_pursuit", "v2", "v3")
-battle_v0 = DeprecatedModule("battle", "v0", "v3")
-battle_v1 = DeprecatedModule("battle", "v1", "v3")
-battle_v2 = DeprecatedModule("battle", "v2", "v3")
-battlefield_v0 = DeprecatedModule("battlefield", "v0", "v3")
-battlefield_v1 = DeprecatedModule("battlefield", "v1", "v3")
-battlefield_v2 = DeprecatedModule("battlefield", "v2", "v3")
-combined_arms_v0 = DeprecatedModule("combined_arms", "v0", "v5")
-combined_arms_v1 = DeprecatedModule("combined_arms", "v1", "v5")
-combined_arms_v2 = DeprecatedModule("combined_arms", "v2", "v5")
-combined_arms_v3 = DeprecatedModule("combined_arms", "v3", "v5")
-combined_arms_v4 = DeprecatedModule("combined_arms", "v4", "v5")
-gather_v0 = DeprecatedModule("gather", "v0", "v3")
-gather_v1 = DeprecatedModule("gather", "v1", "v3")
-gather_v2 = DeprecatedModule("gather", "v2", "v3")
-tiger_deer_v0 = DeprecatedModule("tiger_deer", "v0", "v3")
-tiger_deer_v1 = DeprecatedModule("tiger_deer", "v1", "v3")
-tiger_deer_v2 = DeprecatedModule("tiger_deer", "v2", "v3")
+
+def __getattr__(env_name):
+    return depricated_handler(env_name, __path__, __name__)

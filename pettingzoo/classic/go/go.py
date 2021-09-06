@@ -22,11 +22,12 @@ A PlayerMove is a (Color, Move) tuple
 
 (0, 0) is considered to be the upper left corner of the board, and (18, 0) is the lower left.
 """
-from collections import namedtuple
 import copy
 import itertools
-import numpy as np
 import os
+from collections import namedtuple
+
+import numpy as np
 
 from . import coords
 

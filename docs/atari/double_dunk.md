@@ -41,4 +41,10 @@ Scoring should be familiar to basketball fans (2-3 points per successful shot).
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v2: No action timer (1.9.0)
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
 </div>

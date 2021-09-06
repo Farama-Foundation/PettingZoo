@@ -1,7 +1,7 @@
-import numpy as np
-import gym
 import os
-from PIL import Image
+
+import gym
+import numpy as np
 
 
 def _check_observation_saveable(env, agent):
@@ -15,6 +15,7 @@ def _check_observation_saveable(env, agent):
 # save the observation of an agent. If agent not specified uses env selected agent. If all_agents
 # then all agents in environment observation recorded.
 def save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd()):
+    from PIL import Image
     if agent is None:
         agent = env.agent_selection
     agent_list = [agent]
