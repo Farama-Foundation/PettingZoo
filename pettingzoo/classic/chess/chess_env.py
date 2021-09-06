@@ -1,11 +1,14 @@
-from . import chess_utils
-import chess
-from pettingzoo import AECEnv
-from gym import spaces
-import numpy as np
 import warnings
-from pettingzoo.utils.agent_selector import agent_selector
+
+import chess
+import numpy as np
+from gym import spaces
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
+
+from . import chess_utils
 
 
 def env():
