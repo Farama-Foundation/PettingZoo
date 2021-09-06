@@ -10,8 +10,9 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):
-    import pygame
     from os import path as os_path
+
+    import pygame
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
