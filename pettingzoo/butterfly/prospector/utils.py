@@ -1,6 +1,8 @@
+import os
+
 import pygame as pg
 from pymunk import Vec2d
-import os
+
 from . import constants as const
 
 

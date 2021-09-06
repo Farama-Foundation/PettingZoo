@@ -43,4 +43,10 @@ There are other ways of earning points, by collecting bonus coins or wafers, ear
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v2: Breaking changes to entire API (1.4.0)
+* v1: Fixes to how all environments handle premature death (1.3.0)
+* v0: Initial versions release (1.0.0)
 </div>

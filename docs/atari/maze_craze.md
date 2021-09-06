@@ -50,4 +50,10 @@ maze_craze.env(game_version="robbers", visibilty_level=0)
 `game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
 
 `visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
+
+### Version History
+
+* v2: Breaking changes to entire API (1.4.0)
+* v1: Fixes to how all environments handle premature death (1.3.0)
+* v0: Initial versions release (1.0.0)
 </div>
