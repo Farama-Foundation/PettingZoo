@@ -17,11 +17,11 @@ agent-labels: "agents= ['first_0', 'second_0']"
 
 
 
-Entomb's competitive version is a race to last the longest.
+Entombed's competitive version is a race to last the longest.
 
 You need to quickly navigate down a constantly generating
 maze you can only see part of. If you get stuck, you lose.
-Note you can easily find yourself in a dead-end excapable only through the use of rare power-ups.
+Note you can easily find yourself in a dead-end escapable only through the use of rare power-ups.
 In addition, there dangerous zombies lurking around to avoid.
 Whenever your opponent dies, you get +1 reward, and your opponent gets -1 reward.
 
