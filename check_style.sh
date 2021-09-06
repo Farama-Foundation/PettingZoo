@@ -2,4 +2,4 @@
 bandit --recursive --skip B101,B301,B303,B311,B403,B404,B603,B607 .
 codespell
 flake8 pettingzoo/ test/
-isort -y -w 100 -o magent -p pettingzoo -c -rc pettingzoo
+isort -w 100 -o magent -p pettingzoo -c -rc pettingzoo
