@@ -1,5 +1,6 @@
 ---
 layout: env_selection
+title: MAgent Environments
 ---
 <div class="selection-content" markdown="1">
 

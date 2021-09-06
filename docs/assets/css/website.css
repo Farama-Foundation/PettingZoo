@@ -59,6 +59,9 @@
 }
 
 @media (max-width: 992px) {
+    .env-title {
+        display: none;
+    }
     .home-container {
         margin-top: 10vh;
     }
@@ -194,6 +197,9 @@
     }
     .navbar-nav {
         padding-left: 0;
+    }
+    .markdown-body {
+        padding-top: 25px;
     }
 }
 
@@ -430,6 +436,9 @@
 }
 
 @media (max-width: 1440px) {
+    .navbar-collapse li li li{
+        left: 14.25vw;
+    }
     .copyright {
         visibility: hidden;
     }
@@ -443,7 +452,7 @@
         list-style: none;  
         position: relative;
         background: #fff;  
-        left: 14.25vw;
+        left: 200px;
         top: -44.28px;
         width: 44.28px;
         height: 44.28px;
@@ -464,6 +473,14 @@
 }
 
 @media (min-width: 992px) {
+    .env-title-small {
+        display: none;
+    }
+
+    .env-selector-title {
+        display: none;
+    }
+
     .spacer {
         height: calc(50vh - 425px);
     }
