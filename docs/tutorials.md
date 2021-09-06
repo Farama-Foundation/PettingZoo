@@ -1,5 +1,6 @@
 ---
 title: "tutorials"
+layout: "links"
 ---
 
 # Tutorials

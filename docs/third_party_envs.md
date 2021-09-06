@@ -1,5 +1,6 @@
 ---
 title: "third-party-envs"
+layout: "links"
 ---
 
 # Third-Party Environments

@@ -29,7 +29,7 @@ nav:
       - title: "Utils"
         url: "/api#utils"
 
-  - title: "Environment Creation"
+  - title: "Env Creation"
     url: "/environment_creation"
     sublinks:
       - title: "Example Custom Environment"

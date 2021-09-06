@@ -35,12 +35,18 @@
 }
 
 .nav-submenu {
-    width: 100%;
+    width: 75%;
+    max-height: 287px;
+    display: flex;
+    overflow-y: visible;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding-inline-start: 0;
 }
 
 .nav-subsubmenu {
     padding-inline-start: 0px;
-    max-height: 318px;
+    max-height: 287px;
     display: flex;
     overflow-y: visible;
     flex-direction: column;
@@ -122,6 +128,10 @@
     .navbar-arrow {
         visibility: hidden;
     }
+
+    .link-container {
+        padding-left: 20px;
+    }
 }
 
 .api-navbar-nav {
@@ -137,9 +147,21 @@
 .navbar-collapse li li {  
     list-style: none;  
     position: relative;
-    background: #fff;  
-    left: 100%;
-    top: -52.96px;
+    background: #fff;
+    width: 100%;
+    left: 19vw;
+}
+
+.nav-subitem-1 {
+    top: -88.28px;
+}
+
+.nav-subitem-2 {
+    top: -132.42px;
+}
+
+.nav-subitem-3 {
+    top: -176.56px;
 }
 
 .navbar-collapse li li li{  
@@ -147,7 +169,7 @@
     position: relative;
     background: #fff;  
     left: 100%;
-    top: -52.96px;
+    top: -44.28px;
     z-index: 10;
 }
 
@@ -198,7 +220,7 @@
 
 .navbar-arrow {
     position: absolute;
-    top: 16.465px;
+    top: 12px;
     height: 20px;
     right: 0;
 }
@@ -206,9 +228,10 @@
 .icon {
     float: left;
     position: absolute;
-    top: 18px;
+    top: 15px;
     max-width: 20px;
     max-height: 20px;
+    z-index: 9999999;
 }
 
 .env-icon {
@@ -290,14 +313,14 @@
 
 @media (min-width: 992px) {
     .home-container {
-        margin-left: 20vw;
+        margin-left: 19vw;
     }
     .fixed-left {
         position: fixed;
         left: 0;
         bottom: 0;
         top: 0;
-        width: 19%;
+        width: 19vw;
         z-index: 1030;
         height: 100%;
     }
@@ -311,7 +334,13 @@
         display: none;
     }
     .navbar-nav {
-        margin-top: 30%;
+        margin-top: 0;
+    }
+    .link-container {
+        margin-left: 22vw;
+    }
+    .timeline-container {
+        margin-left: 19vw;
     }
 }
 
@@ -345,18 +374,17 @@
         list-style: none;  
         position: relative;
         background: #fff;  
-        left: 227px;
-        top: -52.96px;
-        width: 267px;
+        left: 267px;
+        width: 200.25px;
     }
 
     .navbar-collapse li li li{  
         list-style: none;  
         position: relative;
         background: #fff;  
-        left: 267px;
-        width: 267px;
-        top: -52.96px;
+        left: 200px;
+        width: 200px;
+        top: -44.28px;
     }
 
     .copyright {
@@ -374,15 +402,24 @@
         margin-right: 0;
         margin-left: 300px;
     }
+    .link-container {
+        margin-left: 309px;
+    }
+    .timeline-container {
+        margin-left: 189px;
+    }
 }
 
-@media screen and (max-height: 850px) {
+@media screen and (max-height: 680px) and (min-width: 992px) {
     .copyright {
         visibility: hidden;
     }
     .navbar-nav {
         overflow-y: auto;
-        overflow-x: visible;
+        overflow-x: hidden;
+    }
+    .navbar-arrow {
+        visibility: hidden;
     }
 }
 
@@ -392,7 +429,39 @@
     }
 }
 
+@media (max-width: 1615px) {
+    .env-link {
+        visibility: hidden;
+    }
+    .navbar-collapse li li li{  
+        list-style: none;  
+        position: relative;
+        background: #fff;  
+        left: 14.25vw;
+        top: -44.28px;
+        width: 44.28px;
+        height: 44.28px;
+        z-index: 10;
+    }
+    .icon {
+        left: 14px;
+    }
+    .nav-subsubmenu {
+        padding-inline-start: 0px;
+        width: 225px;
+        max-width: 225px;
+        display: flex;
+        overflow-y: visible;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
 @media (min-width: 992px) {
+    .spacer {
+        height: calc(50vh - 425px);
+    }
+
     .selection-table-container {
         width: 50%;
         height: 100vh;
@@ -400,7 +469,7 @@
         padding: 10px;
         overflow-x: auto;
     }
-    
+
     .selection-content {
         width: 50%;
         float: left;
