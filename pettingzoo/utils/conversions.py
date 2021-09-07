@@ -188,7 +188,6 @@ class from_parallel_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
-        self.new_agents = []
 
     def observe(self, agent):
         return self._observations[agent]
@@ -196,24 +195,12 @@ class from_parallel_wrapper(AECEnv):
     def state(self):
         return self.env.state()
 
-    def add_new_agent(self, new_agent):
-        self.agents.append(new_agent)
-        self._agent_selector.agent_order = self.agents
-        self.dones[new_agent] = False
-        self.infos[new_agent] = {}
-        self.rewards[new_agent] = 0
-        self._cumulative_rewards[new_agent] = 0
-
     def step(self, action):
         if self.dones[self.agent_selection]:
             del self._actions[self.agent_selection]
             return self._was_done_step(action)
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
-            if self.new_agents:
-                new_agent = self.new_agents.pop()
-                self.add_new_agent(new_agent)
-                return
             obss, rews, dones, infos = self.env.step(self._actions)
 
             self._observations = copy.copy(obss)
@@ -222,7 +209,7 @@ class from_parallel_wrapper(AECEnv):
             self.rewards = copy.copy(rews)
             self._cumulative_rewards = copy.copy(rews)
             live_agents = [agent for agent in self.agents if not self.dones[agent]]
-            self.new_agents = [agent for agent in self.env.agents if agent not in self.rewards]
+            
             # self.agents = live_agents #(
             # [agent for agent in self.agents if agent in rews]# +
             # [agent for agent in self.env.agents if agent not in rews]
