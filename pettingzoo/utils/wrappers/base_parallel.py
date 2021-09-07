@@ -14,7 +14,7 @@ class BaseParallelWraper(ParallelEnv):
 
         self.metadata = env.metadata
         try:
-            self.possible_agents = aec_env.possible_agents
+            self.possible_agents = env.possible_agents
         except AttributeError:
             pass
 
@@ -70,7 +70,3 @@ class BaseParallelWraper(ParallelEnv):
 
     def action_space(self, agent):
         return self.env.action_space(agent)
-
-    @property
-    def unwrapped(self):
-        return self.env.unwrapped
