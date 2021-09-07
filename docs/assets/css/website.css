@@ -243,7 +243,6 @@
     top: 15px;
     max-width: 20px;
     max-height: 20px;
-    z-index: 9999999;
 }
 
 .env-icon {
@@ -452,7 +451,6 @@
         list-style: none;  
         position: relative;
         background: #fff;  
-        left: 200px;
         top: -44.28px;
         width: 44.28px;
         height: 44.28px;
@@ -460,6 +458,10 @@
     }
     .icon {
         left: 14px;
+    }
+    .icon-anchor {
+        display: block;
+        height: 100%;
     }
     .nav-subsubmenu {
         padding-inline-start: 0px;
@@ -469,6 +471,12 @@
         overflow-y: visible;
         flex-direction: row;
         flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 1615px) and (min-width: 1440px) {
+    .navbar-collapse li li li {
+        left: 200px;
     }
 }
 

@@ -45,7 +45,7 @@
                     {%- for subsublink in sublink.subsublinks -%}
                       <li class="nav-subsubitem nav-item">
                         {% assign img_link = "/assets/img/icons/" | append: sublink.title | append: "/" | | append: subsublink.title | replace: " ", "" | replace: ":", "" | append: ".png" %}
-                        <a href="{{ subsublink.url }}"><img class="icon" src="{{ img_link }}"></a>
+                        <a class="icon-anchor" href="{{ subsublink.url }}"><img class="icon" src="{{ img_link }}"></a>
                         <a class="nav-link-icon nav-link js-scroll-trigger env-link" href="{{ subsublink.url }}">{{ subsublink.title }}</a>
                       </li>
                     {%- endfor -%}
