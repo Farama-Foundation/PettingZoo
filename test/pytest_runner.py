@@ -2,10 +2,12 @@ import pytest
 import pickle
 from .all_modules import all_environments
 from pettingzoo.test.api_test import api_test
-from pettingzoo.test.seed_test import seed_test
+from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
 from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.max_cycles_test import max_cycles_test
 from pettingzoo.test.state_test import state_test
+from pettingzoo.atari import warlords_v2
+from pettingzoo.utils import to_parallel, from_parallel
 import os
 
 
@@ -27,3 +29,9 @@ def test_module(name, env_module):
 
     recreated_env = pickle.loads(pickle.dumps(_env))
     api_test(recreated_env)
+
+
+def test_conversions():
+    env1 = warlords_v2.env()
+    env2 = from_parallel(to_parallel(warlords_v2.env()))
+    check_environment_deterministic(env1, env2, 5000)

@@ -30,19 +30,22 @@ def parallel_api_test(par_env, num_cycles=10):
             for agent in par_env.agents:
                 if agent not in live_agents:
                     live_agents.add(agent)
-            assert set(par_env.agents) == live_agents
             assert isinstance(obs, dict)
             assert isinstance(rew, dict)
             assert isinstance(done, dict)
             assert isinstance(info, dict)
-            assert set(obs.keys()) == (set(par_env.agents)), "agents should not be given an observation if they were done last turn"
-            assert set(rew.keys()) == (set(par_env.agents)), "agents should not be given a reward if they were done last turn"
-            assert set(done.keys()) == (set(par_env.agents)), "agents should not be given a done if they were done last turn"
-            assert set(info.keys()) == (set(par_env.agents)), "agents should not be given a info if they were done last turn"
+            assert set(obs.keys()) == (set(live_agents)), "agents should not be given an observation if they were done last turn"
+            assert set(rew.keys()) == (set(live_agents)), "agents should not be given a reward if they were done last turn"
+            assert set(done.keys()) == (set(live_agents)), "agents should not be given a done if they were done last turn"
+            assert set(info.keys()) == (set(live_agents)), "agents should not be given a info if they were done last turn"
             assert not hasattr(par_env, 'possible_agents') or set(par_env.agents).issubset(set(par_env.possible_agents)), "possible agents should include all agents always if it exists"
             for agent, d in done.items():
                 if d:
                     live_agents.remove(agent)
+                # if not d and agent not in live_agents:
+                #     live_agents.add(agent)
+                # 
+            assert set(par_env.agents) == live_agents
             has_finished |= {agent for agent, d in done.items() if d}
             if not par_env.agents:
                 assert has_finished == set(par_env.possible_agents), "not all agents finished, some were skipped over"

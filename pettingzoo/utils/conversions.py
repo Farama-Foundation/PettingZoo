@@ -91,9 +91,6 @@ class to_parallel_wrapper(ParallelEnv):
         return observations
 
     def step(self, actions):
-        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
-            self.aec_env.step(None)
-
         rewards = {a: 0 for a in self.aec_env.agents}
         dones = {}
         infos = {}
@@ -112,8 +109,11 @@ class to_parallel_wrapper(ParallelEnv):
 
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
-        self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
+            self.aec_env.step(None)
+
+        self.agents = self.aec_env.agents
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):
@@ -188,6 +188,7 @@ class from_parallel_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
+        self.new_agents = []
 
     def observe(self, agent):
         return self._observations[agent]
@@ -195,27 +196,42 @@ class from_parallel_wrapper(AECEnv):
     def state(self):
         return self.env.state()
 
+    def add_new_agent(self, new_agent):
+        self.agents.append(new_agent)
+        self._agent_selector.agent_order = self.agents
+        self.dones[new_agent] = False
+        self.infos[new_agent] = {}
+        self.rewards[new_agent] = 0
+        self._cumulative_rewards[new_agent] = 0
+
     def step(self, action):
         if self.dones[self.agent_selection]:
             del self._actions[self.agent_selection]
             return self._was_done_step(action)
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
+            if self.new_agents:
+                new_agent = self.new_agents.pop()
+                self.add_new_agent(new_agent)
+                return
             obss, rews, dones, infos = self.env.step(self._actions)
 
             self._observations = copy.copy(obss)
             self.dones = copy.copy(dones)
             self.infos = copy.copy(infos)
             self.rewards = copy.copy(rews)
-            self.agents = self.env.agents[:]
+            self._cumulative_rewards = copy.copy(rews)
+            live_agents = [agent for agent in self.agents if not self.dones[agent]]
+            self.new_agents = [agent for agent in self.env.agents if agent not in self.rewards]
+            # self.agents = live_agents #(
+            # [agent for agent in self.agents if agent in rews]# +
+            # [agent for agent in self.env.agents if agent not in rews]
+            # )
 
-            self._live_agents = [agent for agent in self.agents if not dones[agent]]
-            # assert self._live_agents == self.agents
-            if len(self._live_agents):
-                self._agent_selector = agent_selector(self._live_agents)
+            if len(live_agents):
+                self._agent_selector = agent_selector(live_agents)
                 self.agent_selection = self._agent_selector.reset()
 
-            self._cumulative_rewards = copy.copy(rews)
             self._dones_step_first()
         else:
             if self._agent_selector.is_first():

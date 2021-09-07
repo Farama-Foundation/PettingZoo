@@ -21,7 +21,7 @@ def raw_env(**kwargs):
 
 
 def get_type(agent):
-    return agent[: agent.rfind('_')]
+    return agent[: agent.rfind("_")]
 
 
 class parallel_env(ParallelEnv):
@@ -50,9 +50,9 @@ class parallel_env(ParallelEnv):
 
     def add_type(self):
         type_id = len(self.types)
-        num_actions = self.np_random.randint(3,10)
-        obs_size = self.np_random.randint(10,50)
-        obs_space = gym.spaces.Box(low=0,high=1,shape=(obs_size,))
+        num_actions = self.np_random.randint(3, 10)
+        obs_size = self.np_random.randint(10, 50)
+        obs_space = gym.spaces.Box(low=0, high=1, shape=(obs_size,))
         act_space = gym.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"
         self.types.append(new_type)
@@ -95,7 +95,7 @@ class parallel_env(ParallelEnv):
                     if len(self.agents) >= 20:
                         self.all_dones[self.np_random.choice(self.agents)] = True
 
-                    agent = self.add_agent(type)
+                    self.add_agent(type)
 
         all_infos = {agent: {} for agent in self.agents}
         all_dones = self.all_dones

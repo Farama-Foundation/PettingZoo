@@ -8,7 +8,13 @@ import numpy as np
 import gym
 import random
 import re
-missing_attr_warning = 'This environment does not have {name} defined. This is not a required part of the API as environments with procedurally generated agents cannot always have this property defined. However, this is very uncommon and these features should be included whenever possible as all standard learning code requires these properties. Also not that if you do not have {name} it should also not be possible for you to expose the possible_agents list and observation_spaces, action_spaces dictionaries.'
+missing_attr_warning = '''This environment does not have {name} defined.
+This is not a required part 'of the API as environments with procedurally
+generated agents cannot always have this property defined. However, this is
+very uncommon and these features should be included whenever possible as all
+standard learning code requires these properties. Also not that if you do not
+have {name} it should also not be possible for you to expose the possible_agents
+list and observation_spaces, action_spaces dictionaries.'''
 
 
 def test_observation(observation, observation_0):
