@@ -8,11 +8,23 @@ action-shape: "(5),(9)"
 action-values: "Discrete(5),(9)"
 observation-shape: "(3,3,5), (9,9,5)"
 observation-values: "[0,2]"
+state-shape: "(45, 45, 5)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import tiger_deer_v3"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8 health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.
@@ -77,3 +89,4 @@ last_reward(extra_features=True)| 1
 * v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v1: Agent order under death changed (1.3.0)
 * v0: Initial versions release (1.0.0)
+</div>

@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import foozpong_v2"
 agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -44,3 +53,4 @@ foozpong_v2.env(num_players=4)
 * v2: No action timer (1.9.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

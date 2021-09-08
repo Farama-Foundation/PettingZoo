@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import maze_craze_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -47,3 +56,4 @@ maze_craze.env(game_version="robbers", visibilty_level=0)
 * v2: Breaking changes to entire API (1.4.0)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+</div>
