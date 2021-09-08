@@ -7,13 +7,24 @@ action-shape: "(1,)"
 action-values: "[0, 2]"
 observation-shape: "(100, 300, 3) or (1,)"
 observation-values: "(0, 255) or (-300, 300)"
+state-shape: "(650, 750, 3)"
+state-values: "(0, 255)"
 average-total-reward: "2.77"
 import: "from pettingzoo.butterfly import prison_v3"
 agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -52,3 +63,4 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
 * v1: Fix to continuous mode (1.0.1)
 * v0: Initial versions release (1.0.0)
+</div>

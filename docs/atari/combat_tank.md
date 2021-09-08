@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import combat_tank_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -46,3 +55,4 @@ combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
 
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

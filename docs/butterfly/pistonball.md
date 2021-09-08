@@ -8,12 +8,23 @@ action-shape: "(1,)"
 action-values: "[-1, 1]"
 observation-shape: "(457, 120, 3)"
 observation-values: "(0, 255)"
+state-shape: "(560, 880, 3)"
+state-values: "(0, 255)"
 average-total-reward: "-91.2"
 import: "from pettingzoo.butterfly import pistonball_v4"
 agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -62,3 +73,4 @@ ball_elasticity=1.5, max_cycles=125)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
 * v1: Fix to continuous mode (1.0.1)
 * v0: Initial versions release (1.0.0)
+</div>

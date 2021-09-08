@@ -12,9 +12,15 @@ import: "from pettingzoo.atari import boxing_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
 
-
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
 
 
 *Boxing* is an adversarial game where precise control and
@@ -38,3 +44,4 @@ Environment parameters are common to all Atari environments and are described in
 
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>
