@@ -1,7 +1,8 @@
-## MPE environments
-
-
-{% include bigtable.html group="mpe/" avg_rew=1 %}
+---
+layout: env_selection
+title: MPE Environments
+---
+<div class="selection-content" markdown="1">
 
 The unique dependencies for this set of environments can be installed via:
 
@@ -82,3 +83,10 @@ But were first released as a part of this work:
 ```
 
 Please cite one or both of these if you use these environments in your research.
+
+</div>
+<div class="selection-table-container" markdown="1">
+## MPE Environments
+
+{% include bigtable.html group="mpe/" cols=3 %}
+</div>

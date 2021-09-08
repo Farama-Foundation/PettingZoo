@@ -7,12 +7,23 @@ action-shape: "(50)"
 action-values: "Discrete(50)/Box(0.0, 1.0, (15))"
 observation-shape: "(21)"
 observation-values: "(-inf,inf)"
+state-shape: "(42,)"
+state-values: "(-inf,inf)"
 average-total-reward: "-57.1"
 import: "from pettingzoo.mpe import simple_reference_v2"
 agent-labels: "agents= [agent_0, agent_1]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -43,3 +54,4 @@ simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
 
+</div>

@@ -4,7 +4,8 @@ import time
 
 
 def inp_handler(name):
-    from pynput.keyboard import Key, Controller as KeyboardController
+    from pynput.keyboard import Controller as KeyboardController
+    from pynput.keyboard import Key
 
     keyboard = KeyboardController()
     time.sleep(0.1)

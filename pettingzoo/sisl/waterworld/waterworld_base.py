@@ -3,9 +3,9 @@ import os
 
 import numpy as np
 import pygame
-import scipy.spatial.distance as ssd
 from gym import spaces
 from gym.utils import seeding
+from scipy.spatial import distance as ssd
 
 from .._utils import Agent
 
