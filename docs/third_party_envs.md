@@ -32,7 +32,7 @@ Multi-Agent traffic control environments.
 ## PZ Dilemma
 [https://github.com/arjun-prakash/pz_dilemma](https://github.com/arjun-prakash/pz_dilemma)
 
-Collection of prisoner's dilemma games as pettingzoo environments
+Collection of prisoner's dilemma games as PettingZoo environments
 
 
 ## Ants
@@ -45,6 +45,10 @@ Simplified simulation of an ant colony
 
 More general n-players form of the Rock Paper Scissors environments in PettingZoo
 
+## PZ Risk
+[https://github.com/mahi97/pz_risk](https://github.com/mahi97/pz_risk)
+
+Implementation of the Risk board game as a PettingZoo environment
 
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
