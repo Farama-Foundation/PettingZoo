@@ -750,19 +750,19 @@
   font-weight: 600;
 }
 
+.markdown-body table thead tr th {
+  background-color: #eee;
+}
+
 .markdown-body table td,
 .markdown-body table th {
   padding: 6px 13px;
-  /*border: 1px solid #dfe2e5;*/
+  border: 2px solid black;
 }
 
 .markdown-body table tr {
   background-color: #fff;
   border-bottom: 1px solid #c6cbd1;
-}
-
-.markdown-body table tr:nth-child(2n) {
-  background-color: #f6f8fa;
 }
 
 .markdown-body img {

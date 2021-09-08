@@ -1,3 +1,7 @@
+---
+layout: "contents"
+title: api
+---
 # API
 
 ## Initializing Environments

@@ -1,12 +1,310 @@
 nav:
-  - title: "APi"
+  - title: "GitHub"
+    url: "https://github.com/PettingZoo-Team/PettingZoo"
+
+  - title: "API"
     url: "/api"
+    sublinks:
+      - title: "Initializing Environments"
+        url: "/api#initializing-environments"
+
+      - title: "Interacting With Environments"
+        url: "/api#interacting-with-environments"
+
+      - title: "Additional Environment API"
+        url: "/api#additional-environment-api"
+
+      - title: "Notable Idioms"
+        url: "/api#notable-idioms"
+
+      - title: "Raw Environments"
+        url: "/api#raw-environments"
+
+      - title: "Parallel API"
+        url: "/api#parallel-api"
+
+      - title: "SuperSuit"
+        url: "/api#supersuit"
+
+      - title: "Utils"
+        url: "/api#utils"
+
+  - title: "Env Creation"
+    url: "/environment_creation"
+    sublinks:
+      - title: "Example Custom Environment"
+        url: "/environment_creation#example-custom-environment"
+
+      - title: "Example Custom Parallel Environment"
+        url: "/environment_creation#example-custom-parallel-environment"
+
+      - title: "Wrappers"
+        url: "/environment_creation#wrappers"
+
+      - title: "Developer Utils"
+        url: "/environment_creation#developer-utils"
+
+      - title: "Tests"
+        url: "/environment_creation#tests"
 
   - title: "Environments"
     url: "/envs"
+    sublinks:
+      - title: "Atari"
+        url: "/atari"
+        subsublinks:
+          - title: "Basketball Pong"
+            url: "/atari/basketball_pong"
+            img: /assets/img/aec/atari_basketball_pong_aec.svg
+            
+          - title: "Boxing"
+            url: "/atari/boxing"
 
-  - title: "Github"
-    url: "https://github.com/PettingZoo-Team/PettingZoo"
+          - title: "Combat: Plane"
+            url: "/atari/combat_plane"
 
-  - title: "Dev Docs"
-    url: "/dev_docs"
+          - title: "Combat: Tank"
+            url: "/atari/combat_tank"
+
+          - title: "Double Dunk"
+            url: "/atari/double_dunk"
+            
+          - title: "Entombed: Competitive"
+            alt_title: "Entombed: Comp"
+            url: "/atari/entombed_competitive"
+
+          - title: "Entombed: Cooperative"
+            alt_title: "Entombed: Coop"
+            url: "/atari/entombed_cooperative"
+
+          - title: "Flag Capture"
+            url: "/atari/flag_capture"
+
+          - title: "Foozpong"
+            url: "/atari/foozpong"
+            
+          - title: "Ice Hockey"
+            url: "/atari/ice_hockey"
+
+          - title: "Joust"
+            url: "/atari/joust"
+
+          - title: "Mario Bros"
+            url: "/atari/mario_bros"
+
+          - title: "Maze Craze"
+            url: "/atari/maze_craze"
+            
+          - title: "Othello"
+            url: "/atari/othello"
+
+          - title: "Pong"
+            url: "/atari/pong"
+
+          - title: "Quadrapong"
+            url: "/atari/quadrapong"
+          
+          - title: "Space Invaders"
+            url: "/atari/space_invaders"
+            
+          - title: "Space War"
+            url: "/atari/space_war"
+
+          - title: "Surround"
+            url: "/atari/surround"
+
+          - title: "Tennis"
+            url: "/atari/tennis"
+
+          - title: "Video Checkers"
+            url: "/atari/video_checkers"
+            
+          - title: "Volleyball Pong"
+            url: "/atari/volleyball_pong"
+
+          - title: "Warlords"
+            url: "/atari/warlords"
+
+          - title: "Wizard of Wor"
+            url: "/atari/wizard_of_wor"
+
+      - title: "Butterfly"
+        url: "/butterfly"
+        subsublinks:
+          - title: "Cooperative Pong"
+            alt_title: "Coop Pong"
+            url: "/butterfly/cooperative_pong"
+            
+          - title: "Knights Archers Zombies ('KAZ')"
+            alt_title: "KAZ"
+            url: "/butterfly/knights_archers_zombies"
+
+          - title: "Pistonball"
+            url: "/butterfly/pistonball"
+            
+          - title: "Prison"
+            url: "/butterfly/prison"
+            
+          - title: "Prospector"
+            url: "/butterfly/prospector"
+
+      - title: "Classic"
+        url: "/classic"
+        subsublinks:
+          - title: "Backgammon"
+            url: "/classic/backgammon"
+            
+          - title: "Checkers"
+            url: "/classic/checkers"
+
+          - title: "Chess"
+            url: "/classic/chess"
+            
+          - title: "Connect Four"
+            url: "/classic/connect_four"
+            
+          - title: "Dou Dizhu"
+            url: "/classic/dou_dizhu"
+          
+          - title: "Gin Rummy"
+            url: "/classic/gin_rummy"
+
+          - title: "Go"
+            url: "/classic/go"
+
+          - title: "Hanabi"
+            url: "/classic/hanabi"
+
+          - title: "Leduc Hold'em"
+            url: "/classic/leduc_holdem"
+
+          - title: "Mahjong"
+            url: "/classic/mahjong"
+
+          - title: "Rock Paper Scissors"
+            alt_title: "RPS"
+            url: "/classic/rps"
+
+          - title: "Texas Hold'em No Limit"
+            alt_title: "Hold'em No Limit"
+            url: "/classic/texas_holdem_no_limit"
+
+          - title: "Texas Hold'em"
+            url: "/classic/texas_holdem"
+
+          - title: "Tic Tac Toe"
+            url: "/classic/tictactoe"
+          
+          - title: "Uno"
+            url: "/classic/uno"
+
+      - title: "MAgent"
+        url: "/magent"
+        subsublinks:
+          - title: "Adversarial Pursuit"
+            alt_title: "Adv Pursuit"
+            url: "/magent/adversarial_pursuit"
+
+          - title: "Battle"
+            url: "/magent/battle"
+
+          - title: "Battlefield"
+            url: "/magent/battlefield"
+
+          - title: "Combined Arms"
+            url: "/magent/combined_arms"
+
+          - title: "Gather"
+            url: "/magent/gather"
+
+          - title: "Tiger-Deer"
+            url: "/magent/tiger_deer"
+
+      - title: "MPE"
+        url: "/mpe"
+        subsublinks:
+          - title: "Simple"
+            url: "/mpe/simple"
+
+          - title: "Simple Adversary"
+            alt_title: "S. Adversary"
+            url: "/mpe/simple_adversary"
+
+          - title: "Simple Crypto"
+            url: "/mpe/simple_crypto"
+
+          - title: "Simple Push"
+            url: "/mpe/simple_push"
+
+          - title: "Simple Speaker Listener"
+            alt_title: "Speaker Listener"
+            url: "/mpe/simple_speaker_listener"
+
+          - title: "Simple Spread"
+            url: "/mpe/simple_spread"
+
+          - title: "Simple Tag"
+            url: "/mpe/simple_tag"
+
+          - title: "Simple World Comm"
+            alt_title: "S. World Comm"
+            url: "/mpe/simple_world_comm"
+
+      - title: "SISL"
+        url: "/sisl"
+        subsublinks:
+          - title: "Multiwalker"
+            url: "/sisl/multiwalker"
+
+          - title: "Pursuit"
+            url: "/sisl/pursuit"
+
+          - title: "Waterworld"
+            url: "/sisl/waterworld"
+
+  - title: "Tutorials"
+    url: "/tutorials"
+
+  - title: "Third Party Environments"
+    url: "/third_party_envs"
+
+api:
+  - title: "Initializing Environments"
+    url: "/api#initializing-environments"
+
+  - title: "Interacting With Environments"
+    url: "/api#interacting-with-environments"
+
+  - title: "Additional Environment API"
+    url: "/api#additional-environment-api"
+
+  - title: "Notable Idioms"
+    url: "/api#notable-idioms"
+
+  - title: "Raw Environments"
+    url: "/api#raw-environments"
+
+  - title: "Parallel API"
+    url: "/api#parallel-api"
+
+  - title: "SuperSuit"
+    url: "/api#supersuit"
+
+  - title: "Utils"
+    url: "/api#utils"
+
+environment_creation:
+      - title: "Example Custom Environment"
+        url: "/environment_creation#example-custom-environment"
+
+      - title: "Example Custom Parallel Environment"
+        url: "/environment_creation#example-custom-parallel-environment"
+
+      - title: "Wrappers"
+        url: "/environment_creation#wrappers"
+
+      - title: "Developer Utils"
+        url: "/environment_creation#developer-utils"
+
+      - title: "Tests"
+        url: "/environment_creation#tests"
