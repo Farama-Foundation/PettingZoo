@@ -34,5 +34,5 @@ Many of the classic environments are based on [RLCard](https://github.com/dataml
 <div class="selection-table-container" markdown="1">
 ## Classic Environments
 
-{% include bigtable.html group="classic/" cols=4 %}
+{% include bigtable.html group="classic/" cols=3 %}
 </div>

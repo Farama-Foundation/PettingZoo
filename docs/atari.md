@@ -125,5 +125,5 @@ Various extensions to the Arcade Learning Environment were introduced in:
 <div class="selection-table-container" markdown="1">
 ## Atari Environments
 
-{% include bigtable.html group="atari/" cols=4 %}
+{% include bigtable.html group="atari/" cols=3 %}
 </div>

@@ -88,5 +88,5 @@ Please cite one or both of these if you use these environments in your research.
 <div class="selection-table-container" markdown="1">
 ## MPE Environments
 
-{% include bigtable.html group="mpe/" cols=4 %}
+{% include bigtable.html group="mpe/" cols=3 %}
 </div>

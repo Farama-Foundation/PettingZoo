@@ -20,5 +20,5 @@ All environments are highly configurable via arguments specified in each environ
 <div class="selection-table-container" markdown="1">
 ## Butterfly Environments
 
-{% include bigtable.html group="butterfly/" cols=4 %}
+{% include bigtable.html group="butterfly/" cols=3 %}
 </div>

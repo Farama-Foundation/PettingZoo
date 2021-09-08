@@ -31,5 +31,5 @@ If you use these environments, please additionally cite:
 <div class="selection-table-container" markdown="1">
 ## SISL Environments
 
-{% include bigtable.html group="sisl/" cols=4 %}
+{% include bigtable.html group="sisl/" cols=3 %}
 </div>

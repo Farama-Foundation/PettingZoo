@@ -198,7 +198,7 @@
     .navbar-nav {
         padding-left: 0;
     }
-    .markdown-body {
+    .top-padding {
         padding-top: 25px;
     }
 }
@@ -499,6 +499,7 @@
         overflow-y: auto;
         padding: 10px;
         overflow-x: auto;
+        border-left: 3px solid black;
     }
 
     .selection-content {
@@ -528,6 +529,7 @@
         overflow-y: auto;
         padding: 10px;
         overflow-x: auto;
+        border-left: 3px solid black;
     }
 }
 
