@@ -1,7 +1,7 @@
-from collections import defaultdict
 import random
 import re
 import warnings
+from collections import defaultdict
 
 import gym
 import numpy as np

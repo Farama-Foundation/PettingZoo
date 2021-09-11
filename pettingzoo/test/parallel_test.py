@@ -1,7 +1,9 @@
+import warnings
+
 from pettingzoo.utils.conversions import from_parallel_wrapper, to_parallel_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
+
 from .api_test import missing_attr_warning
-import warnings
 
 
 def parallel_api_test(par_env, num_cycles=10):

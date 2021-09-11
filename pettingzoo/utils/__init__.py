@@ -4,5 +4,6 @@ from .conversions import from_parallel, to_parallel
 from .env import AECEnv, ParallelEnv
 from .random_demo import random_demo
 from .save_observation import save_observation
-from .wrappers import (AssertOutOfBoundsWrapper, BaseWrapper, BaseParallelWraper, CaptureStdoutWrapper,
-                       ClipOutOfBoundsWrapper, OrderEnforcingWrapper, TerminateIllegalWrapper,)
+from .wrappers import (AssertOutOfBoundsWrapper, BaseParallelWraper, BaseWrapper,
+                       CaptureStdoutWrapper, ClipOutOfBoundsWrapper, OrderEnforcingWrapper,
+                       TerminateIllegalWrapper)
