@@ -1,9 +1,10 @@
-from .waterworld_base import MAWaterWorld as _env
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils import wrappers
 import numpy as np
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .waterworld_base import MAWaterWorld as _env
 
 
 def env(**kwargs):

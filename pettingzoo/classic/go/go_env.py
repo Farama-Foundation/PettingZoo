@@ -1,17 +1,20 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
-from gym import spaces
-from . import go
-from . import coords
-import numpy as np
 import os
+
+import numpy as np
 import pygame
+from gym import spaces
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
+
+from . import coords, go
 
 
 def get_image(path):
-    import pygame
     from os import path as os_path
+
+    import pygame
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)

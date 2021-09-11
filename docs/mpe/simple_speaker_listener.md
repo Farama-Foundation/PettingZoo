@@ -7,12 +7,23 @@ action-shape: "(3),(5)"
 action-values: "Discrete(3),(5)/Box(0.0, 1.0, (3)), Box(0.0, 1.0, (5))"
 observation-shape: "(3),(11)"
 observation-values: "(-inf,inf)"
+state-shape: "(14,)"
+state-values: "(-inf,inf)"
 average-total-reward: "-80.9"
 import: "from pettingzoo.mpe import simple_speaker_listener_v3"
 agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -37,3 +48,4 @@ simple_speaker_listener_v2.env(max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+</div>

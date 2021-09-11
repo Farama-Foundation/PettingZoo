@@ -1,17 +1,18 @@
-from gym.spaces import Discrete, Box
-import numpy as np
-import warnings
-import magent
-from pettingzoo import AECEnv
 import math
-from pettingzoo.magent.render import Renderer
-from pettingzoo.utils import agent_selector, wrappers
-from .magent_env import magent_parallel_env, make_env
-from pettingzoo.utils.conversions import from_parallel_wrapper
-from pettingzoo.utils.conversions import parallel_wrapper_fn
-from .battle_v3 import get_config, KILL_REWARD
+import warnings
+
+import magent
+import numpy as np
+from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
+from pettingzoo import AECEnv
+from pettingzoo.magent.render import Renderer
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
+
+from .battle_v3 import KILL_REWARD, get_config
+from .magent_env import magent_parallel_env, make_env
 
 default_map_size = 80
 max_cycles_default = 1000

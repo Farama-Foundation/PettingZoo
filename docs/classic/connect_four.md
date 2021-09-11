@@ -11,7 +11,16 @@ import: "from pettingzoo.classic import connect_four_v3"
 agent-labels: "agents= ['player_0', 'player_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -45,3 +54,4 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
+</div>

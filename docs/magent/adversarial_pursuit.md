@@ -7,11 +7,22 @@ action-shape: "(9),(13)"
 action-values: "Discrete(9),(13)"
 observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
+state-shape: "(45, 45, 5)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import adversarial_pursuit_v3"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so they can be tagged continually.
 
@@ -89,3 +100,5 @@ last_reward(extra_features=True)| 1
 * v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v1: Agent order under death changed (1.3.0)
 * v0: Initial versions release (1.0.0)
+
+</div>

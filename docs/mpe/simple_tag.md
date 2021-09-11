@@ -7,10 +7,21 @@ action-shape: "(5)"
 action-values: "Discrete(5)/Box(0.0, 1.0, (50))"
 observation-shape: "(14),(16)"
 observation-values: "(-inf,inf)"
+state-shape: "(62,)"
+state-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_tag_v2"
 agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -49,3 +60,4 @@ simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25,
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
 
+</div>

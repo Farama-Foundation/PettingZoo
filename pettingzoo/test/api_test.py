@@ -1,13 +1,15 @@
-from pettingzoo.utils.conversions import to_parallel_wrapper, from_parallel_wrapper
-from pettingzoo.utils.wrappers import BaseWrapper
-
-import pettingzoo
-import warnings
 from collections import defaultdict
-import numpy as np
-import gym
 import random
 import re
+import warnings
+
+import gym
+import numpy as np
+
+import pettingzoo
+from pettingzoo.utils.conversions import from_parallel_wrapper, to_parallel_wrapper
+from pettingzoo.utils.wrappers import BaseWrapper
+
 missing_attr_warning = '''This environment does not have {name} defined.
 This is not a required part 'of the API as environments with procedurally
 generated agents cannot always have this property defined. However, this is

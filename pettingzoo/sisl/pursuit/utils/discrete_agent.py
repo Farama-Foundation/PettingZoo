@@ -1,12 +1,12 @@
 import numpy as np
-
 from gym import spaces
-from ..._utils import Agent
 
+from ..._utils import Agent
 
 #################################################################
 # Implements the Single 2D Agent Dynamics
 #################################################################
+
 
 class DiscreteAgent(Agent):
 

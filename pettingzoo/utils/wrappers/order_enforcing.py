@@ -1,6 +1,6 @@
-from .base import BaseWrapper
+from ..env import AECIterable, AECIterator
 from ..env_logger import EnvLogger
-from ..env import AECIterator, AECIterable
+from .base import BaseWrapper
 
 
 class OrderEnforcingWrapper(BaseWrapper):

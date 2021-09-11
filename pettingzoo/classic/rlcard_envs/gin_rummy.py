@@ -1,17 +1,20 @@
-from pettingzoo import AECEnv
-from pettingzoo.utils.agent_selector import agent_selector
-from gym import spaces
 import random
-import rlcard
-from rlcard.utils.utils import print_card
-from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.utils import utils
-from rlcard.games.gin_rummy.utils.action_event import KnockAction, GinAction
-import rlcard.games.gin_rummy.utils.melding as melding
+
 import numpy as np
-from pettingzoo.utils import wrappers
-from .rlcard_base import RLCardBase
+import rlcard
+from gym import spaces
 from gym.utils import EzPickle
+from rlcard.games.gin_rummy.player import GinRummyPlayer
+from rlcard.games.gin_rummy.utils import melding as melding
+from rlcard.games.gin_rummy.utils import utils
+from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
+from rlcard.utils.utils import print_card
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
+
+from .rlcard_base import RLCardBase
 
 
 def env(**kwargs):

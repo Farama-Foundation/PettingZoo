@@ -1,6 +1,7 @@
-from pettingzoo.utils import save_observation
 import gym
 import numpy as np
+
+from pettingzoo.utils import save_observation
 
 
 def check_save_obs(env):

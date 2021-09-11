@@ -1,8 +1,9 @@
-import warnings
-import random
-import numpy as np
 import hashlib
 import pickle
+import random
+import warnings
+
+import numpy as np
 
 
 def hash(val):

@@ -1,4 +1,8 @@
-# Developer Documentation
+---
+layout: "contents"
+title: environment_creation
+---
+# Environment Creation
 
 This documentation overviews creating new environments and relevant useful wrappers, utilities and tests included in PettingZoo designed for the creation of new environments.
 

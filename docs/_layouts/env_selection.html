@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<link rel="stylesheet" href="/assets/css/no-scroll.css">
+
+{% include nav.html %}
+
+<div class="doccontainer selection-container" id="pagecontainer">
+  <div class="markdown-body">
+    <div class = "env-selector-title">
+      <h2>{{ page.title }}</h2>
+    </div>
+    {{ content }}
+  </div>
+</div>

@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import wizard_of_wor_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -30,3 +39,10 @@ Note that in addition to the competitive aspect where you benefit from attacking
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v2: Breaking changes to entire API (1.4.0)
+* v1: Fixes to how all environments handle premature death (1.3.0)
+* v0: Initial versions release (1.0.0)
+</div>

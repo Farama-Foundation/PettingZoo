@@ -1,9 +1,11 @@
-from typing import Optional, Dict, List, Union
+from typing import Dict, List, Optional, Union
+
 import numpy as np
 from gym import spaces
+from gym.utils import EzPickle, seeding
+
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
-from gym.utils import seeding, EzPickle
 
 # importing Hanabi and throw error message if pypi package is not installed correctly.
 try:

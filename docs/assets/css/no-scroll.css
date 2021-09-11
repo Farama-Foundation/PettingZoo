@@ -1,0 +1,9 @@
+body {
+    overflow-y:hidden;
+}
+
+@media (max-width: 992px) {
+    body {
+        overflow-y:auto;
+    }
+}

@@ -1,16 +1,18 @@
-from gym.spaces import Discrete
-import numpy as np
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils import wrappers
-from pettingzoo.utils.conversions import parallel_wrapper_fn
 import os
+
+import numpy as np
 import pygame
+from gym.spaces import Discrete
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 
 def get_image(path):
-    import pygame
     from os import path as os_path
+
+    import pygame
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
