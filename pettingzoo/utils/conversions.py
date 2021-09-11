@@ -1,6 +1,6 @@
-from collections import defaultdict
 import copy
 import warnings
+from collections import defaultdict
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import AECEnv, ParallelEnv

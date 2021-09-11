@@ -1,5 +1,6 @@
-from pettingzoo.utils.env import AECEnv
 import warnings
+
+from pettingzoo.utils.env import AECEnv
 
 
 class BaseWrapper(AECEnv):
