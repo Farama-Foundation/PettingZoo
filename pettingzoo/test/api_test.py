@@ -149,6 +149,11 @@ def play_test(env, observation_0, num_cycles):
         else:
             action = env.action_space(agent).sample()
 
+        if agent not in live_agents:
+            live_agents.add(agent)
+
+        assert live_agents.issubset(set(env.agents)), "environment must delete agents as the game continues"
+
         if done:
             live_agents.remove(agent)
             has_finished.add(agent)
@@ -167,9 +172,6 @@ def play_test(env, observation_0, num_cycles):
         assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
         if hasattr(env, 'possible_agents'):
             assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents, if it exists"
-        if env.agent_selection not in live_agents:
-            live_agents.add(env.agent_selection)
-        assert live_agents.issubset(set(env.agents)), "environment must delete agents as the game continues"
         if not env.agents:
             assert has_finished == generated_agents, "not all agents finished, some were skipped over"
             break
