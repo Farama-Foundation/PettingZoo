@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import space_invaders_v1"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -47,3 +56,9 @@ zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 
 `invisible_invaders`:  The invaders are invisible, making them more difficult to hit.
 
+
+### Version History
+
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
+</div>

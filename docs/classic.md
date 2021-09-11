@@ -1,7 +1,8 @@
-## Classic Environments
-
-
-{% include bigtable.html group="classic/" %}
+---
+layout: env_selection
+title: Classic Environments
+---
+<div class="selection-content" markdown="1">
 
 The unique dependencies for this set of environments can be installed via:
 
@@ -28,3 +29,10 @@ Many of the classic environments are based on [RLCard](https://github.com/dataml
   year={2019}
 }
 ```
+
+</div>
+<div class="selection-table-container" markdown="1">
+## Classic Environments
+
+{% include bigtable.html group="classic/" cols=3 %}
+</div>

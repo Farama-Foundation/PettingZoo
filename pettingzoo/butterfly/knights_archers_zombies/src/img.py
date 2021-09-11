@@ -1,5 +1,6 @@
-import pygame
 from os import path as os_path
+
+import pygame
 
 
 def get_image(path):

@@ -8,12 +8,23 @@ action-shape: "(1,)"
 action-values: "[0, 5]"
 observation-shape: "(512, 512, 3)"
 observation-values: "(0, 255)"
+state-shape: "(720, 1280, 3)"
+state-values: "(0, 255)"
 average-total-reward: "2.95"
 import: "from pettingzoo.butterfly import knights_archers_zombies_v7"
 agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -63,3 +74,4 @@ max_cycles=900)
 * v2: Fixed bug in how `dones` were computed (1.3.1)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+</div>

@@ -1,12 +1,15 @@
+import math
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 import numpy as np
-import scipy.spatial.distance as ssd
+import pygame
 from gym import spaces
 from gym.utils import seeding
+from scipy.spatial import distance as ssd
+
 from .._utils import Agent
-import pygame
-import math
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
 class Archea(Agent):

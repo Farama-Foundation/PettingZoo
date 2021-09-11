@@ -12,7 +12,16 @@ import: "from pettingzoo.atari import video_checkers_v3"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -29,3 +38,11 @@ This is a timed game: if a player does not take a turn after 10 seconds, then th
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Version History
+
+* v3: No action timer (1.9.0)
+* v2: Fixed checkers rewards (1.5.0)
+* v1: Breaking changes to entire API (1.4.0)
+* v0: Initial versions release (1.0.0)
+</div>

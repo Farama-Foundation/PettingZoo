@@ -1,13 +1,14 @@
-import multi_agent_ale_py
 from pathlib import Path
-from pettingzoo import AECEnv
+
 import gym
-from gym.utils import seeding, EzPickle
-from pettingzoo.utils import agent_selector, wrappers
-from gym import spaces
+import multi_agent_ale_py
 import numpy as np
-from pettingzoo.utils.conversions import from_parallel_wrapper
-from pettingzoo.utils.conversions import parallel_wrapper_fn
+from gym import spaces
+from gym.utils import EzPickle, seeding
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 

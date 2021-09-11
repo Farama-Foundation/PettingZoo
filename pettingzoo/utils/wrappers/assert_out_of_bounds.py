@@ -1,5 +1,6 @@
-from .base import BaseWrapper
 from gym.spaces import Discrete
+
+from .base import BaseWrapper
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):

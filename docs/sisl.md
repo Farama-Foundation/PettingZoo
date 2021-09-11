@@ -1,6 +1,8 @@
-## SISL Environments
-
-{% include bigtable.html group="sisl/" avg_rew=1 %}
+---
+layout: env_selection
+title: SISL Environments
+---
+<div class="selection-content" markdown="1">
 
 The unique dependencies for this set of environments can be installed via:
 
@@ -24,3 +26,10 @@ If you use these environments, please additionally cite:
   organization={Springer}
 }
 ```
+
+</div>
+<div class="selection-table-container" markdown="1">
+## SISL Environments
+
+{% include bigtable.html group="sisl/" cols=3 %}
+</div>

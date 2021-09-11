@@ -7,11 +7,22 @@ action-shape: "(21)"
 action-values: "Discrete(21)"
 observation-shape: "(13,13,5)"
 observation-values: "[0,2]"
+state-shape: "(80, 80, 5)"
+state-values: "(0, 2)"
 import: "pettingzoo.magent import battlefield_v3"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -104,3 +115,4 @@ last_reward(extra_features=True)| 1
 * v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v1: Agent order under death changed (1.3.0)
 * v0: Initial versions release (1.0.0)
+</div>

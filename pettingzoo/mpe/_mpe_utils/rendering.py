@@ -1,10 +1,15 @@
 """
 2D rendering framework
 """
+import math
 import os
 import sys
 
+import numpy as np
 from gym import error
+from pyglet.gl import (GL_BLEND, GL_LINE_LOOP, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_LINE_STIPPLE,
+                       GL_LINE_STRIP, GL_LINES, GL_NICEST, GL_ONE_MINUS_SRC_ALPHA, GL_POINTS,
+                       GL_POLYGON, GL_QUADS, GL_SRC_ALPHA, GL_TRIANGLES)
 
 try:
     import pyglet
@@ -12,14 +17,13 @@ except ImportError:
     raise ImportError("HINT: you can install pyglet directly via 'pip install pyglet'. But if you really just want to install all Gym dependencies and not have to think about it, 'pip install -e .[all]' or 'pip install gym[all]' will do it.")
 
 try:
-    from pyglet.gl import glEnable, glHint, glLineWidth, glBlendFunc, glBegin, glPushMatrix, glTranslatef, glClearColor, glRotatef, glScalef, glPopMatrix, glColor4f, glLineStipple, glDisable, glVertex3f, glEnd, glVertex2f, gluOrtho2D
+    from pyglet.gl import (glBegin, glBlendFunc, glClearColor, glColor4f, glDisable, glEnable,
+                           glEnd, glHint, glLineStipple, glLineWidth, glPopMatrix, glPushMatrix,
+                           glRotatef, glScalef, glTranslatef, gluOrtho2D, glVertex2f, glVertex3f)
 except ImportError:
     raise ImportError("""Error occurred while running `from pyglet.gl import ...`
             HINT: make sure you have OpenGL install. On Ubuntu, you can run 'apt-get install python-opengl'. If you're running on a server, you may need a virtual frame buffer; something like this should work: 'xvfb-run -s \"-screen 0 1400x900x24\" python <your_script.py>'""")
 
-from pyglet.gl import GL_BLEND, GL_LINE_SMOOTH, GL_LINE_SMOOTH_HINT, GL_NICEST, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_LINE_STIPPLE, GL_POINTS, GL_QUADS, GL_LINE_LOOP, GL_POLYGON, GL_TRIANGLES, GL_LINE_STRIP, GL_LINES
-import math
-import numpy as np
 
 if "Apple" in sys.version:
     if 'DYLD_FALLBACK_LIBRARY_PATH' in os.environ:

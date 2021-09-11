@@ -1,22 +1,24 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 import sys
-sys.dont_write_bytecode = True
+
+import numpy as np
 import pygame
 import pygame.gfxdraw
-from .src.players import Knight, Archer
-from .src.zombie import Zombie
-from .src.weapons import Arrow, Sword
-from .manual_control import manual_control
-import numpy as np
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
 from gym.spaces import Box, Discrete
-from gym.utils import seeding
-from pettingzoo.utils import wrappers
-from gym.utils import EzPickle
+from gym.utils import EzPickle, seeding
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+
+from .manual_control import manual_control
 from .src.img import get_image
+from .src.players import Archer, Knight
+from .src.weapons import Arrow, Sword
+from .src.zombie import Zombie
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+sys.dont_write_bytecode = True
 
 
 def env(**kwargs):

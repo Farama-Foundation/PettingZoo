@@ -7,12 +7,23 @@ action-shape: "(5)"
 action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
 observation-shape: "(18)"
 observation-values: "(-inf,inf)"
+state-shape: "(54,)"
+state-values: "(-inf,inf)"
 average-total-reward: "-115.6"
 import: "from pettingzoo.mpe import simple_spread_v2"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
+<div class="docu-info" markdown="1">
 {% include info_box.md %}
+</div>
+
+<div class="docu-content" markdown="1">
+<div class="appear_big env-title" markdown="1">
+{% include env_icon.md %}
+## {{page.title}}
+</div>
+
 
 
 
@@ -39,3 +50,4 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+</div>
