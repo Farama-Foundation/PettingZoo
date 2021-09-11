@@ -135,8 +135,11 @@ def play_test(env, observation_0, num_cycles):
     done = {agent: False for agent in env.agents}
     live_agents = set(env.agents[:])
     has_finished = set()
+    generated_agents = set()
     accumulated_rewards = defaultdict(int)
     for agent in env.agent_iter(env.num_agents * num_cycles):
+        generated_agents.add(agent)
+        assert agent not in has_finished, "agents cannot resurect! Generate a new agent with a new name."
         assert isinstance(env.infos[agent], dict), "an environment agent's info must be a dictionary"
         prev_observe, reward, done, info = env.last()
         if done:
@@ -146,30 +149,29 @@ def play_test(env, observation_0, num_cycles):
         else:
             action = env.action_space(agent).sample()
 
-        env.step(action)
+        if done:
+            live_agents.remove(agent)
+            has_finished.add(agent)
 
         assert accumulated_rewards[agent] == reward, "reward returned by last is not the accumulated rewards in its rewards dict"
         accumulated_rewards[agent] = 0
+
+        env.step(action)
+
         for a, rew in env.rewards.items():
             accumulated_rewards[a] += rew
 
-        # check dict element removal
-        assert not (done and agent in has_finished), "agent cannot be done twice in an environment"
         assert env.num_agents == len(env.agents), "env.num_agents is not equal to len(env.agents)"
         assert set(env.rewards.keys()) == (set(env.agents)), "agents should not be given a reward if they were done last turn"
         assert set(env.dones.keys()) == (set(env.agents)), "agents should not be given a done if they were done last turn"
         assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
         if hasattr(env, 'possible_agents'):
             assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents, if it exists"
-        if agent not in live_agents:
-            live_agents.add(agent)
-        if done:
-            live_agents.remove(agent)
-            has_finished.add(agent)
-
-        assert set(env.agents) == live_agents, "environment must delete agents as the game continues"
+        if env.agent_selection not in live_agents:
+            live_agents.add(env.agent_selection)
+        assert live_agents.issubset(set(env.agents)), "environment must delete agents as the game continues"
         if not env.agents:
-            assert has_finished == set(env.possible_agents), "not all agents finished, some were skipped over"
+            assert has_finished == generated_agents, "not all agents finished, some were skipped over"
             break
 
         if isinstance(env.observation_space(agent), gym.spaces.Box):

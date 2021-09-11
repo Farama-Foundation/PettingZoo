@@ -4,6 +4,7 @@ import copy
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 from pettingzoo.utils.env import ParallelEnv
 import warnings
+from collections import defaultdict
 
 
 def parallel_wrapper_fn(env_fn):
@@ -86,16 +87,15 @@ class to_parallel_wrapper(ParallelEnv):
 
     def reset(self):
         self.aec_env.reset()
-        self.agents = self.aec_env.agents
+        self.agents = self.aec_env.agents[:]
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
 
     def step(self, actions):
-        rewards = {a: 0 for a in self.aec_env.agents}
+        rewards = defaultdict(int)
         dones = {}
         infos = {}
         observations = {}
-
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
                 if self.aec_env.dones[agent]:
@@ -188,12 +188,24 @@ class from_parallel_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
+        self.new_agents = []
+        self.new_values = {}
 
     def observe(self, agent):
         return self._observations[agent]
 
     def state(self):
         return self.env.state()
+
+    def add_new_agent(self, new_agent):
+        self._agent_selector._current_agent = len(self._agent_selector.agent_order)
+        self._agent_selector.agent_order.append(new_agent)
+        self.agent_selection = self._agent_selector.next()
+        self.agents.append(new_agent)
+        self.dones[new_agent] = False
+        self.infos[new_agent] = {}
+        self.rewards[new_agent] = 0
+        self._cumulative_rewards[new_agent] = 0
 
     def step(self, action):
         if self.dones[self.agent_selection]:
@@ -208,15 +220,13 @@ class from_parallel_wrapper(AECEnv):
             self.infos = copy.copy(infos)
             self.rewards = copy.copy(rews)
             self._cumulative_rewards = copy.copy(rews)
-            live_agents = [agent for agent in self.agents if not self.dones[agent]]
-            
-            # self.agents = live_agents #(
-            # [agent for agent in self.agents if agent in rews]# +
-            # [agent for agent in self.env.agents if agent not in rews]
-            # )
 
-            if len(live_agents):
-                self._agent_selector = agent_selector(live_agents)
+            env_agent_set = set(self.env.agents)
+
+            self.agents = self.env.agents + [agent for agent in sorted(self._observations.keys()) if agent not in env_agent_set]
+
+            if len(self.env.agents):
+                self._agent_selector = agent_selector(self.env.agents)
                 self.agent_selection = self._agent_selector.reset()
 
             self._dones_step_first()
