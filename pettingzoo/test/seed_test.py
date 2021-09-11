@@ -29,6 +29,7 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             else:
                 action = new_env.action_space(agent).sample()
             new_env.step(action)
+            cur_hashes.append(agent)
             cur_hashes.append(hash_obsevation(obs))
             cur_hashes.append(float(rew))
 
@@ -52,10 +53,12 @@ def check_environment_deterministic(env1, env2, num_cycles):
     seed_action_spaces(env1)
     seed_action_spaces(env2)
 
+    num_agents = max(1, len(getattr(env1, 'possible_agents', [])))
+
     # checks deterministic behavior if seed is set
     hashes = []
     num_seeds = 2
-    max_env_iters = num_cycles * len(env1.possible_agents)
+    max_env_iters = num_cycles * num_agents
     envs = [env1, env2]
     for x in range(num_seeds):
         hashes.append(calc_hash(envs[x], x, max_env_iters))

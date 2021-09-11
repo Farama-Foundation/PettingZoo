@@ -66,12 +66,11 @@ class parallel_env(ParallelEnv):
         self._agent_counters[type] += 1
         agent_name = f"{type}_{agent_id}"
         self.agents.append(agent_name)
-        self.all_dones[agent_name] = False
         return agent_name
 
     def reset(self):
-        self.agents = []
         self.all_dones = {}
+        self.agents = []
         self.num_steps = 0
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
@@ -81,10 +80,13 @@ class parallel_env(ParallelEnv):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
     def step(self, action):
-        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
         done = self.num_steps >= self.max_cycles
-        self.all_dones = {agent: done for agent in self.agents}
+        all_dones = {agent: done for agent in self.agents}
         if not done:
+            for i in range(6):
+                if self.np_random.random() < 0.1 and len(self.agents) >= 10:
+                    all_dones[self.np_random.choice(self.agents)] = True
+
             for i in range(3):
                 if self.np_random.random() < 0.1:
                     if self.np_random.random() < 0.1:
@@ -92,17 +94,14 @@ class parallel_env(ParallelEnv):
                     else:
                         type = self.np_random.choice(self.types)
 
-                    if len(self.agents) >= 20:
-                        self.all_dones[self.np_random.choice(self.agents)] = True
-
-                    self.add_agent(type)
+                    new_agent = self.add_agent(type)
+                    all_dones[new_agent] = False
 
         all_infos = {agent: {} for agent in self.agents}
-        all_dones = self.all_dones
         all_rewards = {agent: 0 for agent in self.agents}
         all_rewards[self.np_random.choice(self.agents)] = 1
         all_observes = {agent: self.observe(agent) for agent in self.agents}
-        self.all_dones = all_dones
+        self.agents = [agent for agent in self.agents if not all_dones[agent]]
         return all_observes, all_rewards, all_dones, all_infos
 
     def render(self, mode="human"):

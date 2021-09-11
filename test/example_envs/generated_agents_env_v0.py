@@ -92,15 +92,16 @@ class raw_env(AECEnv):
         self._cumulative_rewards[self.agent_selection] = 0
 
         if self._agent_selector.is_last():
-            if self.np_random.random() < 0.1:
+            for i in range(5):
                 if self.np_random.random() < 0.1:
-                    type = self.add_type()
-                else:
-                    type = self.np_random.choice(self.types)
+                    if self.np_random.random() < 0.1:
+                        type = self.add_type()
+                    else:
+                        type = self.np_random.choice(self.types)
 
-                agent = self.add_agent(type)
-                if len(self.agents) >= 20:
-                    self.dones[self.np_random.choice(self.agents)] = True
+                    agent = self.add_agent(type)
+                    if len(self.agents) >= 20:
+                        self.dones[self.np_random.choice(self.agents)] = True
 
         if self._agent_selector.is_last():
             self.num_steps += 1

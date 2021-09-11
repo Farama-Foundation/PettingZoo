@@ -42,9 +42,6 @@ def parallel_api_test(par_env, num_cycles=10):
             for agent, d in done.items():
                 if d:
                     live_agents.remove(agent)
-                # if not d and agent not in live_agents:
-                #     live_agents.add(agent)
-                # 
             assert set(par_env.agents) == live_agents
             has_finished |= {agent for agent, d in done.items() if d}
             if not par_env.agents:
