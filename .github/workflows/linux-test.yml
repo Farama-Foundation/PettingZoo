@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         export AUDIODEV=null
-        sudo apt-get install swig unrar
+        sudo apt-get install swig
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
     - name: Full Python tests
