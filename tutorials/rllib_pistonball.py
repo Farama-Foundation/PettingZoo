@@ -5,7 +5,6 @@ from ray.tune.registry import register_env
 from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
 from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
-
 import torch
 from torch import nn
 
