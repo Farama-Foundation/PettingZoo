@@ -6,9 +6,6 @@ from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
 from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
 
-# for APEX-DQN
-from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
-
 import torch
 from torch import nn
 
