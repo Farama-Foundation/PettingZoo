@@ -9,7 +9,7 @@ import torch
 from torch import nn
 
 
-class MLPModelV2(TorchModelV2, nn.Module):
+class CNNModelV2(TorchModelV2, nn.Module):
     def __init__(self, obs_space, act_space, num_outputs, *args, **kwargs):
         TorchModelV2.__init__(self, obs_space, act_space, num_outputs, *args, **kwargs)
         nn.Module.__init__(self)
@@ -68,12 +68,12 @@ if __name__ == "__main__":
     obs_space = test_env.observation_space
     act_space = test_env.action_space
 
-    ModelCatalog.register_custom_model("MLPModelV2", MLPModelV2)
+    ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
     def gen_policy(i):
         config = {
             "model": {
-                "custom_model": "MLPModelV2",
+                "custom_model": "CNNModelV2",
             },
             "gamma": 0.99,
         }
