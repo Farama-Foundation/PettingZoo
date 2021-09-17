@@ -29,7 +29,7 @@ nav:
       - title: "Utils"
         url: "/api#utils"
 
-  - title: "Env Creation"
+  - title: "Environment Creation"
     url: "/environment_creation"
     sublinks:
       - title: "Example Custom Environment"
@@ -132,7 +132,6 @@ nav:
         url: "/butterfly"
         subsublinks:
           - title: "Cooperative Pong"
-            alt_title: "Coop Pong"
             url: "/butterfly/cooperative_pong"
             
           - title: "Knights Archers Zombies ('KAZ')"
@@ -182,7 +181,6 @@ nav:
             url: "/classic/mahjong"
 
           - title: "Rock Paper Scissors"
-            alt_title: "RPS"
             url: "/classic/rps"
 
           - title: "Texas Hold'em No Limit"
@@ -202,7 +200,6 @@ nav:
         url: "/magent"
         subsublinks:
           - title: "Adversarial Pursuit"
-            alt_title: "Adv Pursuit"
             url: "/magent/adversarial_pursuit"
 
           - title: "Battle"
@@ -227,7 +224,6 @@ nav:
             url: "/mpe/simple"
 
           - title: "Simple Adversary"
-            alt_title: "S. Adversary"
             url: "/mpe/simple_adversary"
 
           - title: "Simple Crypto"
@@ -237,7 +233,7 @@ nav:
             url: "/mpe/simple_push"
 
           - title: "Simple Speaker Listener"
-            alt_title: "Speaker Listener"
+            alt_title: "S. Speaker Listener"
             url: "/mpe/simple_speaker_listener"
 
           - title: "Simple Spread"
@@ -247,7 +243,6 @@ nav:
             url: "/mpe/simple_tag"
 
           - title: "Simple World Comm"
-            alt_title: "S. World Comm"
             url: "/mpe/simple_world_comm"
 
       - title: "SISL"

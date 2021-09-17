@@ -471,7 +471,7 @@ hr {
 
 code {
     font-size: 87.5%;
-    color: #e83e8c;
+    color: #86193F;
     word-break: break-word
 }
 
@@ -501,7 +501,6 @@ pre {
 
 pre code {
     font-size: inherit;
-    color: inherit;
     word-break: normal
 }
 
@@ -3928,6 +3927,8 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-brand {
+    padding-left: 40px;
+    padding-right: 40px;
     display: flex;
     flex-direction: column;
     padding-top: .3125rem;
