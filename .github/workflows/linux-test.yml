@@ -23,8 +23,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        export AUDIODEV=null
-        sudo apt-get install swig unrar
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
     - name: Full Python tests
