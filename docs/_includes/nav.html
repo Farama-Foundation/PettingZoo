@@ -10,7 +10,7 @@
           {{ site.title }}
         {%- endif -%}
     </a>
-    <div class="navbar-text" style="font-family:Ubuntu">
+    <div class="navbar-text">
       <p>PettingZoo</p>
     </div>
     </div>
@@ -18,15 +18,15 @@
     <div class="menu-btn">
       <img class="menu-icon" src="{{ site.data.img.nav.menu }}"/>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav text-uppercase">
+        <ul class="navbar-nav">
         {%- for link in site.data.navigation.nav -%}
-          <li class="nav-item">
+          <li class="nav-item nav-first-item">
           {%- if link.url -%}
             <a class="nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
             {%- if link.sublinks -%}
               <img class="navbar-arrow" src="{{ site.data.img.nav.arrow }}"/>
             {%- endif -%}
-            <ul class="nav-submenu text-uppercase">
+            <ul class="nav-submenu">
               {%- for sublink in link.sublinks -%}
                 {%- if link.title == "API" -%}
                   <li class="nav-subitem-1 nav-item">
@@ -34,14 +34,14 @@
                 {%- if link.title == "Environments" -%}
                   <li class="nav-subitem-3 nav-item">
                 {%- endif -%}
-                {%- if link.title == "Env Creation" -%}
+                {%- if link.title == "Environment Creation" -%}
                   <li class="nav-subitem-2 nav-item">
                 {%- endif -%}
                     <a class="nav-link js-scroll-trigger" href="{{ sublink.url }}">{{ sublink.title }}</a>
                     {%- if sublink.subsublinks -%}
                       <img class="navbar-arrow" height="20px" src="{{ site.data.img.nav.arrow }}"/>
                     {%- endif -%}
-                    <ul class="nav-subsubmenu text-uppercase">
+                    <ul class="nav-subsubmenu">
                     {%- for subsublink in sublink.subsublinks -%}
                       <li class="nav-subsubitem nav-item">
                         {% assign img_link = "/assets/img/icons/" | append: sublink.title | append: "/" | | append: subsublink.title | replace: " ", "" | replace: ":", "" | append: ".png" %}
