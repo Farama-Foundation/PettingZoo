@@ -54,8 +54,8 @@ nav:
         url: "/atari"
         subsublinks:
           - title: "Basketball Pong"
+            alt_title: "Basketball Pong"
             url: "/atari/basketball_pong"
-            img: /assets/img/aec/atari_basketball_pong_aec.svg
             
           - title: "Boxing"
             url: "/atari/boxing"
@@ -139,6 +139,7 @@ nav:
             url: "/butterfly/knights_archers_zombies"
 
           - title: "Pistonball"
+            alt_title: "Pistonball"
             url: "/butterfly/pistonball"
             
           - title: "Prison"
@@ -249,12 +250,14 @@ nav:
         url: "/sisl"
         subsublinks:
           - title: "Multiwalker"
+            alt_title: "Multiwalker"
             url: "/sisl/multiwalker"
 
           - title: "Pursuit"
             url: "/sisl/pursuit"
 
           - title: "Waterworld"
+            alt_title: "Waterworld"
             url: "/sisl/waterworld"
 
   - title: "Tutorials"
