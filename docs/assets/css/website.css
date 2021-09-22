@@ -218,6 +218,10 @@
     .top-padding {
         padding-top: 25px;
     }
+    .side-padding {
+        padding-left: 20vw;
+        padding-right: 20vw
+    }
 }
 
 .navbar-collapse ul ul ul {
@@ -365,7 +369,7 @@
         margin-top: 0;
     }
     .link-container {
-        margin-left: 22vw;
+        margin-left: 19vw;
     }
     .timeline-container {
         margin-left: 19vw;
@@ -434,7 +438,7 @@
         margin-left: 300px;
     }
     .link-container {
-        margin-left: 309px;
+        margin-left: 267px;
     }
     .timeline-container {
         margin-left: 189px;
@@ -548,6 +552,8 @@
         height: 100vh;
         overflow-y: auto;
         padding: 10px;
+        padding-left: 5vw;
+        padding-right: 5vw;
         overflow-x: auto;
         border-left: 3px solid black;
     }
