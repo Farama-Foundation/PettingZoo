@@ -62,7 +62,7 @@ class raw_env(AECEnv):
         observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
-        action_mask = np.zeros(9, int)
+        action_mask = np.zeros(9, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 

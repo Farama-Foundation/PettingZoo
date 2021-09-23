@@ -63,7 +63,7 @@ class RLCardBase(AECEnv):
         observation = obs['obs'].astype(self._dtype)
 
         legal_moves = self.next_legal_moves
-        action_mask = np.zeros(self.env.num_actions, int)
+        action_mask = np.zeros(self.env.num_actions, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 

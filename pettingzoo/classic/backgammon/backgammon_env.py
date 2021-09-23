@@ -85,7 +85,7 @@ class raw_env(AECEnv):
         self._accumulate_rewards()
 
     def observe(self, agent):
-        action_mask = np.zeros(1353, int)
+        action_mask = np.zeros(1353, 'int8')
         observation = np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198, )
         # only current agent can make legal moves
         if agent == self.agent_selection:

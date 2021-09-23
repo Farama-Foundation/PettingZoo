@@ -53,7 +53,7 @@ class raw_env(AECEnv):
         observation = np.dstack((observation[:, :, :7], self.board_history))
         legal_moves = chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
 
-        action_mask = np.zeros(4672, int)
+        action_mask = np.zeros(4672, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 
