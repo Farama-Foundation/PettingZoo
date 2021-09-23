@@ -59,7 +59,7 @@ class magent_parallel_env(ParallelEnv):
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
 
         self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
-        self.base_state = np.zeros(self.state_space.shape)
+        self.base_state = np.zeros(self.state_space.shape, dtype='float32')
         walls = self.env._get_walls_info()
         wall_x, wall_y = zip(*walls)
         self.base_state[wall_x, wall_y, 0] = 1
