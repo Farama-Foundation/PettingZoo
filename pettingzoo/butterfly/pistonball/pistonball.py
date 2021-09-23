@@ -45,8 +45,8 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v4"}
 
-    def __init__(self, n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
-        EzPickle.__init__(self, n_pistons, local_ratio, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
+    def __init__(self, n_pistons=20, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
+        EzPickle.__init__(self, n_pistons, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
         self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40
@@ -96,7 +96,7 @@ class raw_env(AECEnv, EzPickle):
         self.recentFrameLimit = 20  # Defines what "recent" means in terms of number of frames.
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
-        self.local_ratio = local_ratio
+        self.local_ratio = 0  # TODO: this was a bad idea and the logic this uses should be removed at some point
         self.ball_mass = ball_mass
         self.ball_friction = ball_friction
         self.ball_elasticity = ball_elasticity
