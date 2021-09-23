@@ -289,7 +289,7 @@ class raw_env(AECEnv, EzPickle):
             self.observation_spaces[agent_name].low)
 
         legal_moves = self.infos[agent_name]['legal_moves']
-        action_mask = np.zeros(self.hanabi_env.num_moves(), int)
+        action_mask = np.zeros(self.hanabi_env.num_moves(), 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 
