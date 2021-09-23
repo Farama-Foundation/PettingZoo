@@ -44,7 +44,6 @@ parameterized_envs = [
     (knights_archers_zombies_v7.env, dict(pad_observation=False)),
     (knights_archers_zombies_v7.env, dict(max_cycles=100)),
 
-    (pistonball_v4.env, dict(local_ratio=0.7)),
     (pistonball_v4.env, dict(continuous=True)),
     (pistonball_v4.env, dict(n_pistons=30)),
     (pistonball_v4.env, dict(continuous=False)),
