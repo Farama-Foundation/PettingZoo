@@ -95,7 +95,7 @@ class raw_env(AECEnv):
         self.observation = np.array(obs)
 
         legal_moves = self.legal_moves() if agent == self.agent_selection else []
-        action_mask = np.zeros(256, int)
+        action_mask = np.zeros(256, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 
