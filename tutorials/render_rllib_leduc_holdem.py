@@ -57,27 +57,36 @@ ray.init(num_cpus=8, num_gpus=0)
 DQNAgent = DQNTrainer(env="leduc_holdem", config=config)
 DQNAgent.restore(checkpoint_path)
 
-reward_sum = 0
-frame_list = []
+reward_sums = {a:0 for a in env.possible_agents}
 i = 0
 env.reset()
 
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
     obs = observation['observation']
-    reward_sum += reward
+    reward_sums[agent] += reward
     if done:
         action = None
     else:
         print(DQNAgent.get_policy(agent))
-        action, _, _ = DQNAgent.get_policy(agent).compute_single_action(observation)
+        policy = DQNAgent.get_policy(agent)
+        batch_obs = {
+            'obs':{
+                'observation': np.expand_dims(observation['observation'], 0),
+                'action_mask': np.expand_dims(observation['action_mask'],0)
+            }
+        }
+        batched_action, state_out, info = policy.compute_actions_from_input_dict(batch_obs)
+        single_action = batched_action[0]
+        action = single_action
 
     env.step(action)
     i += 1
-    if i % (len(env.possible_agents)+1) == 0:
-        frame_list.append(PIL.Image.fromarray(env.render(mode='rgb_array')))
-env.close()
+    env.render()
+    # if i % (len(env.possible_agents)+1) == 0:
+    #     frame_list.append(PIL.Image.fromarray(env.render(mode='rgb_array')))
+# env.close()
 
-
-print(reward_sum)
-frame_list[0].save("out.gif", save_all=True, append_images=frame_list[1:], duration=3, loop=0)
+print("rewards:")
+print(reward_sums)
+# frame_list[0].save("out.gif", save_all=True, append_images=frame_list[1:], duration=3, loop=0)
