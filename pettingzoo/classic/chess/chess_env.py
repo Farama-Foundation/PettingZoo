@@ -48,6 +48,12 @@ class raw_env(AECEnv):
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def observe(self, agent):
         observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
         observation = np.dstack((observation[:, :, :7], self.board_history))

@@ -71,6 +71,12 @@ class raw_env(AECEnv):
 
         self.reinit()
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def reinit(self):
         self.agents = self.possible_agents[:]
         self._agent_selector = agent_selector(self.agents)

@@ -16,7 +16,7 @@ def collect_render_results(env, mode):
                 elif isinstance(obs, dict) and 'action_mask' in obs:
                     action = random.choice(np.flatnonzero(obs['action_mask']))
                 else:
-                    action = env.action_spaces[agent].sample()
+                    action = env.action_space(agent).sample()
                 env.step(action)
         render_result = env.render(mode=mode)
         results.append(render_result)

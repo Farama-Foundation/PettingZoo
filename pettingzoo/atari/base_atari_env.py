@@ -145,6 +145,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         obs = self._observe()
         return {agent: obs for agent in self.agents}
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def _observe(self):
         if self.obs_type == 'ram':
             bytes = self.ale.getRAM()
@@ -156,7 +162,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def step(self, action_dict):
         actions = np.zeros(self.max_num_agents, dtype=np.int32)
-        self.agents = [agent for agent in self.agents if not self.dones[agent]]
         for i, agent in enumerate(self.possible_agents):
             if agent in action_dict:
                 actions[i] = action_dict[agent]
@@ -170,12 +175,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
             dones = {agent: int(life) < 0 for agent, life in zip(self.possible_agents, lives) if agent in self.agents}
-            self.dones = dones
 
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
         rewards = {agent: rew for agent, rew in zip(self.possible_agents, rewards) if agent in self.agents}
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
+        self.agents = [agent for agent in self.agents if not dones[agent]]
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):

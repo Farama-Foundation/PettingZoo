@@ -169,6 +169,12 @@ class raw_env(AECEnv, EzPickle):
                                                              self.hanabi_env.num_moves(),), dtype=np.int8)})
                                    for player_name in self.agents}
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         config = dict(seed=seed, **self._config)
         self.hanabi_env = HanabiEnv(config=config)
