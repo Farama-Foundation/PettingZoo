@@ -8,6 +8,8 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 
 def get_image(path):
     from os import path as os_path
