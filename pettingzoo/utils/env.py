@@ -19,7 +19,7 @@ class AECEnv:
 
     def step(self, action):
         '''
-        receives a dictionary of actions keyed by the agent name.
+        Receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary,
         where each dictionary is keyed by the agent.
         '''
@@ -27,7 +27,7 @@ class AECEnv:
 
     def reset(self):
         '''
-        resets the environment and returns a dictionary of observations (keyed by the agent name)
+        Resets the environment to a starting state.
         '''
         raise NotImplementedError
 
