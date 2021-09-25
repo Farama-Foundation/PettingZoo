@@ -131,6 +131,12 @@ class raw_env(AECEnv, EzPickle):
         self.closed = False
         self.seed()
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 

@@ -1,3 +1,5 @@
+import warnings
+
 from pettingzoo.utils.env import AECEnv
 
 
@@ -11,9 +13,18 @@ class BaseWrapper(AECEnv):
         super().__init__()
         self.env = env
 
-        self.observation_spaces = self.env.observation_spaces
-        self.action_spaces = self.env.action_spaces
-        self.possible_agents = self.env.possible_agents
+        # try to access these parameters for backwards compatability
+        try:
+            self._observation_spaces = self.env.observation_spaces
+            self._action_spaces = self.env.action_spaces
+        except AttributeError:
+            pass
+
+        try:
+            self.possible_agents = self.env.possible_agents
+        except AttributeError:
+            pass
+
         self.metadata = self.env.metadata
 
         # we don't want these defined as we don't want them used before they are gotten
@@ -34,6 +45,28 @@ class BaseWrapper(AECEnv):
             self.state_space = self.env.state_space
         except AttributeError:
             pass
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return self._observation_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return self._action_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.env.action_space(agent)
 
     @property
     def unwrapped(self):

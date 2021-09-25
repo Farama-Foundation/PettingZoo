@@ -66,6 +66,12 @@ class magent_parallel_env(ParallelEnv):
         self._renderer = None
         self.frames = 0
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         if seed is None:
             seed = seeding.create_seed(seed, max_bytes=4)
@@ -187,8 +193,6 @@ class magent_parallel_env(ParallelEnv):
 
     def step(self, all_actions):
         action_list = [0] * self.max_num_agents
-        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
-        self.env.clear_dead()
         for i, agent in enumerate(self.possible_agents):
             if agent in all_actions:
                 action_list[i] = all_actions[agent]
@@ -207,4 +211,6 @@ class magent_parallel_env(ParallelEnv):
         all_rewards = self._all_rewards()
         all_observes = self._observe_all()
         self.all_dones = all_dones
+        self.env.clear_dead()
+        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
         return all_observes, all_rewards, all_dones, all_infos

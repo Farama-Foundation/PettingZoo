@@ -26,6 +26,12 @@ class OrderEnforcingWrapper(BaseWrapper):
         '''
         if value == "unwrapped":
             return self.env.unwrapped
+        elif value == 'possible_agents':
+            EnvLogger.error_possible_agents_attribute_missing('possible_agents')
+        elif value == 'observation_spaces':
+            raise AttributeError("The base environment does not have an observation_spaces dict attribute. Use the environments `observation_space` method instead")
+        elif value == 'action_spaces':
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
         elif value == "agent_order":
             raise AttributeError("agent_order has been removed from the API. Please consider using agent_iter instead.")
         elif value in {"rewards", "dones", "infos", "agent_selection", "num_agents", "agents"}:

@@ -1,4 +1,6 @@
 import copy
+import warnings
+from collections import defaultdict
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import AECEnv, ParallelEnv
@@ -33,9 +35,19 @@ def from_parallel(par_env):
 class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         self.aec_env = aec_env
-        self.observation_spaces = aec_env.observation_spaces
-        self.action_spaces = aec_env.action_spaces
-        self.possible_agents = aec_env.possible_agents
+
+        # try to access these parameters for backwards compatability
+        try:
+            self._observation_spaces = self.aec_env.observation_spaces
+            self._action_spaces = self.aec_env.action_spaces
+        except AttributeError:
+            pass
+
+        try:
+            self.possible_agents = aec_env.possible_agents
+        except AttributeError:
+            pass
+
         self.metadata = aec_env.metadata
 
         # Not every environment has the .state_space attribute implemented
@@ -43,6 +55,28 @@ class to_parallel_wrapper(ParallelEnv):
             self.state_space = self.aec_env.state_space
         except AttributeError:
             pass
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return self._observation_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return self._action_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.aec_env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.aec_env.action_space(agent)
 
     @property
     def unwrapped(self):
@@ -53,19 +87,15 @@ class to_parallel_wrapper(ParallelEnv):
 
     def reset(self):
         self.aec_env.reset()
-        self.agents = self.aec_env.agents
+        self.agents = self.aec_env.agents[:]
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
 
     def step(self, actions):
-        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
-            self.aec_env.step(None)
-
-        rewards = {a: 0 for a in self.aec_env.agents}
+        rewards = defaultdict(int)
         dones = {}
         infos = {}
         observations = {}
-
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
                 if self.aec_env.dones[agent]:
@@ -79,8 +109,11 @@ class to_parallel_wrapper(ParallelEnv):
 
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
-        self.agents = self.aec_env.agents
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
+            self.aec_env.step(None)
+
+        self.agents = self.aec_env.agents
         return observations, rewards, dones, infos
 
     def render(self, mode="human"):
@@ -97,11 +130,18 @@ class from_parallel_wrapper(AECEnv):
     def __init__(self, parallel_env):
         self.metadata = parallel_env.metadata
         self.env = parallel_env
-        self.possible_agents = self.env.possible_agents
 
-        self.action_spaces = self.env.action_spaces
-        self.observation_spaces = self.env.observation_spaces
+        try:
+            self.possible_agents = parallel_env.possible_agents
+        except AttributeError:
+            pass
 
+        # try to access these parameters for backwards compatability
+        try:
+            self._observation_spaces = self.env.observation_spaces
+            self._action_spaces = self.env.action_spaces
+        except AttributeError:
+            pass
         # Not every environment has the .state_space attribute implemented
         try:
             self.state_space = self.env.state_space
@@ -111,6 +151,28 @@ class from_parallel_wrapper(AECEnv):
     @property
     def unwrapped(self):
         return self.env.unwrapped
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return self._observation_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return self._action_spaces
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.env.action_space(agent)
 
     def seed(self, seed=None):
         self.env.seed(seed)
@@ -126,12 +188,24 @@ class from_parallel_wrapper(AECEnv):
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
+        self.new_agents = []
+        self.new_values = {}
 
     def observe(self, agent):
         return self._observations[agent]
 
     def state(self):
         return self.env.state()
+
+    def add_new_agent(self, new_agent):
+        self._agent_selector._current_agent = len(self._agent_selector.agent_order)
+        self._agent_selector.agent_order.append(new_agent)
+        self.agent_selection = self._agent_selector.next()
+        self.agents.append(new_agent)
+        self.dones[new_agent] = False
+        self.infos[new_agent] = {}
+        self.rewards[new_agent] = 0
+        self._cumulative_rewards[new_agent] = 0
 
     def step(self, action):
         if self.dones[self.agent_selection]:
@@ -145,15 +219,16 @@ class from_parallel_wrapper(AECEnv):
             self.dones = copy.copy(dones)
             self.infos = copy.copy(infos)
             self.rewards = copy.copy(rews)
-            self.agents = self.env.agents[:]
+            self._cumulative_rewards = copy.copy(rews)
 
-            self._live_agents = [agent for agent in self.agents if not dones[agent]]
-            # assert self._live_agents == self.agents
-            if len(self._live_agents):
-                self._agent_selector = agent_selector(self._live_agents)
+            env_agent_set = set(self.env.agents)
+
+            self.agents = self.env.agents + [agent for agent in sorted(self._observations.keys()) if agent not in env_agent_set]
+
+            if len(self.env.agents):
+                self._agent_selector = agent_selector(self.env.agents)
                 self.agent_selection = self._agent_selector.reset()
 
-            self._cumulative_rewards = copy.copy(rews)
             self._dones_step_first()
         else:
             if self._agent_selector.is_first():
