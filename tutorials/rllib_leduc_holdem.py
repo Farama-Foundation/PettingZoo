@@ -4,7 +4,7 @@ import ray
 from ray import tune
 from ray.rllib.agents.registry import get_agent_class
 from ray.rllib.env import PettingZooEnv
-from pettingzoo.classic import leduc_holdem_v2
+from pettingzoo.classic import leduc_holdem_v4
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
 from gym.spaces import Box
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # function that outputs the environment you wish to register.
 
     def env_creator():
-        env = leduc_holdem_v2.env()
+        env = leduc_holdem_v4.env()
         return env
 
     num_cpus = 1
