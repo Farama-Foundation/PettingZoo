@@ -83,10 +83,6 @@ for agent in env.agent_iter():
     env.step(action)
     i += 1
     env.render()
-    # if i % (len(env.possible_agents)+1) == 0:
-    #     frame_list.append(PIL.Image.fromarray(env.render(mode='rgb_array')))
-# env.close()
 
 print("rewards:")
 print(reward_sums)
-# frame_list[0].save("out.gif", save_all=True, append_images=frame_list[1:], duration=3, loop=0)
