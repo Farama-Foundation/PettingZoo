@@ -1,6 +1,7 @@
 ---
 actions: "Continuous"
 title: "Waterworld"
+alt_title: "WaterWorld"
 agents: "5"
 manual-control: "No"
 action-shape: "(2,)"
