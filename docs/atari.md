@@ -123,7 +123,7 @@ Various extensions to the Arcade Learning Environment were introduced in:
 </div>
 
 <div class="selection-table-container" markdown="1">
-## Atari Environments
+## Atari
 
 {% include bigtable.html group="atari/" cols=3 %}
 </div>

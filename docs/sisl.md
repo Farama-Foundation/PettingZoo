@@ -29,7 +29,7 @@ If you use these environments, please additionally cite:
 
 </div>
 <div class="selection-table-container" markdown="1">
-## SISL Environments
+## SISL
 
 {% include bigtable.html group="sisl/" cols=3 %}
 </div>

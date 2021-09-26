@@ -1,6 +1,7 @@
 ---
 layout: "docu"
 title: "Space War"
+alt_title: "Spacewar"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"
