@@ -8,6 +8,8 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 
 def get_image(path):
     from os import path as os_path
@@ -75,11 +77,17 @@ class raw_env(AECEnv):
         observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
-        action_mask = np.zeros(7, int)
+        action_mask = np.zeros(7, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 
         return {'observation': observation, 'action_mask': action_mask}
+
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
 
     def _legal_moves(self):
         return [i for i in range(7) if self.board[i] == 0]

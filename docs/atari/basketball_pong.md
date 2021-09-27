@@ -1,6 +1,7 @@
 ---
 layout: "docu"
 title: "Basketball Pong"
+alt_title: "BasketBallPong"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

@@ -7,7 +7,7 @@
         {%- for link in site.data.navigation[contents] -%}
           <li class="nav-item" style="margin-bottom:30%; margin-top:20%">
           {%- if link.url -%}
-            <a class="nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
+            <a class="nav-link api-nav-link js-scroll-trigger" href="{{ link.url }}">{{ link.title }}</a>
           {%- else if link.section -%}
             <a class="nav-link js-scroll-trigger" href="{{ site.baseurl }}/#{{ link.section }}">{{ link.title }}</a>
           {%- else -%}

@@ -22,9 +22,9 @@ def bombardment_test(env, cycles=10000):
             elif isinstance(obs, dict) and 'action_mask' in obs:
                 action = random.choice(np.flatnonzero(obs['action_mask']))
             else:
-                action = env.action_spaces[agent].sample()
+                action = env.action_space(agent).sample()
             next_observe = env.step(action)
-            assert env.observation_spaces[agent].contains(prev_observe), "Agent's observation is outside of its observation space"
+            assert env.observation_space(agent).contains(prev_observe), "Agent's observation is outside of its observation space"
             test_observation(prev_observe, observation_0)
             prev_observe = next_observe
         env.reset()

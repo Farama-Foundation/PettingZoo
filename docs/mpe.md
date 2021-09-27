@@ -86,7 +86,7 @@ Please cite one or both of these if you use these environments in your research.
 
 </div>
 <div class="selection-table-container" markdown="1">
-## MPE Environments
+## MPE
 
 {% include bigtable.html group="mpe/" cols=3 %}
 </div>

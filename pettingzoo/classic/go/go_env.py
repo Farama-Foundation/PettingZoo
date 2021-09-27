@@ -59,6 +59,12 @@ class raw_env(AECEnv):
 
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def _overwrite_go_global_variables(self, board_size: int):
         self._N = board_size
         go.N = self._N
@@ -109,7 +115,7 @@ class raw_env(AECEnv):
         observation = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
-        action_mask = np.zeros((self._N * self._N) + 1, int)
+        action_mask = np.zeros((self._N * self._N) + 1, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 

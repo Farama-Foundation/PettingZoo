@@ -44,7 +44,6 @@ parameterized_envs = [
     (knights_archers_zombies_v7.env, dict(pad_observation=False)),
     (knights_archers_zombies_v7.env, dict(max_cycles=100)),
 
-    (pistonball_v4.env, dict(local_ratio=0.7)),
     (pistonball_v4.env, dict(continuous=True)),
     (pistonball_v4.env, dict(n_pistons=30)),
     (pistonball_v4.env, dict(continuous=False)),
@@ -83,7 +82,6 @@ parameterized_envs = [
     (hanabi_v4.env, dict(random_start_player=False)),
     (hanabi_v4.env, dict(random_start_player=True)),
 
-    # Commented out due to rare segfault
     (tiger_deer_v3.env, dict(minimap_mode=True)),
     (battle_v3.env, dict(minimap_mode=False)),
     (battlefield_v3.env, dict(minimap_mode=False, extra_features=False)),
