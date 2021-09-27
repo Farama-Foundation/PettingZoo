@@ -126,6 +126,12 @@ class Pursuit():
         self.reset()
         assert not kwargs, f"gave arguments {list(kwargs.keys())} that are not valid pursuit arguments"
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def close(self):
         if self.renderOn:
             pygame.event.pump()

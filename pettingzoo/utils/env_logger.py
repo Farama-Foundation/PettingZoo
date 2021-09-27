@@ -33,6 +33,10 @@ class EnvLogger():
         EnvLogger._output = True
 
     @staticmethod
+    def error_possible_agents_attribute_missing(name):
+        raise AttributeError(f'[ERROR]: This environment does not support {name}. This means that either the environment has procedurally generated agents such that this property cannot be well defined (which requires special learning code to handle) or the environment was improperly configured by the developer.')
+
+    @staticmethod
     def warn_action_out_of_bound(action, action_space, backup_policy):
         EnvLogger._generic_warning(f"[WARNING]: Received an action {action} that was outside action space {action_space}. Environment is {backup_policy}")
 

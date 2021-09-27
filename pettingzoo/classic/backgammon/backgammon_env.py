@@ -48,6 +48,12 @@ class raw_env(AECEnv):
             for i in self.agents}
         self.double_roll = 0
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         self.np_random = np.random.RandomState(seed)
 
@@ -85,7 +91,7 @@ class raw_env(AECEnv):
         self._accumulate_rewards()
 
     def observe(self, agent):
-        action_mask = np.zeros(1353, int)
+        action_mask = np.zeros(1353, 'int8')
         observation = np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198, )
         # only current agent can make legal moves
         if agent == self.agent_selection:

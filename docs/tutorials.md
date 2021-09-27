@@ -17,15 +17,7 @@ A very beginner friendly introduction to learning the Pistonball environment usi
 
 An example-based introduction to the PettingZoo API for beginners, that then shows users how to use tabular Q Learning for self play in the Tic Tac Toe environment.
 
-## Learning in PettingZoo Environments with RLlib
-[Draft] [https://docs.google.com/document/d/1URk_30risCDf5XzQ11IX5k_CddXcEAKa-ZfFnja8Ysw/edit?usp=sharing](https://docs.google.com/document/d/1URk_30risCDf5XzQ11IX5k_CddXcEAKa-ZfFnja8Ysw/edit?usp=sharing)
+## Using PettingZoo with RLlib for Multi-Agent Deep Reinforcement Learning
+[https://towardsdatascience.com/using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning-5ff47c677abd](https://towardsdatascience.com/using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning-5ff47c677abd)
 
-An in-depth tutorial on using RLlib for environments with PettingZoo, specifically covering Pistonball and Leduc Hold'em (which covers turn based games with action masking).
-
-This tutorials is a draft that should be complete by the end of September; improved Pistonball code and Ledum Hold'em code that has not made it into the main tutorial are available in
-
-[https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/rllib_pistonball.py](https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/rllib_pistonball.py)
-
-[https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/render_rllib_pistonball.py](https://github.com/PettingZoo-Team/PettingZoo/blob/master/tutorials/render_rllib_pistonball.py)
-
-[https://gist.github.com/benblack769/7ea33e31d31a819d25bf64fb2bf1d430](https://gist.github.com/benblack769/7ea33e31d31a819d25bf64fb2bf1d430)
+A tutorial on learning PettingZoo multi-agent environments with the RLlib reinforcement learning library, intended for those generally new to RLlib but with nontrivial experimence in reinforcement learning

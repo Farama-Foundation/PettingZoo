@@ -40,6 +40,12 @@ class RLCardBase(AECEnv):
                                                     dtype=np.int8)}) for _ in range(self.num_agents)])
         self.action_spaces = self._convert_to_dict([spaces.Discrete(self.env.num_actions) for _ in range(self.num_agents)])
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         config = {'allow_step_back': False,
                   'seed': seed,
@@ -63,7 +69,7 @@ class RLCardBase(AECEnv):
         observation = obs['obs'].astype(self._dtype)
 
         legal_moves = self.next_legal_moves
-        action_mask = np.zeros(self.env.num_actions, int)
+        action_mask = np.zeros(self.env.num_actions, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 
