@@ -1,6 +1,7 @@
 ---
 action-type: "either"
 title: "Pistonball"
+alt_title: "PistonBall"
 actions: Either
 agents: "20"
 manual-control: "Yes"
