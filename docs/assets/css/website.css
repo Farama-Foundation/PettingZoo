@@ -1,6 +1,26 @@
 .code {
     color: #86193F;
 }
+.link-container h1{
+    font-weight: 500 !important;
+    text-align: center;
+}
+.env-title h2{
+    font-size: 2em !important;
+    font-weight: 500 !important;
+}
+.selection-table-container h2 {
+    text-align: center;
+    font-weight: 500 !important;
+    font-size: 2em !important;
+}
+.selection-table-container .card-title {
+    font-weight: 500 !important;
+    font-size: 1em !important;
+}
+.api-nav-link {
+    text-align: center;
+}
 .navbar-text {
     font-family:Ubuntu;
 }
@@ -76,6 +96,10 @@
 }
 
 @media (max-width: 992px) {
+    .env-icon {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
     .env-title {
         display: none;
     }
@@ -268,8 +292,7 @@
 
 .env-icon {
     float: left;
-    height: 1.75rem;  
-    margin-right: .25rem;
+    height: 2rem;
 }
 
 .fixed-footer {
@@ -346,6 +369,10 @@
 @media (min-width: 992px) {
     .home-container {
         margin-left: 19vw;
+    }
+    .env-icon {
+        padding-top: 5px;
+        margin-right: 10px
     }
     .fixed-left {
         position: fixed;

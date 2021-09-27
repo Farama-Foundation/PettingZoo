@@ -1,6 +1,7 @@
 ---
 actions: "Continuous"
 title: "Multiwalker"
+alt_title: "MultiWalker"
 agents: "3"
 manual-control: "No"
 action-shape: "(4,)"

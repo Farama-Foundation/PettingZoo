@@ -1,6 +1,7 @@
 ---
 layout: "docu"
 title: "Wizard of Wor"
+alt_title: "WizardOfWor"
 actions: "Discrete"
 agents: "2"
 manual-control: "No"

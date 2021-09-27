@@ -64,7 +64,7 @@ Please cite this paper if you use these environments in your research.
 
 </div>
 <div class="selection-table-container" markdown="1">
-## MAgent Environments
+## MAgent
 
 {% include bigtable.html group="magent/" cols=3 %}
 </div>

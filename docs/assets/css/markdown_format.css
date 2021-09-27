@@ -674,7 +674,7 @@
 .markdown-body h1,
 .markdown-body h2 {
   padding-bottom: .3em;
-  border-bottom: 1px solid #eaecef;
+  /* border-bottom: 1px solid #eaecef; */
 }
 
 .markdown-body h2 {
@@ -977,5 +977,5 @@
   vertical-align: middle;
 }
 .markdown-body .language-plaintext{
-  color: #38BC9D;
+  color: #86193F;
 }

@@ -53,7 +53,7 @@ nav:
       - title: "Atari"
         url: "/atari"
         subsublinks:
-          - title: "Basketball Pong"
+          - title: "BasketBall Pong"
             alt_title: "Basketball Pong"
             url: "/atari/basketball_pong"
             
@@ -107,7 +107,8 @@ nav:
           - title: "Space Invaders"
             url: "/atari/space_invaders"
             
-          - title: "Space War"
+          - title: "Spacewar"
+            alt_title: "Space War"
             url: "/atari/space_war"
 
           - title: "Surround"
@@ -125,7 +126,8 @@ nav:
           - title: "Warlords"
             url: "/atari/warlords"
 
-          - title: "Wizard of Wor"
+          - title: "Wizard Of Wor"
+            alt_title: "Wizard of Wor"
             url: "/atari/wizard_of_wor"
 
       - title: "Butterfly"
@@ -138,7 +140,7 @@ nav:
             alt_title: "KAZ"
             url: "/butterfly/knights_archers_zombies"
 
-          - title: "Pistonball"
+          - title: "PistonBall"
             alt_title: "Pistonball"
             url: "/butterfly/pistonball"
             
@@ -249,14 +251,14 @@ nav:
       - title: "SISL"
         url: "/sisl"
         subsublinks:
-          - title: "Multiwalker"
+          - title: "MultiWalker"
             alt_title: "Multiwalker"
             url: "/sisl/multiwalker"
 
           - title: "Pursuit"
             url: "/sisl/pursuit"
 
-          - title: "Waterworld"
+          - title: "WaterWorld"
             alt_title: "Waterworld"
             url: "/sisl/waterworld"
 
