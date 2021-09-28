@@ -1,6 +1,9 @@
 .code {
     color: #86193F;
 }
+.bottom-padding {
+    padding-bottom: 50px;
+}
 .link-container h1{
     font-weight: 500 !important;
     text-align: center;
@@ -26,6 +29,7 @@
 }
 .nav-first-item {
     width: 19vw;
+    min-width: 110px
 }
 .nav-link {
     font-family:Ubuntu;
@@ -93,6 +97,7 @@
 .api-navbar {
     padding: 0rem 2rem;
     overflow-y: auto;
+    z-index: 0 !important;
 }
 
 @media (max-width: 992px) {
@@ -114,11 +119,10 @@
         padding-left: 10px;
     }
     .navbar-brand {
+        display: none !important;
         visibility: hidden;
     }
     .navbar-text {
-        position: fixed;
-        top: 1vh;
         left: 40%;
         padding-left: 8px;
     }
@@ -171,6 +175,7 @@
         top: 0;
         width: 10vw;
         height: 10vh;
+        min-height: 52px;
     }
     .navbar-arrow {
         visibility: hidden;
@@ -195,7 +200,7 @@
     list-style: none;  
     position: relative;
     background: #fff;
-    width: 100%;
+    width: 12vw;
     left: 19vw;
 }
 
@@ -244,7 +249,7 @@
     }
     .side-padding {
         padding-left: 20vw;
-        padding-right: 20vw
+        padding-right: 20vw;
     }
 }
 
@@ -286,7 +291,7 @@
     float: left;
     position: absolute;
     top: 15px;
-    max-width: 20px;
+    max-width: 17px;
     max-height: 20px;
 }
 
@@ -309,6 +314,7 @@
     left: 0;
     top: 0;
     width: 100%;
+    min-height: 52px;
     height: 10%;
     z-index: 1030
 }
@@ -335,9 +341,9 @@
 .menu-icon {
     display: flex;
     position:  fixed;
-    top: 2.5vh;
+    top: max(2.5vh, 13px);
     left: 1vw;
-    height: 5vh;
+    height: max(5vh, 26px);
 }
 
 .menu-btn:hover .collapse {
@@ -487,14 +493,14 @@
 
 @media (max-width: 1440px) {
     .navbar-collapse li li li{
-        left: 14.25vw;
+        left: 12vw;
     }
     .copyright {
         visibility: hidden;
     }
 }
 
-@media (max-width: 1615px) {
+@media (max-width: 992px) {
     .env-link {
         visibility: hidden;
     }
@@ -560,6 +566,7 @@
         height: 100vh;
         overflow-y: auto;
         padding: 10px;
+        padding-top: 80px;
         overflow-x: auto;
     }
     
