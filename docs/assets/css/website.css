@@ -4,6 +4,12 @@
 .bottom-padding {
     padding-bottom: 50px;
 }
+.navbar-brand {
+    max-height: 187px;
+}
+.navbar-brand-img {
+    max-height: 187px;
+}
 .link-container h1{
     font-weight: 500 !important;
     text-align: center;
