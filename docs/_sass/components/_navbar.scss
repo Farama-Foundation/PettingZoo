@@ -24,8 +24,9 @@
   .navbar-nav {
     .nav-item {
       .nav-link {
-        font-size: 90%;
-        font-weight: 600;
+        font-size: 80%;
+        min-height: 44.53px;
+        font-weight: 800;
         padding: 0.75em 0;
         letter-spacing: 1px;
         color: #2E003E;
@@ -66,7 +67,7 @@
     .navbar-nav {
       .nav-item {
         .nav-link {
-          padding: .8em 1em;
+          padding: 1em 1em;
           padding-left: 1.5em;
         }
       }
