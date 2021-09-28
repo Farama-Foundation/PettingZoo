@@ -5,7 +5,7 @@
     <a class="navbar-brand" href="{{ site.baseurl }}/#">
         {%- if site.logo -%}
           <!-- <img height="{{ site.logo.height | default: 52 }}" src="{{ site.logo.path }}"/> -->
-          <img src="{{ site.logo.path }}"/>
+          <img class="navbar-brand-img" src="{{ site.logo.path }}"/>
         {%- else -%}
           {{ site.title }}
         {%- endif -%}
