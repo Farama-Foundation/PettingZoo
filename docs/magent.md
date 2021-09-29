@@ -4,6 +4,8 @@ title: MAgent Environments
 ---
 <div class="selection-content" markdown="1">
 
+The unique dependencies for this set of environments can be installed via:
+
 ````bash
 pip install pettingzoo[magent]
 ````
