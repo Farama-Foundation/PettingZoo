@@ -34,7 +34,6 @@ Multi-Agent traffic control environments.
 
 Collection of prisoner's dilemma games as PettingZoo environments
 
-
 ## Ants
 [https://github.com/chorsch/ants](https://github.com/chorsch/ants)
 
@@ -49,6 +48,11 @@ More general n-players form of the Rock Paper Scissors environments in PettingZo
 [https://github.com/mahi97/pz_risk](https://github.com/mahi97/pz_risk)
 
 Implementation of the Risk board game as a PettingZoo environment
+
+## Sumo-RL
+[https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
+
+PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
