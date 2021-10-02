@@ -79,8 +79,10 @@ class parallel_env(ParallelEnv):
     def seed(self, seed=None):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
-    def step(self, action):
+    def step(self, actions):
         done = self.num_steps >= self.max_cycles
+        for agent in self.agents:
+            assert agent in actions
         all_dones = {agent: done for agent in self.agents}
         if not done:
             for i in range(6):
