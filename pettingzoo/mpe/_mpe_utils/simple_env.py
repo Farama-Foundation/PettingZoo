@@ -20,7 +20,7 @@ def make_env(raw_env):
 
 
 class SimpleEnv(AECEnv):
-    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
+    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None, color_entities=None):
         super().__init__()
 
         self.seed()
@@ -32,6 +32,8 @@ class SimpleEnv(AECEnv):
         self.world = world
         self.continuous_actions = continuous_actions
         self.local_ratio = local_ratio
+        self.color_entities = color_entities
+        self.color_geom = []
 
         self.scenario.reset_world(self.world, self.np_random)
 
@@ -218,6 +220,9 @@ class SimpleEnv(AECEnv):
                     geom.set_color(*entity.color[:3], alpha=0.5)
                 else:
                     geom.set_color(*entity.color[:3])
+                    if isinstance(entity, self.color_entities):
+                        self.color_geom.append((entity, geom))
+
                 geom.add_attr(xform)
                 self.render_geoms.append(geom)
                 self.render_geoms_xform.append(xform)
@@ -249,6 +254,9 @@ class SimpleEnv(AECEnv):
             message = (other.name + ' sends ' + word + '   ')
 
             self.viewer.text_lines[idx].set_text(message)
+
+        for entity, geom in self.color_geom:
+            geom.set_color(*entity.color[:3])
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
