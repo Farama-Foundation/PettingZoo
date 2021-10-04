@@ -220,7 +220,7 @@ class SimpleEnv(AECEnv):
                     geom.set_color(*entity.color[:3], alpha=0.5)
                 else:
                     geom.set_color(*entity.color[:3])
-                    if isinstance(entity, self.color_entities):
+                    if self.color_entities is not None and isinstance(entity, self.color_entities):
                         self.color_geom.append((entity, geom))
 
                 geom.add_attr(xform)
