@@ -581,6 +581,7 @@
         height: 100vh;
         overflow-y: auto;
         padding: 10px;
+        padding-top: 40px;
         overflow-x: auto;
         float: left;
     }
