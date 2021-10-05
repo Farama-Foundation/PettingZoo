@@ -1,12 +1,13 @@
-import itertools
 import copy
-import numpy as np
+import itertools
 import warnings
 
-from pettingzoo import AECEnv
 import gym
-from pettingzoo.utils.agent_selector import agent_selector
+import numpy as np
+
+from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
+from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env():
