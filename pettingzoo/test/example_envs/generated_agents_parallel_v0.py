@@ -1,28 +1,33 @@
-import itertools
 import copy
-import numpy as np
+import itertools
 import warnings
 
-from pettingzoo import AECEnv
 import gym
+import numpy as np
+
+from pettingzoo import AECEnv, ParallelEnv
+from pettingzoo.utils import conversions, wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-from pettingzoo.utils import wrappers
 
 
-def env():
-    env = raw_env()
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
+
+
+def raw_env(**kwargs):
+    return conversions.from_parallel(parallel_env(**kwargs))
 
 
 def get_type(agent):
     return agent[: agent.rfind("_")]
 
 
-class raw_env(AECEnv):
+class parallel_env(ParallelEnv):
 
-    metadata = {"render.modes": ["human"], "name": "generated_agents_env_v0"}
+    metadata = {"render.modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100):
         super().__init__()
@@ -60,60 +65,47 @@ class raw_env(AECEnv):
     def add_agent(self, type):
         agent_id = self._agent_counters[type]
         self._agent_counters[type] += 1
-        agent = f"{type}_{agent_id}"
-        self.agents.append(agent)
-        self.dones[agent] = False
-        self.rewards[agent] = 0
-        self._cumulative_rewards[agent] = 0
-        self.infos[agent] = {}
-        return agent
+        agent_name = f"{type}_{agent_id}"
+        self.agents.append(agent_name)
+        return agent_name
 
     def reset(self):
+        self.all_dones = {}
         self.agents = []
-        self.rewards = {}
-        self._cumulative_rewards = {}
-        self.dones = {}
-        self.infos = {}
         self.num_steps = 0
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
-
-        self._agent_selector = agent_selector(self.agents)
-        self.agent_selection = self._agent_selector.reset()
+        return {agent: self.observe(agent) for agent in self.agents}
 
     def seed(self, seed=None):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
-    def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+    def step(self, actions):
+        done = self.num_steps >= self.max_cycles
+        for agent in self.agents:
+            assert agent in actions
+        all_dones = {agent: done for agent in self.agents}
+        if not done:
+            for i in range(6):
+                if self.np_random.random() < 0.1 and len(self.agents) >= 10:
+                    all_dones[self.np_random.choice(self.agents)] = True
 
-        self._clear_rewards()
-        self._cumulative_rewards[self.agent_selection] = 0
-
-        if self._agent_selector.is_last():
-            for i in range(5):
+            for i in range(3):
                 if self.np_random.random() < 0.1:
                     if self.np_random.random() < 0.1:
                         type = self.add_type()
                     else:
                         type = self.np_random.choice(self.types)
 
-                    agent = self.add_agent(type)
-                    if len(self.agents) >= 20:
-                        self.dones[self.np_random.choice(self.agents)] = True
+                    new_agent = self.add_agent(type)
+                    all_dones[new_agent] = False
 
-        if self._agent_selector.is_last():
-            self.num_steps += 1
-
-        if self.num_steps > self.max_cycles:
-            for agent in self.agents:
-                self.dones[agent] = True
-
-        self.rewards[self.np_random.choice(self.agents)] = 1
-
-        self._accumulate_rewards()
-        self._dones_step_first()
+        all_infos = {agent: {} for agent in self.agents}
+        all_rewards = {agent: 0 for agent in self.agents}
+        all_rewards[self.np_random.choice(self.agents)] = 1
+        all_observes = {agent: self.observe(agent) for agent in self.agents}
+        self.agents = [agent for agent in self.agents if not all_dones[agent]]
+        return all_observes, all_rewards, all_dones, all_infos
 
     def render(self, mode="human"):
         print(self.agents)
