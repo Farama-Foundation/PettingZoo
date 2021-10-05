@@ -11,6 +11,8 @@
 
 This environment is part of the [{{category_name}} environments](../{{category_name}}). Please read that page first for general information.
 
+
+{% if page.state-shape and page.average-total-reward %}
 Name | Value
 --- | ---
 Actions | {{ page.actions }}
@@ -23,9 +25,53 @@ Observation Shape | {{ page.observation-shape }}
 Observation Values | {{ page.observation-values }}
 Import | `{{ page.import }}`
 Agents | `{{ page.agent-labels }}`
-{% if page.state-shape %}State Shape | {{ page.state-shape }}{% endif %}
-{% if page.state-values %}State Values | {{ page.state-values }}{% endif %}
-{% if page.average-total-reward %}Average Total Reward | {{ page.average-total-reward }}{% endif %}
+State Shape | {{ page.state-shape }}
+State Values | {{ page.state-values }}
+Average Total Reward | {{ page.average-total-reward }}
+{% elsif page.state-shape %}
+Name | Value
+--- | ---
+Actions | {{ page.actions }}
+Agents | {{ page.agents }}
+Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
+Manual Control | {{ page.manual-control }}
+Action Shape | {{ page.action-shape }}
+Action Values | {{ page.action-values }}
+Observation Shape | {{ page.observation-shape }}
+Observation Values | {{ page.observation-values }}
+Import | `{{ page.import }}`
+Agents | `{{ page.agent-labels }}`
+State Shape | {{ page.state-shape }}
+State Values | {{ page.state-values }}
+{% elsif page.average-total-reward %}
+Name | Value
+--- | ---
+Actions | {{ page.actions }}
+Agents | {{ page.agents }}
+Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
+Manual Control | {{ page.manual-control }}
+Action Shape | {{ page.action-shape }}
+Action Values | {{ page.action-values }}
+Observation Shape | {{ page.observation-shape }}
+Observation Values | {{ page.observation-values }}
+Import | `{{ page.import }}`
+Agents | `{{ page.agent-labels }}`
+Average Total Reward | {{ page.average-total-reward }}
+{% else %}
+Name | Value
+--- | ---
+Actions | {{ page.actions }}
+Agents | {{ page.agents }}
+Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
+Manual Control | {{ page.manual-control }}
+Action Shape | {{ page.action-shape }}
+Action Values | {{ page.action-values }}
+Observation Shape | {{ page.observation-shape }}
+Observation Values | {{ page.observation-values }}
+Import | `{{ page.import }}`
+Agents | `{{ page.agent-labels }}`
+{% endif %}
+
 
 #### Agent Environment Cycle
 
