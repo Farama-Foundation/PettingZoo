@@ -16,6 +16,7 @@ from .rlcard_base import RLCardBase
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
+
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
