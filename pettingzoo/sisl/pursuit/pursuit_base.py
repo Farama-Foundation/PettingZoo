@@ -137,6 +137,7 @@ class Pursuit():
             pygame.event.pump()
             pygame.display.quit()
             pygame.quit()
+            self.renderOn = False
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #
