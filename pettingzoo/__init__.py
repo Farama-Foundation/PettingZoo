@@ -11,4 +11,4 @@ if sys.platform.startswith('linux'):
     os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 
-__version__ = "1.11.2"
+__version__ = "1.12.0"
