@@ -76,9 +76,9 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `close()`: Closes the rendering window.
 
-### Optional API components
+### Optional API Components
 
-While not required by the base API, many downstream wrappers and utilities may depend on the following attributes, and should be added to new environments when possible.
+While not required by the base API, most downstream wrappers and utilities depend on the following attributes and methods, and they should be added to new environments except in special circumstances where adding one or more is not possible.
 
 `possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
 
