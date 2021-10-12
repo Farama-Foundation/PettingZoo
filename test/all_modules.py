@@ -31,7 +31,7 @@ from pettingzoo.classic import tictactoe_v3
 from pettingzoo.classic import leduc_holdem_v4
 from pettingzoo.classic import mahjong_v4
 from pettingzoo.classic import texas_holdem_v4
-from pettingzoo.classic import texas_holdem_no_limit_v5
+from pettingzoo.classic import texas_holdem_no_limit_v6
 from pettingzoo.classic import uno_v4
 from pettingzoo.classic import dou_dizhu_v4
 from pettingzoo.classic import gin_rummy_v4
@@ -111,7 +111,7 @@ all_environments = {
     "classic/leduc_holdem_v4": leduc_holdem_v4,
     "classic/mahjong_v4": mahjong_v4,
     "classic/texas_holdem_v4": texas_holdem_v4,
-    "classic/texas_holdem_no_limit_v5": texas_holdem_no_limit_v5,
+    "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,
     "classic/uno_v4": uno_v4,
     "classic/dou_dizhu_v4": dou_dizhu_v4,
     "classic/gin_rummy_v4": gin_rummy_v4,
