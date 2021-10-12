@@ -45,8 +45,8 @@ class raw_env(RLCardBase):
     def __init__(self, num_players=2):
         super().__init__("no-limit-holdem", num_players, (54,))
         self.observation_spaces = self._convert_to_dict([spaces.Dict(
-            {'observation': spaces.Box(low=np.zeros(54, ), high=np.append(np.ones(52, ), [100, 100]), dtype=np.float32),
-             'action_mask': spaces.Box(low=0, high=1, shape=(6,), dtype=np.int8)}) for _ in range(self.num_agents)])
+            {'observation': spaces.Box(low=np.zeros(54, ), high=np.append(np.ones(52, ), [100, 100]), dtype=np.float64),
+             'action_mask': spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8)}) for _ in range(self.num_agents)])
 
     def render(self, mode='human'):
 
