@@ -3,11 +3,11 @@ actions: "Discrete"
 title: "Texas Hold'em No Limit"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(6)"
-action-values: "Discrete(6)"
+action-shape: "Discrete(5)"
+action-values: "Discrete(5)"
 observation-shape: "(54,)"
 observation-values: "[0, 100]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v6"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -26,14 +26,10 @@ Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit o
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
-
-Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
-
 ### Arguments
 
 ```
-texas_holdem_no_limit_v5.env(num_players=2)
+texas_holdem_no_limit_v6.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
@@ -68,11 +64,10 @@ The legal moves available to the current agent are found in the `action_mask` el
 | Action ID   |     Action         |
 | ----------- | :----------------- |
 | 0           | Fold               |
-| 1           | Check              |
-| 2           | Call               |
-| 3           | Raise Half Pot     |
-| 4           | Raise Full Pot     |
-| 5           | All In             |
+| 1           | Check & Call       |
+| 2           | Raise Half Pot     |
+| 3           | Raise Full Pot     |
+| 4           | All In             |
 
 ### Rewards
 
@@ -82,6 +77,7 @@ The legal moves available to the current agent are found in the `action_mask` el
 
 ### Version History
 
+* v6: Upgrade to RLCard 1.0.5, fixes to the action space as ACPC (1.12.0)
 * v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
