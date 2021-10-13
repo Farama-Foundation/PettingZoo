@@ -32,9 +32,9 @@ parameterized_envs = [
     (texas_holdem_v4.env, dict(num_players=3)),
     (texas_holdem_v4.env, dict(num_players=4)),
 
-    (texas_holdem_no_limit_v5.env, dict(num_players=2)),
-    (texas_holdem_no_limit_v5.env, dict(num_players=3)),
-    (texas_holdem_no_limit_v5.env, dict(num_players=4)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=2)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=3)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=4)),
 
     (knights_archers_zombies_v7.env, dict(spawn_rate=50)),
     (knights_archers_zombies_v7.env, dict(num_knights=4, num_archers=5)),
