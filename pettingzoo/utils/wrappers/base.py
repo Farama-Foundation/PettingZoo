@@ -48,7 +48,6 @@ class BaseWrapper(AECEnv):
 
     @property
     def observation_spaces(self):
-        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
         try:
             return {agent: self.observation_space(agent) for agent in self._observation_spaces}
         except AttributeError:
@@ -56,7 +55,6 @@ class BaseWrapper(AECEnv):
 
     @property
     def action_spaces(self):
-        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
         try:
             return {agent: self.action_space(agent) for agent in self._action_spaces}
         except AttributeError:
