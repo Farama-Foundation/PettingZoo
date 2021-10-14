@@ -152,7 +152,7 @@ for step in range(max_cycles):
 
 ## SuperSuit
 
-[SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
+[SuperSuit](https://github.com/FaramaFoundation/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
 
 ## Utils

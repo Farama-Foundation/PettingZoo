@@ -43,13 +43,11 @@ The MAgent environments were originally created for the following work:
 ```
 @article{DBLP:journals/corr/abs-1712-00600,
   author    = {Lianmin Zheng and Jiacheng Yang and Han Cai and Weinan Zhang and Jun Wang and Yong Yu},
-  title     = {MAgent: {A} Many-Agent Reinforcement Learning Platform for Artificial
-               Collective Intelligence},
+  title     = {MAgent: {A} Many-Agent Reinforcement Learning Platform for Artificial Collective Intelligence},
   journal   = {CoRR},
   volume    = {abs/1712.00600},
   year      = {2017},
   url       = {http://arxiv.org/abs/1712.00600},
-  archivePrefix = {arXiv},
   eprint    = {1712.00600},
 }
 ```
