@@ -82,7 +82,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             final = start / "ROM" / game / f"{game}.bin"
 
         if not final.exists():
-            raise OSError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/FaramaFoundation/AutoROM) "
+            raise OSError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/Farama-Foundation/AutoROM) "
                           "or specify and double-check the path to your Atari rom using the `rom_path` argument.")
 
         self.rom_path = str(final)
