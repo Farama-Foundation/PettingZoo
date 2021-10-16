@@ -1,9 +1,9 @@
-gym>=0.18.0
+gym>=0.21.0
 pygame==2.0.0
 numpy>=1.18.0
 pymunk==6.2.0
 box2d-py==2.3.5
-python-chess==0.31.4
+python-chess==1.7.0
 rlcard==1.0.5
 pynput
 hanabi_learning_environment==0.0.1
