@@ -12,7 +12,7 @@ header:
         icon: /assets/img/environment_icon.svg
         iconsize: 80%
       - button: GitHub
-        buttonlink: https://github.com/FaramaFoundation/PettingZoo
+        buttonlink: https://github.com/Farama-Foundation/PettingZoo
         icon: /assets/img/github_icon.svg
         iconsize: 80%
       - button: Dev Docs
@@ -102,7 +102,7 @@ team:
         imglink: documentation
       - name: "Github"
         image: /assets/img/github_icon.svg
-        imglink: https://github.com/FaramaFoundation/PettingZoo
+        imglink: https://github.com/Farama-Foundation/PettingZoo
       - name: "Environments"
         image: /assets/img/environment_icon.svg
         imglink: atari
