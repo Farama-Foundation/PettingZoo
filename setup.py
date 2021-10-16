@@ -42,7 +42,7 @@ setup(
     author='PettingZoo Team',
     author_email="justinkterry@gmail.com",
     description="Gym for multi-agent reinforcement learning",
-    url='https://github.com/FaramaFoundation/PettingZoo',
+    url='https://github.com/Farama-Foundation/PettingZoo',
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
