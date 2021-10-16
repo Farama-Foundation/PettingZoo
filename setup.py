@@ -24,7 +24,7 @@ def get_version():
 
 extras = {
     "atari": ["multi_agent_ale_py==0.1.11", "pygame==2.0.0"],
-    "classic": ["python-chess==0.31.4", "rlcard==1.0.4", "pygame==2.0.0", "hanabi_learning_environment==0.0.1"],
+    "classic": ["chess==1.7.0", "rlcard==1.0.4", "pygame==2.0.0", "hanabi_learning_environment==0.0.1"],
     "butterfly": ["pygame==2.0.0", "pymunk==6.2.0"],
     "magent": ["magent==0.1.14"],
     "mpe": ["pyglet>=1.4.0"],
@@ -33,7 +33,7 @@ extras = {
     "tests": ["pynput"],
 }
 
-extras["all"] = extras["atari"]+extras["classic"]+extras["butterfly"]+extras["magent"]+extras["mpe"]+extras["sisl"]+extras["other"]
+extras["all"] = extras["atari"] + extras["classic"] + extras["butterfly"] + extras["magent"] + extras["mpe"] + extras["sisl"] + extras["other"]
 
 
 setup(
@@ -46,17 +46,16 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
-    python_requires=">=3.6, <3.10",
+    python_requires=">=3.7, <3.10",
     packages=["pettingzoo"] + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
     install_requires=[
         "numpy>=1.18.0",
-        "gym>=0.18.0"
+        "gym>=0.21.0"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
