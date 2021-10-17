@@ -1,5 +1,6 @@
 from gym.spaces import Discrete
 import numpy as np
+import functools
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils import wrappers
@@ -65,11 +66,16 @@ class raw_env(AECEnv):
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {agent: Discrete(4) for agent in self.possible_agents}
 
+    # this cache ensures that same space object is returned for the same agent
+    # allows action space seeding to work as expected
+    @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        return self._observation_spaces[agent]
+        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        return Discrete(4)
 
+    @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
-        return self._action_spaces[agent]
+        return Discrete(3)
 
     def render(self, mode="human"):
         '''
