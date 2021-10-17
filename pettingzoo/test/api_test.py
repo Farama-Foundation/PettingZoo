@@ -51,6 +51,8 @@ def test_observation_action_spaces(env, agent_0):
     for agent in env.agents:
         assert isinstance(env.observation_space(agent), gym.spaces.Space), "Observation space for each agent must extend gym.spaces.Space"
         assert isinstance(env.action_space(agent), gym.spaces.Space), "Agent space for each agent must extend gym.spaces.Space"
+        assert env.observation_space(agent) is env.observation_space(agent), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
+        assert env.action_space(agent) is env.action_space(agent), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
         if not (isinstance(env.observation_space(agent), gym.spaces.Box) or isinstance(env.observation_space(agent), gym.spaces.Discrete)):
             warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_space(agent), gym.spaces.Box) or isinstance(env.action_space(agent), gym.spaces.Discrete)):
