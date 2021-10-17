@@ -272,6 +272,7 @@ class ParallelEnv:
 
         Default implementation is to return the observation_spaces dict
         '''
+        raise AssertionError()
         warnings.warn("Yfour environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.")
         return self.observation_spaces[agent]
 
