@@ -40,7 +40,7 @@ def calc_hash(new_env, rand_issue, max_env_iters):
 def seed_action_spaces(env):
     if hasattr(env, 'possible_agents'):
         for i, agent in enumerate(env.possible_agents):
-            env.action_space.seed(42 + i)
+            env.action_space(agent).seed(42 + i)
 
 
 def check_environment_deterministic(env1, env2, num_cycles):
