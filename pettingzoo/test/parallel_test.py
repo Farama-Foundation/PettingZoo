@@ -9,10 +9,6 @@ from .api_test import missing_attr_warning
 def parallel_api_test(par_env, num_cycles=10):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
-    if not hasattr(par_env, 'observation_spaces'):
-        warnings.warn(missing_attr_warning.format(name='observation_spaces'))
-    if not hasattr(par_env, 'action_spaces'):
-        warnings.warn(missing_attr_warning.format(name='action_spaces'))
 
     assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, from_parallel_wrapper)

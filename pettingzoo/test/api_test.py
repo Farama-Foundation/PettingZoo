@@ -48,9 +48,6 @@ def test_observation(observation, observation_0):
 
 
 def test_observation_action_spaces(env, agent_0):
-    assert not hasattr(env, 'action_spaces') or isinstance(env.action_spaces, dict), "action_spaces must be a dict"
-    assert not hasattr(env, 'observation_spaces') or isinstance(env.observation_spaces, dict), "if observation_spaces exists, it must be a dict"
-
     for agent in env.agents:
         assert isinstance(env.observation_space(agent), gym.spaces.Space), "Observation space for each agent must extend gym.spaces.Space"
         assert isinstance(env.action_space(agent), gym.spaces.Space), "Agent space for each agent must extend gym.spaces.Space"
@@ -235,10 +232,6 @@ def api_test(env, num_cycles=10, verbose_progress=False):
     print("Starting API test")
     if not hasattr(env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
-    if not hasattr(env, 'observation_spaces'):
-        warnings.warn(missing_attr_warning.format(name='observation_spaces'))
-    if not hasattr(env, 'action_spaces'):
-        warnings.warn(missing_attr_warning.format(name='action_spaces'))
 
     env.reset()
 
