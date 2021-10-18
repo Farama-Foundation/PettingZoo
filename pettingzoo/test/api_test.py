@@ -48,12 +48,11 @@ def test_observation(observation, observation_0):
 
 
 def test_observation_action_spaces(env, agent_0):
-    assert not hasattr(env, 'action_spaces') or isinstance(env.action_spaces, dict), "action_spaces must be a dict"
-    assert not hasattr(env, 'observation_spaces') or isinstance(env.observation_spaces, dict), "if observation_spaces exists, it must be a dict"
-
     for agent in env.agents:
         assert isinstance(env.observation_space(agent), gym.spaces.Space), "Observation space for each agent must extend gym.spaces.Space"
         assert isinstance(env.action_space(agent), gym.spaces.Space), "Agent space for each agent must extend gym.spaces.Space"
+        assert env.observation_space(agent) is env.observation_space(agent), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
+        assert env.action_space(agent) is env.action_space(agent), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
         if not (isinstance(env.observation_space(agent), gym.spaces.Box) or isinstance(env.observation_space(agent), gym.spaces.Discrete)):
             warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_space(agent), gym.spaces.Box) or isinstance(env.action_space(agent), gym.spaces.Discrete)):
@@ -235,10 +234,6 @@ def api_test(env, num_cycles=10, verbose_progress=False):
     print("Starting API test")
     if not hasattr(env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
-    if not hasattr(env, 'observation_spaces'):
-        warnings.warn(missing_attr_warning.format(name='observation_spaces'))
-    if not hasattr(env, 'action_spaces'):
-        warnings.warn(missing_attr_warning.format(name='action_spaces'))
 
     env.reset()
 
