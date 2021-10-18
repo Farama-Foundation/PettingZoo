@@ -24,3 +24,7 @@ jobs:
       run: |
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
+    - name: 13 lines test
+      run: |
+        pip install stable_baselines3
+        sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
