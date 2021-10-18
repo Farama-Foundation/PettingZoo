@@ -27,7 +27,7 @@ jobs:
         AutoROM -v
     - name: Full Python tests
       run: |
-        pytest ./test/pytest_runner.py
+        xvfb-run -s "-screen 0 1024x768x24" pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
         pytest ./test/variable_env_test.py
     - name: Bandit, Codespell, and Flake 8 tests
