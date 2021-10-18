@@ -54,6 +54,11 @@ Implementation of the Risk board game as a PettingZoo environment
 
 PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 
+## Sequential Social Delima Games
+[https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197](https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197)
+
+Set of two environments with numerous multi-agent equilibria popular with researchers
+
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
