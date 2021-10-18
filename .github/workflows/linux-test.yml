@@ -25,6 +25,11 @@ jobs:
       run: |
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
+    - name: Full Python tests
+      run: |
+        xvfb-run -s "-screen 0 1024x768x24" pytest ./test/pytest_runner.py
+        pytest ./test/all_parameter_combs.py
+        pytest ./test/variable_env_test.py
     - name: Bandit, Codespell, and Flake 8 tests
       run: |
         bash ./check_style.sh
