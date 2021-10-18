@@ -9,10 +9,6 @@ from .api_test import missing_attr_warning
 def parallel_api_test(par_env, num_cycles=10):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
-    if not hasattr(par_env, 'observation_spaces'):
-        warnings.warn(missing_attr_warning.format(name='observation_spaces'))
-    if not hasattr(par_env, 'action_spaces'):
-        warnings.warn(missing_attr_warning.format(name='action_spaces'))
 
     assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, from_parallel_wrapper)
@@ -41,6 +37,10 @@ def parallel_api_test(par_env, num_cycles=10):
             assert set(done.keys()) == (set(live_agents)), "agents should not be given a done if they were done last turn"
             assert set(info.keys()) == (set(live_agents)), "agents should not be given a info if they were done last turn"
             assert not hasattr(par_env, 'possible_agents') or set(par_env.agents).issubset(set(par_env.possible_agents)), "possible agents should include all agents always if it exists"
+            for agent in par_env.agents:
+                assert par_env.observation_space(agent) is par_env.observation_space(agent), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
+                assert par_env.action_space(agent) is par_env.action_space(agent), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
+
             for agent, d in done.items():
                 if d:
                     live_agents.remove(agent)
