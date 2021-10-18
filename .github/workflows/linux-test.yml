@@ -40,6 +40,7 @@ jobs:
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
         pytest ./test/variable_env_test.py
+        pytest ./test/doc_examples_test.py
     - name: 13 lines test
       run: |
         pip install stable_baselines3 supersuit
