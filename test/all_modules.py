@@ -23,7 +23,7 @@ from pettingzoo.atari import volleyball_pong_v2
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
-from pettingzoo.classic import chess_v4
+from pettingzoo.classic import chess_v5
 from pettingzoo.classic import checkers_v3
 from pettingzoo.classic import rps_v2
 from pettingzoo.classic import connect_four_v3
@@ -103,7 +103,7 @@ all_environments = {
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
-    "classic/chess_v4": chess_v4,
+    "classic/chess_v5": chess_v5,
     "classic/checkers_v3": checkers_v3,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,

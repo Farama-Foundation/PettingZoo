@@ -9,7 +9,7 @@ action-values: "Discrete(4672)"
 observation-shape: "(8,8,20)"
 observation-values: "[0,1]"
 num-states: "?"
-import: "pettingzoo.classic.chess_v4"
+import: "pettingzoo.classic.chess_v5"
 agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
