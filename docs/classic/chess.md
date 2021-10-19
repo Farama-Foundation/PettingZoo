@@ -77,6 +77,7 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 
 ### Version History
 
+* v5: Changed python-chess version to version 1.7 (1.13.1)
 * v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
 * v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
