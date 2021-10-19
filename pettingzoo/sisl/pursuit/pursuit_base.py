@@ -214,16 +214,15 @@ class Pursuit():
 
             self.latest_reward_state += self.catch_reward * pursuers_who_remove
             self.latest_reward_state += self.urgency_reward
+            self.frames = self.frames + 1
 
         self.model_state[0] = self.map_matrix
         self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
-        if is_last:
-            global_val = self.latest_reward_state.mean()
-            local_val = self.latest_reward_state
-            self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
-            self.frames = self.frames + 1
+        global_val = self.latest_reward_state.mean()
+        local_val = self.latest_reward_state
+        self.latest_reward_state = self.local_ratio * local_val + (1 - self.local_ratio) * global_val
 
     def draw_model_state(self):
         # -1 is building pixel flag
