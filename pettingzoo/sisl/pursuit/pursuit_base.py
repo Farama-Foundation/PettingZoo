@@ -199,12 +199,16 @@ class Pursuit():
         opponent_layer = self.evader_layer
         opponent_controller = self.evader_controller
 
-        # actual action application
+        # actual action application, change the pursuer layer
         agent_layer.move_agent(agent_id, action)
+
+        # Update only the pursuer layer
+        self.model_state[1] = self.pursuer_layer.get_state_matrix()
 
         self.latest_reward_state = self.reward() / self.num_agents
 
         if is_last:
+            # Possibly change the evader layer
             ev_remove, pr_remove, pursuers_who_remove = self.remove_agents()
 
             for i in range(opponent_layer.n_agents()):
@@ -216,8 +220,8 @@ class Pursuit():
             self.latest_reward_state += self.urgency_reward
             self.frames = self.frames + 1
 
+        # Update the remaining layers
         self.model_state[0] = self.map_matrix
-        self.model_state[1] = self.pursuer_layer.get_state_matrix()
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
         global_val = self.latest_reward_state.mean()
