@@ -63,3 +63,7 @@ Set of two environments with numerous multi-agent equilibria popular with resear
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
 Planned by maintainer, not yet done
+
+## CookingZoo
+[https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+Maintained fork of too many cooks game with PettingZoo API support
