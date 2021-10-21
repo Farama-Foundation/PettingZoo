@@ -2,7 +2,7 @@
     <img src="PettingZoo_Text.png" width="500px"/>
 </p>
 
-PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of [Gym](https://github.com/openai/gym) library.
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gym](https://github.com/openai/gym).
 
 Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
