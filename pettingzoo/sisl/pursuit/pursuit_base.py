@@ -1,5 +1,6 @@
 import glob
 import os
+from collections import defaultdict
 from os.path import join
 from subprocess import call
 
@@ -268,6 +269,54 @@ class Pursuit():
 
             pygame.draw.circle(self.screen, col, center, int(self.pixel_scale / 3))
 
+    def draw_agent_counts(self):
+        font = pygame.font.SysFont('Comic Sans MS', self.pixel_scale * 2 // 3)
+
+        agent_positions = defaultdict(int)
+        evader_positions = defaultdict(int)
+
+        for i in range(self.evader_layer.n_agents()):
+            x, y = self.evader_layer.get_position(i)
+            evader_positions[(x, y)] += 1
+
+        for i in range(self.pursuer_layer.n_agents()):
+            x, y = self.pursuer_layer.get_position(i)
+            agent_positions[(x, y)] += 1
+
+        for (x, y) in evader_positions:
+            (pos_x, pos_y) = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                              int(self.pixel_scale * y + self.pixel_scale / 2))
+
+            agent_count = evader_positions[(x, y)]
+            count_text: str
+            if agent_count < 1:
+                count_text = ""
+            elif agent_count < 10:
+                count_text = str(agent_count)
+            else:
+                count_text = "+"
+
+            text = font.render(count_text, False, (0, 255, 255))
+
+            self.screen.blit(text, (pos_x, pos_y - self.pixel_scale // 2))
+
+        for (x, y) in agent_positions:
+            (pos_x, pos_y) = (int(self.pixel_scale * x + self.pixel_scale / 2),
+                              int(self.pixel_scale * y + self.pixel_scale / 2))
+
+            agent_count = agent_positions[(x, y)]
+            count_text: str
+            if agent_count < 1:
+                count_text = ""
+            elif agent_count < 10:
+                count_text = str(agent_count)
+            else:
+                count_text = "+"
+
+            text = font.render(count_text, False, (255, 255, 0))
+
+            self.screen.blit(text, (pos_x - self.pixel_scale // 3, pos_y - self.pixel_scale // 2))
+
     def render(self, mode="human"):
         if not self.renderOn:
             if mode == "human":
@@ -284,6 +333,7 @@ class Pursuit():
 
         self.draw_evaders()
         self.draw_pursuers()
+        self.draw_agent_counts()
 
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
@@ -413,7 +463,7 @@ class Pursuit():
             x, y = self.evader_layer.get_position(ai)
             if self.surround:
                 pos_that_catch = self.surround_mask + \
-                    self.evader_layer.get_position(ai)
+                                 self.evader_layer.get_position(ai)
                 truths = np.array(
                     [np.equal([xi, yi], pos_that_catch).all(axis=1) for xi, yi in zip(xpur, ypur)])
                 if np.sum(truths.any(axis=0)) == self.need_to_surround(x, y):
