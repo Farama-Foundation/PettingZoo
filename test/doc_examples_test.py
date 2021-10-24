@@ -7,7 +7,6 @@ import aec_rps
 import parallel_rps
 
 
-
 def test_rps_aec_example():
     api_test(aec_rps.raw_env(), 100)
     api_test(aec_rps.env(), 100)
