@@ -3,6 +3,7 @@ import os
 from collections import defaultdict
 from os.path import join
 from subprocess import call
+from typing import Optional
 
 import numpy as np
 import pygame
@@ -11,19 +12,35 @@ from gym.utils import seeding
 
 from .utils import agent_utils, two_d_maps
 from .utils.agent_layer import AgentLayer
-from .utils.controllers import RandomPolicy, SingleActionPolicy
+from .utils.controllers import RandomPolicy, SingleActionPolicy, PursuitPolicy
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
-class Pursuit():
+class Pursuit:
 
-    def __init__(self, **kwargs):
+    def __init__(self, x_size: int = 16,
+                 y_size: int = 16,
+                 max_cycles: int = 500,
+                 shared_reward: bool = True,
+                 n_evaders: int = 30,
+                 n_pursuers: int = 8,
+                 obs_range: int = 7,
+                 n_catch: int = 2,
+                 freeze_evaders: bool = False,
+                 evader_controller: Optional[PursuitPolicy] = None,
+                 pursuer_controller: Optional[PursuitPolicy] = None,
+                 tag_reward: float = 0.01,
+                 catch_reward: float = 5.0,
+                 urgency_reward: float = -0.1,
+                 surround: bool = True,
+                 constraint_windos: float = 1.0
+                 ):
         """
-        In evade purusit a set of pursuers must 'tag' a set of evaders
+        In evade pursuit a set of pursuers must 'tag' a set of evaders
         Required arguments:
             x_size, y_size: World size
-            local_ratio: proportion of reward allocated locally vs distributed among all agents
+            shared_reward: whether the rewards should be shared between all agents
             n_evaders
             n_pursuers
             obs_range: how far each agent can see
@@ -42,18 +59,17 @@ class Pursuit():
         constraint_window: window in which agents can randomly spawn
         """
 
-        self.x_size = kwargs.pop('x_size', 16)
-        self.y_size = kwargs.pop('y_size', 16)
-        x_size = self.x_size
-        y_size = self.y_size
+        self.x_size = x_size
+        self.y_size = y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
-        self.max_cycles = kwargs.pop("max_cycles", 500)
+        self.max_cycles = max_cycles
         self.seed()
 
-        self.local_ratio = kwargs.pop('local_ratio', 1.0)
+        self.shared_reward = shared_reward
+        self.local_ratio = 1.0 - float(self.shared_reward)
 
-        self.n_evaders = kwargs.pop('n_evaders', 30)
-        self.n_pursuers = kwargs.pop('n_pursuers', 8)
+        self.n_evaders = n_evaders
+        self.n_pursuers = n_pursuers
         self.num_agents = self.n_pursuers
 
         self.latest_reward_state = [0 for _ in range(self.num_agents)]
@@ -61,7 +77,7 @@ class Pursuit():
         self.latest_obs = [None for _ in range(self.num_agents)]
 
         # can see 7 grids around them by default
-        self.obs_range = kwargs.pop('obs_range', 7)
+        self.obs_range = obs_range
         # assert self.obs_range % 2 != 0, "obs_range should be odd"
         self.obs_offset = int((self.obs_range - 1) / 2)
         self.pursuers = agent_utils.create_agents(
@@ -72,31 +88,27 @@ class Pursuit():
         self.pursuer_layer = AgentLayer(x_size, y_size, self.pursuers)
         self.evader_layer = AgentLayer(x_size, y_size, self.evaders)
 
-        self.n_catch = kwargs.pop('n_catch', 2)
+        self.n_catch = n_catch
 
         n_act_purs = self.pursuer_layer.get_nactions(0)
         n_act_ev = self.evader_layer.get_nactions(0)
 
-        self.freeze_evaders = kwargs.pop('freeze_evaders', False)
+        self.freeze_evaders = freeze_evaders
 
         if self.freeze_evaders:
-            self.evader_controller = kwargs.pop(
-                'evader_controller', SingleActionPolicy(4))
-            self.pursuer_controller = kwargs.pop(
-                'pursuer_controller', SingleActionPolicy(4))
+            self.evader_controller = SingleActionPolicy(4) if evader_controller is None else evader_controller
+            self.pursuer_controller = SingleActionPolicy(4) if pursuer_controller is None else pursuer_controller
         else:
-            self.evader_controller = kwargs.pop(
-                'evader_controller', RandomPolicy(n_act_purs, self.np_random))
-            self.pursuer_controller = kwargs.pop(
-                'pursuer_controller', RandomPolicy(n_act_ev, self.np_random))
+            self.evader_controller = RandomPolicy(n_act_purs, self.np_random) if evader_controller is None else evader_controller
+            self.pursuer_controller = RandomPolicy(n_act_ev, self.np_random) if pursuer_controller is None else pursuer_controller
 
         self.current_agent_layer = np.zeros((x_size, y_size), dtype=np.int32)
 
-        self.tag_reward = kwargs.pop('tag_reward', 0.01)
+        self.tag_reward = tag_reward
 
-        self.catch_reward = kwargs.pop('catch_reward', 5.0)
+        self.catch_reward = catch_reward
 
-        self.urgency_reward = kwargs.pop('urgency_reward', 0.0)
+        self.urgency_reward = urgency_reward
 
         self.ally_actions = np.zeros(n_act_purs, dtype=np.int32)
         self.opponent_actions = np.zeros(n_act_ev, dtype=np.int32)
@@ -112,9 +124,9 @@ class Pursuit():
 
         self.evaders_gone = np.array([False for i in range(self.n_evaders)])
 
-        self.surround = kwargs.pop('surround', True)
+        self.surround = surround
 
-        self.constraint_window = kwargs.pop('constraint_window', 1.0)
+        self.constraint_window = constraint_windos
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
 
@@ -125,7 +137,6 @@ class Pursuit():
 
         self.frames = 0
         self.reset()
-        assert not kwargs, f"gave arguments {list(kwargs.keys())} that are not valid pursuit arguments"
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -341,32 +352,6 @@ class Pursuit():
         if mode == "human":
             pygame.display.flip()
         return np.transpose(new_observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
-
-    def animate(self, act_fn, nsteps, file_name, rate=1.5, verbose=False):
-        """
-            Save an animation to an mp4 file.
-        """
-        # run sim loop
-        o = self.reset()
-        file_path = "/".join(file_name.split("/")[0:-1])
-        temp_name = join(file_path, "temp_0.png")
-        # generate .pngs
-        self.save_image(temp_name)
-        removed = 0
-        for i in range(nsteps):
-            a = act_fn(o)
-            o, r, done, info = self.step(a)
-            temp_name = join(file_path, "temp_" + str(i + 1) + ".png")
-            self.save_image(temp_name)
-            removed += info['removed']
-            if done:
-                break
-        # use ffmpeg to create .pngs to .mp4 movie
-        ffmpeg_cmd = "ffmpeg -framerate " + str(rate) + " -i " + join(
-            file_path, "temp_%d.png") + " -c:v libx264 -pix_fmt yuv420p " + file_name
-        call(ffmpeg_cmd.split())
-        # clean-up by removing .pngs
-        map(os.remove, glob.glob(join(file_path, "temp_*.png")))
 
     def save_image(self, file_name):
         self.render()

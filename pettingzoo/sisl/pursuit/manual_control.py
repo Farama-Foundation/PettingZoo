@@ -4,11 +4,12 @@ import time
 import numpy as np
 import pygame
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 
 def manual_control(**kwargs):
     from .pursuit import env as _env
+
     xs = 5
     ys = 5
     obs_range = 3
@@ -18,8 +19,9 @@ def manual_control(**kwargs):
     clock = pygame.time.Clock()
 
     # obs_range should be odd 3, 5, 7, etc
-    env = _env(n_pursuers=n_pursuers, n_evaders=n_evaders,
-               xs=xs, ys=ys, obs_range=obs_range)
+    env = _env(
+        n_pursuers=n_pursuers, n_evaders=n_evaders, xs=xs, ys=ys, obs_range=obs_range
+    )
 
     env.reset()
 
