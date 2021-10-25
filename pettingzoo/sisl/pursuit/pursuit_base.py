@@ -34,7 +34,7 @@ class Pursuit:
                  catch_reward: float = 5.0,
                  urgency_reward: float = -0.1,
                  surround: bool = True,
-                 constraint_windos: float = 1.0
+                 constraint_window: float = 1.0
                  ):
         """
         In evade pursuit a set of pursuers must 'tag' a set of evaders
@@ -126,7 +126,7 @@ class Pursuit:
 
         self.surround = surround
 
-        self.constraint_window = constraint_windos
+        self.constraint_window = constraint_window
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
 
