@@ -1,5 +1,4 @@
 class Agent:
-
     def __new__(cls, *args, **kwargs):
         agent = super().__new__(cls)
         return agent
@@ -13,4 +12,4 @@ class Agent:
         raise NotImplementedError()
 
     def __str__(self):
-        return f'<{type(self).__name__} instance>'
+        return f"<{type(self).__name__} instance>"
