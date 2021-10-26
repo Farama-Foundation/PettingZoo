@@ -87,7 +87,7 @@ Multiplayer games within the Arcade Learning Environment were introduced in:
 ```
 @article{terry2020arcade,
   Title = {Multiplayer Support for the Arcade Learning Environment},
-  Author = {Terry, Justin K and Black, Benjamin},
+  Author = {Terry, J K and Black, Benjamin},
   journal={arXiv preprint arXiv:2009.09341},
   year={2020}
 }

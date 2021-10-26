@@ -618,7 +618,7 @@ class raw_env(AECEnv, EzPickle):
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
 
-# The original code for this game, that was added by Justin Terry, was
+# The original code for this game, that was added by J K Terry, was
 # created by Dipam Patel in a different repository (hence the git history)
 
 # Game art purchased from https://finalbossblues.itch.io/time-fantasy-monsters

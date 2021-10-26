@@ -439,4 +439,4 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
 
-# Game art created by Justin Terry
+# Game art created by J K Terry

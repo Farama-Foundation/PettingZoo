@@ -441,4 +441,4 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
-# added in by Justin Terry (which is why he's shown as the creator in the git history)
+# added in by J K Terry (which is why they're shown as the creator in the git history)
