@@ -172,7 +172,7 @@ If you use this in your research, please cite:
 ```
 @article{SuperSuit,
   Title = {SuperSuit: Simple Microwrappers for Reinforcement Learning Environments},
-  Author = {Terry, Justin K and Black, Benjamin and Hari, Ananth},
+  Author = {Terry, J K and Black, Benjamin and Hari, Ananth},
   journal={arXiv preprint arXiv:2008.08932},
   year={2020}
 }
