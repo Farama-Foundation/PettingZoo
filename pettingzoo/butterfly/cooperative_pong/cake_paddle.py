@@ -34,7 +34,14 @@ class CakePaddle(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect3)
         pygame.draw.rect(screen, (255, 255, 255), self.rect4)
 
-    def update(self, area, action):
+    def update(self, area, action, b_rect):
+        # update vertical relationship with ball
+        # since [process_collision] is called later,
+        # we can guarantee there is no collision here
+        self.was_ball_on_top = False
+        if self.rect4.top >= b_rect.bottom:
+            self.was_ball_on_top = True
+
         # action: 1 - up, 2 - down
         movepos = [0, 0]
         if action == 1:
@@ -72,51 +79,59 @@ class CakePaddle(pygame.sprite.Sprite):
             if dx > 0:
                 b_rect.right = self.rect4.left
                 b_speed[0] = -b_speed[0]
-            # top or bottom edge
-            elif dy > 0:
+            # @FIX: The vertical position of ball
+            # should be determined based on the 
+            # relative position before update,
+            # not based on its vertical speed.
+            elif self.was_ball_on_top:
                 b_rect.bottom = self.rect4.top
-                b_speed[1] = -b_speed[1]
-            elif dy < 0:
+                if b_speed[1] > 0:
+                    b_speed[1] = -b_speed[1]
+            elif not self.was_ball_on_top:
                 b_rect.top = self.rect4.bottom
-                b_speed[1] = -b_speed[1]
+                if b_speed[1] < 0:
+                    b_speed[1] = -b_speed[1]
             return is_collision, b_rect, b_speed
         elif self.rect3.colliderect(b_rect):
             is_collision = True
             if dx > 0:
                 b_rect.right = self.rect3.left
                 b_speed[0] = -b_speed[0]
-            # top or bottom edge
-            elif dy > 0:
+            elif self.was_ball_on_top:
                 b_rect.bottom = self.rect3.top
-                b_speed[1] = -b_speed[1]
-            elif dy < 0:
+                if b_speed[1] > 0:
+                    b_speed[1] = -b_speed[1]
+            elif not self.was_ball_on_top:
                 b_rect.top = self.rect3.bottom
-                b_speed[1] = -b_speed[1]
+                if b_speed[1] < 0:
+                    b_speed[1] = -b_speed[1]
             return is_collision, b_rect, b_speed
         elif self.rect2.colliderect(b_rect):
             is_collision = True
             if dx > 0:
                 b_rect.right = self.rect2.left
                 b_speed[0] = -b_speed[0]
-            # top or bottom edge
-            elif dy > 0:
+            elif self.was_ball_on_top:
                 b_rect.bottom = self.rect2.top
-                b_speed[1] = -b_speed[1]
-            elif dy < 0:
+                if b_speed[1] > 0:
+                    b_speed[1] = -b_speed[1]
+            elif not self.was_ball_on_top:
                 b_rect.top = self.rect2.bottom
-                b_speed[1] = -b_speed[1]
+                if b_speed[1] < 0:
+                    b_speed[1] = -b_speed[1]
             return is_collision, b_rect, b_speed
         elif self.rect.colliderect(b_rect):
             is_collision = True
             if dx > 0:
                 b_rect.right = self.rect.left
                 b_speed[0] = -b_speed[0]
-            # top or bottom edge
-            elif dy > 0:
+            elif self.was_ball_on_top:
                 b_rect.bottom = self.rect.top
-                b_speed[1] = -b_speed[1]
-            elif dy < 0:
+                if b_speed[1] > 0:
+                    b_speed[1] = -b_speed[1]
+            elif not self.was_ball_on_top:
                 b_rect.top = self.rect.bottom
-                b_speed[1] = -b_speed[1]
+                if b_speed[1] < 0:
+                    b_speed[1] = -b_speed[1]
             return is_collision, b_rect, b_speed
         return False, b_rect, b_speed
