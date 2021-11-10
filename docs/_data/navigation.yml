@@ -1,6 +1,6 @@
 nav:
   - title: "GitHub"
-    url: "https://github.com/PettingZoo-Team/PettingZoo"
+    url: "https://github.com/Farama-Foundation/PettingZoo"
 
   - title: "API"
     url: "/API"

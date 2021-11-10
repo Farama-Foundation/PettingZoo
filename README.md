@@ -2,7 +2,7 @@
     <img src="PettingZoo_Text.png" width="500px"/>
 </p>
 
-PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gym](https://github.com/openai/gym).
 
 Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
@@ -21,7 +21,7 @@ To install the pettingzoo base library, use `pip install pettingzoo`
 
 This does not include dependencies for all families of environments (there's a massive number, and some can be problematic to install on certain systems). You can install these dependencies for one family like `pip install pettingzoo[atari]` or use `pip install pettingzoo[all]` to install all dependencies.
 
-We support Python 3.6, 3.7, 3.8 and 3.9 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
+We support Python 3.7, 3.8 and 3.9 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
 ## API
 
@@ -52,7 +52,7 @@ In certain environments, it's a valid to assume that agents take their actions a
 
 ## SuperSuit
 
-SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/PettingZoo-Team/SuperSuit
+SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/Farama-Foundation/SuperSuit
 
 ## Environment Versioning
 

@@ -13,6 +13,8 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from .rlcard_base import RLCardBase
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 
 def get_image(path):
     from os import path as os_path
@@ -38,13 +40,13 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "texas_holdem_no_limit_v5"}
+    metadata = {'render.modes': ['human', 'rgb_array'], "name": "texas_holdem_no_limit_v6"}
 
     def __init__(self, num_players=2):
         super().__init__("no-limit-holdem", num_players, (54,))
         self.observation_spaces = self._convert_to_dict([spaces.Dict(
-            {'observation': spaces.Box(low=np.zeros(54, ), high=np.append(np.ones(52, ), [100, 100]), dtype=np.int8),
-             'action_mask': spaces.Box(low=0, high=1, shape=(6,), dtype=np.int8)}) for _ in range(self.num_agents)])
+            {'observation': spaces.Box(low=np.zeros(54, ), high=np.append(np.ones(52, ), [100, 100]), dtype=np.float64),
+             'action_mask': spaces.Box(low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8)}) for _ in range(self.num_agents)])
 
     def render(self, mode='human'):
 

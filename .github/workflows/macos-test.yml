@@ -9,7 +9,7 @@ on:
 
 jobs:
   macos-test:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
@@ -18,11 +18,12 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        export AUDIODEV=null
-        brew install swig rar
         pip install AutoROM pytest -r requirements.txt
         AutoROM -v
     - name: Full Python tests
       run: |
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
+    - name: 13 lines test
+      run: |
+        pip install stable_baselines3

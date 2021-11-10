@@ -2,10 +2,10 @@ import random
 
 import numpy as np
 import rlcard
-import rlcard.games.gin_rummy.utils.melding as melding
 from gym import spaces
 from gym.utils import EzPickle
 from rlcard.games.gin_rummy.player import GinRummyPlayer
+from rlcard.games.gin_rummy.utils import melding as melding
 from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
 from rlcard.utils.utils import print_card
@@ -63,7 +63,7 @@ class raw_env(RLCardBase, EzPickle):
             observation = obs['obs'][0:4, :].astype(self._dtype)
 
         legal_moves = self.next_legal_moves
-        action_mask = np.zeros(110, int)
+        action_mask = np.zeros(110, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 

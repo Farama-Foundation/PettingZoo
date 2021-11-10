@@ -11,7 +11,17 @@ from ..._utils import Agent
 class DiscreteAgent(Agent):
 
     # constructor
-    def __init__(self, xs, ys, map_matrix, randomizer, obs_range=3, n_channels=3, seed=1, flatten=False):
+    def __init__(
+        self,
+        xs,
+        ys,
+        map_matrix,
+        randomizer,
+        obs_range=3,
+        n_channels=3,
+        seed=1,
+        flatten=False,
+    ):
         # map_matrix is the may of the environment (-1 are buildings)
         # n channels is the number of observation channels
 
@@ -20,17 +30,15 @@ class DiscreteAgent(Agent):
         self.xs = xs
         self.ys = ys
 
-        self.eactions = [0,  # move left
-                         1,  # move right
-                         2,  # move up
-                         3,  # move down
-                         4]  # stay
+        self.eactions = [
+            0,  # move left
+            1,  # move right
+            2,  # move up
+            3,  # move down
+            4,
+        ]  # stay
 
-        self.motion_range = [[-1, 0],
-                             [1, 0],
-                             [0, 1],
-                             [0, -1],
-                             [0, 0]]
+        self.motion_range = [[-1, 0], [1, 0], [0, 1], [0, -1], [0, 0]]
 
         self.current_pos = np.zeros(2, dtype=np.int32)  # x and y position
         self.last_pos = np.zeros(2, dtype=np.int32)
@@ -43,7 +51,7 @@ class DiscreteAgent(Agent):
         self._obs_range = obs_range
 
         if flatten:
-            self._obs_shape = (n_channels * obs_range**2 + 1,)
+            self._obs_shape = (n_channels * obs_range ** 2 + 1,)
         else:
             self._obs_shape = (obs_range, obs_range, 4)
             # self._obs_shape = (4, obs_range, obs_range)

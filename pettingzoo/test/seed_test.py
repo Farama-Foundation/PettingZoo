@@ -28,8 +28,9 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             elif isinstance(obs, dict) and 'action_mask' in obs:
                 action = sampler.choice(np.flatnonzero(obs['action_mask']))
             else:
-                action = new_env.action_spaces[agent].sample()
+                action = new_env.action_space(agent).sample()
             new_env.step(action)
+            cur_hashes.append(agent)
             cur_hashes.append(hash_obsevation(obs))
             cur_hashes.append(float(rew))
 
@@ -37,8 +38,9 @@ def calc_hash(new_env, rand_issue, max_env_iters):
 
 
 def seed_action_spaces(env):
-    for i, (agent, space) in enumerate(sorted(env.action_spaces.items())):
-        space.seed(42 + i)
+    if hasattr(env, 'possible_agents'):
+        for i, agent in enumerate(env.possible_agents):
+            env.action_space(agent).seed(42 + i)
 
 
 def check_environment_deterministic(env1, env2, num_cycles):
@@ -52,10 +54,12 @@ def check_environment_deterministic(env1, env2, num_cycles):
     seed_action_spaces(env1)
     seed_action_spaces(env2)
 
+    num_agents = max(1, len(getattr(env1, 'possible_agents', [])))
+
     # checks deterministic behavior if seed is set
     hashes = []
     num_seeds = 2
-    max_env_iters = num_cycles * len(env1.possible_agents)
+    max_env_iters = num_cycles * num_agents
     envs = [env1, env2]
     for x in range(num_seeds):
         hashes.append(calc_hash(envs[x], x, max_env_iters))

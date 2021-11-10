@@ -8,10 +8,13 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
 
 def get_image(path):
-    import pygame
     from os import path as os_path
+
+    import pygame
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + '/' + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
@@ -69,6 +72,12 @@ class raw_env(AECEnv):
         self.history = [0] * (2 * 5)
 
         self.reinit()
+
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
 
     def reinit(self):
         self.agents = self.possible_agents[:]

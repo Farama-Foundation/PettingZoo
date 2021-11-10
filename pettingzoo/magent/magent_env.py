@@ -59,12 +59,18 @@ class magent_parallel_env(ParallelEnv):
         self.observation_spaces = {agent: space for agent, space in zip(self.agents, observation_space_list)}
 
         self._zero_obs = {agent: np.zeros_like(space.low) for agent, space in self.observation_spaces.items()}
-        self.base_state = np.zeros(self.state_space.shape)
+        self.base_state = np.zeros(self.state_space.shape, dtype='float32')
         walls = self.env._get_walls_info()
         wall_x, wall_y = zip(*walls)
         self.base_state[wall_x, wall_y, 0] = 1
         self._renderer = None
         self.frames = 0
+
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
 
     def seed(self, seed=None):
         if seed is None:
@@ -187,8 +193,6 @@ class magent_parallel_env(ParallelEnv):
 
     def step(self, all_actions):
         action_list = [0] * self.max_num_agents
-        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
-        self.env.clear_dead()
         for i, agent in enumerate(self.possible_agents):
             if agent in all_actions:
                 action_list[i] = all_actions[agent]
@@ -207,4 +211,6 @@ class magent_parallel_env(ParallelEnv):
         all_rewards = self._all_rewards()
         all_observes = self._observe_all()
         self.all_dones = all_dones
+        self.env.clear_dead()
+        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
         return all_observes, all_rewards, all_dones, all_infos
