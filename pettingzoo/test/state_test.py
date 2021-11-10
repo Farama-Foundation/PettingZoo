@@ -36,7 +36,7 @@ def test_state(env, num_cycles):
         if done:
             action = None
         else:
-            action = env.action_spaces[agent].sample()
+            action = env.action_space(agent).sample()
 
         env.step(action)
         new_state = env.state()

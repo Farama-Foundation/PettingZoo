@@ -5,11 +5,12 @@ import numpy as np
 
 
 def _check_observation_saveable(env, agent):
-    assert isinstance(env.observation_spaces[agent], gym.spaces.Box), "Observations must be Box to save observations as image"
-    assert np.all(np.equal(env.observation_spaces[agent].low, 0)) and np.all(np.equal(env.observation_spaces[agent].high, 255)), "Observations must be 0 to 255 to save as image"
-    assert len(env.observation_spaces[agent].shape) == 3 or len(env.observation_spaces[agent].shape) == 2, "Observations must be 2D or 3D to save as image"
-    if len(env.observation_spaces[agent].shape) == 3:
-        assert env.observation_spaces[agent].shape[2] == 1 or env.observation_spaces[agent].shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
+    obs_space = env.observation_space(agent)
+    assert isinstance(obs_space, gym.spaces.Box), "Observations must be Box to save observations as image"
+    assert np.all(np.equal(obs_space.low, 0)) and np.all(np.equal(obs_space.high, 255)), "Observations must be 0 to 255 to save as image"
+    assert len(obs_space.shape) == 3 or len(obs_space.shape) == 2, "Observations must be 2D or 3D to save as image"
+    if len(obs_space.shape) == 3:
+        assert obs_space.shape[2] == 1 or obs_space.shape[2] == 3, "3D observations can only have 1 or 3 channels to save as an image"
 
 
 # save the observation of an agent. If agent not specified uses env selected agent. If all_agents

@@ -3,11 +3,11 @@ actions: "Discrete"
 title: "Texas Hold'em No Limit"
 agents: "2"
 manual-control: "No"
-action-shape: "Discrete(103)"
-action-values: "Discrete(103)"
+action-shape: "Discrete(5)"
+action-values: "Discrete(5)"
 observation-shape: "(54,)"
 observation-values: "[0, 100]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v4"
+import: "from pettingzoo.classic import texas_holdem_no_limit_v6"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
@@ -26,14 +26,10 @@ Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit o
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
-
-Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
-
 ### Arguments
 
 ``` python
-texas_holdem_no_limit_v5.env(num_players=2)
+texas_holdem_no_limit_v6.env(num_players=2)
 ```
 
 `num_players`: Sets the number of players in the game. Minimum is 2.
@@ -48,18 +44,16 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-
 
 The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
+The main observation space is similar to Texas Hold'em. The first 52 entries represent the union of the current player's hand and the community cards.
 
-|  Index  | Description                                                 |
-|:-------:|-------------------------------------------------------------|
-|  0 - 12 | Spades<br>_`0`: A, `1`: 2, ..., `12`: K_                    |
-| 13 - 25 | Hearts<br>_`13`: A, `14`: 2, ..., `25`: K_                  |
-| 26 - 38 | Diamonds<br>_`26`: A, `27`: 2, ..., `38`: K_                |
-| 39 - 51 | Clubs<br>_`39`: A, `40`: 2, ..., `51`: K_                   |
-| 52 - 56 | Chips raised in Round 1<br>_`52`: 0, `53`: 1, ..., `56`: 4_ |
-| 57 - 61 | Chips raised in Round 2<br>_`57`: 0, `58`: 1, ..., `61`: 4_ |
-| 62 - 66 | Chips raised in Round 3<br>_`62`: 0, `63`: 1, ..., `66`: 4_ |
-| 67 - 71 | Chips raised in Round 4<br>_`67`: 0, `68`: 1, ..., `71`: 4_ |
+|  Index  | Description                                  |  Values  |
+|:-------:|----------------------------------------------|:--------:|
+|  0 - 12 | Spades<br>_`0`: A, `1`: 2, ..., `12`: K_     |  [0, 1]  |
+| 13 - 25 | Hearts<br>_`13`: A, `14`: 2, ..., `25`: K_   |  [0, 1]  |
+| 26 - 38 | Diamonds<br>_`26`: A, `27`: 2, ..., `38`: K_ |  [0, 1]  |
+| 39 - 51 | Clubs<br>_`39`: A, `40`: 2, ..., `51`: K_    |  [0, 1]  |
+|    52   | Number of Chips of player_0                  | [0, 100] |
+|    53   | Number of Chips of player_1                  | [0, 100] |
 
 #### Legal Actions Mask
 
@@ -67,12 +61,13 @@ The legal moves available to the current agent are found in the `action_mask` el
 
 ### Action Space
 
-| Action ID | Action |
-|:---------:|--------|
-|     0     | Call   |
-|     1     | Raise  |
-|     2     | Fold   |
-|     3     | Check  |
+| Action ID   |     Action         |
+| ----------- | :----------------- |
+| 0           | Fold               |
+| 1           | Check & Call       |
+| 2           | Raise Half Pot     |
+| 3           | Raise Full Pot     |
+| 4           | All In             |
 
 ### Rewards
 
@@ -82,6 +77,7 @@ The legal moves available to the current agent are found in the `action_mask` el
 
 ### Version History
 
+* v6: Upgrade to RLCard 1.0.5, fixes to the action space as ACPC (1.12.0)
 * v5: Upgrade to RLCard 1.0.4, fixes to rewards with greater than 2 players (1.11.1)
 * v4: Upgrade to RLCard 1.0.3 (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)

@@ -15,10 +15,10 @@ url    : "" # the base hostname & protocol for your site, e.g. http://example.co
 baseurl: "" # the subpath of your site, e.g. /blog
 
 title      : PettingZoo
-email      : justinkterry@gmail.com #this is also the email contact forms will go to
+email      : jkterry@gmail.com #this is also the email contact forms will go to
 description: "Multi-Agent Reinforcement Learning Environments"
 author     : Your Name
-copyright  : J Terry
+copyright  : J K Terry
 logo:     #optional, defaults to site title
   path: /assets/img/PettingZoo_White.svg
   height: 100 #height in px, defaults to 52px

@@ -23,7 +23,7 @@ from pettingzoo.atari import volleyball_pong_v2
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
-from pettingzoo.classic import chess_v4
+from pettingzoo.classic import chess_v5
 from pettingzoo.classic import checkers_v3
 from pettingzoo.classic import rps_v2
 from pettingzoo.classic import connect_four_v3
@@ -31,7 +31,7 @@ from pettingzoo.classic import tictactoe_v3
 from pettingzoo.classic import leduc_holdem_v4
 from pettingzoo.classic import mahjong_v4
 from pettingzoo.classic import texas_holdem_v4
-from pettingzoo.classic import texas_holdem_no_limit_v5
+from pettingzoo.classic import texas_holdem_no_limit_v6
 from pettingzoo.classic import uno_v4
 from pettingzoo.classic import dou_dizhu_v4
 from pettingzoo.classic import gin_rummy_v4
@@ -62,7 +62,7 @@ from pettingzoo.mpe import simple_tag_v2
 from pettingzoo.mpe import simple_world_comm_v2
 from pettingzoo.mpe import simple_v2
 
-from pettingzoo.sisl import pursuit_v3
+from pettingzoo.sisl import pursuit_v4
 from pettingzoo.sisl import waterworld_v3
 from pettingzoo.sisl import multiwalker_v7
 
@@ -103,7 +103,7 @@ all_environments = {
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
-    "classic/chess_v4": chess_v4,
+    "classic/chess_v5": chess_v5,
     "classic/checkers_v3": checkers_v3,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
@@ -111,7 +111,7 @@ all_environments = {
     "classic/leduc_holdem_v4": leduc_holdem_v4,
     "classic/mahjong_v4": mahjong_v4,
     "classic/texas_holdem_v4": texas_holdem_v4,
-    "classic/texas_holdem_no_limit_v5": texas_holdem_no_limit_v5,
+    "classic/texas_holdem_no_limit_v6": texas_holdem_no_limit_v6,
     "classic/uno_v4": uno_v4,
     "classic/dou_dizhu_v4": dou_dizhu_v4,
     "classic/gin_rummy_v4": gin_rummy_v4,
@@ -144,5 +144,5 @@ all_environments = {
 
     "sisl/multiwalker_v7": multiwalker_v7,
     "sisl/waterworld_v3": waterworld_v3,
-    "sisl/pursuit_v3": pursuit_v3,
+    "sisl/pursuit_v4": pursuit_v4,
 }

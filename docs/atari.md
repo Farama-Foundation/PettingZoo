@@ -5,7 +5,7 @@ title: Atari Environments
 <div class="selection-content" markdown="1">
 
 
-The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/PettingZoo-Team/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
+The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/Farama-Foundation/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
 
 ### Games Overview
 
@@ -15,12 +15,12 @@ Most games have two players, with the exception of Warlords and a couple of Pong
 
 The ALE has been studied extensively and a few notable problems have been identified:
 
-* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/PettingZoo-Team/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/Farama-Foundation/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
 * **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this computing the pixel-wise maximum of the previous 2 observations (see example below for implementation).
 
 ### Preprocessing
 
-We encourage the use of the [supersuit](https://github.com/PettingZoo-Team/SuperSuit) library for preprocessing. The unique dependencies for this set of environments can be installed via:
+We encourage the use of the [supersuit](https://github.com/Farama-Foundation/SuperSuit) library for preprocessing. The unique dependencies for this set of environments can be installed via:
 
  ````bash
 pip install supersuit
@@ -71,7 +71,7 @@ All the Atari environments have the following environment parameters:
 `max_cycles`:  the number of frames (the number of steps that each agent can take) until game terminates.
 
 `auto_rom_install_path`: The path to your AutoROM installation, installed
-with the [PettingZoo-Team/AutoROM](https://github.com/PettingZoo-Team/AutoROM) tool.
+with the [Farama-Foundation/AutoROM](https://github.com/Farama-Foundation/AutoROM) tool.
 This is the path you specified when installing AutoROM. For example, if
 you're using the boxing Atari environment, then the library will look for
 the rom at
@@ -87,7 +87,7 @@ Multiplayer games within the Arcade Learning Environment were introduced in:
 ```
 @article{terry2020arcade,
   Title = {Multiplayer Support for the Arcade Learning Environment},
-  Author = {Terry, Justin K and Black, Benjamin},
+  Author = {Terry, J K and Black, Benjamin},
   journal={arXiv preprint arXiv:2009.09341},
   year={2020}
 }

@@ -79,6 +79,12 @@ class raw_env(AECEnv):
 
         self.reset()
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def observe(self, agent):
         # Use self.ch.flatboard to update self.observation
         board = self.ch.flat_board()
@@ -95,7 +101,7 @@ class raw_env(AECEnv):
         self.observation = np.array(obs)
 
         legal_moves = self.legal_moves() if agent == self.agent_selection else []
-        action_mask = np.zeros(256, int)
+        action_mask = np.zeros(256, 'int8')
         for i in legal_moves:
             action_mask[i] = 1
 

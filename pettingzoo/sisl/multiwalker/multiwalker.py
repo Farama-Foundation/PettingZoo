@@ -36,6 +36,12 @@ class raw_env(AECEnv, EzPickle):
             zip(self.agents, self.env.observation_space))
         self.steps = 0
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     def seed(self, seed=None):
         self.env.seed(seed)
 

@@ -50,17 +50,11 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `num_agents`: The length of the agents list.
 
-`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
-
-`max_num_agents`: The length of the possible_agents list.
-
 `agent_selection` an attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
-`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+`observation_space(agent)` a function that retrieves the observation space for a particular agent. This space should never change for a particular agent ID.
 
-`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
-
-`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
+`action_space(agent)` a function that retrieves the action space for a particular agent. This space should never change for a particular agent ID.
 
 `dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
@@ -72,8 +66,6 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `observe(agent)`: Returns the observation an agent currently can make. `last()` calls this function.
 
-`state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
-
 `rewards`: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:
 
 `{0:[first agent's reward], 1:[second agent's reward] ... n-1:[nth agent's reward]}`
@@ -83,6 +75,22 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 `render(mode='human')`: Displays a rendered frame from the environment, if supported. Alternate render modes in the default environments are `'rgb_array'` which returns a numpy array and is supported by all environments outside of classic, and `'ansi'` which returns the strings printed (specific to classic environments).
 
 `close()`: Closes the rendering window.
+
+### Optional API Components
+
+While not required by the base API, most downstream wrappers and utilities depend on the following attributes and methods, and they should be added to new environments except in special circumstances where adding one or more is not possible.
+
+`possible_agents`: A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
+
+`max_num_agents`: The length of the possible_agents list.
+
+`observation_spaces`: A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+
+`action_spaces`: A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+
+`state()`: Returns a global observation of the current state of the environment. Not all environments will support this feature.
+
+`state_space`: The space of a global observation of the environment. Not all environments will support this feature.
 
 ## Notable Idioms
 
@@ -144,7 +152,7 @@ for step in range(max_cycles):
 
 ## SuperSuit
 
-[SuperSuit](https://github.com/PettingZoo-Team/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
+[SuperSuit](https://github.com/Farama-Foundation/SuperSuit) contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.
 
 
 ## Utils

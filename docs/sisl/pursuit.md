@@ -8,7 +8,7 @@ action-values: "Discrete(5)"
 observation-shape: "(7, 7, 3)"
 observation-values: "[0, 30]"
 average-total-reward: "30.3"
-import: "from pettingzoo.sisl import pursuit_v3"
+import: "from pettingzoo.sisl import pursuit_v4"
 agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
@@ -25,7 +25,7 @@ agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 
 
 
-By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in the *Agent Environment Cycle Games* paper applied.
+By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.
 
 Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.
 
@@ -37,14 +37,14 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 ### Arguments
 
 ``` python
-pursuit_v3.env(max_cycles=500, x_size=16, y_size=16, local_ratio=1.0, n_evaders=30,
+pursuit_v4.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
 n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
-catch_reward=5.0, urgency_reward=0.0, surround=True, constraint_window=1.0)
+catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 ```
 
 `x_size, y_size`: Size of environment world space
 
-`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
+`shared_reward`: Whether the rewards should be distributed among all agents
 
 `n_evaders`:  Number of evaders
 
@@ -71,6 +71,7 @@ catch_reward=5.0, urgency_reward=0.0, surround=True, constraint_window=1.0)
 
 ### Version History
 
+* v4: Change the reward sharing, fix a collection bug, add agent counts to the rendering (1.14.0)
 * v3: Observation space bug fixed (1.5.0)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)

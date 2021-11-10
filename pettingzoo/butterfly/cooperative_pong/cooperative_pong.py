@@ -385,6 +385,12 @@ class raw_env(AECEnv, EzPickle):
 
         self.score = self.env.score
 
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
     def seed(self, seed=None):
@@ -435,4 +441,4 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
 
 # This was originally created, in full, by Ananth Hari in a different repo, and was
-# added in by Justin Terry (which is why he's shown as the creator in the git history)
+# added in by J K Terry (which is why they're shown as the creator in the git history)

@@ -32,9 +32,9 @@ parameterized_envs = [
     (texas_holdem_v4.env, dict(num_players=3)),
     (texas_holdem_v4.env, dict(num_players=4)),
 
-    (texas_holdem_no_limit_v5.env, dict(num_players=2)),
-    (texas_holdem_no_limit_v5.env, dict(num_players=3)),
-    (texas_holdem_no_limit_v5.env, dict(num_players=4)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=2)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=3)),
+    (texas_holdem_no_limit_v6.env, dict(num_players=4)),
 
     (knights_archers_zombies_v7.env, dict(spawn_rate=50)),
     (knights_archers_zombies_v7.env, dict(num_knights=4, num_archers=5)),
@@ -44,7 +44,6 @@ parameterized_envs = [
     (knights_archers_zombies_v7.env, dict(pad_observation=False)),
     (knights_archers_zombies_v7.env, dict(max_cycles=100)),
 
-    (pistonball_v4.env, dict(local_ratio=0.7)),
     (pistonball_v4.env, dict(continuous=True)),
     (pistonball_v4.env, dict(n_pistons=30)),
     (pistonball_v4.env, dict(continuous=False)),
@@ -83,7 +82,6 @@ parameterized_envs = [
     (hanabi_v4.env, dict(random_start_player=False)),
     (hanabi_v4.env, dict(random_start_player=True)),
 
-    # Commented out due to rare segfault
     (tiger_deer_v3.env, dict(minimap_mode=True)),
     (battle_v3.env, dict(minimap_mode=False)),
     (battlefield_v3.env, dict(minimap_mode=False, extra_features=False)),
@@ -117,12 +115,12 @@ parameterized_envs = [
     (multiwalker_v7.env, dict(terminate_on_fall=False)),
     (multiwalker_v7.env, dict(terminate_on_fall=False, remove_on_fall=False)),
 
-    (pursuit_v3.env, dict(x_size=8, y_size=19)),
-    (pursuit_v3.env, dict(local_ratio=0.5)),
-    (pursuit_v3.env, dict(n_evaders=5, n_pursuers=16)),
-    (pursuit_v3.env, dict(obs_range=15)),
-    (pursuit_v3.env, dict(n_catch=3)),
-    (pursuit_v3.env, dict(freeze_evaders=True)),
+    (pursuit_v4.env, dict(x_size=8, y_size=19)),
+    (pursuit_v4.env, dict(shared_reward=True)),
+    (pursuit_v4.env, dict(n_evaders=5, n_pursuers=16)),
+    (pursuit_v4.env, dict(obs_range=15)),
+    (pursuit_v4.env, dict(n_catch=3)),
+    (pursuit_v4.env, dict(freeze_evaders=True)),
 
     (waterworld_v3.env, dict(n_pursuers=3, n_evaders=6)),
     (waterworld_v3.env, dict(n_coop=1)),

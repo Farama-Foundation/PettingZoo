@@ -32,8 +32,7 @@ Multi-Agent traffic control environments.
 ## PZ Dilemma
 [https://github.com/arjun-prakash/pz_dilemma](https://github.com/arjun-prakash/pz_dilemma)
 
-Collection of prisoner's dilemma games as pettingzoo environments
-
+Collection of prisoner's dilemma games as PettingZoo environments
 
 ## Ants
 [https://github.com/chorsch/ants](https://github.com/chorsch/ants)
@@ -45,8 +44,26 @@ Simplified simulation of an ant colony
 
 More general n-players form of the Rock Paper Scissors environments in PettingZoo
 
+## PZ Risk
+[https://github.com/mahi97/pz_risk](https://github.com/mahi97/pz_risk)
+
+Implementation of the Risk board game as a PettingZoo environment
+
+## Sumo-RL
+[https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
+
+PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
+
+## Sequential Social Delima Games
+[https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197](https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197)
+
+Set of two environments with numerous multi-agent equilibria popular with researchers
 
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
 Planned by maintainer, not yet done
+
+## CookingZoo
+[https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+Maintained fork of too many cooks game with PettingZoo API support

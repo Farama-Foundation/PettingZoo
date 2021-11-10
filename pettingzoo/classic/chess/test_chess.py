@@ -1,7 +1,6 @@
 import chess
-import numpy as np
-
 import chess_utils
+import numpy as np
 
 
 def assert_asserts(x):
