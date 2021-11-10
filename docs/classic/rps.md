@@ -30,7 +30,7 @@ The game can be expanded to have extra actions by adding new action pairs. Addin
 
 ### Arguments
 
-```
+``` python
 rps_v2.env(num_actions=3, max_cycles=15)
 ```
 

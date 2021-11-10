@@ -108,7 +108,7 @@ The game lasts for 900 frames by default.
 
 ### Arguments
 
-```
+``` python
 prospector_v4.env(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
 prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
 banker_deposit_gold_reward=1, max_cycles=150

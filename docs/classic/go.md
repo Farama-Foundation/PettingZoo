@@ -32,7 +32,7 @@ Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minig
 
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
-```
+``` python
 go_v5.env(board_size = 19, komi = 7.5)
 ```
 

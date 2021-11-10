@@ -47,7 +47,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to combat-plane are
 
-```
+``` python
 combat_plane_v1.env(game_version="jet", guided_missile=True)
 ```
 

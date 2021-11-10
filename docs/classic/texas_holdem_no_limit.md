@@ -32,7 +32,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-ho
 
 ### Arguments
 
-```
+``` python
 texas_holdem_no_limit_v5.env(num_players=2)
 ```
 

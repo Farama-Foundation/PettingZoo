@@ -3,31 +3,31 @@ nav:
     url: "https://github.com/PettingZoo-Team/PettingZoo"
 
   - title: "API"
-    url: "/api"
+    url: "/API"
     sublinks:
       - title: "Initializing Environments"
-        url: "/api#initializing-environments"
+        url: "/API#initializing-environments"
 
       - title: "Interacting With Environments"
-        url: "/api#interacting-with-environments"
+        url: "/API#interacting-with-environments"
 
       - title: "Additional Environment API"
-        url: "/api#additional-environment-api"
+        url: "/API#additional-environment-api"
 
       - title: "Notable Idioms"
-        url: "/api#notable-idioms"
+        url: "/API#notable-idioms"
 
       - title: "Raw Environments"
-        url: "/api#raw-environments"
+        url: "/API#raw-environments"
 
       - title: "Parallel API"
-        url: "/api#parallel-api"
+        url: "/API#parallel-api"
 
       - title: "SuperSuit"
-        url: "/api#supersuit"
+        url: "/API#supersuit"
 
       - title: "Utils"
-        url: "/api#utils"
+        url: "/API#utils"
 
   - title: "Environment Creation"
     url: "/environment_creation"
@@ -46,6 +46,21 @@ nav:
 
       - title: "Tests"
         url: "/environment_creation#tests"
+
+  - title: "Wrappers"
+    url: "/Wrappers"
+    sublinks:
+      - title: "Included Functions"
+        url: "/Wrappers#included-functions"
+
+      - title: "Included Multi-Agent Only Functions"
+        url: "/Wrappers#included-multi-agent-only-functions"
+
+      - title: "Environment Vectorization"
+        url: "/Wrappers#environment-vectorization"
+
+      - title: "Lambda Functions"
+        url: "/Wrappers#lambda-functions"
 
   - title: "Environments"
     url: "/envs"
@@ -268,32 +283,32 @@ nav:
   - title: "Third Party Environments"
     url: "/third_party_envs"
 
-api:
+API:
   - title: "Initializing Environments"
-    url: "/api#initializing-environments"
+    url: "/API#initializing-environments"
 
   - title: "Interacting With Environments"
-    url: "/api#interacting-with-environments"
+    url: "/API#interacting-with-environments"
 
   - title: "Additional Environment API"
-    url: "/api#additional-environment-api"
+    url: "/API#additional-environment-api"
 
   - title: "Notable Idioms"
-    url: "/api#notable-idioms"
+    url: "/API#notable-idioms"
 
   - title: "Raw Environments"
-    url: "/api#raw-environments"
+    url: "/API#raw-environments"
 
   - title: "Parallel API"
-    url: "/api#parallel-api"
+    url: "/API#parallel-api"
 
   - title: "SuperSuit"
-    url: "/api#supersuit"
+    url: "/API#supersuit"
 
   - title: "Utils"
-    url: "/api#utils"
+    url: "/API#utils"
 
-environment_creation:
+Environment Creation:
       - title: "Example Custom Environment"
         url: "/environment_creation#example-custom-environment"
 
@@ -308,3 +323,16 @@ environment_creation:
 
       - title: "Tests"
         url: "/environment_creation#tests"
+
+Wrappers:
+    - title: "Included Functions"
+      url: "/Wrappers#included-functions"
+
+    - title: "Included Multi-Agent Only Functions"
+      url: "/Wrappers#included-multi-agent-only-functions"
+
+    - title: "Environment Vectorization"
+      url: "/Wrappers#environment-vectorization"
+
+    - title: "Lambda Functions"
+      url: "/Wrappers#lambda-functions"

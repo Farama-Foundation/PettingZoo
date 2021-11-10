@@ -41,7 +41,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Space Invaders are
 
-```
+``` python
 space_invaders_v1.env(alternating_control=False, moving_shields=True,
 zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 ```

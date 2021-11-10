@@ -529,7 +529,7 @@ pre code {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .container {
         max-width: 960px
     }
@@ -1125,7 +1125,7 @@ pre code {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .col-lg {
         -ms-flex-preferred-size: 0;
         flex-basis: 0;
@@ -2939,7 +2939,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .dropdown-menu-lg-left {
         right: auto;
         left: 0
@@ -4096,7 +4096,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .navbar-expand-lg {
         -ms-flex-flow: row nowrap;
         flex-flow: row nowrap;
@@ -5194,7 +5194,7 @@ a.badge-dark.focus, a.badge-dark:focus {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .list-group-horizontal-lg {
         -ms-flex-direction: row;
         flex-direction: row
@@ -5675,7 +5675,7 @@ a.close.disabled {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .modal-lg, .modal-xl {
         max-width: 800px
     }
@@ -6540,7 +6540,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .d-lg-none {
         display: none!important
     }
@@ -7123,7 +7123,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .flex-lg-row {
         -ms-flex-direction: row!important;
         flex-direction: row!important
@@ -7437,7 +7437,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .float-lg-left {
         float: left!important
     }
@@ -7527,7 +7527,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 
 
 
-@media (min-width: 992px) {
+@media (min-width:860px) {
     .fixed-left {
         position: fixed;
         left: 0;
@@ -8588,7 +8588,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .m-lg-0 {
         margin: 0!important
     }
@@ -9192,7 +9192,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
     }
 }
 
-@media (min-width:992px) {
+@media (min-width:860px) {
     .text-lg-left {
         text-align: left!important
     }

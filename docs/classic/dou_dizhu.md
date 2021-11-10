@@ -32,7 +32,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and yo
 
 ### Arguments
 
-```
+``` python
 dou_dizhu_v4.env(opponents_hand_visible=False)
 ```
 
