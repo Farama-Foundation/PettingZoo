@@ -73,7 +73,7 @@ When multiple agents (depending on `n_coop`) capture food together each agent re
 
 ### Arguments
 
-```
+``` python
 waterworld_v3.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20,
 sensor_range=0.2,radius=0.015, obstacle_radius=0.2,
 obstacle_coord=np.array([0.5, 0.5]), pursuer_max_accel=0.01, evader_speed=0.01,

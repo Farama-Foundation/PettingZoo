@@ -45,7 +45,7 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 
 ### Arguments
 
-```
+``` python
 simple_crypto_v2.env(max_cycles=25, continuous_actions=False)
 ```
 

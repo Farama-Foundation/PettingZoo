@@ -38,7 +38,7 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 
 ### Arguments
 
-```
+``` python
 prison_v3.env(vector_observation=False, continuous=False, synchronized_start=False,
 identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 ```

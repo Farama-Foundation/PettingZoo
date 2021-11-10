@@ -9,7 +9,7 @@ observation-shape: "(13,13,9)"
 observation-values: "[0,2]"
 state-shape: "(45, 45, 9)"
 state-values: "(0, 2)"
-import: "pettingzoo.magent import combined_arms_v5"
+import: "from pettingzoo.magent import combined_arms_v5"
 agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
@@ -30,7 +30,7 @@ A large-scale team battle. Here there are two types of agents on each team, rang
 
 ### Arguments
 
-```
+``` python
 combined_arms_v5.env(map_size=45, minimap_mode=False, step_reward=-0.005,
 dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2, max_cycles=1000,
 extra_features=False)
@@ -77,7 +77,7 @@ If multiple options apply, rewards are added.
 
 The observation space is a 13x13 map with the below channels (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1
@@ -93,7 +93,7 @@ agent_position(minimap_mode=True)| 2
 
 The observation space is a 45x45 map. It contains the following channels, which are (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle map | 1
 melee_team_1_presence | 1

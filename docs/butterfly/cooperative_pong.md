@@ -38,7 +38,7 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ### Arguments
 
-```
+``` python
 cooperative_pong_v3.env(ball_speed=9, left_paddle_speed=12,
 right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False)
 ```

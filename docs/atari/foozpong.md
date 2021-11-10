@@ -42,7 +42,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Foozpong are
 
-```
+``` python
 foozpong_v2.env(num_players=4)
 ```
 

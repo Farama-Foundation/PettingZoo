@@ -9,7 +9,7 @@ observation-shape: "(15,15,5)"
 observation-values: "[0,2]"
 state-shape: "(200, 200, 5)"
 state-values: "(0, 2)"
-import: "pettingzoo.magent import gather_v3"
+import: "from pettingzoo.magent import gather_v3"
 agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
@@ -30,7 +30,7 @@ In gather, the agents gain reward by eating food. Food needs to be broken down b
 
 ### Arguments
 
-```
+``` python
 gather_v3.env(minimap_mode=False, step_reward=-0.01, attack_penalty=-0.1,
 dead_penalty=-1, attack_food_reward=0.5, max_cycles=500, extra_features=False)
 ```
@@ -69,7 +69,7 @@ Reward is given as:
 
 The observation space is a 15x15 map with the below channels (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle/off the map| 1
 omnivore_presence| 1
@@ -86,7 +86,7 @@ agent_position(minimap_mode=True)| 2
 
 The observation space is a 200x200 map. It contains the following channels, which are (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle map| 1
 omnivore_presence| 1

@@ -43,7 +43,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Maze Craze are
 
-```
+``` python
 maze_craze.env(game_version="robbers", visibilty_level=0)
 ```
 
