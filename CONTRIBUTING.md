@@ -17,11 +17,11 @@ If you're thinking about creating submitting a new environment, please contact u
 Contributing code is done through standard github methods:
 
 1. Fork this repo
-1. Commit your code
-1. Submit a pull request. It will be reviewed by maintainers and they'll give feedback or make requests as applicable
+3. Commit your code
+4. Submit a pull request. It will be reviewed by maintainers and they'll give feedback or make requests as applicable
 
 #### Considerations
-- Make sure existing tests pass (run `pytest pettingzoo/tests/pytest_runner.py`)
+- Make sure existing tests pass (`pip install -r requirements.txt` and then run `pytest test/pytest_runner.py` -- may also need to apt-get/brew install swig)
 - Make sure linter passes (run `check_style.sh`)
 - Make sure your new code is properly tested and fully-covered
 - Any fixes to environments should include fixes to the appropriate documentation
