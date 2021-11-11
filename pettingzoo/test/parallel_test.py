@@ -5,6 +5,7 @@ from pettingzoo.utils.wrappers import BaseWrapper
 
 from .api_test import missing_attr_warning
 
+
 def parallel_api_test(par_env, num_cycles=10):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
@@ -33,21 +34,21 @@ def parallel_api_test(par_env, num_cycles=10):
             assert isinstance(info, dict)
 
             agents_set = set(live_agents)
-            keys       = 'observation reward done info'.split()
-            vals       = [obs, rew, done, info]
+            keys = 'observation reward done info'.split()
+            vals = [obs, rew, done, info]
             for k, v in zip(keys, vals):
                 if set(v.keys()) == agents_set:
                     continue
                 warnings.warn('Agent was given: {} but was done last turn'.format(k))
 
             if hasattr(par_env, 'possible_agents'):
-               assert set(par_env.agents).issubset(set(par_env.possible_agents)), "possible_agents defined but does not contain all agents"
+                assert set(par_env.agents).issubset(set(par_env.possible_agents)), "possible_agents defined but does not contain all agents"
 
-               has_finished |= {agent for agent, d in done.items() if d}
-               if not par_env.agents and has_finished != set(par_env.possible_agents):
-                   warnings.warn('No agents present but not all possible_agents are done')
+                has_finished |= {agent for agent, d in done.items() if d}
+                if not par_env.agents and has_finished != set(par_env.possible_agents):
+                    warnings.warn('No agents present but not all possible_agents are done')
             elif not par_env.agents:
-               warnings.warn('No agents present')
+                warnings.warn('No agents present')
 
             for agent in par_env.agents:
                 assert par_env.observation_space(agent) is par_env.observation_space(agent), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
