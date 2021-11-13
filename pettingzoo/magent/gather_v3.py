@@ -13,6 +13,26 @@ from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper
 
 from .magent_env import magent_parallel_env, make_env
 
+"""
+In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
+
+### Arguments
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+`step_reward`:  reward added unconditionally
+
+`dead_penalty`:  reward added when killed
+
+`attack_penalty`:  reward added for attacking
+
+`attack_food_reward`:  Reward added for attacking a food
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
+"""
+
 map_size = 200
 max_cycles_default = 500
 KILL_REWARD = 5

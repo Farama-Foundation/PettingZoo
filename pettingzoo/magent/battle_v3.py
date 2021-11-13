@@ -13,6 +13,31 @@ from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper
 
 from .magent_env import magent_parallel_env, make_env
 
+"""
+A large-scale team battle. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
+
+Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
+
+### Arguments
+
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 12.
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+
+`step_reward`:  reward after every step
+
+`dead_penalty`:  reward when killed
+
+`attack_penalty`:  reward when attacking anything
+
+`attack_opponent_reward`:  reward added for attacking an opponent
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
+"""
+
 default_map_size = 45
 max_cycles_default = 1000
 KILL_REWARD = 5

@@ -13,6 +13,22 @@ from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper
 
 from .magent_env import magent_parallel_env, make_env
 
+"""
+The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so they can be tagged continually.
+
+### Arguments
+
+`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 7.
+
+`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+
+`tag_penalty`:  reward when red agents tag anything
+
+`max_cycles`:  number of frames (a step for each agent) until game terminates
+
+`extra_features`: Adds additional features to observation (see table). Default False
+"""
+
 default_map_size = 45
 max_cycles_default = 500
 minimap_mode_default = False

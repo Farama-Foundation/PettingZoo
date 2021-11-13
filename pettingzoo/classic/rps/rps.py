@@ -8,6 +8,67 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+"""
+Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock.
+
+The game can be expanded to have extra actions by adding new action pairs. Adding the new actions in pairs allows for a more balanced game. This means that the final game will have an odd number of actions and each action wins over exactly half of the other actions while being defeated by the other half. The most common expansion of this game is [Rock, Paper, Scissors, Lizard, Spock](http://www.samkass.com/theories/RPSSL.html), in which only one extra action pair is added.
+
+### Arguments
+`num_actions`:  number of actions applicable in the game. The default value is 3 for the game of Rock, Paper, Scissors. This argument must be an integer greater than 3 and with odd parity. If the value given is 5, the game is expanded to Rock, Paper, Scissors, Lizard, Spock.
+
+`max_cycles`:  after max_cycles steps all agents will return done.
+
+### Observation Space
+
+#### Rock, Paper, Scissors
+| Value  |  Observation |
+| :----: | :---------:  |
+| 0      | Rock         |
+| 1      | Paper        |
+| 2      | Scissors     |
+| 3      | None         |
+
+#### Expanded Game
+| Value  |  Observation |
+| :----: | :---------:  |
+| 0      | Rock         |
+| 1      | Paper        |
+| 2      | Scissors     |
+| 3      | Lizard       |
+| 4      | Spock        |
+| 5      | Action_6     |
+| 6      | Action_7     |
+| 7      | None         |
+
+### Action Space
+
+#### Rock, Paper, Scissors
+
+| Value  |  Action |
+| :----: | :---------:  |
+| 0      | Rock         |
+| 1      | Paper        |
+| 2      | Scissors     |
+
+#### Expanded Game
+
+| Value  |  Action |
+| :----: | :---------:  |
+| 0      | Rock         |
+| 1      | Paper        |
+| 2      | Scissors     |
+| 3      | Lizard       |
+| 4      | Spock        |
+| 5      | Action_6     |
+| 6      | Action_7     |
+
+### Rewards
+
+| Winner | Loser |
+| :----: | :---: |
+| +1     | -1    |
+"""
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 

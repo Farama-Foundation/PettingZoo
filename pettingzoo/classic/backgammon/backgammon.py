@@ -3,6 +3,80 @@ from collections import namedtuple
 
 # Code based on: https://github.com/dellalibera/gym-backgammon
 
+"""
+Backgammon is a 2-player turn-based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.
+
+This environment uses [gym-backgammon](https://github.com/dellalibera/gym-backgammon)'s implementation of backgammon.
+
+The rules of backgammon can be found [here.](https://www.bkgm.com/rules.html)
+
+### Observation Space
+The main observation space has shape (198,). Entries 0-97 represent the positions of any white checkers, entries 98-195 represent the positions of any black checkers, and entries 196-197 encode the current player.
+
+| Num       | Observation                                                         | Min  | Max  |
+| --------- | -----------------------------------------------------------------   | ---- | ---- |
+| 0         | WHITE - 1st point, 1st component                                    | 0.0  | 1.0  |
+| ...         |                                     |   |   |
+| 3         | WHITE - 1st point, 4th component                                    | 0.0  | 6.0  |
+| 4         | WHITE - 2nd point, 1st component                                    | 0.0  | 1.0  |
+| ...       |                                                                     |      |      |
+| 96        | WHITE - BAR checkers                                                | 0.0  | 7.5  |
+| 97        | WHITE - OFF bar checkers                                            | 0.0  | 1.0  |
+| 98        | BLACK - 1st point, 1st component                                    | 0.0  | 1.0  |
+| ...       |                                                                     |      |      |
+| 194       | BLACK - BAR checkers                                                | 0.0  | 7.5  |
+| 195       | BLACK - OFF bar checkers                                            | 0.0  | 1.0  |
+| 196 - 197 | Current player                                                      | 0.0  | 1.0  |
+
+If there are more than 3 checkers on a point, then the value of the 4th component of that point will be (checkers - 3.0) / 2.0
+
+Encoding of checkers on the bar:
+
+| Checkers | Encoding             |
+| -------- | -------------------- |
+| 0 - 14   | bar_checkers / 2.0 |
+
+Encoding of off checkers:
+
+| Checkers | Encoding              |
+| -------- | --------------------- |
+| 0 - 14   | off_checkers / 15.0 |
+
+Encoding of the current player:
+
+| Player  | Encoding   |
+| ------- | ---------- |
+| WHITE   | [1.0, 0.0] |
+| BLACK   | [0.0, 1.0] |
+
+### Action Space
+
+The 'do nothing' action is 26^2*2
+
+| Action  | First Source Location ID | Second Source Location ID|  First Roll Used | Second Roll Used |         
+| ------- | ---------- |---------- |---------- |---------- |
+| 0 to 26^ 2 -1   | action mod 26 | action / 26 | Low Roll | High Roll
+| 26^2 to 26^2*2 -1   | (action - 26^2) mod 26 |(action - 26^2) / 26 | High Roll | Low Roll
+| 26^2*2   | None |None | None | None |
+
+The location on the board can be found from the location ID, which is either the source ID, or the destination ID (source ID + Roll).
+
+| Location ID (S) | Board Location |
+| ------- |  ------- |
+| <1 | White's bear off location|
+|1 to 24 | Point number S-1|
+|25 | Bar|
+|>25 | Black's bear off location|
+
+#### Rewards
+
+The winner is the first player to remove all of their checkers from the board.
+
+| Winner | Loser |
+| :----: | :---: |
+| +1     | -1    |
+"""
+
 WHITE = 0
 BLACK = 1
 NUM_POINTS = 24

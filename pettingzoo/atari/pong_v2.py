@@ -2,6 +2,26 @@ import os
 
 from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
 
+"""
+Classic two player competitive game of timing.
+
+Get the ball past the opponent.
+
+Scoring a point gives you +1 reward and your opponent -1 reward.
+
+Serves are timed: If the player does not serve within 2 seconds of receiving the ball, they receive -1 points, and the timer resets. This prevents one player from indefinitely stalling the game, but also means it is no longer a purely zero sum game.
+
+[Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
+
+#### Environment parameters
+
+Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari).
+
+Parameters specific to Pong are
+
+`num_players`:  Number of players (must be either 2 or 4)
+"""
+
 avaliable_2p_versions = {
     "classic": 4,
     "two_paddles": 10,

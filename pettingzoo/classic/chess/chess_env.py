@@ -10,6 +10,43 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from . import chess_utils
 
+"""
+Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
+
+### Observation Space
+* Channels 0 - 3: Castling rights:
+  * Channel 0: All ones if white can castle queenside
+  * Channel 1: All ones if white can castle kingside
+  * Channel 2: All ones if black can castle queenside
+  * Channel 3: All ones if black can castle kingside
+* Channel 4: Is black or white
+* Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+* Channel 6: All ones to help neural networks find board edges in padded convolutions
+* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
+* Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
+
+### Action Space
+
+From the AlphaZero chess paper:
+
+> [In AlphaChessZero, the] action space is a 8x8x73 dimensional array.
+Each of the 8×8 positions identifies the square from which to “pick up” a piece. The first 56 planes encode possible ‘queen moves’ for any piece: a number of squares [1..7] in which the piece will be
+moved, along one of eight relative compass directions {N, NE, E, SE, S, SW, W, NW}. The
+next 8 planes encode possible knight moves for that piece. The final 9 planes encode possible
+underpromotions for pawn moves or captures in two possible diagonals, to knight, bishop or
+rook respectively. Other pawn moves or captures from the seventh rank are promoted to a
+queen.
+
+We instead flatten this into 8×8×73 = 4672 discrete action space.
+
+You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a/(8*73), (a/73)%8, a%(8*8))`
+
+### Rewards
+
+| Winner | Loser | Draw |
+| :----: | :---: | :---: |
+| +1     | -1    | 0 |
+"""
 
 def env():
     env = raw_env()

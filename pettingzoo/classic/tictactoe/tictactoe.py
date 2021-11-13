@@ -8,6 +8,30 @@ from pettingzoo.utils import agent_selector, wrappers
 
 from .board import Board
 
+"""
+Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
+
+### Observation Space
+
+The main observation is 2 planes of the 3x3 board. For player_1, the first plane represents the placement of Xs, and the second plane shows the placement of Os. The possible values for each cell are 0 or 1; in the first plane, 1 indicates that an X has been placed in that cell, and 0 indicates that X is not in that cell. Similarly, in the second plane, 1 indicates that an O has been placed in that cell, while 0 indicates that an O has not been placed. For player_2, the observation is the same, but Xs and Os swap positions, so Os are encoded in plane 1 and Xs in plane 2. This allows for self-play.
+
+### Action Space
+```
+0 | 3 | 6
+_________
+
+1 | 4 | 7
+_________
+
+2 | 5 | 8
+```
+
+### Rewards
+
+| Winner | Loser |
+| :----: | :---: |
+| +1     | -1    |
+"""
 
 def env():
     env = raw_env()

@@ -13,6 +13,30 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 from .cake_paddle import RENDER_RATIO, CakePaddle
 from .manual_control import manual_control
 
+"""
+Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default. Obser2ation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, both agents receive a combined reward of `100 / max_cycles` (default 0.11), if they successfully complete a frame. Otherwise, each agent receive a reward of `-100` and the game ends.
+
+
+### Manual Control
+
+Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP' and 'DOWN' arrow keys.
+
+### Arguments
+
+`ball_speed`: Speed of ball (in pixels)
+
+`left_paddle_speed`: Speed of left paddle (in pixels)
+
+`right_paddle_speed`: Speed of right paddle (in pixels)
+
+`cake_paddle`: If True, the right paddle cakes the shape of a 4 tiered wedding cake
+
+`max_cycles`: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
+
+`bounce_randomness`: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
+
+"""
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 KERNEL_WINDOW_LENGTH = 2

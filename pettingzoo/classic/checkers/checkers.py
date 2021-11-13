@@ -9,6 +9,31 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
+"""
+Checkers (also called Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
+
+#### Observation Space
+| Plane | Observation            |
+| ----- | ---------------------- |
+| 0     | Current Player's Men   |
+| 1     | Current Player's Kings |
+| 2     | Other Player's Men     |
+| 3     | Other Player's Kings   |
+
+#### Action Space
+| Action    | Starting Square | Direction |
+| --------- | --------------- | --------- |
+| 0...63    | 0...63          | Northwest |
+| 64...127  | 0...63          | Northeast |
+| 128...191 | 0...63          | Southwest |
+| 192...255 | 0...63          | Southeast |
+
+#### Rewards
+
+| Winner | Loser |
+| :----: | :---: |
+|   +1   |  -1   |
+"""
 
 def env():
     env = raw_env()

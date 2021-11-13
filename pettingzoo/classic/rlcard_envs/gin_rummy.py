@@ -16,6 +16,54 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from .rlcard_base import RLCardBase
 
+"""
+Gin Rummy is a 2-player card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or in a sequence of the same suit.
+
+Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+### Arguments
+
+`knock_reward`:  reward received by a player who knocks
+
+`gin_reward`:  reward received by a player who goes gin
+
+`opponents_hand_visible`:  Set to `True` to observe the entire observation space as described in `Observation Space` below. Setting it to `False` will remove any observation of the unknown cards and the observation space will only include planes 0 to 3.
+
+### Observation Space
+| Row Index | Description                                    |
+|:---------:|------------------------------------------------|
+|     0     | Current player's hand                          |
+|     1     | Top card of the discard pile                   |
+|     2     | Cards in discard pile (excluding the top card) |
+|     3     | Opponent's known cards                         |
+|     4     | Unknown cards                                  |
+
+| Column Index | Description                                       |
+|:------------:|---------------------------------------------------|
+|    0 - 12    | Spades<br>_`0`: Ace, `1`: 2, ..., `12`: King_     |
+|    13 - 25   | Hearts<br>_`13`: Ace, `14`: 2, ..., `25`: King_   |
+|    26 - 38   | Diamonds<br>_`26`: Ace, `27`: 2, ..., `38`: King_ |
+|    39 - 51   | Clubs<br>_`39`: Ace, `40`: 2, ..., `51`: King_    |
+
+### Action Space
+| Action ID | Action                                                                                                                                                                                 |
+|:---------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     0     | Score Player 0<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                  |
+|     1     | Score Player 1<br>_Used after knock, gin, or dead hand to compute the player's hand._                                                                                                  |
+|     2     | Draw a card                                                                                                                                                                            |
+|     3     | Pick top card from Discard pile                                                                                                                                                        |
+|     4     | Declare dead hand                                                                                                                                                                      |
+|     5     | Gin                                                                                                                                                                                    |
+|   6 - 57  | Discard a card<br>_`6`: A-Spades, `7`: 2-Spades, ..., `18`: K-Spades<br>`19`: A-Hearts ... `31`: K-Hearts<br>`32`: A-Diamonds ... `44`: K-Diamonds<br>`45`: A-Clubs ... `57`: K-Clubs_ |
+|  58 - 109 | Knock<br>_`58`: A-Spades, `59`: 2-Spades, ..., `70`: K-Spades<br>`71`: A-Hearts ... `83`: K-Hearts<br>`84`: A-Diamonds ... `96`: K-Diamonds<br>`97`: A-Clubs ... `109`: K-Clubs_       |
+
+### Rewards
+| End Action                                | Winner | Loser                   |
+| ----------------------------------------- | :----: | ----------------------- |
+| Dead Hand<br>_Both players are penalized_ |   --   | `-deadwood_count / 100` |
+| Knock<br>_Knocking player: Default +0.5_  |   --   | `-deadwood_count / 100` |
+| Gin<br>_Going Gin Player: Default +1_     |   --   | `-deadwood_count / 100` |
+"""
 
 def env(**kwargs):
     env = raw_env(**kwargs)
