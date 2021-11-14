@@ -411,6 +411,8 @@ class raw_env(AECEnv, EzPickle):
             ball_min_x = int(self.ball.position[0] - self.ball_radius)
             if ball_min_x <= self.wall_width + 1:
                 self.done = True
+            # ensures that the ball can't pass through the wall
+            ball_min_x = max(self.wall_width, ball_min_x)
             self.draw()
             local_reward = self.get_local_reward(self.lastX, ball_min_x)
             # Opposite order due to moving right to left
