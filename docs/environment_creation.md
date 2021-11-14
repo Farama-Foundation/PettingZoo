@@ -1,6 +1,6 @@
 ---
 layout: "contents"
-title: environment_creation
+title: Environment Creation
 ---
 # Environment Creation
 
@@ -37,7 +37,7 @@ An environment can be converted from an AEC environment to a parallel environmen
 
 Most parallel environments in PettingZoo only allocate rewards at the end of a cycle. In these environments, the reward scheme of the AEC API an the parallel API is equivalent.  If an AEC environment does allocate rewards within a cycle, then the rewards will be allocated at different timesteps in the AEC environment an the Parallel environment. In particular, the AEC environment will allocate all rewards from one time the agent steps to the next time, while the Parallel environment will allocate all rewards from when the first agent stepped to the last agent stepped.
 
-```
+``` python
 from pettingzoo.utils import to_parallel
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -48,7 +48,7 @@ env = to_parallel(env)
 
 Any parallel environment can be efficiently converted to an AEC environment with the `from_parallel` wrapper.
 
-```
+``` python
 from pettingzoo.utils import from_parallel
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.parallel_env()
@@ -68,7 +68,7 @@ We wanted our pettingzoo environments to be both easy to use and easy to impleme
 
 You can apply these wrappers to your environment in a similar manner to the below example:
 
-```
+``` python
 from pettingzoo.utils import OrderEnforcingWrapper
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -103,12 +103,12 @@ for i in range(100):
 The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.
 
 For example, when the user tries to import the `prospector_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
-```
+``` python
 from pettingzoo.utils.deprecated_module import DeprecatedModule
 prospector_v0 = DeprecatedModule("prospector", "v0", "v3")
 ```
 This declaration tells the user that `prospector_v0` is deprecated and `prospector_v4` should be used instead. In particular, it gives the following error:
-```
+``` python
 from pettingzoo.butterfly import prospector_v0
 prospector_v0.env()
 # pettingzoo.utils.deprecated_module.DeprecatedEnv: prospector_v0 is now deprecated, use prospector_v4 instead
@@ -122,7 +122,7 @@ PettingZoo has a number of compliance tests for environments through. If you are
 
 PettingZoo's API has a number of features and requirements. To make sure your environment is consistent with the API, we have the api_test. Below is an example:
 
-```
+``` python
 from pettingzoo.test import api_test
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -140,7 +140,7 @@ The optional arguments are:
 
 This is an analogous version of the API test, but for parallel environments. You can use this test like:
 
-```
+``` python
 from pettingzoo.test import parallel_api_test
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.parallel_env()
@@ -153,7 +153,7 @@ To have a properly reproducible environment that utilizes randomness, you need t
 
 The seed test takes in a function that creates a pettingzoo environment. For example
 
-```
+``` python
 from pettingzoo.test import seed_test, parallel_seed_test
 from pettingzoo.butterfly import pistonball_v4
 env_fn = pistonball_v4.env
@@ -177,7 +177,7 @@ The second optional argument, `test_kept_state` allows the user to disable the s
 
 The max cycles test tests that the `max_cycles` environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a `max_cycles` argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing `max_cycles`. An example test usage looks like:
 
-```
+``` python
 from pettingzoo.test import max_cycles_test
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -188,7 +188,7 @@ max_cycles_test(env)
 
 The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports `'human'`, `'ansi'`, and `'rgb_array'` modes).
 
-```
+``` python
 from pettingzoo.test import render_test
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -197,7 +197,7 @@ render_test(env)
 
 The render test method takes in an optional argument `custom_tests` that allows for additional tests in non-standard modes.
 
-```
+``` python
 custom_tests = {
     "svg": lambda render_result: return isinstance(render_result, str)
 }
@@ -208,7 +208,7 @@ render_test(env, custom_tests=custom_tests)
 
 To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:
 
-```
+``` python
 from pettingzoo.test import performance_benchmark
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()
@@ -219,7 +219,7 @@ performance_benchmark(env)
 
 The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.
 
-```
+``` python
 from pettingzoo.test import test_save_obs
 from pettingzoo.butterfly import pistonball_v4
 env = pistonball_v4.env()

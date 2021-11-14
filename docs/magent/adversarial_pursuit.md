@@ -9,7 +9,7 @@ observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
 state-shape: "(45, 45, 5)"
 state-values: "(0, 2)"
-import: "pettingzoo.magent import adversarial_pursuit_v3"
+import: "from pettingzoo.magent import adversarial_pursuit_v3"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
@@ -28,7 +28,7 @@ The red agents must navigate the obstacles and tag (similar to attacking, but wi
 
 ### Arguments
 
-```
+``` python
 adversarial_pursuit_v3.env(map_size=45, minimap_mode=False, tag_penalty=-0.2,
 max_cycles=500, extra_features=False)
 ```
@@ -67,7 +67,7 @@ Prey's reward is given as:
 
 The observation space is a 10x10 map for pursuers and a 9x9 map for the pursued. They contain the following channels, which are (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1
@@ -82,7 +82,7 @@ last_reward(extra_features=True)| 1
 
 The observation space is a 45x45 map. It contains the following channels, which are (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle map| 1
 prey_presence| 1

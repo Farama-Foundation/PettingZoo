@@ -34,7 +34,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#gin-rummy) and yo
 
 Gin Rummy takes two optional arguments that define the reward received by a player who knocks or goes gin. The default values for the knock reward and gin reward are 0.5 and 1.0, respectively.
 
-```
+``` python
 gin_rummy_v4.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = False)
 ```
 

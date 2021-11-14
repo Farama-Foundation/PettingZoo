@@ -31,7 +31,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) an
 
 ### Arguments
 
-```
+``` python
 leduc_holdem_v4.env(num_players=2)
 ```
 

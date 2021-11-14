@@ -32,7 +32,7 @@ Observation space: `[self_vel, landmark_rel_position]`
 
 ### Arguments
 
-```
+``` python
 simple_v2.env(max_cycles=25, continuous_actions=False)
 ```
 
