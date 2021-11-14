@@ -409,7 +409,6 @@ class raw_env(AECEnv, EzPickle):
         self.space.step(1 / 20.0)
         if self._agent_selector.is_last():
             ball_min_x = int(self.ball.position[0] - self.ball_radius)
-            ball_min_x = max(ball_min_x, self.wall_width)
             if ball_min_x <= self.wall_width + 1:
                 self.done = True
             # ensures that the ball can't pass through the wall
