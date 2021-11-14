@@ -26,6 +26,8 @@ def parallel_api_test(par_env, num_cycles=10):
             actions = {agent: par_env.action_space(agent).sample() for agent in par_env.agents if agent in done and not done[agent]}
             obs, rew, done, info = par_env.step(actions)
             for agent in par_env.agents:
+                assert agent not in has_finished, "agent cannot be revived once done"
+
                 if agent not in live_agents:
                     live_agents.add(agent)
             assert isinstance(obs, dict)
