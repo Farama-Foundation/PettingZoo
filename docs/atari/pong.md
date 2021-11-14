@@ -41,7 +41,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Pong are
 
-```
+``` python
 pong_v2.env(num_players=2)
 ```
 

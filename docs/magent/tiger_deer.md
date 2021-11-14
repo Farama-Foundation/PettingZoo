@@ -10,7 +10,7 @@ observation-shape: "(3,3,5), (9,9,5)"
 observation-values: "[0,2]"
 state-shape: "(45, 45, 5)"
 state-values: "(0, 2)"
-import: "pettingzoo.magent import tiger_deer_v3"
+import: "from pettingzoo.magent import tiger_deer_v3"
 agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
@@ -31,7 +31,7 @@ In tiger-deer, there are a number of tigers who are only rewarded for teaming up
 
 ### Arguments
 
-```
+``` python
 tiger_deer_v3.env(map_size=45, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False)
 ```
 
@@ -70,7 +70,7 @@ Deer's reward scheme is:
 
 The observation space is a 3x3 map with 5 channels for deer and 9x9 map with 5 channels for tigers, which are (in order):
 
-name | number of channels
+feature | number of channels
 --- | ---
 obstacle/off the map| 1
 my_team_presence| 1

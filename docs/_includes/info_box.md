@@ -13,63 +13,59 @@ This environment is part of the [{{category_name}} environments](../{{category_n
 
 
 {% if page.state-shape and page.average-total-reward %}
-Name | Value
---- | ---
+
+Import | `{{ page.import }}`
 Actions | {{ page.actions }}
-Agents | {{ page.agents }}
 Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
 Manual Control | {{ page.manual-control }}
+Agents | `{{ page.agent-labels }}`
+Agents | {{ page.agents }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}
 Observation Shape | {{ page.observation-shape }}
 Observation Values | {{ page.observation-values }}
-Import | `{{ page.import }}`
-Agents | `{{ page.agent-labels }}`
 State Shape | {{ page.state-shape }}
 State Values | {{ page.state-values }}
 Average Total Reward | {{ page.average-total-reward }}
 {% elsif page.state-shape %}
-Name | Value
---- | ---
+
+Import | `{{ page.import }}`
 Actions | {{ page.actions }}
-Agents | {{ page.agents }}
 Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
 Manual Control | {{ page.manual-control }}
+Agents | `{{ page.agent-labels }}`
+Agents | {{ page.agents }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}
 Observation Shape | {{ page.observation-shape }}
 Observation Values | {{ page.observation-values }}
-Import | `{{ page.import }}`
-Agents | `{{ page.agent-labels }}`
 State Shape | {{ page.state-shape }}
 State Values | {{ page.state-values }}
 {% elsif page.average-total-reward %}
-Name | Value
---- | ---
+
+Import | `{{ page.import }}`
 Actions | {{ page.actions }}
-Agents | {{ page.agents }}
 Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
 Manual Control | {{ page.manual-control }}
+Agents | `{{ page.agent-labels }}`
+Agents | {{ page.agents }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}
 Observation Shape | {{ page.observation-shape }}
 Observation Values | {{ page.observation-values }}
-Import | `{{ page.import }}`
-Agents | `{{ page.agent-labels }}`
 Average Total Reward | {{ page.average-total-reward }}
 {% else %}
-Name | Value
---- | ---
+
+Import | `{{ page.import }}`
 Actions | {{ page.actions }}
-Agents | {{ page.agents }}
 Parallel API | {% if page.is_parallel %} Yes {% else %} No {% endif %}
 Manual Control | {{ page.manual-control }}
+Agents | `{{ page.agent-labels }}`
+Agents | {{ page.agents }}
 Action Shape | {{ page.action-shape }}
 Action Values | {{ page.action-values }}
 Observation Shape | {{ page.observation-shape }}
 Observation Values | {{ page.observation-values }}
-Import | `{{ page.import }}`
-Agents | `{{ page.agent-labels }}`
 {% endif %}
 
 
