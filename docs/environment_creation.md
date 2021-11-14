@@ -154,10 +154,14 @@ To have a properly reproducible environment that utilizes randomness, you need t
 The seed test takes in a function that creates a pettingzoo environment. For example
 
 ``` python
-from pettingzoo.test import seed_test
+from pettingzoo.test import seed_test, parallel_seed_test
 from pettingzoo.butterfly import pistonball_v4
 env_fn = pistonball_v4.env
 seed_test(env_fn, num_cycles=10, test_kept_state=True)
+
+# or for parallel environments
+parallel_env_fn = pistonball_v4.parallel_env
+parallel_seed_test(parallel_env_fn, num_cycles=10, test_kept_state=True)
 ```
 
 Internally, there are two separate tests.
