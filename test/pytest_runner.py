@@ -21,7 +21,7 @@ def test_module(name, env_module):
         parallel_api_test(env_module.parallel_env())
 
     seed_test(env_module.env, 50)
-    render_test(_env)
+    render_test(env_module.env)
 
     if "classic/" not in name:
         max_cycles_test(env_module)
