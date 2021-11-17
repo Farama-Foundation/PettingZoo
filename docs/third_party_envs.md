@@ -62,7 +62,7 @@ Set of two environments with numerous multi-agent equilibria popular with resear
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
-Planned by maintainer, not yet done
+Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
 
 ## CookingZoo
 [https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
