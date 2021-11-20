@@ -66,8 +66,10 @@ Massive environment intended to replicate an MMORPG game and hopefully study gen
 
 ## CookingZoo
 [https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+
 Maintained fork of too many cooks game with PettingZoo API support
 
 ## SNIM
 [https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py](https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py)
+
 PettingZoo based supply chain management environment
