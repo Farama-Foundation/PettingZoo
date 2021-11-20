@@ -46,7 +46,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
-    python_requires=">=3.7, <3.10",
+    python_requires=">=3.7, <3.11",
     packages=["pettingzoo"] + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
     install_requires=[
@@ -59,6 +59,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     extras_require=extras,
 )
