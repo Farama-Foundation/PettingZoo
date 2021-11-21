@@ -5,12 +5,13 @@
 .nav-item {
     border-right: solid;
     border-right-color: #bbb;
-    border-right-width: 1px
+    border-right-width: 1px;
 }
+
 .nav-subsubitem {
-    border-left: solid;
-    border-left-color: #bbb;
-    border-left-width: 1px
+    border: solid;
+    border-color: #bbb;
+    border-width: 1px
 }
 
 .bottom-padding {
@@ -223,16 +224,29 @@
 
 .nav-subitem-1 {
     top: -89.06px;
+    border: solid;
+    border-color: #bbb;
+    border-width: 1px
 }
 
 .nav-subitem-2 {
     top: -133.59px;
+    border: solid;
+    border-color: #bbb;
+    border-width: 1px
 }
 
 .nav-subitem-3 {
     top: -178.12px;
+    border: solid;
+    border-color: #bbb;
+    border-width: 1px
 }
 .nav-subitem-4 {
+    border-top: solid;
+    border-bottom: solid;
+    border-color: #bbb;
+    border-width: 1px;
     top: -222.65px;
 }
 
@@ -241,7 +255,7 @@
     position: relative;
     background: #fff;  
     left: 100%;
-    top: -44.28px;
+    top: -45.522px;
     z-index: 10;
 }
 
@@ -310,10 +324,10 @@
 .icon {
     float: left;
     position: absolute;
-    top: 15px;
+    top: 14px;
     max-width: 17px;
     max-height: 20px;
-    padding-left: 2px;
+    padding-left: 4px;
 }
 
 .env-icon {
@@ -473,7 +487,7 @@
         background: #fff;  
         left: 200px;
         width: 200px;
-        top: -44.28px;
+        top: -45.522px;
     }
 
     .copyright {
@@ -560,9 +574,9 @@
         list-style: none;  
         position: relative;
         background: #fff;  
-        top: -44.28px;
-        width: 44.28px;
-        height: 44.28px;
+        top: -45.522px;
+        width: 45.522px;
+        height: 45.522px;
         z-index: 10;
     }
     .icon {
