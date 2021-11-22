@@ -317,7 +317,7 @@ class CooperativePong:
             self.rewards = {a: 0 for a in self.agents}
             self.p0.update(self.area, action)
         elif agent == self.agents[1]:
-            self.p1.update(self.area, action)
+            self.p1.update(self.area, action, self.ball.rect)
 
             # do the rest if not done
             if not self.done:
