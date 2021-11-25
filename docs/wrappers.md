@@ -1,6 +1,11 @@
+---
+layout: "contents"
+title: Wrappers
+---
+
 PettingZoo include wrappers via the SuperSuit companion package (`pip install supersuit`). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:
 
-```
+``` python
 import gym
 from supersuit import color_reduction_v0, frame_stack_v1
 
@@ -11,12 +16,14 @@ env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 
 Similarly, using SuperSuit with PettingZoo environments looks like
 
-```
+``` python
 from pettingzoo.butterfly import pistonball_v0
 env = pistonball_v0.env()
 
 env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 ```
+
+## Included Functions
 
 Supersuit includes the following wrappers:
 
@@ -65,13 +72,15 @@ Supersuit includes the following wrappers:
 
 `pad_observations_v0(env)` pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning*. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.
 
+## Environment Vectorization
+
 `concat_vec_envs_v0(vec_env, num_vec_envs, num_cpus=0, base_class='gym')` takes in an `vec_env` which is vector environment (should not have multithreading enabled). Creates a new vector environment with `num_vec_envs` copies of that vector environment concatenated together and runs them on `num_cpus` cpus as balanced as possible between cpus. `num_cpus=0` or `num_cpus=1` means to create 0 new threads, i.e. run the process in an efficient single threaded manner. A use case for this function is given below. If the base class of the resulting vector environment matters as it does for stable baselines, you can use the `base_class` parameter to switch between `"gym"` base class and `"stable_baselines3"`'s base class. Note that both have identical functionality.
 
 ### Parallel Environment Vectorization
 
 Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of "environments":
 
-```
+``` python
 agent_1
 agent_2
 agent_3
@@ -86,7 +95,7 @@ The following function performs this conversion.
 
 You can also use the `concat_vec_envs_v0` functionality to train on several vector environments in parallel, forming a vector which looks like
 
-```
+``` python
 env_1_agent_1
 env_1_agent_2
 env_1_agent_3
@@ -98,7 +107,7 @@ env_2_agent_3
 
 So you can for example train 4 copies of pettingzoo's pistonball environment in parallel with some code like:
 
-```
+``` python
 from stable_baselines3 import PPO
 from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
@@ -119,7 +128,7 @@ Turning on multiprocessing runs each environment in it's own process. Turning th
 
 On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.
 
-```
+``` python
 import multiprocessing
 multiprocessing.set_start_method("fork")
 ```
@@ -138,13 +147,13 @@ If none of the included in micro-wrappers are suitable for your needs, you can u
 
 Adding noise to a Box observation looks like:
 
-```
+``` python
 env = observation_lambda_v0(env, lambda x : x + np.random.normal(size=x.shape))
 ```
 
 Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:
 
-```
+``` python
 env = observation_lambda_v0(env,
     lambda x : x + np.random.normal(size=x.shape),
     lambda obs_space : gym.spaces.Box(obs_space.low-5,obs_space.high+5))
@@ -152,7 +161,7 @@ env = observation_lambda_v0(env,
 
 Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:
 
-```
+``` python
 def one_hot(x,n):
     v = np.zeros(n)
     v[x] = 1

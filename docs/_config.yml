@@ -18,7 +18,7 @@ title      : PettingZoo
 email      : jkterry@gmail.com #this is also the email contact forms will go to
 description: "Multi-Agent Reinforcement Learning Environments"
 author     : Your Name
-copyright  : J K Terry
+copyright  : Farama Foundation
 logo:     #optional, defaults to site title
   path: /assets/img/PettingZoo_White.svg
   height: 100 #height in px, defaults to 52px
