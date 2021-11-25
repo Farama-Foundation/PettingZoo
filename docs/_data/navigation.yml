@@ -3,31 +3,31 @@ nav:
     url: "https://github.com/Farama-Foundation/PettingZoo"
 
   - title: "API"
-    url: "/API"
+    url: "/api"
     sublinks:
       - title: "Initializing Environments"
-        url: "/API#initializing-environments"
+        url: "/api#initializing-environments"
 
       - title: "Interacting With Environments"
-        url: "/API#interacting-with-environments"
+        url: "/api#interacting-with-environments"
 
       - title: "Additional Environment API"
-        url: "/API#additional-environment-api"
+        url: "/api#additional-environment-api"
 
       - title: "Notable Idioms"
-        url: "/API#notable-idioms"
+        url: "/api#notable-idioms"
 
       - title: "Raw Environments"
-        url: "/API#raw-environments"
+        url: "/api#raw-environments"
 
       - title: "Parallel API"
-        url: "/API#parallel-api"
+        url: "/api#parallel-api"
 
       - title: "SuperSuit"
-        url: "/API#supersuit"
+        url: "/api#supersuit"
 
       - title: "Utils"
-        url: "/API#utils"
+        url: "/api#utils"
 
   - title: "Environment Creation"
     url: "/environment_creation"
@@ -285,28 +285,28 @@ nav:
 
 API:
   - title: "Initializing Environments"
-    url: "/API#initializing-environments"
+    url: "/api#initializing-environments"
 
   - title: "Interacting With Environments"
-    url: "/API#interacting-with-environments"
+    url: "/api#interacting-with-environments"
 
   - title: "Additional Environment API"
-    url: "/API#additional-environment-api"
+    url: "/api#additional-environment-api"
 
   - title: "Notable Idioms"
-    url: "/API#notable-idioms"
+    url: "/api#notable-idioms"
 
   - title: "Raw Environments"
-    url: "/API#raw-environments"
+    url: "/api#raw-environments"
 
   - title: "Parallel API"
-    url: "/API#parallel-api"
+    url: "/api#parallel-api"
 
   - title: "SuperSuit"
-    url: "/API#supersuit"
+    url: "/api#supersuit"
 
   - title: "Utils"
-    url: "/API#utils"
+    url: "/api#utils"
 
 Environment Creation:
       - title: "Example Custom Environment"
