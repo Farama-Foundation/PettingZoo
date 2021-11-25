@@ -73,3 +73,9 @@ Maintained fork of too many cooks game with PettingZoo API support
 [https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py](https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py)
 
 PettingZoo based supply chain management environment
+
+## CityLearn
+
+[https://github.com/apigott/CityLearn](https://github.com/apigott/CityLearn)
+
+PettingZoo environments for city grid power management, based on the CityLearn simulator.
