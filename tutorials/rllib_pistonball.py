@@ -7,6 +7,7 @@ from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
 import torch
 from torch import nn
+from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 
 
 class CNNModelV2(TorchModelV2, nn.Module):
