@@ -7,6 +7,8 @@ from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
 import torch
 from torch import nn
+from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
+from ray import shutdown
 
 
 class CNNModelV2(TorchModelV2, nn.Module):
@@ -49,7 +51,16 @@ class CNNModelV2(TorchModelV2, nn.Module):
 
 
 def env_creator(args):
-    env = pistonball_v4.parallel_env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+    env = pistonball_v4.parallel_env(n_pistons=20,
+                                     # local_ratio=0,
+                                     time_penalty=-0.1,
+                                     continuous=True,
+                                     random_drop=True,
+                                     random_rotate=True,
+                                     ball_mass=0.75,
+                                     ball_friction=0.3,
+                                     ball_elasticity=1.5,
+                                     max_cycles=125)
     env = ss.color_reduction_v0(env, mode='B')
     env = ss.dtype_v0(env, 'float32')
     env = ss.resize_v0(env, x_size=84, y_size=84)
@@ -60,6 +71,8 @@ def env_creator(args):
 
 
 if __name__ == "__main__":
+    shutdown()
+    
     env_name = "pistonball_v4"
 
     register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))
