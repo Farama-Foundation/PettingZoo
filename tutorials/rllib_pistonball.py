@@ -1,7 +1,6 @@
 from ray import tune
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
-# from ray.rllib.utils import try_import_tf
 from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
 from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
@@ -52,7 +51,6 @@ class CNNModelV2(TorchModelV2, nn.Module):
 
 def env_creator(args):
     env = pistonball_v4.parallel_env(n_pistons=20,
-                                     # local_ratio=0,
                                      time_penalty=-0.1,
                                      continuous=True,
                                      random_drop=True,
@@ -66,13 +64,12 @@ def env_creator(args):
     env = ss.resize_v0(env, x_size=84, y_size=84)
     env = ss.frame_stack_v1(env, 3)
     env = ss.normalize_obs_v0(env, env_min=0, env_max=1)
-    #env = ss.flatten_v0(env)
     return env
 
 
 if __name__ == "__main__":
-    # shutdown()
-    
+    shutdown()
+
     env_name = "pistonball_v4"
 
     register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))
@@ -130,7 +127,7 @@ if __name__ == "__main__":
             "sgd_minibatch_size": 64,
             "num_sgd_iter": 10, # epoc
             'rollout_fragment_length': 512,
-            "train_batch_size": 512*4,
+            "train_batch_size": 512,
             'lr': 2e-05,
             "clip_actions": True,
 
