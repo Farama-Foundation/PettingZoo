@@ -71,7 +71,7 @@ def env_creator(args):
 
 
 if __name__ == "__main__":
-    shutdown()
+    # shutdown()
     
     env_name = "pistonball_v4"
 
