@@ -5,9 +5,9 @@ from ray.rllib.agents.ppo import PPOTrainer
 from pettingzoo.butterfly import pistonball_v4
 import supersuit as ss
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
-import PIL
+from PIL import Image
 from ray.rllib.models import ModelCatalog
-from rllib_pistonball import MLPModelV2
+from rllib_pistonball import CNNModelV2
 import numpy as np
 import os
 import argparse
@@ -23,11 +23,21 @@ args = parser.parse_args()
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
 params_path = Path(checkpoint_path).parent.parent/"params.pkl"
 
-ModelCatalog.register_custom_model("MLPModelV2", MLPModelV2)
+ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
 
 def env_creator():
-    env = pistonball_v4.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+    env = pistonball_v4.env(
+        n_pistons=20,
+        time_penalty=-0.1,
+        continuous=True,
+        random_drop=True,
+        random_rotate=True,
+        ball_mass=0.75,
+        ball_friction=0.3,
+        ball_elasticity=1.5,
+        max_cycles=125
+    )
     env = ss.color_reduction_v0(env, mode='B')
     env = ss.dtype_v0(env, 'float32')
     env = ss.resize_v0(env, x_size=84, y_size=84)
@@ -67,7 +77,7 @@ for agent in env.agent_iter():
     env.step(action)
     i += 1
     if i % (len(env.possible_agents)+1) == 0:
-        frame_list.append(PIL.Image.fromarray(env.render(mode='rgb_array')))
+        frame_list.append(Image.fromarray(env.render(mode='rgb_array')))
 env.close()
 
 
