@@ -80,7 +80,7 @@ class CakePaddle(pygame.sprite.Sprite):
                 b_rect.right = self.rect4.left
                 b_speed[0] = -b_speed[0]
             # @FIX: The vertical position of ball
-            # should be determined based on the 
+            # should be determined based on the
             # relative position before update,
             # not based on its vertical speed.
             elif self.was_ball_on_top:
