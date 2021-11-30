@@ -263,10 +263,6 @@ class turn_based_to_parallel_wrapper(to_parallel_wrapper):
             observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
             return observations, rewards, dones, infos
         self.aec_env.step(actions[self.aec_env.agent_selection])
-        #rewards = defaultdict(int)
-        #dones = {}
-        #infos = {}
-        #observations = {}
         rewards = dict(**self.aec_env.rewards)
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
