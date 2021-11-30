@@ -3,8 +3,7 @@ import warnings
 
 import numpy as np
 
-from pettingzoo.utils.conversions import (from_parallel_wrapper,
-                                          to_parallel_wrapper,
+from pettingzoo.utils.conversions import (from_parallel_wrapper, to_parallel_wrapper,
                                           turn_based_to_parallel_wrapper)
 from pettingzoo.utils.wrappers import BaseWrapper
 
