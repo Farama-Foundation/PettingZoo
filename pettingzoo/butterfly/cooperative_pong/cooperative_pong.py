@@ -195,7 +195,7 @@ class BallSprite(pygame.sprite.Sprite):
 
 
 class CooperativePong:
-    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10):
         super().__init__()
 
         pygame.init()
@@ -205,6 +205,8 @@ class CooperativePong:
         self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
         self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
+        self.max_reward = max_reward
+        self.off_screen_penalty = off_screen_penalty
 
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
@@ -329,18 +331,17 @@ class CooperativePong:
                 reward = 0
                 # ball is out-of-bounds
                 if self.done:
-                    reward = -100
+                    reward = self.off_screen_penalty
                     self.score += reward
                 if not self.done:
                     self.num_frames += 1
-                    # scaling reward so that the max reward is 100
-                    reward = 100 / self.max_cycles
+                    reward = self.max_reward / self.max_cycles
                     self.score += reward
                     if self.num_frames == self.max_cycles:
                         self.done = True
 
                 for ag in self.agents:
-                    self.rewards[ag] = reward / self.num_agents
+                    self.rewards[ag] = reward
                     self.dones[ag] = self.done
                     self.infos[ag] = {}
 
@@ -361,7 +362,7 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "cooperative_pong_v3"}
+    metadata = {'render.modes': ['human', "rgb_array"], 'name': "cooperative_pong_v4"}
 
     def __init__(self, **kwargs):
         EzPickle.__init__(self, **kwargs)

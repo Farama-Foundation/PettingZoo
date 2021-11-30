@@ -56,6 +56,8 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 
 `random_aliens`:  If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
 
+`max_cycles`:  after max_cycles steps all agents will return done
+
 
 ### Version History
 
