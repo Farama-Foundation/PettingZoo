@@ -32,6 +32,14 @@ def from_parallel(par_env):
         return ordered_env
 
 
+def turn_based_to_parallel(aec_env):
+    if isinstance(aec_env, from_parallel_wrapper):
+        return aec_env.env
+    else:
+        par_env = turn_based_to_parallel_wrapper(aec_env)
+        return par_env
+
+
 class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         self.aec_env = aec_env
@@ -236,3 +244,43 @@ class from_parallel_wrapper(AECEnv):
 
     def __str__(self):
         return str(self.env)
+
+
+class turn_based_to_parallel_wrapper(to_parallel_wrapper):
+    def reset(self):
+        self.aec_env.reset()
+        self.agents = self.aec_env.agents[:]
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        return observations
+
+    def step(self, actions):
+        if actions == {}:
+            rewards = defaultdict(int)
+            dones = dict(**self.aec_env.dones)
+            infos = dict(**self.aec_env.infos)
+            observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+            return observations, rewards, dones, infos
+        self.aec_env.step(actions[self.aec_env.agent_selection])
+        #rewards = defaultdict(int)
+        #dones = {}
+        #infos = {}
+        #observations = {}
+        rewards = dict(**self.aec_env.rewards)
+        dones = dict(**self.aec_env.dones)
+        infos = dict(**self.aec_env.infos)
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+
+        while self.aec_env.agents:
+            obs, rew, done, info = self.aec_env.last()
+            agent = self.aec_env.agent_selection
+            observations[agent] = obs
+            rewards[agent] = rew
+            dones[agent] = done
+            infos[agent] = info
+            if self.aec_env.dones[self.aec_env.agent_selection]:
+                self.aec_env.step(None)
+            else:
+                break
+
+        self.agents = self.aec_env.agents
+        return observations, rewards, dones, infos
