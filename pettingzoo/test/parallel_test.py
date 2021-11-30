@@ -12,7 +12,7 @@ from .api_test import missing_attr_warning
 
 def sample_action(env, obs, agent):
     agent_obs = obs[agent]
-    if "action_mask" in agent_obs:
+    if isinstance(agent_obs, dict) and "action_mask" in agent_obs:
         legal_actions = np.flatnonzero(agent_obs["action_mask"])
         if len(legal_actions) == 0:
             return 0
