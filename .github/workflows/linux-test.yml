@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -43,5 +43,8 @@ jobs:
         pytest ./test/doc_examples_test.py
     - name: 13 lines test
       run: |
-        pip install stable_baselines3 supersuit
-        sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
+        if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
+        then
+            pip install stable_baselines3 supersuit
+            sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
+        fi
