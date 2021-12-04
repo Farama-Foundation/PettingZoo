@@ -17,6 +17,8 @@ class CaptureStdoutWrapper(BaseWrapper):
 
                 val = stdout.getvalue()
             return val
+        elif mode == "rgb_array":
+            return super().render()
 
     def __str__(self):
         return str(self.env)
