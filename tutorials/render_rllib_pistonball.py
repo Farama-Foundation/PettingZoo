@@ -2,7 +2,7 @@ import ray
 import pickle5 as pickle
 from ray.tune.registry import register_env
 from ray.rllib.agents.ppo import PPOTrainer
-from pettingzoo.butterfly import pistonball_v4
+from pettingzoo.butterfly import pistonball_v5
 import supersuit as ss
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
 from PIL import Image
@@ -16,7 +16,7 @@ from pathlib import Path
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(description='Render pretrained policy loaded from checkpoint')
-parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v4/PPO/PPO_pistonball_v4_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
+parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v5/PPO/PPO_pistonball_v5_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
 
 args = parser.parse_args()
 
@@ -27,7 +27,7 @@ ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
 
 def env_creator():
-    env = pistonball_v4.env(
+    env = pistonball_v5.env(
         n_pistons=20,
         time_penalty=-0.1,
         continuous=True,
@@ -47,7 +47,7 @@ def env_creator():
 
 
 env = env_creator()
-env_name = 'pistonball_v4'
+env_name = 'pistonball_v5'
 register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
 with open(params_path, "rb") as f:
