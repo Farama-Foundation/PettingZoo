@@ -8,16 +8,14 @@ class CaptureStdoutWrapper(BaseWrapper):
         self.metadata['render.modes'].append("ansi")
 
     def render(self, mode="human"):
-        if mode == "human":
-            super().render(mode)
-        elif mode == "ansi":
+        if mode == "ansi":
             with capture_stdout() as stdout:
 
-                super().render(mode)
+                super().render("human")
 
                 val = stdout.getvalue()
             return val
-        elif mode == "rgb_array":
+        else:
             return super().render(mode)
 
     def __str__(self):
