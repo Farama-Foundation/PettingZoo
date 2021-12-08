@@ -29,7 +29,7 @@ An adversarial game that combines control and precise selection.
 The game has two stages: selection and play. Selection can be
 difficult because you have to hold the same action for a few steps and then
 take the 0 action. Strategy choice is timed: if a player does not select any action after 2 seconds (120 frames)
-then the player is rewarded -1, and the timer resets. This prevents one player from indefinitely stalling the game.
+then the player is rewarded -1, and the timer resets. This prevents one player from indefinitely stalling the game, but also means it is no longer a purely zero sum game.
 
 Once play begins, each team has two players. You only control
 one at a time, and and which one you control depends on the selected play.

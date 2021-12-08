@@ -39,7 +39,7 @@ Note that following this reward greedily is known to be a bad long-term strategy
 
 When one player cannot move, the tokens on both sides are tallied, and the player with the most tokens wins! (receives +1 reward, and their opponent -1).
 
-This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets. This prevents one player from indefinitely stalling the game.
+This is a timed game: if a player does not take a turn after 10 seconds, then that player is rewarded -1 points, their opponent is rewarded nothing, and the timer resets. This prevents one player from indefinitely stalling the game, but also means it is no longer a purely zero sum game.
 
 [Official othello manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=335)
 
