@@ -13,3 +13,5 @@ docs/classic/desktop.ini
 docs/Gemfile
 docs/Gemfile
 docs/Gemfile
+out/*
+.idea/*
