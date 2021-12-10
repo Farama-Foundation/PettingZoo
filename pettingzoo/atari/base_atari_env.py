@@ -188,7 +188,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         image = self.ale.getScreenRGB()
         if mode == "human":
             import os
-            os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
             import pygame
             zoom_factor = 4
             if self._screen is None:

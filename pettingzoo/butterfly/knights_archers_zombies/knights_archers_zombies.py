@@ -17,7 +17,6 @@ from .src.players import Archer, Knight
 from .src.weapons import Arrow, Sword
 from .src.zombie import Zombie
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 sys.dont_write_bytecode = True
 
 
