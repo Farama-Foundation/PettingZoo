@@ -1,12 +1,12 @@
 [tool.pyright]
 
-# add any files with type declaration to include
+# add any files/directories with type declaration to include
 include = ["pettingzoo/atari/base_atari_env.py"]
 exclude = [
     "**/node_modules",
     "**/__pycache__",
 ]
-strict = ["gym/version.py", "gym/logger.py"]
+strict = ["pettingzoo/atari/base_atari_env.py"]
 
 reportMissingImports = true
 reportMissingTypeStubs = false
