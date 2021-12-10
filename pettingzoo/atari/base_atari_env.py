@@ -183,7 +183,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.agents = [agent for agent in self.agents if not dones[agent]]
         return observations, rewards, dones, infos
 
-    def render(self, mode="human"):
+    def render(self, mode:str ="human"):
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if mode == "human":
