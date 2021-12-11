@@ -144,7 +144,7 @@ class raw_env(AECEnv):
         assert mode in ['human'], print(mode)
         if mode == 'human':
             self.game.render()
-            return True
+            return None
 
     def close(self):
         pass
