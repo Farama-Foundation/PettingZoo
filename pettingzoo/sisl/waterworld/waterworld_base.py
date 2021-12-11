@@ -9,8 +9,6 @@ from scipy.spatial import distance as ssd
 
 from .._utils import Agent
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 class Archea(Agent):
 

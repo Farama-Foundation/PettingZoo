@@ -14,8 +14,6 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from .rlcard_base import RLCardBase
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def get_image(path):
     from os import path as os_path

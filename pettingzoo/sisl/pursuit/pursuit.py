@@ -11,8 +11,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 from .manual_control import manual_control
 from .pursuit_base import Pursuit as _env
 
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
-
 
 def env(**kwargs):
     env = raw_env(**kwargs)
