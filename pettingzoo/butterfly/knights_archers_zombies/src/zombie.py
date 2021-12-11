@@ -4,9 +4,6 @@ import pygame
 
 from .img import get_image
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
-
 ZOMBIE_Y_SPEED = 5
 ZOMBIE_X_SPEED = 30
 WIDTH = 1280

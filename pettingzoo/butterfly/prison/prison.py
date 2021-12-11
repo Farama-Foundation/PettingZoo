@@ -11,8 +11,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def get_image(path):
     from os import path as os_path

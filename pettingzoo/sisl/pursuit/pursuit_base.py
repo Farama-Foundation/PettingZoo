@@ -14,8 +14,6 @@ from .utils import agent_utils, two_d_maps
 from .utils.agent_layer import AgentLayer
 from .utils.controllers import PursuitPolicy, RandomPolicy, SingleActionPolicy
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 class Pursuit:
 
