@@ -254,31 +254,20 @@ class turn_based_to_parallel_wrapper(to_parallel_wrapper):
         return observations
 
     def step(self, actions):
-        if actions == {}:
-            rewards = defaultdict(int)
-            dones = dict(**self.aec_env.dones)
-            infos = dict(**self.aec_env.infos)
-            for agent in self.aec_env.agents:
-                infos[agent]["active_agent"] = self.aec_env.agent_selection
-            observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
-            return observations, rewards, dones, infos
+        if not self.agents:
+            return {}, {}, {}, {}
         self.aec_env.step(actions[self.aec_env.agent_selection])
-        rewards = dict(**self.aec_env.rewards)
-        dones = dict(**self.aec_env.dones)
-        infos = dict(**self.aec_env.infos)
+        rewards = {**self.aec_env.rewards}
+        dones = {**self.aec_env.dones}
+        infos = {**self.aec_env.infos}
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
 
         while self.aec_env.agents:
-            obs, rew, done, info = self.aec_env.last()
-            agent = self.aec_env.agent_selection
-            observations[agent] = obs
-            rewards[agent] = rew
-            dones[agent] = done
-            infos[agent] = info
             if self.aec_env.dones[self.aec_env.agent_selection]:
                 self.aec_env.step(None)
             else:
                 break
+            # no need to update data after null step (nothing should change other than the active agent)
 
         for agent in self.aec_env.agents:
             infos[agent]["active_agent"] = self.aec_env.agent_selection
