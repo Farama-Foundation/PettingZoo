@@ -11,7 +11,7 @@ on:
 
 jobs:
   linux-test:
-    runs-on: ubuntu-bionic 
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
