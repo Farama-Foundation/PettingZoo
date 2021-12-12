@@ -24,6 +24,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sudo apt-get install python-opengl
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
     - name: Bandit, Codespell, and Flake 8 tests
