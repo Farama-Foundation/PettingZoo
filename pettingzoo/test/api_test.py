@@ -174,6 +174,9 @@ def play_test(env, observation_0, num_cycles):
         if hasattr(env, 'possible_agents'):
             assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents, if it exists"
 
+        if not env.agents:
+            break
+
         if isinstance(env.observation_space(agent), gym.spaces.Box):
             assert env.observation_space(agent).dtype == prev_observe.dtype
         assert env.observation_space(agent).contains(prev_observe), \
