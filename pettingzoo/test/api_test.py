@@ -186,7 +186,6 @@ def play_test(env, observation_0, num_cycles):
 
     if not env.agents:
         assert has_finished == generated_agents, "not all agents finished, some were skipped over"
-        break
 
     env.reset()
     for agent in env.agent_iter(env.num_agents * 2):
