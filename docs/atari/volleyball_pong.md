@@ -28,6 +28,8 @@ agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 Four player team battle.
 
 Get the ball onto your opponent's floor to score. In addition to being able to move left and right, each player can also jump higher to affect the ball's motion above the net.
+This is a team game, so a given team must try to coordinate to get the ball away from their scoring areas towards their opponent's.
+Specifically `first_0` and `third_0` are on one team and `second_0` and `fourth_0` are on the other.
 
 Scoring a point gives your team +1 reward and your opponent team -1 reward.
 
@@ -42,7 +44,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to Volleyball Pong are
 
-```
+``` python
 volleyball_pong_v2.env(num_players=4)
 ```
 

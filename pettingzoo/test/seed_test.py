@@ -5,6 +5,8 @@ import warnings
 
 import numpy as np
 
+from pettingzoo.utils import from_parallel
+
 
 def hash(val):
     val = pickle.dumps(val)
@@ -38,9 +40,9 @@ def calc_hash(new_env, rand_issue, max_env_iters):
 
 
 def seed_action_spaces(env):
-    if hasattr(env, 'action_spaces'):
-        for i, (agent, space) in enumerate(sorted(env.action_spaces.items())):
-            space.seed(42 + i)
+    if hasattr(env, 'possible_agents'):
+        for i, agent in enumerate(env.possible_agents):
+            env.action_space(agent).seed(42 + i)
 
 
 def check_environment_deterministic(env1, env2, num_cycles):
@@ -102,3 +104,12 @@ def seed_test(env_constructor, num_cycles=10, test_kept_state=True):
 
     assert check_environment_deterministic(env1, env2, num_cycles), \
         ("The environment gives different results on multiple runs when initialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state.")
+
+
+def parallel_seed_test(parallel_env_fn, num_cycles=10, test_kept_state=True):
+    def aec_env_fn():
+        parallel_env = parallel_env_fn()
+        env = from_parallel(parallel_env)
+        return env
+
+    seed_test(aec_env_fn, num_cycles, test_kept_state)

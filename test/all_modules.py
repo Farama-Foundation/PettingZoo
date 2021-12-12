@@ -23,7 +23,7 @@ from pettingzoo.atari import volleyball_pong_v2
 from pettingzoo.atari import wizard_of_wor_v2
 from pettingzoo.atari import warlords_v2
 
-from pettingzoo.classic import chess_v4
+from pettingzoo.classic import chess_v5
 from pettingzoo.classic import checkers_v3
 from pettingzoo.classic import rps_v2
 from pettingzoo.classic import connect_four_v3
@@ -40,8 +40,8 @@ from pettingzoo.classic import hanabi_v4
 from pettingzoo.classic import backgammon_v3
 
 from pettingzoo.butterfly import knights_archers_zombies_v7
-from pettingzoo.butterfly import pistonball_v4
-from pettingzoo.butterfly import cooperative_pong_v3
+from pettingzoo.butterfly import pistonball_v5
+from pettingzoo.butterfly import cooperative_pong_v4
 from pettingzoo.butterfly import prison_v3
 from pettingzoo.butterfly import prospector_v4
 
@@ -62,7 +62,7 @@ from pettingzoo.mpe import simple_tag_v2
 from pettingzoo.mpe import simple_world_comm_v2
 from pettingzoo.mpe import simple_v2
 
-from pettingzoo.sisl import pursuit_v3
+from pettingzoo.sisl import pursuit_v4
 from pettingzoo.sisl import waterworld_v3
 from pettingzoo.sisl import multiwalker_v7
 
@@ -103,7 +103,7 @@ all_environments = {
     "atari/wizard_of_wor_v2": wizard_of_wor_v2,
     "atari/warlords_v2": warlords_v2,
 
-    "classic/chess_v4": chess_v4,
+    "classic/chess_v5": chess_v5,
     "classic/checkers_v3": checkers_v3,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
@@ -120,8 +120,8 @@ all_environments = {
     "classic/backgammon_v3": backgammon_v3,
 
     "butterfly/knights_archers_zombies_v7": knights_archers_zombies_v7,
-    "butterfly/pistonball_v4": pistonball_v4,
-    "butterfly/cooperative_pong_v3": cooperative_pong_v3,
+    "butterfly/pistonball_v5": pistonball_v5,
+    "butterfly/cooperative_pong_v4": cooperative_pong_v4,
     "butterfly/prison_v3": prison_v3,
     "butterfly/prospector_v4": prospector_v4,
 
@@ -144,5 +144,5 @@ all_environments = {
 
     "sisl/multiwalker_v7": multiwalker_v7,
     "sisl/waterworld_v3": waterworld_v3,
-    "sisl/pursuit_v3": pursuit_v3,
+    "sisl/pursuit_v4": pursuit_v4,
 }

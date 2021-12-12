@@ -6,8 +6,6 @@ import pygame
 from .img import get_image
 from .weapons import Arrow, Sword
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 WIDTH = 1280
 HEIGHT = 720
 ARCHER_SPEED = 25

@@ -5,8 +5,6 @@ import pygame
 
 from . import constants as const
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def manual_control(**kwargs):
     from .prospector import env as _env

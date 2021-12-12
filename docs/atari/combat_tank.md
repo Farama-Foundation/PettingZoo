@@ -41,7 +41,7 @@ Some environment parameters are common to all Atari environments and are describ
 
 Parameters specific to combat-tank are
 
-```
+``` python
 combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
 ```
 

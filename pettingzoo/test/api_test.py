@@ -48,12 +48,11 @@ def test_observation(observation, observation_0):
 
 
 def test_observation_action_spaces(env, agent_0):
-    assert not hasattr(env, 'action_spaces') or isinstance(env.action_spaces, dict), "action_spaces must be a dict"
-    assert not hasattr(env, 'observation_spaces') or isinstance(env.observation_spaces, dict), "if observation_spaces exists, it must be a dict"
-
     for agent in env.agents:
         assert isinstance(env.observation_space(agent), gym.spaces.Space), "Observation space for each agent must extend gym.spaces.Space"
         assert isinstance(env.action_space(agent), gym.spaces.Space), "Agent space for each agent must extend gym.spaces.Space"
+        assert env.observation_space(agent) is env.observation_space(agent), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
+        assert env.action_space(agent) is env.action_space(agent), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
         if not (isinstance(env.observation_space(agent), gym.spaces.Box) or isinstance(env.observation_space(agent), gym.spaces.Discrete)):
             warnings.warn("Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete")
         if not (isinstance(env.action_space(agent), gym.spaces.Box) or isinstance(env.action_space(agent), gym.spaces.Discrete)):
@@ -174,8 +173,8 @@ def play_test(env, observation_0, num_cycles):
         assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
         if hasattr(env, 'possible_agents'):
             assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents, if it exists"
+
         if not env.agents:
-            assert has_finished == generated_agents, "not all agents finished, some were skipped over"
             break
 
         if isinstance(env.observation_space(agent), gym.spaces.Box):
@@ -187,6 +186,9 @@ def play_test(env, observation_0, num_cycles):
         test_observation(prev_observe, observation_0)
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
+
+    if not env.agents:
+        assert has_finished == generated_agents, "not all agents finished, some were skipped over"
 
     env.reset()
     for agent in env.agent_iter(env.num_agents * 2):
@@ -224,7 +226,7 @@ def test_action_flexibility(env):
     elif isinstance(action_space, gym.spaces.Box):
         env.step(np.zeros_like(action_space.low))
         env.reset()
-        env.step(np.zeros_like(action_space.low).tolist())
+        env.step(np.zeros_like(action_space.low))
 
 
 def api_test(env, num_cycles=10, verbose_progress=False):
@@ -235,10 +237,6 @@ def api_test(env, num_cycles=10, verbose_progress=False):
     print("Starting API test")
     if not hasattr(env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
-    if not hasattr(env, 'observation_spaces'):
-        warnings.warn(missing_attr_warning.format(name='observation_spaces'))
-    if not hasattr(env, 'action_spaces'):
-        warnings.warn(missing_attr_warning.format(name='action_spaces'))
 
     env.reset()
 

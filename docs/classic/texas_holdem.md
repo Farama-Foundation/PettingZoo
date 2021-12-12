@@ -24,7 +24,7 @@ agent-labels: "agents= ['player_0', 'player_1']"
 
 ### Arguments
 
-```
+``` python
 texas_holdem_v4.env(num_players=2)
 ```
 

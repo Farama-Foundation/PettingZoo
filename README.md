@@ -2,7 +2,7 @@
     <img src="PettingZoo_Text.png" width="500px"/>
 </p>
 
-PettingZoo is a Python library for conducting research in multi-agent reinforcement learning. It's akin to a multi-agent version of OpenAI's Gym library.
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gym](https://github.com/openai/gym).
 
 Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
@@ -30,8 +30,8 @@ PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https:/
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```python
-from pettingzoo.butterfly import pistonball_v4
-env = pistonball_v4.env()
+from pettingzoo.butterfly import pistonball_v5
+env = pistonball_v5.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:

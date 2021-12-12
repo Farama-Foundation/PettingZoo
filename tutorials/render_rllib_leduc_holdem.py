@@ -18,7 +18,7 @@ from rllib_leduc_holdem import TorchMaskedActions
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(description='Render pretrained policy loaded from checkpoint')
-parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v4/PPO/PPO_pistonball_v4_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
+parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v5/PPO/PPO_pistonball_v5_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
 
 args = parser.parse_args()
 

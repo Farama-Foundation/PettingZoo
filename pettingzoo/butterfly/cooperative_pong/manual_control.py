@@ -3,8 +3,6 @@ import os
 import numpy as np
 import pygame
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def manual_control(**kwargs):
     from .cooperative_pong import env as _env

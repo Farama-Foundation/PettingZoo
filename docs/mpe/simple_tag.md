@@ -29,7 +29,7 @@ This is a predator-prey environment. Good agents (green) are faster and receive 
 
 So that good agents don't run to infinity, they are also penalized for exiting the area by the following function:
 
-```
+``` python
 def bound(x):
       if x < 0.9:
           return 0
@@ -44,7 +44,7 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 
 ### Arguments
 
-```
+``` python
 simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25, continuous_actions=False)
 ```
 

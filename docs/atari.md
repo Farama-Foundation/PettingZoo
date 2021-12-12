@@ -28,7 +28,7 @@ pip install supersuit
 
 Here is some example usage for the Atari preprocessing:
 
-```
+``` python
 import supersuit
 from pettingzoo.atari import space_invaders_v1
 
@@ -56,7 +56,7 @@ env = supersuit.frame_stack_v1(env, 4)
 
 All the Atari environments have the following environment parameters:
 
-```
+``` python
 <atari_game>.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
 ```
 
@@ -87,7 +87,7 @@ Multiplayer games within the Arcade Learning Environment were introduced in:
 ```
 @article{terry2020arcade,
   Title = {Multiplayer Support for the Arcade Learning Environment},
-  Author = {Terry, Justin K and Black, Benjamin},
+  Author = {Terry, J K and Black, Benjamin},
   journal={arXiv preprint arXiv:2009.09341},
   year={2020}
 }

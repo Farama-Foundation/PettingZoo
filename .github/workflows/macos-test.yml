@@ -24,3 +24,6 @@ jobs:
       run: |
         pytest ./test/pytest_runner.py
         pytest ./test/all_parameter_combs.py
+    - name: 13 lines test
+      run: |
+        pip install stable_baselines3
