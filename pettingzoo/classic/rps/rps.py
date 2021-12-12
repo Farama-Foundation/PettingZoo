@@ -42,7 +42,11 @@ class raw_env(AECEnv):
     Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
     The observation is simply the last opponent action."""
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "rps_v2"}
+    metadata = {
+        'render.modes': ['human', 'rgb_array'],
+        "name": "rps_v2",
+        'is_parallelizable': True
+    }
 
     def __init__(self, num_actions=3, max_cycles=15):
         self.max_cycles = max_cycles
