@@ -360,7 +360,11 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "cooperative_pong_v4"}
+    metadata = {
+        'render.modes': ['human', "rgb_array"],
+        'name': "cooperative_pong_v4",
+        'is_parallelizable': True
+    }
 
     def __init__(self, **kwargs):
         EzPickle.__init__(self, **kwargs)
