@@ -223,7 +223,7 @@ def test_action_flexibility(env):
     elif isinstance(action_space, gym.spaces.Box):
         env.step(np.zeros_like(action_space.low))
         env.reset()
-        env.step(np.zeros_like(action_space.low).tolist())
+        env.step(np.zeros_like(action_space.low))
 
 
 def api_test(env, num_cycles=10, verbose_progress=False):
