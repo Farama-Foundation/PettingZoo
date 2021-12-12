@@ -127,7 +127,7 @@ class Renderer:
 
     def render(self, mode):
         import os
-        os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
         import pygame
 
         env = self.env

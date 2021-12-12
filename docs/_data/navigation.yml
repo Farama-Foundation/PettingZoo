@@ -47,6 +47,21 @@ nav:
       - title: "Tests"
         url: "/environment_creation#tests"
 
+  - title: "Wrappers"
+    url: "/Wrappers"
+    sublinks:
+      - title: "Included Functions"
+        url: "/Wrappers#included-functions"
+
+      - title: "Included Multi-Agent Only Functions"
+        url: "/Wrappers#included-multi-agent-only-functions"
+
+      - title: "Environment Vectorization"
+        url: "/Wrappers#environment-vectorization"
+
+      - title: "Lambda Functions"
+        url: "/Wrappers#lambda-functions"
+
   - title: "Environments"
     url: "/envs"
     sublinks:
@@ -268,7 +283,7 @@ nav:
   - title: "Third Party Environments"
     url: "/third_party_envs"
 
-api:
+API:
   - title: "Initializing Environments"
     url: "/api#initializing-environments"
 
@@ -293,7 +308,7 @@ api:
   - title: "Utils"
     url: "/api#utils"
 
-environment_creation:
+Environment Creation:
       - title: "Example Custom Environment"
         url: "/environment_creation#example-custom-environment"
 
@@ -308,3 +323,16 @@ environment_creation:
 
       - title: "Tests"
         url: "/environment_creation#tests"
+
+Wrappers:
+    - title: "Included Functions"
+      url: "/Wrappers#included-functions"
+
+    - title: "Included Multi-Agent Only Functions"
+      url: "/Wrappers#included-multi-agent-only-functions"
+
+    - title: "Environment Vectorization"
+      url: "/Wrappers#environment-vectorization"
+
+    - title: "Lambda Functions"
+      url: "/Wrappers#lambda-functions"

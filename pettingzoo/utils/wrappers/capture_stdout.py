@@ -8,15 +8,15 @@ class CaptureStdoutWrapper(BaseWrapper):
         self.metadata['render.modes'].append("ansi")
 
     def render(self, mode="human"):
-        if mode == "human":
-            super().render()
-        elif mode == "ansi":
+        if mode == "ansi":
             with capture_stdout() as stdout:
 
-                super().render()
+                super().render("human")
 
                 val = stdout.getvalue()
             return val
+        else:
+            return super().render(mode)
 
     def __str__(self):
         return str(self.env)

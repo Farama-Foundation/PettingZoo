@@ -1,5 +1,5 @@
 ---
-title: "third-party-envs"
+title: "Third Party Environments"
 layout: "links"
 ---
 
@@ -54,7 +54,28 @@ Implementation of the Risk board game as a PettingZoo environment
 
 PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 
+## Sequential Social Delima Games
+[https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197](https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197)
+
+Set of two environments with numerous multi-agent equilibria popular with researchers
+
 ## Neural MMO
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
-Planned by maintainer, not yet done
+Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
+
+## CookingZoo
+[https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+
+Maintained fork of too many cooks game with PettingZoo API support
+
+## SNIM
+[https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py](https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py)
+
+PettingZoo based supply chain management environment
+
+## CityLearn
+
+[https://github.com/apigott/CityLearn](https://github.com/apigott/CityLearn)
+
+PettingZoo environments for city grid power management, based on the CityLearn simulator.

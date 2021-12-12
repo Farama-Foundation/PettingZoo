@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -25,11 +25,6 @@ jobs:
       run: |
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
-    - name: Full Python tests
-      run: |
-        xvfb-run -s "-screen 0 1024x768x24" pytest ./test/pytest_runner.py
-        pytest ./test/all_parameter_combs.py
-        pytest ./test/variable_env_test.py
     - name: Bandit, Codespell, and Flake 8 tests
       run: |
         bash ./check_style.sh
@@ -40,3 +35,16 @@ jobs:
       run: |
         python setup.py sdist
         pip install dist/*.tar.gz
+    - name: Full Python tests
+      run: |
+        xvfb-run -s "-screen 0 1024x768x24" pytest ./test/pytest_runner.py
+        pytest ./test/all_parameter_combs.py
+        pytest ./test/variable_env_test.py
+        pytest ./test/doc_examples_test.py
+    - name: 13 lines test
+      run: |
+        if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
+        then
+            pip install stable_baselines3 supersuit==3.3.2
+            sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
+        fi

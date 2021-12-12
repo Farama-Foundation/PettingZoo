@@ -30,7 +30,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#uno) and you can 
 
 ### Arguments
 
-```
+``` python
 uno_v4.env(opponents_hand_visible=False)
 ```
 

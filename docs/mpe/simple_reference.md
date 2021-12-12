@@ -42,7 +42,7 @@ Agent continuous action space: `[no_action, move_left, move_right, move_down, mo
 ### Arguments
 
 
-```
+``` python
 simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False)
 ```
 
