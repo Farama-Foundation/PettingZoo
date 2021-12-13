@@ -6,6 +6,7 @@ from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
 from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.max_cycles_test import max_cycles_test
 from pettingzoo.test.state_test import state_test
+from pettingzoo.test.render_test import render_test
 from pettingzoo.atari import warlords_v2
 from pettingzoo.utils import to_parallel, from_parallel
 import os
@@ -20,6 +21,7 @@ def test_module(name, env_module):
         parallel_api_test(env_module.parallel_env())
 
     seed_test(env_module.env, 50)
+    render_test(env_module.env)
 
     if "classic/" not in name:
         max_cycles_test(env_module)
