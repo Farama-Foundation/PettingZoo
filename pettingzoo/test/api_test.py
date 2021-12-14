@@ -173,8 +173,8 @@ def play_test(env, observation_0, num_cycles):
         assert set(env.infos.keys()) == (set(env.agents)), "agents should not be given an info if they were done last turn"
         if hasattr(env, 'possible_agents'):
             assert set(env.agents).issubset(set(env.possible_agents)), "possible agents should always include all agents, if it exists"
+
         if not env.agents:
-            assert has_finished == generated_agents, "not all agents finished, some were skipped over"
             break
 
         if isinstance(env.observation_space(agent), gym.spaces.Box):
@@ -186,6 +186,9 @@ def play_test(env, observation_0, num_cycles):
         test_observation(prev_observe, observation_0)
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn("The info of each agent should be a dict, use {} if you aren't using info")
+
+    if not env.agents:
+        assert has_finished == generated_agents, "not all agents finished, some were skipped over"
 
     env.reset()
     for agent in env.agent_iter(env.num_agents * 2):
@@ -223,7 +226,7 @@ def test_action_flexibility(env):
     elif isinstance(action_space, gym.spaces.Box):
         env.step(np.zeros_like(action_space.low))
         env.reset()
-        env.step(np.zeros_like(action_space.low).tolist())
+        env.step(np.zeros_like(action_space.low))
 
 
 def api_test(env, num_cycles=10, verbose_progress=False):
