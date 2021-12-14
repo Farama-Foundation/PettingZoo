@@ -6,7 +6,7 @@ exclude = [
     "**/node_modules",
     "**/__pycache__",
 ]
-basic = ["pettingzoo/atari/base_atari_env.py"]
+strict = ["pettingzoo/atari/base_atari_env.py"]
 
 reportMissingImports = true
 reportMissingTypeStubs = false
