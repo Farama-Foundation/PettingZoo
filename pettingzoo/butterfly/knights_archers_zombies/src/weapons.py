@@ -5,9 +5,6 @@ import pygame
 
 from .img import get_image
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
-
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
 ARROW_SPEED = 45

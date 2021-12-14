@@ -13,8 +13,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 from .cake_paddle import RENDER_RATIO, CakePaddle
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 KERNEL_WINDOW_LENGTH = 2
 
 
