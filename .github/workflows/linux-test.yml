@@ -64,6 +64,9 @@ jobs:
       PYRIGHT_VERSION: 1.1.183
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install requirements.txt
       - uses: jakebailey/pyright-action@v1
         with:
           version: ${{ env.PYRIGHT_VERSION }}
