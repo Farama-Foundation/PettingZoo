@@ -29,7 +29,11 @@ def env():
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human', "rgb_array"], "name": "connect_four_v3"}
+    metadata = {
+        'render.modes': ['human', "rgb_array"],
+        "name": "connect_four_v3",
+        "is_parallelizable": False,
+    }
 
     def __init__(self):
         super().__init__()
