@@ -19,7 +19,11 @@ def env(**kwargs):
 
 
 class raw_env(AECEnv):
-    metadata = {'render.modes': ['human'], "name": "backgammon_v3"}
+    metadata = {
+        'render.modes': ['human'],
+        "name": "backgammon_v3",
+        "is_parallelizable": False,
+    }
 
     def __init__(self):
         super().__init__()
