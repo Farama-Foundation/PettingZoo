@@ -22,7 +22,11 @@ def env():
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human'], "name": "chess_v5"}
+    metadata = {
+        'render.modes': ['human'],
+        "name": "chess_v5",
+        "is_parallelizable": False,
+    }
 
     def __init__(self):
         super().__init__()
