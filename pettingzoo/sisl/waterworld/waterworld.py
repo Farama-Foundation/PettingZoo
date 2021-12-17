@@ -51,7 +51,9 @@ class raw_env(AECEnv):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed:
+            self.seed(seed)
         self.has_reset = True
         self.env.reset()
         self.agents = self.possible_agents[:]
