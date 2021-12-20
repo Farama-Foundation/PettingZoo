@@ -118,6 +118,8 @@ class raw_env(AECEnv):
         return {'observation': observation, 'action_mask': action_mask}
 
     def reset(self, seed=None):
+        if seed:
+            self.seed(seed)
         self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}
         self.infos = {i: {'legal_moves': []} for i in self.agents}

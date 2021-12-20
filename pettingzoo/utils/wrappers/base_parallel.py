@@ -19,8 +19,8 @@ class BaseParallelWraper(ParallelEnv):
         except AttributeError:
             pass
 
-    def reset(self):
-        res = self.env.reset()
+    def reset(self, seed=None):
+        res = self.env.reset(seed=seed)
         self.agents = self.env.agents
         return res
 

@@ -61,7 +61,7 @@ class PaddleSprite(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
         self.speed = speed
 
-    def reset(self):
+    def reset(self, seed=None):
         pass
 
     def draw(self, screen):
@@ -242,7 +242,7 @@ class CooperativePong:
         self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
         self.score = 0
 
-    def reset(self):
+    def reset(self, seed=None):
         # reset ball and paddle init conditions
         self.ball.rect.center = self.area.center
         # set the direction to an angle between [0, 2*np.pi)
@@ -400,8 +400,10 @@ class raw_env(AECEnv, EzPickle):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
-    def reset(self):
-        self.env.reset()
+    def reset(self, seed=None):
+        if seed:
+            self.seed(seed)
+        self.env.reset(seed=seed)
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards

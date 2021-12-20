@@ -83,12 +83,10 @@ def hash_obsevation(obs):
 
 def test_environment_reset_deterministic(env1, num_cycles):
     seed_action_spaces(env1)
-    env1.seed(42)
-    env1.reset()
+    env1.reset(seed=42)
     hash1 = calc_hash(env1, 1, num_cycles)
     seed_action_spaces(env1)
-    env1.seed(42)
-    env1.reset()
+    env1.reset(seed=42)
     hash2 = calc_hash(env1, 2, num_cycles)
     assert hash1 == hash2, "environments kept state after seed(42) and reset()"
 
@@ -99,8 +97,8 @@ def seed_test(env_constructor, num_cycles=10, test_kept_state=True):
         test_environment_reset_deterministic(env1, num_cycles)
     env2 = env_constructor()
     base_seed = 42
-    env1.seed(base_seed)
-    env2.seed(base_seed)
+    env1.reset(seed=base_seed)
+    env2.reset(seed=base_seed)
 
     assert check_environment_deterministic(env1, env2, num_cycles), \
         ("The environment gives different results on multiple runs when initialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state.")
