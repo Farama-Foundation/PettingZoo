@@ -107,7 +107,7 @@ class raw_env(AECEnv):
         '''
         pass
 
-    def reset(self):
+    def reset(self, seed=None):
         '''
         Reset needs to initialize the following attributes
         - agents
@@ -121,6 +121,8 @@ class raw_env(AECEnv):
 
         Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
         '''
+        if seed:
+            self.seed(seed=seed)
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}

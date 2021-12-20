@@ -96,7 +96,7 @@ class parallel_env(ParallelEnv):
         '''
         pass
 
-    def reset(self):
+    def reset(self, seed=None):
         '''
         Reset needs to initialize the `agents` attribute and must set up the
         environment so that render(), and step() can be called without issues.
@@ -106,6 +106,8 @@ class parallel_env(ParallelEnv):
 
         Returns the observations for each agent
         '''
+        if seed:
+            self.seed(seed=seed)
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         observations = {agent: NONE for agent in self.agents}
