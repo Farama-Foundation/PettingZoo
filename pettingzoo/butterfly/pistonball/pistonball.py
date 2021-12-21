@@ -14,8 +14,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 _image_library = {}
 
 
@@ -43,7 +41,11 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v5"}
+    metadata = {
+        'render.modes': ['human', "rgb_array"],
+        'name': "pistonball_v5",
+        'is_parallelizable': True
+    }
 
     def __init__(self, n_pistons=20, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
         EzPickle.__init__(self, n_pistons, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)

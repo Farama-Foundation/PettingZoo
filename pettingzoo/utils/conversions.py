@@ -34,6 +34,14 @@ def from_parallel(par_env):
 
 class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
+        assert aec_env.metadata.get('is_parallelizable', False), \
+            "Converting from an AEC environment to a parallel environment " \
+            "with the to_parallel wrapper is not generally safe " \
+            "(the AEC environment should only update once at the end " \
+            "of each cycle). If you have confirmed that your AEC environment " \
+            "can be converted in this way, then please set the `is_parallelizable` "\
+            "key in your metadata to True"
+
         self.aec_env = aec_env
 
         try:
@@ -121,8 +129,10 @@ class to_parallel_wrapper(ParallelEnv):
 
 class from_parallel_wrapper(AECEnv):
     def __init__(self, parallel_env):
-        self.metadata = parallel_env.metadata
         self.env = parallel_env
+
+        self.metadata = {**parallel_env.metadata}
+        self.metadata['is_parallelizable'] = True
 
         try:
             self.possible_agents = parallel_env.possible_agents

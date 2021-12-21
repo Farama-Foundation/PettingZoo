@@ -4,8 +4,6 @@ import time
 import numpy as np
 import pygame
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def manual_control(**kwargs):
     from .pistonball import env as _env

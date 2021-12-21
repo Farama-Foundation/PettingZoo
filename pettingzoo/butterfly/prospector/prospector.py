@@ -18,8 +18,6 @@ from . import constants as const
 from . import utils
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 class CollisionTypes(IntEnum):
     PROSPECTOR = auto()
@@ -532,7 +530,11 @@ class raw_env(AECEnv, EzPickle):
             f = Fence(w_type, s_pos, b_pos, verts, self.space)
             self.fences.append(f)
 
-        self.metadata = {"render.modes": ["human", "rgb_array"], 'name': "prospector_v4"}
+        self.metadata = {
+            "render.modes": ["human", "rgb_array"],
+            'name': "prospector_v4",
+            'is_parallelizable': True,
+        }
 
         self.action_spaces = {}
         for p in self.prospectors:

@@ -1,7 +1,7 @@
 This repository is licensed as follows:
-All assets in this repository are the copyright of Justin Terry, except where
-prohibited. Contributors to the repository transfer copyright of their work
-to Justin Terry.
+All assets in this repository are the copyright of the Farama Foundation, except 
+where prohibited. Contributors to the repository transfer copyright of their work
+to the Farama Foundation.
 
 Some code in this repository has been taken from other open source projects
 and was originally released under the MIT or Apache 2.0 licenses, with
@@ -11,7 +11,7 @@ is owned by Justin Terry. The Secret Code font was also released under
 the MIT license by Matthew Welch (http://www.squaregear.net/fonts/).
 The MIT and Apache 2.0 licenses are included below.
 
-Justin Terry releases the elements of this repository he has copyright to
+The Farama Foundation releases the elements of this repository they copyright to
 under the MIT license.
 
 --------------------------------------------------------------------------------
