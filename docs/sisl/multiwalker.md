@@ -9,7 +9,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-inf,inf]"
 average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v7"
+import: "from pettingzoo.sisl import multiwalker_v8"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -64,8 +64,7 @@ This table enumerates the observation space:
 ### Arguments
 
 ``` python
-multiwalker_v7.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3,
-local_ratio=1.0, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0,
+multiwalker_v8.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
 terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 ```
 
@@ -77,11 +76,11 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 `angle_noise`:  noise applied to agent rotational sensor observations
 
-`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
-
 `forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
 
 `fall_reward`:  reward applied when an agent falls down
+
+`shared_reward`:  whether reward is distributed among all agents or allocated locally
 
 `terminate_reward`: reward applied to a walker for failing the environment
 
@@ -93,7 +92,7 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 
 ### Version History
-
+* v8: Replaced local_ratio, fixed rewards (14.1.0)
 * v7: Fixed problem with walker collisions (1.8.2)
 * v6: Fixed observation space and made large improvements to code quality (1.5.0)
 * v5: Fixes to reward structure, added arguments (1.4.2)

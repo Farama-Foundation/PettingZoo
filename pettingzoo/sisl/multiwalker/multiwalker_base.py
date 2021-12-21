@@ -68,7 +68,7 @@ class ContactDetector(contactListener):
             if contact.fixtureA.body not in [w.hull for w in self.env.walkers]:
                 self.env.game_over = True
 
-            #    self.env.game_over = True
+        # self.env.game_over = True
         for walker in self.env.walkers:
             if walker.hull is not None:
                 for leg in [walker.legs[1], walker.legs[3]]:
@@ -268,15 +268,15 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-                 forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=True, max_cycles=500):
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, 
+        terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True, terminate_on_fall=True, remove_on_fall=True, max_cycles=500):
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
             angle_noise: noise applied to agent rotational sensor observations
-            local_ratio: proportion of reward allocated locally vs distributed among all agents
             forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
             fall_reward: reward applied when an agent falls down
+            shared_reward: whether reward is distributed among all agents or allocated locally
             terminate_reward: reward applied for each fallen walker in environment
             terminate_on_fall: toggles whether agent is done if it falls down
             max_cycles: after max_cycles steps all agents will return done
@@ -289,7 +289,7 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.terminate_reward = terminate_reward
         self.terminate_on_fall = terminate_on_fall
-        self.local_ratio = local_ratio
+        self.local_ratio = 1 - shared_reward
         self.remove_on_fall = remove_on_fall
         self.seed_val = None
         self.seed()
