@@ -25,7 +25,10 @@ class SimpleEnv(AECEnv):
 
         self.seed()
 
-        self.metadata = {'render.modes': ['human', 'rgb_array']}
+        self.metadata = {
+            'render.modes': ['human', 'rgb_array'],
+            'is_parallelizable': True
+        }
 
         self.max_cycles = max_cycles
         self.scenario = scenario

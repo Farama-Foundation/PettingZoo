@@ -28,6 +28,7 @@ agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 Four player team battle.
 
 Each player controls a paddle and defends a scoring area. However, this is a team game, and so two of the 4 scoring areas belong to the same team. So a given team must try to coordinate to get the ball away from their scoring areas towards their opponent's.
+Specifically `first_0` and `third_0` are on one team and `second_0` and `fourth_0` are on the other.
 
 Scoring a point gives your team +1 reward and your opponent team -1 reward.
 
