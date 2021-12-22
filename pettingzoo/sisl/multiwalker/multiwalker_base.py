@@ -440,7 +440,7 @@ class MultiWalkerEnv():
             WALKER_SEPERATION * TERRAIN_STEP
 
         done = [False] * self.n_walkers
-        if self.game_over or xpos[0] < 0:
+        if self.game_over or self.package.position.x < 0:
             rewards += self.terminate_reward
             done = [True] * self.n_walkers
         if self.package.position.x > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
