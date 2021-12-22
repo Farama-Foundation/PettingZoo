@@ -428,12 +428,10 @@ class MultiWalkerEnv():
             neighbor_obs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(walker_obs + neighbor_obs))
 
-            # shaping = 130 * pos[0] / SCALE
-            shaping = 0.0
-            shaping -= 5.0 * abs(walker_obs[0])
+            shaping = -5.0 * abs(walker_obs[0])
             rewards[i] = shaping - self.prev_shaping[i]
             self.prev_shaping[i] = shaping
-
+        
         package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
         rewards += (package_shaping - self.prev_package_shaping)
         self.prev_package_shaping = package_shaping
@@ -442,10 +440,10 @@ class MultiWalkerEnv():
             WALKER_SEPERATION * TERRAIN_STEP
 
         done = [False] * self.n_walkers
-        if self.game_over or pos[0] < 0:
+        if self.game_over or xpos[0] < 0:
             rewards += self.terminate_reward
             done = [True] * self.n_walkers
-        if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
+        if self.package.position.x > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
             done = [True] * self.n_walkers
         rewards += self.fall_reward * self.fallen_walkers
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
