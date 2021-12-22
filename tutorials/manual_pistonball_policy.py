@@ -12,9 +12,9 @@ def change_observation(obs):
     return obs
 
 
-DOWN = np.array([-1.])
-UP = np.array([1.])
-HOLD = np.array([0.])
+DOWN = np.array([-1.], dtype=np.float32)
+UP = np.array([1.], dtype=np.float32)
+HOLD = np.array([0.], dtype=np.float32)
 count = 0
 
 
