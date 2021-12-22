@@ -362,7 +362,7 @@ class raw_env(AECEnv, EzPickle):
     # class env(MultiAgentEnv):
     metadata = {
         'render.modes': ['human', "rgb_array"],
-        'name': "cooperative_pong_v4",
+        'name': "cooperative_pong_v5",
         'is_parallelizable': True
     }
 

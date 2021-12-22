@@ -81,7 +81,7 @@ class CakePaddle(pygame.sprite.Sprite):
             # should be determined based on the 
             # relative position before update,
             # not based on its vertical speed.
-            elif self.was_ball_on_top:
+            if self.was_ball_on_top:
                 b_rect.bottom = self.rect4.top
                 if b_speed[1] > 0:
                     b_speed[1] = -b_speed[1]
@@ -95,7 +95,7 @@ class CakePaddle(pygame.sprite.Sprite):
             if dx > 0:
                 b_rect.right = self.rect3.left
                 b_speed[0] = -b_speed[0]
-            elif self.was_ball_on_top:
+            if self.was_ball_on_top:
                 b_rect.bottom = self.rect3.top
                 if b_speed[1] > 0:
                     b_speed[1] = -b_speed[1]
@@ -109,7 +109,7 @@ class CakePaddle(pygame.sprite.Sprite):
             if dx > 0:
                 b_rect.right = self.rect2.left
                 b_speed[0] = -b_speed[0]
-            elif self.was_ball_on_top:
+            if self.was_ball_on_top:
                 b_rect.bottom = self.rect2.top
                 if b_speed[1] > 0:
                     b_speed[1] = -b_speed[1]
@@ -123,7 +123,7 @@ class CakePaddle(pygame.sprite.Sprite):
             if dx > 0:
                 b_rect.right = self.rect.left
                 b_speed[0] = -b_speed[0]
-            elif self.was_ball_on_top:
+            if self.was_ball_on_top:
                 b_rect.bottom = self.rect.top
                 if b_speed[1] > 0:
                     b_speed[1] = -b_speed[1]
