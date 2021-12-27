@@ -97,35 +97,28 @@ class PaddleSprite(pygame.sprite.Sprite):
         b_speed: new ball speed
 
         '''
-        if paddle_type == 1:
-            if self.rect.colliderect(b_rect):
-                is_collision = True
-                if dx < 0:
-                    b_rect.left = self.rect.right
-                    b_speed[0] = -b_speed[0]
-                # top or bottom edge
-                elif dy > 0:
-                    b_rect.bottom = self.rect.top
-                    b_speed[1] = -b_speed[1]
-                elif dy < 0:
-                    b_rect.top = self.rect.bottom
-                    b_speed[1] = -b_speed[1]
-                return is_collision, b_rect, b_speed
-        elif paddle_type == 2:
-            if self.rect.colliderect(b_rect):
-                is_collision = True
-                if dx > 0:
-                    b_rect.right = self.rect.left
-                    b_speed[0] = -b_speed[0]
-                # top or bottom edge
-                elif dy > 0:
-                    b_rect.bottom = self.rect.top
-                    b_speed[1] = -b_speed[1]
-                elif dy < 0:
-                    b_rect.top = self.rect.bottom
-                    b_speed[1] = -b_speed[1]
-                return is_collision, b_rect, b_speed
-        return False, b_rect, b_speed
+        if not self.rect.colliderect(b_rect):
+            return False, b_rect, b_speed
+        # handle collision from left or right
+        if paddle_type == 1 and b_rect.left < self.rect.right:
+            b_rect.left = self.rect.right
+            if b_speed[0] < 0:
+                b_speed[0] *= -1
+        elif paddle_type == 2 and b_rect.right > self.rect.left:
+            b_rect.right = self.rect.left
+            if b_speed[0] > 0:
+                b_speed[0] *= -1
+        # handle collision from top
+        if b_rect.bottom > self.rect.top and b_rect.top - dy < self.rect.top and b_speed[1] > 0:
+            b_rect.bottom = self.rect.top
+            if b_speed[1] > 0:
+                b_speed[1] *= -1
+        # handle collision from bottom
+        elif b_rect.top < self.rect.bottom and b_rect.bottom - dy > self.rect.bottom and b_speed[1] < 0:
+            b_rect.top = self.rect.bottom - 1
+            if b_speed[1] < 0:
+                b_speed[1] *= -1
+        return True, b_rect, b_speed
 
 
 class BallSprite(pygame.sprite.Sprite):
@@ -140,26 +133,20 @@ class BallSprite(pygame.sprite.Sprite):
         self.randomizer = randomizer
 
     def update2(self, area, p0, p1):
-        (speed_x, speed_y) = self.speed
-        done_x, done_y = False, False
-        if self.speed[0] != 0:
-            done_x = self.move_single_axis(self.speed[0], 0, area, p0, p1)
-        if self.speed[1] != 0:
-            done_y = self.move_single_axis(0, self.speed[1], area, p0, p1)
-        return (done_x or done_y)
+        return self.move(self.speed[0], self.speed[1], area, p0, p1)
 
-    def move_single_axis(self, dx, dy, area, p0, p1):
+    def move(self, dx, dy, area, p0, p1):
         # move ball rect
         self.rect.x += dx
         self.rect.y += dy
 
         if not area.contains(self.rect):
             # bottom wall
-            if dy > 0:
+            if self.rect.bottom > area.bottom:
                 self.rect.bottom = area.bottom
                 self.speed[1] = -self.speed[1]
             # top wall
-            elif dy < 0:
+            elif self.rect.top < area.top:
                 self.rect.top = area.top
                 self.speed[1] = -self.speed[1]
             # right or left walls
