@@ -32,7 +32,7 @@ class CakePaddle(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 255, 255), self.rect3)
         pygame.draw.rect(screen, (255, 255, 255), self.rect4)
 
-    def update(self, area, action, b_rect):
+    def update(self, area, action):
         # action: 1 - up, 2 - down
         movepos = [0, 0]
         if action == 1:
