@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-RENDER_RATIO = 2
+from .cooperative_pong import RENDER_RATIO
 
 
 class CakePaddle(pygame.sprite.Sprite):
