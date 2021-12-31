@@ -83,13 +83,8 @@ class to_parallel_wrapper(ParallelEnv):
     def unwrapped(self):
         return self.aec_env.unwrapped
 
-    def seed(self, seed=None):
-        return self.aec_env.seed(seed)
-
     def reset(self, seed=None):
-        if seed:
-            self.seed(seed=seed)
-        self.aec_env.reset()
+        self.aec_env.reset(seed=seed)
         self.agents = self.aec_env.agents[:]
         observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
         return observations
@@ -173,13 +168,8 @@ class from_parallel_wrapper(AECEnv):
     def action_space(self, agent):
         return self.env.action_space(agent)
 
-    def seed(self, seed=None):
-        self.env.seed(seed)
-
     def reset(self, seed=None):
-        if seed:
-            self.seed(seed)
-        self._observations = self.env.reset()
+        self._observations = self.env.reset(seed=seed)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions = {agent: None for agent in self.agents}

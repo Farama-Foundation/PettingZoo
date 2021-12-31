@@ -13,6 +13,9 @@ def parallel_api_test(par_env, num_cycles=10):
     assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, from_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, BaseWrapper)
+
+    # checks that reset takes an argument seed
+    par_env.reset(seed=0)
     MAX_RESETS = 2
     for n_resets in range(MAX_RESETS):
         obs = par_env.reset()

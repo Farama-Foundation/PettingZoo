@@ -35,7 +35,7 @@ class AECEnv:
         '''
         Reseeds the environment (making the resulting environment deterministic).
         '''
-        warnings.warn("Calling seed externally is deprecated; call reset(seed=seed) instead", DeprecationWarning)
+        raise NotImplementedError("Calling seed externally is deprecated; call reset(seed=seed) instead")
 
     def observe(self, agent):
         '''
@@ -229,7 +229,7 @@ class ParallelEnv:
         '''
          Reseeds the environment (making it deterministic).
         '''
-        warnings.warn("Calling seed externally is deprecated; call reset(seed=seed) instead", DeprecationWarning)
+        raise NotImplementedError("Calling seed externally is deprecated; call reset(seed=seed) instead")
 
     def step(self, actions):
         '''
