@@ -11,11 +11,11 @@ from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .ball import Ball
-from .cake_paddle import RENDER_RATIO, CakePaddle
-from .manual_control import manual_control
+from .cake_paddle import CakePaddle
 from .paddle import Paddle
 
 KERNEL_WINDOW_LENGTH = 2
+RENDER_RATIO = 2
 
 
 def deg_to_rad(deg):
