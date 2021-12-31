@@ -401,7 +401,7 @@ class raw_env(AECEnv, EzPickle):
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.env.reset(seed=seed)
         self.agents = self.possible_agents[:]

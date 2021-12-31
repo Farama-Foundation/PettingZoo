@@ -52,7 +52,7 @@ class raw_env(AECEnv):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.has_reset = True
         self.env.reset()

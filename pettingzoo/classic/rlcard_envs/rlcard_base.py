@@ -90,7 +90,7 @@ class RLCardBase(AECEnv):
         self._dones_step_first()
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         obs, player_id = self.env.reset()
         self.agents = self.possible_agents[:]

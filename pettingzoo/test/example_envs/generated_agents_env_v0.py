@@ -70,7 +70,7 @@ class raw_env(AECEnv):
         return agent
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed=seed)
         self.agents = []
         self.rewards = {}

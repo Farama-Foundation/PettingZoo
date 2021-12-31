@@ -115,7 +115,7 @@ class magent_parallel_env(ParallelEnv):
             self._renderer = None
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.agents = self.possible_agents[:]
         self.env.reset()

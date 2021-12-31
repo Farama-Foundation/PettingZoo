@@ -611,7 +611,7 @@ class raw_env(AECEnv, EzPickle):
         self.frames = 0
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.has_reset = True
         self.agents = self.possible_agents[:]

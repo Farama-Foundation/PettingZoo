@@ -49,7 +49,7 @@ class raw_env(AECEnv, EzPickle):
         self.env.seed(seed)
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.steps = 0
         self.agents = self.possible_agents[:]

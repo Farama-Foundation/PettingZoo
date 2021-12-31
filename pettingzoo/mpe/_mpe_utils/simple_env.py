@@ -94,7 +94,7 @@ class SimpleEnv(AECEnv):
         return np.concatenate(states, axis=None)
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.scenario.reset_world(self.world, self.np_random)
 

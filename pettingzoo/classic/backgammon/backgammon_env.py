@@ -118,7 +118,7 @@ class raw_env(AECEnv):
         return {'observation': observation, 'action_mask': action_mask}
 
     def reset(self, seed=None):
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}

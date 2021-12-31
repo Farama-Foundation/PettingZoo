@@ -232,7 +232,7 @@ class raw_env(AECEnv, EzPickle):
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
-        if seed:
+        if seed is not None:
             self.seed(seed)
         self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment

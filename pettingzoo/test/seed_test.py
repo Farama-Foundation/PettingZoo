@@ -86,7 +86,7 @@ def test_environment_reset_deterministic(env1, num_cycles):
     hash1 = calc_hash(env1, 1, num_cycles)
     seed_action_spaces(env1)
     hash2 = calc_hash(env1, 2, num_cycles)
-    assert hash1 == hash2, "environments kept state after seed(42) and reset()"
+    assert hash1 == hash2, "environments kept state after reset(seed)"
 
 
 def seed_test(env_constructor, num_cycles=10, test_kept_state=True):
