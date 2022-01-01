@@ -14,20 +14,17 @@ from .ball import Ball
 from .cake_paddle import CakePaddle
 from .paddle import Paddle
 
-KERNEL_WINDOW_LENGTH = 2
-RENDER_RATIO = 2
-
 
 def deg_to_rad(deg):
     return deg * np.pi / 180
 
 
-def get_flat_shape(width, height):
-    return int(width * height / (KERNEL_WINDOW_LENGTH * KERNEL_WINDOW_LENGTH))
+def get_flat_shape(width, height, kernel_window_length=2):
+    return int(width * height / (kernel_window_length * kernel_window_length))
 
 
-def original_obs_shape(screen_width, screen_height):
-    return (int(screen_height * 2 / KERNEL_WINDOW_LENGTH), int(screen_width * 2 / (KERNEL_WINDOW_LENGTH)), 1)
+def original_obs_shape(screen_width, screen_height, kernel_window_length=2):
+    return (int(screen_height * 2 / kernel_window_length), int(screen_width * 2 / (kernel_window_length)), 1)
 
 
 def get_valid_angle(randomizer):
@@ -53,14 +50,17 @@ def get_valid_angle(randomizer):
 
 
 class CooperativePong:
-    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10):
+    def __init__(self, randomizer, ball_speed=9, left_paddle_speed=12, right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False, max_reward=100, off_screen_penalty=-10, render_ratio=2, kernel_window_length=2):
         super().__init__()
 
         pygame.init()
         self.num_agents = 2
 
+        self.render_ratio = render_ratio
+        self.kernel_window_length = kernel_window_length
+
         # Display screen
-        self.s_width, self.s_height = 960 // RENDER_RATIO, 560 // RENDER_RATIO
+        self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
         self.screen = pygame.Surface((self.s_width, self.s_height))  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
         self.max_reward = max_reward
@@ -68,7 +68,7 @@ class CooperativePong:
 
         # define action and observation spaces
         self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
-        original_shape = original_obs_shape(self.s_width, self.s_height)
+        original_shape = original_obs_shape(self.s_width, self.s_height, kernel_window_length=kernel_window_length)
         original_color_shape = (original_shape[0], original_shape[1], 3)
         self.observation_space = [gym.spaces.Box(low=0, high=255, shape=(original_color_shape), dtype=np.uint8) for _ in range(self.num_agents)]
         # define the global space of the environment or state
@@ -82,16 +82,16 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = Paddle((20 // RENDER_RATIO, 80 // RENDER_RATIO), left_paddle_speed)
+        self.p0 = Paddle((20 // render_ratio, 80 // render_ratio), left_paddle_speed)
         if cake_paddle:
-            self.p1 = CakePaddle(right_paddle_speed)
+            self.p1 = CakePaddle(right_paddle_speed, render_ratio=render_ratio)
         else:
-            self.p1 = Paddle((20 // RENDER_RATIO, 100 // RENDER_RATIO), right_paddle_speed)
+            self.p1 = Paddle((20 // render_ratio, 100 // render_ratio), right_paddle_speed)
 
         self.agents = ["paddle_0", "paddle_1"]  # list(range(self.num_agents))
 
         # ball
-        self.ball = Ball(randomizer, (20 // RENDER_RATIO, 20 // RENDER_RATIO), ball_speed, bounce_randomness)
+        self.ball = Ball(randomizer, (20 // render_ratio, 20 // render_ratio), ball_speed, bounce_randomness)
         self.randomizer = randomizer
 
         self.reinit()

@@ -2,20 +2,19 @@ import os
 
 import pygame
 
-from .cooperative_pong import RENDER_RATIO
-
 
 class CakePaddle(pygame.sprite.Sprite):
 
-    def __init__(self, speed=12):
+    def __init__(self, speed=12, render_ratio=2):
+        self.render_ratio = render_ratio
         # surf is the right-most (largest) tier of the cake
-        self.surf = pygame.Surface((30 // RENDER_RATIO, 120 // RENDER_RATIO))
+        self.surf = pygame.Surface((30 // render_ratio, 120 // render_ratio))
         self.rect = self.surf.get_rect()
-        self.surf2 = pygame.Surface((30 // RENDER_RATIO, 80 // RENDER_RATIO))
+        self.surf2 = pygame.Surface((30 // render_ratio, 80 // render_ratio))
         self.rect2 = self.surf2.get_rect()
-        self.surf3 = pygame.Surface((30 // RENDER_RATIO, 40 // RENDER_RATIO))
+        self.surf3 = pygame.Surface((30 // render_ratio, 40 // render_ratio))
         self.rect3 = self.surf3.get_rect()
-        self.surf4 = pygame.Surface((30 // RENDER_RATIO, 10 // RENDER_RATIO))
+        self.surf4 = pygame.Surface((30 // render_ratio, 10 // render_ratio))
         self.rect4 = self.surf4.get_rect()
 
         self.speed = speed
