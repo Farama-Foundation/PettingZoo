@@ -47,25 +47,25 @@ class CakePaddle(pygame.sprite.Sprite):
             self.rect3 = self.rect3.move(movepos)
             self.rect4 = self.rect4.move(movepos)
 
-    def _process_collision_with_rect(self, rect, dx, dy, b_rect, b_speed, paddle_type):
+    def _process_collision_with_rect(self, rect, b_rect, b_speed, paddle_type):
         # handle collision from top
-        if b_rect.bottom > rect.top and b_rect.top - dy < rect.top and b_speed[1] > 0:
+        if b_rect.bottom > rect.top and b_rect.top - b_speed[1] < rect.top and b_speed[1] > 0:
             b_rect.bottom = rect.top
             if b_speed[1] > 0:
                 b_speed[1] *= -1
         # handle collision from bottom
-        elif b_rect.top < rect.bottom and b_rect.bottom - dy > rect.bottom and b_speed[1] < 0:
+        elif b_rect.top < rect.bottom and b_rect.bottom - b_speed[1] > rect.bottom and b_speed[1] < 0:
             b_rect.top = rect.bottom
             if b_speed[1] < 0:
                 b_speed[1] *= -1
         # handle collision from left
         if b_rect.right > rect.left:
             b_rect.right = rect.left
-            if dx > 0:
+            if b_speed[0] > 0:
                 b_speed[0] *= -1
         return True, b_rect, b_speed
 
-    def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
+    def process_collision(self, b_rect, b_speed, paddle_type):
         '''
 
         Parameters
@@ -83,11 +83,11 @@ class CakePaddle(pygame.sprite.Sprite):
 
         '''
         if self.rect4.colliderect(b_rect):
-            return self._process_collision_with_rect(self.rect4, dx, dy, b_rect, b_speed, paddle_type)
+            return self._process_collision_with_rect(self.rect4, b_rect, b_speed, paddle_type)
         elif self.rect3.colliderect(b_rect):
-            return self._process_collision_with_rect(self.rect3, dx, dy, b_rect, b_speed, paddle_type)
+            return self._process_collision_with_rect(self.rect3, b_rect, b_speed, paddle_type)
         elif self.rect2.colliderect(b_rect):
-            return self._process_collision_with_rect(self.rect2, dx, dy, b_rect, b_speed, paddle_type)
+            return self._process_collision_with_rect(self.rect2, b_rect, b_speed, paddle_type)
         elif self.rect.colliderect(b_rect):
-            return self._process_collision_with_rect(self.rect, dx, dy, b_rect, b_speed, paddle_type)
+            return self._process_collision_with_rect(self.rect, b_rect, b_speed, paddle_type)
         return False, b_rect, b_speed

@@ -19,12 +19,9 @@ class Ball(pygame.sprite.Sprite):
         self.randomizer = randomizer
 
     def update2(self, area, p0, p1):
-        return self.move(self.speed[0], self.speed[1], area, p0, p1)
-
-    def move(self, dx, dy, area, p0, p1):
         # move ball rect
-        self.rect.x += dx
-        self.rect.y += dy
+        self.rect.x += self.speed[0]
+        self.rect.y += self.speed[1]
 
         if not area.contains(self.rect):
             # bottom wall
@@ -49,12 +46,12 @@ class Ball(pygame.sprite.Sprite):
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p0.process_collision(self.rect, dx, dy, self.speed, 1)
+                is_collision, self.rect, self.speed = p0.process_collision(self.rect, self.speed, 1)
                 if is_collision:
                     self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
             # ball in right half
             else:
-                is_collision, self.rect, self.speed = p1.process_collision(self.rect, dx, dy, self.speed, 2)
+                is_collision, self.rect, self.speed = p1.process_collision(self.rect, self.speed, 2)
                 if is_collision:
                     self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
 
