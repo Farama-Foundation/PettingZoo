@@ -27,7 +27,7 @@ class Paddle(pygame.sprite.Sprite):
             if area.contains(newpos):
                 self.rect = newpos
 
-    def process_collision(self, b_rect, dx, dy, b_speed, paddle_type):
+    def process_collision(self, b_rect, b_speed, paddle_type):
         '''
 
         Parameters
@@ -55,12 +55,12 @@ class Paddle(pygame.sprite.Sprite):
             if b_speed[0] > 0:
                 b_speed[0] *= -1
         # handle collision from top
-        if b_rect.bottom > self.rect.top and b_rect.top - dy < self.rect.top and b_speed[1] > 0:
+        if b_rect.bottom > self.rect.top and b_rect.top - b_speed[1] < self.rect.top and b_speed[1] > 0:
             b_rect.bottom = self.rect.top
             if b_speed[1] > 0:
                 b_speed[1] *= -1
         # handle collision from bottom
-        elif b_rect.top < self.rect.bottom and b_rect.bottom - dy > self.rect.bottom and b_speed[1] < 0:
+        elif b_rect.top < self.rect.bottom and b_rect.bottom - b_speed[1] > self.rect.bottom and b_speed[1] < 0:
             b_rect.top = self.rect.bottom - 1
             if b_speed[1] < 0:
                 b_speed[1] *= -1
