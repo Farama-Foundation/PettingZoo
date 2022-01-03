@@ -37,7 +37,7 @@ class raw_env(AECEnv, EzPickle):
         'render.modes': ['human', "rgb_array"],
         'name': "knights_archers_zombies_v7",
         'is_parallelizable': True,
-        'FPS': FPS
+        'video.frames_per_second': FPS
     }
 
     def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
