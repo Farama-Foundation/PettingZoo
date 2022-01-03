@@ -534,6 +534,7 @@ class raw_env(AECEnv, EzPickle):
             "render.modes": ["human", "rgb_array"],
             'name': "prospector_v4",
             'is_parallelizable': True,
+            'FPS': const.FPS,
         }
 
         self.action_spaces = {}
