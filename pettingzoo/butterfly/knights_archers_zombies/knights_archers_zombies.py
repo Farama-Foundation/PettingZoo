@@ -19,6 +19,7 @@ from .src.zombie import Zombie
 
 sys.dont_write_bytecode = True
 
+FPS = 15
 
 def env(**kwargs):
     env = raw_env(**kwargs)
@@ -36,6 +37,7 @@ class raw_env(AECEnv, EzPickle):
         'render.modes': ['human', "rgb_array"],
         'name': "knights_archers_zombies_v7",
         'is_parallelizable': True,
+        'FPS': FPS
     }
 
     def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
@@ -103,7 +105,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(num_archers):
             name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name, FPS=FPS)
             self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
             self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
@@ -113,7 +115,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(num_knights):
             name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name, FPS=FPS)
             self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
             self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])
@@ -227,14 +229,14 @@ class raw_env(AECEnv, EzPickle):
                 if not self.sword_list:      # Sword List is Empty
                     if not self.knight_killed:
                         for i in range(0, self.knight_player_num + 1):
-                            self.sword_dict[f'sword{i}'] = Sword(self.knight_dict[f'knight{i}'])
+                            self.sword_dict[f'sword{i}'] = Sword(self.knight_dict[f'knight{i}'], FPS=FPS)
                             self.sword_list.add(self.sword_dict[(f'sword{i}')])
                             self.all_sprites.add(self.sword_dict[(f'sword{i}')])
                         self.sword_spawn_rate = 1
                         self.knight_killed = False
                     else:
                         for knight in self.knight_list:
-                            temp = Sword(knight)
+                            temp = Sword(knight, FPS=FPS)
                             self.sword_list.add(temp)
                             self.all_sprites.add(temp)
                         self.sword_spawn_rate = 1
@@ -246,14 +248,14 @@ class raw_env(AECEnv, EzPickle):
                 if not self.archer_killed:
                     for i in range(0, self.archer_player_num + 1):
                         if i == self.agent_index:
-                            self.arrow_dict[(f'arrow{i}')] = Arrow(self.archer_dict[(f'archer{i}')])
+                            self.arrow_dict[(f'arrow{i}')] = Arrow(self.archer_dict[(f'archer{i}')], FPS=FPS)
                             self.arrow_list.add(self.arrow_dict[(f'arrow{i}')])
                             self.all_sprites.add(self.arrow_dict[(f'arrow{i}')])
                     self.arrow_spawn_rate = 1
                     self.archer_killed = False
                 else:
                     for archer in self.archer_list:
-                        temp = Arrow(archer)
+                        temp = Arrow(archer, FPS=FPS)
                         self.arrow_list.add(temp)
                         self.all_sprites.add(temp)
                     self.arrow_spawn_rate = 1
@@ -272,7 +274,7 @@ class raw_env(AECEnv, EzPickle):
     # Spawning Zombies at Random Location at every 100 iterations
     def spawn_zombie(self, zombie_spawn_rate, zombie_list, all_sprites):
         zombie_spawn_rate += 1
-        zombie = Zombie(self.np_random)
+        zombie = Zombie(self.np_random, FPS=FPS)
 
         if zombie_spawn_rate >= self.ZOMBIE_SPAWN:
             zombie.rect.x = self.np_random.randint(0, self.WIDTH)
@@ -576,7 +578,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name, FPS=FPS)
             self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
             self.all_sprites.add(self.archer_dict[f"archer{self.archer_player_num}"])
@@ -586,7 +588,7 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_knights):
             name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name, FPS=FPS)
             self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
             self.all_sprites.add(self.knight_dict[f"knight{self.knight_player_num}"])
@@ -625,5 +627,4 @@ class raw_env(AECEnv, EzPickle):
 # created by Dipam Patel in a different repository (hence the git history)
 
 # Game art purchased from https://finalbossblues.itch.io/time-fantasy-monsters
-
 # and https://finalbossblues.itch.io/icons
