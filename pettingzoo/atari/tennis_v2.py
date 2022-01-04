@@ -13,7 +13,7 @@ Serves are timed: If the player does not serve within 3 seconds of receiving the
 
 [Official tennis manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=555)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

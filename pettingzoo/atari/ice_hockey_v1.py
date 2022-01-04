@@ -10,7 +10,7 @@ When you are on offense you must pass the puck between your two players (you con
 [Official ice hockey manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=241)
 
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

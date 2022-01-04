@@ -13,26 +13,11 @@ from pettingzoo.utils.agent_selector import agent_selector
 Checkers (also called Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
 
 #### Observation Space
-| Plane | Observation            |
-| ----- | ---------------------- |
-| 0     | Current Player's Men   |
-| 1     | Current Player's Kings |
-| 2     | Other Player's Men     |
-| 3     | Other Player's Kings   |
 
 #### Action Space
-| Action    | Starting Square | Direction |
-| --------- | --------------- | --------- |
-| 0...63    | 0...63          | Northwest |
-| 64...127  | 0...63          | Northeast |
-| 128...191 | 0...63          | Southwest |
-| 192...255 | 0...63          | Southeast |
 
 #### Rewards
 
-| Winner | Loser |
-| :----: | :---: |
-|   +1   |  -1   |
 """
 
 def env():
@@ -650,9 +635,9 @@ class CheckersRules:
 def keyboard_player_move(board, last_moved_piece):
     '''A player that uses keyboard to select moves.'''
     if last_moved_piece is None:
-        input_str = input('* move `from_square, to_square`: ')
+        input_str = input('* move `from_square, to_square: ')
     else:
-        input_str = input('* move `%i, to_square`: ' % last_moved_piece)
+        input_str = input('* move `%i, to_square: ' % last_moved_piece)
     from_sq, to_sq = map(int, input_str.strip().split(','))
     return from_sq, to_sq
 

@@ -20,16 +20,10 @@ Our implementation is a wrapper for [MiniGo](https://github.com/tensorflow/minig
 
 Go takes two optional arguments that define the board size (int) and komi compensation points (float). The default values for the board size and komi are 19 and 7.5, respectively.
 
-`board_size`: The length of each size of the board.
-
-`komi`: The number of points given to white to compensate it for the disadvantage inherent to moving second. 7.5 is the standard value for Chinese tournament Go, but may not be perfectly balanced.
+:param board_size:param : The length of each size of the board.
+:param komi:param : The number of points given to white to compensate it for the disadvantage inherent to moving second. 7.5 is the standard value for Chinese tournament Go, but may not be perfectly balanced.
 
 ### Observation Space
-|  Plane  | Description                                               |
-|:-------:|-----------------------------------------------------------|
-|    0    | Current Player's stones<br>_'`0`: no stone, `1`: stone_   |
-|    1    | Opponent Player's stones<br>_'`0`: no stone, `1`: stone_  |
-|    2    | Player<br>_'`0`: white, `1`: black_                       |
 
 While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/~gunnar/gtp/).
 
@@ -37,19 +31,8 @@ While rendering, the board coordinate system is [GTP](http://www.lysator.liu.se/
 
 Similar to the observation space, the action space is dependent on the board size _N_.
 
-|                          Action ID                           | Description                                                  |
-| :----------------------------------------------------------: | ------------------------------------------------------------ |
-| <img src="https://render.githubusercontent.com/render/math?math=0 \ldots (N-1)"> | Place a stone on the 1st row of the board.<br>_`0`: (0,0), `1`: (0,1), ..., `N-1`: (0,N-1)_ |
-| <img src="https://render.githubusercontent.com/render/math?math=N \ldots (2N- 1)"> | Place a stone on the 2nd row of the board.<br>_`N`: (1,0), `N+1`: (1,1), ..., `2N-1`: (1,N-1)_ |
-|                             ...                              | ...                                                          |
-| <img src="https://render.githubusercontent.com/render/math?math=N^2-N \ldots N^2-1"> | Place a stone on the Nth row of the board.<br>_`N^2-N`: (N-1,0), `N^2-N+1`: (N-1,1), ..., `N^2-1`: (N-1,N-1)_ |
-| <img src="https://render.githubusercontent.com/render/math?math=N^2"> | Pass                                                         |
-
 ### Rewards
 
-| Winner | Loser |
-| :----: | :---: |
-| +1     | -1    |
 """
 
 def get_image(path):

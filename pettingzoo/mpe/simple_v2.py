@@ -10,10 +10,8 @@ Observation space: `[self_vel, landmark_rel_position]`
 
 ### Arguments
 
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

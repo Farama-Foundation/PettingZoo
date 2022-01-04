@@ -20,7 +20,7 @@ narrow down the location of the flag quickly and effectively.
 [Official flag capture manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=183)
 
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

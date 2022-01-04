@@ -28,19 +28,13 @@ Adversary leader continuous action space: `[no_action, move_left, move_right, mo
 
 ### Arguments
 
-`num_good`:  number of good agents
-
-`num_adversaries`:  number of adversaries
-
-`num_obstacles`:  number of obstacles
-
-`num_food`:  number of food locations that good agents are rewarded at
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`num_forests`: number of forests that can hide agents inside from being seen
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+:param num_good:  number of good agents
+:param num_adversaries:  number of adversaries
+:param num_obstacles:  number of obstacles
+:param num_food:  number of food locations that good agents are rewarded at
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param num_forests: number of forests that can hide agents inside from being seen
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

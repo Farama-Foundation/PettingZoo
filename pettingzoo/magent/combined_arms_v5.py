@@ -18,22 +18,14 @@ A large-scale team battle. Here there are two types of agents on each team, rang
 
 ### Arguments
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.
-
-`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
-
-
-`step_reward`:  reward after every step
-
-`dead_penalty`:  reward when killed
-
-`attack_penalty`:  reward when attacking anything
-
-`attack_opponent_reward`:  reward added for attacking an opponent
-
-`max_cycles`:  number of cycles (a step for each agent) until game terminates
-
-`extra_features`: Adds additional features to observation (see table). Default False
+:param map_size: Sets dimensions of the (square) map. Increasing the size increases the number of agents. Minimum size is 16.
+:param minimap_mode: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+:param step_reward:  reward after every step
+:param dead_penalty:  reward when killed
+:param attack_penalty:  reward when attacking anything
+:param attack_opponent_reward:  reward added for attacking an opponent
+:param max_cycles:  number of cycles (a step for each agent) until game terminates
+:param extra_features: Adds additional features to observation (see table). Default False
 """
 
 default_map_size = 45

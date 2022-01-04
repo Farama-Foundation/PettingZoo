@@ -14,7 +14,7 @@ Serves are timed: If the player does not serve within 2 seconds of receiving the
 
 [Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

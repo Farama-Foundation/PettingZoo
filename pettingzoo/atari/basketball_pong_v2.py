@@ -12,13 +12,13 @@ Serves are timed: If the player does not serve within 2 seconds of receiving the
 
 [Official Video Olympics manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=587)
 
-#### Environment parameters
+### Arguments
 
 Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari).
 
 Parameters specific to Basketball_Pong are
 
-`num_players`:  Number of players (must be either 2 or 4)
+:param num_players:  Number of players (must be either 2 or 4)
 """
 
 def raw_env(num_players=2, **kwargs):

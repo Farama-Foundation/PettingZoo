@@ -13,21 +13,17 @@ The number of lives is shared between the ships, i.e. the game ends when a ship 
 
 [Official Space Invaders manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=460)
 
-#### Environment parameters
+### Arguments
 
 Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari).
 
 Parameters specific to Space Invaders are
 
-`alternating_control`:  Only one of the two players has an option to fire at one time. If you fire, your opponent can then fire. However, you can't hoard the firing ability forever, eventually, control shifts to your opponent anyways.
-
-`moving_shields`:  The shields move back and forth, leaving less reliable protection.
-
-`zigzaging_bombs`:  The invader's bombs move back and forth, making them more difficult to avoid.
-
-`fast_bomb`:  The bombs are much faster, making them more difficult to avoid.
-
-`invisible_invaders`:  The invaders are invisible, making them more difficult to hit.
+:param alternating_control:  Only one of the two players has an option to fire at one time. If you fire, your opponent can then fire. However, you can't hoard the firing ability forever, eventually, control shifts to your opponent anyways.
+:param moving_shields:  The shields move back and forth, leaving less reliable protection.
+:param zigzaging_bombs:  The invader's bombs move back and forth, making them more difficult to avoid.
+:param fast_bomb:  The bombs are much faster, making them more difficult to avoid.
+:param invisible_invaders:  The invaders are invisible, making them more difficult to hit.
 """
 
 def raw_env(alternating_control=False, moving_shields=True, zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False, **kwargs):

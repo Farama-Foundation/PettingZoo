@@ -23,18 +23,12 @@ Move the left paddle using the 'W' and 'S' keys. Move the right paddle using 'UP
 
 ### Arguments
 
-`ball_speed`: Speed of ball (in pixels)
-
-`left_paddle_speed`: Speed of left paddle (in pixels)
-
-`right_paddle_speed`: Speed of right paddle (in pixels)
-
-`cake_paddle`: If True, the right paddle cakes the shape of a 4 tiered wedding cake
-
-`max_cycles`: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
-
-`bounce_randomness`: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
-
+:param ball_speed: Speed of ball (in pixels)
+:param left_paddle_speed: Speed of left paddle (in pixels)
+:param right_paddle_speed: Speed of right paddle (in pixels)
+:param cake_paddle: If True, the right paddle cakes the shape of a 4 tiered wedding cake
+:param max_cycles: Done is set to True for all agents after this number of frames (steps through all agents) elapses.
+:param bounce_randomness: If True, each collision of the ball with the paddles adds a small random angle to the direction of the ball, with the speed of the ball remaining unchanged.
 """
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'

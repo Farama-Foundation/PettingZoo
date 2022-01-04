@@ -16,32 +16,16 @@ Leduc Hold'em is a variation of Limit Texas Hold'em with 2 players, 2 rounds and
 
 Our implementation wraps [RLCard](http://rlcard.org/games.html#leduc-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
 
-### Arguments
-
-`num_players`: Sets the number of players in the game. Minimum is 2.
-
 ### Observation Space
-|  Index  | Description                                                                  |
-|:-------:|------------------------------------------------------------------------------|
-|  0 - 2  | Current Player's Hand<br>_`0`: J, `1`: Q, `2`: K_                            |
-|  3 - 5  | Community Cards<br>_`3`: J, `4`: Q, `5`: K_                                  |
-|  6 - 20 | Current Player's Chips<br>_`6`: 0 chips, `7`: 1 chip, ..., `20`: 14 chips_   |
-| 21 - 35 | Opponent's Chips<br>_`21`: 0 chips, `22`: 1 chip, ..., `35`: 14 chips_       |
 
 ### Action Space
 
-| Action ID | Action |
-|:---------:|--------|
-|     0     | Call   |
-|     1     | Raise  |
-|     2     | Fold   |
-|     3     | Check  |
 
 ### Rewards
 
-|      Winner       |       Loser       |
-| :---------------: | :---------------: |
-| +raised chips / 2 | -raised chips / 2 |
+### Arguments
+
+:param num_players: Sets the number of players in the game. Minimum is 2.
 """
 
 def env(**kwargs):

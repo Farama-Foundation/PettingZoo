@@ -11,7 +11,7 @@ But both players leave a trail of walls behind you, slowly filling the screen wi
 
 [Official surround manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=943)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

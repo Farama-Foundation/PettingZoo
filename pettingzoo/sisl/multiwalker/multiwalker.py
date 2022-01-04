@@ -16,51 +16,18 @@ Each agent receives an observation composed of various physical properties of it
 
 This table enumerates the observation space:
 
-| Index: [start, end) | Description                                                  |   Values    |
-|:-----------------:|------------------------------------------------------------|:---------------:|
-|          0          | Hull angle                |  [0, 2*pi]  |
-|          1          | Hull angular velocity                                        | [-inf, inf] |
-|          2          | X Velocity                                                   |   [-1, 1]   |
-|          3          | Y Velocity                                                   |   [-1, 1]   |
-|          4          | Hip joint 1 angle                                            | [-inf, inf] |
-|          5          | Hip joint 1 speed                                            | [-inf, inf] |
-|          6          | Knee joint 1 angle                                           | [-inf, inf] |
-|          7          | Knee joint 1 speed                                           | [-inf, inf] |
-|          8          | Leg 1 ground contact flag                                    |   {0, 1}    |
-|          9          | Hip joint 1 angle                                            | [-inf, inf] |
-|         10          | Hip joint 2 speed                                            | [-inf, inf] |
-|         11          | Knee joint 2 angle                                           | [-inf, inf] |
-|         12          | Knee joint 2 speed                                           | [-inf, inf] |
-|         13          | Leg 2 ground contact flag                                    |   {0, 1}    |
-|        14-23        | LIDAR sensor readings                                        | [-inf, inf] |
-|         24          | Left neighbor relative X position (0.0 for leftmost walker) (Noisy) | [-inf, inf] |
-|         25          | Left neighbor relative Y position (0.0 for leftmost walker) (Noisy) | [-inf, inf] |
-|         26          | Right neighbor relative X position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
-|         27          | Right neighbor relative Y position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
-|         28          | Walker X position relative to package (0 for left edge, 1 for right edge) | [-inf, inf] |
-|         29          | Walker Y position relative to package                        | [-inf, inf] |
-|         30          | Package angle                                                | [-inf, inf] |
 
 ### Arguments
-`n_walkers`:  number of bipedal walker agents in environment
-
-`position_noise`:  noise applied to agent positional sensor observations
-
-`angle_noise`:  noise applied to agent rotational sensor observations
-
-`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
-
-`forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
-
-`fall_reward`:  reward applied when an agent falls down
-
-`terminate_reward`: reward applied to a walker for failing the environment
-
-`terminate_on_fall`: toggles whether agent is done if it falls down
-
-`remove_on_fall`: Remove walker when it falls (only does anything when `terminate_on_fall` is False)
-
-`max_cycles`:  after max_cycles steps all agents will return done
+:param n_walkers:  number of bipedal walker agents in environment
+:param position_noise:  noise applied to agent positional sensor observations
+:param angle_noise:  noise applied to agent rotational sensor observations
+:param local_ratio: Proportion of reward allocated locally vs distributed among all agents
+:param forward_reward:  reward applied for an agent standing, scaled by agent's x coordinate
+:param fall_reward:  reward applied when an agent falls down
+:param terminate_reward: reward applied to a walker for failing the environment
+:param terminate_on_fall: toggles whether agent is done if it falls down
+:param remove_on_fall: Remove walker when it falls (only does anything when `terminate_on_fall` is False)
+:param max_cycles:  after max_cycles steps all agents will return done
 """
 
 def env(**kwargs):

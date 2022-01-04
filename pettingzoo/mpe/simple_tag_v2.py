@@ -12,15 +12,11 @@ Agent and adversary action space: `[no_action, move_left, move_right, move_down,
 
 ### Arguments
 
-`num_good`:  number of good agents
-
-`num_adversaries`:  number of adversaries
-
-`num_obstacles`:  number of obstacles
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+:param num_good:  number of good agents
+:param num_adversaries:  number of adversaries
+:param num_obstacles:  number of obstacles
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

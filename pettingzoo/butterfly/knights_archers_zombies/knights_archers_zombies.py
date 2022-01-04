@@ -32,19 +32,13 @@ Press 'M' key to spawn a new knight.
 
 ### Arguments
 
-`spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
-
-`num_knights`:  how many knight agents initially spawn.
-
-`num_archers`:  how many archer agents initially spawn.
-
-`killable_knights`:  if set to False, knight agents cannot be killed by zombies.
-
-`killable_archers`:  if set to False, archer agents cannot be killed by zombies.
-
-`line_death`:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
-
-`pad_observation`:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
+:param spawn_rate:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
+:param num_knights:  how many knight agents initially spawn.
+:param num_archers:  how many archer agents initially spawn.
+:param killable_knights:  if set to False, knight agents cannot be killed by zombies.
+:param killable_archers:  if set to False, archer agents cannot be killed by zombies.
+:param line_death:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.
+:param pad_observation:  if agents are near edge of environment, their observation cannot form a 40x40 grid. If this is set to True, the observation is padded with black.
 """
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'

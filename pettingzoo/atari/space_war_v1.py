@@ -12,7 +12,7 @@ Whenever you score a point, you are rewarded +1 and your opponent is penalized -
 
 [Official space war manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=470)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

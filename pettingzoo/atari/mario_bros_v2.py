@@ -18,7 +18,7 @@ There are other ways of earning points, by collecting bonus coins or wafers, ear
 
 [Official mario bros manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=286)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

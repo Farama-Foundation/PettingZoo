@@ -13,30 +13,9 @@ Waterworld is a simulation of archea navigating and trying to survive in their e
 
 This table enumerates the observation space with `speed_features = True`:
 
-|        Index: [start, end)         | Description                                  |   Values    |
-| :--------------------------------: | -------------------------------------------- | :---------: |
-|           0 to n_sensors           | Obstacle distance for each sensor            |   [0, √2]   |
-|    n_sensors to (2 * n_sensors)    | Barrier distance for each sensor             |   [0, √2]   |
-| (2 * n_sensors) to (3 * n_sensors) | Food distance for each sensor                |   [0, √2]   |
-| (3 * n_sensors) to (4 * n_sensors) | Food speed for each sensor                   | [-√2, 2*√2] |
-| (4 * n_sensors) to (5 * n_sensors) | Poison distance for each sensor              |   [0, √2]   |
-| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-√2, 2*√2] |
-| (6 * n_sensors) to (7 * n_sensors) | Pursuer distance for each sensor             |   [0, √2]   |
-| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-√2, 2*√2] |
-|           8 * n_sensors            | Indicates whether agent collided with food   |   {0, 1}    |
-|        (8 * n_sensors) + 1         | Indicates whether agent collided with poison |   {0, 1}    |
 
 This table enumerates the observation space with `speed_features = False`:
 
-|        Index: [start, end)        | Description                                  | Values  |
-| :-------------------------------: | -------------------------------------------- | :-----: |
-|           0 - n_sensors           | Obstacle distance for each sensor            | [0, √2] |
-|    n_sensors - (2 * n_sensors)    | Barrier distance for each sensor             | [0, √2] |
-| (2 * n_sensors) - (3 * n_sensors) | Food distance for each sensor                | [0, √2] |
-| (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, √2] |
-| (4 * n_sensors) - (5 * n_sensors) | Pursuer distance for each sensor             | [0, √2] |
-|          (5 * n_sensors)          | Indicates whether agent collided with food   | {0, 1}  |
-|        (5 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1}  |
 
 ### Action Space
 
@@ -44,43 +23,25 @@ This table enumerates the observation space with `speed_features = False`:
 
 ### Arguments
 
-`n_pursuers`: number of pursuing archea (agents)
-
-`n_evaders`: number of food objects
-
-`n_poison`: number of poison objects
-
-`n_coop`: number of pursuing archea (agents) that must be touching food at the same time to consume it
-
-`n_sensors`: number of sensors on all pursuing archea (agents)
-
-`sensor_range`: length of sensor dendrite on all pursuing archea (agents)
-
-`radius`: archea base radius. Pursuer: radius, food: 2 x radius, poison: 3/4 x radius
-
-`obstacle_radius`: radius of obstacle object
-
-`obstacle_coord`: coordinate of obstacle object. Can be set to `None` to use a random location
-
-`pursuer_max_accel`: pursuer archea maximum acceleration (maximum action size)
-
-`evader_speed`: food speed
-
-`poison_speed`: poison speed
-
-`poison_reward`: reward for pursuer consuming a poison object (typically negative)
-
-`food_reward`: reward for pursuers consuming a food object
-
-`encounter_reward`: reward for a pursuer colliding with a food object
-
-`thrust_penalty`: scaling factor for the negative reward used to penalize large actions
-
-`local_ratio`: Proportion of reward allocated locally vs distributed globally among all agents
-
-`speed_features`: toggles whether pursuing archea (agent) sensors detect speed of other objects and archea
-
-`max_cycles`: After max_cycles steps all agents will return done
+:param n_pursuers: number of pursuing archea (agents)
+:param n_evaders: number of food objects
+:param n_poison: number of poison objects
+:param n_coop: number of pursuing archea (agents) that must be touching food at the same time to consume it
+:param n_sensors: number of sensors on all pursuing archea (agents)
+:param sensor_range: length of sensor dendrite on all pursuing archea (agents)
+:param radius: archea base radius. Pursuer: radius, food: 2 x radius, poison: 3/4 x radius
+:param obstacle_radius: radius of obstacle object
+:param obstacle_coord: coordinate of obstacle object. Can be set to None to use a random location
+:param pursuer_max_accel: pursuer archea maximum acceleration (maximum action size)
+:param evader_speed: food speed
+:param poison_speed: poison speed
+:param poison_reward: reward for pursuer consuming a poison object (typically negative)
+:param food_reward: reward for pursuers consuming a food object
+:param encounter_reward: reward for a pursuer colliding with a food object
+:param thrust_penalty: scaling factor for the negative reward used to penalize large actions
+:param local_ratio: Proportion of reward allocated locally vs distributed globally among all agents
+:param speed_features: toggles whether pursuing archea (agent) sensors detect speed of other objects and archea
+:param max_cycles: After max_cycles steps all agents will return done
 """
 
 def env(**kwargs):

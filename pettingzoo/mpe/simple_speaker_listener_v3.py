@@ -16,10 +16,8 @@ Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ### Arguments
 
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-</div>
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

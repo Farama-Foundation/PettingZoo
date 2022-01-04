@@ -100,30 +100,14 @@ The game lasts for 900 frames by default.
 
 ### Arguments
 
-`ind_reward`: The reward multiplier for a single agent completing an objective.
-
-`group_reward`: The reward multiplier that agents of the same type
-as the scoring agent will earn.
-
-`other_group_reward`: The reward multiplier that agents of the other type
-as the scoring agent will earn. If the scoring agent is a prospector,
-then this is the reward that the bankers get, and vice versa.
-
-Constraint: `ind_reward + group_reward + other_group_reward == 1.0`
-
-`prospec_find_gold_reward`: The reward for a prospector
-retrieving gold from the water at the bottom of the screen.
-
-`prospec_handoff_gold_reward`: The reward for a prospector
-handing off gold to a banker.
-
-`banker_receive_gold_reward`: The reward for a banker receiving
-gold from a prospector.
-
-`banker_deposit_gold_reward`: The reward for a banker depositing
-gold into a bank.
-
-`max_cycles`: The number of frames the game should run for.
+:param ind_reward: The reward multiplier for a single agent completing an objective.
+:param group_reward: The reward multiplier that agents of the same type as the scoring agent will earn.
+:param other_group_reward: The reward multiplier that agents of the other type as the scoring agent will earn. If the scoring agent is a prospector, then this is the reward that the bankers get, and vice versa.
+:param prospec_find_gold_reward: The reward for a prospector retrieving gold from the water at the bottom of the screen.
+:param prospec_handoff_gold_reward: The reward for a prospector handing off gold to a banker.
+:param banker_receive_gold_reward: The reward for a banker receiving gold from a prospector.
+:param banker_deposit_gold_reward: The reward for a banker depositing gold into a bank.
+:param max_cycles: The number of frames the game should run for.
 """
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'

@@ -18,12 +18,9 @@ Agent continuous action space: `[no_action, move_left, move_right, move_down, mo
 
 ### Arguments
 
-`local_ratio`:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-
+:param local_ratio:  Weight applied to local reward and global reward. Global reward weight will always be 1 - local reward weight.
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

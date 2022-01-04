@@ -1,5 +1,5 @@
 ---
-actions: "Continuous"
+actions: "Box"
 title: "Waterworld"
 alt_title: "WaterWorld"
 agents: "5"

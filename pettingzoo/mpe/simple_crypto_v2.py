@@ -22,9 +22,8 @@ For Bob and Eve, their communication is checked to be the 1 bit of information t
 
 ### Arguments
 
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param continuous_actions: Whether agent action spaces are discrete(default) or continuous
 """
 
 class raw_env(SimpleEnv):

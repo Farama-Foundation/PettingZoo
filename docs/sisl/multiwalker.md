@@ -1,5 +1,5 @@
 ---
-actions: "Continuous"
+actions: "Box"
 title: "Multiwalker"
 alt_title: "MultiWalker"
 agents: "3"

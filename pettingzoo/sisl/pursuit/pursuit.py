@@ -23,31 +23,19 @@ Select different pursuers with 'J' and 'K'. The selected pursuer can be moved wi
 
 ### Arguments
 
-`x_size, y_size`: Size of environment world space
-
-`shared_reward`: Whether the rewards should be distributed among all agents
-
-`n_evaders`:  Number of evaders
-
-`n_pursuers`:  Number of pursuers
-
-`obs_range`:  Size of the box around the agent that the agent observes.
-
-`n_catch`:  Number pursuers required around an evader to be considered caught
-
-`freeze_evaders`:  Toggles if evaders can move or not
-
-`tag_reward`:  Reward for 'tagging', or being single evader.
-
-`term_pursuit`:  Reward added when a pursuer or pursuers catch an evader
-
-`urgency_reward`:  Reward to agent added in each step
-
-`surround`:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
-
-`constraint_window`: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
-
-`max_cycles`:  After max_cycles steps all agents will return done
+:param x_size, y_size: Size of environment world space
+:param shared_reward: Whether the rewards should be distributed among all agents
+:param n_evaders:  Number of evaders
+:param n_pursuers:  Number of pursuers
+:param obs_range:  Size of the box around the agent that the agent observes.
+:param n_catch:  Number pursuers required around an evader to be considered caught
+:param freeze_evaders:  Toggles if evaders can move or not
+:param tag_reward:  Reward for 'tagging', or being single evader.
+:param term_pursuit:  Reward added when a pursuer or pursuers catch an evader
+:param urgency_reward:  Reward to agent added in each step
+:param surround:  Toggles whether evader is removed when surrounded, or when n_catch pursuers are on top of evader
+:param constraint_window: Size of box (from center, in proportional units) which agents can randomly spawn into the environment world. Default is 1.0, which means they can spawn anywhere on the map. A value of 0 means all agents spawn in the center.
+:param max_cycles:  After max_cycles steps all agents will return done
 """
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"

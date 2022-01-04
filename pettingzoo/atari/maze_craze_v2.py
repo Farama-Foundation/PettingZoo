@@ -16,15 +16,14 @@ The first player to leave the maze scores +1, the other player scores -1 (unless
 
 [Official Maze craze manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=295). Note that the table of modes has some inaccuracies. In particular, game mode 12 has Blockade enabled, not mode 11.
 
-#### Environment parameters
+### Arguments
 
 Some environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari).
 
 Parameters specific to Maze Craze are
 
-`game_version`:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
-
-`visibilty_level`:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
+:param game_version:  Possibilities are "robbers", "race", "capture", corresponding to the 3 game versions described above
+:param visibilty_level:  A number from 0-3. Set to 0 for 100% visible map, and 3 for 0% visibility map.
 """
 
 avaliable_versions = {

@@ -26,23 +26,15 @@ Keys *a* and *d* control which piston is selected to move (initially the rightmo
 
 ### Arguments
 
-`n_pistons`: The number of pistons (agents) in the environment.
-
-`time_penalty`: Amount of reward added to each piston each time step. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
-
-`continuous`:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
-
-`random_drop`:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
-
-`random_rotate`:  If True, ball will spawn with a random angular momentum
-
-`ball_mass`:  Sets the mass of the ball physics object
-
-`ball_friction`:  Sets the friction of the ball physics object
-
-`ball_elasticity`:  Sets the elasticity of the ball physics object
-
-`max_cycles`:  after max_cycles steps all agents will return done
+:param n_pistons: The number of pistons (agents) in the environment.
+:param time_penalty: Amount of reward added to each piston each time step. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
+:param continuous:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
+:param random_drop:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
+:param random_rotate:  If True, ball will spawn with a random angular momentum
+:param ball_mass:  Sets the mass of the ball physics object
+:param ball_friction:  Sets the friction of the ball physics object
+:param ball_elasticity:  Sets the elasticity of the ball physics object
+:param max_cycles:  after max_cycles steps all agents will return done
 """
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'

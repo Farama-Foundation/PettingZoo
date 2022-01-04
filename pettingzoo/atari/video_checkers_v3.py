@@ -13,7 +13,7 @@ This is a timed game: if a player does not take a turn after 10 seconds, then th
 
 [Official video checkers manual](https://atariage.com/manual_html_page.php?SoftwareID=1427)
 
-#### Environment parameters
+### Arguments
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 """

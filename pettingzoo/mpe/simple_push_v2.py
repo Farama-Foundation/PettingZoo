@@ -16,8 +16,7 @@ Adversary action space: `[no_action, move_left, move_right, move_down, move_up]`
 
 ### Arguments
 
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
+:param max_cycles:  number of frames (a step for each agent) until game terminates
 """
 
 class raw_env(SimpleEnv):

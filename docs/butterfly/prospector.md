@@ -1,5 +1,5 @@
 ---
-actions: "Continuous"
+actions: "Box"
 title: "Prospector"
 agents: "7"
 manual-control: "Yes"

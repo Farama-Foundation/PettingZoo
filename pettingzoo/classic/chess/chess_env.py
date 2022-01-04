@@ -43,9 +43,6 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 
 ### Rewards
 
-| Winner | Loser | Draw |
-| :----: | :---: | :---: |
-| +1     | -1    | 0 |
 """
 
 def env():

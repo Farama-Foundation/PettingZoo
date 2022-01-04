@@ -18,17 +18,12 @@ In tiger-deer, there are a number of tigers who are only rewarded for teaming up
 
 ### Arguments
 
-`map_size`: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
-
-`minimap_mode`: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
-
-`tiger_step_recover`: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
-
-`deer_attacked`: Reward a deer gets for being attacked
-
-`max_cycles`:  number of frames (a step for each agent) until game terminates
-
-`extra_features`: Adds additional features to observation (see table). Default False
+:param map_size: Sets dimensions of the (square) map. Increasing the size increases the number of agents.  Minimum size is 10.
+:param minimap_mode: Turns on global minimap observations. These observations include your and your opponents piece densities binned over the 2d grid of the observation space. Also includes your `agent_position`, the absolute position on the map (rescaled from 0 to 1).
+:param tiger_step_recover: Amount of health a tiger gains/loses per turn (tigers have health 10 and get health 8 from killing a deer)
+:param deer_attacked: Reward a deer gets for being attacked
+:param max_cycles:  number of frames (a step for each agent) until game terminates
+:param extra_features: Adds additional features to observation (see table). Default False
 """
 
 default_map_size = 45

@@ -11,44 +11,6 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
-"""
-The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/Farama-Foundation/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
-
-### Environment Details
-
-The ALE has been studied extensively and a few notable problems have been identified:
-
-* **Determinism**: The Atari console is deterministic, and so agents can theoretically memorize precise sequences of actions that will maximize the end score. This is not ideal, so we encourage the use of [SuperSuit's](https://github.com/Farama-Foundation/SuperSuit) `sticky_actions` wrapper (example below). This is the recommended approach of  *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
-* **Frame flickering**: Atari games often do not render every sprite every frame due to hardware restrictions. Instead, sprites (such as the knights in Joust) are sometimes rendered every other frame or even (in Wizard of Wor) every 3 frames. The standard way of handling this computing the pixel-wise maximum of the previous 2 observations (see example below for implementation).
-
-### Common Parameters
-
-All the Atari environments have the following environment parameters:
-
-```
-<atari_game>.env(obs_type='rgb_image', full_action_space=True, max_cycles=100000, auto_rom_install_path=None)
-```
-
-`obs_type`:  There are three possible values for this parameter:
-
-* 'rgb_image' (default) - produces an RGB image like you would see as a human player.
-* 'grayscale_image' - produces a grayscale image.
-* 'ram' - produces an observation of the 1024 bits that comprise the RAM of the Atari console.
-
-`full_action_space`:  the effective action space of the Atari games is often smaller than the full space of 18 moves. Setting this to `False` shrinks the available action space to that smaller space.
-
-`max_cycles`:  the number of frames (the number of steps that each agent can take) until game terminates.
-
-`auto_rom_install_path`: The path to your AutoROM installation, installed
-with the [Farama-Foundation/AutoROM](https://github.com/Farama-Foundation/AutoROM) tool.
-This is the path you specified when installing AutoROM. For example, if
-you're using the boxing Atari environment, then the library will look for
-the rom at
-`/auto_rom_install_path/ROM/boxing/boxing.bin`.
-If this is not specified (has value `None`), then the library looks for roms
-installed at the default AutoROM path.
-"""
-
 def base_env_wrapper_fn(raw_env_fn):
     def env_fn(**kwargs):
         env = raw_env_fn(**kwargs)

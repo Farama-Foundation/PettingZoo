@@ -21,17 +21,12 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 
 ### Arguments
 
-`vector_observation`:  If set to False an image of the prisoner's cell is observed. If set to True, the distance to the left side wall is returned.
-
-`continuous`:  If False, each agent action is a discrete value indicating whether to move left or right one unit. If True, each agent action represents a real value that is added to the agent's x position
-
-`synchronized_start`:  If set to true, all aliens will start in the same x position, relative to their cells. Otherwise, their position is random.
-
-`num_floors`:  A floor contains two aliens. Add more or fewer floor to increase or decrease the number of agents in the environment.
-
-`identical_aliens`:  If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
-
-`random_aliens`:  If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
+:param vector_observation:  If set to False an image of the prisoner's cell is observed. If set to True, the distance to the left side wall is returned.
+:param continuous:  If False, each agent action is a discrete value indicating whether to move left or right one unit. If True, each agent action represents a real value that is added to the agent's x position
+:param synchronized_start:  If set to true, all aliens will start in the same x position, relative to their cells. Otherwise, their position is random.
+:param num_floors:  A floor contains two aliens. Add more or fewer floor to increase or decrease the number of agents in the environment.
+:param identical_aliens:  If set to true, each alien will have the some randomly chosen sprite. This argument overrides the random_aliens argument.
+:param random_aliens:  If set to True, each alien's sprite is randomly chosen from all possible sprites. If random_aliens and synchronized_aliens are both False, each alien's sprite is chosen cyclically from all possible sprites.
 """
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
