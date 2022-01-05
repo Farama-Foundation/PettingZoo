@@ -18,7 +18,7 @@ def env(**kwargs):
 
 
 def raw_env(**kwargs):
-    return conversions.from_parallel(parallel_env(**kwargs))
+    return conversions.parallel2aec(parallel_env(**kwargs))
 
 
 def get_type(agent):

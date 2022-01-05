@@ -15,7 +15,7 @@ def parallel_wrapper_fn(env_fn):
     return par_fn
 
 
-def to_parallel(aec_env):
+def aec2parallel(aec_env):
     if isinstance(aec_env, from_parallel_wrapper):
         return aec_env.env
     else:
@@ -23,7 +23,7 @@ def to_parallel(aec_env):
         return par_env
 
 
-def from_parallel(par_env):
+def parallel2aec(par_env):
     if isinstance(par_env, to_parallel_wrapper):
         return par_env.aec_env
     else:
