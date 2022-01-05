@@ -2,8 +2,8 @@ import os
 
 import pygame
 
-from .img import get_image
 from . import constants as const
+from .img import get_image
 
 
 class Zombie(pygame.sprite.Sprite):

@@ -3,8 +3,8 @@ import os
 
 import pygame
 
-from .img import get_image
 from . import constants as const
+from .img import get_image
 
 
 class Arrow(pygame.sprite.Sprite):
