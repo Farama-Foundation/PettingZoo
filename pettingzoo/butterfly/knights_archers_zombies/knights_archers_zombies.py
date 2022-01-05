@@ -12,12 +12,11 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
+from .src import constants as const
 from .src.img import get_image
 from .src.players import Archer, Knight
 from .src.weapons import Arrow, Sword
 from .src.zombie import Zombie
-
-from .src import constants as const
 
 sys.dont_write_bytecode = True
 
