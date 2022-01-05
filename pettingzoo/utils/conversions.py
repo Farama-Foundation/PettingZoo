@@ -32,6 +32,22 @@ def parallel2aec(par_env):
         return ordered_env
 
 
+def to_parallel(aec_env):
+    """
+    This function is here for legacy reasons,
+    please use `aec2parallel(aec_env)` instead
+    """
+    aec2parallel(aec_env)
+
+
+def from_parallel(par_env):
+    """
+    This function is here for legacy reasons,
+    please use `aec2parallel(aec_env)` instead
+    """
+    parallel2aec(par_env)
+
+
 class to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         assert aec_env.metadata.get('is_parallelizable', False), \
