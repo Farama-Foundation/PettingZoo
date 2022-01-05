@@ -17,7 +17,8 @@ def manual_control(**kwargs):
     # frame_limit = 500
     quit_game = 0
 
-    while not done:
+    # while not done:
+    while True:
         clock.tick(FPS)
         # while frame_count < frame_limit: # Uncomment this if you want the game to run for fame_limit amount of frames instead of ending by normal game conditions (useful for testing purposes)
         agents = env.agents
@@ -58,5 +59,7 @@ def manual_control(**kwargs):
             env.step(a)
         env.render()
         done = any(env.dones.values())
+        if done:
+            env.reset()
 
     env.close()
