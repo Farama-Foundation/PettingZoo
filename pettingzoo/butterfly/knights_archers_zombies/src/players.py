@@ -6,13 +6,13 @@ import pygame
 from .img import get_image
 from . import constants as const
 
-class Player(pygame.sprite.Sprite):
 
+class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.agent_name = None
 
-        self.rect = pygame.Rect(0., 0., 0., 0.)
+        self.rect = pygame.Rect(0.0, 0.0, 0.0, 0.0)
         self.image = None
         self.org_image = None
 
@@ -32,7 +32,6 @@ class Player(pygame.sprite.Sprite):
         self.action = 6
         self.attacking = False
         self.weapon_timeout = 99
-
 
     def update(self, action):
         self.action = action
@@ -84,11 +83,10 @@ class Player(pygame.sprite.Sprite):
 
 
 class Archer(Player):
-
     def __init__(self, agent_name):
         super().__init__()
         self.agent_name = agent_name
-        self.image = get_image(os.path.join('img', 'archer.png'))
+        self.image = get_image(os.path.join("img", "archer.png"))
         self.rect = self.image.get_rect(center=(const.ARCHER_X, const.ARCHER_Y))
         self.org_image = self.image.copy()
         self.pos = pygame.Vector2(self.rect.center)
@@ -96,12 +94,12 @@ class Archer(Player):
         self.speed = const.ARCHER_SPEED
         self.ang_rate = const.PLAYER_ANG_RATE
 
-class Knight(Player):
 
+class Knight(Player):
     def __init__(self, agent_name):
         super().__init__()
         self.agent_name = agent_name
-        self.image = get_image(os.path.join('img', 'knight.png'))
+        self.image = get_image(os.path.join("img", "knight.png"))
         self.rect = self.image.get_rect(center=(const.KNIGHT_X, const.KNIGHT_Y))
         self.org_image = self.image.copy()
         self.pos = pygame.Vector2(self.rect.center)

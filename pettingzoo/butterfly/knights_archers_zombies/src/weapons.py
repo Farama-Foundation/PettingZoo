@@ -6,12 +6,12 @@ import pygame
 from .img import get_image
 from . import constants as const
 
-class Arrow(pygame.sprite.Sprite):
 
+class Arrow(pygame.sprite.Sprite):
     def __init__(self, archer):
         super().__init__()
         self.archer = archer
-        self.image = get_image(os.path.join('img', 'arrow.png'))
+        self.image = get_image(os.path.join("img", "arrow.png"))
         self.rect = self.image.get_rect(center=self.archer.pos)
         self.image = pygame.transform.rotate(self.image, self.archer.angle)
 
@@ -20,7 +20,6 @@ class Arrow(pygame.sprite.Sprite):
 
         # reset the archer timeout when arrow fired
         archer.weapon_timeout = 0
-
 
     def update(self):
         if self.archer.alive:
@@ -40,12 +39,11 @@ class Arrow(pygame.sprite.Sprite):
 
 
 class Sword(pygame.sprite.Sprite):
-
     def __init__(self, knight):
         # the sword is actually a mace, but we refer to it as sword everywhere
         super().__init__()
         self.knight = knight
-        self.image = get_image(os.path.join('img', 'mace.png'))
+        self.image = get_image(os.path.join("img", "mace.png"))
         self.rect = self.image.get_rect(center=self.knight.rect.center)
         self.active = False
 
@@ -63,10 +61,16 @@ class Sword(pygame.sprite.Sprite):
                 self.phase -= 1
                 self.knight.attacking = True
 
-                angle = math.radians(self.knight.angle + 90 + const.SWORD_SPEED * self.phase)
+                angle = math.radians(
+                    self.knight.angle + 90 + const.SWORD_SPEED * self.phase
+                )
                 self.rect = self.image.get_rect(center=self.knight.rect.center)
-                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (math.cos(angle) * (self.knight.rect.width / 2))
-                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (math.sin(angle) * (self.knight.rect.height / 2))
+                self.rect.x += (math.cos(angle) * (self.rect.width / 2)) + (
+                    math.cos(angle) * (self.knight.rect.width / 2)
+                )
+                self.rect.y -= (math.sin(angle) * (self.rect.height / 2)) + (
+                    math.sin(angle) * (self.knight.rect.height / 2)
+                )
             else:
                 self.phase = const.MAX_PHASE
                 self.active = False
