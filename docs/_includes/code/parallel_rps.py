@@ -36,7 +36,7 @@ def env():
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
-    # Strongly recomended
+    # Strongly recommended
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
