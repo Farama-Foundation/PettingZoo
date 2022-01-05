@@ -21,6 +21,7 @@ from .src import constants as const
 
 sys.dont_write_bytecode = True
 
+
 def env(**kwargs):
     env = raw_env(**kwargs)
     env = wrappers.AssertOutOfBoundsWrapper(env)
@@ -34,14 +35,34 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
 
     metadata = {
-        'render.modes': ['human', "rgb_array"],
-        'name': "knights_archers_zombies_v7",
-        'is_parallelizable': True,
-        'video.frames_per_second': const.FPS
+        "render.modes": ["human", "rgb_array"],
+        "name": "knights_archers_zombies_v7",
+        "is_parallelizable": True,
+        "video.frames_per_second": const.FPS,
     }
 
-    def __init__(self, spawn_rate=20, num_archers=2, num_knights=2, killable_knights=True, killable_archers=True, pad_observation=True, line_death=False, max_cycles=900):
-        EzPickle.__init__(self, spawn_rate, num_archers, num_knights, killable_knights, killable_archers, pad_observation, line_death, max_cycles)
+    def __init__(
+        self,
+        spawn_rate=20,
+        num_archers=2,
+        num_knights=2,
+        killable_knights=True,
+        killable_archers=True,
+        pad_observation=True,
+        line_death=False,
+        max_cycles=900,
+    ):
+        EzPickle.__init__(
+            self,
+            spawn_rate,
+            num_archers,
+            num_knights,
+            killable_knights,
+            killable_archers,
+            pad_observation,
+            line_death,
+            max_cycles,
+        )
 
         # Game Status
         self.frames = 0
@@ -79,23 +100,38 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        self.observation_spaces = dict(zip(self.agents, [Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8) for _ in enumerate(self.agents)]))
-        self.action_spaces = dict(zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)]))
-        self.state_space = Box(low=0, high=255, shape=(const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3), dtype=np.uint8)
+        self.observation_spaces = dict(
+            zip(
+                self.agents,
+                [
+                    Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8)
+                    for _ in enumerate(self.agents)
+                ],
+            )
+        )
+        self.action_spaces = dict(
+            zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
+        )
+        self.state_space = Box(
+            low=0,
+            high=255,
+            shape=(const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3),
+            dtype=np.uint8,
+        )
         self.possible_agents = self.agents
 
         # Initializing Pygame
         pygame.init()
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
-        self.left_wall = get_image(os.path.join('img', 'left_wall.png'))
-        self.right_wall = get_image(os.path.join('img', 'right_wall.png'))
+        self.left_wall = get_image(os.path.join("img", "left_wall.png"))
+        self.right_wall = get_image(os.path.join("img", "right_wall.png"))
         self.right_wall_rect = self.right_wall.get_rect()
         self.right_wall_rect.left = const.SCREEN_WIDTH - self.right_wall_rect.width
-        self.floor_patch1 = get_image(os.path.join('img', 'patch1.png'))
-        self.floor_patch2 = get_image(os.path.join('img', 'patch2.png'))
-        self.floor_patch3 = get_image(os.path.join('img', 'patch3.png'))
-        self.floor_patch4 = get_image(os.path.join('img', 'patch4.png'))
+        self.floor_patch1 = get_image(os.path.join("img", "patch1.png"))
+        self.floor_patch2 = get_image(os.path.join("img", "patch2.png"))
+        self.floor_patch3 = get_image(os.path.join("img", "patch3.png"))
+        self.floor_patch4 = get_image(os.path.join("img", "patch4.png"))
 
         self._agent_selector = agent_selector(self.agents)
         self.reinit()
@@ -123,7 +159,11 @@ class raw_env(AECEnv, EzPickle):
 
     # Spawn Swords for Players
     def action_sword(self, action, agent):
-        if (action == 5 and agent.is_knight and agent.weapon_timeout > const.SWORD_TIMEOUT):
+        if (
+            action == 5
+            and agent.is_knight
+            and agent.weapon_timeout > const.SWORD_TIMEOUT
+        ):
             # make sure that the current knight doesn't have a sword already
             for sword in self.sword_list:
                 if sword.knight == agent:
@@ -133,7 +173,11 @@ class raw_env(AECEnv, EzPickle):
 
     # Spawn Arrows for Players
     def action_arrow(self, action, agent):
-        if (action == 5 and agent.is_archer and agent.weapon_timeout > const.ARROW_TIMEOUT):
+        if (
+            action == 5
+            and agent.is_archer
+            and agent.weapon_timeout > const.ARROW_TIMEOUT
+        ):
             self.arrow_list.add(Arrow(agent))
 
     # Stab the Sword
@@ -146,7 +190,9 @@ class raw_env(AECEnv, EzPickle):
     # Zombie Kills the Knight (also remove the sword)
     def zombit_hit_knight(self):
         for zombie in self.zombie_list:
-            zombie_knight_list = pygame.sprite.spritecollide(zombie, self.knight_list, True)
+            zombie_knight_list = pygame.sprite.spritecollide(
+                zombie, self.knight_list, True
+            )
 
             for knight in zombie_knight_list:
                 knight.alive = False
@@ -161,7 +207,9 @@ class raw_env(AECEnv, EzPickle):
     # Zombie Kills the Archer
     def zombie_hit_archer(self):
         for zombie in self.zombie_list:
-            zombie_archer_list = pygame.sprite.spritecollide(zombie, self.archer_list, True)
+            zombie_archer_list = pygame.sprite.spritecollide(
+                zombie, self.archer_list, True
+            )
 
             for archer in zombie_archer_list:
                 archer.alive = False
@@ -172,7 +220,9 @@ class raw_env(AECEnv, EzPickle):
     # Zombie Kills the Sword
     def sword_hit(self):
         for sword in self.sword_list:
-            zombie_sword_list = pygame.sprite.spritecollide(sword, self.zombie_list, True)
+            zombie_sword_list = pygame.sprite.spritecollide(
+                sword, self.zombie_list, True
+            )
 
             # For each zombie hit, remove the sword and add to the score
             for zombie in zombie_sword_list:
@@ -183,7 +233,9 @@ class raw_env(AECEnv, EzPickle):
     # Zombie Kills the Arrow
     def arrow_hit(self):
         for arrow in self.arrow_list:
-            zombie_arrow_list = pygame.sprite.spritecollide(arrow, self.zombie_list, True)
+            zombie_arrow_list = pygame.sprite.spritecollide(
+                arrow, self.zombie_list, True
+            )
 
             # For each zombie hit, remove the arrow, zombie and add to the score
             for zombie in zombie_arrow_list:
@@ -232,14 +284,16 @@ class raw_env(AECEnv, EzPickle):
             endx = 512 + upper_x_bound - max_x
             endy = 512 + upper_y_bound - max_y
             cropped = np.zeros_like(self.observation_spaces[agent].low)
-            cropped[startx:endx, starty:endy, :] = screen[lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :]
+            cropped[startx:endx, starty:endy, :] = screen[
+                lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
+            ]
 
         return np.swapaxes(cropped, 1, 0)
 
     def state(self):
-        '''
+        """
         Returns an observation of the global environment
-        '''
+        """
         state = pygame.surfarray.pixels3d(self.WINDOW).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
@@ -368,7 +422,9 @@ class raw_env(AECEnv, EzPickle):
         observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
         if mode == "human":
             pygame.display.flip()
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        return (
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        )
 
     def close(self):
         if not self.closed:
@@ -414,7 +470,9 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
-            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(agent_name=name)
+            self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
+                agent_name=name
+            )
             self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
             self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
             self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
@@ -423,7 +481,9 @@ class raw_env(AECEnv, EzPickle):
 
         for i in range(self.num_knights):
             name = "knight_" + str(i)
-            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(agent_name=name)
+            self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
+                agent_name=name
+            )
             self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
             self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
             self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
@@ -456,6 +516,7 @@ class raw_env(AECEnv, EzPickle):
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
+
 
 # The original code for this game, that was added by J K Terry, was
 # created by Dipam Patel in a different repository (hence the git history)
