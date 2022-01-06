@@ -117,8 +117,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                 num_channels = 3
             elif obs_type == 'grayscale_image':
                 num_channels = 1
-            # num_channels will show an unbound error in pyright
-            # perhaps change the above elif to else, or have a seperate else which maybe throws an error
             observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
 
         player_names = ["first", "second", "third", "fourth"]
@@ -185,7 +183,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.agents = [agent for agent in self.agents if not dones[agent]]
         return observations, rewards, dones, infos
 
-    def render(self, mode:str ="human"):
+    def render(self, mode="human"):
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if mode == "human":
