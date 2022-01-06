@@ -179,7 +179,7 @@ class AECEnv:
             self._skip_agent_selection = None
         self._clear_rewards()
 
-    def __str__(self):
+    def __str__(self) -> str:
         '''
         returns a name which looks like: "space_invaders_v1"
         '''
@@ -294,7 +294,7 @@ class ParallelEnv:
     def max_num_agents(self):
         return len(self.possible_agents)
 
-    def __str__(self):
+    def __str__(self) -> str:
         '''
         returns a name which looks like: "space_invaders_v1" by default
         '''
