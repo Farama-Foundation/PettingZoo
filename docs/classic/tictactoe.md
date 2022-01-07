@@ -20,9 +20,6 @@ agent-labels: "agents= ['player_1', 'player_2']"
 ## {{page.title}}
 </div>
 
-
-
-
 Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
 
 ### Observation Space
@@ -38,7 +35,6 @@ The legal moves available to the current agent are found in the `action_mask` el
 ### Action Space
 
 Each action from 0 to 8 represents placing either an X or O in the corresponding cell. The cells are indexed as follows:
-
 
  ```
 0 | 3 | 6

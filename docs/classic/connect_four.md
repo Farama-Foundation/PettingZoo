@@ -37,7 +37,6 @@ The main observation space is 2 planes of a 6x7 grid. Each plane represents a sp
 
 The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
-
 ### Action Space
 
 The action space is the set of integers from 0 to 6 (inclusive), where the action represents which column a token should be dropped in.

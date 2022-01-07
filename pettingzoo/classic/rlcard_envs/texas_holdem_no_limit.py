@@ -13,6 +13,23 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from .rlcard_base import RLCardBase
 
+"""
+Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
+
+Our implementation wraps [RLCard](http://rlcard.org/games.html#no-limit-texas-hold-em) and you can refer to its documentation for additional details. Please cite their work if you use this game in research.
+
+### Observation Space
+
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is similar to Texas Hold'em. The first 52 entries represent the union of the current player's hand and the community cards.
+
+### Arguments
+
+:param num_players: Sets the number of players in the game. Minimum is 2.
+
+"""
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 

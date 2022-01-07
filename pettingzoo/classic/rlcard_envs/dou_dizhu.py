@@ -19,20 +19,14 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#dou-dizhu) and yo
 
 ### Observation Space
 
-##### Encoding per Plane
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-
-##### Landlord Observation
-
-
-##### Peasant Observation
-
+The main *Observation Space* is encoded in a 1D vector with different concatenated features depending on the agent. To represent a combination of cards a 54-dimensional one-hot vector is encoded as follows. A 4x15 is constructed, where each column represents the rank of the cards (including the two jokers), and each row the number of matching card rank. The matrix is constructed using one-hot encoding. Since there are two jokers in the deck, the six entries that are always zero in the columns of the jokers are removed. Finally, to form the 54-dimensional vector, the one-hot matrix is flatten.
+The columns and rows of the 4x15 matrix are encoded as follows:
 
 ### Action Space
 
-### Rewards
-
-We modified the reward structure compared to RLCard. Instead of rewarding `0` to the losing player, we assigned a `-1` reward to the losing agent.
+The raw size of the action space of Dou Dizhu is 27,472. As a reminder, suits are irrelevant in Dou Dizhu.
 
 ### Arguments
 

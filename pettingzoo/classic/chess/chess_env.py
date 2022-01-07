@@ -14,6 +14,11 @@ from . import chess_utils
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 
 ### Observation Space
+
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:
+
 * Channels 0 - 3: Castling rights:
   * Channel 0: All ones if white can castle queenside
   * Channel 1: All ones if white can castle kingside
@@ -24,6 +29,10 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 * Channel 6: All ones to help neural networks find board edges in padded convolutions
 * Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
 * Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
+
+Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
+
+Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the `frame_stacking` argument of our wrapper.
 
 ### Action Space
 
@@ -40,8 +49,6 @@ queen.
 We instead flatten this into 8×8×73 = 4672 discrete action space.
 
 You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a/(8*73), (a/73)%8, a%(8*8))`
-
-### Rewards
 
 """
 

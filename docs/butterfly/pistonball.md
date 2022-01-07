@@ -1,5 +1,4 @@
 ---
-action-type: "either"
 title: "Pistonball"
 alt_title: "PistonBall"
 actions: Either

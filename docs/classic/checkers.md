@@ -23,9 +23,6 @@ agent-labels: "agents= ['player_0', 'player_1']"
 ## {{page.title}}
 </div>
 
-
-
-
 Checkers (also called Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
 
 #### Observation Space

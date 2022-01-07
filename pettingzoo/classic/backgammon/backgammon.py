@@ -11,34 +11,26 @@ This environment uses [gym-backgammon](https://github.com/dellalibera/gym-backga
 The rules of backgammon can be found [here.](https://www.bkgm.com/rules.html)
 
 ### Observation Space
+
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
 The main observation space has shape (198,). Entries 0-97 represent the positions of any white checkers, entries 98-195 represent the positions of any black checkers, and entries 196-197 encode the current player.
-
-
-If there are more than 3 checkers on a point, then the value of the 4th component of that point will be (checkers - 3.0) / 2.0
-
-Encoding of checkers on the bar:
-
-
-Encoding of off checkers:
-
-
-Encoding of the current player:
-
 
 ### Action Space
 
+The action space for this environment is Discrete(26^2 * 2 + 1).
+
+An agent's turn involves rolling two dice and then performing an action based on those rolls. An action involves using the two dice values to move checkers from one point to another or off of the board.
+
+Each action value encodes the two points to move checkers from (source locations), and which dice roll to use first. An action moves a checker from the first source location forward by the amount of the first dice roll (either low roll or high roll, depending on the action value), and then moves a checker from the second source location forward by the amount of the other dice roll.
+
+It is possible that only one of the dice rolls can be used. In that case, one of the source locations will be out of the bounds of the board and is not used.
+
+Actions from 0 to 26^2 -1 use the low dice roll first, and actions from 26^2 to 2*26 ^2 - 1 use the high dice roll first.
+
+The two locations to move a checker from are encoded as a number in base 26.
+
 The 'do nothing' action is 26^2*2
-
-| Action  | First Source Location ID | Second Source Location ID|  First Roll Used | Second Roll Used |         
-| 0 to 26^ 2 -1   | action mod 26 | action / 26 | Low Roll | High Roll
-| 26^2 to 26^2*2 -1   | (action - 26^2) mod 26 |(action - 26^2) / 26 | High Roll | Low Roll
-
-The location on the board can be found from the location ID, which is either the source ID, or the destination ID (source ID + Roll).
-
-
-#### Rewards
-
-The winner is the first player to remove all of their checkers from the board.
 
 """
 

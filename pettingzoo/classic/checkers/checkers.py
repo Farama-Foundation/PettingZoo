@@ -14,9 +14,15 @@ Checkers (also called Draughts) is a 2-player turn based game. Our implementatio
 
 #### Observation Space
 
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is 8x8x4 where the first two dimensions represent the row and column on the game board, and the 4 planes in the third dimension represents the type of piece at that location on the board.
+
+The board is rotated and the planes are shifted to accommodate the current player. During the black player's turn, the top row provided by the `render` function is stored in row 0 of the observation. During the white player's turn, the top row is stored in row 7 of the observation. Additionally, the first two planes of the observation represent the men and kings of the current agent stored in `agent_selection` (The agent that must act next). The last two planes represent the other player's pieces.
+
 #### Action Space
 
-#### Rewards
+The action space is a discrete space of size 256 (8 * 8 * 4) discrete values, where each value describes the starting location and direction of a move. The formula `action % 64` returns the action's starting square. The action space can be split into 4 sections of 64 elements as described below:
 
 """
 

@@ -14,6 +14,18 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 from .rlcard_base import RLCardBase
 
+"""
+### Observation Space
+
+The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
+
+### Arguments
+
+:param num_players: Sets the number of players in the game. Minimum is 2.
+"""
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 
