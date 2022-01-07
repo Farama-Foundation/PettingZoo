@@ -14,6 +14,8 @@ from .ball import Ball
 from .cake_paddle import CakePaddle
 from .paddle import Paddle
 
+FPS = 15
+
 
 def deg_to_rad(deg):
     return deg * np.pi / 180
@@ -223,7 +225,8 @@ class raw_env(AECEnv, EzPickle):
     metadata = {
         'render.modes': ['human', "rgb_array"],
         'name': "cooperative_pong_v5",
-        'is_parallelizable': True
+        'is_parallelizable': True,
+        'video.frames_per_second': FPS
     }
 
     def __init__(self, **kwargs):
