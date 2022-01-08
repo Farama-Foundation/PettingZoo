@@ -1,6 +1,6 @@
 import warnings
 
-from pettingzoo.utils.conversions import parallel_to_aec_wrapper, aec_to_parallel_wrapper
+from pettingzoo.utils.conversions import aec_to_parallel_wrapper, parallel_to_aec_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
 
 from .api_test import missing_attr_warning
