@@ -268,8 +268,9 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, 
-        terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True, terminate_on_fall=True, remove_on_fall=True, max_cycles=500):
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0,
+                 terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+                 terminate_on_fall=True, remove_on_fall=True, terrain_length=TERRAIN_LENGTH, max_cycles=500):
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
@@ -279,6 +280,7 @@ class MultiWalkerEnv():
             shared_reward: whether reward is distributed among all agents or allocated locally
             terminate_reward: reward applied for each fallen walker in environment
             terminate_on_fall: toggles whether agent is done if it falls down
+            terrain_length: length of terrain in number of steps
             max_cycles: after max_cycles steps all agents will return done
         """
 
@@ -291,6 +293,7 @@ class MultiWalkerEnv():
         self.terminate_on_fall = terminate_on_fall
         self.local_ratio = 1 - shared_reward
         self.remove_on_fall = remove_on_fall
+        self.terrain_length = terrain_length
         self.seed_val = None
         self.seed()
         self.setup()
@@ -332,8 +335,6 @@ class MultiWalkerEnv():
 
         self.prev_shaping = np.zeros(self.n_walkers)
         self.prev_package_shaping = 0.0
-
-        self.terrain_length = int(TERRAIN_LENGTH * self.n_walkers * 1 / 8.)
 
     @property
     def agents(self):
@@ -431,7 +432,7 @@ class MultiWalkerEnv():
             shaping = -5.0 * abs(walker_obs[0])
             rewards[i] = shaping - self.prev_shaping[i]
             self.prev_shaping[i] = shaping
-        
+
         package_shaping = self.forward_reward * 130 * self.package.position.x / SCALE
         rewards += (package_shaping - self.prev_package_shaping)
         self.prev_package_shaping = package_shaping

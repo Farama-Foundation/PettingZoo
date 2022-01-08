@@ -24,7 +24,7 @@ agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 </div>
 
 
-In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. The scaling factor of 130 gives a total reward of approximately 300 across the entire distance the package can travel under an optimal policy. If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
+In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75 steps with the scaling factor of 130, the total reward under an optimal policy is around 300 . If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
 
 If a walker falls, it is penalized -10. By default, the environment is done if any walker or the package falls, or if the package goes beyond the left edge of the terrain. In all of these cases, each walker receives an additional reward of -100. If the `terminate_on_fall` setting is set to False, the game continues until the package falls. If the `remove_on_fall` setting is set to True, the walkers are removed from the environment after they fall. The environment is also done if package falls off the right edge of the terrain, with no additional reward or penalty.
 
@@ -92,11 +92,13 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 `remove_on_fall`: Remove walker when it falls (only does anything when `terminate_on_fall` is False)
 
+`terrain_length`: length of terrain in number of steps
+
 `max_cycles`:  after max_cycles steps all agents will return done
 
 
 ### Version History
-* v8: Replaced local_ratio, fixed rewards and documentation (1.15.0)
+* v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)
 * v7: Fixed problem with walker collisions (1.8.2)
 * v6: Fixed observation space and made large improvements to code quality (1.5.0)
 * v5: Fixes to reward structure, added arguments (1.4.2)
