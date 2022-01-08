@@ -35,7 +35,7 @@ def parallel_to_aec(par_env):
 def to_parallel(aec_env):
     """
     This function is here for legacy reasons,
-    please use `aec2parallel(aec_env)` instead
+    please use `aec_to_parallel(aec_env)` instead
     """
     return aec_to_parallel(aec_env)
 
@@ -43,7 +43,7 @@ def to_parallel(aec_env):
 def from_parallel(par_env):
     """
     This function is here for legacy reasons,
-    please use `aec2parallel(aec_env)` instead
+    please use `parallel_to_aec(aec_env)` instead
     """
     return parallel_to_aec(par_env)
 
