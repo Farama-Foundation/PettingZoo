@@ -33,18 +33,12 @@ def parallel_to_aec(par_env):
 
 
 def to_parallel(aec_env):
-    """
-    This function is here for legacy reasons,
-    please use `aec_to_parallel(aec_env)` instead
-    """
+    warnings.warn("The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.")
     return aec_to_parallel(aec_env)
 
 
 def from_parallel(par_env):
-    """
-    This function is here for legacy reasons,
-    please use `parallel_to_aec(aec_env)` instead
-    """
+    warnings.warn("The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.")
     return parallel_to_aec(par_env)
 
 
