@@ -2,7 +2,7 @@ import functools
 from gym.spaces import Discrete
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils import parallel2aec
+from pettingzoo.utils import parallel_to_aec
 
 
 ROCK = 0
@@ -47,7 +47,7 @@ def raw_env():
     function to convert from a ParallelEnv to an AEC env
     '''
     env = parallel_env()
-    env = parallel2aec(env)
+    env = parallel_to_aec(env)
     return env
 
 
