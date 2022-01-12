@@ -6,6 +6,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .multiwalker_base import MultiWalkerEnv as _env
+from .multiwalker_base import FPS
 
 
 def env(**kwargs):
@@ -24,6 +25,7 @@ class raw_env(AECEnv, EzPickle):
         'render.modes': ['human', "rgb_array"],
         'name': 'multiwalker_v7',
         'is_parallelizable': True,
+        'video.frames_per_second': FPS,
     }
 
     def __init__(self, *args, **kwargs):
