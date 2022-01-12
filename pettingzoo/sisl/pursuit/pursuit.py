@@ -28,6 +28,7 @@ class raw_env(AECEnv, EzPickle):
         "render.modes": ["human", "rgb_array"],
         "name": "pursuit_v4",
         'is_parallelizable': True,
+        'video.frames_per_second': 15,
     }
 
     def __init__(self, *args, **kwargs):
