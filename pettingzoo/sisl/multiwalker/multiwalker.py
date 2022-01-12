@@ -5,8 +5,8 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .multiwalker_base import MultiWalkerEnv as _env
 from .multiwalker_base import FPS
+from .multiwalker_base import MultiWalkerEnv as _env
 
 
 def env(**kwargs):
