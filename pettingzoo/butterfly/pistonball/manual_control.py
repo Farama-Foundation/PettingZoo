@@ -23,7 +23,7 @@ def manual_control(**kwargs):
     num_agents = len(env.agents)  # 20
     while not done:
         clock.tick(60)
-        action_list = np.array([1 for _ in range(num_agents)])
+        action_list = np.ones((num_agents,1))
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
