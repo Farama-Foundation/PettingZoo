@@ -23,6 +23,7 @@ class raw_env(AECEnv):
         'render.modes': ['human'],
         "name": "backgammon_v3",
         "is_parallelizable": False,
+        "video.frames_per_second": 2,
     }
 
     def __init__(self):
