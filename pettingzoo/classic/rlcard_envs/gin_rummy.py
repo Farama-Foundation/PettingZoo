@@ -29,9 +29,10 @@ def env(**kwargs):
 class raw_env(RLCardBase, EzPickle):
 
     metadata = {
-        'render.modes': ['human'],
+        "render.modes": ["human"],
         "name": "gin_rummy_v4",
         "is_parallelizable": False,
+        "video.frames_per_second": 1,
     }
 
     def __init__(self, knock_reward: float = 0.5, gin_reward: float = 1.0, opponents_hand_visible=False):
