@@ -47,7 +47,7 @@ from pettingzoo.butterfly import prospector_v4
 
 from pettingzoo.magent import battle_v3
 from pettingzoo.magent import adversarial_pursuit_v3
-from pettingzoo.magent import gather_v3
+from pettingzoo.magent import gather_v4
 from pettingzoo.magent import combined_arms_v5
 from pettingzoo.magent import tiger_deer_v3
 from pettingzoo.magent import battlefield_v3
@@ -129,7 +129,7 @@ all_environments = {
     "magent/battle_v3": battle_v3,
     "magent/battlefield_v3": battlefield_v3,
     "magent/combined_arms_v5": combined_arms_v5,
-    "magent/gather_v3": gather_v3,
+    "magent/gather_v4": gather_v4,
     "magent/tiger_deer_v3": tiger_deer_v3,
 
     "mpe/simple_adversary_v2": simple_adversary_v2,
