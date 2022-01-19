@@ -9,7 +9,7 @@ def manual_control(**kwargs):
     env = _env(**kwargs)
     env.reset()
     done = False
-    FPS = 90
+    FPS = 15
     clock = pygame.time.Clock()
 
     cur_agent = 0
