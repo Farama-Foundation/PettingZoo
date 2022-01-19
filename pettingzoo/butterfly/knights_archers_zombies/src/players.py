@@ -17,7 +17,7 @@ ANGLE_RATE = 10
 
 class Archer(pygame.sprite.Sprite):
 
-    def __init__(self, agent_name):
+    def __init__(self, agent_name, FPS):
         super().__init__()
         self.image = get_image(os.path.join('img', 'archer.png'))
         self.rect = self.image.get_rect(center=(ARCHER_X, ARCHER_Y))
@@ -26,12 +26,23 @@ class Archer(pygame.sprite.Sprite):
         self.pos = pygame.Vector2(self.rect.center)
         self.direction = pygame.Vector2(0, -1)
         self.attacking = False  # disable movement during attacking
-        self.weapon = Arrow(self)
+        self.weapon = Arrow(self, FPS)
         self.alive = True
         self.score = 0
         self.is_archer = True
         self.is_knight = False
         self.agent_name = agent_name
+
+        self.knight_speed = KNIGHT_SPEED * 15. / FPS
+        self.angle_rate = ANGLE_RATE * 15. / FPS
+
+        if self.knight_speed % 1. != 0.:
+            raise ValueError(f'FPS of {FPS} leads to decimal place value of {self.knight_speed} for knight_speed.')
+        if self.angle_rate % 1. != 0.:
+            raise ValueError(f'FPS of {FPS} leads to decimal place value of {self.angle_rate} for angle_rate.')
+
+        self.knight_speed = int(self.knight_speed)
+        self.angle_rate = int(self.angle_rate)
 
     def update(self, action):
         went_out_of_bounds = False
@@ -40,16 +51,16 @@ class Archer(pygame.sprite.Sprite):
             move_angle = math.radians(self.angle + 90)
             # Up and Down movement
             if action == 1 and self.rect.y > 20:
-                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
-                self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * self.knight_speed
+                self.rect.y -= math.sin(move_angle) * self.knight_speed
             elif action == 2 and self.rect.y < HEIGHT - 40:
-                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
-                self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * self.knight_speed
+                self.rect.y += math.sin(move_angle) * self.knight_speed
             # Turn CCW & CW
             elif action == 3:
-                self.angle += ANGLE_RATE
+                self.angle += self.angle_rate
             elif action == 4:
-                self.angle -= ANGLE_RATE
+                self.angle -= self.angle_rate
             elif action == 5 and self.alive:
                 self.weapon.fired = True
                 # self.attacking = True # gets reset to False in weapon attack
@@ -77,7 +88,7 @@ class Archer(pygame.sprite.Sprite):
 
 
 class Knight(pygame.sprite.Sprite):
-    def __init__(self, agent_name):
+    def __init__(self, agent_name, FPS):
         super().__init__()
         self.image = get_image(os.path.join('img', 'knight.png'))
         self.rect = self.image.get_rect(center=(KNIGHT_X, KNIGHT_Y))
@@ -88,13 +99,24 @@ class Knight(pygame.sprite.Sprite):
         # self.radius = radius
         self.attacking = False  # Used to disable movement during attacking
         self.attack_phase = -5
-        self.weapon = Sword(self)
+        self.weapon = Sword(self, FPS)
         self.alive = True  # This flag is used to immediately delete the mace object when the knight dies
         self.action = -1
         self.score = 0
         self.is_archer = False
         self.is_knight = True
         self.agent_name = agent_name
+
+        self.knight_speed = KNIGHT_SPEED * 15. / FPS
+        self.angle_rate = ANGLE_RATE * 15. / FPS
+
+        if self.knight_speed % 1. != 0.:
+            raise ValueError(f'FPS of {FPS} leads to decimal place value of {self.knight_speed} for knight_speed.')
+        if self.angle_rate % 1. != 0.:
+            raise ValueError(f'FPS of {FPS} leads to decimal place value of {self.angle_rate} for angle_rate.')
+
+        self.knight_speed = int(self.knight_speed)
+        self.angle_rate = int(self.angle_rate)
 
     def update(self, action):
         self.action = action
@@ -103,16 +125,16 @@ class Knight(pygame.sprite.Sprite):
             move_angle = math.radians(self.angle + 90)
             # Up and Down movement
             if action == 1 and self.rect.y > 20:
-                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
-                self.rect.y -= math.sin(move_angle) * KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * self.knight_speed
+                self.rect.y -= math.sin(move_angle) * self.knight_speed
             elif action == 2 and self.rect.y < HEIGHT - 40:
-                self.rect.x += math.cos(move_angle) * KNIGHT_SPEED
-                self.rect.y += math.sin(move_angle) * KNIGHT_SPEED
+                self.rect.x += math.cos(move_angle) * self.knight_speed
+                self.rect.y += math.sin(move_angle) * self.knight_speed
             # Turn CCW & CW
             elif action == 3:
-                self.angle += ANGLE_RATE
+                self.angle += self.angle_rate
             elif action == 4:
-                self.angle -= ANGLE_RATE
+                self.angle -= self.angle_rate
             elif action == 5:
                 self.attacking = True  # gets reset to False in weapon attack
             elif action == 6:

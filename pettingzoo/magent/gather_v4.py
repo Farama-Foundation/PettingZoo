@@ -71,8 +71,16 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
+<<<<<<< HEAD:pettingzoo/magent/gather_v4.py
     metadata = {'render.modes': ['human', 'rgb_array'], 'name': "gather_v4"}
 
+=======
+    metadata = {
+        "render.modes": ["human", "rgb_array"],
+        'name': "gather_v3",
+        "video.frames_per_second": 5,
+        }
+>>>>>>> master:pettingzoo/magent/gather_v3.py
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
