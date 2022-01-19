@@ -20,9 +20,10 @@ def env():
 
 class raw_env(AECEnv):
     metadata = {
-        'render.modes': ['human'],
+        "render.modes": ["human"],
         "name": "tictactoe_v3",
         "is_parallelizable": False,
+        "video.frames_per_second": 1,
     }
 
     def __init__(self):

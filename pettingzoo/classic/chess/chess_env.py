@@ -26,6 +26,7 @@ class raw_env(AECEnv):
         'render.modes': ['human'],
         "name": "chess_v5",
         "is_parallelizable": False,
+        "video.frames_per_second": 2,
     }
 
     def __init__(self):
