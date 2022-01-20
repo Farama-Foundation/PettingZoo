@@ -11,7 +11,7 @@ observation-values: "(0, 255)"
 state-shape: "(720, 1280, 3)"
 state-values: "(0, 255)"
 average-total-reward: "2.95"
-import: "from pettingzoo.butterfly import knights_archers_zombies_v7"
+import: "from pettingzoo.butterfly import knights_archers_zombies_v8"
 agent-labels: "agents= ['archer_0', 'archer_1', 'knight_0', 'knight_1']"
 ---
 
@@ -43,7 +43,7 @@ Press 'M' key to spawn a new knight.
 ### Arguments
 
 ``` python
-knights_archers_zombies_v7.env(spawn_rate=20, num_knights=2, num_archers=2,
+knights_archers_zombies_v8.env(spawn_rate=20, num_knights=2, num_archers=2,
 killable_knights=True, killable_archers=True, line_death=True, pad_observation=True,
 max_cycles=900)
 ```
@@ -66,6 +66,7 @@ max_cycles=900)
 
 ### Version History
 
+* v8: General code cleanup and removed weird bugs (1.14.0)
 * v7: Minor bug fix relating to end of episode crash (1.6.0)
 * v6: Fixed reward structure (1.5.2)
 * v5: Removed black death argument (1.5.0)
