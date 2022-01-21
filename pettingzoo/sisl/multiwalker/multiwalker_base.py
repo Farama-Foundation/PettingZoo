@@ -68,7 +68,7 @@ class ContactDetector(contactListener):
             if contact.fixtureA.body not in [w.hull for w in self.env.walkers]:
                 self.env.game_over = True
 
-            #    self.env.game_over = True
+        # self.env.game_over = True
         for walker in self.env.walkers:
             if walker.hull is not None:
                 for leg in [walker.legs[1], walker.legs[3]]:
@@ -268,17 +268,19 @@ class MultiWalkerEnv():
 
     hardcore = False
 
-    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, local_ratio=1.0,
-                 forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, terminate_on_fall=True, remove_on_fall=True, max_cycles=500):
+    def __init__(self, n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0,
+                 terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+                 terminate_on_fall=True, remove_on_fall=True, terrain_length=TERRAIN_LENGTH, max_cycles=500):
         """
             n_walkers: number of bipedal walkers in environment
             position_noise: noise applied to agent positional sensor observations
             angle_noise: noise applied to agent rotational sensor observations
-            local_ratio: proportion of reward allocated locally vs distributed among all agents
             forward_reward: reward applied for an agent standing, scaled by agent's x coordinate
             fall_reward: reward applied when an agent falls down
+            shared_reward: whether reward is distributed among all agents or allocated locally
             terminate_reward: reward applied for each fallen walker in environment
             terminate_on_fall: toggles whether agent is done if it falls down
+            terrain_length: length of terrain in number of steps
             max_cycles: after max_cycles steps all agents will return done
         """
 
@@ -289,8 +291,9 @@ class MultiWalkerEnv():
         self.fall_reward = fall_reward
         self.terminate_reward = terminate_reward
         self.terminate_on_fall = terminate_on_fall
-        self.local_ratio = local_ratio
+        self.local_ratio = 1 - shared_reward
         self.remove_on_fall = remove_on_fall
+        self.terrain_length = terrain_length
         self.seed_val = None
         self.seed()
         self.setup()
@@ -332,8 +335,6 @@ class MultiWalkerEnv():
 
         self.prev_shaping = np.zeros(self.n_walkers)
         self.prev_package_shaping = 0.0
-
-        self.terrain_length = int(TERRAIN_LENGTH * self.n_walkers * 1 / 8.)
 
     @property
     def agents(self):
@@ -428,9 +429,7 @@ class MultiWalkerEnv():
             neighbor_obs.append(self.np_random.normal(self.package.angle, self.angle_noise))
             obs.append(np.array(walker_obs + neighbor_obs))
 
-            # shaping = 130 * pos[0] / SCALE
-            shaping = 0.0
-            shaping -= 5.0 * abs(walker_obs[0])
+            shaping = -5.0 * abs(walker_obs[0])
             rewards[i] = shaping - self.prev_shaping[i]
             self.prev_shaping[i] = shaping
 
@@ -442,10 +441,10 @@ class MultiWalkerEnv():
             WALKER_SEPERATION * TERRAIN_STEP
 
         done = [False] * self.n_walkers
-        if self.game_over or pos[0] < 0:
+        if self.game_over or self.package.position.x < 0:
             rewards += self.terminate_reward
             done = [True] * self.n_walkers
-        if pos[0] > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
+        if self.package.position.x > (self.terrain_length - TERRAIN_GRASS) * TERRAIN_STEP:
             done = [True] * self.n_walkers
         rewards += self.fall_reward * self.fallen_walkers
         if self.terminate_on_fall and np.sum(self.fallen_walkers) > 0:
