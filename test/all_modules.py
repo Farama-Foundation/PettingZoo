@@ -41,7 +41,7 @@ from pettingzoo.classic import backgammon_v3
 
 from pettingzoo.butterfly import knights_archers_zombies_v8
 from pettingzoo.butterfly import pistonball_v5
-from pettingzoo.butterfly import cooperative_pong_v4
+from pettingzoo.butterfly import cooperative_pong_v5
 from pettingzoo.butterfly import prison_v3
 from pettingzoo.butterfly import prospector_v4
 
@@ -64,7 +64,7 @@ from pettingzoo.mpe import simple_v2
 
 from pettingzoo.sisl import pursuit_v4
 from pettingzoo.sisl import waterworld_v3
-from pettingzoo.sisl import multiwalker_v7
+from pettingzoo.sisl import multiwalker_v8
 
 all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
@@ -121,7 +121,7 @@ all_environments = {
 
     "butterfly/knights_archers_zombies_v8": knights_archers_zombies_v8,
     "butterfly/pistonball_v5": pistonball_v5,
-    "butterfly/cooperative_pong_v4": cooperative_pong_v4,
+    "butterfly/cooperative_pong_v5": cooperative_pong_v5,
     "butterfly/prison_v3": prison_v3,
     "butterfly/prospector_v4": prospector_v4,
 
@@ -142,7 +142,7 @@ all_environments = {
     "mpe/simple_world_comm_v2": simple_world_comm_v2,
     "mpe/simple_v2": simple_v2,
 
-    "sisl/multiwalker_v7": multiwalker_v7,
+    "sisl/multiwalker_v8": multiwalker_v8,
     "sisl/waterworld_v3": waterworld_v3,
     "sisl/pursuit_v4": pursuit_v4,
 }
