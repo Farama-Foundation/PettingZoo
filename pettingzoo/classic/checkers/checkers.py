@@ -25,6 +25,7 @@ class raw_env(AECEnv):
         "render.modes": ["human"],
         "name": "checkers_v3",
         "is_parallelizable": False,
+        "video.frames_per_second": 2,
     }
 
     move64_32 = {

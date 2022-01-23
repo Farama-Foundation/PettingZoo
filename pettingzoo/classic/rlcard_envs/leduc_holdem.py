@@ -24,9 +24,10 @@ def env(**kwargs):
 class raw_env(RLCardBase):
 
     metadata = {
-        'render.modes': ['human'],
+        "render.modes": ["human"],
         "name": "leduc_holdem_v4",
         "is_parallelizable": False,
+        "video.frames_per_second": 1,
     }
 
     def __init__(self, num_players=2):
