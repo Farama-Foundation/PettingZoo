@@ -84,6 +84,7 @@ class raw_env(AECEnv, EzPickle):
         self.kill_list = []
         self.agent_list = []
         self.agents = []
+        self.dead_agents = []
 
         self.agent_name_mapping = {}
         a_count = 0
@@ -120,6 +121,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Initializing Pygame
         pygame.init()
+         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))
@@ -371,19 +373,18 @@ class raw_env(AECEnv, EzPickle):
 
         # manage the kill list
         if self._agent_selector.is_last():
-            # note: this is quivalent to copy(), not an alias
-            _live_agents = self.agents[:]
+            for agent in self.kill_list:
+                self.agents.remove(agent)
+                self.dead_agents.append(agent)
 
-            # prune agents
-            for k in self.kill_list:
-                self.dones[k] = True
-                _live_agents.remove(k)
+            for agent in self.dead_agents:
+                self.dones[agent] = True
 
             # reset the kill list
             self.kill_list = []
 
             # reinit the agent selector with existing agents
-            self._agent_selector.reinit(_live_agents)
+            self._agent_selector.reinit(self.agents)
 
         # if there still exist agents, get the next one
         if len(self._agent_selector.agent_order):
@@ -395,6 +396,7 @@ class raw_env(AECEnv, EzPickle):
 
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
+        # self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         self.render_on = True
         self.draw()
 
@@ -466,6 +468,7 @@ class raw_env(AECEnv, EzPickle):
         # agents is s list of strings
         self.agent_list = []
         self.agents = []
+        self.dead_agents = []
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
