@@ -84,7 +84,6 @@ class raw_env(AECEnv, EzPickle):
         self.kill_list = []
         self.agent_list = []
         self.agents = []
-        self.dead_agents = []
 
         self.agent_name_mapping = {}
         a_count = 0
@@ -368,12 +367,14 @@ class raw_env(AECEnv, EzPickle):
         self.rewards[self.agent_selection] = agent.score
         agent.score = 0
         done = not self.run or self.frames >= self.max_cycles
-        self.dones = {a: done for a in self.possible_agents}
+        self.dones = {a: done for a in self.agents}
 
         # manage the kill list
         if self._agent_selector.is_last():
+            # note: this is quivalent to copy(), not an alias
             _live_agents = self.agents[:]
 
+            # prune agents
             for k in self.kill_list:
                 self.dones[k] = True
                 _live_agents.remove(k)
@@ -381,8 +382,10 @@ class raw_env(AECEnv, EzPickle):
             # reset the kill list
             self.kill_list = []
 
+            # reinit the agent selector with existing agents
             self._agent_selector.reinit(_live_agents)
 
+        # if there still exist agents, get the next one
         if len(self._agent_selector.agent_order):
             self.agent_selection = self._agent_selector.next()
 
@@ -461,10 +464,8 @@ class raw_env(AECEnv, EzPickle):
 
         # agent_list is a list of instances
         # agents is s list of strings
-        # dead_agents is a list of strings
         self.agent_list = []
         self.agents = []
-        self.dead_agents = []
 
         for i in range(self.num_archers):
             name = "archer_" + str(i)
