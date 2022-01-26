@@ -226,7 +226,6 @@ class raw_env(AECEnv, EzPickle):
 
             # For each zombie hit, remove the sword and add to the score
             for zombie in zombie_sword_list:
-                self.sword_list.remove(sword)
                 self.zombie_list.remove(zombie)
                 sword.knight.score += 1
 
