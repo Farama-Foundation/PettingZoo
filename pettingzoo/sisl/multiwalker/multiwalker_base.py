@@ -3,6 +3,9 @@ import math
 
 import Box2D
 import numpy as np
+import pygame
+from pygame import gfxdraw
+
 from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
                       revoluteJointDef)
 from gym import spaces
@@ -123,8 +126,8 @@ class BipedalWalker(Agent):
                 groupIndex=self.walker_id,
                 restitution=0.0)  # 0.99 bouncy
         )
-        self.hull.color1 = (0.5, 0.4, 0.9)
-        self.hull.color2 = (0.3, 0.3, 0.5)
+        self.hull.color1 = (127, 51, 229)
+        self.hull.color2 = (76, 76, 127)
         self.hull.ApplyForceToCenter((self.np_random.uniform(-INITIAL_RANDOM, INITIAL_RANDOM), 0),
                                      True)
 
@@ -141,8 +144,8 @@ class BipedalWalker(Agent):
                     groupIndex=self.walker_id,
                 )  # collide with ground only
             )
-            leg.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
-            leg.color2 = (0.4 - i / 10., 0.2 - i / 10., 0.3 - i / 10.)
+            leg.color1 = (153 - i * 25, 76 - i * 25, 127 - i * 25)
+            leg.color2 = (102 - i * 25, 51 - i * 25, 76 - i * 25)
             rjd = revoluteJointDef(
                 bodyA=self.hull,
                 bodyB=leg,
@@ -168,8 +171,8 @@ class BipedalWalker(Agent):
                     groupIndex=self.walker_id,
                 )
             )
-            lower.color1 = (0.6 - i / 10., 0.3 - i / 10., 0.5 - i / 10.)
-            lower.color2 = (0.4 - i / 10., 0.2 - i / 10., 0.3 - i / 10.)
+            lower.color1 = (153 - i * 25, 76 - i * 25, 127 - i * 25)
+            lower.color2 = (102 - i * 25, 51 - i * 25, 76 - i * 25)
             rjd = revoluteJointDef(
                 bodyA=leg,
                 bodyB=lower,
@@ -297,6 +300,8 @@ class MultiWalkerEnv():
         self.seed_val = None
         self.seed()
         self.setup()
+        self.screen = None
+        self.isopen = True
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
@@ -361,9 +366,9 @@ class MultiWalkerEnv():
             walker._destroy()
 
     def close(self):
-        if self.viewer is not None:
-            self.viewer.close()
-            self.viewer = None
+        if self.screen is not None:
+            pygame.quit()
+            self.isopen = False
 
     def reset(self):
         self.setup()
@@ -491,76 +496,130 @@ class MultiWalkerEnv():
 
     def render(self, mode='human', close=False):
         if close:
-            if self.viewer is not None:
-                self.viewer.close()
-                self.viewer = None
+            self.close()
             return
 
-        render_scale = 0.75
+        offset = 200  # compensates for the negative coordinates
+        render_scale = SCALE / self.package_scale / 0.75
+        if self.screen is None:
+            pygame.init()
+            self.screen = pygame.display.set_mode((VIEWPORT_W, VIEWPORT_H))
 
-        from gym.envs.classic_control import rendering
-        if self.viewer is None:
-            self.viewer = rendering.Viewer(VIEWPORT_W, VIEWPORT_H)
-        self.viewer.set_bounds(self.scroll,
-                               VIEWPORT_W / SCALE * self.package_scale * render_scale + self.scroll,
-                               0, VIEWPORT_H / SCALE * self.package_scale * render_scale)
+        self.surf = pygame.Surface((VIEWPORT_W + self.scroll * render_scale + offset, VIEWPORT_H))
 
-        self.viewer.draw_polygon([
-            (self.scroll, 0),
-            (self.scroll + VIEWPORT_W * self.package_scale / SCALE * render_scale, 0),
-            (self.scroll + VIEWPORT_W * self.package_scale / SCALE * render_scale,
-             VIEWPORT_H / SCALE * self.package_scale * render_scale),
-            (self.scroll, VIEWPORT_H / SCALE * self.package_scale * render_scale),
-        ], color=(0.9, 0.9, 1.0))
+        pygame.draw.polygon(
+            self.surf,
+            color=(215, 215, 255),
+            points=[
+                (self.scroll * render_scale + offset, 0),
+                (self.scroll * render_scale + VIEWPORT_W + offset, 0),
+                (self.scroll * render_scale + VIEWPORT_W + offset, VIEWPORT_H),
+                (self.scroll * render_scale + offset, VIEWPORT_H),
+            ],
+        )
+
         for poly, x1, x2 in self.cloud_poly:
             if x2 < self.scroll / 2:
                 continue
             if x1 > self.scroll / 2 + VIEWPORT_W / SCALE * self.package_scale:
                 continue
-            self.viewer.draw_polygon(
-                [(p[0] + self.scroll / 2, p[1]) for p in poly], color=(1, 1, 1))
+            gfxdraw.aapolygon(
+                self.surf,
+                [(p[0] * render_scale + self.scroll * render_scale / 2 + offset,
+                  p[1] * render_scale) for p in poly],
+                (255, 255, 255),
+            )
+            gfxdraw.filled_polygon(
+                self.surf,
+                [(p[0] * render_scale + self.scroll * render_scale / 2 + offset,
+                  p[1] * render_scale) for p in poly],
+                (255, 255, 255),
+            )
+
         for poly, color in self.terrain_poly:
             if poly[1][0] < self.scroll:
                 continue
             if poly[0][0] > self.scroll + VIEWPORT_W / SCALE * self.package_scale:
                 continue
-            self.viewer.draw_polygon(poly, color=color)
+            scaled_poly = []
+            for coord in poly:
+                scaled_poly.append(([coord[0] * render_scale + offset, coord[1] * render_scale]))
+            gfxdraw.aapolygon(self.surf, scaled_poly, color)
+            gfxdraw.filled_polygon(self.surf, scaled_poly, color)
 
         self.lidar_render = (self.lidar_render + 1) % 100
         i = self.lidar_render
         for walker in self.walkers:
             if i < 2 * len(walker.lidar):
                 l = walker.lidar[i] if i < len(walker.lidar) else walker.lidar[len(walker.lidar) - i - 1]
-                self.viewer.draw_polyline(
-                    [l.p1, l.p2], color=(1, 0, 0), linewidth=1)
+                pygame.draw.line(
+                    self.surf,
+                    color=(255, 0, 0),
+                    start_pos=(l.p1[0] * render_scale + offset, l.p1[1] * render_scale),
+                    end_pos=(l.p2[0] * render_scale + offset, l.p2[1] * render_scale),
+                    width=1,
+                )
 
         for obj in self.drawlist:
             for f in obj.fixtures:
                 trans = f.body.transform
                 if type(f.shape) is circleShape:
-                    t = rendering.Transform(translation=trans * f.shape.pos)
-                    self.viewer.draw_circle(
-                        f.shape.radius, 30, color=obj.color1).add_attr(t)
-                    self.viewer.draw_circle(f.shape.radius, 30, color=obj.color2, filled=False,
-                                            linewidth=2).add_attr(t)
+                    pygame.draw.circle(
+                        self.surf,
+                        color=obj.color1,
+                        center=trans * f.shape.pos * render_scale + offset,
+                        radius=f.shape.radius * render_scale,
+                    )
+                    pygame.draw.circle(
+                        self.surf,
+                        color=obj.color2,
+                        center=trans * f.shape.pos * render_scale + offset,
+                        radius=f.shape.radius * render_scale,
+                    )
                 else:
-                    path = [trans * v for v in f.shape.vertices]
-                    self.viewer.draw_polygon(path, color=obj.color1)
-                    path.append(path[0])
-                    self.viewer.draw_polyline(
-                        path, color=obj.color2, linewidth=2)
+                    path = [trans * v * render_scale for v in f.shape.vertices]
+                    path = [[c[0] + offset, c[1]] for c in path]
+                    if len(path) > 2:
+                        gfxdraw.aapolygon(self.surf, path, obj.color1)
+                        gfxdraw.filled_polygon(self.surf, path, obj.color1)
+                        path.append(path[0])
+                        gfxdraw.aapolygon(self.surf, path, obj.color2)
+                    else:
+                        pygame.draw.aaline(
+                            self.surf,
+                            start_pos=path[0],
+                            end_pos=path[1],
+                            color=obj.color2,
+                        )
 
-        flagy1 = TERRAIN_HEIGHT
-        flagy2 = flagy1 + 50 / SCALE
-        x = TERRAIN_STEP * 3
-        self.viewer.draw_polyline(
-            [(x, flagy1), (x, flagy2)], color=(0, 0, 0), linewidth=2)
-        f = [(x, flagy2), (x, flagy2 - 10 / SCALE),
-             (x + 25 / SCALE, flagy2 - 5 / SCALE)]
-        self.viewer.draw_polygon(f, color=(0.9, 0.2, 0))
-        self.viewer.draw_polyline(f + [f[0]], color=(0, 0, 0), linewidth=2)
+        flagy1 = TERRAIN_HEIGHT * render_scale
+        flagy2 = flagy1 + 50 * render_scale / SCALE
+        x = TERRAIN_STEP * 3 * render_scale + offset
+        pygame.draw.aaline(
+            self.surf, color=(0, 0, 0), start_pos=(x, flagy1), end_pos=(x, flagy2)
+        )
 
-        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+        f = [
+            (x, flagy2),
+            (x, flagy2 - 10 * render_scale / SCALE),
+            (x + 25 * render_scale / SCALE, flagy2 - 5 * render_scale / SCALE),
+        ]
+        pygame.draw.polygon(self.surf, color=(230, 51, 0), points=f)
+        pygame.draw.lines(
+            self.surf, color=(0, 0, 0), points=f + [f[0]], width=1, closed=False
+        )
+
+        self.surf = pygame.transform.flip(self.surf, False, True)
+        self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
+        if mode == "human":
+            pygame.display.flip()
+
+        if mode == "rgb_array":
+            return np.transpose(
+                np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
+            )
+        else:
+            return self.isopen
 
     def _generate_package(self):
         init_x = np.mean(self.start_x)
@@ -576,8 +635,8 @@ class MultiWalkerEnv():
                 # maskBits=0x001,  # collide only with ground
                 restitution=0.0)  # 0.99 bouncy
         )
-        self.package.color1 = (0.5, 0.4, 0.9)
-        self.package.color2 = (0.3, 0.3, 0.5)
+        self.package.color1 = (127, 102, 229)
+        self.package.color2 = (76, 76, 127)
 
     def _generate_terrain(self, hardcore):
         GRASS, STUMP, STAIRS, PIT, _STATES_ = range(5)
@@ -609,12 +668,12 @@ class MultiWalkerEnv():
                 ]
                 t = self.world.CreateStaticBody(fixtures=fixtureDef(
                     shape=polygonShape(vertices=poly), friction=FRICTION))
-                t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
+                t.color1, t.color2 = (255, 255, 255), (153, 153, 153)
                 self.terrain.append(t)
                 t = self.world.CreateStaticBody(fixtures=fixtureDef(shape=polygonShape(
                     vertices=[(p[0] + TERRAIN_STEP * counter, p[1]) for p in poly]),
                     friction=FRICTION))
-                t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
+                t.color1, t.color2 = (255, 255, 255), (153, 153, 153)
                 self.terrain.append(t)
                 counter += 2
                 original_y = y
@@ -634,7 +693,7 @@ class MultiWalkerEnv():
                 ]
                 t = self.world.CreateStaticBody(fixtures=fixtureDef(
                     shape=polygonShape(vertices=poly), friction=FRICTION))
-                t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
+                t.color1, t.color2 = (255, 255, 255), (153, 153, 153)
                 self.terrain.append(t)
 
             elif state == STAIRS and oneshot:
@@ -655,7 +714,7 @@ class MultiWalkerEnv():
                     ]
                     t = self.world.CreateStaticBody(fixtures=fixtureDef(
                         shape=polygonShape(vertices=poly), friction=FRICTION))
-                    t.color1, t.color2 = (1, 1, 1), (0.6, 0.6, 0.6)
+                    t.color1, t.color2 = (255, 255, 255), (153, 153, 153)
                     self.terrain.append(t)
                 counter = stair_steps * stair_width
 
@@ -685,11 +744,11 @@ class MultiWalkerEnv():
                 shape=edgeShape(vertices=poly),
                 friction=FRICTION
             ))
-            color = (0.3, 1.0 if i % 2 == 0 else 0.8, 0.3)
+            color = (76, 255 if i % 2 == 0 else 204, 76)
             t.color1 = color
             t.color2 = color
             self.terrain.append(t)
-            color = (0.4, 0.6, 0.3)
+            color = (102, 153, 76)
             poly += [(poly[1][0], 0), (poly[0][0], 0)]
             self.terrain_poly.append((poly, color))
         self.terrain.reverse()
