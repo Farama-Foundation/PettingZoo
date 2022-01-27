@@ -4,12 +4,11 @@ import math
 import Box2D
 import numpy as np
 import pygame
-from pygame import gfxdraw
-
-from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef, polygonShape,
-                      revoluteJointDef)
+from Box2D.b2 import (circleShape, contactListener, edgeShape, fixtureDef,
+                      polygonShape, revoluteJointDef)
 from gym import spaces
 from gym.utils import seeding
+from pygame import gfxdraw
 
 from .._utils import Agent
 
