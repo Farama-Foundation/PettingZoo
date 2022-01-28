@@ -341,7 +341,7 @@ class raw_env(AECEnv, EzPickle):
             rel_pos = rel_pos / const.SCREEN_DIAG
 
             # give more emphasis to closer positions
-            rel_pos = 1 - rel_pos
+            rel_pos = np.sign(rel_pos) * (1 - abs(rel_pos))
 
             # combine the positions and angles
             state = np.concatenate([rel_pos, rel_ang], axis=-1)
