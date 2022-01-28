@@ -50,7 +50,7 @@ class raw_env(AECEnv, EzPickle):
         pad_observation=True,
         line_death=False,
         max_cycles=900,
-        vector_state=False,
+        vector_state=None,
     ):
         EzPickle.__init__(
             self,
@@ -126,7 +126,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Initializing Pygame
         pygame.init()
-         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))
@@ -299,7 +299,7 @@ class raw_env(AECEnv, EzPickle):
         Returns an observation of the global environment
         """
         state = None
-        if not self.vector_state:
+        if self.vector_state is None:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
@@ -314,7 +314,15 @@ class raw_env(AECEnv, EzPickle):
             for agent in self.zombie_list:
                 state.append(agent.vector_state)
 
-            state = np.stack(state, axis=0)
+            if self.vector_state == "dynamic":
+                state = np.stack(state, axis=0)
+            elif self.vector_state == "constant":
+                state = np.concatenate(state, axis=0)
+                state = np.pad(state, [0, max(30 * 4 - state.shape[0], 0)], "constant")
+            else:
+                raise NotImplementedError(
+                    f"Unknown vector_state {self.vector_state}, only `dynamic` and `constant` are allowed."
+                )
 
         return state
 
