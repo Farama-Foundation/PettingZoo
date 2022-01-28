@@ -10,29 +10,39 @@ from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 def parallel_wrapper_fn(env_fn):
     def par_fn(**kwargs):
         env = env_fn(**kwargs)
-        env = to_parallel_wrapper(env)
+        env = aec_to_parallel_wrapper(env)
         return env
     return par_fn
 
 
-def to_parallel(aec_env):
-    if isinstance(aec_env, from_parallel_wrapper):
+def aec_to_parallel(aec_env):
+    if isinstance(aec_env, parallel_to_aec_wrapper):
         return aec_env.env
     else:
-        par_env = to_parallel_wrapper(aec_env)
+        par_env = aec_to_parallel_wrapper(aec_env)
         return par_env
 
 
-def from_parallel(par_env):
-    if isinstance(par_env, to_parallel_wrapper):
+def parallel_to_aec(par_env):
+    if isinstance(par_env, aec_to_parallel_wrapper):
         return par_env.aec_env
     else:
-        aec_env = from_parallel_wrapper(par_env)
+        aec_env = parallel_to_aec_wrapper(par_env)
         ordered_env = OrderEnforcingWrapper(aec_env)
         return ordered_env
 
 
-class to_parallel_wrapper(ParallelEnv):
+def to_parallel(aec_env):
+    warnings.warn("The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.")
+    return aec_to_parallel(aec_env)
+
+
+def from_parallel(par_env):
+    warnings.warn("The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.")
+    return parallel_to_aec(par_env)
+
+
+class aec_to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
         assert aec_env.metadata.get('is_parallelizable', False), \
             "Converting from an AEC environment to a parallel environment " \
@@ -127,7 +137,7 @@ class to_parallel_wrapper(ParallelEnv):
         return self.aec_env.close()
 
 
-class from_parallel_wrapper(AECEnv):
+class parallel_to_aec_wrapper(AECEnv):
     def __init__(self, parallel_env):
         self.env = parallel_env
 

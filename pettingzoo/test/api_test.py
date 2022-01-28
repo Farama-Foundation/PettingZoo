@@ -7,7 +7,7 @@ import gym
 import numpy as np
 
 import pettingzoo
-from pettingzoo.utils.conversions import from_parallel_wrapper, to_parallel_wrapper
+from pettingzoo.utils.conversions import aec_to_parallel_wrapper, parallel_to_aec_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
 
 missing_attr_warning = '''This environment does not have {name} defined.
@@ -281,8 +281,8 @@ def api_test(env, num_cycles=10, verbose_progress=False):
     progress_report("Finished test_rewards_dones")
 
     # checks unwrapped attribute
-    assert not isinstance(env.unwrapped, to_parallel_wrapper)
-    assert not isinstance(env.unwrapped, from_parallel_wrapper)
+    assert not isinstance(env.unwrapped, aec_to_parallel_wrapper)
+    assert not isinstance(env.unwrapped, parallel_to_aec_wrapper)
     assert not isinstance(env.unwrapped, BaseWrapper)
 
     # Test that if env has overridden render(), they must have overridden close() as well
