@@ -1,7 +1,10 @@
+import math
+
 # video options
 FPS = 15
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+SCREEN_DIAG = math.sqrt(SCREEN_WIDTH ** 2 + SCREEN_HEIGHT ** 2)
 SCREEN_UNITS = 15
 
 # zombie speeds
