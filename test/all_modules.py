@@ -40,14 +40,14 @@ from pettingzoo.classic import hanabi_v4
 from pettingzoo.classic import backgammon_v3
 
 from pettingzoo.butterfly import knights_archers_zombies_v8
-from pettingzoo.butterfly import pistonball_v5
+from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.butterfly import cooperative_pong_v5
 from pettingzoo.butterfly import prison_v3
 from pettingzoo.butterfly import prospector_v4
 
 from pettingzoo.magent import battle_v3
 from pettingzoo.magent import adversarial_pursuit_v3
-from pettingzoo.magent import gather_v3
+from pettingzoo.magent import gather_v4
 from pettingzoo.magent import combined_arms_v5
 from pettingzoo.magent import tiger_deer_v3
 from pettingzoo.magent import battlefield_v3
@@ -120,7 +120,7 @@ all_environments = {
     "classic/backgammon_v3": backgammon_v3,
 
     "butterfly/knights_archers_zombies_v8": knights_archers_zombies_v8,
-    "butterfly/pistonball_v5": pistonball_v5,
+    "butterfly/pistonball_v6": pistonball_v6,
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
     "butterfly/prison_v3": prison_v3,
     "butterfly/prospector_v4": prospector_v4,
@@ -129,7 +129,7 @@ all_environments = {
     "magent/battle_v3": battle_v3,
     "magent/battlefield_v3": battlefield_v3,
     "magent/combined_arms_v5": combined_arms_v5,
-    "magent/gather_v3": gather_v3,
+    "magent/gather_v4": gather_v4,
     "magent/tiger_deer_v3": tiger_deer_v3,
 
     "mpe/simple_adversary_v2": simple_adversary_v2,
