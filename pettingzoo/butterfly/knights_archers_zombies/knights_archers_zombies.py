@@ -70,7 +70,10 @@ class raw_env(AECEnv, EzPickle):
         # whether we want RGB state or vector state
         self.vector_state = vector_state
         self.num_tracked = num_tracked
-        assert num_tracked >= 4, f"vector_len ({num_tracked}) must be more than 4."
+        num_agents = num_archers + num_knights
+        assert (
+            num_tracked >= num_agents
+        ), f"num_tracked ({num_tracked}) must be more than num_archers ({num_archers}) plus num_knights ({num_knights})."
 
         # Game Status
         self.frames = 0
