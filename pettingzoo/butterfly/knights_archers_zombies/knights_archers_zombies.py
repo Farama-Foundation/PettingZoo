@@ -111,7 +111,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-            shape = [512, 512, 3] if not self.vector_state else [4 * self.num_tracked]
+        shape = [512, 512, 3] if not self.vector_state else [4 * self.num_tracked]
 
         self.observation_spaces = dict(
             zip(
