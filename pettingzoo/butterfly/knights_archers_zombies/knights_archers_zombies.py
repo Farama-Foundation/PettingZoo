@@ -45,13 +45,13 @@ class raw_env(AECEnv, EzPickle):
         spawn_rate=20,
         num_archers=2,
         num_knights=2,
+        max_zombies=15,
         killable_knights=True,
         killable_archers=True,
         pad_observation=True,
         line_death=False,
         max_cycles=900,
         vector_state=False,
-        num_tracked=30,
     ):
         EzPickle.__init__(
             self,
@@ -64,16 +64,11 @@ class raw_env(AECEnv, EzPickle):
             line_death,
             max_cycles,
             vector_state,
-            num_tracked,
         )
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
-        self.num_tracked = num_tracked
-        num_agents = num_archers + num_knights
-        assert (
-            num_tracked >= num_agents
-        ), f"num_tracked ({num_tracked}) must be more than num_archers ({num_archers}) plus num_knights ({num_knights})."
+        self.num_tracked = num_archers + num_knights + max_zombies
 
         # Game Status
         self.frames = 0
@@ -91,6 +86,7 @@ class raw_env(AECEnv, EzPickle):
         self.line_death = line_death
         self.num_archers = num_archers
         self.num_knights = num_knights
+        self.max_zombies = max_zombies
 
         # Represents agents to remove at end of cycle
         self.kill_list = []
@@ -112,7 +108,6 @@ class raw_env(AECEnv, EzPickle):
             a_count += 1
 
         shape = [512, 512, 3] if not self.vector_state else [4 * self.num_tracked]
-
         self.observation_spaces = dict(
             zip(
                 self.agents,
@@ -161,15 +156,16 @@ class raw_env(AECEnv, EzPickle):
 
     # Spawn Zombies at Random Location at every 100 iterations
     def spawn_zombie(self):
-        self.zombie_spawn_rate += 1
-        zombie = Zombie(self.np_random)
+        if len(self.zombie_list) < self.max_zombies:
+            self.zombie_spawn_rate += 1
+            zombie = Zombie(self.np_random)
 
-        if self.zombie_spawn_rate >= self.spawn_rate:
-            zombie.rect.x = self.np_random.randint(0, const.SCREEN_WIDTH)
-            zombie.rect.y = 5
+            if self.zombie_spawn_rate >= self.spawn_rate:
+                zombie.rect.x = self.np_random.randint(0, const.SCREEN_WIDTH)
+                zombie.rect.y = 5
 
-            self.zombie_list.add(zombie)
-            self.zombie_spawn_rate = 0
+                self.zombie_list.add(zombie)
+                self.zombie_spawn_rate = 0
 
     # Spawn Swords for Players
     def action_sword(self, action, agent):
