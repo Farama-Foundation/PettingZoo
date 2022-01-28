@@ -9,8 +9,8 @@ title: API
 Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
 
 ``` python
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 ```
 
 Environments are generally highly configurable via arguments at creation, i.e.:
@@ -167,8 +167,8 @@ This value is important for establishing the simplest possible baseline: the ran
 
 ``` python
 from pettingzoo.utils import average_total_reward
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 average_total_reward(env, max_episodes=100, max_steps=10000000000)
 ```
 
@@ -200,8 +200,8 @@ If the agents in a game make observations that are images then the observations 
 
 ``` python
 from pettingzoo.utils import save_observation
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 env.reset()
 save_observation(env, agent=None, all_agents=False, save_dir=os.getcwd())
 ```
