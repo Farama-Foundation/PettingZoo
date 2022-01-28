@@ -1,6 +1,6 @@
 import warnings
 
-from pettingzoo.utils.conversions import from_parallel_wrapper, to_parallel_wrapper
+from pettingzoo.utils.conversions import aec_to_parallel_wrapper, parallel_to_aec_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
 
 from .api_test import missing_attr_warning
@@ -10,8 +10,8 @@ def parallel_api_test(par_env, num_cycles=10):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
 
-    assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
-    assert not isinstance(par_env.unwrapped, from_parallel_wrapper)
+    assert not isinstance(par_env.unwrapped, aec_to_parallel_wrapper)
+    assert not isinstance(par_env.unwrapped, parallel_to_aec_wrapper)
     assert not isinstance(par_env.unwrapped, BaseWrapper)
     MAX_RESETS = 2
     for n_resets in range(MAX_RESETS):
