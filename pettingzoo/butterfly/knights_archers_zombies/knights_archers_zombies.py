@@ -50,6 +50,7 @@ class raw_env(AECEnv, EzPickle):
         pad_observation=True,
         line_death=False,
         max_cycles=900,
+        vector_state=False,
     ):
         EzPickle.__init__(
             self,
@@ -61,7 +62,11 @@ class raw_env(AECEnv, EzPickle):
             pad_observation,
             line_death,
             max_cycles,
+            vector_state=False,
         )
+
+        # whether we want RGB state or vector state
+        self.vector_state = vector_state
 
         # Game Status
         self.frames = 0
@@ -293,9 +298,24 @@ class raw_env(AECEnv, EzPickle):
         """
         Returns an observation of the global environment
         """
-        state = pygame.surfarray.pixels3d(self.WINDOW).copy()
-        state = np.rot90(state, k=3)
-        state = np.fliplr(state)
+        state = None
+        if not self.vector_state:
+            state = pygame.surfarray.pixels3d(self.WINDOW).copy()
+            state = np.rot90(state, k=3)
+            state = np.fliplr(state)
+        else:
+            state = []
+            for agent in self.archer_list:
+                state.append(agent.vector_state)
+
+            for agent in self.knight_list:
+                state.append(agent.vector_state)
+
+            for agent in self.zombie_list:
+                state.append(agent.vector_state)
+
+            state = np.stack(state, axis=0)
+
         return state
 
     def step(self, action):
