@@ -66,7 +66,8 @@ max_cycles=900)
 
 ### Version History
 
-* v8: General code cleanup and removed weird bugs (1.14.0)
+<<<<<<< HEAD
+* v8: Code cleanup and several bug fixes (1.14.0)
 * v7: Minor bug fix relating to end of episode crash (1.6.0)
 * v6: Fixed reward structure (1.5.2)
 * v5: Removed black death argument (1.5.0)

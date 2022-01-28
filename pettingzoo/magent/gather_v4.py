@@ -9,7 +9,7 @@ from gym.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
 from .magent_env import magent_parallel_env, make_env
 
@@ -27,7 +27,7 @@ def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_defaul
 
 
 def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
-    return from_parallel_wrapper(parallel_env(max_cycles, minimap_mode, extra_features, **reward_args))
+    return parallel_to_aec_wrapper(parallel_env(max_cycles, minimap_mode, extra_features, **reward_args))
 
 
 env = make_env(raw_env)
@@ -72,10 +72,11 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
-        "render.modes": ["human", "rgb_array"],
-        'name': "gather_v3",
-        "video.frames_per_second": 5,
-        }
+    'render.modes': ['human','rgb_array'],
+    'name': "gather_v4",
+    'video.frames_per_second': 5,
+    }
+
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
@@ -121,47 +122,23 @@ class _parallel_env(magent_parallel_env, EzPickle):
         add_square(pos, map_size * 0.3 - 6, 1)
         env.add_agents(food_handle, method="custom", pos=pos)
 
-        # legend
-        legend = [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-            [1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
-            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0],
-            [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0],
-            [1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0],
-            [1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0],
-            [1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
+        # pattern
+        pattern = ( [[int(not((i % 4 == 0 or i % 4 == 1) or (j % 4 == 0 or j % 4 == 1)) ) for j in range(53)] for i in range(53)]) 
 
-        org = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-
-        def draw(base_x, base_y, scale, data):
+        def draw(base_x, base_y, data):
             w, h = len(data), len(data[0])
             pos = []
             for i in range(w):
                 for j in range(h):
                     if data[i][j] == 1:
-                        start_x = i * scale + base_x
-                        start_y = j * scale + base_y
-                        for x in range(start_x, start_x + scale):
-                            for y in range(start_y, start_y + scale):
+                        start_x = i + base_x
+                        start_y = j + base_y
+                        for x in range(start_x, start_x + 1):
+                            for y in range(start_y, start_y + 1):
                                 pos.append([y, x])
 
             env.add_agents(food_handle, method="custom", pos=pos)
 
-        scale = 1
-        w, h = len(legend), len(legend[0])
-        offset = -3
-        draw(offset + map_size // 2 - w // 2 * scale, map_size // 2 - h // 2 * scale, scale, legend)
-        draw(offset + map_size // 2 - w // 2 * scale + len(legend), map_size // 2 - h // 2 * scale, scale, org)
+        w, h = len(pattern), len(pattern[0])
+
+        draw(map_size // 2 - w // 2, map_size // 2 - h // 2, pattern)
