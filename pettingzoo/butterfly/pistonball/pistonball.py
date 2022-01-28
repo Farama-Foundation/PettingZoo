@@ -44,7 +44,7 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {
         'render.modes': ['human', "rgb_array"],
-        'name': "pistonball_v5",
+        'name': "pistonball_v6",
         'is_parallelizable': True,
         'video.frames_per_second': FPS
     }
