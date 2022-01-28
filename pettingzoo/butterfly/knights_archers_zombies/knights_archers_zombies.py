@@ -51,6 +51,7 @@ class raw_env(AECEnv, EzPickle):
         line_death=False,
         max_cycles=900,
         vector_state=None,
+        num_tracked=30,
     ):
         EzPickle.__init__(
             self,
@@ -62,11 +63,14 @@ class raw_env(AECEnv, EzPickle):
             pad_observation,
             line_death,
             max_cycles,
-            vector_state=False,
+            vector_state,
+            num_tracked,
         )
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
+        self.num_tracked = num_tracked
+        assert num_tracked >= 4, f"vector_len ({num_tracked}) must be more than 4."
 
         # Game Status
         self.frames = 0
@@ -266,64 +270,124 @@ class raw_env(AECEnv, EzPickle):
         return run
 
     def observe(self, agent):
-        screen = pygame.surfarray.pixels3d(self.WINDOW)
+        if self.vector_state is None:
+            screen = pygame.surfarray.pixels3d(self.WINDOW)
 
-        i = self.agent_name_mapping[agent]
-        agent_obj = self.agent_list[i]
-        agent_position = (agent_obj.rect.x, agent_obj.rect.y)
+            i = self.agent_name_mapping[agent]
+            agent_obj = self.agent_list[i]
+            agent_position = (agent_obj.rect.x, agent_obj.rect.y)
 
-        if not agent_obj.alive:
-            cropped = np.zeros((512, 512, 3), dtype=np.uint8)
+            if not agent_obj.alive:
+                cropped = np.zeros((512, 512, 3), dtype=np.uint8)
+            else:
+                min_x = agent_position[0] - 256
+                max_x = agent_position[0] + 256
+                min_y = agent_position[1] - 256
+                max_y = agent_position[1] + 256
+                lower_y_bound = max(min_y, 0)
+                upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
+                lower_x_bound = max(min_x, 0)
+                upper_x_bound = min(max_x, const.SCREEN_WIDTH)
+                startx = lower_x_bound - min_x
+                starty = lower_y_bound - min_y
+                endx = 512 + upper_x_bound - max_x
+                endy = 512 + upper_y_bound - max_y
+                cropped = np.zeros_like(self.observation_spaces[agent].low)
+                cropped[startx:endx, starty:endy, :] = screen[
+                    lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
+                ]
+
+            return np.swapaxes(cropped, 1, 0)
+
         else:
-            min_x = agent_position[0] - 256
-            max_x = agent_position[0] + 256
-            min_y = agent_position[1] - 256
-            max_y = agent_position[1] + 256
-            lower_y_bound = max(min_y, 0)
-            upper_y_bound = min(max_y, const.SCREEN_HEIGHT)
-            lower_x_bound = max(min_x, 0)
-            upper_x_bound = min(max_x, const.SCREEN_WIDTH)
-            startx = lower_x_bound - min_x
-            starty = lower_y_bound - min_y
-            endx = 512 + upper_x_bound - max_x
-            endy = 512 + upper_y_bound - max_y
-            cropped = np.zeros_like(self.observation_spaces[agent].low)
-            cropped[startx:endx, starty:endy, :] = screen[
-                lower_x_bound:upper_x_bound, lower_y_bound:upper_y_bound, :
-            ]
+            # get the agent
+            i = self.agent_name_mapping[agent]
+            agent = self.agent_list[i]
+            agent_state = agent.vector_state
 
-        return np.swapaxes(cropped, 1, 0)
+            # get the agent position
+            agent_pos = np.expand_dims(agent_state[:2], axis=0)
+            agent_ang = np.expand_dims(agent_state[2:], axis=0)
+
+            # get vector state of everything
+            state = self.get_vector_state()
+            all_pos = state[:, :2]
+            all_ang = state[:, 2:]
+
+            # compute the angles that everything is facing
+            all_ang = np.arctan2(all_ang[:, 0], all_ang[:, 1])
+            agent_ang = np.arctan2(agent_ang[:, 0], agent_ang[:, 1])
+
+            # get relative angles that everything is facing relative
+            # to the current agent
+            rel_ang = all_ang - agent_ang
+
+            # get rotation matrix
+            c, s = np.cos(rel_ang), np.sin(rel_ang)
+            rot_mat = np.array([[c, -s], [s, c]])
+            rot_mat = np.transpose(rot_mat, (2, 0, 1))
+
+            # unit vector
+            unit_vec = np.array([0, -1])
+
+            # get rotated relative unit vectors
+            rel_ang = rot_mat @ unit_vec
+
+            # get relative positions scaled to screen size
+            rel_pos = all_pos - agent_pos
+            rel_pos = rel_pos / const.SCREEN_DIAG
+
+            # give more emphasis to closer positions
+            rel_pos = 1 - rel_pos
+
+            # combine the positions and angles
+            state = np.concatenate([rel_pos, rel_ang], axis=-1)
+            state = self.pad_vector_state(state, self.vector_state)
+
+            return state
 
     def state(self):
         """
         Returns an observation of the global environment
         """
         state = None
-        if self.vector_state is None:
+        # change this to True if image space state is required
+        if False:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
         else:
-            state = []
-            for agent in self.archer_list:
-                state.append(agent.vector_state)
+            state = self.get_vector_state()
 
-            for agent in self.knight_list:
-                state.append(agent.vector_state)
+        return state
 
-            for agent in self.zombie_list:
-                state.append(agent.vector_state)
+    def get_vector_state(self):
+        state = []
+        for agent in self.archer_list:
+            state.append(agent.vector_state)
 
-            if self.vector_state == "dynamic":
-                state = np.stack(state, axis=0)
-            elif self.vector_state == "constant":
-                state = np.concatenate(state, axis=0)
-                state = np.pad(state, [0, max(30 * 4 - state.shape[0], 0)], "constant")
-            else:
-                raise NotImplementedError(
-                    f"Unknown vector_state {self.vector_state}, only `dynamic` and `constant` are allowed."
-                )
+        for agent in self.knight_list:
+            state.append(agent.vector_state)
 
+        for agent in self.zombie_list:
+            state.append(agent.vector_state)
+
+        state = np.stack(state, axis=0)
+
+        return state
+
+    def pad_vector_state(self, state, vec_style=None):
+        if vec_style == "dynamic":
+            pass
+        elif vec_style == "constant":
+            state = np.concatenate([*state], axis=0)
+            state = np.pad(
+                state, [0, max(self.num_tracked * 4 - state.shape[0], 0)], "constant"
+            )
+        else:
+            raise NotImplementedError(
+                f"Unknown vector_state {vec_style}, only `constant` and `dynamic` are allowed."
+            )
         return state
 
     def step(self, action):
