@@ -343,6 +343,13 @@ class raw_env(AECEnv, EzPickle):
             # give more emphasis to closer positions
             rel_pos = np.sign(rel_pos) * (1 - abs(rel_pos))
 
+            # get rotation matrix of agent
+            c, s = np.cos(agent_ang), np.sin(agent_ang)
+            rot_mat = np.array([[c, -s], [s, c]])
+            rot_mat = np.squeeze(rot_mat).T
+
+            rel_pos = rel_pos @ rot_mat
+
             # combine the positions and angles
             state = np.concatenate([rel_pos, rel_ang], axis=-1)
             state = self.pad_vector_state(state, self.vector_state)
