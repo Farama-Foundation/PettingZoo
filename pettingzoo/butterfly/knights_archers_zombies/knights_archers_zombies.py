@@ -50,6 +50,7 @@ class raw_env(AECEnv, EzPickle):
         pad_observation=True,
         line_death=False,
         max_cycles=900,
+        vector_state=None,
     ):
         EzPickle.__init__(
             self,
@@ -61,7 +62,11 @@ class raw_env(AECEnv, EzPickle):
             pad_observation,
             line_death,
             max_cycles,
+            vector_state=False,
         )
+
+        # whether we want RGB state or vector state
+        self.vector_state = vector_state
 
         # Game Status
         self.frames = 0
@@ -121,7 +126,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Initializing Pygame
         pygame.init()
-         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))
@@ -293,9 +298,32 @@ class raw_env(AECEnv, EzPickle):
         """
         Returns an observation of the global environment
         """
-        state = pygame.surfarray.pixels3d(self.WINDOW).copy()
-        state = np.rot90(state, k=3)
-        state = np.fliplr(state)
+        state = None
+        if self.vector_state is None:
+            state = pygame.surfarray.pixels3d(self.WINDOW).copy()
+            state = np.rot90(state, k=3)
+            state = np.fliplr(state)
+        else:
+            state = []
+            for agent in self.archer_list:
+                state.append(agent.vector_state)
+
+            for agent in self.knight_list:
+                state.append(agent.vector_state)
+
+            for agent in self.zombie_list:
+                state.append(agent.vector_state)
+
+            if self.vector_state == "dynamic":
+                state = np.stack(state, axis=0)
+            elif self.vector_state == "constant":
+                state = np.concatenate(state, axis=0)
+                state = np.pad(state, [0, max(30 * 4 - state.shape[0], 0)], "constant")
+            else:
+                raise NotImplementedError(
+                    f"Unknown vector_state {self.vector_state}, only `dynamic` and `constant` are allowed."
+                )
+
         return state
 
     def step(self, action):
