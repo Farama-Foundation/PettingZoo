@@ -108,11 +108,14 @@ class raw_env(AECEnv, EzPickle):
             a_count += 1
 
         shape = [512, 512, 3] if not self.vector_state else [4 * self.num_tracked]
+        low = 0 if not self.vector_state else -np.inf
+        high = 255 if not self.vector_state else np.inf
+        dtype = np.uint8 if not self.vector_state else np.float64
         self.observation_spaces = dict(
             zip(
                 self.agents,
                 [
-                    Box(low=-1.0, high=1.0, shape=shape, dtype=np.uint8)
+                    Box(low=low, high=high, shape=shape, dtype=dtype)
                     for _ in enumerate(self.agents)
                 ],
             )
@@ -307,7 +310,6 @@ class raw_env(AECEnv, EzPickle):
 
             # get the agent position, normalize agent pos
             agent_state = agent.vector_state
-            agent_state[:2] /= const.SCREEN_DIAG
             agent_pos = np.expand_dims(agent_state[:2], axis=0)
             agent_ang = np.expand_dims(agent_state[2:], axis=0)
 
@@ -340,6 +342,9 @@ class raw_env(AECEnv, EzPickle):
             rot_mat = np.squeeze(rot_mat).T
 
             rel_pos = rel_pos @ rot_mat
+
+            # give more emphasis to closer targets
+            rel_pos = 1. / (rel_pos + 1e-6)
 
             # combine the positions and angles
             # set the current agents one to be absolute
@@ -376,8 +381,6 @@ class raw_env(AECEnv, EzPickle):
             state.append(agent.vector_state)
 
         state = np.stack(state, axis=0)
-
-        state[:, :2] = state[:, :2] / const.SCREEN_DIAG
 
         return state
 
