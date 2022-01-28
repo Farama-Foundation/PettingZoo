@@ -50,7 +50,7 @@ class raw_env(AECEnv, EzPickle):
         pad_observation=True,
         line_death=False,
         max_cycles=900,
-        vector_state=None,
+        vector_state=False,
         num_tracked=30,
     ):
         EzPickle.__init__(
@@ -111,11 +111,17 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
+        shape = None
+        if not self.vector_state:
+            shape = [512, 512, 3]
+        else:
+            shape = [4 * self.num_tracked]
+
         self.observation_spaces = dict(
             zip(
                 self.agents,
                 [
-                    Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8)
+                    Box(low=-1.0, high=1.0, shape=shape, dtype=np.uint8)
                     for _ in enumerate(self.agents)
                 ],
             )
@@ -273,7 +279,7 @@ class raw_env(AECEnv, EzPickle):
         return run
 
     def observe(self, agent):
-        if self.vector_state is None:
+        if not self.vector_state:
             screen = pygame.surfarray.pixels3d(self.WINDOW)
 
             i = self.agent_name_mapping[agent]
@@ -306,13 +312,14 @@ class raw_env(AECEnv, EzPickle):
             # get the agent
             i = self.agent_name_mapping[agent]
             agent = self.agent_list[i]
-            agent_state = agent.vector_state
 
-            # get the agent position
+            # get the agent position, normalize agent pos
+            agent_state = agent.vector_state
+            agent_state[:2] /= const.SCREEN_DIAG
             agent_pos = np.expand_dims(agent_state[:2], axis=0)
             agent_ang = np.expand_dims(agent_state[2:], axis=0)
 
-            # get vector state of everything
+            # get vector state of everything, this is already normalized
             state = self.get_vector_state()
             all_pos = state[:, :2]
             all_ang = state[:, 2:]
@@ -325,20 +332,12 @@ class raw_env(AECEnv, EzPickle):
             # to the current agent
             rel_ang = all_ang - agent_ang
 
-            # get rotation matrix
+            # get relative angle vector
             c, s = np.cos(rel_ang), np.sin(rel_ang)
-            rot_mat = np.array([[c, -s], [s, c]])
-            rot_mat = np.transpose(rot_mat, (2, 0, 1))
+            rel_ang = np.stack([c, s], axis=0).T
 
-            # unit vector
-            unit_vec = np.array([0, -1])
-
-            # get rotated relative unit vectors
-            rel_ang = rot_mat @ unit_vec
-
-            # get relative positions scaled to screen size
+            # get relative positions
             rel_pos = all_pos - agent_pos
-            rel_pos = rel_pos / const.SCREEN_DIAG
 
             # give more emphasis to closer positions
             rel_pos = np.sign(rel_pos) * (1 - abs(rel_pos))
@@ -351,8 +350,10 @@ class raw_env(AECEnv, EzPickle):
             rel_pos = rel_pos @ rot_mat
 
             # combine the positions and angles
+            # set the current agents one to be absolute
             state = np.concatenate([rel_pos, rel_ang], axis=-1)
-            state = self.pad_vector_state(state, self.vector_state)
+            state[i] = agent_state
+            state = self.pad_vector_state(state, "constant")
 
             return state
 
@@ -361,13 +362,13 @@ class raw_env(AECEnv, EzPickle):
         Returns an observation of the global environment
         """
         state = None
-        # change this to True if image space state is required
-        if False:
+        if not self.vector_state:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)
             state = np.fliplr(state)
         else:
             state = self.get_vector_state()
+            state = self.pad_vector_state(state, "constant")
 
         return state
 
@@ -383,6 +384,8 @@ class raw_env(AECEnv, EzPickle):
             state.append(agent.vector_state)
 
         state = np.stack(state, axis=0)
+
+        state[:, :2] = state[:, :2] / const.SCREEN_DIAG
 
         return state
 
