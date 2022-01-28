@@ -66,7 +66,6 @@ max_cycles=900)
 
 ### Version History
 
-<<<<<<< HEAD
 * v8: Code cleanup and several bug fixes (1.14.0)
 * v7: Minor bug fix relating to end of episode crash (1.6.0)
 * v6: Fixed reward structure (1.5.2)
