@@ -9,7 +9,7 @@ from gym.utils import EzPickle
 from pettingzoo import AECEnv
 from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
-from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
 from .magent_env import magent_parallel_env, make_env
 
@@ -27,7 +27,7 @@ def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_defaul
 
 
 def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
-    return from_parallel_wrapper(parallel_env(max_cycles, minimap_mode, extra_features, **reward_args))
+    return parallel_to_aec_wrapper(parallel_env(max_cycles, minimap_mode, extra_features, **reward_args))
 
 
 env = make_env(raw_env)

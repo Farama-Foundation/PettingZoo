@@ -2,7 +2,7 @@ import functools
 from gym.spaces import Discrete
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils import from_parallel
+from pettingzoo.utils import parallel_to_aec
 
 
 ROCK = 0
@@ -36,7 +36,7 @@ def env():
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
-    # Strongly recomended
+    # Strongly recommended
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -47,7 +47,7 @@ def raw_env():
     function to convert from a ParallelEnv to an AEC env
     '''
     env = parallel_env()
-    env = from_parallel(env)
+    env = parallel_to_aec(env)
     return env
 
 
