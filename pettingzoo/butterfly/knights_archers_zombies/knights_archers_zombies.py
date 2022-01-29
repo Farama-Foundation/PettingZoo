@@ -107,7 +107,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        shape = [512, 512, 3] if not self.vector_state else [4 * self.num_tracked]
+        shape = [512, 512, 3] if not self.vector_state else [self.num_tracked, 8]
         low = 0 if not self.vector_state else -np.inf
         high = 255 if not self.vector_state else np.inf
         dtype = np.uint8 if not self.vector_state else np.float64
@@ -308,15 +308,16 @@ class raw_env(AECEnv, EzPickle):
             i = self.agent_name_mapping[agent]
             agent = self.agent_list[i]
 
-            # get the agent position, normalize agent pos
+            # get the agent position
             agent_state = agent.vector_state
-            agent_pos = np.expand_dims(agent_state[:2], axis=0)
-            agent_ang = np.expand_dims(agent_state[2:], axis=0)
+            agent_pos = np.expand_dims(agent_state[4:6], axis=0)
+            agent_ang = np.expand_dims(agent_state[6:8], axis=0)
 
-            # get vector state of everything, this is already normalized
+            # get vector state of everything
             state = self.get_vector_state()
-            all_pos = state[:, :2]
-            all_ang = state[:, 2:]
+            all_ids = state[:, 0:4]
+            all_pos = state[:, 4:6]
+            all_ang = state[:, 6:8]
 
             # compute the angles that everything is facing
             all_ang = np.arctan2(all_ang[:, 0], all_ang[:, 1])
@@ -348,9 +349,11 @@ class raw_env(AECEnv, EzPickle):
 
             # combine the positions and angles
             # set the current agents one to be absolute
-            state = np.concatenate([rel_pos, rel_ang], axis=-1)
+            # set the current agent's entity type to 3
+            state = np.concatenate([all_ids, rel_pos, rel_ang], axis=-1)
             state[i] = agent_state
-            state = self.pad_vector_state(state, "constant")
+            state[i, 0:4] = np.array([0., 0., 0., 1.])
+            state = self.pad_vector_state(state)
 
             return state
 
@@ -365,16 +368,14 @@ class raw_env(AECEnv, EzPickle):
             state = np.fliplr(state)
         else:
             state = self.get_vector_state()
-            state = self.pad_vector_state(state, "constant")
+            state = self.pad_vector_state(state)
 
         return state
 
     def get_vector_state(self):
         state = []
-        for agent in self.archer_list:
-            state.append(agent.vector_state)
-
-        for agent in self.knight_list:
+        for agent_name in self.agents:
+            agent = self.agent_list[self.agent_name_mapping[agent_name]]
             state.append(agent.vector_state)
 
         for agent in self.zombie_list:
@@ -384,18 +385,8 @@ class raw_env(AECEnv, EzPickle):
 
         return state
 
-    def pad_vector_state(self, state, vec_style=None):
-        if vec_style == "dynamic":
-            pass
-        elif vec_style == "constant":
-            state = np.concatenate([*state], axis=0)
-            state = np.pad(
-                state, [0, max(self.num_tracked * 4 - state.shape[0], 0)], "constant"
-            )
-        else:
-            raise NotImplementedError(
-                f"Unknown vector_state {vec_style}, only `constant` and `dynamic` are allowed."
-            )
+    def pad_vector_state(self, state):
+        state = np.pad(state, [[0, self.num_tracked - state.shape[0]], [0, 0]], "constant")
         return state
 
     def step(self, action):

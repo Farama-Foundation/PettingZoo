@@ -36,7 +36,14 @@ class Player(pygame.sprite.Sprite):
 
     @property
     def vector_state(self):
-        return np.array([self.rect.x / const.SCREEN_DIAG, self.rect.y / const.SCREEN_DIAG, *self.direction])
+        # typemask is [zombie, archer, knight, you]
+        type_mask = [0., 0., 0., 0.]
+
+        if self.is_archer:
+            type_mask[1] = 1.
+        elif self.is_knight:
+            type_mask[2] = 1.
+        return np.array([*type_mask, self.rect.x / const.SCREEN_DIAG, self.rect.y / const.SCREEN_DIAG, *self.direction])
 
     def update(self, action):
         self.action = action
