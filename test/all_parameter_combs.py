@@ -144,10 +144,9 @@ parameterized_envs = [
 def test_module(env_module, kwargs):
     _env = env_module.env(**kwargs)
     api_test(_env)
-    seed_test(env_module.env, 50)
-    render_test(env_module.env)
+    seed_test(lambda: env_module.env(**kwargs), 50)
+    render_test(lambda: env_module.env(**kwargs))
     if _env.metadata.get('is_parallelizable'):
-        max_cycles_test(env_module)
         par_env = to_parallel(env_constr(**kwargs))
         try:
             state_test(_env, par_env)
