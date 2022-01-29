@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
             type_mask[1] = 1.
         elif self.is_knight:
             type_mask[2] = 1.
-        return np.array([*type_mask, self.rect.x / const.SCREEN_DIAG, self.rect.y / const.SCREEN_DIAG, *self.direction])
+        return np.array([*type_mask, self.rect.x / const.SCREEN_WIDTH, self.rect.y / const.SCREEN_HEIGHT, *self.direction])
 
     def update(self, action):
         self.action = action
