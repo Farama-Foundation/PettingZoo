@@ -352,7 +352,7 @@ class raw_env(AECEnv, EzPickle):
             # set the current agent's entity type to 3
             state = np.concatenate([all_ids, rel_pos, rel_ang], axis=-1)
             state[i] = agent_state
-            state[i, 0:4] = np.array([0., 0., 0., 1.])
+            state[i, 3] = 1.
             state = self.pad_vector_state(state)
 
             return state
