@@ -146,10 +146,11 @@ def test_module(env_module, kwargs):
     api_test(_env)
     seed_test(lambda: env_module.env(**kwargs), 50)
     render_test(lambda: env_module.env(**kwargs))
-    if _env.metadata.get('is_parallelizable'):
-        par_env = to_parallel(env_constr(**kwargs))
-        try:
-            state_test(_env, par_env)
-        except NotImplementedError:
-            # no issue if state is simply not implemented
-            pass
+    if hasattr(env_module, 'parallel_env'):
+        par_env = env_module.parallel_env(**kwargs)
+    try:
+        _env.state()
+        state_test(_env, par_env)
+    except NotImplementedError:
+        # no issue if state is simply not implemented
+        pass
