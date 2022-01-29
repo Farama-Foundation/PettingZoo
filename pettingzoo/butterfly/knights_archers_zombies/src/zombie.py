@@ -18,7 +18,9 @@ class Zombie(pygame.sprite.Sprite):
 
     @property
     def vector_state(self):
-        return np.array([self.rect.x / const.SCREEN_DIAG, self.rect.y / const.SCREEN_DIAG, 0., -1.])
+        # typemask is [zombie, archer, knight, you]
+        type_mask = [1., 0., 0., 0.]
+        return np.array([*type_mask, self.rect.x / const.SCREEN_DIAG, self.rect.y / const.SCREEN_DIAG, 0., -1.])
 
     def update(self):
         rand_x = self.randomizer.randint(0, 10)
