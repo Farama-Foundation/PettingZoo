@@ -333,7 +333,7 @@ class raw_env(AECEnv, EzPickle):
             # get vector state of everything
             vector_state = self.get_vector_state()
             state = vector_state[:, -4:]
-            is_dead = np.abs(np.sum(state, axis=1)) == 0.
+            is_dead = np.abs(np.sum(np.abs(state), axis=1)) == 0.
             all_ids = vector_state[:, :-4]
             all_pos = state[:, 0:2]
             all_ang = state[:, 2:4]
