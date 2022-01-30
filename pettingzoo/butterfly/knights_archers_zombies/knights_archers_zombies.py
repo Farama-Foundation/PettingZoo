@@ -52,6 +52,7 @@ class raw_env(AECEnv, EzPickle):
         line_death=False,
         max_cycles=900,
         vector_state=False,
+        use_typemasks=True,
     ):
         EzPickle.__init__(
             self,
@@ -64,11 +65,14 @@ class raw_env(AECEnv, EzPickle):
             line_death,
             max_cycles,
             vector_state,
+            use_typemasks,
         )
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
         self.num_tracked = num_archers + num_knights + max_zombies
+        self.use_typemasks = use_typemasks
+        self.vector_width = 8 if use_typemasks else 4
 
         # Game Status
         self.frames = 0
@@ -107,7 +111,11 @@ class raw_env(AECEnv, EzPickle):
             self.agent_name_mapping[k_name] = a_count
             a_count += 1
 
-        shape = [512, 512, 3] if not self.vector_state else [self.num_tracked, 8]
+        shape = (
+            [512, 512, 3]
+            if not self.vector_state
+            else [self.num_tracked + 1, self.vector_width]
+        )
         low = 0 if not self.vector_state else -np.inf
         high = 255 if not self.vector_state else np.inf
         dtype = np.uint8 if not self.vector_state else np.float64
@@ -120,14 +128,24 @@ class raw_env(AECEnv, EzPickle):
                 ],
             )
         )
+
         self.action_spaces = dict(
             zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
         )
+
+        shape = (
+            [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
+            if not self.vector_state
+            else [self.num_tracked, self.vector_width]
+        )
+        low = 0 if not self.vector_state else -np.inf
+        high = 255 if not self.vector_state else np.inf
+        dtype = np.uint8 if not self.vector_state else np.float64
         self.state_space = Box(
-            low=0,
-            high=255,
-            shape=(const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3),
-            dtype=np.uint8,
+            low=low,
+            high=high,
+            shape=shape,
+            dtype=dtype,
         )
         self.possible_agents = self.agents
 
@@ -305,23 +323,24 @@ class raw_env(AECEnv, EzPickle):
 
         else:
             # get the agent
-            i = self.agent_name_mapping[agent]
-            agent = self.agent_list[i]
+            agent = self.agent_list[self.agent_name_mapping[agent]]
 
             # get the agent position
             agent_state = agent.vector_state
-            agent_pos = np.expand_dims(agent_state[4:6], axis=0)
-            agent_ang = np.expand_dims(agent_state[6:8], axis=0)
+            agent_pos = np.expand_dims(agent_state[0:2], axis=0)
+            agent_ang = np.expand_dims(agent_state[2:4], axis=0)
 
             # get vector state of everything
-            state = self.get_vector_state()
-            all_ids = state[:, 0:4]
-            all_pos = state[:, 4:6]
-            all_ang = state[:, 6:8]
+            vector_state = self.get_vector_state()
+            state = vector_state[:, -4:]
+            is_dead = np.abs(np.sum(state, axis=1)) == 0.
+            all_ids = vector_state[:, :-4]
+            all_pos = state[:, 0:2]
+            all_ang = state[:, 2:4]
 
             # compute the angles that everything is facing
-            all_ang = np.arctan2(all_ang[:, 0], all_ang[:, 1])
-            agent_ang = np.arctan2(agent_ang[:, 0], agent_ang[:, 1])
+            all_ang = np.arctan2(all_ang[:, 1], all_ang[:, 0])
+            agent_ang = np.arctan2(agent_ang[:, 1], agent_ang[:, 0])
 
             # get relative angles that everything is facing relative
             # to the current agent
@@ -334,9 +353,6 @@ class raw_env(AECEnv, EzPickle):
             # get relative positions
             rel_pos = all_pos - agent_pos
 
-            # give more emphasis to closer positions
-            rel_pos = np.sign(rel_pos) * (1 - abs(rel_pos))
-
             # get rotation matrix of agent
             c, s = np.cos(agent_ang), np.sin(agent_ang)
             rot_mat = np.array([[c, -s], [s, c]])
@@ -344,16 +360,26 @@ class raw_env(AECEnv, EzPickle):
 
             rel_pos = rel_pos @ rot_mat
 
-            # give more emphasis to closer targets
-            rel_pos = 1. / (rel_pos + 1e-6)
+            # kill dead things
+            all_ids[is_dead] *= 0
+            rel_pos[is_dead] *= 0
+            rel_ang[is_dead] *= 0
 
-            # combine the positions and angles
-            # set the current agents one to be absolute
-            # set the current agent's entity type to 3
+            # combine the typemasks, positions and angles
             state = np.concatenate([all_ids, rel_pos, rel_ang], axis=-1)
-            state[i] = agent_state
-            state[i, 3] = 1.
             state = self.pad_vector_state(state)
+
+            # get the agent state as absolute vector
+            if self.use_typemasks:
+                typemask = np.array([0.0, 0.0, 0.0, 1.0])
+            else:
+                typemask = np.array([])
+            agent_state = agent.vector_state
+            agent_state = np.concatenate([typemask, agent_state], axis=0)
+            agent_state = np.expand_dims(agent_state, axis=0)
+
+            # prepend agent state to the observation
+            state = np.concatenate([agent_state, state], axis=0)
 
             return state
 
@@ -361,7 +387,6 @@ class raw_env(AECEnv, EzPickle):
         """
         Returns an observation of the global environment
         """
-        state = None
         if not self.vector_state:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)
@@ -374,19 +399,40 @@ class raw_env(AECEnv, EzPickle):
 
     def get_vector_state(self):
         state = []
-        for agent_name in self.agents:
-            agent = self.agent_list[self.agent_name_mapping[agent_name]]
-            state.append(agent.vector_state)
+        for agent_name in self.possible_agents:
+            if agent_name not in self.dead_agents:
+                agent = self.agent_list[self.agent_name_mapping[agent_name]]
 
-        for agent in self.zombie_list:
-            state.append(agent.vector_state)
+                if self.use_typemasks:
+                    typemask = np.array([0.0, 0.0, 0.0, 0.0])
+                    if agent.is_archer:
+                        typemask[1] = 1.0
+                    elif agent.is_knight:
+                        typemask[2] = 1.0
+                else:
+                    typemask = np.array([])
+
+                vector = np.concatenate((typemask, agent.vector_state), axis=0)
+                state.append(vector)
+            else:
+                state.append(np.zeros(self.vector_width))
+
+        for zombie in self.zombie_list:
+            if self.use_typemasks:
+                typemask = np.array([1.0, 0.0, 0.0, 0.0])
+            else:
+                typemask = np.array([])
+            vector = np.concatenate((typemask, zombie.vector_state), axis=0)
+            state.append(vector)
 
         state = np.stack(state, axis=0)
 
         return state
 
     def pad_vector_state(self, state):
-        state = np.pad(state, [[0, self.num_tracked - state.shape[0]], [0, 0]], "constant")
+        state = np.pad(
+            state, [[0, self.num_tracked - state.shape[0]], [0, 0]], "constant"
+        )
         return state
 
     def step(self, action):
