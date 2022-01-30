@@ -116,8 +116,8 @@ class raw_env(AECEnv, EzPickle):
             if not self.vector_state
             else [self.num_tracked + 1, self.vector_width]
         )
-        low = 0 if not self.vector_state else -np.inf
-        high = 255 if not self.vector_state else np.inf
+        low = 0 if not self.vector_state else -1.
+        high = 255 if not self.vector_state else 1.
         dtype = np.uint8 if not self.vector_state else np.float64
         self.observation_spaces = dict(
             zip(
@@ -138,8 +138,8 @@ class raw_env(AECEnv, EzPickle):
             if not self.vector_state
             else [self.num_tracked, self.vector_width]
         )
-        low = 0 if not self.vector_state else -np.inf
-        high = 255 if not self.vector_state else np.inf
+        low = 0 if not self.vector_state else -1.
+        high = 255 if not self.vector_state else 1.
         dtype = np.uint8 if not self.vector_state else np.float64
         self.state_space = Box(
             low=low,
@@ -358,6 +358,7 @@ class raw_env(AECEnv, EzPickle):
             rot_mat = np.array([[c, -s], [s, c]])
             rot_mat = np.squeeze(rot_mat).T
 
+            # rotate relative positions
             rel_pos = rel_pos @ rot_mat
 
             # kill dead things
