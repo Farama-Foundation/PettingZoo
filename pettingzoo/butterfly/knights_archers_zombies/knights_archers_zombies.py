@@ -363,7 +363,7 @@ class raw_env(AECEnv, EzPickle):
             rel_pos = rel_pos @ rot_mat
 
             # funky scaling things
-            rel_pos = 1. / rel_pos + self.epsilon
+            rel_pos = np.sign(rel_pos) * (1. / (np.abs(rel_pos) + self.epsilon))
 
             # kill dead things
             all_ids[is_dead] *= 0
