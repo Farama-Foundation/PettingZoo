@@ -47,7 +47,7 @@ class raw_env(AECEnv, EzPickle):
         num_archers=2,
         num_knights=2,
         max_zombies=15,
-        max_arrows=30,
+        max_arrows=15,
         killable_knights=True,
         killable_archers=True,
         pad_observation=True,
