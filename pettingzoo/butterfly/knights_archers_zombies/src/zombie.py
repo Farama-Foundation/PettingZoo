@@ -18,7 +18,14 @@ class Zombie(pygame.sprite.Sprite):
 
     @property
     def vector_state(self):
-        return np.array([self.rect.x / const.SCREEN_WIDTH, self.rect.y / const.SCREEN_HEIGHT, 0., -1.])
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                0.0,
+                -1.0,
+            ]
+        )
 
     def update(self):
         rand_x = self.randomizer.randint(0, 10)
