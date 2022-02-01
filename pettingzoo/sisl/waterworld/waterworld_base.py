@@ -7,9 +7,9 @@ from gym import spaces
 from gym.utils import seeding
 from scipy.spatial import distance as ssd
 
-from .._utils import Agent
+from _utils import Agent
 
-FPS = 15
+FPS = 500
 
 class Archea(Agent):
 
@@ -88,20 +88,14 @@ class Archea(Agent):
         sensor_vectors = self.sensors * self._sensor_range
         sensor_endpoints = sensor_vectors + self.position
 
-        # Clip sensor lines on the environment's barriers.
-        # Note that any clipped vectors may not be at the same angle as the original sensors
-        clipped_endpoints = np.clip(sensor_endpoints, min_pos, max_pos)
-
-        # Extract just the sensor vectors after clipping
-        clipped_vectors = clipped_endpoints - self.position
-
-        # Find the ratio of the clipped sensor vector to the original sensor vector
-        # Scaling the vector by this ratio will limit the end of the vector to the barriers
-        ratios = np.divide(clipped_vectors, sensor_vectors, out=np.ones_like(clipped_vectors),
-                           where=np.abs(sensor_vectors) > 0.00000001)
-
-        # Find the minimum ratio (x or y) of clipped endpoints to original endpoints
-        minimum_ratios = np.amin(ratios, axis=1)
+        # square to circle change:
+        # I will process sensing in an approximate manner
+        # The ratio will be the euclidean distance between the endpoint wrt the circle center
+        # divided by the starting point wrt the circle center
+        # TODO: work out the math to see if this is an overapproximation or under
+        # TODO: Get rid of magic numbers here: 0.5 center coordinate of circle
+        minimum_ratios = np.divide(((sensor_endpoints-np.array([0.5,0.5]))**2).sum(axis=1),
+                                   ((sensor_vectors-np.array([0.5,0.5]))**2).sum(axis=1))
 
         # Convert to 2d array of size (n_sensors, 1)
         sensor_values = np.expand_dims(minimum_ratios, 0)
@@ -119,7 +113,7 @@ class Archea(Agent):
 
 class MAWaterWorld():
 
-    def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=30, sensor_range=0.2,
+    def __init__(self, n_pursuers=5, n_evaders=5, n_poison=10, n_coop=1, n_sensors=30, sensor_range=0.2,
                  radius=0.015, obstacle_radius=0.2, obstacle_coord=(0.5, 0.5),
                  pursuer_max_accel=0.01, evader_speed=0.01, poison_speed=0.01, poison_reward=-1.0,
                  food_reward=10.0, encounter_reward=0.01, thrust_penalty=-0.5, local_ratio=1.0,
@@ -217,10 +211,22 @@ class MAWaterWorld():
         return [seed]
 
     def _generate_coord(self, radius):
-        coord = self.np_random.rand(2)
+
+        # square to circle change: sample points in the circle
+        # I use the length-angle method of sampling
+        # TODO: get rid of magic numbers here: 0.5 is radius of circle
+        length = np.sqrt(np.random.uniform(0, 0.25))
+        angle = np.pi * np.random.uniform(0, 2)
+        x = length * np.cos(angle)
+        y = length * np.sin(angle)
+        coord = np.array([self.initial_obstacle_coord[0]+x,self.initial_obstacle_coord[1]+y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
-            coord = self.np_random.rand(2)
+            length = np.sqrt(np.random.uniform(0, 0.25))
+            angle = np.pi * np.random.uniform(0, 2)
+            x = length * np.cos(angle)
+            y = length * np.sin(angle)
+            coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
         return coord
 
     def reset(self):
@@ -326,13 +332,24 @@ class MAWaterWorld():
     def collision_handling_subroutine(self, rewards, is_last):
         # Stop pursuers upon hitting a wall
         for pursuer in self._pursuers:
-            clipped_coord = np.clip(pursuer.position, 0, 1)
-            clipped_velocity = pursuer.velocity
-            # If x or y position gets clipped, set x or y velocity to 0 respectively
-            clipped_velocity[pursuer.position != clipped_coord] = 0
-            # Save clipped velocity and position
-            pursuer.set_velocity(clipped_velocity)
-            pursuer.set_position(clipped_coord)
+
+            # square to circle change:
+            # here we are trying to clip based on a circle, not a square
+            # the problem amounts to solving a quadratic equation for euclidean distance
+            # given a position and velocity vector, we want to go back in time so that
+            # the object is just inside the circle
+            # TODO: there's a small drawing problem when the objects go outside the circle
+            distance = pursuer.position - self.initial_obstacle_coord
+            if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
+                # quadratic equation coefficients for euclidean distance
+                coeff = [pursuer.velocity[0] ** 2 + pursuer.velocity[1] ** 2,
+                         -2 * pursuer.velocity[0] * distance[0] - 2 * pursuer.velocity[1] * distance[1],
+                         distance[0] ** 2 + distance[1] ** 2 - 0.25]
+                ans = np.roots(coeff)
+                # we find the smallest positive t that confines in the circle
+                t = min(abs(ans))
+                pursuer.set_position(pursuer.position - t*pursuer.velocity)
+                pursuer.set_velocity(np.array([0,0]))
 
         def rebound_particles(particles, n):
             collisions_particle_obstacle = np.zeros(n)
@@ -381,6 +398,7 @@ class MAWaterWorld():
         # Number of collisions depends on n_coop, how many are needed to catch an evader
         caught_evaders, pursuer_evader_catches = self._caught(
             collisions_pursuer_evader, self.n_coop)
+
 
         # Find poison collisions
         distances_pursuer_poison = ssd.cdist(positions_pursuer, positions_poison)
@@ -436,20 +454,19 @@ class MAWaterWorld():
         poison_speed_features = self._extract_speed_features(poisons_speed, closest_poison_idx, poison_mask)
         pursuer_speed_features = self._extract_speed_features(pursuers_speed, closest_pursuer_idx, pursuer_mask)
 
-        # Process collisions
-        # If object collided with required number of players, reset its position and velocity
-        # Effectively the same as removing it and adding it back
-        def reset_caught_objects(caught_objects, objects, speed):
+        # square to circle change: we don't regenerate anymore
+        # once a collision happened, the object is gone
+        def reset_caught_objects(caught_objects, objects, is_poison):
             if caught_objects.size:
                 for object_idx in caught_objects:
-                    objects[object_idx].set_position(
-                        self._generate_coord(objects[object_idx]._radius))
-                    # Generate both velocity components from range [-self.evader_speed, self.evader_speed)
-                    objects[object_idx].set_velocity(
-                        (self.np_random.rand(2,) - 0.5) * 2 * speed)
+                    objects.pop(object_idx)
+                    if is_poison:
+                        self.n_poison -= 1
+                    else:
+                        self.n_evaders -= 1
 
-        reset_caught_objects(caught_evaders, self._evaders, self.evader_speed)
-        reset_caught_objects(caught_poisons, self._poisons, self.poison_speed)
+        reset_caught_objects(caught_evaders, self._evaders, False)
+        reset_caught_objects(caught_poisons, self._poisons, True)
 
         pursuer_evader_encounters, pursuer_evader_encounter_matrix = self._caught(
             collisions_pursuer_evader, 1)
@@ -515,10 +532,23 @@ class MAWaterWorld():
                     # Move objects
                     obj.set_position(obj.position + self.cycle_time * obj.velocity)
                     # Bounce object if it hits a wall
-                    for i in range(len(obj.position)):
-                        if obj.position[i] >= 1 or obj.position[i] <= 0:
-                            obj.position[i] = np.clip(obj.position[i], 0, 1)
-                            obj.velocity[i] = -1 * obj.velocity[i]
+                    # square to circle change:
+                    # here we are trying to clip based on a circle, not a square
+                    # the problem is a little more complicated, but amounts to
+                    # solve a quadratic equation for euclidean distance
+
+                    # quadratic equation coefficients for euclidean distance
+                    # TODO: there's a drawing problem when the objects go outside the circle
+                    distance = obj.position - self.initial_obstacle_coord
+                    if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
+                        coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
+                                 -2 * obj.velocity[0] * distance[0] - 2 * obj.velocity[1] * distance[1],
+                                 distance[0] ** 2 + distance[1] ** 2 - 0.25]
+                        ans = np.roots(coeff)
+                        # we find the smallest positive t that confines in the circle
+                        t = min(abs(ans))
+                        obj.set_position(obj.position - t * obj.velocity)
+                        obj.set_velocity(-1 * obj.velocity)
 
             move_objects(self._evaders)
             move_objects(self._poisons)
@@ -553,8 +583,11 @@ class MAWaterWorld():
     def draw_background(self):
         # -1 is building pixel flag
         color = (255, 255, 255)
-        rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
-        pygame.draw.rect(self.screen, color, rect)
+
+        #square to circle change: draw circle
+        x, y = self.initial_obstacle_coord
+        center = (int(self.pixel_scale * x),int(self.pixel_scale * y))
+        pygame.draw.circle(self.screen, color, center, int(self.pixel_scale * x))
 
     def draw_pursuers(self):
         for pursuer in self._pursuers:
