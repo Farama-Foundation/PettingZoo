@@ -36,7 +36,13 @@ class Player(pygame.sprite.Sprite):
 
     @property
     def vector_state(self):
-        return np.array([self.rect.x / const.SCREEN_WIDTH, self.rect.y / const.SCREEN_HEIGHT, *self.direction])
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                *self.direction,
+            ]
+        )
 
     def update(self, action):
         self.action = action

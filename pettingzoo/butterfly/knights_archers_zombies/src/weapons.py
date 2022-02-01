@@ -1,6 +1,7 @@
 import math
 import os
 
+import numpy as np
 import pygame
 
 from . import constants as const
@@ -16,14 +17,24 @@ class Arrow(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image, self.archer.angle)
 
         self.pos = pygame.Vector2(self.archer.rect.center)
-        self.fire_direction = self.archer.direction
+        self.direction = self.archer.direction
 
         # reset the archer timeout when arrow fired
         archer.weapon_timeout = 0
 
+    @property
+    def vector_state(self):
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                *self.direction,
+            ]
+        )
+
     def update(self):
         if self.archer.alive:
-            self.pos += self.fire_direction * const.ARROW_SPEED
+            self.pos += self.direction * const.ARROW_SPEED
             self.rect.center = self.pos
         else:
             self.rect.x = -100
@@ -45,10 +56,21 @@ class Sword(pygame.sprite.Sprite):
         self.knight = knight
         self.image = get_image(os.path.join("img", "mace.png"))
         self.rect = self.image.get_rect(center=self.knight.rect.center)
+        self.direction = self.knight.direction
         self.active = False
 
         # phase of the sword, starts at the left most part
         self.phase = const.MAX_PHASE
+
+    @property
+    def vector_state(self):
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                *self.direction,
+            ]
+        )
 
     def update(self):
         if self.knight.action == 5:
