@@ -23,7 +23,7 @@ class Zombie(pygame.sprite.Sprite):
                 self.rect.x / const.SCREEN_WIDTH,
                 self.rect.y / const.SCREEN_HEIGHT,
                 0.0,
-                -1.0,
+                1.0,
             ]
         )
 
