@@ -81,7 +81,6 @@ class raw_env(AECEnv, EzPickle):
         self.use_typemasks = use_typemasks
         self.typemask_width = 6
         self.vector_width = 4 + self.typemask_width if use_typemasks else 4
-        self.epsilon = 1e-1  # funky scaling things
 
         # Game Status
         self.frames = 0
@@ -126,8 +125,8 @@ class raw_env(AECEnv, EzPickle):
             if not self.vector_state
             else [self.num_tracked + 1, self.vector_width + 1]
         )
-        low = 0 if not self.vector_state else -1.0 / self.epsilon
-        high = 255 if not self.vector_state else 1.0 / self.epsilon
+        low = 0 if not self.vector_state else -1.0
+        high = 255 if not self.vector_state else 1.0
         dtype = np.uint8 if not self.vector_state else np.float64
         self.observation_spaces = dict(
             zip(
@@ -148,8 +147,8 @@ class raw_env(AECEnv, EzPickle):
             if not self.vector_state
             else [self.num_tracked, self.vector_width - 1]
         )
-        low = 0 if not self.vector_state else -1.0 / self.epsilon
-        high = 255 if not self.vector_state else 1.0 / self.epsilon
+        low = 0 if not self.vector_state else -1.0
+        high = 255 if not self.vector_state else 1.0
         dtype = np.uint8 if not self.vector_state else np.float64
         self.state_space = Box(
             low=low,
@@ -374,10 +373,6 @@ class raw_env(AECEnv, EzPickle):
 
             # rotate relative positions
             rel_pos = rel_pos @ rot_mat
-
-            # funky scaling things
-            rel_pos = np.sign(rel_pos) * (1.0 / (np.abs(rel_pos) + self.epsilon))
-            norm_pos = 1.0 / (norm_pos + self.epsilon)
 
             # kill dead things
             all_ids[is_dead] *= 0
