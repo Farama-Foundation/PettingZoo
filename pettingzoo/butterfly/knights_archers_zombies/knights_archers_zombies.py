@@ -55,7 +55,7 @@ class raw_env(AECEnv, EzPickle):
         max_cycles=900,
         vector_state=False,
         use_typemasks=True,
-        experimental=False,
+        transformer=False,
     ):
         EzPickle.__init__(
             self,
@@ -71,10 +71,10 @@ class raw_env(AECEnv, EzPickle):
             max_cycles,
             vector_state,
             use_typemasks,
-            experimental,
+            transformer,
         )
-        # experimental variable state space
-        self.experimental = experimental
+        # variable state space
+        self.transformer = transformer
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
@@ -414,7 +414,7 @@ class raw_env(AECEnv, EzPickle):
                 vector = np.concatenate((typemask, agent.vector_state), axis=0)
                 state.append(vector)
             else:
-                if not self.experimental:
+                if not self.transformer:
                     state.append(np.zeros(self.vector_width))
 
         # handle swords
@@ -427,7 +427,7 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty swords
-        if not self.experimental:
+        if not self.transformer:
             state.extend(repeat(np.zeros(self.vector_width), self.num_knights - len(self.sword_list)))
 
         # handle arrows
@@ -440,7 +440,7 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty arrows
-        if not self.experimental:
+        if not self.transformer:
             state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - len(self.arrow_list)))
 
         # handle zombies
@@ -453,7 +453,7 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty zombies
-        if not self.experimental:
+        if not self.transformer:
             state.extend(repeat(np.zeros(self.vector_width), self.max_zombies - len(self.zombie_list)))
 
         return np.stack(state, axis=0)
