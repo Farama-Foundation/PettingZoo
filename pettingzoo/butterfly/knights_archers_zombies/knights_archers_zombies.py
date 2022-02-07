@@ -338,7 +338,6 @@ class raw_env(AECEnv, EzPickle):
             # get the agent position
             agent_state = agent.vector_state
             agent_pos = np.expand_dims(agent_state[0:2], axis=0)
-            agent_ang = np.expand_dims(agent_state[2:4], axis=0)
 
             # get vector state of everything
             vector_state = self.get_vector_state()
@@ -348,40 +347,20 @@ class raw_env(AECEnv, EzPickle):
             all_pos = state[:, 0:2]
             all_ang = state[:, 2:4]
 
-            # compute the angles that everything is facing
-            all_ang = np.arctan2(all_ang[:, 1], all_ang[:, 0])
-            agent_ang = np.arctan2(agent_ang[:, 1], agent_ang[:, 0])
-
-            # get relative angles that everything is facing relative
-            # to the current agent
-            rel_ang = all_ang - agent_ang
-
-            # get relative angle vector
-            c, s = np.cos(rel_ang), np.sin(rel_ang)
-            rel_ang = np.stack([c, s], axis=0).T
-
             # get relative positions
             rel_pos = all_pos - agent_pos
 
             # get norm of relative distance
             norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True)
 
-            # get rotation matrix of agent
-            c, s = np.cos(agent_ang), np.sin(agent_ang)
-            rot_mat = np.array([[c, -s], [s, c]])
-            rot_mat = np.squeeze(rot_mat).T
-
-            # rotate relative positions
-            rel_pos = rel_pos @ rot_mat
-
             # kill dead things
             all_ids[is_dead] *= 0
+            all_ang[is_dead] *= 0
             rel_pos[is_dead] *= 0
-            rel_ang[is_dead] *= 0
             norm_pos[is_dead] *= 0
 
             # combine the typemasks, positions and angles
-            state = np.concatenate([all_ids, norm_pos, rel_pos, rel_ang], axis=-1)
+            state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
 
             # get the agent state as absolute vector
             # typemask is one longer to also include norm_pos
