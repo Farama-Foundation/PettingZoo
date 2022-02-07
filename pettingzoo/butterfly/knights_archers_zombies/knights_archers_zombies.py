@@ -55,6 +55,7 @@ class raw_env(AECEnv, EzPickle):
         max_cycles=900,
         vector_state=False,
         use_typemasks=True,
+        experimental=False,
     ):
         EzPickle.__init__(
             self,
@@ -70,7 +71,10 @@ class raw_env(AECEnv, EzPickle):
             max_cycles,
             vector_state,
             use_typemasks,
+            experimental,
         )
+        # experimental variable state space
+        self.experimental = experimental
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
@@ -410,7 +414,8 @@ class raw_env(AECEnv, EzPickle):
                 vector = np.concatenate((typemask, agent.vector_state), axis=0)
                 state.append(vector)
             else:
-                state.append(np.zeros(self.vector_width))
+                if not self.experimental:
+                    state.append(np.zeros(self.vector_width))
 
         # handle swords
         for sword in self.sword_list:
@@ -422,7 +427,8 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty swords
-        state.extend(repeat(np.zeros(self.vector_width), self.num_knights - len(self.sword_list)))
+        if not self.experimental:
+            state.extend(repeat(np.zeros(self.vector_width), self.num_knights - len(self.sword_list)))
 
         # handle arrows
         for arrow in self.arrow_list:
@@ -434,7 +440,8 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty arrows
-        state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - len(self.arrow_list)))
+        if not self.experimental:
+            state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - len(self.arrow_list)))
 
         # handle zombies
         for zombie in self.zombie_list:
@@ -446,7 +453,8 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty zombies
-        state.extend(repeat(np.zeros(self.vector_width), self.max_zombies - len(self.zombie_list)))
+        if not self.experimental:
+            state.extend(repeat(np.zeros(self.vector_width), self.max_zombies - len(self.zombie_list)))
 
         return np.stack(state, axis=0)
 
