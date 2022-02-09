@@ -9,7 +9,7 @@ from scipy.spatial import distance as ssd
 
 from _utils import Agent
 
-FPS = 150
+FPS = 15
 
 class Archea(Agent):
 
@@ -93,21 +93,7 @@ class Archea(Agent):
         # TODO: Get rid of magic numbers here: 0.5 center coordinate of circle
         distance = ((sensor_endpoints-self.position)**2).sum(axis=1) #sensor_endpoints - self.position
         reference = 0.5 - ((self.position[0] - 0.5) ** 2 + (self.position[1] - 0.5) ** 2)**(1/2)
-        # if (distance[0] ** 2 + distance[1] ** 2 > reference):
-        #     # quadratic equation coefficients for euclidean distance
-        #     coeff = [sensor_vectors[0] ** 2 + sensor_vectors[1] ** 2,
-        #              -2 * sensor_vectors[0] * distance[0] - 2 * sensor_vectors[1] * distance[1],
-        #              distance[0] ** 2 + distance[1] ** 2 - reference]
-        #     ans = np.roots(coeff)
-        #     # we find the smallest positive t that confines in the circle
-        #     t = min(abs(ans))
-        #     pursuer.set_position(pursuer.position - t * pursuer.velocity)
-        #     pursuer.set_velocity(np.array([0, 0]))
 
-        # minimum_ratios = np.divide(((sensor_endpoints-np.array([0.5,0.5]))**2).sum(axis=1),
-        #                            ((sensor_vectors-np.array([0.5,0.5]))**2).sum(axis=1))
-        # print(minimum_ratios.shape)
-        # print(np.divide(reference, distance).shape)
         minimum_ratios = np.divide(reference, distance)
 
         # Convert to 2d array of size (n_sensors, 1)
@@ -351,7 +337,6 @@ class MAWaterWorld():
             # given a position and velocity vector, we want to go back in time so that
             # the object is just inside the circle
             # TODO: there's a small drawing problem when the objects go outside the circle
-            # print(pursuer._radius)
             distance = pursuer.position - self.initial_obstacle_coord + pursuer._radius
             if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                 # quadratic equation coefficients for euclidean distance
@@ -483,7 +468,7 @@ class MAWaterWorld():
         poison_speed_features = self._extract_speed_features(poisons_speed, closest_poison_idx, poison_mask)
         pursuer_speed_features = self._extract_speed_features(pursuers_speed, closest_pursuer_idx, pursuer_mask)
 
-        # square to circle change: we don't regenerate anymore
+        # we don't regenerate anymore
         # once a collision happened, the object is gone
         def reset_caught_objects(caught_objects, objects, is_poison):
             if caught_objects.size:
@@ -551,6 +536,7 @@ class MAWaterWorld():
         # Penalize large thrusts
         accel_penalty = self.thrust_penalty * math.sqrt((action ** 2).sum())
         # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
+        # TODO: change this reward
         self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
         # Assign the current agent the local portion designated by local_ratio
         self.control_rewards[agent_id] += accel_penalty * self.local_ratio
