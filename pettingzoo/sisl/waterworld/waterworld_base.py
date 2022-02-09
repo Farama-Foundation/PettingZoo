@@ -9,7 +9,7 @@ from scipy.spatial import distance as ssd
 
 from _utils import Agent
 
-FPS = 500
+FPS = 150
 
 class Archea(Agent):
 
@@ -89,13 +89,26 @@ class Archea(Agent):
         sensor_endpoints = sensor_vectors + self.position
 
         # square to circle change:
-        # I will process sensing in an approximate manner
-        # The ratio will be the euclidean distance between the endpoint wrt the circle center
-        # divided by the starting point wrt the circle center
-        # TODO: work out the math to see if this is an overapproximation or under
+        # The ratio will be the euclidean distance between the sensor endpoint wrt the pursuer position
         # TODO: Get rid of magic numbers here: 0.5 center coordinate of circle
-        minimum_ratios = np.divide(((sensor_endpoints-np.array([0.5,0.5]))**2).sum(axis=1),
-                                   ((sensor_vectors-np.array([0.5,0.5]))**2).sum(axis=1))
+        distance = ((sensor_endpoints-self.position)**2).sum(axis=1) #sensor_endpoints - self.position
+        reference = 0.5 - ((self.position[0] - 0.5) ** 2 + (self.position[1] - 0.5) ** 2)**(1/2)
+        # if (distance[0] ** 2 + distance[1] ** 2 > reference):
+        #     # quadratic equation coefficients for euclidean distance
+        #     coeff = [sensor_vectors[0] ** 2 + sensor_vectors[1] ** 2,
+        #              -2 * sensor_vectors[0] * distance[0] - 2 * sensor_vectors[1] * distance[1],
+        #              distance[0] ** 2 + distance[1] ** 2 - reference]
+        #     ans = np.roots(coeff)
+        #     # we find the smallest positive t that confines in the circle
+        #     t = min(abs(ans))
+        #     pursuer.set_position(pursuer.position - t * pursuer.velocity)
+        #     pursuer.set_velocity(np.array([0, 0]))
+
+        # minimum_ratios = np.divide(((sensor_endpoints-np.array([0.5,0.5]))**2).sum(axis=1),
+        #                            ((sensor_vectors-np.array([0.5,0.5]))**2).sum(axis=1))
+        # print(minimum_ratios.shape)
+        # print(np.divide(reference, distance).shape)
+        minimum_ratios = np.divide(reference, distance)
 
         # Convert to 2d array of size (n_sensors, 1)
         sensor_values = np.expand_dims(minimum_ratios, 0)
@@ -333,13 +346,13 @@ class MAWaterWorld():
         # Stop pursuers upon hitting a wall
         for pursuer in self._pursuers:
 
-            # square to circle change:
             # here we are trying to clip based on a circle, not a square
             # the problem amounts to solving a quadratic equation for euclidean distance
             # given a position and velocity vector, we want to go back in time so that
             # the object is just inside the circle
             # TODO: there's a small drawing problem when the objects go outside the circle
-            distance = pursuer.position - self.initial_obstacle_coord
+            # print(pursuer._radius)
+            distance = pursuer.position - self.initial_obstacle_coord + pursuer._radius
             if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                 # quadratic equation coefficients for euclidean distance
                 coeff = [pursuer.velocity[0] ** 2 + pursuer.velocity[1] ** 2,
@@ -355,9 +368,25 @@ class MAWaterWorld():
             collisions_particle_obstacle = np.zeros(n)
             # Particles rebound on hitting an obstacle
             for idx, particle in enumerate(particles):
-                obstacle_distance = ssd.cdist(np.expand_dims(
-                    particle.position, 0), self.obstacle_coords)
-                is_colliding = obstacle_distance <= particle._radius + self.obstacle_radius
+                # obstacle_distance = ssd.cdist(np.expand_dims(
+                #     particle.position, 0), self.obstacle_coords)
+
+                # We find whether the pursuer is colliding with any of the four sides our hourglass obstacle
+                center = self.obstacle_coords[0]
+                topleft = np.array([center[0] - 2 * self.radius, center[1] - 2 * self.radius])
+                topright = np.array([center[0] + 2 * self.radius, center[1] - 2 * self.radius])
+                bottomleft = np.array([center[0] - 2 * self.radius, center[1] + 2 * self.radius])
+                bottomright = np.array([center[0] + 2 * self.radius, center[1] + 2 * self.radius])
+                topdist = np.linalg.norm(np.cross(topright - topleft, topleft - particle.position)) / np.linalg.norm(
+                    topright - topleft)
+                leftdist = np.linalg.norm(np.cross(bottomright - topleft, topleft - particle.position)) / np.linalg.norm(
+                    bottomright - topleft)
+                rightdist = np.linalg.norm(np.cross(topright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
+                    topright - bottomleft)
+                bottomdist = np.linalg.norm(np.cross(bottomright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
+                    bottomright - bottomleft)
+                is_colliding = (topdist <= particle._radius) or (leftdist <= particle._radius) or \
+                                (rightdist <= particle._radius) or (bottomdist <= particle._radius)
                 collisions_particle_obstacle[idx] = is_colliding.sum()
                 if collisions_particle_obstacle[idx] > 0:
                     # Rebound the particle that collided with an obstacle
@@ -532,14 +561,13 @@ class MAWaterWorld():
                     # Move objects
                     obj.set_position(obj.position + self.cycle_time * obj.velocity)
                     # Bounce object if it hits a wall
-                    # square to circle change:
                     # here we are trying to clip based on a circle, not a square
                     # the problem is a little more complicated, but amounts to
                     # solve a quadratic equation for euclidean distance
 
                     # quadratic equation coefficients for euclidean distance
                     # TODO: there's a drawing problem when the objects go outside the circle
-                    distance = obj.position - self.initial_obstacle_coord
+                    distance = obj.position - self.initial_obstacle_coord + obj._radius
                     if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                         coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
                                  -2 * obj.velocity[0] * distance[0] - 2 * obj.velocity[1] * distance[1],
@@ -575,16 +603,26 @@ class MAWaterWorld():
         for obstacle in self.obstacle_coords:
             assert obstacle.shape == (2,)
             x, y = obstacle
-            center = (int(self.pixel_scale * x),
-                      int(self.pixel_scale * y))
+            # center = (int(self.pixel_scale * x),
+            #           int(self.pixel_scale * y))
             color = (120, 176, 178)
-            pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.obstacle_radius)
+            topleft = (int(self.pixel_scale * (x - 2 * self.radius)), int(self.pixel_scale * (y - 2 * self.radius)))
+            topright = (int(self.pixel_scale * (x + 2 * self.radius)), int(self.pixel_scale * (y - 2 * self.radius)))
+            bottomleft = (int(self.pixel_scale * (x - 2 * self.radius)), int(self.pixel_scale * (y + 2 * self.radius)))
+            bottomright = (int(self.pixel_scale * (x + 2 * self.radius)), int(self.pixel_scale * (y + 2 * self.radius)))
+            pygame.draw.line(self.screen, color, topleft, bottomright)
+            pygame.draw.line(self.screen, color, bottomleft, topright)
+            pygame.draw.line(self.screen, color, topleft, topright)
+            pygame.draw.line(self.screen, color, bottomleft, bottomright)
+            # pygame.draw.circle(self.screen, color, center, self.pixel_scale * self.obstacle_radius)
 
     def draw_background(self):
         # -1 is building pixel flag
         color = (255, 255, 255)
 
-        #square to circle change: draw circle
+        rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
+        pygame.draw.rect(self.screen, (0,0,0), rect)
+
         x, y = self.initial_obstacle_coord
         center = (int(self.pixel_scale * x),int(self.pixel_scale * y))
         pygame.draw.circle(self.screen, color, center, int(self.pixel_scale * x))
