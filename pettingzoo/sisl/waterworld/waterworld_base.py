@@ -9,7 +9,8 @@ from scipy.spatial import distance as ssd
 
 from _utils import Agent
 
-FPS = 15
+FPS = 150
+
 
 class Archea(Agent):
 
@@ -91,8 +92,8 @@ class Archea(Agent):
         # square to circle change:
         # The ratio will be the euclidean distance between the sensor endpoint wrt the pursuer position
         # TODO: Get rid of magic numbers here: 0.5 center coordinate of circle
-        distance = ((sensor_endpoints-self.position)**2).sum(axis=1) #sensor_endpoints - self.position
-        reference = 0.5 - ((self.position[0] - 0.5) ** 2 + (self.position[1] - 0.5) ** 2)**(1/2)
+        distance = ((sensor_endpoints - self.position) ** 2).sum(axis=1)
+        reference = 0.5 - ((self.position[0] - 0.5) ** 2 + (self.position[1] - 0.5) ** 2) ** (1 / 2)
 
         minimum_ratios = np.divide(reference, distance)
 
@@ -211,17 +212,18 @@ class MAWaterWorld():
 
     def _generate_coord(self, radius):
 
-        # square to circle change: sample points in the circle
+        # sample points in the circle
         # I use the length-angle method of sampling
         # TODO: get rid of magic numbers here: 0.5 is radius of circle
-        length = np.sqrt(np.random.uniform(0, 0.25))
+        # TODO: incorporate obstacle consideration (just limit the length)
+        length = np.random.uniform(0, 0.5 - radius * 2)
         angle = np.pi * np.random.uniform(0, 2)
         x = length * np.cos(angle)
         y = length * np.sin(angle)
-        coord = np.array([self.initial_obstacle_coord[0]+x,self.initial_obstacle_coord[1]+y])
+        coord = np.array([self.initial_obstacle_coord[0] + x,self.initial_obstacle_coord[1] + y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
-            length = np.sqrt(np.random.uniform(0, 0.25))
+            length = np.random.uniform(0, 0.5 - radius * 2)
             angle = np.pi * np.random.uniform(0, 2)
             x = length * np.cos(angle)
             y = length * np.sin(angle)
@@ -336,8 +338,7 @@ class MAWaterWorld():
             # the problem amounts to solving a quadratic equation for euclidean distance
             # given a position and velocity vector, we want to go back in time so that
             # the object is just inside the circle
-            # TODO: there's a small drawing problem when the objects go outside the circle
-            distance = pursuer.position - self.initial_obstacle_coord + pursuer._radius
+            distance = abs(pursuer.position - self.initial_obstacle_coord) + pursuer._radius
             if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                 # quadratic equation coefficients for euclidean distance
                 coeff = [pursuer.velocity[0] ** 2 + pursuer.velocity[1] ** 2,
@@ -346,32 +347,40 @@ class MAWaterWorld():
                 ans = np.roots(coeff)
                 # we find the smallest positive t that confines in the circle
                 t = min(abs(ans))
-                pursuer.set_position(pursuer.position - t*pursuer.velocity)
-                pursuer.set_velocity(np.array([0,0]))
+                pursuer.set_position(pursuer.position - t * pursuer.velocity)
+                pursuer.set_velocity(np.array([0, 0]))
 
         def rebound_particles(particles, n):
             collisions_particle_obstacle = np.zeros(n)
             # Particles rebound on hitting an obstacle
             for idx, particle in enumerate(particles):
-                # obstacle_distance = ssd.cdist(np.expand_dims(
-                #     particle.position, 0), self.obstacle_coords)
 
-                # We find whether the pursuer is colliding with any of the four sides our hourglass obstacle
+                # We find whether the particle is colliding with any of the four sides our hourglass obstacle
+                # TODO: find out the correct x and y value---I think it's corrd + one radius
                 center = self.obstacle_coords[0]
-                topleft = np.array([center[0] - 2 * self.radius, center[1] - 2 * self.radius])
-                topright = np.array([center[0] + 2 * self.radius, center[1] - 2 * self.radius])
-                bottomleft = np.array([center[0] - 2 * self.radius, center[1] + 2 * self.radius])
-                bottomright = np.array([center[0] + 2 * self.radius, center[1] + 2 * self.radius])
+                topleft = np.array([center[0] - 10 * self.radius, center[1] - 10 * self.radius])
+                topright = np.array([center[0] + 10 * self.radius, center[1] - 10 * self.radius])
+                bottomleft = np.array([center[0] - 10 * self.radius, center[1] + 10 * self.radius])
+                bottomright = np.array([center[0] + 10 * self.radius, center[1] + 10 * self.radius])
                 topdist = np.linalg.norm(np.cross(topright - topleft, topleft - particle.position)) / np.linalg.norm(
                     topright - topleft)
+                top = (topdist <= particle._radius) and (
+                        topleft[0] <= particle.position[0] and topright[0] >= particle.position[0])
                 leftdist = np.linalg.norm(np.cross(bottomright - topleft, topleft - particle.position)) / np.linalg.norm(
                     bottomright - topleft)
+                left = (leftdist <= particle._radius) and (
+                        topleft[0] <= particle.position[0] and bottomright[0] >= particle.position[0]) and (
+                        topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
                 rightdist = np.linalg.norm(np.cross(topright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
                     topright - bottomleft)
+                right = (rightdist <= particle._radius) and (
+                        topleft[0] <= particle.position[0] and bottomright[0] >= particle.position[0]) and (
+                        topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
                 bottomdist = np.linalg.norm(np.cross(bottomright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
                     bottomright - bottomleft)
-                is_colliding = (topdist <= particle._radius) or (leftdist <= particle._radius) or \
-                                (rightdist <= particle._radius) or (bottomdist <= particle._radius)
+                bottom = (bottomdist <= particle._radius) and (
+                            topleft[0] <= particle.position[0] and topright[0] >= particle.position[0])
+                is_colliding = top or left or right or bottom
                 collisions_particle_obstacle[idx] = is_colliding.sum()
                 if collisions_particle_obstacle[idx] > 0:
                     # Rebound the particle that collided with an obstacle
@@ -412,7 +421,6 @@ class MAWaterWorld():
         # Number of collisions depends on n_coop, how many are needed to catch an evader
         caught_evaders, pursuer_evader_catches = self._caught(
             collisions_pursuer_evader, self.n_coop)
-
 
         # Find poison collisions
         distances_pursuer_poison = ssd.cdist(positions_pursuer, positions_poison)
@@ -536,8 +544,9 @@ class MAWaterWorld():
         # Penalize large thrusts
         accel_penalty = self.thrust_penalty * math.sqrt((action ** 2).sum())
         # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
-        # TODO: change this reward
-        self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers) * (1 - self.local_ratio)
+
+        # Since we are no longer coorporating, we should change this reward
+        self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers) #* (1 - self.local_ratio)
         # Assign the current agent the local portion designated by local_ratio
         self.control_rewards[agent_id] += accel_penalty * self.local_ratio
 
@@ -553,7 +562,7 @@ class MAWaterWorld():
 
                     # quadratic equation coefficients for euclidean distance
                     # TODO: there's a drawing problem when the objects go outside the circle
-                    distance = obj.position - self.initial_obstacle_coord + obj._radius
+                    distance = abs(obj.position - self.initial_obstacle_coord) + obj._radius
                     if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                         coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
                                  -2 * obj.velocity[0] * distance[0] - 2 * obj.velocity[1] * distance[1],
@@ -592,10 +601,10 @@ class MAWaterWorld():
             # center = (int(self.pixel_scale * x),
             #           int(self.pixel_scale * y))
             color = (120, 176, 178)
-            topleft = (int(self.pixel_scale * (x - 2 * self.radius)), int(self.pixel_scale * (y - 2 * self.radius)))
-            topright = (int(self.pixel_scale * (x + 2 * self.radius)), int(self.pixel_scale * (y - 2 * self.radius)))
-            bottomleft = (int(self.pixel_scale * (x - 2 * self.radius)), int(self.pixel_scale * (y + 2 * self.radius)))
-            bottomright = (int(self.pixel_scale * (x + 2 * self.radius)), int(self.pixel_scale * (y + 2 * self.radius)))
+            topleft = (int(self.pixel_scale * (x - 10 * self.radius)), int(self.pixel_scale * (y - 10 * self.radius)))
+            topright = (int(self.pixel_scale * (x + 10 * self.radius)), int(self.pixel_scale * (y - 10 * self.radius)))
+            bottomleft = (int(self.pixel_scale * (x - 10 * self.radius)), int(self.pixel_scale * (y + 10 * self.radius)))
+            bottomright = (int(self.pixel_scale * (x + 10 * self.radius)), int(self.pixel_scale * (y + 10 * self.radius)))
             pygame.draw.line(self.screen, color, topleft, bottomright)
             pygame.draw.line(self.screen, color, bottomleft, topright)
             pygame.draw.line(self.screen, color, topleft, topright)
@@ -607,10 +616,10 @@ class MAWaterWorld():
         color = (255, 255, 255)
 
         rect = pygame.Rect(0, 0, self.pixel_scale, self.pixel_scale)
-        pygame.draw.rect(self.screen, (0,0,0), rect)
+        pygame.draw.rect(self.screen, (0, 0, 0), rect)
 
         x, y = self.initial_obstacle_coord
-        center = (int(self.pixel_scale * x),int(self.pixel_scale * y))
+        center = (int(self.pixel_scale * x), int(self.pixel_scale * y))
         pygame.draw.circle(self.screen, color, center, int(self.pixel_scale * x))
 
     def draw_pursuers(self):
