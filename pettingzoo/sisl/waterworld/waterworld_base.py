@@ -220,7 +220,7 @@ class MAWaterWorld():
         angle = np.pi * np.random.uniform(0, 2)
         x = length * np.cos(angle)
         y = length * np.sin(angle)
-        coord = np.array([self.initial_obstacle_coord[0] + x,self.initial_obstacle_coord[1] + y])
+        coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
             length = np.random.uniform(0, 0.5 - radius * 2)
@@ -546,7 +546,7 @@ class MAWaterWorld():
         # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
 
         # Since we are no longer coorporating, we should change this reward
-        self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers) #* (1 - self.local_ratio)
+        self.control_rewards = (accel_penalty / self.n_pursuers) * np.ones(self.n_pursuers)
         # Assign the current agent the local portion designated by local_ratio
         self.control_rewards[agent_id] += accel_penalty * self.local_ratio
 
