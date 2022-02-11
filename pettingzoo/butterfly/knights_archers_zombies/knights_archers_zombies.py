@@ -527,7 +527,7 @@ class raw_env(AECEnv, EzPickle):
         self.rewards[self.agent_selection] = agent.score
         agent.score = 0
         done = not self.run or self.frames >= self.max_cycles
-        self.dones = {a: done for a in self.possible_agents}
+        self.dones = {a: done for a in self.agents}
 
         # manage the kill list
         if self._agent_selector.is_last():
