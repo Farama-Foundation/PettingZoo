@@ -6,7 +6,7 @@ from pettingzoo.utils.wrappers import BaseWrapper
 from .api_test import missing_attr_warning
 
 
-def parallel_api_test(par_env, num_cycles=10):
+def parallel_api_test(par_env, num_cycles=1000):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
 
