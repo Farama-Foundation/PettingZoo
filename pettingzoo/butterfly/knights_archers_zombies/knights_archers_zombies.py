@@ -285,7 +285,6 @@ class raw_env(AECEnv, EzPickle):
             for zombie in zombie_arrow_list:
                 self.arrow_list.remove(arrow)
                 self.zombie_list.remove(zombie)
-                # score += 1
                 arrow.archer.score += 1
 
             # Remove the arrow if it flies up off the screen
