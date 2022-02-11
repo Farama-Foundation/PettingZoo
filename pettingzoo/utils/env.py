@@ -19,9 +19,8 @@ class AECEnv:
 
     def step(self, action):
         '''
-        Receives a dictionary of actions keyed by the agent name.
-        Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary,
-        where each dictionary is keyed by the agent.
+        Accepts and executes the action of the current agent_selection
+        in the environment, automatically switches control to the next agent.
         '''
         raise NotImplementedError
 
