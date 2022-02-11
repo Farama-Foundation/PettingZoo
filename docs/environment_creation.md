@@ -126,7 +126,7 @@ PettingZoo's API has a number of features and requirements. To make sure your en
 from pettingzoo.test import api_test
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
-api_test(env, num_cycles=10, verbose_progress=False)
+api_test(env, num_cycles=1000, verbose_progress=False)
 ```
 
 As you can tell, you simply pass an environment to the test. The test will assert or give some other error on an API issue, and will return normally if it passes.
@@ -144,7 +144,7 @@ This is an analogous version of the API test, but for parallel environments. You
 from pettingzoo.test import parallel_api_test
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.parallel_env()
-parallel_api_test(env, num_cycles=10)
+parallel_api_test(env, num_cycles=1000)
 ```
 
 ### Seed Test
