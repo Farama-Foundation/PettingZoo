@@ -1,4 +1,19 @@
+from __future__ import annotations
+
 import warnings
+from typing import Any, TypeVar, Iterable, Iterator
+
+import gym
+import numpy as np
+
+
+ObsType = TypeVar('ObsType')
+ActionType = TypeVar('ActionType')
+AgentID = str
+
+ObsDict = dict[AgentID, ObsType]
+ActionDict = dict[AgentID, ActionType]
+
 
 '''
 Base environment definitions
@@ -7,44 +22,57 @@ See docs/api.md for api documentation
 See docs/dev_docs.md for additional documentation and an example environment.
 '''
 
-
 class AECEnv:
     '''
     The AECEnv steps agents one at a time. If you are unsure if you
     have implemented a AECEnv correctly, try running the `api_test` documented in
     the Developer documentation on the website.
     '''
+
+    metadata: dict[str, Any]  # Metadata for the environment
+
+    possible_agents: list[AgentID]  # All agents that may appear in the environment
+    agents: list[AgentID]  # Agents active at any given time
+
+    observation_spaces: dict[AgentID, gym.spaces.Space]  # Observation space for each agent
+    action_spaces: dict[AgentID, gym.spaces.Space]  # Action space for each agent
+
+    dones: dict[AgentID, bool]  # Whether each agent has just reached a terminal state
+    rewards: dict[AgentID, float]  # Reward from the last step for each agent
+    _cumulative_rewards: dict[AgentID, float]  # Cumulative rewards for each agent
+    infos: dict[AgentID, dict[str, Any]]  # Additional information from the last step for each agent
+
+    agent_selection: AgentID  # The agent currently being stepped
+
     def __init__(self):
         pass
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         '''
-        Receives a dictionary of actions keyed by the agent name.
-        Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary,
-        where each dictionary is keyed by the agent.
+        Receives an action for the current agent and updates the environment accordingly.
         '''
         raise NotImplementedError
 
-    def reset(self):
+    def reset(self) -> None:
         '''
         Resets the environment to a starting state.
         '''
         raise NotImplementedError
 
-    def seed(self, seed=None):
+    def seed(self, seed=None) -> None:
         '''
         Reseeds the environment (making the resulting environment deterministic).
         `reset()` must be called after `seed()`, and before `step()`.
         '''
         pass
 
-    def observe(self, agent):
+    def observe(self, agent: str) -> ObsType:
         '''
         Returns the observation an agent currently can make. `last()` calls this function.
         '''
         raise NotImplementedError
 
-    def render(self, mode='human'):
+    def render(self, mode='human') -> None | np.ndarray | str:
         '''
         Displays a rendered frame from the environment, if supported.
         Alternate render modes in the default environments are `'rgb_array'`
@@ -53,7 +81,7 @@ class AECEnv:
         '''
         raise NotImplementedError
 
-    def state(self):
+    def state(self) -> np.ndarray:
         '''
         State returns a global view of the environment appropriate for
         centralized training decentralized execution methods like QMIX
@@ -67,7 +95,7 @@ class AECEnv:
         '''
         pass
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: str) -> gym.Space:
         '''
         Takes in agent and returns the observation space for that agent.
 
@@ -78,7 +106,7 @@ class AECEnv:
         warnings.warn("Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.")
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: str) -> gym.Space:
         '''
         Takes in agent and returns the action space for that agent.
 
@@ -90,14 +118,14 @@ class AECEnv:
         return self.action_spaces[agent]
 
     @property
-    def num_agents(self):
+    def num_agents(self) -> int:
         return len(self.agents)
 
     @property
-    def max_num_agents(self):
+    def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def _dones_step_first(self):
+    def _dones_step_first(self) -> AgentID:
         '''
         Makes .agent_selection point to first done agent. Stores old value of agent_selection
         so that _was_done_step can restore the variable after the done agent steps.
@@ -108,36 +136,36 @@ class AECEnv:
             self.agent_selection = _dones_order[0]
         return self.agent_selection
 
-    def _clear_rewards(self):
+    def _clear_rewards(self) -> None:
         '''
-        clears all items in .rewards
+        Clears all items in .rewards
         '''
         for agent in self.rewards:
             self.rewards[agent] = 0
 
-    def _accumulate_rewards(self):
+    def _accumulate_rewards(self) -> None:
         '''
-        adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
+        Adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
         called near the end of a step() method
         '''
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter=2**63):
+    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
         '''
-        yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
+        Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
         '''
         return AECIterable(self, max_iter)
 
-    def last(self, observe=True):
+    def last(self, observe: bool = True) -> tuple[ObsType, float, bool, dict[str, Any]]:
         '''
-        returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
+        Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
         '''
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
         return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
 
-    def _was_done_step(self, action):
+    def _was_done_step(self, action: None) -> None:
         '''
         Helper function that performs step() for done agents.
 
@@ -179,7 +207,7 @@ class AECEnv:
             self._skip_agent_selection = None
         self._clear_rewards()
 
-    def __str__(self):
+    def __str__(self) -> str:
         '''
         returns a name which looks like: "space_invaders_v1"
         '''
@@ -189,11 +217,11 @@ class AECEnv:
             return self.__class__.__name__
 
     @property
-    def unwrapped(self):
+    def unwrapped(self) -> AECEnv:
         return self
 
 
-class AECIterable:
+class AECIterable(Iterable):
     def __init__(self, env, max_iter):
         self.env = env
         self.max_iter = max_iter
@@ -202,7 +230,7 @@ class AECIterable:
         return AECIterator(self.env, self.max_iter)
 
 
-class AECIterator:
+class AECIterator(Iterator):
     def __init__(self, env, max_iter):
         self.env = env
         self.iters_til_term = max_iter
@@ -213,6 +241,9 @@ class AECIterator:
         self.iters_til_term -= 1
         return self.env.agent_selection
 
+    def __iter__(self):
+        return self
+
 
 class ParallelEnv:
     '''
@@ -220,9 +251,15 @@ class ParallelEnv:
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     '''
-    def reset(self):
+    metadata: dict[str, Any]
+
+    agents: list[AgentID]
+    possible_agents: list[AgentID]
+
+
+    def reset(self) -> ObsDict:
         '''
-        resets the environment and returns a dictionary of observations (keyed by the agent name)
+        Resets the environment and returns a dictionary of observations (keyed by the agent name)
         '''
         raise NotImplementedError
 
@@ -233,7 +270,7 @@ class ParallelEnv:
         '''
         pass
 
-    def step(self, actions):
+    def step(self, actions: ActionDict) -> tuple[ObsDict, dict[str, float], dict[str, bool], dict[str, dict]]:
         '''
         receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, done dictionary,
@@ -241,7 +278,7 @@ class ParallelEnv:
         '''
         raise NotImplementedError
 
-    def render(self, mode="human"):
+    def render(self, mode="human") -> None | np.ndarray | str:
         '''
         Displays a rendered frame from the environment, if supported.
         Alternate render modes in the default environments are `'rgb_array'`
@@ -257,14 +294,14 @@ class ParallelEnv:
         '''
         pass
 
-    def state(self):
+    def state(self) -> np.ndarray:
         '''
         State returns a global view of the environment appropriate for
         centralized training decentralized execution methods like QMIX
         '''
         raise NotImplementedError('state() method has not been implemented in the environment {}.'.format(self.metadata.get('name', self.__class__.__name__)))
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: AgentID) -> gym.Space:
         '''
         Takes in agent and returns the observation space for that agent.
 
@@ -275,7 +312,7 @@ class ParallelEnv:
         warnings.warn("Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute.")
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gym.Space:
         '''
         Takes in agent and returns the action space for that agent.
 
@@ -287,14 +324,14 @@ class ParallelEnv:
         return self.action_spaces[agent]
 
     @property
-    def num_agents(self):
+    def num_agents(self) -> int:
         return len(self.agents)
 
     @property
-    def max_num_agents(self):
+    def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def __str__(self):
+    def __str__(self) -> str:
         '''
         returns a name which looks like: "space_invaders_v1" by default
         '''
@@ -304,5 +341,5 @@ class ParallelEnv:
             return self.__class__.__name__
 
     @property
-    def unwrapped(self):
+    def unwrapped(self) -> ParallelEnv:
         return self
