@@ -149,7 +149,7 @@ class raw_env(AECEnv, EzPickle):
                 self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
                 self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
-        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
+        self.state_space = spaces.Box(low=0, high=255, shape=(50 + 150 * self.num_floors, 750, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls(num_floors)
