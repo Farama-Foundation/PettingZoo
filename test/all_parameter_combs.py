@@ -11,7 +11,6 @@ from pettingzoo.test.render_test import render_test
 from pettingzoo.utils import aec_to_parallel, parallel_to_aec
 
 
-
 parameterized_envs = [
     (boxing_v1, dict(obs_type="grayscale_image")),
     (boxing_v1, dict(obs_type="ram")),
@@ -71,8 +70,8 @@ parameterized_envs = [
     (prison_v3, dict(random_aliens=False)),
 
     (prospector_v4, dict(ind_reward=0.8, group_reward=0.1, other_group_reward=0.1,
-                             prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
-                             banker_deposit_gold_reward=1, max_cycles=900)),
+                         prospec_find_gold_reward=1, prospec_handoff_gold_reward=1, banker_receive_gold_reward=1,
+                         banker_deposit_gold_reward=1, max_cycles=900)),
 
     (go_v5, dict(board_size=13, komi=2.5)),
     (go_v5, dict(board_size=9, komi=0.)),
