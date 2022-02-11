@@ -121,7 +121,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Initializing Pygame
         pygame.init()
-         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))

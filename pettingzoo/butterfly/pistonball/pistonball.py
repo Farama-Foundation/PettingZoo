@@ -18,6 +18,7 @@ _image_library = {}
 
 FPS = 20
 
+
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
@@ -51,7 +52,7 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(self, n_pistons=20, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
         EzPickle.__init__(self, n_pistons, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
-        self.dt = 1./FPS
+        self.dt = 1. / FPS
         self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40

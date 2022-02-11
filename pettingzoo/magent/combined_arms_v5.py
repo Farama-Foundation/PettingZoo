@@ -149,7 +149,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         "render.modes": ["human", "rgb_array"],
         'name': "combined_arms_v5",
         "video.frames_per_second": 5,
-        }
+    }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)

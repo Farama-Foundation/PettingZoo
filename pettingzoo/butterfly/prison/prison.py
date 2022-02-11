@@ -14,6 +14,7 @@ from .manual_control import manual_control
 FPS = 15
 PRISONER_VELOCITY = 24
 
+
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
