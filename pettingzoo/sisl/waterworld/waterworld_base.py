@@ -139,13 +139,14 @@ class MAWaterWorld():
         speed_features: toggles whether pursuing archea (agent) sensors detect speed of other archea
         max_cycles: After max_cycles steps all agents will return done
         """
+        self.seed()
         self.n_pursuers = n_pursuers
         self.n_evaders = n_evaders
         self.n_coop = n_coop
         self.n_poison = n_poison
         self.obstacle_radius = obstacle_radius
         obstacle_coord = np.array(obstacle_coord)
-        self.initial_obstacle_coord = np.random.uniform(0, 1, 2) if obstacle_coord is None else obstacle_coord
+        self.initial_obstacle_coord = self.np_random.uniform(0, 1, 2) if obstacle_coord is None else obstacle_coord
         self.pursuer_max_accel = pursuer_max_accel
         self.evader_speed = evader_speed
         self.poison_speed = poison_speed
@@ -165,7 +166,6 @@ class MAWaterWorld():
         self.local_ratio = local_ratio
         self._speed_features = speed_features
         self.max_cycles = max_cycles
-        self.seed()
         # TODO: Look into changing hardcoded radius ratios
         self._pursuers = [
             Archea(pursuer_idx + 1, self.radius, self.n_sensors, sensor_range, self.pursuer_max_accel,
@@ -216,15 +216,15 @@ class MAWaterWorld():
         # I use the length-angle method of sampling
         # TODO: get rid of magic numbers here: 0.5 is radius of circle
         # TODO: incorporate obstacle consideration (just limit the length)
-        length = np.random.uniform(0, 0.5 - radius * 2)
-        angle = np.pi * np.random.uniform(0, 2)
+        length = self.np_random.uniform(0, 0.5 - radius * 2)
+        angle = np.pi * self.np_random.uniform(0, 2)
         x = length * np.cos(angle)
         y = length * np.sin(angle)
         coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
-            length = np.random.uniform(0, 0.5 - radius * 2)
-            angle = np.pi * np.random.uniform(0, 2)
+            length = self.np_random.uniform(0, 0.5 - radius * 2)
+            angle = np.pi * self.np_random.uniform(0, 2)
             x = length * np.cos(angle)
             y = length * np.sin(angle)
             coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
