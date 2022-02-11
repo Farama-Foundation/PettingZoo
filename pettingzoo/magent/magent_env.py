@@ -51,7 +51,7 @@ class magent_parallel_env(ParallelEnv):
                 idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
                 space.low[:, :, idx] = reward_low
                 space.high[:, :, idx] = reward_high
-            idx_state = self.state_space.shape[2] - 3 if minimap_mode else self.state_space.shape[2] - 1
+            idx_state = self.state_space.shape[2] - 1 if minimap_mode else self.state_space.shape[2] - 1
             self.state_space.low[:, :, idx_state] = reward_low
             self.state_space.high[:, :, idx_state] = reward_high
 
