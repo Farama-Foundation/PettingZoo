@@ -533,11 +533,12 @@ class raw_env(AECEnv, EzPickle):
         # manage the kill list
         if self._agent_selector.is_last():
             for k in self.kill_list:
+                # kill the agent
                 self.agents.remove(k)
-                self.dead_agents.append(k)
-
-            for k in self.dead_agents:
+                # set the done for this agent for one round
                 self.dones[k] = True
+                # add that we know this guy is dead
+                self.dead_agents.append(k)
 
             # reset the kill list
             self.kill_list = []
