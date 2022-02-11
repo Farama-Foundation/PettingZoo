@@ -48,19 +48,19 @@ nav:
         url: "/environment_creation#tests"
 
   - title: "Wrappers"
-    url: "/Wrappers"
+    url: "/wrappers"
     sublinks:
       - title: "Included Functions"
-        url: "/Wrappers#included-functions"
+        url: "/wrappers#included-functions"
 
       - title: "Included Multi-Agent Only Functions"
-        url: "/Wrappers#included-multi-agent-only-functions"
+        url: "/wrappers#included-multi-agent-only-functions"
 
       - title: "Environment Vectorization"
-        url: "/Wrappers#environment-vectorization"
+        url: "/wrappers#environment-vectorization"
 
       - title: "Lambda Functions"
-        url: "/Wrappers#lambda-functions"
+        url: "/wrappers#lambda-functions"
 
   - title: "Environments"
     url: "/envs"
