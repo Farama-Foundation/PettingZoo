@@ -309,6 +309,10 @@ class raw_env(AECEnv, EzPickle):
         # agent: agent instance
         agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
 
+        # cumulative rewards from previous iterations should be cleared
+        self._cumulative_rewards[self.agent_selection] = 0
+        agent.score = 0
+
         # this is... so whacky... but all actions here are index with 1 so... ok
         action = action + 1
         out_of_bounds = agent.update(action)
@@ -364,9 +368,6 @@ class raw_env(AECEnv, EzPickle):
             self.check_game_end()
             self.frames += 1
 
-        self._clear_rewards()
-        self.rewards[self.agent_selection] = agent.score
-        agent.score = 0
         done = not self.run or self.frames >= self.max_cycles
         self.dones = {a: done for a in self.agents}
 
@@ -390,7 +391,10 @@ class raw_env(AECEnv, EzPickle):
         if len(self._agent_selector.agent_order):
             self.agent_selection = self._agent_selector.next()
 
-        self._cumulative_rewards[agent.agent_name] = 0
+        self._clear_rewards()
+        next_agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        self.rewards[self.agent_selection] = next_agent.score
+
         self._accumulate_rewards()
         self._dones_step_first()
 
