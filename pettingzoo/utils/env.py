@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Iterable, Iterator, TypeVar
+from typing import Any, Dict, Iterable, Iterator, List, Tuple, TypeVar
 
 import gym
 import numpy as np
@@ -10,8 +10,8 @@ ObsType = TypeVar('ObsType')
 ActionType = TypeVar('ActionType')
 AgentID = str
 
-ObsDict = dict[AgentID, ObsType]
-ActionDict = dict[AgentID, ActionType]
+ObsDict = Dict[AgentID, ObsType]
+ActionDict = Dict[AgentID, ActionType]
 
 
 '''
@@ -28,18 +28,18 @@ class AECEnv:
     the Developer documentation on the website.
     '''
 
-    metadata: dict[str, Any]  # Metadata for the environment
+    metadata: Dict[str, Any]  # Metadata for the environment
 
-    possible_agents: list[AgentID]  # All agents that may appear in the environment
-    agents: list[AgentID]  # Agents active at any given time
+    possible_agents: List[AgentID]  # All agents that may appear in the environment
+    agents: List[AgentID]  # Agents active at any given time
 
-    observation_spaces: dict[AgentID, gym.spaces.Space]  # Observation space for each agent
-    action_spaces: dict[AgentID, gym.spaces.Space]  # Action space for each agent
+    observation_spaces: Dict[AgentID, gym.spaces.Space]  # Observation space for each agent
+    action_spaces: Dict[AgentID, gym.spaces.Space]  # Action space for each agent
 
-    dones: dict[AgentID, bool]  # Whether each agent has just reached a terminal state
-    rewards: dict[AgentID, float]  # Reward from the last step for each agent
-    _cumulative_rewards: dict[AgentID, float]  # Cumulative rewards for each agent
-    infos: dict[AgentID, dict[str, Any]]  # Additional information from the last step for each agent
+    dones: Dict[AgentID, bool]  # Whether each agent has just reached a terminal state
+    rewards: Dict[AgentID, float]  # Reward from the last step for each agent
+    _cumulative_rewards: Dict[AgentID, float]  # Cumulative rewards for each agent
+    infos: Dict[AgentID, Dict[str, Any]]  # Additional information from the last step for each agent
 
     agent_selection: AgentID  # The agent currently being stepped
 
@@ -156,7 +156,7 @@ class AECEnv:
         '''
         return AECIterable(self, max_iter)
 
-    def last(self, observe: bool = True) -> tuple[ObsType, float, bool, dict[str, Any]]:
+    def last(self, observe: bool = True) -> Tuple[ObsType, float, bool, Dict[str, Any]]:
         '''
         Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
         '''
@@ -250,10 +250,10 @@ class ParallelEnv:
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     '''
-    metadata: dict[str, Any]
+    metadata: Dict[str, Any]
 
-    agents: list[AgentID]
-    possible_agents: list[AgentID]
+    agents: List[AgentID]
+    possible_agents: List[AgentID]
 
 
     def reset(self) -> ObsDict:
@@ -269,7 +269,7 @@ class ParallelEnv:
         '''
         pass
 
-    def step(self, actions: ActionDict) -> tuple[ObsDict, dict[str, float], dict[str, bool], dict[str, dict]]:
+    def step(self, actions: ActionDict) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
         '''
         receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, done dictionary,
