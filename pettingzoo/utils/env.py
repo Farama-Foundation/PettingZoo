@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, TypeVar, Iterable, Iterator
+from typing import Any, Iterable, Iterator, TypeVar
 
 import gym
 import numpy as np
-
 
 ObsType = TypeVar('ObsType')
 ActionType = TypeVar('ActionType')
