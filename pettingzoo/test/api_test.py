@@ -229,7 +229,7 @@ def test_action_flexibility(env):
         env.step(np.zeros_like(action_space.low))
 
 
-def api_test(env, num_cycles=10, verbose_progress=False):
+def api_test(env, num_cycles=1000, verbose_progress=False):
     def progress_report(msg):
         if verbose_progress:
             print(msg)

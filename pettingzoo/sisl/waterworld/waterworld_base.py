@@ -11,6 +11,7 @@ from .._utils import Agent
 
 FPS = 15
 
+
 class Archea(Agent):
 
     def __init__(self, idx, radius, n_sensors, sensor_range, max_accel, speed_features=True):
