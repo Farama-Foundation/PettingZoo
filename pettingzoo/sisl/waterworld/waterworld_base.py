@@ -9,7 +9,7 @@ from scipy.spatial import distance as ssd
 
 from .._utils import Agent
 
-FPS = 150
+FPS = 15
 
 
 class Archea(Agent):
@@ -191,7 +191,9 @@ class MAWaterWorld():
 
         self.cycle_time = 1.0 * 15. / FPS
         self.frames = 0
-        self.reset()
+
+        # I don't think this reset should be here. It will cause problems with deterministic environment testing
+        # self.reset()
 
     def close(self):
         if self.renderOn:
@@ -215,15 +217,14 @@ class MAWaterWorld():
         # sample points in the circle
         # I use the length-angle method of sampling
         # TODO: get rid of magic numbers here: 0.5 is radius of circle
-        # TODO: incorporate obstacle consideration (just limit the length)
-        length = self.np_random.uniform(0, 0.5 - radius * 2)
+        length = self.np_random.uniform(10 * self.radius * (2 ** (1 / 2)), 0.5 - radius * 2)
         angle = np.pi * self.np_random.uniform(0, 2)
         x = length * np.cos(angle)
         y = length * np.sin(angle)
         coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
-            length = self.np_random.uniform(0, 0.5 - radius * 2)
+            length = self.np_random.uniform(10 * self.radius * (2 ** (1 / 2)), 0.5 - radius * 2)
             angle = np.pi * self.np_random.uniform(0, 2)
             x = length * np.cos(angle)
             y = length * np.sin(angle)
@@ -269,6 +270,7 @@ class MAWaterWorld():
                 # Limit speed to self.poison_speed
                 velocity = velocity / speed * self.poison_speed
             poison.set_velocity(velocity)
+
 
         rewards = np.zeros(self.n_pursuers)
         sensor_features, collided_pursuer_evader, collided_pursuer_poison, rewards \
@@ -356,12 +358,13 @@ class MAWaterWorld():
             for idx, particle in enumerate(particles):
 
                 # We find whether the particle is colliding with any of the four sides our hourglass obstacle
-                # TODO: find out the correct x and y value---I think it's corrd + one radius
+                # In order to take care of the corners, we add/subtract another radius
+                # This makes sure that the particle bounces off even at the corner of our hourglass
                 center = self.obstacle_coords[0]
-                topleft = np.array([center[0] - 10 * self.radius, center[1] - 10 * self.radius])
-                topright = np.array([center[0] + 10 * self.radius, center[1] - 10 * self.radius])
-                bottomleft = np.array([center[0] - 10 * self.radius, center[1] + 10 * self.radius])
-                bottomright = np.array([center[0] + 10 * self.radius, center[1] + 10 * self.radius])
+                topleft = np.array([center[0] - 11 * self.radius, center[1] - 11 * self.radius])
+                topright = np.array([center[0] + 11 * self.radius, center[1] - 11 * self.radius])
+                bottomleft = np.array([center[0] - 11 * self.radius, center[1] + 11 * self.radius])
+                bottomright = np.array([center[0] + 11 * self.radius, center[1] + 11 * self.radius])
                 topdist = np.linalg.norm(np.cross(topright - topleft, topleft - particle.position)) / np.linalg.norm(
                     topright - topleft)
                 top = (topdist <= particle._radius) and (
