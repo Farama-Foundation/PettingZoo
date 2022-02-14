@@ -192,9 +192,6 @@ class MAWaterWorld():
         self.cycle_time = 1.0 * 15. / FPS
         self.frames = 0
 
-        # I don't think this reset should be here. It will cause problems with deterministic environment testing
-        # self.reset()
-
     def close(self):
         if self.renderOn:
             # pygame.event.pump()
