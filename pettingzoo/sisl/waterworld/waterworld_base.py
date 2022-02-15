@@ -9,7 +9,7 @@ from scipy.spatial import distance as ssd
 
 from .._utils import Agent
 
-FPS = 150
+FPS = 15
 
 
 class Archea(Agent):
@@ -191,6 +191,7 @@ class MAWaterWorld():
 
         self.cycle_time = 1.0 * 15. / FPS
         self.frames = 0
+        self.reset()
 
     def close(self):
         if self.renderOn:
