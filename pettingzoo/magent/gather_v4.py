@@ -72,9 +72,9 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
-    'render.modes': ['human','rgb_array'],
-    'name': "gather_v4",
-    'video.frames_per_second': 5,
+        'render.modes': ['human', 'rgb_array'],
+        'name': "gather_v4",
+        'video.frames_per_second': 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
@@ -123,7 +123,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env.add_agents(food_handle, method="custom", pos=pos)
 
         # pattern
-        pattern = ( [[int(not((i % 4 == 0 or i % 4 == 1) or (j % 4 == 0 or j % 4 == 1)) ) for j in range(53)] for i in range(53)]) 
+        pattern = ([[int(not((i % 4 == 0 or i % 4 == 1) or (j % 4 == 0 or j % 4 == 1))) for j in range(53)] for i in range(53)])
 
         def draw(base_x, base_y, data):
             w, h = len(data), len(data[0])

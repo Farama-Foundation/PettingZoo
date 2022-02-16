@@ -121,7 +121,7 @@ class raw_env(AECEnv, EzPickle):
 
         # Initializing Pygame
         pygame.init()
-         # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
+        # self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])
         self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         pygame.display.set_caption("Knights, Archers, Zombies")
         self.left_wall = get_image(os.path.join("img", "left_wall.png"))
@@ -309,6 +309,10 @@ class raw_env(AECEnv, EzPickle):
         # agent: agent instance
         agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
 
+        # cumulative rewards from previous iterations should be cleared
+        self._cumulative_rewards[self.agent_selection] = 0
+        agent.score = 0
+
         # this is... so whacky... but all actions here are index with 1 so... ok
         action = action + 1
         out_of_bounds = agent.update(action)
@@ -364,32 +368,35 @@ class raw_env(AECEnv, EzPickle):
             self.check_game_end()
             self.frames += 1
 
-        self._clear_rewards()
-        self.rewards[self.agent_selection] = agent.score
-        agent.score = 0
         done = not self.run or self.frames >= self.max_cycles
-        self.dones = {a: done for a in self.possible_agents}
+        self.dones = {a: done for a in self.agents}
 
         # manage the kill list
         if self._agent_selector.is_last():
+            # start iterating on only the living agents
+            _live_agents = self.agents[:]
             for k in self.kill_list:
-                self.agents.remove(k)
-                self.dead_agents.append(k)
-
-            for k in self.dead_agents:
+                # kill the agent
+                _live_agents.remove(k)
+                # set the done for this agent for one round
                 self.dones[k] = True
+                # add that we know this guy is dead
+                self.dead_agents.append(k)
 
             # reset the kill list
             self.kill_list = []
 
             # reinit the agent selector with existing agents
-            self._agent_selector.reinit(self.agents)
+            self._agent_selector.reinit(_live_agents)
 
         # if there still exist agents, get the next one
         if len(self._agent_selector.agent_order):
             self.agent_selection = self._agent_selector.next()
 
-        self._cumulative_rewards[agent.agent_name] = 0
+        self._clear_rewards()
+        next_agent = self.agent_list[self.agent_name_mapping[self.agent_selection]]
+        self.rewards[self.agent_selection] = next_agent.score
+
         self._accumulate_rewards()
         self._dones_step_first()
 
