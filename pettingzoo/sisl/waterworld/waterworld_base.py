@@ -214,16 +214,17 @@ class MAWaterWorld():
 
         # sample points in the circle
         # I use the length-angle method of sampling
+        # There needs to be both a lower bound and upper bound on the length
+        # because we don't want the object to go outside or start where the obstacle is
         # TODO: get rid of magic numbers here: 0.5 is radius of circle
-        # TODO: incorporate obstacle consideration (just limit the length)
-        length = self.np_random.uniform(0, 0.5 - radius * 2)
+        length = self.np_random.uniform(10 * self.radius * (2 ** (1 / 2)), 0.5 - radius * 2)
         angle = np.pi * self.np_random.uniform(0, 2)
         x = length * np.cos(angle)
         y = length * np.sin(angle)
         coord = np.array([self.initial_obstacle_coord[0] + x, self.initial_obstacle_coord[1] + y])
         # Create random coordinate that avoids obstacles
         while ssd.cdist(coord[None, :], self.obstacle_coords) <= radius * 2 + self.obstacle_radius:
-            length = self.np_random.uniform(0, 0.5 - radius * 2)
+            length = self.np_random.uniform(10 * self.radius * (2 ** (1 / 2)), 0.5 - radius * 2)
             angle = np.pi * self.np_random.uniform(0, 2)
             x = length * np.cos(angle)
             y = length * np.sin(angle)
@@ -336,7 +337,7 @@ class MAWaterWorld():
 
             # here we are trying to clip based on a circle, not a square
             # the problem amounts to solving a quadratic equation for euclidean distance
-            # given a position and velocity vector, we want to go back in time so that
+            # given a position and velocity vector, we want to "go back in time" so that
             # the object is just inside the circle
             distance = abs(pursuer.position - self.initial_obstacle_coord) + pursuer._radius
             if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
@@ -356,12 +357,13 @@ class MAWaterWorld():
             for idx, particle in enumerate(particles):
 
                 # We find whether the particle is colliding with any of the four sides our hourglass obstacle
-                # TODO: find out the correct x and y value---I think it's corrd + one radius
+                # In graphics the four corners are actually 10 * self.radius
+                # However, the collision needs to account for an extra radius length
                 center = self.obstacle_coords[0]
-                topleft = np.array([center[0] - 10 * self.radius, center[1] - 10 * self.radius])
-                topright = np.array([center[0] + 10 * self.radius, center[1] - 10 * self.radius])
-                bottomleft = np.array([center[0] - 10 * self.radius, center[1] + 10 * self.radius])
-                bottomright = np.array([center[0] + 10 * self.radius, center[1] + 10 * self.radius])
+                topleft = np.array([center[0] - 11 * self.radius, center[1] - 11 * self.radius])
+                topright = np.array([center[0] + 11 * self.radius, center[1] - 11 * self.radius])
+                bottomleft = np.array([center[0] - 11 * self.radius, center[1] + 11 * self.radius])
+                bottomright = np.array([center[0] + 11 * self.radius, center[1] + 11 * self.radius])
                 topdist = np.linalg.norm(np.cross(topright - topleft, topleft - particle.position)) / np.linalg.norm(
                     topright - topleft)
                 top = (topdist <= particle._radius) and (
@@ -559,9 +561,6 @@ class MAWaterWorld():
                     # here we are trying to clip based on a circle, not a square
                     # the problem is a little more complicated, but amounts to
                     # solve a quadratic equation for euclidean distance
-
-                    # quadratic equation coefficients for euclidean distance
-                    # TODO: there's a drawing problem when the objects go outside the circle
                     distance = abs(obj.position - self.initial_obstacle_coord) + obj._radius
                     if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
                         coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
@@ -598,8 +597,6 @@ class MAWaterWorld():
         for obstacle in self.obstacle_coords:
             assert obstacle.shape == (2,)
             x, y = obstacle
-            # center = (int(self.pixel_scale * x),
-            #           int(self.pixel_scale * y))
             color = (120, 176, 178)
             topleft = (int(self.pixel_scale * (x - 10 * self.radius)), int(self.pixel_scale * (y - 10 * self.radius)))
             topright = (int(self.pixel_scale * (x + 10 * self.radius)), int(self.pixel_scale * (y - 10 * self.radius)))
