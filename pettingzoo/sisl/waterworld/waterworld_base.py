@@ -412,6 +412,7 @@ class MAWaterWorld():
         positions_evader = np.array([evader.position for evader in self._evaders])
         positions_poison = np.array([poison.position for poison in self._poisons])
 
+
         # Find evader collisions
         distances_pursuer_evader = ssd.cdist(positions_pursuer, positions_evader)
         # Generate n_evaders x n_pursuers matrix of boolean values for collisions
@@ -474,20 +475,21 @@ class MAWaterWorld():
         evaders_speed = np.array([evader.velocity for evader in self._evaders])
         poisons_speed = np.array([poison.velocity for poison in self._poisons])
 
+
         evader_speed_features = self._extract_speed_features(evaders_speed, closest_evader_idx, evader_mask)
         poison_speed_features = self._extract_speed_features(poisons_speed, closest_poison_idx, poison_mask)
         pursuer_speed_features = self._extract_speed_features(pursuers_speed, closest_pursuer_idx, pursuer_mask)
 
         # we don't regenerate anymore
-        # once a collision happened, the object is gone
+        # once a collision happened, the object is dead
         def reset_caught_objects(caught_objects, objects, is_poison):
             if caught_objects.size:
                 for object_idx in caught_objects:
-                    objects.pop(object_idx)
-                    if is_poison:
-                        self.n_poison -= 1
-                    else:
-                        self.n_evaders -= 1
+                    objects[object_idx].set_position(
+                        np.array([0, 0]))
+                    # Generate both velocity components from range [-self.evader_speed, self.evader_speed)
+                    objects[object_idx].set_velocity(
+                        np.array([0, 0]))
 
         reset_caught_objects(caught_evaders, self._evaders, False)
         reset_caught_objects(caught_poisons, self._poisons, True)
@@ -568,9 +570,10 @@ class MAWaterWorld():
                                  distance[0] ** 2 + distance[1] ** 2 - 0.25]
                         ans = np.roots(coeff)
                         # we find the smallest positive t that confines in the circle
-                        t = min(abs(ans))
-                        obj.set_position(obj.position - t * obj.velocity)
-                        obj.set_velocity(-1 * obj.velocity)
+                        if len(ans) > 0:
+                            t = min(abs(ans))
+                            obj.set_position(obj.position - t * obj.velocity)
+                            obj.set_velocity(-1 * obj.velocity)
 
             move_objects(self._evaders)
             move_objects(self._poisons)
