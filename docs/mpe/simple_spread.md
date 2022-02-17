@@ -10,7 +10,7 @@ observation-values: "(-inf,inf)"
 state-shape: "(54,)"
 state-values: "(-inf,inf)"
 average-total-reward: "-115.6"
-import: "from pettingzoo.mpe import simple_spread_v2"
+import: "from pettingzoo.mpe import simple_spread_v3"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
@@ -38,7 +38,7 @@ Agent action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ``` python
-simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=False)
+simple_spread_v3.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=False)
 ```
 
 
