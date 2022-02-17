@@ -102,7 +102,7 @@ parameterized_envs = [
 
     (simple_adversary_v2, dict(N=4)),
     (simple_reference_v2, dict(local_ratio=0.2)),
-    (simple_spread_v2, dict(N=5)),
+    (simple_spread_v3, dict(N=5)),
     (simple_tag_v2, dict(num_good=5, num_adversaries=10, num_obstacles=4)),
     (simple_tag_v2, dict(num_good=1, num_adversaries=1, num_obstacles=1)),
     (simple_world_comm_v2, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3)),
@@ -110,7 +110,7 @@ parameterized_envs = [
 
     (simple_adversary_v2, dict(N=4, continuous_actions=True)),
     (simple_reference_v2, dict(local_ratio=0.2, continuous_actions=True)),
-    (simple_spread_v2, dict(N=5, continuous_actions=True)),
+    (simple_spread_v3, dict(N=5, continuous_actions=True)),
     (simple_tag_v2, dict(num_good=5, num_adversaries=10, num_obstacles=4, continuous_actions=True)),
     (simple_tag_v2, dict(num_good=1, num_adversaries=1, num_obstacles=1, continuous_actions=True)),
     (simple_world_comm_v2, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3, continuous_actions=True)),
