@@ -412,7 +412,6 @@ class MAWaterWorld():
         positions_evader = np.array([evader.position for evader in self._evaders])
         positions_poison = np.array([poison.position for poison in self._poisons])
 
-
         # Find evader collisions
         distances_pursuer_evader = ssd.cdist(positions_pursuer, positions_evader)
         # Generate n_evaders x n_pursuers matrix of boolean values for collisions
@@ -474,7 +473,6 @@ class MAWaterWorld():
         pursuers_speed = np.array([pursuer.velocity for pursuer in self._pursuers])
         evaders_speed = np.array([evader.velocity for evader in self._evaders])
         poisons_speed = np.array([poison.velocity for poison in self._poisons])
-
 
         evader_speed_features = self._extract_speed_features(evaders_speed, closest_evader_idx, evader_mask)
         poison_speed_features = self._extract_speed_features(poisons_speed, closest_poison_idx, poison_mask)
