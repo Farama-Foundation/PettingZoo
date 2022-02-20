@@ -328,8 +328,8 @@ class Water:
         self.debris = []
         for col in range(1, self.num_cols - 1, 3):
             if rng.random_sample() >= 0.5:
-                y = rng.randint(0, 2)
-                x = col + rng.randint(0, 3)
+                y = rng.integers(0, 2)
+                x = col + rng.integers(0, 3)
                 rect = self.rects[y][x].copy()
                 rect.x += 3
                 rect.y += 9
@@ -387,11 +387,11 @@ class Background:
         self.debris = {}
         for row in range(1, self.num_rows - 1, 3):
             for col in range(1, self.num_cols - 1, 3):
-                y = row + rng.randint(0, 3)
+                y = row + rng.integers(0, 3)
                 if y == self.num_rows - 2:
                     y += -1
-                x = col + rng.randint(0, 3)
-                choice = rng.randint(0, 4)
+                x = col + rng.integers(0, 3)
+                choice = rng.integers(0, 4)
                 self.debris[self.rects[y][x].topleft] = self.debris_tiles[choice]
 
     def full_draw(self, screen):

@@ -51,8 +51,8 @@ class parallel_env(ParallelEnv):
 
     def add_type(self):
         type_id = len(self.types)
-        num_actions = self.np_random.randint(3, 10)
-        obs_size = self.np_random.randint(10, 50)
+        num_actions = self.np_random.integers(3, 10)
+        obs_size = self.np_random.integers(10, 50)
         obs_space = gym.spaces.Box(low=0, high=1, shape=(obs_size,))
         act_space = gym.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"

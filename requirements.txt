@@ -1,4 +1,4 @@
-gym>=0.21.0
+gym>=0.22.0
 pygame==2.1.0
 numpy>=1.18.0
 pymunk==6.2.0
