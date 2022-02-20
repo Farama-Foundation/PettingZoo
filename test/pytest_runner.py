@@ -30,6 +30,7 @@ def test_module(name, env_module):
         state_test(_env, env_module.parallel_env())
 
     recreated_env = pickle.loads(pickle.dumps(_env))
+    recreated_env.seed(42)
     api_test(recreated_env)
 
 
