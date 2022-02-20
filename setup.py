@@ -51,7 +51,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "numpy>=1.18.0",
-        "gym>=0.22.0"
+        "gym>=0.21.0"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
