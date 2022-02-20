@@ -16,7 +16,7 @@ class Zombie(pygame.sprite.Sprite):
         self.x_lims = [const.SCREEN_UNITS, const.SCREEN_WIDTH - const.SCREEN_UNITS]
 
     def update(self):
-        rand_x = self.randomizer.randint(0, 10)
+        rand_x = self.randomizer.integers(0, 10)
 
         self.rect.y += const.ZOMBIE_Y_SPEED
 
