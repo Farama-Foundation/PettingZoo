@@ -1,11 +1,7 @@
-import os
-import time
-
 import pygame
 
-from typing import Callable, Any
 
-class ManualPolicy():
+class ManualPolicy:
     def __init__(self, env, agent_id=0, show_obs=False):
 
         self.env = env
@@ -13,23 +9,20 @@ class ManualPolicy():
         self.agent = self.env.agents[self.agent_id]
         self.show_obs = show_obs
 
-        self.clock = pygame.time.Clock()
-        self.clock.tick(env.metadata['video.frames_per_second'])
-
         self.action_space = env.action_space(env.agents[agent_id])
 
         # action mappings for all agents are the same
         if True:
             self.default_action = 5
             self.action_mapping = dict()
-            self.action_mapping[pygame.K_w] = 0
-            self.action_mapping[pygame.K_s] = 1
-            self.action_mapping[pygame.K_a] = 2
-            self.action_mapping[pygame.K_d] = 3
-            self.action_mapping[pygame.K_SPACE] = 4
+            self.action_mapping[pygame.K_w] = 0 # front
+            self.action_mapping[pygame.K_s] = 1 # back
+            self.action_mapping[pygame.K_q] = 2 # rotate left
+            self.action_mapping[pygame.K_e] = 3 # rotate right
+            self.action_mapping[pygame.K_f] = 4 # weapon
 
-    def forward(self, observation, agent):
-        # only triger when we are the correct agent
+    def __call__(self, observation, agent):
+        # only trigger when we are the correct agent
         assert agent == self.agent, f'Manual Policy only applied to agent: {self.agent}, but got tag for {agent}.'
 
         # set the default action
@@ -41,14 +34,44 @@ class ManualPolicy():
                 if event.key == pygame.K_ESCAPE:
                     # escape to end
                     exit()
-                if event.key == pygame.K_BACKSPACE:
+
+                elif event.key == pygame.K_BACKSPACE:
                     # backspace to reset
                     self.env.reset()
 
-                action = self.action_mapping[event.key]
+                elif event.key in self.action_mapping:
+                    action = self.action_mapping[event.key]
 
         return action
 
     @property
     def available_agents(self):
         return self.env.agents
+
+
+if __name__ == "__main__":
+    from pettingzoo.butterfly import knights_archers_zombies_v8
+
+    clock = pygame.time.Clock()
+
+    env = knights_archers_zombies_v8.env()
+    env.reset()
+
+    manual_policy = knights_archers_zombies_v8.ManualPolicy(env)
+
+    for agent in env.agent_iter():
+        clock.tick(env.metadata['video.frames_per_second'])
+
+        observation, reward, done, info = env.last()
+
+        if agent == manual_policy.agent:
+            action = manual_policy(observation, agent)
+        else:
+            action = env.action_space(agent).sample()
+
+        env.step(action)
+
+        env.render()
+
+        if done:
+            env.reset()
