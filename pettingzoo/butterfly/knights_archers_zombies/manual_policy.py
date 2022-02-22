@@ -15,11 +15,11 @@ class ManualPolicy:
         if True:
             self.default_action = 5
             self.action_mapping = dict()
-            self.action_mapping[pygame.K_w] = 0 # front
-            self.action_mapping[pygame.K_s] = 1 # back
-            self.action_mapping[pygame.K_q] = 2 # rotate left
-            self.action_mapping[pygame.K_e] = 3 # rotate right
-            self.action_mapping[pygame.K_f] = 4 # weapon
+            self.action_mapping[pygame.K_w] = 0  # front
+            self.action_mapping[pygame.K_s] = 1  # back
+            self.action_mapping[pygame.K_q] = 2  # rotate left
+            self.action_mapping[pygame.K_e] = 3  # rotate right
+            self.action_mapping[pygame.K_f] = 4  # weapon
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent

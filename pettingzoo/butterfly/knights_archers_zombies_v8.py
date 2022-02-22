@@ -1,2 +1,2 @@
-from .knights_archers_zombies.knights_archers_zombies import (env, manual_control, ManualPolicy,
+from .knights_archers_zombies.knights_archers_zombies import (ManualPolicy, env, manual_control,
                                                               parallel_env, raw_env)
