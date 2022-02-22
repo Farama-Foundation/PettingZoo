@@ -7,9 +7,9 @@ class ManualPolicy:
         self.env = env
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]
-        self.show_obs = show_obs
 
-        self.action_space = env.action_space(env.agents[agent_id])
+        # TO-DO: show current agent observation if this is True
+        self.show_obs = show_obs
 
         # action mappings for all agents are the same
         if True:
