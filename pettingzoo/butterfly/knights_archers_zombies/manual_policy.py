@@ -2,7 +2,7 @@ import pygame
 
 
 class ManualPolicy:
-    def __init__(self, env, agent_id=0, show_obs=False):
+    def __init__(self, env, agent_id: int = 0, show_obs: bool = False):
 
         self.env = env
         self.agent_id = agent_id
@@ -46,7 +46,7 @@ class ManualPolicy:
 
     @property
     def available_agents(self):
-        return self.env.agents
+        return self.env.agent_name_mapping
 
 
 if __name__ == "__main__":
