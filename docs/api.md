@@ -194,6 +194,43 @@ from pettingzoo.utils import random_demo
 random_demo(env, render=True, episodes=1)
 ```
 
+### Playing Alongside Trained Policies
+
+Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.
+Some games support this via:
+
+``` python
+import time
+from pettingzoo.butterfly import knights_archers_zombies_v8
+
+env = knights_archers_zombies_v8.env()
+env.reset()
+
+manual_policy = knights_archers_zombies_v8.ManualPolicy(env)
+
+for agent in env.agent_iter():
+    observation, reward, done, info = env.last()
+
+    if agent == manual_policy.agent:
+        action = manual_policy(observation, agent)
+    else:
+        action = policy(observation, agent)
+
+    env.step(action)
+
+    env.render()
+    time.sleep(0.05)
+
+    if done:
+        env.reset()
+```
+
+`ManualPolicy` accepts several default arguments:
+
+`agent_id`: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use `manual_policy.availabla_agents` to query what agents are available and what are their indices.
+
+`show_obs`: Is a boolean which shows the observation from the currently selected agent, if available.
+
 ### Observation Saving
 
 If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no `agent` is specified, then the current selected agent for the environment is chosen. If `all_agents` is passed in as `True`, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If `save_dir` is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.
