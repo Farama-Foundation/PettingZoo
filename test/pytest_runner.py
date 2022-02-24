@@ -1,5 +1,4 @@
 import pytest
-import pickle
 from .all_modules import all_environments
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
@@ -29,8 +28,9 @@ def test_module(name, env_module):
     if ("butterfly/" in name) or ("mpe/" in name) or ("magent/" in name):
         state_test(_env, env_module.parallel_env())
 
-    recreated_env = pickle.loads(pickle.dumps(_env))
-    api_test(recreated_env)
+    # recreated_env = pickle.loads(pickle.dumps(_env))
+    # recreated_env.seed(42)
+    # api_test(recreated_env)
 
 
 def test_conversions():
