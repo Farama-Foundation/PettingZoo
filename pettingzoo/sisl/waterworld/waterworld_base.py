@@ -39,11 +39,13 @@ class Archea(Agent):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=np.float32(-np.sqrt(2)), high=np.float32(2 * np.sqrt(2)), shape=(self._obs_dim,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-np.sqrt(2)), high=np.float32(2 * np.sqrt(2)), shape=(self._obs_dim,),
+                          dtype=np.float32)
 
     @property
     def action_space(self):
-        return spaces.Box(low=np.float32(-self._max_accel), high=np.float32(self._max_accel), shape=(2,), dtype=np.float32)
+        return spaces.Box(low=np.float32(-self._max_accel), high=np.float32(self._max_accel), shape=(2,),
+                          dtype=np.float32)
 
     @property
     def position(self):
@@ -74,11 +76,11 @@ class Archea(Agent):
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
         # Set sensorvals to np.inf when object should not be seen by sensor
-        distance_squared = (relative_coord**2).sum(axis=1)[None, :]
+        distance_squared = (relative_coord ** 2).sum(axis=1)[None, :]
         sensorvals[
-            (sensorvals < 0)    # Wrong direction (by more than 90 degrees in both directions)
-            | (sensorvals - object_radius > self._sensor_range)         # Outside sensor range
-            | (distance_squared - sensorvals**2 > object_radius**2)     # Sensor does not intersect object
+            (sensorvals < 0)  # Wrong direction (by more than 90 degrees in both directions)
+            | (sensorvals - object_radius > self._sensor_range)  # Outside sensor range
+            | (distance_squared - sensorvals ** 2 > object_radius ** 2)  # Sensor does not intersect object
         ] = np.inf
         if same:
             # Set sensors values for sensing the current object to np.inf
@@ -109,7 +111,8 @@ class Archea(Agent):
         # As well as the corresponding triangle side because that tells us where the particle will end up
         theta_three = np.pi - theta_one - theta_two
         max_length = np.linalg.norm(position) * np.sin(theta_three) / np.sin(theta_one)
-        clipped_vectors = max_length / np.linalg.norm(sensor_vectors, axis=1).reshape(self._n_sensors, 1) * sensor_vectors
+        clipped_vectors = max_length / np.linalg.norm(sensor_vectors, axis=1).reshape(self._n_sensors,
+                                                                                      1) * sensor_vectors
 
         # Find the ratio of the clipped sensor vector to the original sensor vector
         # Scaling the vector by this ratio will limit the end of the vector to the barriers
@@ -312,7 +315,7 @@ class MAWaterWorld():
         sensorvals = []
 
         for pursuer_idx in range(self.n_pursuers):
-            sensors = np.arange(self.n_sensors)         # sensor indices
+            sensors = np.arange(self.n_sensors)  # sensor indices
             objects = closest_object_idx[pursuer_idx, ...]  # object indices
             sensorvals.append(input_sensorvals[pursuer_idx, ..., sensors, objects])
 
@@ -324,7 +327,7 @@ class MAWaterWorld():
         for pursuer in self._pursuers:
             relative_speed = object_velocities - np.expand_dims(pursuer.velocity, 0)
             sensorvals.append(pursuer.sensors.dot(relative_speed.T))
-        sensed_speed = np.c_[sensorvals]    # Speeds in direction of each sensor
+        sensed_speed = np.c_[sensorvals]  # Speeds in direction of each sensor
 
         speed_features = np.zeros((self.n_pursuers, self.n_sensors))
 
@@ -341,7 +344,6 @@ class MAWaterWorld():
     def collision_handling_subroutine(self, rewards, is_last):
         # Stop pursuers upon hitting a wall
         for pursuer in self._pursuers:
-
             # Here we are trying to clip based on a circle, not a square
             # Given the current position of the pursuer (outside of the circle) and its velocity,
             # we want to "pull it back" along the direction of the velocity vector into the circle again
@@ -358,12 +360,13 @@ class MAWaterWorld():
 
                 # again, you should reference the link above to make sure this velocity vector makes sense
                 # We are treating the pursuer position as the starting point of the velocity vector
-                if (pursuer.velocity[0] == 0 and pursuer.velocity[1] == 0) or (pursuer.velocity[0] == -0 and pursuer.velocity[1] == -0):
+                if (pursuer.velocity[0] == 0 and pursuer.velocity[1] == 0) or (
+                        pursuer.velocity[0] == -0 and pursuer.velocity[1] == -0):
                     # If this happens then we have no velocity to rely on.
                     # In that case, we just bring the particle back directly towards the center
-                    v = (0.5 - pursuer.position) / np.linalg.norm(pursuer.position - 0.5)
+                    v = 0.5 - pursuer.position
                 else:
-                    v = -1 * pursuer.velocity / np.linalg.norm(pursuer.velocity)
+                    v = -1 * pursuer.velocity
 
                 # The determinant of this quadratic equation must always be non-negative because
                 # there will always be an intersection between the velocity and the circle
@@ -384,7 +387,9 @@ class MAWaterWorld():
                 t = sol[idx]
 
                 # The last term is because the pursuer has a radius that we need to account for
-                pursuer.set_position(pursuer.position + t * v + pursuer._radius / np.linalg.norm(v) * v)
+                pursuer.set_position(
+                    pursuer.position + t * v + 2 * pursuer._radius / np.linalg.norm(0.5 - pursuer.position) * (
+                            0.5 - pursuer.position))
                 pursuer.set_velocity(v)
 
         def rebound_particles(particles, n):
@@ -403,26 +408,29 @@ class MAWaterWorld():
                     topright - topleft)
                 top = (topdist <= particle._radius) and (
                         topleft[0] <= particle.position[0] and topright[0] >= particle.position[0])
-                leftdist = np.linalg.norm(np.cross(bottomright - topleft, topleft - particle.position)) / np.linalg.norm(
+                leftdist = np.linalg.norm(
+                    np.cross(bottomright - topleft, topleft - particle.position)) / np.linalg.norm(
                     bottomright - topleft)
                 left = (leftdist <= particle._radius) and (
                         topleft[0] <= particle.position[0] and bottomright[0] >= particle.position[0]) and (
-                        topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
-                rightdist = np.linalg.norm(np.cross(topright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
+                               topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
+                rightdist = np.linalg.norm(
+                    np.cross(topright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
                     topright - bottomleft)
                 right = (rightdist <= particle._radius) and (
                         topleft[0] <= particle.position[0] and bottomright[0] >= particle.position[0]) and (
-                        topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
-                bottomdist = np.linalg.norm(np.cross(bottomright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
+                                topleft[1] <= particle.position[1] and bottomright[1] >= particle.position[1])
+                bottomdist = np.linalg.norm(
+                    np.cross(bottomright - bottomleft, bottomleft - particle.position)) / np.linalg.norm(
                     bottomright - bottomleft)
                 bottom = (bottomdist <= particle._radius) and (
-                            topleft[0] <= particle.position[0] and topright[0] >= particle.position[0])
+                        topleft[0] <= particle.position[0] and topright[0] >= particle.position[0])
                 is_colliding = top or left or right or bottom
                 collisions_particle_obstacle[idx] = is_colliding.sum()
                 if collisions_particle_obstacle[idx] > 0:
                     # Rebound the particle that collided with an obstacle
                     velocity_scale = particle._radius + self.obstacle_radius - \
-                        ssd.euclidean(particle.position, self.obstacle_coords)
+                                     ssd.euclidean(particle.position, self.obstacle_coords)
                     pos_diff = particle.position - self.obstacle_coords[0]
                     new_pos = particle.position + velocity_scale * pos_diff
                     particle.set_position(new_pos)
@@ -560,7 +568,8 @@ class MAWaterWorld():
                 np.concatenate([
                     sensor_feature[pursuer_idx, ...].ravel(), [
                         float((is_colliding_evader[pursuer_idx, :]).sum() > 0), float((
-                            is_colliding_poison[pursuer_idx, :]).sum() > 0)
+                                                                                          is_colliding_poison[
+                                                                                          pursuer_idx, :]).sum() > 0)
                     ]
                 ]))
         return obslist
@@ -589,7 +598,7 @@ class MAWaterWorld():
                 for obj in objects:
                     # Move objects
                     obj.set_position(obj.position + self.cycle_time * obj.velocity)
-                    # Bounce object if it hits a wall
+
                     # TODO: vectorize this calculation the same way in the collision code
                     distance = abs(obj.position - self.initial_obstacle_coord) + obj._radius
                     if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
@@ -607,7 +616,8 @@ class MAWaterWorld():
             move_objects(self._poisons)
 
             rewards = np.zeros(self.n_pursuers)
-            sensorfeatures, collisions_pursuer_evader, collisions_pursuer_poison, rewards = self.collision_handling_subroutine(rewards, is_last)
+            sensorfeatures, collisions_pursuer_evader, collisions_pursuer_poison, rewards = self.collision_handling_subroutine(
+                rewards, is_last)
             obs_list = self.observe_list(
                 sensorfeatures, collisions_pursuer_evader, collisions_pursuer_poison)
             self.last_obs = obs_list
