@@ -92,7 +92,7 @@ class Archea(Agent):
         # The key insight is that there is a triangle formed when the particle moves outside of the circle
         # Namely, the triangle with vertices---center, particle, and intersection
         # So the sides are---position vector, velocity vector, and radius
-        # TODO: get rid of magic number 0.5
+        # TODO: get rid of magic number 0.5 and 2
         position = self.position - 0.5
 
         # We first need the angle formed by center, particle, and particle movement direction
@@ -109,7 +109,7 @@ class Archea(Agent):
         # As well as the corresponding triangle side because that tells us where the particle will end up
         theta_three = np.pi - theta_one - theta_two
         max_length = np.linalg.norm(position) * np.sin(theta_three) / np.sin(theta_one)
-        clipped_vectors = max_length / np.linalg.norm(sensor_vectors, axis=1).reshape(30, 1) * sensor_vectors
+        clipped_vectors = max_length / np.linalg.norm(sensor_vectors, axis=1).reshape(self._n_sensors, 1) * sensor_vectors
 
         # Find the ratio of the clipped sensor vector to the original sensor vector
         # Scaling the vector by this ratio will limit the end of the vector to the barriers
