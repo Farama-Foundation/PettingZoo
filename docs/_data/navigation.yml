@@ -48,19 +48,19 @@ nav:
         url: "/environment_creation#tests"
 
   - title: "Wrappers"
-    url: "/Wrappers"
+    url: "/wrappers"
     sublinks:
       - title: "Included Functions"
-        url: "/Wrappers#included-functions"
+        url: "/wrappers#included-functions"
 
       - title: "Included Multi-Agent Only Functions"
-        url: "/Wrappers#included-multi-agent-only-functions"
+        url: "/wrappers#included-multi-agent-only-functions"
 
       - title: "Environment Vectorization"
-        url: "/Wrappers#environment-vectorization"
+        url: "/wrappers#environment-vectorization"
 
       - title: "Lambda Functions"
-        url: "/Wrappers#lambda-functions"
+        url: "/wrappers#lambda-functions"
 
   - title: "Environments"
     url: "/envs"
@@ -71,7 +71,7 @@ nav:
           - title: "BasketBall Pong"
             alt_title: "Basketball Pong"
             url: "/atari/basketball_pong"
-            
+
           - title: "Boxing"
             url: "/atari/boxing"
 
@@ -83,7 +83,7 @@ nav:
 
           - title: "Double Dunk"
             url: "/atari/double_dunk"
-            
+
           - title: "Entombed: Competitive"
             alt_title: "Entombed: Comp"
             url: "/atari/entombed_competitive"
@@ -97,7 +97,7 @@ nav:
 
           - title: "Foozpong"
             url: "/atari/foozpong"
-            
+
           - title: "Ice Hockey"
             url: "/atari/ice_hockey"
 
@@ -109,7 +109,7 @@ nav:
 
           - title: "Maze Craze"
             url: "/atari/maze_craze"
-            
+
           - title: "Othello"
             url: "/atari/othello"
 
@@ -118,10 +118,10 @@ nav:
 
           - title: "Quadrapong"
             url: "/atari/quadrapong"
-          
+
           - title: "Space Invaders"
             url: "/atari/space_invaders"
-            
+
           - title: "Spacewar"
             alt_title: "Space War"
             url: "/atari/space_war"
@@ -134,7 +134,7 @@ nav:
 
           - title: "Video Checkers"
             url: "/atari/video_checkers"
-            
+
           - title: "Volleyball Pong"
             url: "/atari/volleyball_pong"
 
@@ -150,7 +150,7 @@ nav:
         subsublinks:
           - title: "Cooperative Pong"
             url: "/butterfly/cooperative_pong"
-            
+
           - title: "Knights Archers Zombies ('KAZ')"
             alt_title: "KAZ"
             url: "/butterfly/knights_archers_zombies"
@@ -158,10 +158,10 @@ nav:
           - title: "PistonBall"
             alt_title: "Pistonball"
             url: "/butterfly/pistonball"
-            
+
           - title: "Prison"
             url: "/butterfly/prison"
-            
+
           - title: "Prospector"
             url: "/butterfly/prospector"
 
@@ -170,19 +170,19 @@ nav:
         subsublinks:
           - title: "Backgammon"
             url: "/classic/backgammon"
-            
+
           - title: "Checkers"
             url: "/classic/checkers"
 
           - title: "Chess"
             url: "/classic/chess"
-            
+
           - title: "Connect Four"
             url: "/classic/connect_four"
-            
+
           - title: "Dou Dizhu"
             url: "/classic/dou_dizhu"
-          
+
           - title: "Gin Rummy"
             url: "/classic/gin_rummy"
 
@@ -210,7 +210,7 @@ nav:
 
           - title: "Tic Tac Toe"
             url: "/classic/tictactoe"
-          
+
           - title: "Uno"
             url: "/classic/uno"
 
@@ -326,13 +326,13 @@ Environment Creation:
 
 Wrappers:
     - title: "Included Functions"
-      url: "/Wrappers#included-functions"
+      url: "/wrappers#included-functions"
 
     - title: "Included Multi-Agent Only Functions"
-      url: "/Wrappers#included-multi-agent-only-functions"
+      url: "/wrappers#included-multi-agent-only-functions"
 
     - title: "Environment Vectorization"
-      url: "/Wrappers#environment-vectorization"
+      url: "/wrappers#environment-vectorization"
 
     - title: "Lambda Functions"
-      url: "/Wrappers#lambda-functions"
+      url: "/wrappers#lambda-functions"

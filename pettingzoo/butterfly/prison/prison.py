@@ -11,7 +11,8 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+FPS = 15
+PRISONER_VELOCITY = 24
 
 
 def get_image(path):
@@ -99,7 +100,12 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector = agent_selector(self.agents)
         self.sprite_list = ["sprites/alien", "sprites/drone", "sprites/glowy", "sprites/reptile", "sprites/ufo", "sprites/bunny", "sprites/robot", "sprites/tank"]
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
-        self.metadata = {'render.modes': ['human', "rgb_array"], 'name': "prison_v3"}
+        self.metadata = {
+            'render.modes': ['human', "rgb_array"],
+            'name': "prison_v3",
+            'is_parallelizable': True,
+            'video.frames_per_second': FPS,
+        }
         self.infos = {}
         self.rendering = False
         self.max_cycles = max_cycles
@@ -112,7 +118,10 @@ class raw_env(AECEnv, EzPickle):
         self.background_append = get_image('background_append.png')
         self.dynamic_background = get_image('blit_background.png')
         self.dynamic_background_append = get_image('blit_background_append.png')
-        self.velocity = 24
+        self.velocity = PRISONER_VELOCITY * 15. / FPS
+        if self.velocity % 1. != 0:
+            raise ValueError(f'FPS of {FPS} leads to decimal place value of {self.velocity} for velocity.')
+        self.velocity = int(self.velocity)
         self.continuous = continuous
         self.vector_obs = vector_observation
         self.synchronized_start = synchronized_start
@@ -127,7 +136,7 @@ class raw_env(AECEnv, EzPickle):
         self.action_spaces = {}
         if continuous:
             for a in self.agents:
-                self.action_spaces[a] = spaces.Box(low=-self.velocity, high=self.velocity, shape=(1,), dtype=np.float32)
+                self.action_spaces[a] = spaces.Box(low=-PRISONER_VELOCITY, high=PRISONER_VELOCITY, shape=(1,), dtype=np.float32)
         else:
             for a in self.agents:
                 self.action_spaces[a] = spaces.Discrete(3)
@@ -140,7 +149,7 @@ class raw_env(AECEnv, EzPickle):
                 self.observation_spaces[a] = spaces.Box(low=-300, high=300, shape=(1,), dtype=np.float32)
             else:
                 self.observation_spaces[a] = spaces.Box(low=0, high=255, shape=(100, 300, 3), dtype=np.uint8)
-        self.state_space = spaces.Box(low=0, high=255, shape=(650, 750, 3), dtype=np.uint8)
+        self.state_space = spaces.Box(low=0, high=255, shape=(50 + 150 * self.num_floors, 750, 3), dtype=np.uint8)
 
         self.walls = []
         self.create_walls(num_floors)
@@ -240,7 +249,7 @@ class raw_env(AECEnv, EzPickle):
         prisoner.update_sprite(movement)
         if self.continuous:
             prisoner.position = (
-                prisoner.position[0] + movement, prisoner.position[1])
+                prisoner.position[0] + movement * 15. / FPS, prisoner.position[1])
         else:
             prisoner.position = (
                 prisoner.position[0] + movement * self.velocity, prisoner.position[1])

@@ -4,8 +4,6 @@ import time
 import numpy as np
 import pygame
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def manual_control(**kwargs):
     from .pistonball import env as _env
@@ -25,7 +23,7 @@ def manual_control(**kwargs):
     num_agents = len(env.agents)  # 20
     while not done:
         clock.tick(60)
-        action_list = np.array([1 for _ in range(num_agents)])
+        action_list = np.zeros((num_agents, 1), dtype="float32")
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -42,9 +40,9 @@ def manual_control(**kwargs):
                     i = (i + 1) if (i != num_agents - 1) else i
                     start = time.time()
                 if event.key == pygame.K_s:
-                    action_list[i] = 0
+                    action_list[i] = -1.
                 if event.key == pygame.K_w:
-                    action_list[i] = 2
+                    action_list[i] = 1.
 
         if quit_game:
             break

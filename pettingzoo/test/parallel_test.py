@@ -1,12 +1,8 @@
 import random
 import warnings
-
 import numpy as np
-
-from pettingzoo.utils.conversions import (from_parallel_wrapper, to_parallel_wrapper,
-                                          turn_based_to_parallel_wrapper)
+from pettingzoo.utils.conversions import aec_to_parallel_wrapper, parallel_to_aec_wrapper, turn_based_aec_to_parallel_wrapper
 from pettingzoo.utils.wrappers import BaseWrapper
-
 from .api_test import missing_attr_warning
 
 
@@ -20,13 +16,13 @@ def sample_action(env, obs, agent):
     return env.action_space(agent).sample()
 
 
-def parallel_api_test(par_env, num_cycles=10):
+def parallel_api_test(par_env, num_cycles=1000):
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
 
-    assert not isinstance(par_env.unwrapped, turn_based_to_parallel_wrapper)
-    assert not isinstance(par_env.unwrapped, to_parallel_wrapper)
-    assert not isinstance(par_env.unwrapped, from_parallel_wrapper)
+    assert not isinstance(par_env.unwrapped, aec_to_parallel_wrapper)
+    assert not isinstance(par_env.unwrapped, parallel_to_aec_wrapper)
+    assert not isinstance(par_env.unwrapped, turn_based_aec_to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, BaseWrapper)
     MAX_RESETS = 2
     for _ in range(MAX_RESETS):

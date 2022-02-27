@@ -2,12 +2,12 @@ import ray
 import pickle5 as pickle
 from ray.tune.registry import register_env
 from ray.rllib.agents.ppo import PPOTrainer
-from pettingzoo.butterfly import pistonball_v4
+from pettingzoo.butterfly import pistonball_v6
 import supersuit as ss
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
-import PIL
+from PIL import Image
 from ray.rllib.models import ModelCatalog
-from rllib_pistonball import MLPModelV2
+from rllib_pistonball import CNNModelV2
 import numpy as np
 import os
 import argparse
@@ -16,18 +16,28 @@ from pathlib import Path
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(description='Render pretrained policy loaded from checkpoint')
-parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v4/PPO/PPO_pistonball_v4_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
+parser.add_argument("checkpoint_path", help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`")
 
 args = parser.parse_args()
 
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
 params_path = Path(checkpoint_path).parent.parent/"params.pkl"
 
-ModelCatalog.register_custom_model("MLPModelV2", MLPModelV2)
+ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
 
 def env_creator():
-    env = pistonball_v4.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+    env = pistonball_v6.env(
+        n_pistons=20,
+        time_penalty=-0.1,
+        continuous=True,
+        random_drop=True,
+        random_rotate=True,
+        ball_mass=0.75,
+        ball_friction=0.3,
+        ball_elasticity=1.5,
+        max_cycles=125
+    )
     env = ss.color_reduction_v0(env, mode='B')
     env = ss.dtype_v0(env, 'float32')
     env = ss.resize_v0(env, x_size=84, y_size=84)
@@ -37,7 +47,7 @@ def env_creator():
 
 
 env = env_creator()
-env_name = 'pistonball_v4'
+env_name = 'pistonball_v6'
 register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
 with open(params_path, "rb") as f:
@@ -67,7 +77,7 @@ for agent in env.agent_iter():
     env.step(action)
     i += 1
     if i % (len(env.possible_agents)+1) == 0:
-        frame_list.append(PIL.Image.fromarray(env.render(mode='rgb_array')))
+        frame_list.append(Image.fromarray(env.render(mode='rgb_array')))
 env.close()
 
 

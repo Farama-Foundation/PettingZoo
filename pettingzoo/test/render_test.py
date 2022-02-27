@@ -24,8 +24,9 @@ def collect_render_results(env, mode):
     return results
 
 
-def render_test(env, custom_tests={}):
-    render_modes = env.metadata.get('render.modes')
+def render_test(env_fn, custom_tests={}):
+    env = env_fn()
+    render_modes = env.metadata.get('render.modes')[:]
     assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
     for mode in render_modes:
         render_results = collect_render_results(env, mode)
@@ -38,4 +39,5 @@ def render_test(env, custom_tests={}):
                 assert isinstance(res, str)  # and len(res.shape) == 3 and res.shape[2] == 3 and res.dtype == np.uint8, "rgb_array mode must have shit in it"
             if mode == "human":
                 assert res is None
-    env.close()
+        env.close()
+        env = env_fn()

@@ -14,8 +14,6 @@ from .utils import agent_utils, two_d_maps
 from .utils.agent_layer import AgentLayer
 from .utils.controllers import PursuitPolicy, RandomPolicy, SingleActionPolicy
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 class Pursuit:
 
@@ -295,8 +293,8 @@ class Pursuit:
             agent_positions[(x, y)] += 1
 
         for (x, y) in evader_positions:
-            (pos_x, pos_y) = (int(self.pixel_scale * x + self.pixel_scale / 2),
-                              int(self.pixel_scale * y + self.pixel_scale / 2))
+            (pos_x, pos_y) = (self.pixel_scale * x + self.pixel_scale // 2,
+                              self.pixel_scale * y + self.pixel_scale // 2)
 
             agent_count = evader_positions[(x, y)]
             count_text: str
@@ -309,11 +307,11 @@ class Pursuit:
 
             text = font.render(count_text, False, (0, 255, 255))
 
-            self.screen.blit(text, (pos_x, pos_y - self.pixel_scale // 2))
+            self.screen.blit(text, (pos_x, pos_y))
 
         for (x, y) in agent_positions:
-            (pos_x, pos_y) = (int(self.pixel_scale * x + self.pixel_scale / 2),
-                              int(self.pixel_scale * y + self.pixel_scale / 2))
+            (pos_x, pos_y) = (self.pixel_scale * x + self.pixel_scale // 2,
+                              self.pixel_scale * y + self.pixel_scale // 2)
 
             agent_count = agent_positions[(x, y)]
             count_text: str
@@ -326,7 +324,7 @@ class Pursuit:
 
             text = font.render(count_text, False, (255, 255, 0))
 
-            self.screen.blit(text, (pos_x - self.pixel_scale // 3, pos_y - self.pixel_scale // 2))
+            self.screen.blit(text, (pos_x, pos_y - self.pixel_scale // 2))
 
     def render(self, mode="human"):
         if not self.renderOn:

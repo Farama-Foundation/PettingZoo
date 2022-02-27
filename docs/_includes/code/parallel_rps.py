@@ -2,7 +2,7 @@ import functools
 from gym.spaces import Discrete
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils import from_parallel
+from pettingzoo.utils import parallel_to_aec
 
 
 ROCK = 0
@@ -26,15 +26,17 @@ REWARD_MAP = {
 
 def env():
     '''
-    The env function wraps the environment in 3 wrappers by default. These
-    wrappers contain logic that is common to many pettingzoo environments.
-    We recommend you use at least the OrderEnforcingWrapper on your own environment
-    to provide sane error messages. You can find full documentation for these methods
+    The env function often wraps the environment in wrappers by default.
+    You can find full documentation for these methods
     elsewhere in the developer documentation.
     '''
     env = raw_env()
+    # This wrapper is only for environments which print results to the terminal
     env = wrappers.CaptureStdoutWrapper(env)
+    # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
+    # Provides a wide vareity of helpful user errors
+    # Strongly recommended
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 
@@ -45,7 +47,7 @@ def raw_env():
     function to convert from a ParallelEnv to an AEC env
     '''
     env = parallel_env()
-    env = from_parallel(env)
+    env = parallel_to_aec(env)
     return env
 
 

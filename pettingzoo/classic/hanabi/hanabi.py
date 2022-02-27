@@ -44,7 +44,12 @@ def env(**kwargs):
 class raw_env(AECEnv, EzPickle):
     """This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py."""
 
-    metadata = {'render.modes': ['human'], "name": "hanabi_v4"}
+    metadata = {
+        "render.modes": ["human"],
+        "name": "hanabi_v4",
+        "is_parallelizable": False,
+        "video.frames_per_second": 2,
+    }
 
     # set of all required params
     required_keys: set = {

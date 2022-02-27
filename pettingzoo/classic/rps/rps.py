@@ -8,8 +8,6 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def get_image(path):
     from os import path as os_path
@@ -44,7 +42,12 @@ class raw_env(AECEnv):
     Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
     The observation is simply the last opponent action."""
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "rps_v2"}
+    metadata = {
+        "render.modes": ["human", "rgb_array"],
+        "name": "rps_v2",
+        "is_parallelizable": True,
+        "video.frames_per_second": 2,
+    }
 
     def __init__(self, num_actions=3, max_cycles=15):
         self.max_cycles = max_cycles

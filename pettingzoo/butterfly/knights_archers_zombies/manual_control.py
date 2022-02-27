@@ -3,15 +3,13 @@ import time
 
 import pygame
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 
 def manual_control(**kwargs):
     from .knights_archers_zombies import env as _env
     env = _env(**kwargs)
     env.reset()
     done = False
-    FPS = 90
+    FPS = 15
     clock = pygame.time.Clock()
 
     cur_agent = 0
