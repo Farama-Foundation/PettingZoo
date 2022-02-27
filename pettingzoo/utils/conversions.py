@@ -10,38 +10,56 @@ from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 def parallel_wrapper_fn(env_fn):
     def par_fn(**kwargs):
         env = env_fn(**kwargs)
-        env = to_parallel_wrapper(env)
+        env = aec_to_parallel_wrapper(env)
         return env
     return par_fn
 
 
-def to_parallel(aec_env):
-    if isinstance(aec_env, from_parallel_wrapper):
+def aec_to_parallel(aec_env):
+    if isinstance(aec_env, parallel_to_aec_wrapper):
         return aec_env.env
     else:
-        par_env = to_parallel_wrapper(aec_env)
+        par_env = aec_to_parallel_wrapper(aec_env)
         return par_env
 
 
-def from_parallel(par_env):
-    if isinstance(par_env, to_parallel_wrapper):
+def parallel_to_aec(par_env):
+    if isinstance(par_env, aec_to_parallel_wrapper):
         return par_env.aec_env
     else:
-        aec_env = from_parallel_wrapper(par_env)
+        aec_env = parallel_to_aec_wrapper(par_env)
         ordered_env = OrderEnforcingWrapper(aec_env)
         return ordered_env
 
 
-def turn_based_to_parallel(aec_env):
-    if isinstance(aec_env, from_parallel_wrapper):
+def turn_based_aec_to_parallel(aec_env):
+    if isinstance(aec_env, parallel_to_aec_wrapper):
         return aec_env.env
     else:
-        par_env = turn_based_to_parallel_wrapper(aec_env)
+        par_env = turn_based_aec_to_parallel_wrapper(aec_env)
         return par_env
 
 
-class to_parallel_wrapper(ParallelEnv):
+def to_parallel(aec_env):
+    warnings.warn("The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.")
+    return aec_to_parallel(aec_env)
+
+
+def from_parallel(par_env):
+    warnings.warn("The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.")
+    return parallel_to_aec(par_env)
+
+
+class aec_to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
+        assert aec_env.metadata.get('is_parallelizable', False), \
+            "Converting from an AEC environment to a parallel environment " \
+            "with the to_parallel wrapper is not generally safe " \
+            "(the AEC environment should only update once at the end " \
+            "of each cycle). If you have confirmed that your AEC environment " \
+            "can be converted in this way, then please set the `is_parallelizable` "\
+            "key in your metadata to True"
+
         self.aec_env = aec_env
 
         try:
@@ -127,10 +145,12 @@ class to_parallel_wrapper(ParallelEnv):
         return self.aec_env.close()
 
 
-class from_parallel_wrapper(AECEnv):
+class parallel_to_aec_wrapper(AECEnv):
     def __init__(self, parallel_env):
-        self.metadata = parallel_env.metadata
         self.env = parallel_env
+
+        self.metadata = {**parallel_env.metadata}
+        self.metadata['is_parallelizable'] = True
 
         try:
             self.possible_agents = parallel_env.possible_agents
@@ -246,7 +266,7 @@ class from_parallel_wrapper(AECEnv):
         return str(self.env)
 
 
-class turn_based_to_parallel_wrapper(to_parallel_wrapper):
+class turn_based_aec_to_parallel_wrapper(aec_to_parallel_wrapper):
     def reset(self):
         self.aec_env.reset()
         self.agents = self.aec_env.agents[:]

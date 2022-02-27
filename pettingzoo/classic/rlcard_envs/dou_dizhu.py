@@ -22,7 +22,12 @@ def env(**kwargs):
 
 class raw_env(RLCardBase):
 
-    metadata = {'render.modes': ['human'], "name": "dou_dizhu_v4"}
+    metadata = {
+        "render.modes": ["human"],
+        "name": "dou_dizhu_v4",
+        "is_parallelizable": False,
+        "video.frames_per_second": 1,
+    }
 
     def __init__(self, opponents_hand_visible=False):
         self._opponents_hand_visible = opponents_hand_visible

@@ -9,9 +9,6 @@ from pettingzoo.utils import wrappers
 
 
 class RLCardBase(AECEnv):
-
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, name, num_players, obs_shape):
         super().__init__()
         self.name = name

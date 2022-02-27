@@ -21,7 +21,12 @@ def env():
 
 class raw_env(AECEnv):
 
-    metadata = {"render.modes": ["human"], "name": "checkers_v3"}
+    metadata = {
+        "render.modes": ["human"],
+        "name": "checkers_v3",
+        "is_parallelizable": False,
+        "video.frames_per_second": 2,
+    }
 
     move64_32 = {
         1: 0,

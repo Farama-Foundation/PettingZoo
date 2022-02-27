@@ -32,7 +32,12 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', 'rgb_array'], "name": "go_v5"}
+    metadata = {
+        "render.modes": ["human", "rgb_array"],
+        "name": "go_v5",
+        "is_parallelizable": False,
+        "video.frames_per_second": 2,
+    }
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)

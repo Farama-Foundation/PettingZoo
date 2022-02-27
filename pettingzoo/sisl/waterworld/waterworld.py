@@ -4,6 +4,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+from .waterworld_base import FPS
 from .waterworld_base import MAWaterWorld as _env
 
 
@@ -19,7 +20,12 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'waterworld_v3'}
+    metadata = {
+        'render.modes': ['human', "rgb_array"],
+        'name': 'waterworld_v3',
+        'is_parallelizable': True,
+        'video.frames_per_second': FPS,
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__()

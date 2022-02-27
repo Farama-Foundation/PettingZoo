@@ -8,7 +8,7 @@ from gym.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
-from pettingzoo.utils.conversions import from_parallel_wrapper, parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -22,7 +22,7 @@ def base_env_wrapper_fn(raw_env_fn):
 
 
 def BaseAtariEnv(**kwargs):
-    return from_parallel_wrapper(ParallelAtariEnv(**kwargs))
+    return parallel_to_aec_wrapper(ParallelAtariEnv(**kwargs))
 
 
 class ParallelAtariEnv(ParallelEnv, EzPickle):
@@ -59,7 +59,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.max_cycles = max_cycles
         if env_name is None:
             env_name = "custom_" + game
-        self.metadata = {'render.modes': ['human', 'rgb_array'], 'name': env_name}
+        self.metadata = {'render.modes': ['human', 'rgb_array'],
+                         'name': env_name,
+                         'video.frames_per_second': 60}
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -188,7 +190,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         image = self.ale.getScreenRGB()
         if mode == "human":
             import os
-            os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
             import pygame
             zoom_factor = 4
             if self._screen is None:

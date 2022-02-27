@@ -11,8 +11,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 from .manual_control import manual_control
 from .pursuit_base import Pursuit as _env
 
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
-
 
 def env(**kwargs):
     env = raw_env(**kwargs)
@@ -26,7 +24,12 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {"render.modes": ["human", "rgb_array"], "name": "pursuit_v4"}
+    metadata = {
+        "render.modes": ["human", "rgb_array"],
+        "name": "pursuit_v4",
+        'is_parallelizable': True,
+        'video.frames_per_second': 5,
+    }
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)

@@ -22,7 +22,12 @@ def env():
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human'], "name": "chess_v5"}
+    metadata = {
+        'render.modes': ['human'],
+        "name": "chess_v5",
+        "is_parallelizable": False,
+        "video.frames_per_second": 2,
+    }
 
     def __init__(self):
         super().__init__()
@@ -121,7 +126,6 @@ class raw_env(AECEnv):
 
     def render(self, mode='human'):
         print(self.board)
-        return str(self.board)
 
     def close(self):
         pass

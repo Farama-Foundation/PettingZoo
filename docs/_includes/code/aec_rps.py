@@ -27,15 +27,17 @@ REWARD_MAP = {
 
 def env():
     '''
-    The env function wraps the environment in 3 wrappers by default. These
-    wrappers contain logic that is common to many pettingzoo environments.
-    We recommend you use at least the OrderEnforcingWrapper on your own environment
-    to provide sane error messages. You can find full documentation for these methods
+    The env function often wraps the environment in wrappers by default.
+    You can find full documentation for these methods
     elsewhere in the developer documentation.
     '''
     env = raw_env()
+    # This wrapper is only for environments which print results to the terminal
     env = wrappers.CaptureStdoutWrapper(env)
+    # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
+    # Provides a wide vareity of helpful user errors
+    # Strongly recommended
     env = wrappers.OrderEnforcingWrapper(env)
     return env
 

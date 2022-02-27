@@ -1,4 +1,4 @@
-from pettingzoo.butterfly import pistonball_v4
+from pettingzoo.butterfly import pistonball_v6
 import numpy as np
 from array2gif import write_gif
 import os
@@ -12,9 +12,9 @@ def change_observation(obs):
     return obs
 
 
-DOWN = np.array([-1.])
-UP = np.array([1.])
-HOLD = np.array([0.])
+DOWN = np.array([-1.], dtype=np.float32)
+UP = np.array([1.], dtype=np.float32)
+HOLD = np.array([0.], dtype=np.float32)
 count = 0
 
 
@@ -59,7 +59,7 @@ def policy(obs):
 
 
 def main():
-    env = pistonball_v4.env(n_pistons=20, local_ratio=0, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
+    env = pistonball_v6.env(n_pistons=20, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125)
     total_reward = 0
     obs_list = []
     NUM_RESETS = 1

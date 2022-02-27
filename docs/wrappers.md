@@ -109,9 +109,9 @@ So you can for example train 4 copies of pettingzoo's pistonball environment in 
 
 ``` python
 from stable_baselines3 import PPO
-from pettingzoo.butterfly import pistonball_v4
+from pettingzoo.butterfly import pistonball_v6
 import supersuit as ss
-env = pistonball_v4.parallel_env()
+env = pistonball_v6.parallel_env()
 env = ss.color_reduction_v0(env, mode='B')
 env = ss.resize_v0(env, x_size=84, y_size=84)
 env = ss.frame_stack_v1(env, 3)

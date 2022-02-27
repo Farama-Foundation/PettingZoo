@@ -9,7 +9,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-inf,inf]"
 average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v7"
+import: "from pettingzoo.sisl import multiwalker_v8"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -24,7 +24,11 @@ agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 </div>
 
 
-In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. By default, the environment is done if any walker or the package falls. A walker is given a reward of -100 when they fail the game by either condition. If the walker falls, they are penalized an additional -10. If the `terminate_on_fall` setting is set to false, the game continues until the package falls. If the `remove_on_fall` setting is set to True, the walkers are removed from the scene after they fall. If the global reward mechanic is chosen, the mean of all rewards is given to each agent. Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 31 element vector containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment's duration is capped at 500 frames by default (can be controlled by the `max_cycles` setting).
+In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75 steps with the scaling factor of 130, the total reward under an optimal policy is around 300 . If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
+
+If a walker falls, it is penalized -10. By default, the environment is done if any walker or the package falls, or if the package goes beyond the left edge of the terrain. In all of these cases, each walker receives an additional reward of -100. If the `terminate_on_fall` setting is set to False, the game continues until the package falls. If the `remove_on_fall` setting is set to True, the walkers are removed from the environment after they fall. The environment is also done if package falls off the right edge of the terrain, with no additional reward or penalty.
+
+Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 31 element vector containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment's duration is capped at 500 frames by default (can be controlled by the `max_cycles` setting).
 
 
 
@@ -64,9 +68,8 @@ This table enumerates the observation space:
 ### Arguments
 
 ``` python
-multiwalker_v7.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3,
-local_ratio=1.0, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0,
-terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
+multiwalker_v8.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 ```
 
 
@@ -77,11 +80,11 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 `angle_noise`:  noise applied to agent rotational sensor observations
 
-`local_ratio`: Proportion of reward allocated locally vs distributed among all agents
-
 `forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
 
 `fall_reward`:  reward applied when an agent falls down
+
+`shared_reward`:  whether reward is distributed among all agents or allocated locally
 
 `terminate_reward`: reward applied to a walker for failing the environment
 
@@ -89,11 +92,13 @@ terminate_on_fall=True, remove_on_fall=True, max_cycles=500)
 
 `remove_on_fall`: Remove walker when it falls (only does anything when `terminate_on_fall` is False)
 
+`terrain_length`: length of terrain in number of steps
+
 `max_cycles`:  after max_cycles steps all agents will return done
 
 
 ### Version History
-
+* v8: Replaced local_ratio, fixed rewards, terrain length as an argument and documentation (1.15.0)
 * v7: Fixed problem with walker collisions (1.8.2)
 * v6: Fixed observation space and made large improvements to code quality (1.5.0)
 * v5: Fixes to reward structure, added arguments (1.4.2)

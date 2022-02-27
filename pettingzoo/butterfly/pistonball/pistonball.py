@@ -14,9 +14,9 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
 
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
-
 _image_library = {}
+
+FPS = 20
 
 
 def get_image(path):
@@ -43,10 +43,16 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv, EzPickle):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': "pistonball_v4"}
+    metadata = {
+        'render.modes': ['human', "rgb_array"],
+        'name': "pistonball_v6",
+        'is_parallelizable': True,
+        'video.frames_per_second': FPS
+    }
 
     def __init__(self, n_pistons=20, time_penalty=-0.1, continuous=True, random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3, ball_elasticity=1.5, max_cycles=125):
         EzPickle.__init__(self, n_pistons, time_penalty, continuous, random_drop, random_rotate, ball_mass, ball_friction, ball_elasticity, max_cycles)
+        self.dt = 1. / FPS
         self.n_pistons = n_pistons
         self.piston_head_height = 11
         self.piston_width = 40
@@ -406,10 +412,11 @@ class raw_env(AECEnv, EzPickle):
         else:
             self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action - 1)
 
-        self.space.step(1 / 20.0)
+        self.space.step(self.dt)
         if self._agent_selector.is_last():
             ball_min_x = int(self.ball.position[0] - self.ball_radius)
-            if ball_min_x <= self.wall_width + 1:
+            ball_next_x = self.ball.position[0] - self.ball_radius + self.ball.velocity[0] * self.dt
+            if ball_next_x <= self.wall_width + 1:
                 self.done = True
             # ensures that the ball can't pass through the wall
             ball_min_x = max(self.wall_width, ball_min_x)
