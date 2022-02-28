@@ -149,7 +149,7 @@ class raw_env(AECEnv, EzPickle):
         shape = (
             [const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3]
             if not self.vector_state
-            else [self.num_tracked, self.vector_width - 1]
+            else [self.num_tracked, self.vector_width]
         )
         low = 0 if not self.vector_state else -1.0
         high = 255 if not self.vector_state else 1.0
@@ -227,10 +227,17 @@ class raw_env(AECEnv, EzPickle):
 
     # Stab the Sword
     def move_sword(self):
-        for sword in self.sword_list:
-            sword_active = sword.update()
-            if not sword_active:
+        for sword in list(self.sword_list):
+            sword.update()
+            if not sword.is_active:
                 self.sword_list.remove(sword)
+
+    # Move arrows
+    def move_arrows(self):
+        for arrow in list(self.arrow_list):
+            arrow.update()
+            if not arrow.is_active:
+                self.arrow_list.remove(arrow)
 
     # Zombie Kills the Knight (also remove the sword)
     def zombit_hit_knight(self):
@@ -245,7 +252,7 @@ class raw_env(AECEnv, EzPickle):
                 if knight.agent_name not in self.kill_list:
                     self.kill_list.append(knight.agent_name)
 
-                for sword in self.sword_list:
+                for sword in list(self.sword_list):
                     if sword.knight == knight:
                         self.sword_list.remove(sword)
 
@@ -276,7 +283,7 @@ class raw_env(AECEnv, EzPickle):
 
     # Zombie Kills the Arrow
     def arrow_hit(self):
-        for arrow in self.arrow_list:
+        for arrow in list(self.arrow_list):
             zombie_arrow_list = pygame.sprite.spritecollide(
                 arrow, self.zombie_list, True
             )
@@ -287,19 +294,15 @@ class raw_env(AECEnv, EzPickle):
                 self.zombie_list.remove(zombie)
                 arrow.archer.score += 1
 
-            # Remove the arrow if it flies up off the screen
-            if arrow.rect.y < 0:
-                self.arrow_list.remove(arrow)
-
     # Zombie reaches the End of the Screen
     def zombie_endscreen(self, run, zombie_list):
         for zombie in zombie_list:
-            if zombie.rect.y > 690:
+            if zombie.rect.y > const.SCREEN_HEIGHT - const.ZOMBIE_Y_SPEED:
                 run = False
         return run
 
     # Zombie Kills all Players
-    def zombie_all_players(self, knight_list, archer_list, run):
+    def zombie_all_players(self, run, knight_list, archer_list):
         if not knight_list and not archer_list:
             run = False
         return run
@@ -354,7 +357,7 @@ class raw_env(AECEnv, EzPickle):
             rel_pos = all_pos - agent_pos
 
             # get norm of relative distance
-            norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True)
+            norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
 
             # kill dead things
             all_ids[is_dead] *= 0
@@ -497,11 +500,14 @@ class raw_env(AECEnv, EzPickle):
             # Stab the Sword
             self.move_sword()
 
-            # Zombie Kills the Arrow
-            self.arrow_hit()
+            # Move arrows
+            self.move_arrows()
 
             # Zombie Kills the Sword
             self.sword_hit()
+
+            # Zombie Kills the Arrow
+            self.arrow_hit()
 
             # Zombie Kills the Archer
             if self.killable_archers:
@@ -514,10 +520,6 @@ class raw_env(AECEnv, EzPickle):
             # update some zombies
             for zombie in self.zombie_list:
                 zombie.update()
-
-            # update some arrows
-            for arrow in self.arrow_list:
-                arrow.update()
 
             # Spawning Zombies at Random Location at every 100 iterations
             self.spawn_zombie()
@@ -609,7 +611,7 @@ class raw_env(AECEnv, EzPickle):
         self.run = self.zombie_endscreen(self.run, self.zombie_list)
 
         # Zombie Kills all Players
-        self.run = self.zombie_all_players(self.knight_list, self.archer_list, self.run)
+        self.run = self.zombie_all_players(self.run, self.knight_list, self.archer_list)
 
     def reinit(self):
         # Dictionaries for holding new players and their weapons

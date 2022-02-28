@@ -39,9 +39,8 @@ class Arrow(pygame.sprite.Sprite):
         else:
             self.rect.x = -100
 
+    @property
     def is_active(self):
-        if not self.archer.alive:
-            return False
         if self.rect.x < 0 or self.rect.y < 0:
             return False
         if self.rect.x > const.SCREEN_WIDTH or self.rect.y > const.SCREEN_HEIGHT:
@@ -98,4 +97,6 @@ class Sword(pygame.sprite.Sprite):
                 self.active = False
                 self.knight.attacking = False
 
+    @property
+    def is_active(self):
         return self.active
