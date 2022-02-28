@@ -53,7 +53,7 @@ class raw_env(AECEnv, EzPickle):
         pad_observation=True,
         line_death=False,
         max_cycles=900,
-        vector_state=False,
+        vector_state=True,
         use_typemasks=True,
         transformer=False,
     ):
