@@ -447,9 +447,9 @@ class MAWaterWorld():
 
         rebound_particles(self._pursuers, self.n_pursuers)
 
-        if is_last:
-            rebound_particles(self._evaders, self.n_evaders)
-            rebound_particles(self._poisons, self.n_poison)
+        # if is_last:
+        #     rebound_particles(self._evaders, self.n_evaders)
+        #     rebound_particles(self._poisons, self.n_poison)
 
         positions_pursuer = np.array([pursuer.position for pursuer in self._pursuers])
         positions_evader = np.array([evader.position for evader in self._evaders])
@@ -597,20 +597,74 @@ class MAWaterWorld():
             def move_objects(objects):
                 for obj in objects:
                     # Move objects
-                    obj.set_position(obj.position + self.cycle_time * obj.velocity)
+                    distance = abs(obj.position - 0.5) + obj._radius
+                    # if we are inside the circle
+                    if (distance[0] ** 2 + distance[1] ** 2 <= 0.25):
+                        obj.set_position(obj.position + self.cycle_time * obj.velocity)
 
-                    # TODO: vectorize this calculation the same way in the collision code
-                    distance = abs(obj.position - self.initial_obstacle_coord) + obj._radius
+                    # Bounce object if it hits a wall
+                    # Here we are trying to clip based on a circle, not a square
+                    # Given the current position of the obj (outside of the circle) and its velocity,
+                    # we want to "pull it back" along the direction of the velocity vector into the circle again
+                    # TODO: get rid of the 0.5 and 0.25 magic number
+
+                    # The code below will make a lot more sense if you reference this website
+                    # https://codereview.stackexchange.com/questions/86421/line-segment-to-circle-collision-algorithm
+                    # The code is optimized so that we find the intersection between the velocity vector and the circle
+                    # using vector calculus, and that intersection will be where the obj tangents the circle
+
+                    distance = abs(obj.position - 0.5) + obj._radius
+                    # if we are outside the circle
                     if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
-                        coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
-                                 -2 * obj.velocity[0] * distance[0] - 2 * obj.velocity[1] * distance[1],
-                                 distance[0] ** 2 + distance[1] ** 2 - 0.25]
-                        ans = np.roots(coeff)
-                        # we find the smallest positive t that confines in the circle
-                        if len(ans) > 0:
-                            t = min(abs(ans))
-                            obj.set_position(obj.position - t * obj.velocity)
-                            obj.set_velocity(-1 * obj.velocity)
+
+                        # again, you should reference the link above to make sure this velocity vector makes sense
+                        # We are treating the pursuer position as the starting point of the velocity vector
+                        if (obj.velocity[0] == 0 and obj.velocity[1] == 0) or (
+                                obj.velocity[0] == -0 and obj.velocity[1] == -0):
+                            if obj.position[0] == 0 and obj.position[1] == 0:
+                                continue
+                            else:
+                                v = 0.5 - obj.position
+                        else:
+                            v = -1 * obj.velocity
+
+                        # The determinant of this quadratic equation must always be non-negative because
+                        # there will always be an intersection between the velocity and the circle
+                        # In fact, there will always be two intersections
+                        # We are looking for the closest one, hence the t with the smaller absolute value
+                        q = self.initial_obstacle_coord
+                        p = obj.position
+                        a = v.dot(v)
+                        b = 2 * v.dot(p - q)
+                        c = p.dot(p) + q.dot(q) - 2 * p.dot(q) - 0.5 ** 2
+                        disc = b ** 2 - 4 * a * c
+                        assert disc >= 0
+                        sqrt_disc = math.sqrt(disc)
+                        sol = [(-b + sqrt_disc) / (2 * a), (-b - sqrt_disc) / (2 * a)]
+                        abs_sol = [abs(number) for number in sol]
+                        min_abs = min(abs_sol)
+                        idx = abs_sol.index(min_abs)
+                        t = sol[idx]
+
+                        # The last term is because the pursuer has a radius that we need to account for
+                        obj.set_position(
+                            obj.position + t * v + 2 * obj._radius / np.linalg.norm(0.5 - obj.position) * (
+                                        0.5 - obj.position))
+                        obj.set_velocity(v)
+                        distance = abs(obj.position - 0.5) + obj._radius
+
+                    # # TODO: vectorize this calculation the same way in the collision code
+                    # distance = abs(obj.position - self.initial_obstacle_coord) + obj._radius
+                    # if (distance[0] ** 2 + distance[1] ** 2 > 0.25):
+                    #     coeff = [obj.velocity[0] ** 2 + obj.velocity[1] ** 2,
+                    #              -2 * obj.velocity[0] * distance[0] - 2 * obj.velocity[1] * distance[1],
+                    #              distance[0] ** 2 + distance[1] ** 2 - 0.25]
+                    #     ans = np.roots(coeff)
+                    #     # we find the smallest positive t that confines in the circle
+                    #     if len(ans) > 0:
+                    #         t = min(abs(ans))
+                    #         obj.set_position(obj.position - t * obj.velocity)
+                    #         obj.set_velocity(-1 * obj.velocity)
 
             move_objects(self._evaders)
             move_objects(self._poisons)
