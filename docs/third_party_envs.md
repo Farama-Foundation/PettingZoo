@@ -84,3 +84,13 @@ PettingZoo environments for city grid power management, based on the CityLearn s
 [https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
 
 Multi-Agent racing environment that supports the PettingZoo API.
+
+## Mu Torere
+[https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
+
+PettingZoo based implementation of the Mū tōrere board game from New Zealand
+
+## skyjo_rl
+[https://github.com/michaelfeil/skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
+
+PettingZoo based implementation of the SkyJo board game
