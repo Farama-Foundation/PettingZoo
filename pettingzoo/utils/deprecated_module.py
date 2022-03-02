@@ -36,7 +36,7 @@ def depricated_handler(env_name, module_path, module_name):
         if is_env(alt_env_name):
             alt_name, alt_version = alt_env_name.rsplit("_v")
             if alt_name == name:
-                if int(alt_version) > int(version):
+                if int(alt_version) >= int(version):
                     return DeprecatedModule(name, version, alt_version)
                 else:
                     raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
