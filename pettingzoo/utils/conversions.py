@@ -32,6 +32,14 @@ def parallel_to_aec(par_env):
         return ordered_env
 
 
+def turn_based_aec_to_parallel(aec_env):
+    if isinstance(aec_env, parallel_to_aec_wrapper):
+        return aec_env.env
+    else:
+        par_env = turn_based_aec_to_parallel_wrapper(aec_env)
+        return par_env
+
+
 def to_parallel(aec_env):
     warnings.warn("The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.")
     return aec_to_parallel(aec_env)
@@ -256,3 +264,32 @@ class parallel_to_aec_wrapper(AECEnv):
 
     def __str__(self):
         return str(self.env)
+
+
+class turn_based_aec_to_parallel_wrapper(aec_to_parallel_wrapper):
+    def reset(self):
+        self.aec_env.reset()
+        self.agents = self.aec_env.agents[:]
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        return observations
+
+    def step(self, actions):
+        if not self.agents:
+            return {}, {}, {}, {}
+        self.aec_env.step(actions[self.aec_env.agent_selection])
+        rewards = {**self.aec_env.rewards}
+        dones = {**self.aec_env.dones}
+        infos = {**self.aec_env.infos}
+        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+
+        while self.aec_env.agents:
+            if self.aec_env.dones[self.aec_env.agent_selection]:
+                self.aec_env.step(None)
+            else:
+                break
+            # no need to update data after null step (nothing should change other than the active agent)
+
+        for agent in self.aec_env.agents:
+            infos[agent]["active_agent"] = self.aec_env.agent_selection
+        self.agents = self.aec_env.agents
+        return observations, rewards, dones, infos
