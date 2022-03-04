@@ -10,7 +10,7 @@ observation-shape: "(8,8,20)"
 observation-values: "[0,1]"
 num-states: "?"
 import: "from pettingzoo.classic.chess_v5"
-agent-labels: "agents= ['player_1', 'player_2']"
+agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 <div class="docu-info" markdown="1">
