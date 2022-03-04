@@ -39,8 +39,8 @@ extras["all"] = extras["atari"] + extras["classic"] + extras["butterfly"] + extr
 setup(
     name='PettingZoo',
     version=get_version(),
-    author='PettingZoo Community',
-    author_email="jkterry@umd.edu",
+    author='Farama Foundation',
+    author_email="jkterry@farama.org",
     description="Gym for multi-agent reinforcement learning",
     url='https://github.com/Farama-Foundation/PettingZoo',
     long_description=long_description,
