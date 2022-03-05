@@ -7,7 +7,6 @@ from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
 from pettingzoo import AECEnv
-from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
