@@ -102,7 +102,7 @@ class raw_env(AECEnv, EzPickle):
         self.sprite_img_heights = [40, 40, 46, 48, 32, 54, 48, 53]
         self.metadata = {
             'render.modes': ['human', "rgb_array"],
-            'name': "prison_v3",
+            'name': "prison_v4",
             'is_parallelizable': True,
             'video.frames_per_second': FPS,
         }

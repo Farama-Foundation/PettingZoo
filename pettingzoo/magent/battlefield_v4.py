@@ -35,7 +35,7 @@ env = make_env(raw_env)
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render.modes": ["human", "rgb_array"],
-        'name': "battlefield_v3",
+        'name': "battlefield_v4",
         "video.frames_per_second": 5,
     }
 
