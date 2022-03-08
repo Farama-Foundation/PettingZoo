@@ -9,7 +9,7 @@ observation-shape: "(13,13,5)"
 observation-values: "[0,2]"
 state-shape: "(80, 80, 5)"
 state-values: "(0, 2)"
-import: "from pettingzoo.magent import battlefield_v3"
+import: "from pettingzoo.magent import battlefield_v4"
 agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
