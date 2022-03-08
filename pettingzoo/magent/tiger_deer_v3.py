@@ -81,7 +81,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         'name': "tiger_deer_v3",
-        "video_fps": 5,
+        "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):

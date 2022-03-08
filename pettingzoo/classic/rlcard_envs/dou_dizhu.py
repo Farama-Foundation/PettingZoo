@@ -26,7 +26,7 @@ class raw_env(RLCardBase):
         "render_modes": ["human"],
         "name": "dou_dizhu_v4",
         "is_parallelizable": False,
-        "video_fps": 1,
+        "render_fps": 1,
     }
 
     def __init__(self, opponents_hand_visible=False):

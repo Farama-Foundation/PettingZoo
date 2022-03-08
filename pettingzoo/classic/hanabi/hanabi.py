@@ -48,7 +48,7 @@ class raw_env(AECEnv, EzPickle):
         "render_modes": ["human"],
         "name": "hanabi_v4",
         "is_parallelizable": False,
-        "video_fps": 2,
+        "render_fps": 2,
     }
 
     # set of all required params

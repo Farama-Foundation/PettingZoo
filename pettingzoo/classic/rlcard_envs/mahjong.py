@@ -25,7 +25,7 @@ class raw_env(RLCardBase):
         "render_modes": ["human"],
         "name": "mahjong_v4",
         "is_parallelizable": False,
-        "video_fps": 1,
+        "render_fps": 1,
     }
 
     def __init__(self):

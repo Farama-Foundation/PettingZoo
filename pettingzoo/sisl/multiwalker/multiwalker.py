@@ -25,7 +25,7 @@ class raw_env(AECEnv, EzPickle):
         'render_modes': ['human', "rgb_array"],
         'name': 'multiwalker_v8',
         'is_parallelizable': True,
-        'video_fps': FPS,
+        'render_fps': FPS,
     }
 
     def __init__(self, *args, **kwargs):

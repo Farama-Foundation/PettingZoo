@@ -27,7 +27,7 @@ class raw_env(RLCardBase):
         "render_modes": ["human"],
         "name": "uno_v4",
         "is_parallelizable": False,
-        "video_fps": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, opponents_hand_visible=False):

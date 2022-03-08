@@ -61,7 +61,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             env_name = "custom_" + game
         self.metadata = {'render_modes': ['human', 'rgb_array'],
                          'name': env_name,
-                         'video_fps': 60}
+                         'render_fps': 60}
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()

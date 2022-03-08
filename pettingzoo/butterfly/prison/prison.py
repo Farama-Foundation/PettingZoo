@@ -104,7 +104,7 @@ class raw_env(AECEnv, EzPickle):
             'render_modes': ['human', "rgb_array"],
             'name': "prison_v4",
             'is_parallelizable': True,
-            'video_fps': FPS,
+            'render_fps': FPS,
         }
         self.infos = {}
         self.rendering = False
