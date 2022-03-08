@@ -34,15 +34,9 @@ env = make_env(raw_env)
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
-<<<<<<< HEAD:pettingzoo/magent/battlefield_v3.py
         "render_modes": ["human", "rgb_array"],
-        'name': "battlefield_v3",
-        "render_fps": 5,
-=======
-        "render.modes": ["human", "rgb_array"],
         'name': "battlefield_v4",
-        "video.frames_per_second": 5,
->>>>>>> 2c4876333bacceaac9080f3b4fbc5fd15ee10e48:pettingzoo/magent/battlefield_v4.py
+        "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
