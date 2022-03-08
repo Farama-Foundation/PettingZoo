@@ -10,7 +10,7 @@ observation-values: "(0, 255) or (-300, 300)"
 state-shape: "(650, 750, 3)"
 state-values: "(0, 255)"
 average-total-reward: "2.77"
-import: "from pettingzoo.butterfly import prison_v3"
+import: "from pettingzoo.butterfly import prison_v4"
 agent-labels: "agents= ['prisoner_0', 'prisoner_1', ..., 'prisoner_7']"
 ---
 
@@ -39,7 +39,7 @@ Select different aliens with 'W', 'A', 'S' or 'D'. Move the selected alien left 
 ### Arguments
 
 ``` python
-prison_v3.env(vector_observation=False, continuous=False, synchronized_start=False,
+prison_v4.env(vector_observation=False, continuous=False, synchronized_start=False,
 identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 ```
 
@@ -61,6 +61,7 @@ identical_aliens=False, max_cycles=150, num_floors=4, random_aliens=False)
 
 ### Version History
 
+* v4: Fixed state() space (1.16.0)
 * v3: Changed default argument for `max_cycles`  (1.6.0)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
 * v1: Fix to continuous mode (1.0.1)
