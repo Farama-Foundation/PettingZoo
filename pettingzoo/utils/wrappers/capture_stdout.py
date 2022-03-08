@@ -5,7 +5,7 @@ from .base import BaseWrapper
 class CaptureStdoutWrapper(BaseWrapper):
     def __init__(self, env):
         super().__init__(env)
-        self.metadata['render.modes'].append("ansi")
+        self.metadata['render_modes'].append("ansi")
 
     def render(self, mode="human"):
         if mode == "ansi":

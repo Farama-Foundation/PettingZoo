@@ -46,7 +46,7 @@ def perform_ci_test(env_id, num_cycles, render, manual_control, performance, sav
 
     if render:
         try:
-            assert len(_env.metadata.get('render.modes')) >= 2
+            assert len(_env.metadata.get('render_modes')) >= 2
             render_test(_env)
         except Exception as e:
             error_collected.append("Render Test:" + str(e))
