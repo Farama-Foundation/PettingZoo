@@ -46,7 +46,7 @@ class AECEnv:
     def render(self, mode='human'):
         '''
         Displays a rendered frame from the environment, if supported.
-        Alternate render_modes in the default environments are `'rgb_array'`
+        Alternate render modes in the default environments are `'rgb_array'`
         which returns a numpy array and is supported by all environments outside of classic,
         and `'ansi'` which returns the strings printed (specific to classic environments).
         '''
@@ -243,7 +243,7 @@ class ParallelEnv:
     def render(self, mode="human"):
         '''
         Displays a rendered frame from the environment, if supported.
-        Alternate render_modes in the default environments are `'rgb_array'`
+        Alternate render modes in the default environments are `'rgb_array'`
         which returns a numpy array and is supported by all environments outside
         of classic, and `'ansi'` which returns the strings printed
         (specific to classic environments).
