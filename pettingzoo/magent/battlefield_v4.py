@@ -37,7 +37,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
 <<<<<<< HEAD:pettingzoo/magent/battlefield_v3.py
         "render_modes": ["human", "rgb_array"],
         'name': "battlefield_v3",
-        "video_fps": 5,
+        "render_fps": 5,
 =======
         "render.modes": ["human", "rgb_array"],
         'name': "battlefield_v4",

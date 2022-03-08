@@ -38,7 +38,7 @@ class raw_env(AECEnv, EzPickle):
         "render_modes": ["human", "rgb_array"],
         "name": "knights_archers_zombies_v9",
         "is_parallelizable": True,
-        "video_fps": const.FPS,
+        "render_fps": const.FPS,
     }
 
     def __init__(

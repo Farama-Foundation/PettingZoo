@@ -46,7 +46,7 @@ class raw_env(AECEnv):
         "render_modes": ["human", "rgb_array"],
         "name": "rps_v2",
         "is_parallelizable": True,
-        "video_fps": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, num_actions=3, max_cycles=15):

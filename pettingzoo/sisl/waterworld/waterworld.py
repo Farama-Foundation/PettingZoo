@@ -24,7 +24,7 @@ class raw_env(AECEnv):
         'render_modes': ['human', "rgb_array"],
         'name': 'waterworld_v3',
         'is_parallelizable': True,
-        'video_fps': FPS,
+        'render_fps': FPS,
     }
 
     def __init__(self, *args, **kwargs):

@@ -28,7 +28,7 @@ class SimpleEnv(AECEnv):
         self.metadata = {
             'render_modes': ['human', 'rgb_array'],
             'is_parallelizable': True,
-            'video_fps': 10
+            'render_fps': 10
         }
 
         self.max_cycles = max_cycles

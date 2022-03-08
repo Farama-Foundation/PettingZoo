@@ -33,7 +33,7 @@ class raw_env(AECEnv):
         "render_modes": ["human", "rgb_array"],
         "name": "connect_four_v3",
         "is_parallelizable": False,
-        "video_fps": 2,
+        "render_fps": 2,
     }
 
     def __init__(self):

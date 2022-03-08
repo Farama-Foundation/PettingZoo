@@ -23,7 +23,7 @@ class raw_env(AECEnv):
         "render_modes": ["human"],
         "name": "tictactoe_v3",
         "is_parallelizable": False,
-        "video_fps": 1,
+        "render_fps": 1,
     }
 
     def __init__(self):

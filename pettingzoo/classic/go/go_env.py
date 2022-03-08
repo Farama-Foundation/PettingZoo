@@ -36,7 +36,7 @@ class raw_env(AECEnv):
         "render_modes": ["human", "rgb_array"],
         "name": "go_v5",
         "is_parallelizable": False,
-        "video_fps": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
