@@ -35,10 +35,10 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
 
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "knights_archers_zombies_v9",
         "is_parallelizable": True,
-        "video.frames_per_second": const.FPS,
+        "render_fps": const.FPS,
     }
 
     def __init__(

@@ -20,10 +20,10 @@ def env(**kwargs):
 
 class raw_env(AECEnv):
     metadata = {
-        "render.modes": ["human"],
+        "render_modes": ["human"],
         "name": "backgammon_v3",
         "is_parallelizable": False,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self):

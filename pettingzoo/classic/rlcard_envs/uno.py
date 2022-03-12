@@ -24,10 +24,10 @@ def env(**kwargs):
 class raw_env(RLCardBase):
 
     metadata = {
-        "render.modes": ["human"],
+        "render_modes": ["human"],
         "name": "uno_v4",
         "is_parallelizable": False,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, opponents_hand_visible=False):

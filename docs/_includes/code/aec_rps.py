@@ -44,12 +44,12 @@ def env():
 
 class raw_env(AECEnv):
     '''
-    The metadata holds environment constants. From gym, we inherit the "render.modes",
+    The metadata holds environment constants. From gym, we inherit the "render_modes",
     metadata which specifies which modes can be put into the render() method.
     At least human mode should be supported.
     The "name" metadata allows the environment to be pretty printed.
     '''
-    metadata = {'render.modes': ['human'], "name": "rps_v2"}
+    metadata = {'render_modes': ['human'], "name": "rps_v2"}
 
     def __init__(self):
         '''
