@@ -23,10 +23,10 @@ def env():
 class raw_env(AECEnv):
 
     metadata = {
-        'render.modes': ['human'],
+        'render_modes': ['human'],
         "name": "chess_v5",
         "is_parallelizable": False,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self):

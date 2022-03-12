@@ -23,7 +23,7 @@ def get_type(agent):
 
 class raw_env(AECEnv):
 
-    metadata = {"render.modes": ["human"], "name": "generated_agents_env_v0"}
+    metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
     def __init__(self, max_cycles=100):
         super().__init__()

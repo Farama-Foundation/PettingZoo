@@ -25,10 +25,10 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
 
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "pursuit_v4",
         'is_parallelizable': True,
-        'video.frames_per_second': 5,
+        'render_fps': 5,
     }
 
     def __init__(self, *args, **kwargs):

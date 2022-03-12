@@ -30,10 +30,10 @@ def env():
 
 class raw_env(AECEnv):
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "connect_four_v3",
         "is_parallelizable": False,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self):
