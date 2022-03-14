@@ -201,43 +201,44 @@ class raw_env(AECEnv, EzPickle):
                 self.zombie_list.add(zombie)
                 self.zombie_spawn_rate = 0
 
-    # Spawn Swords for Players
-    def action_sword(self, action, agent):
-        if (
-            action == 5
-            and agent.is_knight
-            and agent.weapon_timeout > const.SWORD_TIMEOUT
-        ):
-            # make sure that the current knight doesn't have a sword already
-            for sword in self.sword_list:
-                if sword.knight == agent:
-                    return
+    # actuate weapons
+    def action_weapon(self, action, agent):
+        if action == 5:
+            if agent.is_knight:
+                if (agent.weapon_timeout > const.SWORD_TIMEOUT):
+                    # make sure that the current knight doesn't have a sword already
+                    if len(agent.weapons) < 0:
+                       agent.weapons.add(Sword(agent))
 
-            self.sword_list.add(Sword(agent))
+            elif agent.is_archer:
+                if len(agent.weapons) < self.num_active_arrows:
+                    if (agent.weapon_timeout > const.ARROW_TIMEOUT):
+                        agent.weapons.add(Arrow(agent))
 
-    # Spawn Arrows for Players
-    def action_arrow(self, action, agent):
-        if len(self.arrow_list) < self.max_arrows:
-            if (
-                action == 5
-                and agent.is_archer
-                and agent.weapon_timeout > const.ARROW_TIMEOUT
-            ):
-                self.arrow_list.add(Arrow(agent))
+    # move weapons
+    def update_weapons(self):
+        for agent in self.agent_list:
+            for weapon in list(agent.weapons):
+                weapon.update()
 
-    # Stab the Sword
-    def move_sword(self):
-        for sword in list(self.sword_list):
-            sword.update()
-            if not sword.is_active:
-                self.sword_list.remove(sword)
+                if not weapon.is_active:
+                    agent.weapons.remove(weapon)
 
-    # Move arrows
-    def move_arrows(self):
-        for arrow in list(self.arrow_list):
-            arrow.update()
-            if not arrow.is_active:
-                self.arrow_list.remove(arrow)
+    @property
+    def num_active_arrows(self):
+        num_arrows = 0
+        for agent in self.agent_list:
+            if agent.is_archer:
+                num_arrows += len(agent.weapons)
+        return num_arrows
+
+    @property
+    def num_active_swords(self):
+        num_swords = 0
+        for agent in self.agent_list:
+            if agent.is_knight:
+                num_swords += len(agent.weapons)
+        return num_swords
 
     # Zombie Kills the Knight (also remove the sword)
     def zombit_hit_knight(self):
@@ -249,12 +250,12 @@ class raw_env(AECEnv, EzPickle):
             for knight in zombie_knight_list:
                 knight.alive = False
                 self.knight_list.remove(knight)
+
+                for sword in list(knight.weapons):
+                    knight.weapons.remove(sword)
+
                 if knight.agent_name not in self.kill_list:
                     self.kill_list.append(knight.agent_name)
-
-                for sword in list(self.sword_list):
-                    if sword.knight == knight:
-                        self.sword_list.remove(sword)
 
     # Zombie Kills the Archer
     def zombie_hit_archer(self):
@@ -271,28 +272,30 @@ class raw_env(AECEnv, EzPickle):
 
     # Zombie Kills the Sword
     def sword_hit(self):
-        for sword in self.sword_list:
-            zombie_sword_list = pygame.sprite.spritecollide(
-                sword, self.zombie_list, True
-            )
+        for knight in self.knight_list:
+            for sword in knight.weapons:
+                zombie_sword_list = pygame.sprite.spritecollide(
+                    sword, self.zombie_list, True
+                )
 
-            # For each zombie hit, remove the sword and add to the score
-            for zombie in zombie_sword_list:
-                self.zombie_list.remove(zombie)
-                sword.knight.score += 1
+                for zombie in zombie_sword_list:
+                    self.zombie_list.remove(zombie)
+                    sword.knight.score += 1
 
     # Zombie Kills the Arrow
     def arrow_hit(self):
-        for arrow in list(self.arrow_list):
-            zombie_arrow_list = pygame.sprite.spritecollide(
-                arrow, self.zombie_list, True
-            )
+        for agent in self.agent_list:
+            if agent.is_archer:
+                for arrow in list(agent.weapons):
+                    zombie_arrow_list = pygame.sprite.spritecollide(
+                        arrow, self.zombie_list, True
+                    )
 
-            # For each zombie hit, remove the arrow, zombie and add to the score
-            for zombie in zombie_arrow_list:
-                self.arrow_list.remove(arrow)
-                self.zombie_list.remove(zombie)
-                arrow.archer.score += 1
+                    # For each zombie hit, remove the arrow, zombie and add to the score
+                    for zombie in zombie_arrow_list:
+                        agent.weapons.remove(arrow)
+                        self.zombie_list.remove(zombie)
+                        arrow.archer.score += 1
 
     # Zombie reaches the End of the Screen
     def zombie_endscreen(self, run, zombie_list):
@@ -420,30 +423,34 @@ class raw_env(AECEnv, EzPickle):
                     state.append(np.zeros(self.vector_width))
 
         # handle swords
-        for sword in self.sword_list:
-            if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width)
-                typemask[4] = 1.0
+        for agent in self.agent_list:
+            if agent.is_knight:
+                for sword in agent.weapons:
+                    if self.use_typemasks:
+                        typemask = np.zeros(self.typemask_width)
+                        typemask[4] = 1.0
 
-            vector = np.concatenate((typemask, sword.vector_state), axis=0)
-            state.append(vector)
+                    vector = np.concatenate((typemask, sword.vector_state), axis=0)
+                    state.append(vector)
 
         # handle empty swords
         if not self.transformer:
-            state.extend(repeat(np.zeros(self.vector_width), self.num_knights - len(self.sword_list)))
+            state.extend(repeat(np.zeros(self.vector_width), self.num_knights - self.num_active_swords))
 
         # handle arrows
-        for arrow in self.arrow_list:
-            if self.use_typemasks:
-                typemask = np.zeros(self.typemask_width)
-                typemask[3] = 1.0
+        for agent in self.agent_list:
+            if agent.is_archer:
+                for arrow in agent.weapons:
+                    if self.use_typemasks:
+                        typemask = np.zeros(self.typemask_width)
+                        typemask[3] = 1.0
 
-            vector = np.concatenate((typemask, arrow.vector_state), axis=0)
-            state.append(vector)
+                    vector = np.concatenate((typemask, arrow.vector_state), axis=0)
+                    state.append(vector)
 
         # handle empty arrows
         if not self.transformer:
-            state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - len(self.arrow_list)))
+            state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - self.num_active_arrows))
 
         # handle zombies
         for zombie in self.zombie_list:
@@ -488,20 +495,14 @@ class raw_env(AECEnv, EzPickle):
                 self.knight_list.remove(agent)
             self.kill_list.append(agent.agent_name)
 
-        # actuate the sword
-        self.action_sword(action, agent)
-
-        # actuate the arrow
-        self.action_arrow(action, agent)
+        # actuate the weapon if necessary
+        self.action_weapon(action, agent)
 
         # Do these things once per cycle
         if self._agent_selector.is_last():
 
-            # Stab the Sword
-            self.move_sword()
-
-            # Move arrows
-            self.move_arrows()
+            # Update the weapons
+            self.update_weapons()
 
             # Zombie Kills the Sword
             self.sword_hit()
@@ -579,8 +580,8 @@ class raw_env(AECEnv, EzPickle):
 
         # draw all the sprites
         self.zombie_list.draw(self.WINDOW)
-        self.arrow_list.draw(self.WINDOW)
-        self.sword_list.draw(self.WINDOW)
+        for agent in self.agent_list:
+            agent.weapons.draw(self.WINDOW)
         self.archer_list.draw(self.WINDOW)
         self.knight_list.draw(self.WINDOW)
 
@@ -626,8 +627,6 @@ class raw_env(AECEnv, EzPickle):
 
         # Creating Sprite Groups
         self.zombie_list = pygame.sprite.Group()
-        self.arrow_list = pygame.sprite.Group()
-        self.sword_list = pygame.sprite.Group()
         self.archer_list = pygame.sprite.Group()
         self.knight_list = pygame.sprite.Group()
 

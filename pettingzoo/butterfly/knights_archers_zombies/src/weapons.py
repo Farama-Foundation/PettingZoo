@@ -22,6 +22,8 @@ class Arrow(pygame.sprite.Sprite):
         # reset the archer timeout when arrow fired
         archer.weapon_timeout = 0
 
+        self.archer.weapons.append(self)
+
     @property
     def vector_state(self):
         return np.array(
@@ -60,6 +62,9 @@ class Sword(pygame.sprite.Sprite):
 
         # phase of the sword, starts at the left most part
         self.phase = const.MAX_PHASE
+
+        # add weapon to knight
+        self.knight.weapons.append(self)
 
     @property
     def vector_state(self):
