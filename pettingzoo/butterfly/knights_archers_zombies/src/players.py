@@ -34,6 +34,8 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.weapon_timeout = 99
 
+        self.weapons = pygame.sprite.Group()
+
     @property
     def vector_state(self):
         return np.array(
