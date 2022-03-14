@@ -208,12 +208,13 @@ class raw_env(AECEnv, EzPickle):
             if agent.is_knight:
                 if (agent.weapon_timeout > const.SWORD_TIMEOUT):
                     # make sure that the current knight doesn't have a sword already
-                    if len(agent.weapons) < 0:
+                    if len(agent.weapons) == 0:
                        agent.weapons.add(Sword(agent))
 
-            elif agent.is_archer:
-                if len(agent.weapons) < self.num_active_arrows:
-                    if (agent.weapon_timeout > const.ARROW_TIMEOUT):
+            if agent.is_archer:
+                if (agent.weapon_timeout > const.ARROW_TIMEOUT):
+                    # make sure that the screen has less arrows than allowable
+                    if self.num_active_arrows < self.max_arrows:
                         agent.weapons.add(Arrow(agent))
 
     # move weapons
@@ -250,13 +251,12 @@ class raw_env(AECEnv, EzPickle):
 
             for knight in zombie_knight_list:
                 knight.alive = False
-                self.knight_list.remove(knight)
-
-                for sword in list(knight.weapons):
-                    knight.weapons.remove(sword)
+                knight.weapons.empty()
 
                 if knight.agent_name not in self.kill_list:
                     self.kill_list.append(knight.agent_name)
+
+                self.knight_list.remove(knight)
 
     # Zombie Kills the Archer
     def zombie_hit_archer(self):
@@ -493,6 +493,7 @@ class raw_env(AECEnv, EzPickle):
             if agent in self.archer_list:
                 self.archer_list.remove(agent)
             else:
+                agent.weapons.empty()
                 self.knight_list.remove(agent)
             self.kill_list.append(agent.agent_name)
 
