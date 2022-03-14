@@ -54,7 +54,7 @@ class raw_env(AECEnv, EzPickle):
         line_death=False,
         max_cycles=900,
         vector_state=True,
-        use_typemasks=True,
+        use_typemasks=False,
         transformer=False,
     ):
         EzPickle.__init__(
@@ -82,7 +82,7 @@ class raw_env(AECEnv, EzPickle):
         self.num_tracked = (
             num_archers + num_knights + max_zombies + num_knights + max_arrows
         )
-        self.use_typemasks = use_typemasks
+        self.use_typemasks = True if transformer else use_typemasks
         self.typemask_width = 6
         self.vector_width = 4 + self.typemask_width if use_typemasks else 4
 
