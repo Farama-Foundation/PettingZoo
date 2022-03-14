@@ -531,10 +531,10 @@ class raw_env(AECEnv, EzPickle):
             self.fences.append(f)
 
         self.metadata = {
-            "render.modes": ["human", "rgb_array"],
+            "render_modes": ["human", "rgb_array"],
             'name': "prospector_v4",
             'is_parallelizable': True,
-            'video.frames_per_second': const.FPS,
+            'render_fps': const.FPS,
         }
 
         self.action_spaces = {}

@@ -43,10 +43,10 @@ class raw_env(AECEnv):
     The observation is simply the last opponent action."""
 
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "rps_v2",
         "is_parallelizable": True,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, num_actions=3, max_cycles=15):

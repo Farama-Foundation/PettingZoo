@@ -33,10 +33,10 @@ def env(**kwargs):
 class raw_env(AECEnv):
 
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "go_v5",
         "is_parallelizable": False,
-        "video.frames_per_second": 2,
+        "render_fps": 2,
     }
 
     def __init__(self, board_size: int = 19, komi: float = 7.5):
