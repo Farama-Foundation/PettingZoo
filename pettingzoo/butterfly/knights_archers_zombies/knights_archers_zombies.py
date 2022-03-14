@@ -206,13 +206,13 @@ class raw_env(AECEnv, EzPickle):
     def action_weapon(self, action, agent):
         if action == 5:
             if agent.is_knight:
-                if (agent.weapon_timeout > const.SWORD_TIMEOUT):
+                if agent.weapon_timeout > const.SWORD_TIMEOUT:
                     # make sure that the current knight doesn't have a sword already
                     if len(agent.weapons) == 0:
-                       agent.weapons.add(Sword(agent))
+                        agent.weapons.add(Sword(agent))
 
             if agent.is_archer:
-                if (agent.weapon_timeout > const.ARROW_TIMEOUT):
+                if agent.weapon_timeout > const.ARROW_TIMEOUT:
                     # make sure that the screen has less arrows than allowable
                     if self.num_active_arrows < self.max_arrows:
                         agent.weapons.add(Arrow(agent))
@@ -436,7 +436,12 @@ class raw_env(AECEnv, EzPickle):
 
         # handle empty swords
         if not self.transformer:
-            state.extend(repeat(np.zeros(self.vector_width), self.num_knights - self.num_active_swords))
+            state.extend(
+                repeat(
+                    np.zeros(self.vector_width),
+                    self.num_knights - self.num_active_swords,
+                )
+            )
 
         # handle arrows
         for agent in self.agent_list:
@@ -451,7 +456,12 @@ class raw_env(AECEnv, EzPickle):
 
         # handle empty arrows
         if not self.transformer:
-            state.extend(repeat(np.zeros(self.vector_width), self.max_arrows - self.num_active_arrows))
+            state.extend(
+                repeat(
+                    np.zeros(self.vector_width),
+                    self.max_arrows - self.num_active_arrows,
+                )
+            )
 
         # handle zombies
         for zombie in self.zombie_list:
@@ -464,7 +474,12 @@ class raw_env(AECEnv, EzPickle):
 
         # handle empty zombies
         if not self.transformer:
-            state.extend(repeat(np.zeros(self.vector_width), self.max_zombies - len(self.zombie_list)))
+            state.extend(
+                repeat(
+                    np.zeros(self.vector_width),
+                    self.max_zombies - len(self.zombie_list),
+                )
+            )
 
         return np.stack(state, axis=0)
 

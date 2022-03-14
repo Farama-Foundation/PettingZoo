@@ -23,7 +23,9 @@ class ManualPolicy:
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
-        assert agent == self.agent, f'Manual Policy only applied to agent: {self.agent}, but got tag for {agent}.'
+        assert (
+            agent == self.agent
+        ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
 
         # set the default action
         action = self.default_action
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     manual_policy = knights_archers_zombies_v9.ManualPolicy(env)
 
     for agent in env.agent_iter():
-        clock.tick(env.metadata['video.frames_per_second'])
+        clock.tick(env.metadata["video.frames_per_second"])
 
         observation, reward, done, info = env.last()
 
