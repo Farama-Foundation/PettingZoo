@@ -7,7 +7,6 @@ from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
 from pettingzoo import AECEnv
-from pettingzoo.magent.render import Renderer
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
@@ -80,9 +79,9 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         'name': "tiger_deer_v3",
-        "video.frames_per_second": 5,
+        "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):

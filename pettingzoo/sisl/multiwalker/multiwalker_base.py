@@ -265,8 +265,8 @@ class BipedalWalker(Agent):
 
 class MultiWalkerEnv():
 
-    metadata = {'render.modes': [
-        'human', 'rgb_array'], 'video.frames_per_second': FPS}
+    metadata = {'render_modes': [
+        'human', 'rgb_array'], 'render_fps': FPS}
 
     hardcore = False
 

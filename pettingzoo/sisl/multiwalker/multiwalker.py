@@ -22,10 +22,10 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
 
     metadata = {
-        'render.modes': ['human', "rgb_array"],
+        'render_modes': ['human', "rgb_array"],
         'name': 'multiwalker_v8',
         'is_parallelizable': True,
-        'video.frames_per_second': FPS,
+        'render_fps': FPS,
     }
 
     def __init__(self, *args, **kwargs):

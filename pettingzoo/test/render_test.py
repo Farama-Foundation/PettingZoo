@@ -26,8 +26,8 @@ def collect_render_results(env, mode):
 
 def render_test(env_fn, custom_tests={}):
     env = env_fn()
-    render_modes = env.metadata.get('render.modes')[:]
-    assert render_modes is not None, "Environment's that support rendering must define render modes in metadata"
+    render_modes = env.metadata.get('render_modes')[:]
+    assert render_modes is not None, "Environments that support rendering must define render_modes in metadata"
     for mode in render_modes:
         render_results = collect_render_results(env, mode)
         for res in render_results:

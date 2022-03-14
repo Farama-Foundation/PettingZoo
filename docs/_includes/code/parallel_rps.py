@@ -52,7 +52,7 @@ def raw_env():
 
 
 class parallel_env(ParallelEnv):
-    metadata = {'render.modes': ['human'], "name": "rps_v2"}
+    metadata = {'render_modes': ['human'], "name": "rps_v2"}
 
     def __init__(self):
         '''
