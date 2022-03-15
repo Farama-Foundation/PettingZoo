@@ -15,6 +15,7 @@ from .rlcard_base import RLCardBase
 
 # Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)
 
+
 def get_image(path):
     from os import path as os_path
     cwd = os_path.dirname(__file__)
