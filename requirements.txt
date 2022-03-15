@@ -8,7 +8,7 @@ rlcard==1.0.5
 pynput
 hanabi_learning_environment==0.0.1
 multi_agent_ale_py==0.1.10
-magent==0.1.14
+magent==0.2.0
 pyglet>=1.4.0
 pillow>=8.0.1
 scipy>=1.4.1
