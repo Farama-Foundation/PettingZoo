@@ -23,20 +23,27 @@ def is_env(env_name):
 
 
 def depricated_handler(env_name, module_path, module_name):
-    try:
-        return importlib.import_module(f"{module_name}.{env_name}")
-    except ImportError:
-        pass
+    spec = importlib.util.find_spec(f'{module_name}.{env_name}')
 
-    if not is_env(env_name):
-        raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
-    name, version = env_name.rsplit("_v")
+    if spec is None:
+        # It wasn't able to find this module
+        # You should do your deprecation notice here.
+        if not is_env(env_name):
+            raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
+        name, version = env_name.rsplit("_v")
 
-    for loader, alt_env_name, is_pkg in pkgutil.iter_modules(module_path):
-        if is_env(alt_env_name):
-            alt_name, alt_version = alt_env_name.rsplit("_v")
-            if alt_name == name:
-                if int(alt_version) > int(version):
-                    return DeprecatedModule(name, version, alt_version)
-                else:
-                    raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
+        for loader, alt_env_name, is_pkg in pkgutil.iter_modules(module_path):
+            if is_env(alt_env_name):
+                alt_name, alt_version = alt_env_name.rsplit("_v")
+                if alt_name == name:
+                    if int(alt_version) > int(version):
+                        return DeprecatedModule(name, version, alt_version)
+                    else:
+                        raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
+
+    # This constructs the module but doesn't execute its code
+    module = importlib.util.module_from_spec(spec)
+    # This executes the module and will raise any exceptions
+    # that would typically be raised by just `import blah`
+    spec.loader.exec_module(module)
+    return module
