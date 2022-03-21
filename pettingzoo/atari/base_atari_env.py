@@ -33,7 +33,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             mode_num=None,
             seed=None,
             obs_type='rgb_image',
-            full_action_space=True,
+            full_action_space=False,
             env_name=None,
             max_cycles=100000,
             auto_rom_install_path=None):
