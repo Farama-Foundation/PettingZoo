@@ -27,7 +27,7 @@ class magent_parallel_env(ParallelEnv):
         self._all_handles = self.env.get_handles()
         env.reset()
         self.generate_map()
-        self.team_sizes = [env.get_num(handle) for handle in self.handles] # gets updated as agents die
+        self.team_sizes = [env.get_num(handle) for handle in self.handles]  # gets updated as agents die
         self.agents = [f"{names[j]}_{i}" for j in range(len(self.team_sizes)) for i in range(self.team_sizes[j])]
         self.possible_agents = self.agents[:]
         num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
