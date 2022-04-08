@@ -39,7 +39,7 @@ from pettingzoo.classic import go_v5
 from pettingzoo.classic import hanabi_v4
 from pettingzoo.classic import backgammon_v3
 
-from pettingzoo.butterfly import knights_archers_zombies_v9
+from pettingzoo.butterfly import knights_archers_zombies_v10
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.butterfly import cooperative_pong_v5
 from pettingzoo.butterfly import prison_v4
@@ -119,7 +119,7 @@ all_environments = {
     "classic/hanabi_v4": hanabi_v4,
     "classic/backgammon_v3": backgammon_v3,
 
-    "butterfly/knights_archers_zombies_v9": knights_archers_zombies_v9,
+    "butterfly/knights_archers_zombies_v10": knights_archers_zombies_v10,
     "butterfly/pistonball_v6": pistonball_v6,
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
     "butterfly/prison_v4": prison_v4,
