@@ -52,14 +52,14 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import knights_archers_zombies_v9
+    from pettingzoo.butterfly import knights_archers_zombies_v10
 
     clock = pygame.time.Clock()
 
-    env = knights_archers_zombies_v9.env()
+    env = knights_archers_zombies_v10.env()
     env.reset()
 
-    manual_policy = knights_archers_zombies_v9.ManualPolicy(env)
+    manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["video.frames_per_second"])
