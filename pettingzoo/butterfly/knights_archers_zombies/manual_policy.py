@@ -23,7 +23,9 @@ class ManualPolicy:
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
-        assert agent == self.agent, f'Manual Policy only applied to agent: {self.agent}, but got tag for {agent}.'
+        assert (
+            agent == self.agent
+        ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
 
         # set the default action
         action = self.default_action
@@ -50,17 +52,17 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import knights_archers_zombies_v9
+    from pettingzoo.butterfly import knights_archers_zombies_v10
 
     clock = pygame.time.Clock()
 
-    env = knights_archers_zombies_v9.env()
+    env = knights_archers_zombies_v10.env()
     env.reset()
 
-    manual_policy = knights_archers_zombies_v9.ManualPolicy(env)
+    manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
     for agent in env.agent_iter():
-        clock.tick(env.metadata['video.frames_per_second'])
+        clock.tick(env.metadata["video.frames_per_second"])
 
         observation, reward, done, info = env.last()
 

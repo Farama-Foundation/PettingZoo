@@ -201,12 +201,12 @@ Some games support this via:
 
 ``` python
 import time
-from pettingzoo.butterfly import knights_archers_zombies_v9
+from pettingzoo.butterfly import knights_archers_zombies_v10
 
-env = knights_archers_zombies_v9.env()
+env = knights_archers_zombies_v10.env()
 env.reset()
 
-manual_policy = knights_archers_zombies_v9.ManualPolicy(env)
+manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()
