@@ -37,7 +37,7 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "knights_archers_zombies_v9",
+        "name": "knights_archers_zombies_v10",
         "is_parallelizable": True,
         "render_fps": const.FPS,
     }
