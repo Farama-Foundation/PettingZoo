@@ -76,9 +76,9 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 
 `n_walkers`:  number of bipedal walker agents in environment
 
-`position_noise`:  noise applied to neigbours and package positional sensor observations
+`position_noise`:  noise applied to neigbours and package positional observations
 
-`angle_noise`:  noise applied to neigbours and package rotational sensor observations
+`angle_noise`:  noise applied to neigbours and package rotational observations
 
 `forward_reward`:  scaling factor for the positive reward obtained by bringing the package forward
 
