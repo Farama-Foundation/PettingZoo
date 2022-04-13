@@ -21,6 +21,8 @@ def sample_action(env, obs, agent):
 
 
 def parallel_api_test(par_env, num_cycles=1000):
+    par_env.max_cycles = num_cycles
+
     if not hasattr(par_env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
 
@@ -80,3 +82,6 @@ def parallel_api_test(par_env, num_cycles=1000):
                     live_agents.remove(agent)
 
             assert set(par_env.agents) == live_agents
+
+            if len(live_agents) == 0:
+                break
