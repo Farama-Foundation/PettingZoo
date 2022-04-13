@@ -113,6 +113,7 @@ class magent_parallel_env(ParallelEnv):
         self.env.reset()
         self.frames = 0
         self.all_dones = {agent: False for agent in self.possible_agents}
+        self.team_sizes = [self.env.get_num(handle) for handle in self.handles]
         self.generate_map()
         return self._observe_all()
 
