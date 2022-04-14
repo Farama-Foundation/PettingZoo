@@ -188,12 +188,11 @@ class magent_parallel_env(ParallelEnv):
         return state
 
     def step(self, all_actions):
-        action_list = [-1] * self.max_num_agents
-        for i, agent in enumerate(self.possible_agents):
+        action_list = [-1] * len(self.agents)
+        for i, agent in enumerate(self.agents):
             if agent in all_actions:
                 action_list[i] = all_actions[agent]
 
-        action_list = list(filter(lambda v: v != -1, action_list))
         all_actions = np.asarray(action_list, dtype=np.int32)
         start_point = 0
         for i in range(len(self.handles)):
