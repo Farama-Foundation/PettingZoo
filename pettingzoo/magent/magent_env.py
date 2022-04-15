@@ -1,13 +1,9 @@
-import math
-import warnings
-
 import numpy as np
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
 from magent import Renderer
 
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils import wrappers
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -31,16 +27,15 @@ class magent_parallel_env(ParallelEnv):
         self._all_handles = self.env.get_handles()
         env.reset()
         self.generate_map()
-        self.team_sizes = team_sizes = [env.get_num(handle) for handle in self.handles]
-        self.agents = [f"{names[j]}_{i}" for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        self.team_sizes = [env.get_num(handle) for handle in self.handles]  # gets updated as agents die
+        self.agents = [f"{names[j]}_{i}" for j in range(len(self.team_sizes)) for i in range(self.team_sizes[j])]
         self.possible_agents = self.agents[:]
-
         num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
-        action_spaces_list = [Discrete(num_actions[j]) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        action_spaces_list = [Discrete(num_actions[j]) for j in range(len(self.team_sizes)) for i in range(self.team_sizes[j])]
         # may change depending on environment config? Not sure.
         team_obs_shapes = self._calc_obs_shapes()
         state_shape = self._calc_state_shape()
-        observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(team_sizes)) for i in range(team_sizes[j])]
+        observation_space_list = [Box(low=0., high=2., shape=team_obs_shapes[j], dtype=np.float32) for j in range(len(self.team_sizes)) for i in range(self.team_sizes[j])]
 
         self.state_space = Box(low=0., high=2., shape=state_shape, dtype=np.float32)
         reward_low, reward_high = reward_range
@@ -118,6 +113,7 @@ class magent_parallel_env(ParallelEnv):
         self.env.reset()
         self.frames = 0
         self.all_dones = {agent: False for agent in self.possible_agents}
+        self.team_sizes = [self.env.get_num(handle) for handle in self.handles]
         self.generate_map()
         return self._observe_all()
 
@@ -152,9 +148,10 @@ class magent_parallel_env(ParallelEnv):
     def _all_dones(self, step_done=False):
         dones = np.ones(self.max_num_agents, dtype=bool)
         if not step_done:
-            for handle in self.handles:
+            for i, handle in enumerate(self.handles):
                 ids = self.env.get_agent_id(handle)
                 dones[ids] = ~self.env.get_alive(handle)
+                self.team_sizes[i] = len(ids) - np.array(dones[ids]).sum()
         ret_agents = set(self.agents)
         return {agent: bool(done) for agent, done in zip(self.possible_agents, dones) if agent in ret_agents}
 
@@ -191,10 +188,11 @@ class magent_parallel_env(ParallelEnv):
         return state
 
     def step(self, all_actions):
-        action_list = [0] * self.max_num_agents
-        for i, agent in enumerate(self.possible_agents):
+        action_list = [-1] * len(self.agents)
+        for i, agent in enumerate(self.agents):
             if agent in all_actions:
                 action_list[i] = all_actions[agent]
+
         all_actions = np.asarray(action_list, dtype=np.int32)
         start_point = 0
         for i in range(len(self.handles)):
