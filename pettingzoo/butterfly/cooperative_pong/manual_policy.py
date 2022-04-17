@@ -15,8 +15,8 @@ class ManualPolicy:
         if True:
             self.default_action = 0
             self.action_mapping = dict()
-            self.action_mapping[pygame.K_w] = 1 
-            self.action_mapping[pygame.K_s] = 2  
+            self.action_mapping[pygame.K_w] = 1
+            self.action_mapping[pygame.K_s] = 2
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
