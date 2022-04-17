@@ -1,5 +1,5 @@
-import pygame
 import numpy as np
+import pygame
 
 
 class ManualPolicy:
@@ -8,7 +8,6 @@ class ManualPolicy:
         self.env = env
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]
-
 
         # TO-DO: show current agent observation if this is True
         self.show_obs = show_obs
@@ -25,7 +24,6 @@ class ManualPolicy:
         assert (
             agent == self.agent
         ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
-
 
         # set the default action
         action = self.default_action

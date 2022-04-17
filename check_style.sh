@@ -3,4 +3,4 @@ set -e
 
 codespell pettingzoo/*/*.py pettingzoo/*/*/*.py
 flake8 pettingzoo/ test/
-isort -w 100 -o magent -p pettingzoo -c pettingzoo
+isort -w 100 -o magent -p pettingzoo  pettingzoo
