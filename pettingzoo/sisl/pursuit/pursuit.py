@@ -9,6 +9,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
+from .manual_policy import ManualPolicy
 from .pursuit_base import Pursuit as _env
 
 
