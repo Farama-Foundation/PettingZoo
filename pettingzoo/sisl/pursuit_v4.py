@@ -1,1 +1,1 @@
-from .pursuit.pursuit import env, manual_control, parallel_env, raw_env, ManualPolicy
+from .pursuit.pursuit import ManualPolicy, env, manual_control, parallel_env, raw_env
