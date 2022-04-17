@@ -10,6 +10,8 @@ from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+from .manual_policy import ManualPolicy
+
 from .ball import Ball
 from .cake_paddle import CakePaddle
 from .paddle import Paddle

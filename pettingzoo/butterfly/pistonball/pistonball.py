@@ -13,6 +13,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .manual_control import manual_control
+from .manual_policy import ManualPolicy
 
 _image_library = {}
 

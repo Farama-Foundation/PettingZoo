@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 
 
 class ManualPolicy:
@@ -8,24 +9,23 @@ class ManualPolicy:
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]
 
+
         # TO-DO: show current agent observation if this is True
         self.show_obs = show_obs
 
         # action mappings for all agents are the same
         if True:
-            self.default_action = 5
+            self.default_action = 0
             self.action_mapping = dict()
-            self.action_mapping[pygame.K_w] = 0  # front
-            self.action_mapping[pygame.K_s] = 1  # back
-            self.action_mapping[pygame.K_a] = 2  # rotate left
-            self.action_mapping[pygame.K_d] = 3  # rotate right
-            self.action_mapping[pygame.K_SPACE] = 4  # weapon
+            self.action_mapping[pygame.K_w] = 1.0
+            self.action_mapping[pygame.K_s] = -1.0
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
         assert (
             agent == self.agent
         ), f"Manual Policy only applied to agent: {self.agent}, but got tag for {agent}."
+
 
         # set the default action
         action = self.default_action
@@ -52,14 +52,14 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import knights_archers_zombies_v10
+    from pettingzoo.butterfly import pistonball_v6
 
     clock = pygame.time.Clock()
 
-    env = knights_archers_zombies_v10.env()
+    env = pistonball_v6.env()
     env.reset()
 
-    manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+    manual_policy = pistonball_v6.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
@@ -71,6 +71,8 @@ if __name__ == "__main__":
         else:
             action = env.action_space(agent).sample()
 
+        action = np.array(action)
+        action = action.reshape(1,)
         env.step(action)
 
         env.render()
