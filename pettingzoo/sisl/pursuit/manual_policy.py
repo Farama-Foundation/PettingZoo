@@ -13,13 +13,12 @@ class ManualPolicy:
 
         # action mappings for all agents are the same
         if True:
-            self.default_action = 5
+            self.default_action = 0
             self.action_mapping = dict()
-            self.action_mapping[pygame.K_w] = 0  # front
-            self.action_mapping[pygame.K_s] = 1  # back
-            self.action_mapping[pygame.K_a] = 2  # rotate left
-            self.action_mapping[pygame.K_d] = 3  # rotate right
-            self.action_mapping[pygame.K_SPACE] = 4  # weapon
+            self.action_mapping[pygame.K_UP] = 3  # right
+            self.action_mapping[pygame.K_DOWN] = 2  # down
+            self.action_mapping[pygame.K_LEFT] = 0  # left
+            self.action_mapping[pygame.K_RIGHT] = 1  # right
 
     def __call__(self, observation, agent):
         # only trigger when we are the correct agent
@@ -52,14 +51,14 @@ class ManualPolicy:
 
 
 if __name__ == "__main__":
-    from pettingzoo.butterfly import knights_archers_zombies_v10
+    from pettingzoo.sisl import pursuit_v4
 
     clock = pygame.time.Clock()
 
-    env = knights_archers_zombies_v10.env()
+    env = pursuit_v4.env()
     env.reset()
 
-    manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+    manual_policy = pursuit_v4.ManualPolicy(env)
 
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
