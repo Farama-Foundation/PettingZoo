@@ -24,7 +24,7 @@ class AECEnv:
         '''
         raise NotImplementedError
 
-    def reset(self):
+    def reset(self, seed=None):
         '''
         Resets the environment to a starting state.
         '''
@@ -33,9 +33,8 @@ class AECEnv:
     def seed(self, seed=None):
         '''
         Reseeds the environment (making the resulting environment deterministic).
-        `reset()` must be called after `seed()`, and before `step()`.
         '''
-        pass
+        raise NotImplementedError("Calling seed externally is deprecated; call reset(seed=seed) instead")
 
     def observe(self, agent):
         '''
@@ -219,7 +218,7 @@ class ParallelEnv:
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     '''
-    def reset(self):
+    def reset(self, seed=None):
         '''
         resets the environment and returns a dictionary of observations (keyed by the agent name)
         '''
@@ -228,9 +227,8 @@ class ParallelEnv:
     def seed(self, seed=None):
         '''
          Reseeds the environment (making it deterministic).
-         `reset()` must be called after `seed()`, and before `step()`.
         '''
-        pass
+        raise NotImplementedError("Calling seed externally is deprecated; call reset(seed=seed) instead")
 
     def step(self, actions):
         '''

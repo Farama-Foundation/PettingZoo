@@ -39,10 +39,6 @@ class OrderEnforcingWrapper(BaseWrapper):
         else:
             raise AttributeError(f"'{type(self).__name__}' object has no attribute '{value}'")
 
-    def seed(self, seed=None):
-        self._has_reset = False
-        super().seed(seed)
-
     def render(self, mode='human'):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
@@ -76,10 +72,10 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)
 
-    def reset(self):
+    def reset(self, seed=None):
         self._has_reset = True
         self._has_updated = True
-        super().reset()
+        super().reset(seed=seed)
 
     def __str__(self):
         if hasattr(self, 'metadata'):
