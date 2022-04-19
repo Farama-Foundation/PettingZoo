@@ -322,7 +322,9 @@ class raw_env(AECEnv, EzPickle):
         self.screen.blit(self.background, (0, 0))
         self.rendering = False
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.has_reset = True
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
