@@ -12,7 +12,6 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .ball import Ball
 from .cake_paddle import CakePaddle
-from .manual_control import manual_control
 from .manual_policy import ManualPolicy
 from .paddle import Paddle
 
