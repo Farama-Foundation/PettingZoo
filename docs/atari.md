@@ -66,7 +66,7 @@ All the Atari environments have the following environment parameters:
 * 'grayscale_image' - produces a grayscale image.
 * 'ram' - produces an observation of the 1024 bits that comprise the RAM of the Atari console.
 
-`full_action_space`:  the effective action space of the Atari games is often smaller than the full space of 18 moves. Setting this to `False` shrinks the available action space to that smaller space.
+`full_action_space`: Setting this option to True sets the action space to the full space of 18 action. Setting this to `False` (default) removes duplicate actions and leaves only unique actions.
 
 `max_cycles`:  the number of frames (the number of steps that each agent can take) until game terminates.
 
