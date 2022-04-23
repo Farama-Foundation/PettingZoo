@@ -106,4 +106,4 @@ def test_unwrapped(name, env_module):
     env = nan_random_v0(env)
     env = nan_zeros_v0(env)
 
-    assert env.unwrapped == base_env, f"Unwrapped Test: unequal envs"
+    assert env.unwrapped == base_env, "Unwrapped Test: unequal envs"
