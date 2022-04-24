@@ -1,5 +1,5 @@
 import chess
-import chess_utils
+from . import chess_utils
 import numpy as np
 
 
@@ -25,11 +25,11 @@ assert assert_asserts(lambda: chess_utils.get_queen_dir((0, 0)))
 assert assert_asserts(lambda: chess_utils.get_queen_dir((1, 2)))
 assert assert_asserts(lambda: chess_utils.get_queen_dir((2, -8)))
 
-assert chess_utils.get_move_plane(chess.Move.from_uci("e1g1"), chess.KING) == chess_utils.get_queen_plane((2, 0))  # castles kingside
-assert chess_utils.get_move_plane(chess.Move.from_uci("g1f3"), chess.KNIGHT) == 56 + chess_utils.get_knight_dir((-1, 2))  # castles kingside
-assert chess_utils.get_move_plane(chess.Move.from_uci("f7f8q"), chess.PAWN) == chess_utils.get_queen_plane((0, 1))
-assert chess_utils.get_move_plane(chess.Move.from_uci("f7f8r"), chess.PAWN) == 56 + 8 + 2 + 1 * 3
-assert chess_utils.get_move_plane(chess.Move.from_uci("f7g8n"), chess.PAWN) == 56 + 8 + 0 + 2 * 3
+assert chess_utils.get_move_plane(chess.Move.from_uci("e1g1")) == chess_utils.get_queen_plane((2, 0))  # castles kingside
+assert chess_utils.get_move_plane(chess.Move.from_uci("g1f3")) == 56 + chess_utils.get_knight_dir((-1, 2))  # castles kingside
+assert chess_utils.get_move_plane(chess.Move.from_uci("f7f8q")) == chess_utils.get_queen_plane((0, 1))
+assert chess_utils.get_move_plane(chess.Move.from_uci("f7f8r")) == 56 + 8 + 2 + 1 * 3
+assert chess_utils.get_move_plane(chess.Move.from_uci("f7g8n")) == 56 + 8 + 0 + 2 * 3
 
 assert str(chess_utils.mirror_move(chess.Move.from_uci("f7g8"))) == "f2g1"
 
