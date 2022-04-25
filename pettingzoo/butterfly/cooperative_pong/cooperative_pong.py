@@ -259,6 +259,7 @@ class raw_env(AECEnv, EzPickle):
 
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
+
     def seed(self, seed=None):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
