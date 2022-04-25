@@ -4,6 +4,7 @@ from copy import deepcopy
 import numpy as np
 import pytest
 from gym import spaces
+
 from pettingzoo.utils import wrappers
 
 from .all_modules import all_environments
@@ -40,7 +41,6 @@ def test_unwrapped(_, env_module):
 
     env.reset()
     agents = env.agents
-
 
     if discrete_observation(env, agents):
         env = wrappers.AssertOutOfBoundsWrapper(env)
