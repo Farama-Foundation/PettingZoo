@@ -11,6 +11,7 @@ def assert_asserts(x):
         return True
     return False
 
+
 def test_chess():
     assert chess_utils.move_to_coord(chess.Move.from_uci("a8b7")) == (0, 7)
     assert chess_utils.move_to_coord(chess.Move.from_uci("g3b7")) == (6, 2)
@@ -39,14 +40,14 @@ def test_chess():
     test_action = np.ones([8, 8, 73]) * -100
     test_action[0, 1, 4] = 1
     board.push_san("c5")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
     board.push_san("e5")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
     board.push_san("d5")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
     board.push_san("a3")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
     board.push_san("d4")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
     board.push_san("c4")
-    obs = chess_utils.get_observation(board, player=1)
+    _ = chess_utils.get_observation(board, player=1)
