@@ -32,7 +32,7 @@ def discrete_observation(env, agents):
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
-def test_unwrapped(_, env_module):
+def test_unwrapped(name, env_module):
 
     env = env_module.env()
     base_env = env.unwrapped
