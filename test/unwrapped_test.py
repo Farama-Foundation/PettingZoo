@@ -1,7 +1,5 @@
 import sys
-from copy import deepcopy
 
-import numpy as np
 import pytest
 from gym import spaces
 
