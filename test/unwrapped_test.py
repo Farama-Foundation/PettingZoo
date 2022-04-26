@@ -33,7 +33,7 @@ def discrete_observation(env, agents):
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
-def test_unwrap_wrappers(name, env_module):
+def test_unwrapped(name, env_module):
 
     env = env_module.env()
     base_env = env.unwrapped
@@ -49,15 +49,6 @@ def test_unwrap_wrappers(name, env_module):
         env = wrappers.ClipOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, 1.0)
-
-    assert env.unwrapped == base_env, "Unwrapped Test: unequal envs"
-
-
-@pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
-def test_unwrap_aec_to_parallel(name, env_module):
-
-    env = env_module.env()
-    base_env = env.unwrapped
 
     if env.metadata['is_parallelizable']:
         env = conversions.aec_to_parallel(env)
