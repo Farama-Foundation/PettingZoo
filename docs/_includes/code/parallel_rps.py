@@ -106,9 +106,6 @@ class parallel_env(ParallelEnv):
 
         Returns the observations for each agent
         '''
-        if seed is not None:
-            self.seed(seed=seed)
-            
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         observations = {agent: NONE for agent in self.agents}

@@ -121,9 +121,6 @@ class raw_env(AECEnv):
 
         Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
         '''
-        if seed is not None:
-            self.seed(seed=seed)
-            
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
