@@ -22,7 +22,7 @@ def is_env(env_name):
     return bool(re.fullmatch("[a-zA-Z_]+_v[0-9]+", env_name))
 
 
-def depricated_handler(env_name, module_path, module_name):
+def deprecated_handler(env_name, module_path, module_name):
     spec = importlib.util.find_spec(f'{module_name}.{env_name}')
 
     if spec is None:

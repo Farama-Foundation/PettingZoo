@@ -450,6 +450,8 @@ class MultiWalkerEnv():
                 rewards[i] += self.fall_reward
                 if self.remove_on_fall:
                     walker._destroy()
+                if not self.terminate_on_fall:
+                    rewards[i] += self.terminate_reward
                 done[i] = True
         if (
             (self.terminate_on_fall and np.sum(self.fallen_walkers) > 0)

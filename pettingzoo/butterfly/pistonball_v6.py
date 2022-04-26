@@ -1,1 +1,1 @@
-from .pistonball.pistonball import env, manual_control, parallel_env, raw_env
+from .pistonball.pistonball import ManualPolicy, env, parallel_env, raw_env
