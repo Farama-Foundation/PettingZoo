@@ -40,7 +40,7 @@ The game terminates after the number of cycles specified by the `max_cycles` env
 
 The observation space of an agent is a vector generally composed of the agent's position and velocity, other agents' relative positions and velocities, landmarks' relative positions, landmarks' and agents' types, and communications received from other agents. The exact form of this is detailed in the environments' documentation.
 
-If an agent cannot see or observe the communication of a second agent, then the second agent is not included in the first's observation space, resulting in varying observation space sizes in certain environments.
+If an agent cannot see or observe the communication of a second agent, then the second agent is not included in the first's observation space, resulting in different agents having different observation space sizes in certain environments.
 
 ### Action Space
 
