@@ -236,7 +236,9 @@ class raw_env(AECEnv, EzPickle):
 
         piston.position = (piston.position[0], cap(piston.position[1] - v * self.pixels_per_position))
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed)
         self.space = pymunk.Space(threaded=False)
         self.add_walls()
         # self.space.threads = 2

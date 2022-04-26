@@ -238,7 +238,8 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     if not hasattr(env, 'possible_agents'):
         warnings.warn(missing_attr_warning.format(name='possible_agents'))
 
-    env.reset()
+    # checks that reset takes an argument called seed
+    env.reset(seed=0)
 
     assert isinstance(env, pettingzoo.AECEnv), "Env must be an instance of pettingzoo.AECEnv"
 

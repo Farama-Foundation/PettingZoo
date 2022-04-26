@@ -70,7 +70,7 @@ class raw_env(AECEnv):
 
         return {'observation': observation, 'action_mask': action_mask}
 
-    def reset(self):
+    def reset(self, seed=None):
         self.has_reset = True
 
         self.agents = self.possible_agents[:]

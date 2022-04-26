@@ -69,7 +69,9 @@ class raw_env(AECEnv):
         self.infos[agent] = {}
         return agent
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.agents = []
         self.rewards = {}
         self._cumulative_rewards = {}
