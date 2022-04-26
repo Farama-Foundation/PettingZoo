@@ -138,7 +138,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.ale.reset_game()
         self.agents = self.possible_agents[:]
         self.dones = {agent: False for agent in self.possible_agents}

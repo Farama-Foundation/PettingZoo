@@ -1,5 +1,7 @@
 import warnings
 
+import gym
+
 from ..env import ParallelEnv
 
 
@@ -19,8 +21,11 @@ class BaseParallelWraper(ParallelEnv):
         except AttributeError:
             pass
 
-    def reset(self):
-        res = self.env.reset()
+    def reset(self, seed=None):
+        # Used in Supersuit frame_skip_par
+        self.np_random, _ = gym.utils.seeding.np_random(seed)
+
+        res = self.env.reset(seed=seed)
         self.agents = self.env.agents
         return res
 
