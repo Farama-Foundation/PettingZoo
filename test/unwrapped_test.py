@@ -62,6 +62,6 @@ def test_unwrap_aec_to_parallel(name, env_module):
     if env.metadata['is_parallelizable']:
         env = conversions.aec_to_parallel(env)
         env = conversions.parallel_to_aec(env)
-        # env = conversions.turn_based_aec_to_parallel(env)
+        env = conversions.turn_based_aec_to_parallel(env)
 
     assert env.unwrapped == base_env, "Unwrapped Test: unequal envs"

@@ -284,6 +284,10 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             pass
 
     @property
+    def unwrapped(self):
+        return self.aec_env.unwrapped
+
+    @property
     def observation_spaces(self):
         warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
         try:
