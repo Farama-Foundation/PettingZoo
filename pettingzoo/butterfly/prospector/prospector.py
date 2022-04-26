@@ -818,7 +818,7 @@ class raw_env(AECEnv, EzPickle):
     def reset(self, seed=None):
         if seed is not None:
             self.seed(seed=seed)
-            
+
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.done = False
 
