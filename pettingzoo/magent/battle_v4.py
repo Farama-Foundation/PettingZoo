@@ -1,20 +1,16 @@
 import math
-import warnings
 
 import magent
 import numpy as np
-from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
-from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 
-from .battle_v3 import KILL_REWARD, get_config
 from .magent_env import magent_parallel_env, make_env
 
-default_map_size = 80
+default_map_size = 45
 max_cycles_default = 1000
+KILL_REWARD = 5
 minimap_mode_default = False
 default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
 
@@ -32,16 +28,48 @@ def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mo
 env = make_env(raw_env)
 
 
+def get_config(map_size, minimap_mode, step_reward, dead_penalty, attack_penalty, attack_opponent_reward):
+    gw = magent.gridworld
+    cfg = gw.Config()
+
+    cfg.set({"map_width": map_size, "map_height": map_size})
+    cfg.set({"minimap_mode": minimap_mode})
+    cfg.set({"embedding_size": 10})
+
+    options = {
+        'width': 1, 'length': 1, 'hp': 10, 'speed': 2,
+        'view_range': gw.CircleRange(6), 'attack_range': gw.CircleRange(1.5),
+        'damage': 2, 'kill_reward': KILL_REWARD, 'step_recover': 0.1,
+        'step_reward': step_reward, 'dead_penalty': dead_penalty, 'attack_penalty': attack_penalty
+    }
+    small = cfg.register_agent_type(
+        "small",
+        options
+    )
+
+    g0 = cfg.add_group(small)
+    g1 = cfg.add_group(small)
+
+    a = gw.AgentSymbol(g0, index='any')
+    b = gw.AgentSymbol(g1, index='any')
+
+    # reward shaping to encourage attack
+    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=attack_opponent_reward)
+    cfg.add_reward_rule(gw.Event(b, 'attack', a), receiver=b, value=attack_opponent_reward)
+
+    return cfg
+
+
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "battlefield_v4",
+        'name': "battle_v4",
         "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
         EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
-        assert map_size >= 46, "size of map must be at least 46"
+        assert map_size >= 12, "size of map must be at least 12"
         env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
         self.leftID = 0
         self.rightID = 1
@@ -57,46 +85,16 @@ class _parallel_env(magent_parallel_env, EzPickle):
         init_num = map_size * map_size * 0.04
         gap = 3
 
-        width = map_size
-        height = map_size
-
-        init_num = 20
-
-        gap = 3
-        leftID, rightID = 0, 1
-
         # left
-        pos = []
-        for y in range(10, 45):
-            pos.append((width / 2 - 5, y))
-            pos.append((width / 2 - 4, y))
-        for y in range(50, height // 2 + 25):
-            pos.append((width / 2 - 5, y))
-            pos.append((width / 2 - 4, y))
-
-        for y in range(height // 2 - 25, height - 50):
-            pos.append((width / 2 + 5, y))
-            pos.append((width / 2 + 4, y))
-        for y in range(height - 45, height - 10):
-            pos.append((width / 2 + 5, y))
-            pos.append((width / 2 + 4, y))
-
-        for x, y in pos:
-            if not (0 < x < width - 1 and 0 < y < height - 1):
-                assert False
-        env.add_walls(pos=pos, method="custom")
-
         n = init_num
         side = int(math.sqrt(n)) * 2
         pos = []
         for x in range(width // 2 - gap - side, width // 2 - gap - side + side, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
-                pos.append([x, y, 0])
-
-        for x, y, _ in pos:
-            if not (0 < x < width - 1 and 0 < y < height - 1):
-                assert False
-        env.add_agents(handles[leftID], method="custom", pos=pos)
+                if 0 < x < width - 1 and 0 < y < height - 1:
+                    pos.append([x, y, 0])
+        team1_size = len(pos)
+        env.add_agents(handles[self.leftID], method="custom", pos=pos)
 
         # right
         n = init_num
@@ -104,9 +102,8 @@ class _parallel_env(magent_parallel_env, EzPickle):
         pos = []
         for x in range(width // 2 + gap, width // 2 + gap + side, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
-                pos.append([x, y, 0])
+                if 0 < x < width - 1 and 0 < y < height - 1:
+                    pos.append([x, y, 0])
 
-        for x, y, _ in pos:
-            if not (0 < x < width - 1 and 0 < y < height - 1):
-                assert False
-        env.add_agents(handles[rightID], method="custom", pos=pos)
+        pos = pos[:team1_size]
+        env.add_agents(handles[self.rightID], method="custom", pos=pos)
