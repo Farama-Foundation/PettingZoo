@@ -112,7 +112,7 @@ class raw_env(AECEnv):
 
         return {'observation': self.observation, 'action_mask': action_mask}
 
-    def reset(self):
+    def reset(self, seed=None):
         self.ch = CheckersRules()
         self.num_moves = 0
         self.agents = self.possible_agents[:]

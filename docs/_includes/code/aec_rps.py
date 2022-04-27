@@ -107,7 +107,7 @@ class raw_env(AECEnv):
         '''
         pass
 
-    def reset(self):
+    def reset(self, seed=None):
         '''
         Reset needs to initialize the following attributes
         - agents

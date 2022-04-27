@@ -226,13 +226,16 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self):
+    def reset(self, seed=None):
         """ Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
+
+        if seed is not None:
+            self.seed(seed=seed)
 
         self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment
