@@ -9,7 +9,7 @@ observation-shape: "(9,9,5), (10,10,9)"
 observation-values: "[0,2]"
 state-shape: "(45, 45, 5)"
 state-values: "(0, 2)"
-import: "from pettingzoo.magent import adversarial_pursuit_v3"
+import: "from pettingzoo.magent import adversarial_pursuit_v4"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
@@ -29,7 +29,7 @@ The red agents must navigate the obstacles and tag (similar to attacking, but wi
 ### Arguments
 
 ``` python
-adversarial_pursuit_v3.env(map_size=45, minimap_mode=False, tag_penalty=-0.2,
+adversarial_pursuit_v4.env(map_size=45, minimap_mode=False, tag_penalty=-0.2,
 max_cycles=500, extra_features=False)
 ```
 
@@ -96,6 +96,7 @@ last_reward(extra_features=True)| 1
 
 ### Version History
 
+* v4: Underlying library fix (1.18.0)
 * v3: Fixed bugs and changed default parameters (1.7.0)
 * v2: Observation space bound fix, bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v1: Agent order under death changed (1.3.0)

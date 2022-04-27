@@ -6,7 +6,7 @@ from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.max_cycles_test import max_cycles_test
 from pettingzoo.test.state_test import state_test
 from pettingzoo.test.render_test import render_test
-from pettingzoo.atari import warlords_v2
+from pettingzoo.atari import warlords_v3
 from pettingzoo.utils import aec_to_parallel, parallel_to_aec
 import os
 
@@ -39,6 +39,6 @@ def test_module(name, env_module):
 
 
 def test_conversions():
-    env1 = warlords_v2.env()
-    env2 = parallel_to_aec(aec_to_parallel(warlords_v2.env()))
+    env1 = warlords_v3.env()
+    env2 = parallel_to_aec(aec_to_parallel(warlords_v3.env()))
     check_environment_deterministic(env1, env2, 5000)
