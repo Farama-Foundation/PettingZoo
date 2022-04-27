@@ -79,7 +79,7 @@ all_environments = {
     "atari/basketball_pong_v3": basketball_pong_v3,
     "atari/boxing_v2": boxing_v2,
     "atari/combat_tank_v2": combat_tank_v2,
-    "atari/combat_plane_v1": combat_plane_v2,
+    "atari/combat_plane_v2": combat_plane_v2,
     "atari/double_dunk_v3": double_dunk_v3,
     "atari/entombed_cooperative_v3": entombed_cooperative_v3,
     "atari/entombed_competitive_v3": entombed_competitive_v3,
