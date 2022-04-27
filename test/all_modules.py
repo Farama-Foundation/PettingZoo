@@ -1,4 +1,4 @@
-from pettingzoo.atari import basketball_pong_v2
+from pettingzoo.atari import basketball_pong_v3
 from pettingzoo.atari import boxing_v1
 from pettingzoo.atari import combat_plane_v1
 from pettingzoo.atari import combat_tank_v1
@@ -76,7 +76,7 @@ manual_environments = {
 }
 
 all_environments = {
-    "atari/basketball_pong_v2": basketball_pong_v2,
+    "atari/basketball_pong_v3": basketball_pong_v3,
     "atari/boxing_v1": boxing_v1,
     "atari/combat_tank_v1": combat_tank_v1,
     "atari/combat_plane_v1": combat_plane_v1,
