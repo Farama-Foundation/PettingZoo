@@ -260,7 +260,49 @@ class parallel_to_aec_wrapper(AECEnv):
         return str(self.env)
 
 
-class turn_based_aec_to_parallel_wrapper(aec_to_parallel_wrapper):
+class turn_based_aec_to_parallel_wrapper(ParallelEnv):
+    def __init__(self, aec_env):
+        self.aec_env = aec_env
+
+        try:
+            self.possible_agents = aec_env.possible_agents
+        except AttributeError:
+            pass
+
+        self.metadata = aec_env.metadata
+
+        # Not every environment has the .state_space attribute implemented
+        try:
+            self.state_space = self.aec_env.state_space
+        except AttributeError:
+            pass
+
+    @property
+    def unwrapped(self):
+        return self.aec_env.unwrapped
+
+    @property
+    def observation_spaces(self):
+        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        try:
+            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+        except AttributeError:
+            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+
+    @property
+    def action_spaces(self):
+        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        try:
+            return {agent: self.action_space(agent) for agent in self.possible_agents}
+        except AttributeError:
+            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+
+    def observation_space(self, agent):
+        return self.aec_env.observation_space(agent)
+
+    def action_space(self, agent):
+        return self.aec_env.action_space(agent)
+
     def reset(self, seed=None):
         self.aec_env.reset(seed=seed)
         self.agents = self.aec_env.agents[:]

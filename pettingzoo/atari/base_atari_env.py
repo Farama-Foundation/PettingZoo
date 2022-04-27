@@ -199,7 +199,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
                 pygame.init()
                 self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
 
-            myImage = pygame.image.fromstring(image.tobytes(), image.shape[:2][::-1], "RGB")
+            myImage = pygame.image.frombuffer(image.tobytes(), image.shape[:2][::-1], "RGB")
 
             myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
 
