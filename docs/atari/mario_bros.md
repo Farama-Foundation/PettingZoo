@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import mario_bros_v2"
+import: "from pettingzoo.atari import mario_bros_v3"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -46,6 +46,7 @@ Environment parameters are common to all Atari environments and are described in
 
 ### Version History
 
+* v3: Minimal Action Space (1.18.0)
 * v2: Breaking changes to entire API (1.4.0)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
