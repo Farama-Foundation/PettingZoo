@@ -33,7 +33,7 @@ extras = {
     "tests": ["pynput", "pytest", "codespell", "flake8", "isort"],
 }
 
-extras["all"] = extras["atari"] + extras["classic"] + extras["butterfly"] + extras["magent"] + extras["mpe"] + extras["sisl"] + extras["other"] + extras["tests"] #tests wasn't being installed in all unsure if that was intentional
+extras["all"] = extras["atari"] + extras["classic"] + extras["butterfly"] + extras["magent"] + extras["mpe"] + extras["sisl"] + extras["other"]
 
 
 setup(
