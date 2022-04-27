@@ -74,7 +74,7 @@ class raw_env(AECEnv, EzPickle):
         import pyglet
         buffer = pyglet.image.get_buffer_manager().get_color_buffer()
         image_data = buffer.get_image_data()
-        arr = np.fromstring(image_data.get_data(), dtype=np.uint8, sep='')
+        arr = np.frombuffer(image_data.get_data(), dtype=np.uint8)
         arr = arr.reshape(buffer.height, buffer.width, 4)
         arr = arr[::-1, :, 0:3]
         return arr if mode == "rgb_array" else None
