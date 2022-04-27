@@ -143,7 +143,7 @@ class raw_env(AECEnv):
         self.agent_selection = next_player if next_player else self._agent_selector.next()
         self._accumulate_rewards()
 
-    def reset(self):
+    def reset(self, seed=None):
         self.has_reset = True
         self._go = go.Position(board=None, komi=self._komi)
 
