@@ -44,12 +44,12 @@ from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.butterfly import cooperative_pong_v5
 from pettingzoo.butterfly import prospector_v4
 
-from pettingzoo.magent import battle_v3
-from pettingzoo.magent import adversarial_pursuit_v3
-from pettingzoo.magent import gather_v4
-from pettingzoo.magent import combined_arms_v5
-from pettingzoo.magent import tiger_deer_v3
-from pettingzoo.magent import battlefield_v4
+from pettingzoo.magent import battle_v4
+from pettingzoo.magent import adversarial_pursuit_v4
+from pettingzoo.magent import gather_v5
+from pettingzoo.magent import combined_arms_v6
+from pettingzoo.magent import tiger_deer_v4
+from pettingzoo.magent import battlefield_v5
 
 from pettingzoo.mpe import simple_adversary_v2
 from pettingzoo.mpe import simple_crypto_v2
@@ -122,12 +122,12 @@ all_environments = {
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
     "butterfly/prospector_v4": prospector_v4,
 
-    "magent/adversarial_pursuit_v3": adversarial_pursuit_v3,
-    "magent/battle_v3": battle_v3,
-    "magent/battlefield_v4": battlefield_v4,
-    "magent/combined_arms_v5": combined_arms_v5,
-    "magent/gather_v4": gather_v4,
-    "magent/tiger_deer_v3": tiger_deer_v3,
+    "magent/adversarial_pursuit_v4": adversarial_pursuit_v4,
+    "magent/battle_v4": battle_v4,
+    "magent/battlefield_v5": battlefield_v5,
+    "magent/combined_arms_v6": combined_arms_v6,
+    "magent/gather_v5": gather_v5,
+    "magent/tiger_deer_v4": tiger_deer_v4,
 
     "mpe/simple_adversary_v2": simple_adversary_v2,
     "mpe/simple_crypto_v2": simple_crypto_v2,
