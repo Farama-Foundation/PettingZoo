@@ -80,7 +80,7 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "tiger_deer_v3",
+        'name': "tiger_deer_v4",
         "render_fps": 5,
     }
 

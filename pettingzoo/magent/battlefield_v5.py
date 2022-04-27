@@ -10,7 +10,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
-from .battle_v3 import KILL_REWARD, get_config
+from .battle_v4 import KILL_REWARD, get_config
 from .magent_env import magent_parallel_env, make_env
 
 default_map_size = 80
@@ -35,7 +35,7 @@ env = make_env(raw_env)
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "battlefield_v4",
+        'name': "battlefield_v5",
         "render_fps": 5,
     }
 
