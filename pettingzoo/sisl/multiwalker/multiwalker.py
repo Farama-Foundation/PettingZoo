@@ -23,7 +23,7 @@ class raw_env(AECEnv, EzPickle):
 
     metadata = {
         'render_modes': ['human', "rgb_array"],
-        'name': 'multiwalker_v8',
+        'name': 'multiwalker_v9',
         'is_parallelizable': True,
         'render_fps': FPS,
     }

@@ -72,7 +72,7 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         'render_modes': ['human', 'rgb_array'],
-        'name': "gather_v4",
+        'name': "gather_v5",
         'render_fps': 5,
     }
 
