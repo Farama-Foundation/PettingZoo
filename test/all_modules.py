@@ -42,7 +42,6 @@ from pettingzoo.classic import backgammon_v3
 from pettingzoo.butterfly import knights_archers_zombies_v10
 from pettingzoo.butterfly import pistonball_v6
 from pettingzoo.butterfly import cooperative_pong_v5
-from pettingzoo.butterfly import prison_v4
 from pettingzoo.butterfly import prospector_v4
 
 from pettingzoo.magent import battle_v3
@@ -72,7 +71,6 @@ manual_environments = {
     "butterfly/knights_archers_zombies",
     "butterfly/pistonball",
     "butterfly/cooperative_pong",
-    "butterfly/prison",
     "butterfly/prospector",
     "sisl/pursuit"
 }
@@ -122,7 +120,6 @@ all_environments = {
     "butterfly/knights_archers_zombies_v10": knights_archers_zombies_v10,
     "butterfly/pistonball_v6": pistonball_v6,
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
-    "butterfly/prison_v4": prison_v4,
     "butterfly/prospector_v4": prospector_v4,
 
     "magent/adversarial_pursuit_v3": adversarial_pursuit_v3,
