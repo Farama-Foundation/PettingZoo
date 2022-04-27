@@ -64,7 +64,7 @@ from pettingzoo.mpe import simple_v2
 
 from pettingzoo.sisl import pursuit_v4
 from pettingzoo.sisl import waterworld_v3
-from pettingzoo.sisl import multiwalker_v8
+from pettingzoo.sisl import multiwalker_v9
 
 all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
@@ -142,7 +142,7 @@ all_environments = {
     "mpe/simple_world_comm_v2": simple_world_comm_v2,
     "mpe/simple_v2": simple_v2,
 
-    "sisl/multiwalker_v8": multiwalker_v8,
+    "sisl/multiwalker_v9": multiwalker_v9,
     "sisl/waterworld_v3": waterworld_v3,
     "sisl/pursuit_v4": pursuit_v4,
 }

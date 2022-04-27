@@ -119,10 +119,10 @@ parameterized_envs = [
     (simple_world_comm_v2, dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3, continuous_actions=True)),
     (simple_world_comm_v2, dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1, continuous_actions=True)),
 
-    (multiwalker_v8, dict(n_walkers=10)),
-    (multiwalker_v8, dict(shared_reward=False)),
-    (multiwalker_v8, dict(terminate_on_fall=False)),
-    (multiwalker_v8, dict(terminate_on_fall=False, remove_on_fall=False)),
+    (multiwalker_v9, dict(n_walkers=10)),
+    (multiwalker_v9, dict(shared_reward=False)),
+    (multiwalker_v9, dict(terminate_on_fall=False)),
+    (multiwalker_v9, dict(terminate_on_fall=False, remove_on_fall=False)),
 
     (pursuit_v4, dict(x_size=8, y_size=19)),
     (pursuit_v4, dict(shared_reward=True)),
