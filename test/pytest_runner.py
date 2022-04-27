@@ -34,6 +34,6 @@ def test_module(name, env_module):
 
 
 def test_conversions():
-    env1 = warlords_v2.env()
+    env1 = warlords_v3.env()
     env2 = parallel_to_aec(aec_to_parallel(warlords_v3.env()))
     check_environment_deterministic(env1, env2, 5000)
