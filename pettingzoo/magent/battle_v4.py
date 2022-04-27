@@ -63,7 +63,7 @@ def get_config(map_size, minimap_mode, step_reward, dead_penalty, attack_penalty
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "battle_v3",
+        'name': "battle_v4",
         "render_fps": 5,
     }
 
