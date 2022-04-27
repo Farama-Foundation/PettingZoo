@@ -9,7 +9,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-inf,inf]"
 average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v8"
+import: "from pettingzoo.sisl import multiwalker_v9"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -68,7 +68,7 @@ This table enumerates the observation space:
 ### Arguments
 
 ``` python
-multiwalker_v8.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+multiwalker_v9.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
 terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 ```
 
