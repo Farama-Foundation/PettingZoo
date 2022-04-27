@@ -3,7 +3,7 @@ import sys
 import pytest
 from gym import spaces
 
-from pettingzoo.utils import wrappers
+from pettingzoo.utils import conversions, wrappers
 
 from .all_modules import all_environments
 
@@ -48,5 +48,11 @@ def test_unwrapped(name, env_module):
         env = wrappers.ClipOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, 1.0)
+
+    if env.metadata["is_parallelizable"]:
+        env = conversions.aec_to_parallel(env)
+
+    env = conversions.parallel_to_aec(env)
+    env = conversions.turn_based_aec_to_parallel(env)
 
     assert env.unwrapped == base_env, "Unwrapped Test: unequal envs"
