@@ -227,7 +227,8 @@ class raw_env(AECEnv, EzPickle):
         'render_modes': ['human', "rgb_array"],
         'name': "cooperative_pong_v5",
         'is_parallelizable': True,
-        'render_fps': FPS
+        'render_fps': FPS,
+        'has_manual_policy': True,
     }
 
     def __init__(self, **kwargs):
