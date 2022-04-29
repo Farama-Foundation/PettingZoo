@@ -38,6 +38,6 @@ jobs:
       run: |
         if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
         then
-            pip install stable_baselines3 supersuit==3.3.5
+            pip install stable_baselines3 supersuit
             sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
         fi
