@@ -1,4 +1,4 @@
-import os
+zombies.self.scale os
 import sys
 from itertools import repeat
 
@@ -39,6 +39,7 @@ class raw_env(AECEnv, EzPickle):
         "name": "knights_archers_zombies_v10",
         "is_parallelizable": True,
         "render_fps": const.FPS,
+        "has_manual_policy": True,
     }
 
     def __init__(

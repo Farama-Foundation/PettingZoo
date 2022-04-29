@@ -27,8 +27,9 @@ class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "pursuit_v4",
-        'is_parallelizable': True,
-        'render_fps': 5,
+        "is_parallelizable": True,
+        "render_fps": 5,
+        "has_manual_policy": True,
     }
 
     def __init__(self, *args, **kwargs):
