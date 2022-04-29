@@ -6,9 +6,9 @@ def get_valid_actions(env, roll):
 def to_bar(action, roll):
     if action == 25:  # bar
         if roll < 0:  # white
-            return ('bar', 24 - abs(roll))
+            return ("bar", 24 - abs(roll))
         else:  # black
-            return ('bar', abs(roll) - 1)
+            return ("bar", abs(roll) - 1)
     else:
         if action + roll - 1 > 23:
             return (action - 1, 24)
@@ -22,7 +22,7 @@ def from_bar(action):
     bears_off = False
     if action[1] == -1 or action[1] == 24:
         bears_off = True
-    if action[0] == 'bar':
+    if action[0] == "bar":
         if action[1] > 12:  # white, top
             return (25, -(24 - action[1]), bears_off)
         else:  # black, bottom
@@ -37,26 +37,26 @@ def to_bg_format(action, roll):
     low_roll = min(roll)
     high_roll = max(roll)
 
-    if action == base**2 * 2:
-        return (())
+    if action == base ** 2 * 2:
+        return ()
 
-    if action < base**2:  # Low roll first
+    if action < base ** 2:  # Low roll first
         dig1 = action % base
         dig2 = action // base
         a = to_bar(dig1, low_roll)
         b = to_bar(dig2, high_roll)
-        if b[0] != 'bar' and b[0] > -1:
+        if b[0] != "bar" and b[0] > -1:
             return (a, b)
         else:
             return (a,)
 
     else:  # High roll first
-        action = action - base**2
+        action = action - base ** 2
         dig1 = action % base
         dig2 = action // base
         a = to_bar(dig1, high_roll)
         b = to_bar(dig2, low_roll)
-        if b[0] != 'bar' and b[0] > -1:
+        if b[0] != "bar" and b[0] > -1:
             return (a, b)
         else:
             return (a,)
@@ -74,14 +74,14 @@ def to_gym_format(actions, roll):
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
             if abs(diff1) == abs(high_roll):  # high first
-                a += base**2
+                a += base ** 2
             nums.append(a)
-        elif isinstance(act[0], int) or act[0] == 'bar':
+        elif isinstance(act[0], int) or act[0] == "bar":
             a, diff1, bears_off = from_bar(act)
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
             if abs(diff1) == abs(high_roll):  # high first
-                a += base**2
+                a += base ** 2
             nums.append(a)
         elif len(act) == 2:
             a, diff1, bears_off1 = from_bar(act[0])
@@ -99,7 +99,7 @@ def to_gym_format(actions, roll):
                         diff2 = high_roll
             num = a + base * b
             if diff1 > diff2:  # high first
-                num += base**2
+                num += base ** 2
             nums.append(num)
     return nums
 

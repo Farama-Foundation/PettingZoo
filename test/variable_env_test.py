@@ -1,5 +1,8 @@
 from pettingzoo.utils.env import AECEnv
-from pettingzoo.test.example_envs import generated_agents_env_v0, generated_agents_parallel_v0
+from pettingzoo.test.example_envs import (
+    generated_agents_env_v0,
+    generated_agents_parallel_v0,
+)
 from pettingzoo.test.api_test import api_test
 from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
 from pettingzoo.test.parallel_test import parallel_api_test
@@ -25,7 +28,9 @@ def test_parallel_generated_agents_conversions():
     api_test(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
 
     env1 = parallel_to_aec(generated_agents_parallel_v0.parallel_env())
-    env2 = parallel_to_aec(aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env())))
+    env2 = parallel_to_aec(
+        aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
+    )
     check_environment_deterministic(env1, env2, 500)
 
 

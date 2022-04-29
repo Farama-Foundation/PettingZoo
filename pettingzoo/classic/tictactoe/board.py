@@ -33,10 +33,14 @@ class Board:
         indices = [x for x in range(0, 9)]
 
         # Vertical combinations
-        winning_combinations += ([tuple(indices[i:(i + 3)]) for i in range(0, len(indices), 3)])
+        winning_combinations += [
+            tuple(indices[i : (i + 3)]) for i in range(0, len(indices), 3)
+        ]
 
         # Horizontal combinations
-        winning_combinations += [tuple(indices[x] for x in range(y, len(indices), 3)) for y in range(0, 3)]
+        winning_combinations += [
+            tuple(indices[x] for x in range(y, len(indices), 3)) for y in range(0, 3)
+        ]
 
         # Diagonal combinations
         winning_combinations.append(tuple(x for x in range(0, len(indices), 4)))

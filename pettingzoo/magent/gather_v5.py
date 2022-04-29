@@ -16,23 +16,41 @@ map_size = 200
 max_cycles_default = 500
 KILL_REWARD = 5
 minimap_mode_default = False
-default_reward_args = dict(step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5)
+default_reward_args = dict(
+    step_reward=-0.01, attack_penalty=-0.1, dead_penalty=-1, attack_food_reward=0.5
+)
 
 
-def parallel_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
+def parallel_env(
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
+    return _parallel_env(
+        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
+    )
 
 
-def raw_env(max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
-    return parallel_to_aec_wrapper(parallel_env(max_cycles, minimap_mode, extra_features, **reward_args))
+def raw_env(
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
+    return parallel_to_aec_wrapper(
+        parallel_env(max_cycles, minimap_mode, extra_features, **reward_args)
+    )
 
 
 env = make_env(raw_env)
 
 
-def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, attack_food_reward):
+def load_config(
+    size, minimap_mode, step_reward, attack_penalty, dead_penalty, attack_food_reward
+):
     gw = magent.gridworld
     cfg = gw.Config()
 
@@ -40,50 +58,73 @@ def load_config(size, minimap_mode, step_reward, attack_penalty, dead_penalty, a
     cfg.set({"minimap_mode": minimap_mode})
 
     options = {
-        'width': 1, 'length': 1, 'hp': 3, 'speed': 3,
-        'view_range': gw.CircleRange(7), 'attack_range': gw.CircleRange(1),
-        'damage': 6, 'step_recover': 0, 'attack_in_group': 1,
-        'step_reward': step_reward, 'attack_penalty': attack_penalty, 'dead_penalty': dead_penalty
+        "width": 1,
+        "length": 1,
+        "hp": 3,
+        "speed": 3,
+        "view_range": gw.CircleRange(7),
+        "attack_range": gw.CircleRange(1),
+        "damage": 6,
+        "step_recover": 0,
+        "attack_in_group": 1,
+        "step_reward": step_reward,
+        "attack_penalty": attack_penalty,
+        "dead_penalty": dead_penalty,
     }
 
-    agent = cfg.register_agent_type(
-        name="agent",
-        attr=options)
+    agent = cfg.register_agent_type(name="agent", attr=options)
 
     options = {
-        'width': 1, 'length': 1, 'hp': 25, 'speed': 0,
-        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-        'kill_reward': KILL_REWARD}
-    food = cfg.register_agent_type(
-        name='food',
-        attr=options)
+        "width": 1,
+        "length": 1,
+        "hp": 25,
+        "speed": 0,
+        "view_range": gw.CircleRange(1),
+        "attack_range": gw.CircleRange(0),
+        "kill_reward": KILL_REWARD,
+    }
+    food = cfg.register_agent_type(name="food", attr=options)
 
     g_f = cfg.add_group(food)
     g_s = cfg.add_group(agent)
 
-    a = gw.AgentSymbol(g_s, index='any')
-    b = gw.AgentSymbol(g_f, index='any')
+    a = gw.AgentSymbol(g_s, index="any")
+    b = gw.AgentSymbol(g_f, index="any")
 
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=a, value=attack_food_reward)
+    cfg.add_reward_rule(gw.Event(a, "attack", b), receiver=a, value=attack_food_reward)
 
     return cfg
 
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
-        'render_modes': ['human', 'rgb_array'],
-        'name': "gather_v5",
-        'render_fps': 5,
+        "render_modes": ["human", "rgb_array"],
+        "name": "gather_v5",
+        "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
+        EzPickle.__init__(
+            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+        )
         env = magent.GridWorld(load_config(map_size, minimap_mode, **reward_args))
         handles = env.get_handles()
         reward_vals = np.array([5] + list(reward_args.values()))
-        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
+        reward_range = [
+            np.minimum(reward_vals, 0).sum(),
+            np.maximum(reward_vals, 0).sum(),
+        ]
         names = ["omnivore"]
-        super().__init__(env, handles[1:], names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
+        super().__init__(
+            env,
+            handles[1:],
+            names,
+            map_size,
+            max_cycles,
+            reward_range,
+            minimap_mode,
+            extra_features,
+        )
 
     def generate_map(self):
         env, map_size = self.env, self.map_size
@@ -122,7 +163,13 @@ class _parallel_env(magent_parallel_env, EzPickle):
         env.add_agents(food_handle, method="custom", pos=pos)
 
         # pattern
-        pattern = ([[int(not((i % 4 == 0 or i % 4 == 1) or (j % 4 == 0 or j % 4 == 1))) for j in range(53)] for i in range(53)])
+        pattern = [
+            [
+                int(not ((i % 4 == 0 or i % 4 == 1) or (j % 4 == 0 or j % 4 == 1)))
+                for j in range(53)
+            ]
+            for i in range(53)
+        ]
 
         def draw(base_x, base_y, data):
             w, h = len(data), len(data[0])

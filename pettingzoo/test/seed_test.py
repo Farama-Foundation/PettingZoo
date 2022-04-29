@@ -27,8 +27,8 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             obs, rew, done, info = new_env.last()
             if done:
                 action = None
-            elif isinstance(obs, dict) and 'action_mask' in obs:
-                action = sampler.choice(np.flatnonzero(obs['action_mask']))
+            elif isinstance(obs, dict) and "action_mask" in obs:
+                action = sampler.choice(np.flatnonzero(obs["action_mask"]))
             else:
                 action = new_env.action_space(agent).sample()
             new_env.step(action)
@@ -40,23 +40,23 @@ def calc_hash(new_env, rand_issue, max_env_iters):
 
 
 def seed_action_spaces(env):
-    if hasattr(env, 'possible_agents'):
+    if hasattr(env, "possible_agents"):
         for i, agent in enumerate(env.possible_agents):
             env.action_space(agent).seed(42 + i)
 
 
 def check_environment_deterministic(env1, env2, num_cycles):
-    '''
+    """
     env1 and env2 should be seeded environments
 
     returns a bool: true if env1 and env2 execute the same way
-    '''
+    """
 
     # seeds action space so that actions are deterministic
     seed_action_spaces(env1)
     seed_action_spaces(env2)
 
-    num_agents = max(1, len(getattr(env1, 'possible_agents', [])))
+    num_agents = max(1, len(getattr(env1, "possible_agents", [])))
 
     # checks deterministic behavior if seed is set
     hashes = []
@@ -95,8 +95,9 @@ def seed_test(env_constructor, num_cycles=10, test_kept_state=True):
         test_environment_reset_deterministic(env1, num_cycles)
     env2 = env_constructor()
 
-    assert check_environment_deterministic(env1, env2, num_cycles), \
-        ("The environment gives different results on multiple runs when initialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state.")
+    assert check_environment_deterministic(
+        env1, env2, num_cycles
+    ), "The environment gives different results on multiple runs when initialized with the same seed. This is usually a sign that you are using np.random or random modules directly, which uses a global random state."
 
 
 def parallel_seed_test(parallel_env_fn, num_cycles=10, test_kept_state=True):
