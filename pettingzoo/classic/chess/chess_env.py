@@ -23,7 +23,7 @@ def env():
 class raw_env(AECEnv):
 
     metadata = {
-        'render_modes': ['human'],
+        "render_modes": ["human"],
         "name": "chess_v5",
         "is_parallelizable": False,
         "render_fps": 2,
@@ -40,10 +40,19 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
 
         self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
-        self.observation_spaces = {name: spaces.Dict({
-            'observation': spaces.Box(low=0, high=1, shape=(8, 8, 111), dtype=bool),
-            'action_mask': spaces.Box(low=0, high=1, shape=(4672,), dtype=np.int8)
-        }) for name in self.agents}
+        self.observation_spaces = {
+            name: spaces.Dict(
+                {
+                    "observation": spaces.Box(
+                        low=0, high=1, shape=(8, 8, 111), dtype=bool
+                    ),
+                    "action_mask": spaces.Box(
+                        low=0, high=1, shape=(4672,), dtype=np.int8
+                    ),
+                }
+            )
+            for name in self.agents
+        }
 
         self.rewards = None
         self.dones = None
@@ -60,15 +69,19 @@ class raw_env(AECEnv):
         return self.action_spaces[agent]
 
     def observe(self, agent):
-        observation = chess_utils.get_observation(self.board, self.possible_agents.index(agent))
+        observation = chess_utils.get_observation(
+            self.board, self.possible_agents.index(agent)
+        )
         observation = np.dstack((observation[:, :, :7], self.board_history))
-        legal_moves = chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
+        legal_moves = (
+            chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
+        )
 
-        action_mask = np.zeros(4672, 'int8')
+        action_mask = np.zeros(4672, "int8")
         for i in legal_moves:
             action_mask[i] = 1
 
-        return {'observation': observation, 'action_mask': action_mask}
+        return {"observation": observation, "action_mask": action_mask}
 
     def reset(self, seed=None):
         self.has_reset = True
@@ -92,7 +105,7 @@ class raw_env(AECEnv):
             self.dones[name] = True
             result_coef = 1 if i == 0 else -1
             self.rewards[name] = result_val * result_coef
-            self.infos[name] = {'legal_moves': []}
+            self.infos[name] = {"legal_moves": []}
 
     def step(self, action):
         if self.dones[self.agent_selection]:
@@ -100,7 +113,9 @@ class raw_env(AECEnv):
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
         next_board = chess_utils.get_observation(self.board, current_agent)
-        self.board_history = np.dstack((next_board[:, :, 7:], self.board_history[:, :, :-13]))
+        self.board_history = np.dstack(
+            (next_board[:, :, 7:], self.board_history[:, :, :-13])
+        )
         self.agent_selection = self._agent_selector.next()
 
         chosen_move = chess_utils.action_to_move(self.board, action, current_index)
@@ -124,7 +139,7 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         print(self.board)
 
     def close(self):

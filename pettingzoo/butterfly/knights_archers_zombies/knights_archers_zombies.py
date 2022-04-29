@@ -1,4 +1,4 @@
-zombies.self.scale os
+import os
 import sys
 from itertools import repeat
 

@@ -12,7 +12,10 @@ class Ball(pygame.sprite.Sprite):
         self.surf = pygame.Surface(dims)
         self.rect = self.surf.get_rect()
         self.speed_val = speed
-        self.speed = [int(self.speed_val * np.cos(np.pi / 4)), int(self.speed_val * np.sin(np.pi / 4))]
+        self.speed = [
+            int(self.speed_val * np.cos(np.pi / 4)),
+            int(self.speed_val * np.sin(np.pi / 4)),
+        ]
         self.bounce_randomness = bounce_randomness
         self.done = False
         self.hit = False
@@ -46,14 +49,24 @@ class Ball(pygame.sprite.Sprite):
 
             # ball in left half of screen
             if self.rect.center[0] < area.center[0]:
-                is_collision, self.rect, self.speed = p0.process_collision(self.rect, self.speed, 1)
+                is_collision, self.rect, self.speed = p0.process_collision(
+                    self.rect, self.speed, 1
+                )
                 if is_collision:
-                    self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
+                    self.speed = [
+                        self.speed[0] + np.sign(self.speed[0]) * r_val,
+                        self.speed[1] + np.sign(self.speed[1]) * r_val,
+                    ]
             # ball in right half
             else:
-                is_collision, self.rect, self.speed = p1.process_collision(self.rect, self.speed, 2)
+                is_collision, self.rect, self.speed = p1.process_collision(
+                    self.rect, self.speed, 2
+                )
                 if is_collision:
-                    self.speed = [self.speed[0] + np.sign(self.speed[0]) * r_val, self.speed[1] + np.sign(self.speed[1]) * r_val]
+                    self.speed = [
+                        self.speed[0] + np.sign(self.speed[0]) * r_val,
+                        self.speed[1] + np.sign(self.speed[1]) * r_val,
+                    ]
 
         return False
 

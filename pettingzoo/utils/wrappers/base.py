@@ -4,10 +4,10 @@ from pettingzoo.utils.env import AECEnv
 
 
 class BaseWrapper(AECEnv):
-    '''
+    """
     Creates a wrapper around `env` parameter. Extend this class
     to create a useful wrapper.
-    '''
+    """
 
     def __init__(self, env):
         super().__init__()
@@ -41,19 +41,29 @@ class BaseWrapper(AECEnv):
 
     @property
     def observation_spaces(self):
-        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        warnings.warn(
+            "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
+        )
         try:
-            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+            return {
+                agent: self.observation_space(agent) for agent in self.possible_agents
+            }
         except AttributeError:
-            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environment's `observation_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an `observation_spaces` dict attribute. Use the environment's `observation_space` method instead"
+            )
 
     @property
     def action_spaces(self):
-        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        warnings.warn(
+            "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
+        )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
         except AttributeError:
-            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environment's `action_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an action_spaces dict attribute. Use the environment's `action_space` method instead"
+            )
 
     def observation_space(self, agent):
         return self.env.observation_space(agent)
@@ -68,7 +78,7 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         return self.env.render(mode)
 
     def reset(self, seed=None):
@@ -98,7 +108,7 @@ class BaseWrapper(AECEnv):
         self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
-        '''
+        """
         returns a name which looks like: "max_observation<space_invaders_v1>"
-        '''
-        return f'{type(self).__name__}<{str(self.env)}>'
+        """
+        return f"{type(self).__name__}<{str(self.env)}>"

@@ -37,7 +37,9 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self._agent_order)
         self.infos = {i: {} for i in self.agents}
 
-        self.action_spaces = {name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents}
+        self.action_spaces = {
+            name: spaces.Discrete(26 * 26 * 2 + 1) for name in self.agents
+        }
 
         low = np.zeros((198,))
         high = np.ones((198,))
@@ -48,9 +50,18 @@ class raw_env(AECEnv):
             high[i] = 6.0
         high[194] = 7.5
         self.observation_spaces = {
-            i: spaces.Dict({'observation': spaces.Box(low=np.float32(low), high=np.float32(high), dtype=np.float32),
-                            'action_mask': spaces.Box(low=0, high=1, shape=(1353,), dtype=np.int8)})
-            for i in self.agents}
+            i: spaces.Dict(
+                {
+                    "observation": spaces.Box(
+                        low=np.float32(low), high=np.float32(high), dtype=np.float32
+                    ),
+                    "action_mask": spaces.Box(
+                        low=0, high=1, shape=(1353,), dtype=np.int8
+                    ),
+                }
+            )
+            for i in self.agents
+        }
         self.double_roll = 0
 
     def observation_space(self, agent):
@@ -66,7 +77,7 @@ class raw_env(AECEnv):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
 
-        if action != 26**2 * 2:
+        if action != 26 ** 2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
             self.game.execute_play(self.colors[self.agent_selection], action)
 
@@ -89,15 +100,19 @@ class raw_env(AECEnv):
             roll = self.np_random.randint(1, 6), self.np_random.randint(1, 6)
             if roll[0] == roll[1]:
                 self.double_roll = 2
-            if(self.colors[self.agent_selection] == WHITE):
+            if self.colors[self.agent_selection] == WHITE:
                 roll = (-roll[0], -roll[1])
             self.roll = roll
 
         self._accumulate_rewards()
 
     def observe(self, agent):
-        action_mask = np.zeros(1353, 'int8')
-        observation = np.array(self.game.get_board_features(agent), dtype=np.float32).reshape(198, )
+        action_mask = np.zeros(1353, "int8")
+        observation = np.array(
+            self.game.get_board_features(agent), dtype=np.float32
+        ).reshape(
+            198,
+        )
         # only current agent can make legal moves
         if agent == self.agent_selection:
             valid_moves = bg_utils.get_valid_actions(self, self.roll)
@@ -109,21 +124,21 @@ class raw_env(AECEnv):
 
             legal_moves = bg_utils.to_gym_format(valid_moves, self.roll)
             if len(legal_moves) == 0:
-                legal_moves = [26**2 * 2]
+                legal_moves = [26 ** 2 * 2]
         else:
             legal_moves = []
 
         for i in legal_moves:
             action_mask[i] = 1
 
-        return {'observation': observation, 'action_mask': action_mask}
+        return {"observation": observation, "action_mask": action_mask}
 
     def reset(self, seed=None):
         if seed is not None:
             self.seed(seed=seed)
         self.agents = self.possible_agents[:]
         self.dones = {i: False for i in self.agents}
-        self.infos = {i: {'legal_moves': []} for i in self.agents}
+        self.infos = {i: {"legal_moves": []} for i in self.agents}
         self._agent_order = list(self.agents)
         self._agent_selector.reinit(self._agent_order)
         self.agent_selection = self._agent_selector.reset()
@@ -147,9 +162,9 @@ class raw_env(AECEnv):
             self.colors[opp_agent] = WHITE
         self.roll = roll
 
-    def render(self, mode='human'):
-        assert mode in ['human'], print(mode)
-        if mode == 'human':
+    def render(self, mode="human"):
+        assert mode in ["human"], print(mode)
+        if mode == "human":
             self.game.render()
 
     def close(self):

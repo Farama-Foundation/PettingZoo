@@ -70,7 +70,9 @@ if __name__ == "__main__":
             action = env.action_space(agent).sample()
 
         action = np.array(action)
-        action = action.reshape(1,)
+        action = action.reshape(
+            1,
+        )
         env.step(action)
 
         env.render()
