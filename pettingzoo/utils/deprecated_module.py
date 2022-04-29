@@ -10,7 +10,9 @@ class DeprecatedEnv(ImportError):
 class DeprecatedModule:
     def __init__(self, name, old_version, new_version):
         def env(*args, **kwargs):
-            raise DeprecatedEnv(f"{name}_v{old_version} is now deprecated, use {name}_v{new_version} instead")
+            raise DeprecatedEnv(
+                f"{name}_v{old_version} is now deprecated, use {name}_v{new_version} instead"
+            )
 
         self.env = env
         self.raw_env = env
@@ -23,7 +25,7 @@ def is_env(env_name):
 
 
 def deprecated_handler(env_name, module_path, module_name):
-    spec = importlib.util.find_spec(f'{module_name}.{env_name}')
+    spec = importlib.util.find_spec(f"{module_name}.{env_name}")
 
     if spec is None:
         # It wasn't able to find this module
@@ -39,7 +41,9 @@ def deprecated_handler(env_name, module_path, module_name):
                     if int(alt_version) > int(version):
                         return DeprecatedModule(name, version, alt_version)
                     else:
-                        raise ImportError(f"cannot import name '{env_name}' from '{module_name}'")
+                        raise ImportError(
+                            f"cannot import name '{env_name}' from '{module_name}'"
+                        )
 
     # This constructs the module but doesn't execute its code
     module = importlib.util.module_from_spec(spec)

@@ -53,7 +53,9 @@ class BaseParallelWraper(ParallelEnv):
             "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
         )
         try:
-            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+            return {
+                agent: self.observation_space(agent) for agent in self.possible_agents
+            }
         except AttributeError:
             raise AttributeError(
                 "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"

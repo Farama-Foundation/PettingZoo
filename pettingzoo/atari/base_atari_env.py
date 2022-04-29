@@ -18,6 +18,7 @@ def base_env_wrapper_fn(raw_env_fn):
         env = wrappers.AssertOutOfBoundsWrapper(env)
         env = wrappers.OrderEnforcingWrapper(env)
         return env
+
     return env_fn
 
 
@@ -27,16 +28,17 @@ def BaseAtariEnv(**kwargs):
 
 class ParallelAtariEnv(ParallelEnv, EzPickle):
     def __init__(
-            self,
-            game,
-            num_players,
-            mode_num=None,
-            seed=None,
-            obs_type='rgb_image',
-            full_action_space=False,
-            env_name=None,
-            max_cycles=100000,
-            auto_rom_install_path=None):
+        self,
+        game,
+        num_players,
+        mode_num=None,
+        seed=None,
+        obs_type="rgb_image",
+        full_action_space=False,
+        env_name=None,
+        max_cycles=100000,
+        auto_rom_install_path=None,
+    ):
         """Frameskip should be either a tuple (indicating a random range to
         choose from, with the top value exclude), or an int."""
         EzPickle.__init__(
@@ -52,21 +54,27 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             auto_rom_install_path,
         )
 
-        assert obs_type in ('ram', 'rgb_image', "grayscale_image"), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
+        assert obs_type in (
+            "ram",
+            "rgb_image",
+            "grayscale_image",
+        ), "obs_type must  either be 'ram' or 'rgb_image' or 'grayscale_image'"
         self.obs_type = obs_type
         self.full_action_space = full_action_space
         self.num_players = num_players
         self.max_cycles = max_cycles
         if env_name is None:
             env_name = "custom_" + game
-        self.metadata = {'render_modes': ['human', 'rgb_array'],
-                         'name': env_name,
-                         'render_fps': 60}
+        self.metadata = {
+            "render_modes": ["human", "rgb_array"],
+            "name": env_name,
+            "render_fps": 60,
+        }
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
 
-        self.ale.setFloat(b'repeat_action_probability', 0.)
+        self.ale.setFloat(b"repeat_action_probability", 0.0)
 
         if auto_rom_install_path is None:
             start = Path(multi_agent_ale_py.__file__).parent
@@ -84,8 +92,10 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             final = start / "ROM" / game / f"{game}.bin"
 
         if not final.exists():
-            raise OSError(f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/Farama-Foundation/AutoROM) "
-                          "or specify and double-check the path to your Atari rom using the `rom_path` argument.")
+            raise OSError(
+                f"rom {game} is not installed. Please install roms using AutoROM tool (https://github.com/Farama-Foundation/AutoROM) "
+                "or specify and double-check the path to your Atari rom using the `rom_path` argument."
+            )
 
         self.rom_path = str(final)
         self.ale.loadROM(self.rom_path)
@@ -96,7 +106,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             mode = all_modes[0]
         else:
             mode = mode_num
-            assert mode in all_modes, f"mode_num parameter is wrong. Mode {mode_num} selected, only {list(all_modes)} modes are supported"
+            assert (
+                mode in all_modes
+            ), f"mode_num parameter is wrong. Mode {mode_num} selected, only {list(all_modes)} modes are supported"
 
         self.mode = mode
         self.ale.setMode(self.mode)
@@ -111,22 +123,33 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
         self.action_mapping = action_mapping
 
-        if obs_type == 'ram':
-            observation_space = gym.spaces.Box(low=0, high=255, dtype=np.uint8, shape=(128,))
+        if obs_type == "ram":
+            observation_space = gym.spaces.Box(
+                low=0, high=255, dtype=np.uint8, shape=(128,)
+            )
         else:
             (screen_width, screen_height) = self.ale.getScreenDims()
-            if obs_type == 'rgb_image':
+            if obs_type == "rgb_image":
                 num_channels = 3
-            elif obs_type == 'grayscale_image':
+            elif obs_type == "grayscale_image":
                 num_channels = 1
-            observation_space = spaces.Box(low=0, high=255, shape=(screen_height, screen_width, num_channels), dtype=np.uint8)
+            observation_space = spaces.Box(
+                low=0,
+                high=255,
+                shape=(screen_height, screen_width, num_channels),
+                dtype=np.uint8,
+            )
 
         player_names = ["first", "second", "third", "fourth"]
         self.agents = [f"{player_names[n]}_0" for n in range(num_players)]
         self.possible_agents = self.agents[:]
 
-        self.action_spaces = {agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents}
-        self.observation_spaces = {agent: observation_space for agent in self.possible_agents}
+        self.action_spaces = {
+            agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents
+        }
+        self.observation_spaces = {
+            agent: observation_space for agent in self.possible_agents
+        }
 
         self._screen = None
         self.seed(seed)
@@ -156,12 +179,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         return self.action_spaces[agent]
 
     def _observe(self):
-        if self.obs_type == 'ram':
+        if self.obs_type == "ram":
             bytes = self.ale.getRAM()
             return bytes
-        elif self.obs_type == 'rgb_image':
+        elif self.obs_type == "rgb_image":
             return self.ale.getScreenRGB()
-        elif self.obs_type == 'grayscale_image':
+        elif self.obs_type == "grayscale_image":
             return self.ale.getScreenGrayscale()
 
     def step(self, action_dict):
@@ -178,11 +201,19 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         else:
             lives = self.ale.allLives()
             # an inactive agent in ale gets a -1 life.
-            dones = {agent: int(life) < 0 for agent, life in zip(self.possible_agents, lives) if agent in self.agents}
+            dones = {
+                agent: int(life) < 0
+                for agent, life in zip(self.possible_agents, lives)
+                if agent in self.agents
+            }
 
         obs = self._observe()
         observations = {agent: obs for agent in self.agents}
-        rewards = {agent: rew for agent, rew in zip(self.possible_agents, rewards) if agent in self.agents}
+        rewards = {
+            agent: rew
+            for agent, rew in zip(self.possible_agents, rewards)
+            if agent in self.agents
+        }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not dones[agent]]
         return observations, rewards, dones, infos
@@ -194,14 +225,21 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             import os
 
             import pygame
+
             zoom_factor = 4
             if self._screen is None:
                 pygame.init()
-                self._screen = pygame.display.set_mode((screen_width * zoom_factor, screen_height * zoom_factor))
+                self._screen = pygame.display.set_mode(
+                    (screen_width * zoom_factor, screen_height * zoom_factor)
+                )
 
-            myImage = pygame.image.frombuffer(image.tobytes(), image.shape[:2][::-1], "RGB")
+            myImage = pygame.image.frombuffer(
+                image.tobytes(), image.shape[:2][::-1], "RGB"
+            )
 
-            myImage = pygame.transform.scale(myImage, (screen_width * zoom_factor, screen_height * zoom_factor))
+            myImage = pygame.transform.scale(
+                myImage, (screen_width * zoom_factor, screen_height * zoom_factor)
+            )
 
             self._screen.blit(myImage, (0, 0))
 
@@ -214,6 +252,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
     def close(self):
         if self._screen is not None:
             import pygame
+
             pygame.quit()
             self._screen = None
 

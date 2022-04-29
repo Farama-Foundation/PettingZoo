@@ -16,17 +16,38 @@ from .magent_env import magent_parallel_env, make_env
 default_map_size = 80
 max_cycles_default = 1000
 minimap_mode_default = False
-default_reward_args = dict(step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1, attack_opponent_reward=0.2)
+default_reward_args = dict(
+    step_reward=-0.005,
+    dead_penalty=-0.1,
+    attack_penalty=-0.1,
+    attack_opponent_reward=0.2,
+)
 
 
-def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
+def parallel_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
+    return _parallel_env(
+        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
+    )
 
 
-def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
-    return parallel_to_aec_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args))
+def raw_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
+    return parallel_to_aec_wrapper(
+        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
+    )
 
 
 env = make_env(raw_env)
@@ -35,20 +56,36 @@ env = make_env(raw_env)
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "battlefield_v5",
+        "name": "battlefield_v5",
         "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
+        EzPickle.__init__(
+            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+        )
         assert map_size >= 46, "size of map must be at least 46"
-        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
+        env = magent.GridWorld(
+            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
+        )
         self.leftID = 0
         self.rightID = 1
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
-        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
+        reward_range = [
+            np.minimum(reward_vals, 0).sum(),
+            np.maximum(reward_vals, 0).sum(),
+        ]
         names = ["red", "blue"]
-        super().__init__(env, env.get_handles(), names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
+        super().__init__(
+            env,
+            env.get_handles(),
+            names,
+            map_size,
+            max_cycles,
+            reward_range,
+            minimap_mode,
+            extra_features,
+        )
 
     def generate_map(self):
         env, map_size, handles = self.env, self.map_size, self.handles

@@ -15,8 +15,9 @@ def get_image(path):
     from os import path as os_path
 
     import pygame
+
     cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + '/' + path)
+    image = pygame.image.load(cwd + "/" + path)
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
     sfc.blit(image, (0, 0))
     return sfc
@@ -47,18 +48,34 @@ class raw_env(AECEnv):
         self._overwrite_go_global_variables(board_size=board_size)
         self._komi = komi
 
-        self.agents = ['black_0', 'white_0']
+        self.agents = ["black_0", "white_0"]
         self.possible_agents = self.agents[:]
         self.has_reset = False
 
         self.screen = None
 
         self.observation_spaces = self._convert_to_dict(
-            [spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(self._N, self._N, 17), dtype=bool),
-                          'action_mask': spaces.Box(low=0, high=1, shape=((self._N * self._N) + 1,), dtype=np.int8)})
-             for _ in range(self.num_agents)])
+            [
+                spaces.Dict(
+                    {
+                        "observation": spaces.Box(
+                            low=0, high=1, shape=(self._N, self._N, 17), dtype=bool
+                        ),
+                        "action_mask": spaces.Box(
+                            low=0,
+                            high=1,
+                            shape=((self._N * self._N) + 1,),
+                            dtype=np.int8,
+                        ),
+                    }
+                )
+                for _ in range(self.num_agents)
+            ]
+        )
 
-        self.action_spaces = self._convert_to_dict([spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)])
+        self.action_spaces = self._convert_to_dict(
+            [spaces.Discrete(self._N * self._N + 1) for _ in range(self.num_agents)]
+        )
 
         self._agent_selector = agent_selector(self.agents)
 
@@ -75,8 +92,23 @@ class raw_env(AECEnv):
         go.N = self._N
         go.ALL_COORDS = [(i, j) for i in range(self._N) for j in range(self._N)]
         go.EMPTY_BOARD = np.zeros([self._N, self._N], dtype=np.int8)
-        go.NEIGHBORS = {(x, y): list(filter(self._check_bounds, [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)])) for x, y in go.ALL_COORDS}
-        go.DIAGONALS = {(x, y): list(filter(self._check_bounds, [(x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1)])) for x, y in go.ALL_COORDS}
+        go.NEIGHBORS = {
+            (x, y): list(
+                filter(
+                    self._check_bounds, [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+                )
+            )
+            for x, y in go.ALL_COORDS
+        }
+        go.DIAGONALS = {
+            (x, y): list(
+                filter(
+                    self._check_bounds,
+                    [(x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1)],
+                )
+            )
+            for x, y in go.ALL_COORDS
+        }
         return
 
     def _check_bounds(self, c):
@@ -120,27 +152,37 @@ class raw_env(AECEnv):
         observation = np.dstack((self.board_history, player_plane))
 
         legal_moves = self.next_legal_moves if agent == self.agent_selection else []
-        action_mask = np.zeros((self._N * self._N) + 1, 'int8')
+        action_mask = np.zeros((self._N * self._N) + 1, "int8")
         for i in legal_moves:
             action_mask[i] = 1
 
-        return {'observation': observation, 'action_mask': action_mask}
+        return {"observation": observation, "action_mask": action_mask}
 
     def step(self, action):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
-        current_agent_plane, opponent_agent_plane = self._encode_board_planes(self.agent_selection)
-        self.board_history = np.dstack((current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2]))
+        current_agent_plane, opponent_agent_plane = self._encode_board_planes(
+            self.agent_selection
+        )
+        self.board_history = np.dstack(
+            (current_agent_plane, opponent_agent_plane, self.board_history[:, :, :-2])
+        )
         next_player = self._agent_selector.next()
         if self._go.is_game_over():
             self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
-            self.rewards = self._convert_to_dict(self._encode_rewards(self._go.result()))
+            self.rewards = self._convert_to_dict(
+                self._encode_rewards(self._go.result())
+            )
             self.next_legal_moves = [self._N * self._N]
         else:
-            self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
-        self.agent_selection = next_player if next_player else self._agent_selector.next()
+            self.next_legal_moves = self._encode_legal_actions(
+                self._go.all_legal_moves()
+            )
+        self.agent_selection = (
+            next_player if next_player else self._agent_selector.next()
+        )
         self._accumulate_rewards()
 
     def reset(self, seed=None):
@@ -158,7 +200,7 @@ class raw_env(AECEnv):
         self._last_obs = self.observe(self.agents[0])
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         screen_width = 1026
         screen_height = 1026
 
@@ -176,14 +218,20 @@ class raw_env(AECEnv):
         # Load and scale all of the necessary images
         tile_size = (screen_width) / size
 
-        black_stone = get_image(os.path.join('img', 'GoBlackPiece.png'))
-        black_stone = pygame.transform.scale(black_stone, (int(tile_size * (5 / 6)), int(tile_size * (5 / 6))))
+        black_stone = get_image(os.path.join("img", "GoBlackPiece.png"))
+        black_stone = pygame.transform.scale(
+            black_stone, (int(tile_size * (5 / 6)), int(tile_size * (5 / 6)))
+        )
 
-        white_stone = get_image(os.path.join('img', 'GoWhitePiece.png'))
-        white_stone = pygame.transform.scale(white_stone, (int(tile_size * (5 / 6)), int(tile_size * (5 / 6))))
+        white_stone = get_image(os.path.join("img", "GoWhitePiece.png"))
+        white_stone = pygame.transform.scale(
+            white_stone, (int(tile_size * (5 / 6)), int(tile_size * (5 / 6)))
+        )
 
-        tile_img = get_image(os.path.join('img', 'GO_Tile0.png'))
-        tile_img = pygame.transform.scale(tile_img, ((int(tile_size * (7 / 6))), int(tile_size * (7 / 6))))
+        tile_img = get_image(os.path.join("img", "GO_Tile0.png"))
+        tile_img = pygame.transform.scale(
+            tile_img, ((int(tile_size * (7 / 6))), int(tile_size * (7 / 6)))
+        )
 
         # blit board tiles
         for i in range(1, size - 1):
@@ -191,23 +239,31 @@ class raw_env(AECEnv):
                 self.screen.blit(tile_img, ((i * (tile_size)), int(j) * (tile_size)))
 
         for i in range(1, 9):
-            tile_img = get_image(os.path.join('img', 'GO_Tile' + str(i) + '.png'))
-            tile_img = pygame.transform.scale(tile_img, ((int(tile_size * (7 / 6))), int(tile_size * (7 / 6))))
+            tile_img = get_image(os.path.join("img", "GO_Tile" + str(i) + ".png"))
+            tile_img = pygame.transform.scale(
+                tile_img, ((int(tile_size * (7 / 6))), int(tile_size * (7 / 6)))
+            )
             for j in range(1, size - 1):
                 if i == 1:
                     self.screen.blit(tile_img, (0, int(j) * (tile_size)))
                 elif i == 2:
                     self.screen.blit(tile_img, ((int(j) * (tile_size)), 0))
                 elif i == 3:
-                    self.screen.blit(tile_img, ((size - 1) * (tile_size), int(j) * (tile_size)))
+                    self.screen.blit(
+                        tile_img, ((size - 1) * (tile_size), int(j) * (tile_size))
+                    )
                 elif i == 4:
-                    self.screen.blit(tile_img, ((int(j) * (tile_size)), (size - 1) * (tile_size)))
+                    self.screen.blit(
+                        tile_img, ((int(j) * (tile_size)), (size - 1) * (tile_size))
+                    )
             if i == 5:
                 self.screen.blit(tile_img, (0, 0))
             elif i == 6:
                 self.screen.blit(tile_img, ((size - 1) * (tile_size), 0))
             elif i == 7:
-                self.screen.blit(tile_img, ((size - 1) * (tile_size), (size - 1) * (tile_size)))
+                self.screen.blit(
+                    tile_img, ((size - 1) * (tile_size), (size - 1) * (tile_size))
+                )
             elif i == 8:
                 self.screen.blit(tile_img, (0, (size - 1) * (tile_size)))
 
@@ -216,16 +272,24 @@ class raw_env(AECEnv):
         for i in range(0, size):
             for j in range(0, size):
                 if self._go.board[i][j] == go.BLACK:
-                    self.screen.blit(black_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
+                    self.screen.blit(
+                        black_stone,
+                        ((i * (tile_size) + offset), int(j) * (tile_size) + offset),
+                    )
                 elif self._go.board[i][j] == go.WHITE:
-                    self.screen.blit(white_stone, ((i * (tile_size) + offset), int(j) * (tile_size) + offset))
+                    self.screen.blit(
+                        white_stone,
+                        ((i * (tile_size) + offset), int(j) * (tile_size) + offset),
+                    )
 
         if mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
-        return np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        return (
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        )
 
     def close(self):
         pass
