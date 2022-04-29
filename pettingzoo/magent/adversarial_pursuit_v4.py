@@ -18,14 +18,30 @@ minimap_mode_default = False
 default_reward_args = dict(tag_penalty=-0.2)
 
 
-def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
+def parallel_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
-    return _parallel_env(map_size, minimap_mode, env_reward_args, max_cycles, extra_features)
+    return _parallel_env(
+        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
+    )
 
 
-def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **reward_args):
-    return parallel_to_aec_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args))
+def raw_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **reward_args
+):
+    return parallel_to_aec_wrapper(
+        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
+    )
 
 
 env = make_env(raw_env)
@@ -40,31 +56,33 @@ def get_config(map_size, minimap_mode, tag_penalty):
     cfg.set({"embedding_size": 10})
 
     options = {
-        'width': 2, 'length': 2, 'hp': 1, 'speed': 1,
-        'view_range': gw.CircleRange(5), 'attack_range': gw.CircleRange(2),
-        'attack_penalty': tag_penalty
+        "width": 2,
+        "length": 2,
+        "hp": 1,
+        "speed": 1,
+        "view_range": gw.CircleRange(5),
+        "attack_range": gw.CircleRange(2),
+        "attack_penalty": tag_penalty,
     }
-    predator = cfg.register_agent_type(
-        "predator",
-        options
-    )
+    predator = cfg.register_agent_type("predator", options)
 
     options = {
-        'width': 1, 'length': 1, 'hp': 1, 'speed': 1.5,
-        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(0)
+        "width": 1,
+        "length": 1,
+        "hp": 1,
+        "speed": 1.5,
+        "view_range": gw.CircleRange(4),
+        "attack_range": gw.CircleRange(0),
     }
-    prey = cfg.register_agent_type(
-        "prey",
-        options
-    )
+    prey = cfg.register_agent_type("prey", options)
 
     predator_group = cfg.add_group(predator)
     prey_group = cfg.add_group(prey)
 
-    a = gw.AgentSymbol(predator_group, index='any')
-    b = gw.AgentSymbol(prey_group, index='any')
+    a = gw.AgentSymbol(predator_group, index="any")
+    b = gw.AgentSymbol(prey_group, index="any")
 
-    cfg.add_reward_rule(gw.Event(a, 'attack', b), receiver=[a, b], value=[1, -1])
+    cfg.add_reward_rule(gw.Event(a, "attack", b), receiver=[a, b], value=[1, -1])
 
     return cfg
 
@@ -72,20 +90,36 @@ def get_config(map_size, minimap_mode, tag_penalty):
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "adversarial_pursuit_v4",
+        "name": "adversarial_pursuit_v4",
         "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
+        EzPickle.__init__(
+            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+        )
         assert map_size >= 7, "size of map must be at least 7"
-        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
+        env = magent.GridWorld(
+            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
+        )
 
         handles = env.get_handles()
         reward_vals = np.array([1, -1, -1, -1, -1] + list(reward_args.values()))
-        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
+        reward_range = [
+            np.minimum(reward_vals, 0).sum(),
+            np.maximum(reward_vals, 0).sum(),
+        ]
         names = ["predator", "prey"]
-        super().__init__(env, handles, names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
+        super().__init__(
+            env,
+            handles,
+            names,
+            map_size,
+            max_cycles,
+            reward_range,
+            minimap_mode,
+            extra_features,
+        )
 
     def generate_map(self):
         env, map_size = self.env, self.map_size

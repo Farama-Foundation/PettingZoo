@@ -29,7 +29,11 @@ def sign(v):
 
 
 def mirror_move(move):
-    return chess.Move(chess.square_mirror(move.from_square), chess.square_mirror(move.to_square), promotion=move.promotion)
+    return chess.Move(
+        chess.square_mirror(move.from_square),
+        chess.square_mirror(move.to_square),
+        promotion=move.promotion,
+    )
 
 
 def result_to_int(result_str):
@@ -91,7 +95,11 @@ def get_pawn_promotion_move(diff):
 
 
 def get_pawn_promotion_num(promotion):
-    assert promotion == chess.KNIGHT or promotion == chess.BISHOP or promotion == chess.ROOK
+    assert (
+        promotion == chess.KNIGHT
+        or promotion == chess.BISHOP
+        or promotion == chess.ROOK
+    )
     return 0 if promotion == chess.KNIGHT else (1 if promotion == chess.BISHOP else 2)
 
 
@@ -114,7 +122,11 @@ def get_move_plane(move):
         return KNIGHT_OFFSET + get_knight_dir(difference)
     else:
         if move.promotion is not None and move.promotion != chess.QUEEN:
-            return UNDER_OFFSET + 3 * get_pawn_promotion_move(difference) + get_pawn_promotion_num(move.promotion)
+            return (
+                UNDER_OFFSET
+                + 3 * get_pawn_promotion_move(difference)
+                + get_pawn_promotion_num(move.promotion)
+            )
         else:
             return QUEEN_OFFSET + get_queen_plane(difference)
 
@@ -130,7 +142,11 @@ def action_to_move(board, action, player):
     mirr_move = mirror_move(base_move) if player else base_move
     if mirr_move.promotion == chess.QUEEN:
         mirr_move.promotion = None
-    if mirr_move.promotion is None and str(board.piece_at(mirr_move.from_square)).lower() == 'p' and base_coord[1] == 6:
+    if (
+        mirr_move.promotion is None
+        and str(board.piece_at(mirr_move.from_square)).lower() == "p"
+        and base_coord[1] == 6
+    ):
         mirr_move.promotion = chess.QUEEN
     return mirr_move
 
@@ -149,7 +165,7 @@ def make_move_mapping(uci_move):
 
 
 def legal_moves(orig_board):
-    '''
+    """
     action space is a 8x8x73 dimensional array
     Each of the 8×8
     positions identifies the square from which to “pick up” a piece. The first 56 planes encode
@@ -159,7 +175,7 @@ def legal_moves(orig_board):
     underpromotions for pawn moves or captures in two possible diagonals, to knight, bishop or
     rook respectively. Other pawn moves or captures from the seventh rank are promoted to a
     queen
-    '''
+    """
     if orig_board.turn == chess.BLACK:  # white is 1, black is 0
         board = orig_board.mirror()
     else:
@@ -178,11 +194,11 @@ def legal_moves(orig_board):
 
 
 def get_observation(orig_board, player):
-    '''
+    """
     Observation is an 8x8x(P + L) dimensional array
     P is going to be your pieces positions + your opponents pieces positions
     L is going to be some metadata such as repetition count,,
-    '''
+    """
     board = orig_board
     if player:
         board = board.mirror()
@@ -198,7 +214,7 @@ def get_observation(orig_board, player):
     AUX_OFF = 0
     BASE = AUX_SIZE
 
-    '''        // "Legacy" input planes with:
+    """        // "Legacy" input planes with:
     // - Plane 104 (0-based) filled with 1 if white can castle queenside.
     // - Plane 105 filled with ones if white can castle kingside.
     // - Plane 106 filled with ones if black can castle queenside.
@@ -209,7 +225,7 @@ def get_observation(orig_board, player):
       result[kAuxPlaneBase + 2].SetAll();
     }
     if (board.castlings().they_can_00()) result[kAuxPlaneBase + 3].SetAll();
-    '''
+    """
     if board.castling_rights & chess.BB_H1:
         result[AUX_OFF + 0] = all_squares
     if board.castling_rights & chess.BB_A1:
@@ -218,19 +234,19 @@ def get_observation(orig_board, player):
         result[AUX_OFF + 2] = all_squares
     if board.castling_rights & chess.BB_A8:
         result[AUX_OFF + 3] = all_squares
-    '''
+    """
         if (we_are_black) result[kAuxPlaneBase + 4].SetAll();
         result[kAuxPlaneBase + 5].Fill(history.Last().GetNoCaptureNoPawnPly());
         // Plane kAuxPlaneBase + 6 used to be movecount plane, now it's all zeros.
         // Plane kAuxPlaneBase + 7 is all ones to help NN find board edges.
         result[kAuxPlaneBase + 7].SetAll();
       }
-      '''
+      """
     if player:
         result[AUX_OFF + 4] = all_squares
     result[AUX_OFF + 5].add(board.halfmove_clock // 2)
     result[AUX_OFF + 6] = all_squares
-    '''
+    """
       bool flip = false;
       int history_idx = history.GetLength() - 1;
       for (int i = 0; i < std::min(history_planes, kMoveHistory);
@@ -261,7 +277,7 @@ def get_observation(orig_board, player):
         result[base + 10].mask = (board.theirs() & board.queens()).as_int();
         result[base + 11].mask = (board.their_king()).as_int();
 
-        '''
+        """
     base = BASE
     OURS = 0
     THEIRS = 1
@@ -279,14 +295,14 @@ def get_observation(orig_board, player):
     result[base + 10] = board.pieces(chess.QUEEN, THEIRS)
     result[base + 11] = board.pieces(chess.KING, THEIRS)
 
-    '''
+    """
     const int repetitions = position.GetRepetitions();
     if (repetitions >= 1) result[base + 12].SetAll();
-    '''
+    """
     has_repeated = board.is_repetition(2)
     if has_repeated >= 1:
         result[base + 12] = all_squares
-    '''
+    """
         // If en passant flag is set, undo last pawn move by removing the pawn from
         // the new square and putting into pre-move square.
         if (history_idx < 0 && !board.en_passant().empty()) {
@@ -301,7 +317,7 @@ def get_observation(orig_board, player):
         }
         if (history_idx > 0) flip = !flip;
       }
-    '''
+    """
     # from 0-63
     square = board.ep_square
     if square:

@@ -76,8 +76,16 @@ class raw_env(AECEnv):
 
         self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
         self.observation_spaces = {
-            name: spaces.Dict({'observation': spaces.Box(low=0, high=1, shape=(8, 8, 4), dtype="float64"),
-                               'action_mask': spaces.Box(low=0, high=1, shape=(256,), dtype=np.int8)})
+            name: spaces.Dict(
+                {
+                    "observation": spaces.Box(
+                        low=0, high=1, shape=(8, 8, 4), dtype="float64"
+                    ),
+                    "action_mask": spaces.Box(
+                        low=0, high=1, shape=(256,), dtype=np.int8
+                    ),
+                }
+            )
             for name in self.agents
         }
         self.observation = np.zeros((8, 8, 4))
@@ -106,11 +114,11 @@ class raw_env(AECEnv):
         self.observation = np.array(obs)
 
         legal_moves = self.legal_moves() if agent == self.agent_selection else []
-        action_mask = np.zeros(256, 'int8')
+        action_mask = np.zeros(256, "int8")
         for i in legal_moves:
             action_mask[i] = 1
 
-        return {'observation': self.observation, 'action_mask': action_mask}
+        return {"observation": self.observation, "action_mask": action_mask}
 
     def reset(self, seed=None):
         self.ch = CheckersRules()

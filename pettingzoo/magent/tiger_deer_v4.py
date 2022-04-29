@@ -18,14 +18,30 @@ minimap_mode_default = False
 default_env_args = dict(tiger_step_recover=-0.1, deer_attacked=-0.1)
 
 
-def parallel_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **env_args):
+def parallel_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **env_args
+):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
-    return _parallel_env(map_size, minimap_mode, env_env_args, max_cycles, extra_features)
+    return _parallel_env(
+        map_size, minimap_mode, env_env_args, max_cycles, extra_features
+    )
 
 
-def raw_env(map_size=default_map_size, max_cycles=max_cycles_default, minimap_mode=minimap_mode_default, extra_features=False, **env_args):
-    return parallel_to_aec_wrapper(parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args))
+def raw_env(
+    map_size=default_map_size,
+    max_cycles=max_cycles_default,
+    minimap_mode=minimap_mode_default,
+    extra_features=False,
+    **env_args
+):
+    return parallel_to_aec_wrapper(
+        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **env_args)
+    )
 
 
 env = make_env(raw_env)
@@ -40,38 +56,46 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
     cfg.set({"minimap_mode": minimap_mode})
 
     options = {
-        'width': 1, 'length': 1, 'hp': 5, 'speed': 1,
-        'view_range': gw.CircleRange(1), 'attack_range': gw.CircleRange(0),
-        'step_recover': 0.2,
-        'kill_supply': 8, 'dead_penalty': -1.,
+        "width": 1,
+        "length": 1,
+        "hp": 5,
+        "speed": 1,
+        "view_range": gw.CircleRange(1),
+        "attack_range": gw.CircleRange(0),
+        "step_recover": 0.2,
+        "kill_supply": 8,
+        "dead_penalty": -1.0,
     }
 
-    deer = cfg.register_agent_type(
-        "deer",
-        options)
+    deer = cfg.register_agent_type("deer", options)
 
     options = {
-        'width': 1, 'length': 1, 'hp': 10, 'speed': 1,
-        'view_range': gw.CircleRange(4), 'attack_range': gw.CircleRange(1),
-        'damage': 1, 'step_recover': tiger_step_recover
+        "width": 1,
+        "length": 1,
+        "hp": 10,
+        "speed": 1,
+        "view_range": gw.CircleRange(4),
+        "attack_range": gw.CircleRange(1),
+        "damage": 1,
+        "step_recover": tiger_step_recover,
     }
-    tiger = cfg.register_agent_type(
-        "tiger",
-        options)
+    tiger = cfg.register_agent_type("tiger", options)
 
     deer_group = cfg.add_group(deer)
     tiger_group = cfg.add_group(tiger)
 
-    a = gw.AgentSymbol(tiger_group, index='any')
-    b = gw.AgentSymbol(tiger_group, index='any')
-    c = gw.AgentSymbol(deer_group, index='any')
+    a = gw.AgentSymbol(tiger_group, index="any")
+    b = gw.AgentSymbol(tiger_group, index="any")
+    c = gw.AgentSymbol(deer_group, index="any")
 
     # tigers get reward when they attack a deer simultaneously
-    e1 = gw.Event(a, 'attack', c)
-    e2 = gw.Event(b, 'attack', c)
+    e1 = gw.Event(a, "attack", c)
+    e2 = gw.Event(b, "attack", c)
     tiger_attack_rew = 1
     # reward is halved because the reward is double counted
-    cfg.add_reward_rule(e1 & e2, receiver=[a, b], value=[tiger_attack_rew / 2, tiger_attack_rew / 2])
+    cfg.add_reward_rule(
+        e1 & e2, receiver=[a, b], value=[tiger_attack_rew / 2, tiger_attack_rew / 2]
+    )
     cfg.add_reward_rule(e1, receiver=[c], value=[deer_attacked])
 
     return cfg
@@ -80,21 +104,37 @@ def get_config(map_size, minimap_mode, tiger_step_recover, deer_attacked):
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        'name': "tiger_deer_v4",
+        "name": "tiger_deer_v4",
         "render_fps": 5,
     }
 
     def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
-        EzPickle.__init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features)
+        EzPickle.__init__(
+            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+        )
         assert map_size >= 10, "size of map must be at least 10"
-        env = magent.GridWorld(get_config(map_size, minimap_mode, **reward_args), map_size=map_size)
+        env = magent.GridWorld(
+            get_config(map_size, minimap_mode, **reward_args), map_size=map_size
+        )
 
         handles = env.get_handles()
         reward_vals = np.array([1, -1] + list(reward_args.values()))
-        reward_range = [np.minimum(reward_vals, 0).sum(), np.maximum(reward_vals, 0).sum()]
+        reward_range = [
+            np.minimum(reward_vals, 0).sum(),
+            np.maximum(reward_vals, 0).sum(),
+        ]
 
         names = ["deer", "tiger"]
-        super().__init__(env, handles, names, map_size, max_cycles, reward_range, minimap_mode, extra_features)
+        super().__init__(
+            env,
+            handles,
+            names,
+            map_size,
+            max_cycles,
+            reward_range,
+            minimap_mode,
+            extra_features,
+        )
 
     def generate_map(self):
         env, map_size = self.env, self.map_size

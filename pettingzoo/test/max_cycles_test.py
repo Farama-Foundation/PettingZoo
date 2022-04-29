@@ -7,9 +7,15 @@ def max_cycles_test(mod):
 
     observations = parallel_env.reset()
     dones = {agent: False for agent in parallel_env.agents}
-    test_cycles = max_cycles + 10  # allows environment to do more than max_cycles if it so wishes
+    test_cycles = (
+        max_cycles + 10
+    )  # allows environment to do more than max_cycles if it so wishes
     for step in range(test_cycles):
-        actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents if not dones[agent]}
+        actions = {
+            agent: parallel_env.action_space(agent).sample()
+            for agent in parallel_env.agents
+            if not dones[agent]
+        }
         observations, rewards, dones, infos = parallel_env.step(actions)
         if all(dones.values()):
             break

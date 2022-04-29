@@ -72,7 +72,7 @@ manual_environments = {
     "butterfly/pistonball",
     "butterfly/cooperative_pong",
     "butterfly/prospector",
-    "sisl/pursuit"
+    "sisl/pursuit",
 }
 
 all_environments = {
@@ -100,7 +100,6 @@ all_environments = {
     "atari/volleyball_pong_v3": volleyball_pong_v3,
     "atari/wizard_of_wor_v3": wizard_of_wor_v3,
     "atari/warlords_v3": warlords_v3,
-
     "classic/chess_v5": chess_v5,
     "classic/checkers_v3": checkers_v3,
     "classic/rps_v2": rps_v2,
@@ -116,19 +115,16 @@ all_environments = {
     "classic/go_v5": go_v5,
     "classic/hanabi_v4": hanabi_v4,
     "classic/backgammon_v3": backgammon_v3,
-
     "butterfly/knights_archers_zombies_v10": knights_archers_zombies_v10,
     "butterfly/pistonball_v6": pistonball_v6,
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
     "butterfly/prospector_v4": prospector_v4,
-
     "magent/adversarial_pursuit_v4": adversarial_pursuit_v4,
     "magent/battle_v4": battle_v4,
     "magent/battlefield_v5": battlefield_v5,
     "magent/combined_arms_v6": combined_arms_v6,
     "magent/gather_v5": gather_v5,
     "magent/tiger_deer_v4": tiger_deer_v4,
-
     "mpe/simple_adversary_v2": simple_adversary_v2,
     "mpe/simple_crypto_v2": simple_crypto_v2,
     "mpe/simple_push_v2": simple_push_v2,
@@ -138,7 +134,6 @@ all_environments = {
     "mpe/simple_tag_v2": simple_tag_v2,
     "mpe/simple_world_comm_v2": simple_world_comm_v2,
     "mpe/simple_v2": simple_v2,
-
     "sisl/multiwalker_v9": multiwalker_v9,
     "sisl/waterworld_v3": waterworld_v3,
     "sisl/pursuit_v4": pursuit_v4,

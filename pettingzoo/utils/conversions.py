@@ -12,6 +12,7 @@ def parallel_wrapper_fn(env_fn):
         env = env_fn(**kwargs)
         env = aec_to_parallel_wrapper(env)
         return env
+
     return par_fn
 
 
@@ -41,24 +42,29 @@ def turn_based_aec_to_parallel(aec_env):
 
 
 def to_parallel(aec_env):
-    warnings.warn("The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead.")
+    warnings.warn(
+        "The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead."
+    )
     return aec_to_parallel(aec_env)
 
 
 def from_parallel(par_env):
-    warnings.warn("The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead.")
+    warnings.warn(
+        "The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead."
+    )
     return parallel_to_aec(par_env)
 
 
 class aec_to_parallel_wrapper(ParallelEnv):
     def __init__(self, aec_env):
-        assert aec_env.metadata.get('is_parallelizable', False), \
-            "Converting from an AEC environment to a parallel environment " \
-            "with the to_parallel wrapper is not generally safe " \
-            "(the AEC environment should only update once at the end " \
-            "of each cycle). If you have confirmed that your AEC environment " \
-            "can be converted in this way, then please set the `is_parallelizable` "\
+        assert aec_env.metadata.get("is_parallelizable", False), (
+            "Converting from an AEC environment to a parallel environment "
+            "with the to_parallel wrapper is not generally safe "
+            "(the AEC environment should only update once at the end "
+            "of each cycle). If you have confirmed that your AEC environment "
+            "can be converted in this way, then please set the `is_parallelizable` "
             "key in your metadata to True"
+        )
 
         self.aec_env = aec_env
 
@@ -77,19 +83,29 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
     @property
     def observation_spaces(self):
-        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        warnings.warn(
+            "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
+        )
         try:
-            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+            return {
+                agent: self.observation_space(agent) for agent in self.possible_agents
+            }
         except AttributeError:
-            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
+            )
 
     @property
     def action_spaces(self):
-        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        warnings.warn(
+            "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
+        )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
         except AttributeError:
-            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
+            )
 
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)
@@ -104,7 +120,11 @@ class aec_to_parallel_wrapper(ParallelEnv):
     def reset(self, seed=None):
         self.aec_env.reset(seed=seed)
         self.agents = self.aec_env.agents[:]
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        observations = {
+            agent: self.aec_env.observe(agent)
+            for agent in self.aec_env.agents
+            if not self.aec_env.dones[agent]
+        }
         return observations
 
     def step(self, actions):
@@ -115,9 +135,13 @@ class aec_to_parallel_wrapper(ParallelEnv):
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
                 if self.aec_env.dones[agent]:
-                    raise AssertionError(f"expected agent {agent} got done agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent termination (setting an agent's self.dones entry to True) to happen only at the end of a cycle.")
+                    raise AssertionError(
+                        f"expected agent {agent} got done agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent termination (setting an agent's self.dones entry to True) to happen only at the end of a cycle."
+                    )
                 else:
-                    raise AssertionError(f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle.")
+                    raise AssertionError(
+                        f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle."
+                    )
             obs, rew, done, info = self.aec_env.last()
             self.aec_env.step(actions[agent])
             for agent in self.aec_env.agents:
@@ -125,7 +149,9 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
         dones = dict(**self.aec_env.dones)
         infos = dict(**self.aec_env.infos)
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+        observations = {
+            agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
+        }
         while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
             self.aec_env.step(None)
 
@@ -147,7 +173,7 @@ class parallel_to_aec_wrapper(AECEnv):
         self.env = parallel_env
 
         self.metadata = {**parallel_env.metadata}
-        self.metadata['is_parallelizable'] = True
+        self.metadata["is_parallelizable"] = True
 
         try:
             self.possible_agents = parallel_env.possible_agents
@@ -166,19 +192,29 @@ class parallel_to_aec_wrapper(AECEnv):
 
     @property
     def observation_spaces(self):
-        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        warnings.warn(
+            "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
+        )
         try:
-            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+            return {
+                agent: self.observation_space(agent) for agent in self.possible_agents
+            }
         except AttributeError:
-            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
+            )
 
     @property
     def action_spaces(self):
-        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        warnings.warn(
+            "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
+        )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
         except AttributeError:
-            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
+            )
 
     def observation_space(self, agent):
         return self.env.observation_space(agent)
@@ -232,7 +268,11 @@ class parallel_to_aec_wrapper(AECEnv):
 
             env_agent_set = set(self.env.agents)
 
-            self.agents = self.env.agents + [agent for agent in sorted(self._observations.keys()) if agent not in env_agent_set]
+            self.agents = self.env.agents + [
+                agent
+                for agent in sorted(self._observations.keys())
+                if agent not in env_agent_set
+            ]
 
             if len(self.env.agents):
                 self._agent_selector = agent_selector(self.env.agents)
@@ -248,7 +288,12 @@ class parallel_to_aec_wrapper(AECEnv):
     def last(self, observe=True):
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
-        return observation, self._cumulative_rewards[agent], self.dones[agent], self.infos[agent]
+        return (
+            observation,
+            self._cumulative_rewards[agent],
+            self.dones[agent],
+            self.infos[agent],
+        )
 
     def render(self, mode="human"):
         return self.env.render(mode)
@@ -283,19 +328,29 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
 
     @property
     def observation_spaces(self):
-        warnings.warn("The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead.")
+        warnings.warn(
+            "The `observation_spaces` dictionary is deprecated. Use the `observation_space` function instead."
+        )
         try:
-            return {agent: self.observation_space(agent) for agent in self.possible_agents}
+            return {
+                agent: self.observation_space(agent) for agent in self.possible_agents
+            }
         except AttributeError:
-            raise AttributeError("The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
+            )
 
     @property
     def action_spaces(self):
-        warnings.warn("The `action_spaces` dictionary is deprecated. Use the `action_space` function instead.")
+        warnings.warn(
+            "The `action_spaces` dictionary is deprecated. Use the `action_space` function instead."
+        )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
         except AttributeError:
-            raise AttributeError("The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead")
+            raise AttributeError(
+                "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
+            )
 
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)
@@ -306,7 +361,11 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
     def reset(self, seed=None):
         self.aec_env.reset(seed=seed)
         self.agents = self.aec_env.agents[:]
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents if not self.aec_env.dones[agent]}
+        observations = {
+            agent: self.aec_env.observe(agent)
+            for agent in self.aec_env.agents
+            if not self.aec_env.dones[agent]
+        }
         return observations
 
     def step(self, actions):
@@ -316,7 +375,9 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         rewards = {**self.aec_env.rewards}
         dones = {**self.aec_env.dones}
         infos = {**self.aec_env.infos}
-        observations = {agent: self.aec_env.observe(agent) for agent in self.aec_env.agents}
+        observations = {
+            agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
+        }
 
         while self.aec_env.agents:
             if self.aec_env.dones[self.aec_env.agent_selection]:

@@ -28,7 +28,7 @@ class Paddle(pygame.sprite.Sprite):
                 self.rect = newpos
 
     def process_collision(self, b_rect, b_speed, paddle_type):
-        '''
+        """
 
         Parameters
         ----------
@@ -42,7 +42,7 @@ class Paddle(pygame.sprite.Sprite):
         b_rect: new ball rect
         b_speed: new ball speed
 
-        '''
+        """
         if not self.rect.colliderect(b_rect):
             return False, b_rect, b_speed
         # handle collision from left or right
@@ -55,12 +55,20 @@ class Paddle(pygame.sprite.Sprite):
             if b_speed[0] > 0:
                 b_speed[0] *= -1
         # handle collision from top
-        if b_rect.bottom > self.rect.top and b_rect.top - b_speed[1] < self.rect.top and b_speed[1] > 0:
+        if (
+            b_rect.bottom > self.rect.top
+            and b_rect.top - b_speed[1] < self.rect.top
+            and b_speed[1] > 0
+        ):
             b_rect.bottom = self.rect.top
             if b_speed[1] > 0:
                 b_speed[1] *= -1
         # handle collision from bottom
-        elif b_rect.top < self.rect.bottom and b_rect.bottom - b_speed[1] > self.rect.bottom and b_speed[1] < 0:
+        elif (
+            b_rect.top < self.rect.bottom
+            and b_rect.bottom - b_speed[1] > self.rect.bottom
+            and b_speed[1] < 0
+        ):
             b_rect.top = self.rect.bottom - 1
             if b_speed[1] < 0:
                 b_speed[1] *= -1
