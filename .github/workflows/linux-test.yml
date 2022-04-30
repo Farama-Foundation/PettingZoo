@@ -33,11 +33,11 @@ jobs:
         pip install dist/*.tar.gz
     - name: Release Test
       run: |
-        xvfb-run -as "-screen 0 1024x768x24" bash ./release_test.sh
+        xvfb-run -s "-screen 0 1024x768x24" bash ./release_test.sh
     - name: 13 lines test
       run: |
         if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
         then
             pip install stable_baselines3 supersuit==3.4.0
-            sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" -a python -
+            sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
         fi

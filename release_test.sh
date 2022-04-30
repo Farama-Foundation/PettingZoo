@@ -11,5 +11,6 @@ pytest ./test/variable_env_test.py
 pytest ./test/doc_examples_test.py
 pytest ./test/specific_env_tests.py
 
-bash ./check_style.sh
 python3 -m test.print_test
+
+bash ./check_style.sh
