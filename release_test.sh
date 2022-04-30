@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # xvfb-run -s "-screen 0 1024x768x24" -a pytest ./test/pytest_runner.py
 # xvfb-run -s "-screen 0 1024x768x24" -a pytest ./test/all_parameter_combs.py
 pytest ./test/pytest_runner.py
