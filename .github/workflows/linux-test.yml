@@ -17,14 +17,14 @@ jobs:
         python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
     - uses: actions/checkout@v2
-    - uses: openrndr/setup-opengl@v1.1
+    # - uses: openrndr/setup-opengl@v1.1
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt-get install python-opengl
+        sudo apt-get install python-opengl xvfb
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
     - name: Source distribution test
