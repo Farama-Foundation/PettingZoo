@@ -21,21 +21,25 @@ PROSPEC_OBSERV_SHAPE = (PROSPEC_OBSERV_SIDE_LEN, PROSPEC_OBSERV_SIDE_LEN, 3)
 BANKER_OBSERV_SIDE_LEN = PROSPEC_OBSERV_SIDE_LEN + 4
 BANKER_OBSERV_SHAPE = (BANKER_OBSERV_SIDE_LEN, BANKER_OBSERV_SIDE_LEN, 3)
 
-MAX_SPRITE_ROTATION = math.pi / 4. / 15. * FPS
+MAX_SPRITE_ROTATION = math.pi / 4.0 / 15.0 * FPS
 
 NUM_PROSPECTORS = 4
 NUM_BANKERS = 3
 NUM_AGENTS = NUM_PROSPECTORS + NUM_BANKERS
 
-PROSPECTOR_SPEED = 1800 * 80 / 15. * FPS
-BANKER_SPEED = 1200 * 80 / 15. * FPS
+PROSPECTOR_SPEED = 1800 * 80 / 15.0 * FPS
+BANKER_SPEED = 1200 * 80 / 15.0 * FPS
 BANKER_HANDOFF_TOLERANCE = math.pi / 4
 TWO_PI = math.pi * 2.0
 
-if PROSPECTOR_SPEED % 1. != 0.:
-    raise ValueError(f'FPS of {FPS} leads to decimal place value of {PROSPECTOR_SPEED} for PROSPECTOR_SPEED.')
-if BANKER_SPEED % 1. != 0.:
-    raise ValueError(f'FPS of {FPS} leads to decimal place value of {BANKER_SPEED} for BANKER_SPEED.')
+if PROSPECTOR_SPEED % 1.0 != 0.0:
+    raise ValueError(
+        f"FPS of {FPS} leads to decimal place value of {PROSPECTOR_SPEED} for PROSPECTOR_SPEED."
+    )
+if BANKER_SPEED % 1.0 != 0.0:
+    raise ValueError(
+        f"FPS of {FPS} leads to decimal place value of {BANKER_SPEED} for BANKER_SPEED."
+    )
 PROSPECTOR_SPEED = int(PROSPECTOR_SPEED)
 BANKER_SPEED = int(BANKER_SPEED)
 

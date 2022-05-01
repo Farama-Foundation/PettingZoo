@@ -27,7 +27,7 @@ def get_type(agent):
 
 class parallel_env(ParallelEnv):
 
-    metadata = {"render.modes": ["human"], "name": "generated_agents_parallel_v0"}
+    metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100):
         super().__init__()
@@ -69,7 +69,9 @@ class parallel_env(ParallelEnv):
         self.agents.append(agent_name)
         return agent_name
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.all_dones = {}
         self.agents = []
         self.num_steps = 0

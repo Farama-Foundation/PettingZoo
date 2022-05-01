@@ -4,6 +4,12 @@ from .conversions import aec_to_parallel, parallel_to_aec, turn_based_aec_to_par
 from .env import AECEnv, ParallelEnv
 from .random_demo import random_demo
 from .save_observation import save_observation
-from .wrappers import (AssertOutOfBoundsWrapper, BaseParallelWraper, BaseWrapper,
-                       CaptureStdoutWrapper, ClipOutOfBoundsWrapper, OrderEnforcingWrapper,
-                       TerminateIllegalWrapper)
+from .wrappers import (
+    AssertOutOfBoundsWrapper,
+    BaseParallelWraper,
+    BaseWrapper,
+    CaptureStdoutWrapper,
+    ClipOutOfBoundsWrapper,
+    OrderEnforcingWrapper,
+    TerminateIllegalWrapper,
+)

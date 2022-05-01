@@ -179,8 +179,8 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ``` python
-from pettingzoo.butterfly import prison_v4
-prison_v4.manual_control(<environment parameters>)
+from pettingzoo.butterfly knights_archers_zombies_v10
+knights_archers_zombies_v10.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.
@@ -201,12 +201,12 @@ Some games support this via:
 
 ``` python
 import time
-from pettingzoo.butterfly import knights_archers_zombies_v9
+from pettingzoo.butterfly import knights_archers_zombies_v10
 
-env = knights_archers_zombies_v9.env()
+env = knights_archers_zombies_v10.env()
 env.reset()
 
-manual_policy = knights_archers_zombies_v9.ManualPolicy(env)
+manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
 for agent in env.agent_iter():
     observation, reward, done, info = env.last()

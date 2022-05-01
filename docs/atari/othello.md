@@ -5,10 +5,10 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
-action-values: "[0,17]"
+action-values: "[0,9]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import othello_v2"
+import: "from pettingzoo.atari import othello_v3"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -49,6 +49,7 @@ Environment parameters are common to all Atari environments and are described in
 
 ### Version History
 
+* v3: Minimal Action Space (1.18.0)
 * v2: Breaking changes to entire API (1.4.0)
 * v1: Fixed othello auto reset issue (1.2.1)
 * v0: Initial versions release (1.0.0)
