@@ -1,0 +1,13 @@
+[tool.pyright]
+
+# add any files/directories with type declaration to include
+include = ["pettingzoo/utils/env.py"]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+]
+strict = ["pettingzoo/utils/env.py"]
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+verboseOutput = true
