@@ -5,10 +5,10 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
-action-values: "[0,17]"
+action-values: "[0,4]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import video_checkers_v3"
+import: "from pettingzoo.atari import video_checkers_v4"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -42,6 +42,7 @@ Environment parameters are common to all Atari environments and are described in
 
 ### Version History
 
+* v4: Minimal Action Space (1.18.0)
 * v3: No action timer (1.9.0)
 * v2: Fixed checkers rewards (1.5.0)
 * v1: Breaking changes to entire API (1.4.0)

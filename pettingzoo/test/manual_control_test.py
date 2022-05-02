@@ -9,7 +9,7 @@ def inp_handler(name):
 
     keyboard = KeyboardController()
     time.sleep(0.1)
-    choices = ['w', 'a', 's', 'd', 'j', 'k', Key.left, Key.right, Key.up, Key.down]
+    choices = ["w", "a", "s", "d", "j", "k", Key.left, Key.right, Key.up, Key.down]
     NUM_TESTS = 50
     for x in range(NUM_TESTS):
         i = random.choice(choices) if x != NUM_TESTS - 1 else Key.esc

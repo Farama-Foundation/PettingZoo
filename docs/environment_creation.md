@@ -39,8 +39,8 @@ Most parallel environments in PettingZoo only allocate rewards at the end of a c
 
 ``` python
 from pettingzoo.utils import to_parallel
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 env = to_parallel(env)
 ```
 
@@ -50,8 +50,8 @@ Any parallel environment can be efficiently converted to an AEC environment with
 
 ``` python
 from pettingzoo.utils import from_parallel
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.parallel_env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.parallel_env()
 env = from_parallel(env)
 ```
 
@@ -70,8 +70,8 @@ You can apply these wrappers to your environment in a similar manner to the belo
 
 ``` python
 from pettingzoo.utils import OrderEnforcingWrapper
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 env = OrderEnforcingWrapper(env)
 ```
 
@@ -124,9 +124,9 @@ PettingZoo's API has a number of features and requirements. To make sure your en
 
 ``` python
 from pettingzoo.test import api_test
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
-api_test(env, num_cycles=10, verbose_progress=False)
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
+api_test(env, num_cycles=1000, verbose_progress=False)
 ```
 
 As you can tell, you simply pass an environment to the test. The test will assert or give some other error on an API issue, and will return normally if it passes.
@@ -142,9 +142,9 @@ This is an analogous version of the API test, but for parallel environments. You
 
 ``` python
 from pettingzoo.test import parallel_api_test
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.parallel_env()
-parallel_api_test(env, num_cycles=10)
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.parallel_env()
+parallel_api_test(env, num_cycles=1000)
 ```
 
 ### Seed Test
@@ -155,12 +155,12 @@ The seed test takes in a function that creates a pettingzoo environment. For exa
 
 ``` python
 from pettingzoo.test import seed_test, parallel_seed_test
-from pettingzoo.butterfly import pistonball_v5
-env_fn = pistonball_v5.env
+from pettingzoo.butterfly import pistonball_v6
+env_fn = pistonball_v6.env
 seed_test(env_fn, num_cycles=10, test_kept_state=True)
 
 # or for parallel environments
-parallel_env_fn = pistonball_v5.parallel_env
+parallel_env_fn = pistonball_v6.parallel_env
 parallel_seed_test(parallel_env_fn, num_cycles=10, test_kept_state=True)
 ```
 
@@ -179,8 +179,8 @@ The max cycles test tests that the `max_cycles` environment argument exists and 
 
 ``` python
 from pettingzoo.test import max_cycles_test
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 max_cycles_test(env)
 ```
 
@@ -190,8 +190,8 @@ The render test checks that rendering 1) does not crash and 2) produces output o
 
 ``` python
 from pettingzoo.test import render_test
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 render_test(env)
 ```
 
@@ -210,8 +210,8 @@ To make sure we do not have performance regressions, we have the performance ben
 
 ``` python
 from pettingzoo.test import performance_benchmark
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 performance_benchmark(env)
 ```
 
@@ -221,7 +221,7 @@ The save observation test is to visually inspect the observations of games with 
 
 ``` python
 from pettingzoo.test import test_save_obs
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 test_save_obs(env)
 ```
