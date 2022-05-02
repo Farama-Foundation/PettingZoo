@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict, Iterable, Iterator, List, Tuple, TypeVar, Optional§
+from typing import Any, Dict, Iterable, Iterator, List, Tuple, TypeVar, Optional
 
 import gym
 import numpy as np
