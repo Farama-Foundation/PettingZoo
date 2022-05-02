@@ -6,8 +6,8 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
 import gym
 import numpy as np
 
-ObsType = TypeVar('ObsType')
-ActionType = TypeVar('ActionType')
+ObsType = TypeVar("ObsType")
+ActionType = TypeVar("ActionType")
 AgentID = str
 
 ObsDict = Dict[AgentID, ObsType]
@@ -34,13 +34,17 @@ class AECEnv:
     possible_agents: List[AgentID]  # All agents that may appear in the environment
     agents: List[AgentID]  # Agents active at any given time
 
-    observation_spaces: Dict[AgentID, gym.spaces.Space]  # Observation space for each agent
+    observation_spaces: Dict[
+        AgentID, gym.spaces.Space
+    ]  # Observation space for each agent
     action_spaces: Dict[AgentID, gym.spaces.Space]  # Action space for each agent
 
     dones: Dict[AgentID, bool]  # Whether each agent has just reached a terminal state
     rewards: Dict[AgentID, float]  # Reward from the last step for each agent
     _cumulative_rewards: Dict[AgentID, float]  # Cumulative rewards for each agent
-    infos: Dict[AgentID, Dict[str, Any]]  # Additional information from the last step for each agent
+    infos: Dict[
+        AgentID, Dict[str, Any]
+    ]  # Additional information from the last step for each agent
 
     agent_selection: AgentID  # The agent currently being stepped
 
@@ -60,7 +64,7 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def seed(self, seed=None) -> None:
+    def seed(self, seed: Optional[int] = None) -> None:
         """
         Reseeds the environment (making the resulting environment deterministic).
         """
@@ -74,7 +78,7 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def render(self, mode='human') -> None | np.ndarray | str:
+    def render(self, mode: str = "human") -> None | np.ndarray | str:
         """
         Displays a rendered frame from the environment, if supported.
         Alternate render modes in the default environments are `'rgb_array'`
@@ -161,7 +165,7 @@ class AECEnv:
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
+    def agent_iter(self, max_iter: int = 2 ** 63) -> AECIterable:
         """
         Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
         """
@@ -268,6 +272,7 @@ class ParallelEnv:
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     """
+
     metadata: Dict[str, Any]
 
     agents: List[AgentID]
@@ -287,7 +292,9 @@ class ParallelEnv:
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
-    def step(self, actions: ActionDict) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
+    def step(
+        self, actions: ActionDict
+    ) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
         """
         receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, done dictionary,

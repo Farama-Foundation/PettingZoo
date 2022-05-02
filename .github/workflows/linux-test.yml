@@ -41,3 +41,11 @@ jobs:
             pip install stable_baselines3 supersuit==3.4.0
             sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
         fi
+    - name: Check code with pyright
+      uses: jakebailey/pyright-action@v1
+      with:
+        version: 1.1.183
+        python-platform: ${{ matrix.python-platform }}
+        python-version: ${{ matrix.python-version }}
+      continue-on-error: true
+
