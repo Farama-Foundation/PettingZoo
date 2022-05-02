@@ -21,6 +21,7 @@ See docs/api.md for api documentation
 See docs/dev_docs.md for additional documentation and an example environment.
 """
 
+
 class AECEnv:
     """
     The AECEnv steps agents one at a time. If you are unsure if you
@@ -271,7 +272,6 @@ class ParallelEnv:
 
     agents: List[AgentID]
     possible_agents: List[AgentID]
-
 
     def reset(self, seed: Optional[int] = None) -> ObsDict:
         """
