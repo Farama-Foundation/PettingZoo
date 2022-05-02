@@ -1,4 +1,18 @@
+from __future__ import annotations
+
 import warnings
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
+
+import gym
+import numpy as np
+
+ObsType = TypeVar('ObsType')
+ActionType = TypeVar('ActionType')
+AgentID = str
+
+ObsDict = Dict[AgentID, ObsType]
+ActionDict = Dict[AgentID, ActionType]
+
 
 """
 Base environment definitions
@@ -15,23 +29,38 @@ class AECEnv:
     the Developer documentation on the website.
     """
 
+    metadata: Dict[str, Any]  # Metadata for the environment
+
+    possible_agents: List[AgentID]  # All agents that may appear in the environment
+    agents: List[AgentID]  # Agents active at any given time
+
+    observation_spaces: Dict[AgentID, gym.spaces.Space]  # Observation space for each agent
+    action_spaces: Dict[AgentID, gym.spaces.Space]  # Action space for each agent
+
+    dones: Dict[AgentID, bool]  # Whether each agent has just reached a terminal state
+    rewards: Dict[AgentID, float]  # Reward from the last step for each agent
+    _cumulative_rewards: Dict[AgentID, float]  # Cumulative rewards for each agent
+    infos: Dict[AgentID, Dict[str, Any]]  # Additional information from the last step for each agent
+
+    agent_selection: AgentID  # The agent currently being stepped
+
     def __init__(self):
         pass
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         """
         Accepts and executes the action of the current agent_selection
         in the environment, automatically switches control to the next agent.
         """
         raise NotImplementedError
 
-    def reset(self, seed=None):
+    def reset(self, seed: Optional[int] = None) -> None:
         """
         Resets the environment to a starting state.
         """
         raise NotImplementedError
 
-    def seed(self, seed=None):
+    def seed(self, seed=None) -> None:
         """
         Reseeds the environment (making the resulting environment deterministic).
         """
@@ -39,13 +68,13 @@ class AECEnv:
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
-    def observe(self, agent):
+    def observe(self, agent: str) -> ObsType:
         """
         Returns the observation an agent currently can make. `last()` calls this function.
         """
         raise NotImplementedError
 
-    def render(self, mode="human"):
+    def render(self, mode='human') -> None | np.ndarray | str:
         """
         Displays a rendered frame from the environment, if supported.
         Alternate render modes in the default environments are `'rgb_array'`
@@ -54,7 +83,7 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def state(self):
+    def state(self) -> np.ndarray:
         """
         State returns a global view of the environment appropriate for
         centralized training decentralized execution methods like QMIX
@@ -72,7 +101,7 @@ class AECEnv:
         """
         pass
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: str) -> gym.Space:
         """
         Takes in agent and returns the observation space for that agent.
 
@@ -85,7 +114,7 @@ class AECEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: str) -> gym.Space:
         """
         Takes in agent and returns the action space for that agent.
 
@@ -99,14 +128,14 @@ class AECEnv:
         return self.action_spaces[agent]
 
     @property
-    def num_agents(self):
+    def num_agents(self) -> int:
         return len(self.agents)
 
     @property
-    def max_num_agents(self):
+    def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def _dones_step_first(self):
+    def _dones_step_first(self) -> AgentID:
         """
         Makes .agent_selection point to first done agent. Stores old value of agent_selection
         so that _was_done_step can restore the variable after the done agent steps.
@@ -117,30 +146,30 @@ class AECEnv:
             self.agent_selection = _dones_order[0]
         return self.agent_selection
 
-    def _clear_rewards(self):
+    def _clear_rewards(self) -> None:
         """
-        clears all items in .rewards
+        Clears all items in .rewards
         """
         for agent in self.rewards:
             self.rewards[agent] = 0
 
-    def _accumulate_rewards(self):
+    def _accumulate_rewards(self) -> None:
         """
-        adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
+        Adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
         called near the end of a step() method
         """
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter=2 ** 63):
+    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
         """
-        yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
+        Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
         """
         return AECIterable(self, max_iter)
 
-    def last(self, observe=True):
+    def last(self, observe: bool = True) -> Tuple[ObsType, float, bool, Dict[str, Any]]:
         """
-        returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
+        Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
         """
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
@@ -151,7 +180,7 @@ class AECEnv:
             self.infos[agent],
         )
 
-    def _was_done_step(self, action):
+    def _was_done_step(self, action: None) -> None:
         """
         Helper function that performs step() for done agents.
 
@@ -195,7 +224,7 @@ class AECEnv:
             self._skip_agent_selection = None
         self._clear_rewards()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         returns a name which looks like: "space_invaders_v1"
         """
@@ -205,11 +234,11 @@ class AECEnv:
             return self.__class__.__name__
 
     @property
-    def unwrapped(self):
+    def unwrapped(self) -> AECEnv:
         return self
 
 
-class AECIterable:
+class AECIterable(Iterable):
     def __init__(self, env, max_iter):
         self.env = env
         self.max_iter = max_iter
@@ -218,7 +247,7 @@ class AECIterable:
         return AECIterator(self.env, self.max_iter)
 
 
-class AECIterator:
+class AECIterator(Iterator):
     def __init__(self, env, max_iter):
         self.env = env
         self.iters_til_term = max_iter
@@ -229,6 +258,9 @@ class AECIterator:
         self.iters_til_term -= 1
         return self.env.agent_selection
 
+    def __iter__(self):
+        return self
+
 
 class ParallelEnv:
     """
@@ -236,10 +268,14 @@ class ParallelEnv:
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     """
+    metadata: Dict[str, Any]
 
-    def reset(self, seed=None):
+    agents: List[AgentID]
+    possible_agents: List[AgentID]
+
+    def reset(self, seed: Optional[int] = None) -> ObsDict:
         """
-        resets the environment and returns a dictionary of observations (keyed by the agent name)
+        Resets the environment and returns a dictionary of observations (keyed by the agent name)
         """
         raise NotImplementedError
 
@@ -251,7 +287,7 @@ class ParallelEnv:
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
-    def step(self, actions):
+    def step(self, actions: ActionDict) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
         """
         receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, done dictionary,
@@ -259,7 +295,7 @@ class ParallelEnv:
         """
         raise NotImplementedError
 
-    def render(self, mode="human"):
+    def render(self, mode="human") -> None | np.ndarray | str:
         """
         Displays a rendered frame from the environment, if supported.
         Alternate render modes in the default environments are `'rgb_array'`
@@ -275,7 +311,7 @@ class ParallelEnv:
         """
         pass
 
-    def state(self):
+    def state(self) -> np.ndarray:
         """
         State returns a global view of the environment appropriate for
         centralized training decentralized execution methods like QMIX
@@ -286,7 +322,7 @@ class ParallelEnv:
             )
         )
 
-    def observation_space(self, agent):
+    def observation_space(self, agent: AgentID) -> gym.Space:
         """
         Takes in agent and returns the observation space for that agent.
 
@@ -299,7 +335,7 @@ class ParallelEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent):
+    def action_space(self, agent: AgentID) -> gym.Space:
         """
         Takes in agent and returns the action space for that agent.
 
@@ -313,14 +349,14 @@ class ParallelEnv:
         return self.action_spaces[agent]
 
     @property
-    def num_agents(self):
+    def num_agents(self) -> int:
         return len(self.agents)
 
     @property
-    def max_num_agents(self):
+    def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         returns a name which looks like: "space_invaders_v1" by default
         """
@@ -330,5 +366,5 @@ class ParallelEnv:
             return self.__class__.__name__
 
     @property
-    def unwrapped(self):
+    def unwrapped(self) -> ParallelEnv:
         return self
