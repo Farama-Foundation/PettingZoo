@@ -1,6 +1,7 @@
 import math
 import os
 
+import numpy as np
 import pygame
 
 from . import constants as const
@@ -33,6 +34,18 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.weapon_timeout = 99
 
+        self.weapons = pygame.sprite.Group()
+
+    @property
+    def vector_state(self):
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                *self.direction,
+            ]
+        )
+
     def update(self, action):
         self.action = action
         went_out_of_bounds = False
@@ -44,7 +57,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x += math.cos(move_angle) * self.speed
                 self.rect.y -= math.sin(move_angle) * self.speed
             elif action == 2 and self.rect.y < const.SCREEN_HEIGHT - 40:
-                self.rect.x += math.cos(move_angle) * self.speed
+                self.rect.x -= math.cos(move_angle) * self.speed
                 self.rect.y += math.sin(move_angle) * self.speed
             # Turn CCW & CW
             elif action == 3:

@@ -5,7 +5,7 @@ import numpy as np
 
 
 class capture_stdout:
-    '''
+    """
     usage:
 
     with capture_stdout() as var:
@@ -13,7 +13,8 @@ class capture_stdout:
 
         # value of var will be "hithere"
         data = var.getvalue()
-    '''
+    """
+
     def __init__(self):
         self.old_stdout = None
 

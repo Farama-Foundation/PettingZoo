@@ -12,19 +12,21 @@ import sys
 import subprocess
 
 
-def generate_data(nameline,module):
+def generate_data(nameline, module):
     dir = f"frames/{nameline}/"
     os.mkdir(dir)
     env = module.env()
-    #env = gin_rummy_v0.env()
+    # env = gin_rummy_v0.env()
     env.reset()
     for step in range(100):
-        for agent in env.agent_iter(env.num_agents):  # step through every agent once with observe=True
+        for agent in env.agent_iter(
+            env.num_agents
+        ):  # step through every agent once with observe=True
             obs, rew, done, info = env.last()
             if done:
                 action = None
-            elif isinstance(obs, dict) and 'action_mask' in obs:
-                action = random.choice(np.flatnonzero(obs['action_mask']))
+            elif isinstance(obs, dict) and "action_mask" in obs:
+                action = random.choice(np.flatnonzero(obs["action_mask"]))
             else:
                 action = env.action_spaces[agent].sample()
             env.step(action)
@@ -32,15 +34,15 @@ def generate_data(nameline,module):
         if env.dones[agent]:
             env.reset()
 
-        ndarray = env.render(mode='rgb_array')
+        ndarray = env.render(mode="rgb_array")
         tot_size = max(ndarray.shape)
         target_size = 500
-        ratio = target_size/tot_size
-        new_shape = (int(ndarray.shape[1]*ratio),int(ndarray.shape[0]*ratio))
+        ratio = target_size / tot_size
+        new_shape = (int(ndarray.shape[1] * ratio), int(ndarray.shape[0] * ratio))
         im = Image.fromarray(ndarray)
-        #im  = im.resize(new_shape, Image.ANTIALIAS)
+        # im  = im.resize(new_shape, Image.ANTIALIAS)
         im.save(f"{dir}{str(step).zfill(3)}.png")
-        #print(text)
+        # print(text)
     env.close()
     render_gif_image(nameline)
     # num_games = 0
@@ -52,21 +54,17 @@ def generate_data(nameline,module):
 
 
 def render_gif_image(name):
-    ffmpeg_command = [
-        "convert",
-         f"frames/{name}/*.png",
-        f"gifs/{name}.gif"
-    ]
+    ffmpeg_command = ["convert", f"frames/{name}/*.png", f"gifs/{name}.gif"]
     print(" ".join(ffmpeg_command))
     subprocess.run(ffmpeg_command)
 
 
 def render_all():
-    for name,module in all_environments.items():
+    for name, module in all_environments.items():
         if "classic" not in name:
             nameline = name.replace("/", "_")
             generate_data(nameline, module)
-            #render_gif_image(nameline)
+            # render_gif_image(nameline)
 
 
 if __name__ == "__main__":

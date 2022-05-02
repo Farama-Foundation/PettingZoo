@@ -67,6 +67,6 @@ class AgentLayer:
         pos = np.zeros(2 * len(self.allies))
         idx = 0
         for ally in self.allies:
-            pos[idx: (idx + 2)] = ally.get_state()
+            pos[idx : (idx + 2)] = ally.get_state()
             idx += 2
         return pos

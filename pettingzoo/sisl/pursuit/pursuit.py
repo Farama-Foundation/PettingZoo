@@ -8,7 +8,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .manual_control import manual_control
+from .manual_policy import ManualPolicy
 from .pursuit_base import Pursuit as _env
 
 
@@ -25,10 +25,11 @@ parallel_env = parallel_wrapper_fn(env)
 class raw_env(AECEnv, EzPickle):
 
     metadata = {
-        "render.modes": ["human", "rgb_array"],
+        "render_modes": ["human", "rgb_array"],
         "name": "pursuit_v4",
-        'is_parallelizable': True,
-        'video.frames_per_second': 5,
+        "is_parallelizable": True,
+        "render_fps": 5,
+        "has_manual_policy": True,
     }
 
     def __init__(self, *args, **kwargs):
@@ -49,7 +50,9 @@ class raw_env(AECEnv, EzPickle):
     def seed(self, seed=None):
         self.env.seed(seed)
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.steps = 0
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))

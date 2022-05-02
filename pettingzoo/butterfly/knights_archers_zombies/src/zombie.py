@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import pygame
 
 from . import constants as const
@@ -14,6 +15,17 @@ class Zombie(pygame.sprite.Sprite):
         self.randomizer = randomizer
 
         self.x_lims = [const.SCREEN_UNITS, const.SCREEN_WIDTH - const.SCREEN_UNITS]
+
+    @property
+    def vector_state(self):
+        return np.array(
+            [
+                self.rect.x / const.SCREEN_WIDTH,
+                self.rect.y / const.SCREEN_HEIGHT,
+                0.0,
+                1.0,
+            ]
+        )
 
     def update(self):
         rand_x = self.randomizer.randint(0, 10)

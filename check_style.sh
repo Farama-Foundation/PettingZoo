@@ -1,5 +1,7 @@
 # See setup.cfg for codespell and flake8 settings
-bandit --recursive --skip B101,B301,B303,B311,B403,B404,B603,B607 .
-codespell
-flake8 pettingzoo/ test/
-isort -w 100 -o magent -p pettingzoo -c pettingzoo
+set -e
+
+codespell pettingzoo/*/*.py pettingzoo/*/*/*.py
+flake8 pettingzoo/ --ignore E203,E266,E501,W503,F403,F401,E402,E128,E741 --max-line-length 88
+flake8 test/ --ignore E203,E266,E501,W503,F403,F401,E402,E128,E741,F405 --max-line-length 88
+isort -w 100 -o magent -p pettingzoo -c pettingzoo --profile black --line-length 88

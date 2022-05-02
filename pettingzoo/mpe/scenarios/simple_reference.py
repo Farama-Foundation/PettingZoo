@@ -13,12 +13,12 @@ class Scenario(BaseScenario):
         # add agents
         world.agents = [Agent() for i in range(2)]
         for i, agent in enumerate(world.agents):
-            agent.name = f'agent_{i}'
+            agent.name = f"agent_{i}"
             agent.collide = False
         # add landmarks
         world.landmarks = [Landmark() for i in range(3)]
         for i, landmark in enumerate(world.landmarks):
-            landmark.name = 'landmark %d' % i
+            landmark.name = "landmark %d" % i
             landmark.collide = False
             landmark.movable = False
         return world
@@ -56,7 +56,9 @@ class Scenario(BaseScenario):
         if agent.goal_a is None or agent.goal_b is None:
             agent_reward = 0.0
         else:
-            agent_reward = np.sqrt(np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos)))
+            agent_reward = np.sqrt(
+                np.sum(np.square(agent.goal_a.state.p_pos - agent.goal_b.state.p_pos))
+            )
         return -agent_reward
 
     def global_reward(self, world):

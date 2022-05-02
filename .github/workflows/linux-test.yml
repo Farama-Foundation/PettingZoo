@@ -11,42 +11,33 @@ on:
 
 jobs:
   linux-test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
     - uses: actions/checkout@v2
-    - uses: openrndr/setup-opengl@v1.1
+    # - uses: openrndr/setup-opengl@v1.1
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt-get install python-opengl
+        sudo apt-get install python-opengl xvfb
         pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
         AutoROM -v
-    - name: Bandit, Codespell, and Flake 8 tests
-      run: |
-        bash ./check_style.sh
-    - name: Print tests
-      run: |
-        python -m test.print_test
     - name: Source distribution test
       run: |
         python setup.py sdist
         pip install dist/*.tar.gz
-    - name: Full Python tests
+    - name: Release Test
       run: |
-        xvfb-run -s "-screen 0 1024x768x24" pytest ./test/pytest_runner.py
-        pytest ./test/all_parameter_combs.py
-        pytest ./test/variable_env_test.py
-        pytest ./test/doc_examples_test.py
+        xvfb-run -s "-screen 0 1024x768x24" bash ./release_test.sh
     - name: 13 lines test
       run: |
         if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
         then
-            pip install stable_baselines3 supersuit==3.3.2
+            pip install stable_baselines3 supersuit==3.4.0
             sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
         fi

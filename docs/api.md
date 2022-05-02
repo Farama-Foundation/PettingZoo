@@ -179,8 +179,8 @@ Where `max_episodes` and `max_steps` both limit the total number of evaluations 
 Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
 
 ``` python
-from pettingzoo.butterfly import prison_v3
-prison_v3.manual_control(<environment parameters>)
+from pettingzoo.butterfly knights_archers_zombies_v10
+knights_archers_zombies_v10.manual_control(<environment parameters>)
 ```
 
 Environments say if they support this functionality in their documentation, and what the specific controls are.
@@ -193,6 +193,43 @@ You can also easily get a quick impression of them by watching a random policy c
 from pettingzoo.utils import random_demo
 random_demo(env, render=True, episodes=1)
 ```
+
+### Playing Alongside Trained Policies
+
+Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.
+Some games support this via:
+
+``` python
+import time
+from pettingzoo.butterfly import knights_archers_zombies_v10
+
+env = knights_archers_zombies_v10.env()
+env.reset()
+
+manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+
+for agent in env.agent_iter():
+    observation, reward, done, info = env.last()
+
+    if agent == manual_policy.agent:
+        action = manual_policy(observation, agent)
+    else:
+        action = policy(observation, agent)
+
+    env.step(action)
+
+    env.render()
+    time.sleep(0.05)
+
+    if done:
+        env.reset()
+```
+
+`ManualPolicy` accepts several default arguments:
+
+`agent_id`: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use `manual_policy.availabla_agents` to query what agents are available and what are their indices.
+
+`show_obs`: Is a boolean which shows the observation from the currently selected agent, if available.
 
 ### Observation Saving
 
