@@ -6,6 +6,8 @@ PettingZoo is a Python library for conducting research in multi-agent reinforcem
 
 Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
 
+PettingZoo also has a discord server for development purposes that you can join here: https://discord.gg/nHg2JRN489
+
 ## Environments and Installation
 
 PettingZoo includes the following families of environments:
@@ -30,8 +32,8 @@ PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https:/
 Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
 
 ```python
-from pettingzoo.butterfly import pistonball_v5
-env = pistonball_v5.env()
+from pettingzoo.butterfly import pistonball_v6
+env = pistonball_v6.env()
 ```
 
 Environments can be interacted with in a manner very similar to Gym:

@@ -4,6 +4,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
+from .waterworld_base import FPS
 from .waterworld_base import MAWaterWorld as _env
 
 
@@ -19,7 +20,12 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv):
 
-    metadata = {'render.modes': ['human', "rgb_array"], 'name': 'waterworld_v3'}
+    metadata = {
+        "render_modes": ["human", "rgb_array"],
+        "name": "waterworld_v3",
+        "is_parallelizable": True,
+        "render_fps": FPS,
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__()
@@ -31,8 +37,7 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(
-            zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.has_reset = False
 
     def observation_space(self, agent):
@@ -47,7 +52,9 @@ class raw_env(AECEnv):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.has_reset = True
         self.env.reset()
         self.agents = self.possible_agents[:]

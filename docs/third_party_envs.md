@@ -5,6 +5,12 @@ layout: "links"
 
 # Third-Party Environments
 
+## BomberManAI
+[https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
+
+PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
+
+
 ## StarCraft Multi-Agent Challenge
 [https://github.com/oxwhirl/smac](https://github.com/oxwhirl/smac)
 
@@ -79,3 +85,18 @@ PettingZoo based supply chain management environment
 [https://github.com/apigott/CityLearn](https://github.com/apigott/CityLearn)
 
 PettingZoo environments for city grid power management, based on the CityLearn simulator.
+
+## Racecar Gym
+[https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
+
+Multi-Agent racing environment that supports the PettingZoo API.
+
+## Mu Torere
+[https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
+
+PettingZoo based implementation of the Mū tōrere board game from New Zealand
+
+## skyjo_rl
+[https://github.com/michaelfeil/skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
+
+PettingZoo based implementation of the SkyJo board game

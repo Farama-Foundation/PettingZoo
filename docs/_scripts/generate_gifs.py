@@ -12,7 +12,9 @@ for name, module in all_environments.items():
         continue
 
     nameline = name.replace("/", "_")
-    proc = subprocess.run(["asciicast2gif", f"gif_data/{nameline}.json", f"gifs/{nameline}.gif"])
+    proc = subprocess.run(
+        ["asciicast2gif", f"gif_data/{nameline}.json", f"gifs/{nameline}.gif"]
+    )
     # procs.append(proc)
     # if len(procs) >= 3:
     #     for p in procs:

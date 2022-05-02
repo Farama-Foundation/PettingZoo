@@ -1,7 +1,7 @@
 import logging
 
 
-class EnvLogger():
+class EnvLogger:
     mqueue = []
     _output = True
 
@@ -34,23 +34,33 @@ class EnvLogger():
 
     @staticmethod
     def error_possible_agents_attribute_missing(name):
-        raise AttributeError(f'[ERROR]: This environment does not support {name}. This means that either the environment has procedurally generated agents such that this property cannot be well defined (which requires special learning code to handle) or the environment was improperly configured by the developer.')
+        raise AttributeError(
+            f"[ERROR]: This environment does not support {name}. This means that either the environment has procedurally generated agents such that this property cannot be well defined (which requires special learning code to handle) or the environment was improperly configured by the developer."
+        )
 
     @staticmethod
     def warn_action_out_of_bound(action, action_space, backup_policy):
-        EnvLogger._generic_warning(f"[WARNING]: Received an action {action} that was outside action space {action_space}. Environment is {backup_policy}")
+        EnvLogger._generic_warning(
+            f"[WARNING]: Received an action {action} that was outside action space {action_space}. Environment is {backup_policy}"
+        )
 
     @staticmethod
     def warn_close_unrendered_env():
-        EnvLogger._generic_warning("[WARNING]: Called close on an unrendered environment.")
+        EnvLogger._generic_warning(
+            "[WARNING]: Called close on an unrendered environment."
+        )
 
     @staticmethod
     def warn_close_before_reset():
-        EnvLogger._generic_warning("[WARNING]: reset() needs to be called before close.")
+        EnvLogger._generic_warning(
+            "[WARNING]: reset() needs to be called before close."
+        )
 
     @staticmethod
     def warn_on_illegal_move():
-        EnvLogger._generic_warning("[WARNING]: Illegal move made, game terminating with current player losing. \nobs['action_mask'] contains a mask of all legal moves that can be chosen.")
+        EnvLogger._generic_warning(
+            "[WARNING]: Illegal move made, game terminating with current player losing. \nobs['action_mask'] contains a mask of all legal moves that can be chosen."
+        )
 
     @staticmethod
     def error_observe_before_reset():
@@ -62,7 +72,9 @@ class EnvLogger():
 
     @staticmethod
     def warn_step_after_done():
-        EnvLogger._generic_warning("[WARNING]: step() called after all agents are done. Should reset() first.")
+        EnvLogger._generic_warning(
+            "[WARNING]: step() called after all agents are done. Should reset() first."
+        )
 
     @staticmethod
     def error_render_before_reset():

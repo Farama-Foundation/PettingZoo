@@ -16,16 +16,23 @@ def make_env(raw_env):
             env = wrappers.AssertOutOfBoundsWrapper(env)
         env = wrappers.OrderEnforcingWrapper(env)
         return env
+
     return env
 
 
 class SimpleEnv(AECEnv):
-    def __init__(self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None):
+    def __init__(
+        self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None
+    ):
         super().__init__()
 
         self.seed()
 
-        self.metadata = {'render.modes': ['human', 'rgb_array']}
+        self.metadata = {
+            "render_modes": ["human", "rgb_array"],
+            "is_parallelizable": True,
+            "render_fps": 10,
+        }
 
         self.max_cycles = max_cycles
         self.scenario = scenario
@@ -37,7 +44,9 @@ class SimpleEnv(AECEnv):
 
         self.agents = [agent.name for agent in self.world.agents]
         self.possible_agents = self.agents[:]
-        self._index_map = {agent.name: idx for idx, agent in enumerate(self.world.agents)}
+        self._index_map = {
+            agent.name: idx for idx, agent in enumerate(self.world.agents)
+        }
 
         self._agent_selector = agent_selector(self.agents)
 
@@ -61,12 +70,24 @@ class SimpleEnv(AECEnv):
             obs_dim = len(self.scenario.observation(agent, self.world))
             state_dim += obs_dim
             if self.continuous_actions:
-                self.action_spaces[agent.name] = spaces.Box(low=0, high=1, shape=(space_dim,))
+                self.action_spaces[agent.name] = spaces.Box(
+                    low=0, high=1, shape=(space_dim,)
+                )
             else:
                 self.action_spaces[agent.name] = spaces.Discrete(space_dim)
-            self.observation_spaces[agent.name] = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(obs_dim,), dtype=np.float32)
+            self.observation_spaces[agent.name] = spaces.Box(
+                low=-np.float32(np.inf),
+                high=+np.float32(np.inf),
+                shape=(obs_dim,),
+                dtype=np.float32,
+            )
 
-        self.state_space = spaces.Box(low=-np.float32(np.inf), high=+np.float32(np.inf), shape=(state_dim,), dtype=np.float32)
+        self.state_space = spaces.Box(
+            low=-np.float32(np.inf),
+            high=+np.float32(np.inf),
+            shape=(state_dim,),
+            dtype=np.float32,
+        )
 
         self.steps = 0
 
@@ -84,18 +105,27 @@ class SimpleEnv(AECEnv):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
-        return self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32)
+        return self.scenario.observation(
+            self.world.agents[self._index_map[agent]], self.world
+        ).astype(np.float32)
 
     def state(self):
-        states = tuple(self.scenario.observation(self.world.agents[self._index_map[agent]], self.world).astype(np.float32) for agent in self.possible_agents)
+        states = tuple(
+            self.scenario.observation(
+                self.world.agents[self._index_map[agent]], self.world
+            ).astype(np.float32)
+            for agent in self.possible_agents
+        )
         return np.concatenate(states, axis=None)
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
         self.scenario.reset_world(self.world, self.np_random)
 
         self.agents = self.possible_agents[:]
-        self.rewards = {name: 0. for name in self.agents}
-        self._cumulative_rewards = {name: 0. for name in self.agents}
+        self.rewards = {name: 0.0 for name in self.agents}
+        self._cumulative_rewards = {name: 0.0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
@@ -125,14 +155,17 @@ class SimpleEnv(AECEnv):
 
         self.world.step()
 
-        global_reward = 0.
+        global_reward = 0.0
         if self.local_ratio is not None:
             global_reward = float(self.scenario.global_reward(self.world))
 
         for agent in self.world.agents:
             agent_reward = float(self.scenario.reward(agent, self.world))
             if self.local_ratio is not None:
-                reward = global_reward * (1 - self.local_ratio) + agent_reward * self.local_ratio
+                reward = (
+                    global_reward * (1 - self.local_ratio)
+                    + agent_reward * self.local_ratio
+                )
             else:
                 reward = agent_reward
 
@@ -198,7 +231,7 @@ class SimpleEnv(AECEnv):
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         from . import rendering
 
         if self.viewer is None:
@@ -214,7 +247,7 @@ class SimpleEnv(AECEnv):
             for entity in self.world.entities:
                 geom = rendering.make_circle(entity.size)
                 xform = rendering.Transform()
-                if 'agent' in entity.name:
+                if "agent" in entity.name:
                     geom.set_color(*entity.color[:3], alpha=0.5)
                 else:
                     geom.set_color(*entity.color[:3])
@@ -235,18 +268,18 @@ class SimpleEnv(AECEnv):
                     self.viewer.text_lines.append(tline)
                     idx += 1
 
-        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         for idx, other in enumerate(self.world.agents):
             if other.silent:
                 continue
             if np.all(other.state.c == 0):
-                word = '_'
+                word = "_"
             elif self.continuous_actions:
-                word = '[' + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
+                word = "[" + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
             else:
                 word = alphabet[np.argmax(other.state.c)]
 
-            message = (other.name + ' sends ' + word + '   ')
+            message = other.name + " sends " + word + "   "
 
             self.viewer.text_lines[idx].set_text(message)
 
@@ -258,7 +291,7 @@ class SimpleEnv(AECEnv):
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
         # render to display or array
-        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+        return self.viewer.render(return_rgb_array=mode == "rgb_array")
 
     # reset rendering assets
     def _reset_render(self):

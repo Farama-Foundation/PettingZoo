@@ -9,7 +9,9 @@ class EntityState:  # physical/external base state of all entities
         self.p_vel = None
 
 
-class AgentState(EntityState):  # state of agents (including communication and internal/mental state)
+class AgentState(
+    EntityState
+):  # state of agents (including communication and internal/mental state)
     def __init__(self):
         super().__init__()
         # communication utterance
@@ -27,7 +29,7 @@ class Action:  # action of the agent
 class Entity:  # properties and state of physical world entity
     def __init__(self):
         # name
-        self.name = ''
+        self.name = ""
         # properties:
         self.size = 0.050
         # entity can move / be pushed
@@ -95,7 +97,7 @@ class World:  # multi-agent world
         # physical damping
         self.damping = 0.25
         # contact response parameters
-        self.contact_force = 1e+2
+        self.contact_force = 1e2
         self.contact_margin = 1e-3
 
     # return all entities in the world
@@ -135,7 +137,11 @@ class World:  # multi-agent world
         # set applied forces
         for i, agent in enumerate(self.agents):
             if agent.movable:
-                noise = np.random.randn(*agent.action.u.shape) * agent.u_noise if agent.u_noise else 0.0
+                noise = (
+                    np.random.randn(*agent.action.u.shape) * agent.u_noise
+                    if agent.u_noise
+                    else 0.0
+                )
                 p_force[i] = agent.action.u + noise
         return p_force
 
@@ -144,15 +150,15 @@ class World:  # multi-agent world
         # simple (but inefficient) collision response
         for a, entity_a in enumerate(self.entities):
             for b, entity_b in enumerate(self.entities):
-                if(b <= a):
+                if b <= a:
                     continue
                 [f_a, f_b] = self.get_collision_force(entity_a, entity_b)
-                if(f_a is not None):
-                    if(p_force[a] is None):
+                if f_a is not None:
+                    if p_force[a] is None:
                         p_force[a] = 0.0
                     p_force[a] = f_a + p_force[a]
-                if(f_b is not None):
-                    if(p_force[b] is None):
+                if f_b is not None:
+                    if p_force[b] is None:
                         p_force[b] = 0.0
                     p_force[b] = f_b + p_force[b]
         return p_force
@@ -163,12 +169,21 @@ class World:  # multi-agent world
             if not entity.movable:
                 continue
             entity.state.p_vel = entity.state.p_vel * (1 - self.damping)
-            if (p_force[i] is not None):
+            if p_force[i] is not None:
                 entity.state.p_vel += (p_force[i] / entity.mass) * self.dt
             if entity.max_speed is not None:
-                speed = np.sqrt(np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1]))
+                speed = np.sqrt(
+                    np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1])
+                )
                 if speed > entity.max_speed:
-                    entity.state.p_vel = entity.state.p_vel / np.sqrt(np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1])) * entity.max_speed
+                    entity.state.p_vel = (
+                        entity.state.p_vel
+                        / np.sqrt(
+                            np.square(entity.state.p_vel[0])
+                            + np.square(entity.state.p_vel[1])
+                        )
+                        * entity.max_speed
+                    )
             entity.state.p_pos += entity.state.p_vel * self.dt
 
     def update_agent_state(self, agent):
@@ -176,14 +191,18 @@ class World:  # multi-agent world
         if agent.silent:
             agent.state.c = np.zeros(self.dim_c)
         else:
-            noise = np.random.randn(*agent.action.c.shape) * agent.c_noise if agent.c_noise else 0.0
+            noise = (
+                np.random.randn(*agent.action.c.shape) * agent.c_noise
+                if agent.c_noise
+                else 0.0
+            )
             agent.state.c = agent.action.c + noise
 
     # get collision forces for any contact between two entities
     def get_collision_force(self, entity_a, entity_b):
         if (not entity_a.collide) or (not entity_b.collide):
             return [None, None]  # not a collider
-        if (entity_a is entity_b):
+        if entity_a is entity_b:
             return [None, None]  # don't collide against itself
         # compute actual distance between entities
         delta_pos = entity_a.state.p_pos - entity_b.state.p_pos
