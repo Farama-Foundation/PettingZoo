@@ -43,11 +43,9 @@ jobs:
         fi
     - name: Check code with pyright
       uses: jakebailey/pyright-action@v1
-      run: |
-        pip install -e .
       with:
         version: 1.1.183
         python-platform: ${{ matrix.python-platform }}
         python-version: ${{ matrix.python-version }}
-      # continue-on-error: true
+      continue-on-error: true
 
