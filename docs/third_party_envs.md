@@ -5,6 +5,12 @@ layout: "links"
 
 # Third-Party Environments
 
+## BomberManAI
+[https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
+
+PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
+
+
 ## StarCraft Multi-Agent Challenge
 [https://github.com/oxwhirl/smac](https://github.com/oxwhirl/smac)
 
