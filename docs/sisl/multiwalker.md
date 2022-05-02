@@ -9,7 +9,7 @@ action-values: "(-1, 1)"
 observation-shape: "(31,)"
 observation-values: "[-inf,inf]"
 average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v8"
+import: "from pettingzoo.sisl import multiwalker_v9"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
@@ -24,7 +24,7 @@ agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 </div>
 
 
-In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is the change in the package distance summed with 130 times the change in the walker's position. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75 steps with the scaling factor of 130, the total reward under an optimal policy is around 300 . If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
+In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is proportional to the change in the package distance and is scaled by `forward_reward`. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75 steps, the total reward under an optimal policy is around 300 . If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
 
 If a walker falls, it is penalized -10. By default, the environment is done if any walker or the package falls, or if the package goes beyond the left edge of the terrain. In all of these cases, each walker receives an additional reward of -100. If the `terminate_on_fall` setting is set to False, the game continues until the package falls. If the `remove_on_fall` setting is set to True, the walkers are removed from the environment after they fall. The environment is also done if package falls off the right edge of the terrain, with no additional reward or penalty.
 
@@ -34,7 +34,7 @@ Each walker exerts force on two joints in their two legs, giving a continuous ac
 
 ### Observation Space
 
-Each agent receives an observation composed of various physical properties of its legs and joints, as well as LIDAR readings from the space immediately in front and below the robot. The observation also includes information about neighboring walkers, and the package, which have normally distributed signal noise controlled by `position_noise` and `angle_noise`. For walkers without neighbors, observations about neighbor positions are zero.
+Each agent receives an observation composed of various physical properties of its legs and joints, as well as LIDAR readings from the space immediately in front and below the robot. The observation also includes information about neighboring walkers, and the package. The neighbour and package observations have normally distributed signal noise controlled by `position_noise` and `angle_noise`. For walkers without neighbors, observations about neighbor positions are zero.
 
 
 
@@ -61,14 +61,14 @@ This table enumerates the observation space:
 |         25          | Left neighbor relative Y position (0.0 for leftmost walker) (Noisy) | [-inf, inf] |
 |         26          | Right neighbor relative X position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
 |         27          | Right neighbor relative Y position (0.0 for rightmost walker) (Noisy) | [-inf, inf] |
-|         28          | Walker X position relative to package (0 for left edge, 1 for right edge) | [-inf, inf] |
-|         29          | Walker Y position relative to package                        | [-inf, inf] |
-|         30          | Package angle                                                | [-inf, inf] |
+|         28          | Walker X position relative to package (0 for left edge, 1 for right edge) (Noisy) | [-inf, inf] |
+|         29          | Walker Y position relative to package (Noisy)                        | [-inf, inf] |
+|         30          | Package angle (Noisy)                                                | [-inf, inf] |
 
 ### Arguments
 
 ``` python
-multiwalker_v8.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
+multiwalker_v9.env(n_walkers=3, position_noise=1e-3, angle_noise=1e-3, forward_reward=1.0, terminate_reward=-100.0, fall_reward=-10.0, shared_reward=True,
 terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 ```
 
@@ -76,11 +76,11 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 
 `n_walkers`:  number of bipedal walker agents in environment
 
-`position_noise`:  noise applied to agent positional sensor observations
+`position_noise`:  noise applied to neigbours and package positional observations
 
-`angle_noise`:  noise applied to agent rotational sensor observations
+`angle_noise`:  noise applied to neigbours and package rotational observations
 
-`forward_reward`:  reward applied for an agent standing, scaled by agent's x coordinate
+`forward_reward`:  scaling factor for the positive reward obtained by bringing the package forward
 
 `fall_reward`:  reward applied when an agent falls down
 

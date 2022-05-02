@@ -8,7 +8,7 @@ action-shape: "(1,)"
 action-values: "[0,17]"
 observation-shape: "(256, 160, 3)"
 observation-values: "(0,255)"
-import: "from pettingzoo.atari import combat_tank_v1"
+import: "from pettingzoo.atari import combat_tank_v2"
 agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
@@ -42,7 +42,7 @@ Some environment parameters are common to all Atari environments and are describ
 Parameters specific to combat-tank are
 
 ``` python
-combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
+combat_tank_v2.env(has_maze=True, is_invisible=False, billiard_hit=True)
 ```
 
 `has_maze`:  Set to true to have the map be a maze instead of an open field
@@ -53,6 +53,7 @@ combat_tank_v1.env(has_maze=True, is_invisible=False, billiard_hit=True)
 
 ### Version History
 
+* v2: Minimal Action Space (1.18.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
 </div>

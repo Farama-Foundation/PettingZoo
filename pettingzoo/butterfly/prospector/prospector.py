@@ -328,8 +328,8 @@ class Water:
         self.debris = []
         for col in range(1, self.num_cols - 1, 3):
             if rng.random_sample() >= 0.5:
-                y = rng.randint(0, 2)
-                x = col + rng.randint(0, 3)
+                y = rng.integers(0, 2)
+                x = col + rng.integers(0, 3)
                 rect = self.rects[y][x].copy()
                 rect.x += 3
                 rect.y += 9
@@ -387,11 +387,11 @@ class Background:
         self.debris = {}
         for row in range(1, self.num_rows - 1, 3):
             for col in range(1, self.num_cols - 1, 3):
-                y = row + rng.randint(0, 3)
+                y = row + rng.integers(0, 3)
                 if y == self.num_rows - 2:
                     y += -1
-                x = col + rng.randint(0, 3)
-                choice = rng.randint(0, 4)
+                x = col + rng.integers(0, 3)
+                choice = rng.integers(0, 4)
                 self.debris[self.rects[y][x].topleft] = self.debris_tiles[choice]
 
     def full_draw(self, screen):
@@ -531,10 +531,10 @@ class raw_env(AECEnv, EzPickle):
             self.fences.append(f)
 
         self.metadata = {
-            "render.modes": ["human", "rgb_array"],
-            'name': "prospector_v4",
-            'is_parallelizable': True,
-            'video.frames_per_second': const.FPS,
+            "render_modes": ["human", "rgb_array"],
+            "name": "prospector_v4",
+            "is_parallelizable": True,
+            "render_fps": const.FPS,
         }
 
         self.action_spaces = {}
@@ -563,7 +563,12 @@ class raw_env(AECEnv, EzPickle):
                 low=0, high=255, shape=const.BANKER_OBSERV_SHAPE, dtype=np.uint8
             )
 
-        self.state_space = spaces.Box(low=0, high=255, shape=((const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3)), dtype=np.uint8)
+        self.state_space = spaces.Box(
+            low=0,
+            high=255,
+            shape=((const.SCREEN_HEIGHT, const.SCREEN_WIDTH, 3)),
+            dtype=np.uint8,
+        )
 
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -708,8 +713,9 @@ class raw_env(AECEnv, EzPickle):
         x, y = ag.center  # Calculated property added to prospector and banker classes
         sub_screen = np.array(
             capture[
-                max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
-                max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta), :,
+                max(0, x - delta) : min(const.SCREEN_WIDTH, x + delta),
+                max(0, y - delta) : min(const.SCREEN_HEIGHT, y + delta),
+                :,
             ],
             dtype=np.uint8,
         )
@@ -750,9 +756,9 @@ class raw_env(AECEnv, EzPickle):
         return self.action_spaces[agent]
 
     def state(self):
-        '''
+        """
         Returns an observation of the global environment
-        '''
+        """
         state = pg.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
@@ -815,7 +821,10 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[agent_id] = 0
         self._accumulate_rewards()
 
-    def reset(self):
+    def reset(self, seed=None):
+        if seed is not None:
+            self.seed(seed=seed)
+
         self.screen = pg.Surface(const.SCREEN_SIZE)
         self.done = False
 
@@ -869,7 +878,7 @@ class raw_env(AECEnv, EzPickle):
             return transposed
 
     def full_draw(self):
-        """ Called to draw everything when first rendering """
+        """Called to draw everything when first rendering"""
         self.background.full_draw(self.screen)
         for f in self.fences:
             f.full_draw(self.screen)
@@ -877,7 +886,7 @@ class raw_env(AECEnv, EzPickle):
         self.all_sprites.draw(self.screen)
 
     def draw(self):
-        """ Called after each frame, all agents updated """
+        """Called after each frame, all agents updated"""
         self.background.draw(self.screen)
         for f in self.fences:
             f.full_draw(self.screen)
