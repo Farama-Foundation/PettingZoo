@@ -626,8 +626,14 @@ class MultiWalkerEnv:
                 pygame.draw.line(
                     self.surf,
                     color=(255, 0, 0),
-                    start_pos=(l_dis.p1[0] * render_scale + offset, l_dis.p1[1] * render_scale),
-                    end_pos=(l_dis.p2[0] * render_scale + offset, l_dis.p2[1] * render_scale),
+                    start_pos=(
+                        l_dis.p1[0] * render_scale + offset,
+                        l_dis.p1[1] * render_scale,
+                    ),
+                    end_pos=(
+                        l_dis.p2[0] * render_scale + offset,
+                        l_dis.p2[1] * render_scale,
+                    ),
                     width=1,
                 )
 
