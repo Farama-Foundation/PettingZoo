@@ -1,15 +1,15 @@
-from .all_modules import *  # noqa: F403
-
 import pytest
-from .all_modules import all_environments
+
 from pettingzoo.test.api_test import api_test
-from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
-from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.max_cycles_test import max_cycles_test
-from pettingzoo.test.state_test import state_test
+from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.render_test import render_test
+from pettingzoo.test.seed_test import check_environment_deterministic, seed_test
+from pettingzoo.test.state_test import state_test
 from pettingzoo.utils import aec_to_parallel, parallel_to_aec
 
+from .all_modules import *  # noqa: F403
+from .all_modules import all_environments
 
 parameterized_envs = [
     ["atari/boxing_v2", boxing_v2, dict(obs_type="grayscale_image")],

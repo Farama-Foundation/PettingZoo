@@ -1,17 +1,19 @@
-import ray
-import pickle5 as pickle
-from ray.tune.registry import register_env
-from ray.rllib.agents.ppo import PPOTrainer
-from pettingzoo.butterfly import pistonball_v6
-import supersuit as ss
-from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
-from PIL import Image
-from ray.rllib.models import ModelCatalog
-from rllib_pistonball import CNNModelV2
-import numpy as np
-import os
 import argparse
+import os
 from pathlib import Path
+
+import numpy as np
+import pickle5 as pickle
+import ray
+import supersuit as ss
+from PIL import Image
+from ray.rllib.agents.ppo import PPOTrainer
+from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
+from ray.rllib.models import ModelCatalog
+from ray.tune.registry import register_env
+from rllib_pistonball import CNNModelV2
+
+from pettingzoo.butterfly import pistonball_v6
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 

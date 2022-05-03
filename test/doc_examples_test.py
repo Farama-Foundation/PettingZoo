@@ -1,6 +1,7 @@
-from pettingzoo.test import api_test, parallel_api_test
-from pathlib import Path
 import sys
+from pathlib import Path
+
+from pettingzoo.test import api_test, parallel_api_test
 
 # allows imports directly from the doc code folder
 sys.path.append("docs/_includes/code/")

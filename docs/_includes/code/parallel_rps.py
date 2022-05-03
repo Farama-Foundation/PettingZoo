@@ -1,9 +1,9 @@
 import functools
-from gym.spaces import Discrete
-from pettingzoo import ParallelEnv
-from pettingzoo.utils import wrappers
-from pettingzoo.utils import parallel_to_aec
 
+from gym.spaces import Discrete
+
+from pettingzoo import ParallelEnv
+from pettingzoo.utils import parallel_to_aec, wrappers
 
 ROCK = 0
 PAPER = 1

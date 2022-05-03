@@ -1,17 +1,19 @@
-from copy import deepcopy
 import os
+from copy import deepcopy
+
 import ray
+from gym.spaces import Box
 from ray import tune
+from ray.rllib.agents.dqn.dqn_torch_model import DQNTorchModel
 from ray.rllib.agents.registry import get_agent_class
 from ray.rllib.env import PettingZooEnv
-from pettingzoo.classic import leduc_holdem_v4
 from ray.rllib.models import ModelCatalog
-from ray.tune.registry import register_env
-from gym.spaces import Box
-from ray.rllib.agents.dqn.dqn_torch_model import DQNTorchModel
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFC
 from ray.rllib.utils.framework import try_import_torch
 from ray.rllib.utils.torch_ops import FLOAT_MAX
+from ray.tune.registry import register_env
+
+from pettingzoo.classic import leduc_holdem_v4
 
 torch, nn = try_import_torch()
 
