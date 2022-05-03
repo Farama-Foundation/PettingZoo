@@ -1,10 +1,10 @@
-from gym.spaces import Discrete
-import numpy as np
 import functools
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector
-from pettingzoo.utils import wrappers
 
+import numpy as np
+from gym.spaces import Discrete
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
 
 ROCK = 0
 PAPER = 1
