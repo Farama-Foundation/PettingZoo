@@ -3,10 +3,8 @@ from pathlib import Path
 
 from pettingzoo.test import api_test, parallel_api_test
 
-# allows imports directly from the doc code folder
-sys.path.append("docs/_includes/code/")
-import aec_rps
-import parallel_rps
+from docs._includes.code import aec_rps
+from docs._includes.code import parallel_rps
 
 
 def test_rps_aec_example():
