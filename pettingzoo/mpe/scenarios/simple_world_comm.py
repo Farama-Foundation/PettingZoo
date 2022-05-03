@@ -48,19 +48,19 @@ class Scenario(BaseScenario):
             landmark.size = 0.2
             landmark.boundary = False
         world.food = [Landmark() for i in range(num_food)]
-        for i, landmark in enumerate(world.food):
-            landmark.name = "food %d" % i
-            landmark.collide = False
-            landmark.movable = False
-            landmark.size = 0.03
-            landmark.boundary = False
+        for i, lm in enumerate(world.food):
+            lm.name = "food %d" % i
+            lm.collide = False
+            lm.movable = False
+            lm.size = 0.03
+            lm.boundary = False
         world.forests = [Landmark() for i in range(num_forests)]
-        for i, landmark in enumerate(world.forests):
-            landmark.name = "forest %d" % i
-            landmark.collide = False
-            landmark.movable = False
-            landmark.size = 0.3
-            landmark.boundary = False
+        for i, lm in enumerate(world.forests):
+            lm.name = "forest %d" % i
+            lm.collide = False
+            lm.movable = False
+            lm.size = 0.3
+            lm.boundary = False
         world.landmarks += world.food
         world.landmarks += world.forests
         # world.landmarks += self.set_boundaries(world)
@@ -74,15 +74,15 @@ class Scenario(BaseScenario):
         num_landmarks = int(edge * 2 / landmark_size)
         for x_pos in [-edge, edge]:
             for i in range(num_landmarks):
-                l = Landmark()
-                l.state.p_pos = np.array([x_pos, -1 + i * landmark_size])
-                boundary_list.append(l)
+                landmark = Landmark()
+                landmark.state.p_pos = np.array([x_pos, -1 + i * landmark_size])
+                boundary_list.append(landmark)
 
         for y_pos in [-edge, edge]:
             for i in range(num_landmarks):
-                l = Landmark()
-                l.state.p_pos = np.array([-1 + i * landmark_size, y_pos])
-                boundary_list.append(l)
+                landmark = Landmark()
+                landmark.state.p_pos = np.array([-1 + i * landmark_size, y_pos])
+                boundary_list.append(landmark)
 
         for i, l in enumerate(boundary_list):
             l.name = "boundary %d" % i

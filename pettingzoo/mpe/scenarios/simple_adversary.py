@@ -60,8 +60,8 @@ class Scenario(BaseScenario):
             return np.sum(np.square(agent.state.p_pos - agent.goal_a.state.p_pos))
         else:
             dists = []
-            for l in world.landmarks:
-                dists.append(np.sum(np.square(agent.state.p_pos - l.state.p_pos)))
+            for lm in world.landmarks:
+                dists.append(np.sum(np.square(agent.state.p_pos - lm.state.p_pos)))
             dists.append(
                 np.sum(np.square(agent.state.p_pos - agent.goal_a.state.p_pos))
             )
