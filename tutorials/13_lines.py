@@ -1,7 +1,8 @@
-from stable_baselines3.ppo import CnnPolicy
-from stable_baselines3 import PPO
-from pettingzoo.butterfly import pistonball_v6
 import supersuit as ss
+from stable_baselines3 import PPO
+from stable_baselines3.ppo import CnnPolicy
+
+from pettingzoo.butterfly import pistonball_v6
 
 env = pistonball_v6.parallel_env(
     n_pistons=20,
