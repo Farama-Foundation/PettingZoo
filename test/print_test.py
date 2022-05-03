@@ -1,7 +1,7 @@
 import os
 
 
-def print_test():
+def test_print():
     dir_names = ["butterfly", "sisl", "magent", "mpe", "atari"]
 
     for name in dir_names:
