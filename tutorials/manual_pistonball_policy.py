@@ -1,7 +1,9 @@
-from pettingzoo.butterfly import pistonball_v6
+import os
+
 import numpy as np
 from array2gif import write_gif
-import os
+
+from pettingzoo.butterfly import pistonball_v6
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 

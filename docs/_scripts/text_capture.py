@@ -1,10 +1,11 @@
+import json
 import random
 import time
-import numpy as np
-import json
 
-from pettingzoo.test.all_modules import all_environments
+import numpy as np
+
 from pettingzoo.classic import gin_rummy_v0
+from pettingzoo.test.all_modules import all_environments
 
 
 def shrink_lines(data, max_height, max_width):

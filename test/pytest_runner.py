@@ -1,14 +1,17 @@
-import pytest
-from .all_modules import all_environments
-from pettingzoo.test.api_test import api_test
-from pettingzoo.test.seed_test import seed_test, check_environment_deterministic
-from pettingzoo.test.parallel_test import parallel_api_test
-from pettingzoo.test.max_cycles_test import max_cycles_test
-from pettingzoo.test.state_test import state_test
-from pettingzoo.test.render_test import render_test
-from pettingzoo.atari import warlords_v3
-from pettingzoo.utils import aec_to_parallel, parallel_to_aec
 import os
+
+import pytest
+
+from pettingzoo.atari import warlords_v3
+from pettingzoo.test.api_test import api_test
+from pettingzoo.test.max_cycles_test import max_cycles_test
+from pettingzoo.test.parallel_test import parallel_api_test
+from pettingzoo.test.render_test import render_test
+from pettingzoo.test.seed_test import check_environment_deterministic, seed_test
+from pettingzoo.test.state_test import state_test
+from pettingzoo.utils import aec_to_parallel, parallel_to_aec
+
+from .all_modules import all_environments
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
