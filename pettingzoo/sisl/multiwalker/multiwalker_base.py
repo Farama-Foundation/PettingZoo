@@ -265,7 +265,7 @@ class BipedalWalker(Agent):
             1.0 if self.legs[3].ground_contact else 0.0,
         ]
 
-        state += [l.fraction for l in self.lidar]
+        state += [l_dis.fraction for l_dis in self.lidar]
         assert len(state) == 24
 
         return state
@@ -618,7 +618,7 @@ class MultiWalkerEnv:
         i = self.lidar_render
         for walker in self.walkers:
             if i < 2 * len(walker.lidar):
-                l = (
+                l_dis = (
                     walker.lidar[i]
                     if i < len(walker.lidar)
                     else walker.lidar[len(walker.lidar) - i - 1]
@@ -626,8 +626,8 @@ class MultiWalkerEnv:
                 pygame.draw.line(
                     self.surf,
                     color=(255, 0, 0),
-                    start_pos=(l.p1[0] * render_scale + offset, l.p1[1] * render_scale),
-                    end_pos=(l.p2[0] * render_scale + offset, l.p2[1] * render_scale),
+                    start_pos=(l_dis.p1[0] * render_scale + offset, l_dis.p1[1] * render_scale),
+                    end_pos=(l_dis.p2[0] * render_scale + offset, l_dis.p2[1] * render_scale),
                     width=1,
                 )
 
