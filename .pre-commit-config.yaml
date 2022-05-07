@@ -32,3 +32,8 @@ repos:
       - id: pyupgrade
         # TODO: remove `--keep-runtime-typing` option
         args: ["--py37-plus", "--keep-runtime-typing"]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0  # Use the ref you want to point at
+    hooks:
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
