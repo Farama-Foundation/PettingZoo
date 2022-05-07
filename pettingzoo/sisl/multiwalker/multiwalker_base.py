@@ -609,7 +609,7 @@ class MultiWalkerEnv:
             scaled_poly = []
             for coord in poly:
                 scaled_poly.append(
-                    ([coord[0] * render_scale + offset, coord[1] * render_scale])
+                    [coord[0] * render_scale + offset, coord[1] * render_scale]
                 )
             gfxdraw.aapolygon(self.surf, scaled_poly, color)
             gfxdraw.filled_polygon(self.surf, scaled_poly, color)
