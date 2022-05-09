@@ -95,8 +95,7 @@ class CooperativePong:
         self.off_screen_penalty = off_screen_penalty
 
         # define action and observation spaces
-        self.action_space = [gym.spaces.Discrete(
-            3) for _ in range(self.num_agents)]
+        self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
         original_shape = original_obs_shape(
             self.s_width, self.s_height, kernel_window_length=kernel_window_length
         )
@@ -120,8 +119,7 @@ class CooperativePong:
         self.max_cycles = max_cycles
 
         # paddles
-        self.p0 = Paddle(
-            (20 // render_ratio, 80 // render_ratio), left_paddle_speed)
+        self.p0 = Paddle((20 // render_ratio, 80 // render_ratio), left_paddle_speed)
         if cake_paddle:
             self.p1 = CakePaddle(right_paddle_speed, render_ratio=render_ratio)
         else:
@@ -194,8 +192,7 @@ class CooperativePong:
         if mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)
-                         ) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
         )
 
     def observe(self):
@@ -294,8 +291,7 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.reset()
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(
-            zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.state_space = self.env.state_space
         # dicts
         self.observations = {}
@@ -350,8 +346,7 @@ class raw_env(AECEnv, EzPickle):
         if not self.action_spaces[agent].contains(action):
             raise Exception(
                 "Action for agent {} must be in Discrete({})."
-                "It is currently {}".format(
-                    agent, self.action_spaces[agent].n, action)
+                "It is currently {}".format(agent, self.action_spaces[agent].n, action)
             )
 
         self.env.step(action, agent)

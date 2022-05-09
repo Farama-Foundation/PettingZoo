@@ -47,8 +47,7 @@ class magent_parallel_env(ParallelEnv):
             for i in range(self.team_sizes[j])
         ]
         self.possible_agents = self.agents[:]
-        num_actions = [env.get_action_space(
-            handle)[0] for handle in self.handles]
+        num_actions = [env.get_action_space(handle)[0] for handle in self.handles]
         action_spaces_list = [
             Discrete(num_actions[j])
             for j in range(len(self.team_sizes))
@@ -63,14 +62,12 @@ class magent_parallel_env(ParallelEnv):
             for i in range(self.team_sizes[j])
         ]
 
-        self.state_space = Box(
-            low=0.0, high=2.0, shape=state_shape, dtype=np.float32)
+        self.state_space = Box(low=0.0, high=2.0, shape=state_shape, dtype=np.float32)
         reward_low, reward_high = reward_range
 
         if extra_features:
             for space in observation_space_list:
-                idx = space.shape[2] - \
-                    3 if minimap_mode else space.shape[2] - 1
+                idx = space.shape[2] - 3 if minimap_mode else space.shape[2] - 1
                 space.low[:, :, idx] = reward_low
                 space.high[:, :, idx] = reward_high
             idx_state = (
@@ -111,10 +108,8 @@ class magent_parallel_env(ParallelEnv):
         self.env.set_seed(seed)
 
     def _calc_obs_shapes(self):
-        view_spaces = [self.env.get_view_space(
-            handle) for handle in self.handles]
-        feature_spaces = [self.env.get_feature_space(
-            handle) for handle in self.handles]
+        view_spaces = [self.env.get_view_space(handle) for handle in self.handles]
+        feature_spaces = [self.env.get_feature_space(handle) for handle in self.handles]
         assert all(len(tup) == 3 for tup in view_spaces)
         assert all(len(tup) == 1 for tup in feature_spaces)
         feat_size = [[fs[0]] for fs in feature_spaces]
@@ -134,8 +129,7 @@ class magent_parallel_env(ParallelEnv):
         self._minimap_features = 2 if self.minimap_mode else 0
         # map channel and agent pair channel. Remove global agent position when minimap mode and extra features
         state_depth = (
-            (max(feature_spaces)[0] -
-             self._minimap_features) * self.extra_features
+            (max(feature_spaces)[0] - self._minimap_features) * self.extra_features
             + 1
             + len(self._all_handles) * 2
         )
@@ -176,8 +170,7 @@ class magent_parallel_env(ParallelEnv):
                 features = features[:, -2:]
             if self.minimap_mode or self.extra_features:
                 feat_reshape = np.expand_dims(np.expand_dims(features, 1), 1)
-                feat_img = np.tile(
-                    feat_reshape, (1, view.shape[1], view.shape[2], 1))
+                feat_img = np.tile(feat_reshape, (1, view.shape[1], view.shape[2], 1))
                 fin_obs = np.concatenate([view, feat_img], axis=-1)
             else:
                 fin_obs = np.copy(view)
@@ -253,8 +246,7 @@ class magent_parallel_env(ParallelEnv):
                 rewards = rewards.reshape(len(rewards), 1)
                 state_features = np.hstack((actions, rewards))
 
-                state[pos_x, pos_y, 1 +
-                      len(self.team_sizes) * 2:] = state_features
+                state[pos_x, pos_y, 1 + len(self.team_sizes) * 2 :] = state_features
         return state
 
     def step(self, all_actions):
@@ -268,7 +260,7 @@ class magent_parallel_env(ParallelEnv):
         for i in range(len(self.handles)):
             size = self.team_sizes[i]
             self.env.set_action(
-                self.handles[i], all_actions[start_point: (start_point + size)]
+                self.handles[i], all_actions[start_point : (start_point + size)]
             )
             start_point += size
 
@@ -281,6 +273,5 @@ class magent_parallel_env(ParallelEnv):
         all_observes = self._observe_all()
         self.all_dones = all_dones
         self.env.clear_dead()
-        self.agents = [
-            agent for agent in self.agents if not self.all_dones[agent]]
+        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
         return all_observes, all_rewards, all_dones, all_infos

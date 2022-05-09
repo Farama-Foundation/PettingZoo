@@ -151,8 +151,7 @@ class SimpleEnv(AECEnv):
                     action //= mdim
             if not agent.silent:
                 scenario_action.append(action)
-            self._set_action(scenario_action, agent,
-                             self.action_spaces[agent.name])
+            self._set_action(scenario_action, agent, self.action_spaces[agent.name])
 
         self.world.step()
 
@@ -276,8 +275,7 @@ class SimpleEnv(AECEnv):
             if np.all(other.state.c == 0):
                 word = "_"
             elif self.continuous_actions:
-                word = "[" + \
-                    ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
+                word = "[" + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
             else:
                 word = alphabet[np.argmax(other.state.c)]
 

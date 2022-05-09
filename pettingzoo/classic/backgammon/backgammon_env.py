@@ -77,7 +77,7 @@ class raw_env(AECEnv):
         if self.dones[self.agent_selection]:
             return self._was_done_step(action)
 
-        if action != 26 ** 2 * 2:
+        if action != 26**2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
             self.game.execute_play(self.colors[self.agent_selection], action)
 
@@ -124,7 +124,7 @@ class raw_env(AECEnv):
 
             legal_moves = bg_utils.to_gym_format(valid_moves, self.roll)
             if len(legal_moves) == 0:
-                legal_moves = [26 ** 2 * 2]
+                legal_moves = [26**2 * 2]
         else:
             legal_moves = []
 

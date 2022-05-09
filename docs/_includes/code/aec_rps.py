@@ -68,8 +68,7 @@ class raw_env(AECEnv):
         )
 
         # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
-        self._action_spaces = {agent: Discrete(
-            3) for agent in self.possible_agents}
+        self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
@@ -92,8 +91,7 @@ class raw_env(AECEnv):
         """
         if len(self.agents) == 2:
             string = "Current state: Agent1: {} , Agent2: {}".format(
-                MOVES[self.state[self.agents[0]]
-                      ], MOVES[self.state[self.agents[1]]]
+                MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
             )
         else:
             string = "Game over"
@@ -180,8 +178,7 @@ class raw_env(AECEnv):
 
             self.num_moves += 1
             # The dones dictionary must be updated for all players.
-            self.dones = {agent: self.num_moves >=
-                          NUM_ITERS for agent in self.agents}
+            self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
 
             # observe the current state
             for i in self.agents:

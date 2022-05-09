@@ -69,10 +69,8 @@ class raw_env(AECEnv):
 
         self.agents = ["player_" + str(r) for r in range(2)]
         self.possible_agents = self.agents[:]
-        self.agent_name_mapping = dict(
-            zip(self.agents, list(range(self.num_agents))))
-        self.action_spaces = {agent: Discrete(
-            num_actions) for agent in self.agents}
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
+        self.action_spaces = {agent: Discrete(num_actions) for agent in self.agents}
         self.observation_spaces = {
             agent: Discrete(1 + num_actions) for agent in self.agents
         }
@@ -115,8 +113,7 @@ class raw_env(AECEnv):
         if self.screen is None:
             if mode == "human":
                 pygame.init()
-                self.screen = pygame.display.set_mode(
-                    (screen_width, screen_height))
+                self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
                 pygame.font.init()
                 self.screen = pygame.Surface((screen_width, screen_height))
@@ -138,8 +135,7 @@ class raw_env(AECEnv):
             rock, (int(screen_height / 9), int(screen_height / 9 * (10 / 13)))
         )
         scissors = pygame.transform.scale(
-            scissors, (int(screen_height / 9),
-                       int(screen_height / 9 * (14 / 13)))
+            scissors, (int(screen_height / 9), int(screen_height / 9 * (14 / 13)))
         )
         spock = pygame.transform.scale(
             spock, (int(screen_height / 9), int(screen_height / 9))
@@ -166,8 +162,7 @@ class raw_env(AECEnv):
                     (
                         (screen_width / 2)
                         + offset(
-                            (i + 1) % 2, screen_height /
-                            9, screen_height * 7 / 126
+                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
                         ),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
@@ -179,8 +174,7 @@ class raw_env(AECEnv):
                     (
                         (screen_width / 2)
                         + offset(
-                            (i + 1) % 2, screen_height /
-                            9, screen_height * 7 / 126
+                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
                         ),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
@@ -192,8 +186,7 @@ class raw_env(AECEnv):
                     (
                         (screen_width / 2)
                         + offset(
-                            (i + 1) % 2, screen_height /
-                            9, screen_height * 7 / 126
+                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
                         ),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
@@ -205,8 +198,7 @@ class raw_env(AECEnv):
                     (
                         (screen_width / 2)
                         + offset(
-                            (i + 1) % 2, screen_height /
-                            9, screen_height * 7 / 126
+                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
                         ),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
@@ -218,8 +210,7 @@ class raw_env(AECEnv):
                     (
                         (screen_width / 2)
                         + offset(
-                            (i + 1) % 2, screen_height /
-                            9, screen_height * 7 / 126
+                            (i + 1) % 2, screen_height / 9, screen_height * 7 / 126
                         ),
                         (screen_height * 7 / 24)
                         + ((screen_height / 7) * np.floor(i / 2)),
@@ -234,8 +225,7 @@ class raw_env(AECEnv):
             rock, (int(screen_height / 7), int(screen_height / 7 * (10 / 13)))
         )
         scissors = pygame.transform.scale(
-            scissors, (int(screen_height / 7),
-                       int(screen_height / 7 * (14 / 13)))
+            scissors, (int(screen_height / 7), int(screen_height / 7 * (14 / 13)))
         )
         spock = pygame.transform.scale(
             spock, (int(screen_height / 7), int(screen_height / 7))
@@ -312,8 +302,7 @@ class raw_env(AECEnv):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)
-                         ) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
         )
 
     def observe(self, agent):
@@ -352,8 +341,7 @@ class raw_env(AECEnv):
                         rewards = (1, -1)
                     else:
                         rewards = (-1, 1)
-            self.rewards[self.agents[0]
-                         ], self.rewards[self.agents[1]] = rewards
+            self.rewards[self.agents[0]], self.rewards[self.agents[1]] = rewards
 
             self.num_moves += 1
 
@@ -367,8 +355,7 @@ class raw_env(AECEnv):
                     self.agents[1 - self.agent_name_mapping[i]]
                 ]
         else:
-            self.state[self.agents[1 -
-                                   self.agent_name_mapping[agent]]] = self._none
+            self.state[self.agents[1 - self.agent_name_mapping[agent]]] = self._none
 
             self._clear_rewards()
 
