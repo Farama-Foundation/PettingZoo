@@ -99,13 +99,15 @@ def test_observation_action_spaces(env, agent_0):
                 'We recommend agents to be named in the format <descriptor>_<number>, like "player_0"'
             )
         if not isinstance(
-            env.observation_space(agent), env.observation_space(agent_0).__class__
+            env.observation_space(
+                agent), env.observation_space(agent_0).__class__
         ):
             warnings.warn(
                 "The class of observation spaces is different between two agents"
             )
         if not isinstance(env.action_space(agent), env.action_space(agent).__class__):
-            warnings.warn("The class of action spaces is different between two agents")
+            warnings.warn(
+                "The class of action spaces is different between two agents")
         if env.observation_space(agent) != env.observation_space(agent_0):
             warnings.warn("Agents have different observation space sizes")
         if env.action_space(agent) != env.action_space(agent):
@@ -121,13 +123,15 @@ def test_observation_action_spaces(env, agent_0):
                     "Agent's maxmimum action space value is infinity. This is probably too high"
                 )
             if np.any(
-                np.equal(env.action_space(agent).low, env.action_space(agent).high)
+                np.equal(env.action_space(agent).low,
+                         env.action_space(agent).high)
             ):
                 warnings.warn(
                     "Agent's maximum and minimum action space values are equal"
                 )
             if np.any(
-                np.greater(env.action_space(agent).low, env.action_space(agent).high)
+                np.greater(env.action_space(agent).low,
+                           env.action_space(agent).high)
             ):
                 assert (
                     False
@@ -152,7 +156,8 @@ def test_observation_action_spaces(env, agent_0):
                 )
             if np.any(
                 np.equal(
-                    env.observation_space(agent).low, env.observation_space(agent).high
+                    env.observation_space(
+                        agent).low, env.observation_space(agent).high
                 )
             ):
                 warnings.warn(
@@ -160,7 +165,8 @@ def test_observation_action_spaces(env, agent_0):
                 )
             if np.any(
                 np.greater(
-                    env.observation_space(agent).low, env.observation_space(agent).high
+                    env.observation_space(
+                        agent).low, env.observation_space(agent).high
                 )
             ):
                 assert (
@@ -188,7 +194,8 @@ def test_reward(reward):
         and not isinstance(np.dtype(reward), np.dtype)
         and not isinstance(reward, np.ndarray)
     ):
-        warnings.warn("Reward should be int, float, NumPy dtype or NumPy array")
+        warnings.warn(
+            "Reward should be int, float, NumPy dtype or NumPy array")
     if isinstance(reward, np.ndarray):
         if isinstance(reward, np.ndarray) and not reward.shape == (1,):
             assert False, "Rewards can only be one number"
@@ -360,8 +367,8 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     if not hasattr(env, "possible_agents"):
         warnings.warn(missing_attr_warning.format(name="possible_agents"))
 
-    # checks that reset takes an argument called seed
-    env.reset(seed=0)
+    # checks that reset takes arguments called seed and options
+    env.reset(seed=0, options={"option": 1})
 
     assert isinstance(
         env, pettingzoo.AECEnv

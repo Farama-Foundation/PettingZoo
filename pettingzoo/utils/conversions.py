@@ -117,8 +117,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
     def unwrapped(self):
         return self.aec_env.unwrapped
 
-    def reset(self, seed=None):
-        self.aec_env.reset(seed=seed)
+    def reset(self, seed=None, options=None):
+        self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)
@@ -222,8 +222,8 @@ class parallel_to_aec_wrapper(AECEnv):
     def action_space(self, agent):
         return self.env.action_space(agent)
 
-    def reset(self, seed=None):
-        self._observations = self.env.reset(seed=seed)
+    def reset(self, seed=None, options=None):
+        self._observations = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions = {agent: None for agent in self.agents}
@@ -243,7 +243,8 @@ class parallel_to_aec_wrapper(AECEnv):
         return self.env.state()
 
     def add_new_agent(self, new_agent):
-        self._agent_selector._current_agent = len(self._agent_selector.agent_order)
+        self._agent_selector._current_agent = len(
+            self._agent_selector.agent_order)
         self._agent_selector.agent_order.append(new_agent)
         self.agent_selection = self._agent_selector.next()
         self.agents.append(new_agent)
@@ -358,8 +359,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
     def action_space(self, agent):
         return self.aec_env.action_space(agent)
 
-    def reset(self, seed=None):
-        self.aec_env.reset(seed=seed)
+    def reset(self, seed=None, options=None):
+        self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)

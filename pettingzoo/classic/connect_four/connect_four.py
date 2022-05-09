@@ -85,7 +85,8 @@ class raw_env(AECEnv):
         cur_p_board = np.equal(board_vals, cur_player + 1)
         opp_p_board = np.equal(board_vals, opp_player + 1)
 
-        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        observation = np.stack(
+            [cur_p_board, opp_p_board], axis=2).astype(np.int8)
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
         action_mask = np.zeros(7, "int8")
@@ -135,7 +136,7 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         # reset environment
         self.board = [0] * (6 * 7)
 
@@ -155,7 +156,8 @@ class raw_env(AECEnv):
         if self.screen is None:
             if mode == "human":
                 pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                self.screen = pygame.display.set_mode(
+                    (screen_width, screen_height))
             else:
                 self.screen = pygame.Surface((screen_width, screen_height))
         if mode == "human":
@@ -206,7 +208,8 @@ class raw_env(AECEnv):
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)
+                         ) if mode == "rgb_array" else None
         )
 
     def close(self):

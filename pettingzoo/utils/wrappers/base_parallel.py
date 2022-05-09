@@ -21,11 +21,11 @@ class BaseParallelWraper(ParallelEnv):
         except AttributeError:
             pass
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         # Used in Supersuit frame_skip_par
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
-        res = self.env.reset(seed=seed)
+        res = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents
         return res
 
