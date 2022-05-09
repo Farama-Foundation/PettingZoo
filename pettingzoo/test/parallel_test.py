@@ -31,11 +31,12 @@ def parallel_api_test(par_env, num_cycles=1000):
 
     assert not isinstance(par_env.unwrapped, aec_to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, parallel_to_aec_wrapper)
-    assert not isinstance(par_env.unwrapped, turn_based_aec_to_parallel_wrapper)
+    assert not isinstance(
+        par_env.unwrapped, turn_based_aec_to_parallel_wrapper)
     assert not isinstance(par_env.unwrapped, BaseWrapper)
 
-    # checks that reset takes an argument seed
-    par_env.reset(seed=0)
+    # checks that reset takes arguments seed and options
+    par_env.reset(seed=0, options={"options": 1})
 
     MAX_RESETS = 2
     for _ in range(MAX_RESETS):
@@ -73,7 +74,8 @@ def parallel_api_test(par_env, num_cycles=1000):
                 if len(key_set) < len(agents_set):
                     warnings.warn("Live agent was not given {}".format(k))
                 else:
-                    warnings.warn("Agent was given {} but was done last turn".format(k))
+                    warnings.warn(
+                        "Agent was given {} but was done last turn".format(k))
 
             if hasattr(par_env, "possible_agents"):
                 assert set(par_env.agents).issubset(

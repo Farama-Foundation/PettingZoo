@@ -48,7 +48,8 @@ class raw_env(AECEnv):
 
         self.rewards = {i: 0 for i in self.agents}
         self.dones = {i: False for i in self.agents}
-        self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
+        self.infos = {i: {"legal_moves": list(
+            range(0, 9))} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
@@ -71,7 +72,8 @@ class raw_env(AECEnv):
         cur_p_board = np.equal(board_vals, cur_player + 1)
         opp_p_board = np.equal(board_vals, opp_player + 1)
 
-        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        observation = np.stack(
+            [cur_p_board, opp_p_board], axis=2).astype(np.int8)
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
         action_mask = np.zeros(9, "int8")
@@ -127,7 +129,7 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         # reset environment
         self.board = Board()
 
@@ -153,15 +155,18 @@ class raw_env(AECEnv):
         board = list(map(getSymbol, self.board.squares))
 
         print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
+        print(f"  {board[0]}  " + "|" +
+              f"  {board[3]}  " + "|" + f"  {board[6]}  ")
         print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
         print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
+        print(f"  {board[1]}  " + "|" +
+              f"  {board[4]}  " + "|" + f"  {board[7]}  ")
         print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
 
         print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
+        print(f"  {board[2]}  " + "|" +
+              f"  {board[5]}  " + "|" + f"  {board[8]}  ")
         print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
 
     def close(self):

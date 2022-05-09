@@ -118,7 +118,7 @@ class SimpleEnv(AECEnv):
         )
         return np.concatenate(states, axis=None)
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.scenario.reset_world(self.world, self.np_random)
@@ -151,7 +151,8 @@ class SimpleEnv(AECEnv):
                     action //= mdim
             if not agent.silent:
                 scenario_action.append(action)
-            self._set_action(scenario_action, agent, self.action_spaces[agent.name])
+            self._set_action(scenario_action, agent,
+                             self.action_spaces[agent.name])
 
         self.world.step()
 
@@ -275,7 +276,8 @@ class SimpleEnv(AECEnv):
             if np.all(other.state.c == 0):
                 word = "_"
             elif self.continuous_actions:
-                word = "[" + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
+                word = "[" + \
+                    ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
             else:
                 word = alphabet[np.argmax(other.state.c)]
 

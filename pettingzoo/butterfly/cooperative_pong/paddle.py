@@ -7,7 +7,7 @@ class Paddle(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
         self.speed = speed
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         pass
 
     def draw(self, screen):

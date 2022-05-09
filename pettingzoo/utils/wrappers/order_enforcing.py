@@ -28,7 +28,8 @@ class OrderEnforcingWrapper(BaseWrapper):
         if value == "unwrapped":
             return self.env.unwrapped
         elif value == "possible_agents":
-            EnvLogger.error_possible_agents_attribute_missing("possible_agents")
+            EnvLogger.error_possible_agents_attribute_missing(
+                "possible_agents")
         elif value == "observation_spaces":
             raise AttributeError(
                 "The base environment does not have an possible_agents attribute. Use the environments `observation_space` method instead"
@@ -88,10 +89,10 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         self._has_reset = True
         self._has_updated = True
-        super().reset(seed=seed)
+        super().reset(seed=seed, options=options)
 
     def __str__(self):
         if hasattr(self, "metadata"):
