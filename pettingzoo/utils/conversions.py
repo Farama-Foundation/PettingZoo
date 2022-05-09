@@ -243,8 +243,7 @@ class parallel_to_aec_wrapper(AECEnv):
         return self.env.state()
 
     def add_new_agent(self, new_agent):
-        self._agent_selector._current_agent = len(
-            self._agent_selector.agent_order)
+        self._agent_selector._current_agent = len(self._agent_selector.agent_order)
         self._agent_selector.agent_order.append(new_agent)
         self.agent_selection = self._agent_selector.next()
         self.agents.append(new_agent)

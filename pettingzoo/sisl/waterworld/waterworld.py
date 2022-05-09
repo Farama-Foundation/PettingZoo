@@ -33,13 +33,11 @@ class raw_env(AECEnv):
 
         self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]
-        self.agent_name_mapping = dict(
-            zip(self.agents, list(range(self.num_agents))))
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
-        self.observation_spaces = dict(
-            zip(self.agents, self.env.observation_space))
+        self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.has_reset = False
 
     def observation_space(self, agent):
@@ -63,8 +61,7 @@ class raw_env(AECEnv):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
-        self._cumulative_rewards = dict(
-            zip(self.agents, [(0) for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 

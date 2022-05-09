@@ -85,8 +85,7 @@ class raw_env(AECEnv, EzPickle):
         self.piston_radius = 5
         self.wall_width = 40
         self.ball_radius = 40
-        self.screen_width = (2 * self.wall_width) + \
-            (self.piston_width * self.n_pistons)
+        self.screen_width = (2 * self.wall_width) + (self.piston_width * self.n_pistons)
         self.screen_height = 560
         y_high = self.screen_height - self.wall_width - self.piston_body_height
         y_low = self.wall_width
@@ -99,8 +98,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = ["piston_" + str(r) for r in range(self.n_pistons)]
         self.possible_agents = self.agents[:]
-        self.agent_name_mapping = dict(
-            zip(self.agents, list(range(self.n_pistons))))
+        self.agent_name_mapping = dict(zip(self.agents, list(range(self.n_pistons))))
         self._agent_selector = agent_selector(self.agents)
 
         self.observation_spaces = dict(
@@ -122,8 +120,7 @@ class raw_env(AECEnv, EzPickle):
             self.action_spaces = dict(
                 zip(
                     self.agents,
-                    [gym.spaces.Box(low=-1, high=1, shape=(1,))
-                     ] * self.n_pistons,
+                    [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons,
                 )
             )
         else:
@@ -227,8 +224,7 @@ class raw_env(AECEnv, EzPickle):
         return state
 
     def enable_render(self):
-        self.screen = pygame.display.set_mode(
-            (self.screen_width, self.screen_height))
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
 
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))
@@ -239,8 +235,7 @@ class raw_env(AECEnv, EzPickle):
         if not self.closed:
             self.closed = True
             if self.renderOn:
-                self.screen = pygame.Surface(
-                    (self.screen_width, self.screen_height))
+                self.screen = pygame.Surface((self.screen_width, self.screen_height))
                 self.renderOn = False
                 pygame.event.pump()
                 pygame.display.quit()
@@ -254,15 +249,12 @@ class raw_env(AECEnv, EzPickle):
             self.screen_height - self.wall_width,
         )
         walls = [
-            pymunk.Segment(self.space.static_body, top_left,
-                           top_right, 1),  # Top wall
-            pymunk.Segment(self.space.static_body, top_left,
-                           bot_left, 1),  # Left wall
+            pymunk.Segment(self.space.static_body, top_left, top_right, 1),  # Top wall
+            pymunk.Segment(self.space.static_body, top_left, bot_left, 1),  # Left wall
             pymunk.Segment(
                 self.space.static_body, bot_left, bot_right, 1
             ),  # Bottom wall
-            pymunk.Segment(self.space.static_body,
-                           top_right, bot_right, 1),  # Right
+            pymunk.Segment(self.space.static_body, top_right, bot_right, 1),  # Right
         ]
         for wall in walls:
             wall.friction = 0.64
@@ -276,8 +268,7 @@ class raw_env(AECEnv, EzPickle):
         body.position = x, y
         # radians per second
         if self.random_rotate:
-            body.angular_velocity = self.np_random.uniform(
-                -6 * math.pi, 6 * math.pi)
+            body.angular_velocity = self.np_random.uniform(-6 * math.pi, 6 * math.pi)
         shape = pymunk.Circle(body, radius, (0, 0))
         shape.friction = b_friction
         shape.elasticity = b_elasticity
@@ -410,8 +401,7 @@ class raw_env(AECEnv, EzPickle):
         self.has_reset = True
         self.done = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self._cumulative_rewards = dict(
-            zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
@@ -442,8 +432,7 @@ class raw_env(AECEnv, EzPickle):
         for piston in self.pistonList:
             self.screen.blit(
                 self.piston_body_sprite,
-                (x_pos, self.screen_height -
-                 self.wall_width - self.piston_body_height),
+                (x_pos, self.screen_height - self.wall_width - self.piston_body_height),
             )
             # Height is the size of the blue part of the piston. 6 is the piston base height (the gray part at the bottom)
             height = (
@@ -476,8 +465,7 @@ class raw_env(AECEnv, EzPickle):
         color = (255, 255, 255)
         pygame.draw.rect(self.screen, color, self.render_rect)
         color = (65, 159, 221)
-        pygame.draw.circle(self.screen, color,
-                           (ball_x, ball_y), self.ball_radius)
+        pygame.draw.circle(self.screen, color, (ball_x, ball_y), self.ball_radius)
 
         line_end_x = ball_x + (self.ball_radius - 1) * np.cos(self.ball.angle)
         line_end_y = ball_y + (self.ball_radius - 1) * np.sin(self.ball.angle)
@@ -532,8 +520,7 @@ class raw_env(AECEnv, EzPickle):
         if mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)
-                         ) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
         )
 
     def step(self, action):
@@ -543,8 +530,7 @@ class raw_env(AECEnv, EzPickle):
         action = np.asarray(action)
         agent = self.agent_selection
         if self.continuous:
-            self.move_piston(
-                self.pistonList[self.agent_name_mapping[agent]], action)
+            self.move_piston(self.pistonList[self.agent_name_mapping[agent]], action)
         else:
             self.move_piston(
                 self.pistonList[self.agent_name_mapping[agent]], action - 1
@@ -586,8 +572,7 @@ class raw_env(AECEnv, EzPickle):
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
         if self._agent_selector.is_last():
-            self.dones = dict(
-                zip(self.agents, [self.done for _ in self.agents]))
+            self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
 
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0

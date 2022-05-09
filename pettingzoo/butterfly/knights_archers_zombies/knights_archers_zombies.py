@@ -361,8 +361,7 @@ class raw_env(AECEnv, EzPickle):
             rel_pos = all_pos - agent_pos
 
             # get norm of relative distance
-            norm_pos = np.linalg.norm(
-                rel_pos, axis=1, keepdims=True) / np.sqrt(2)
+            norm_pos = np.linalg.norm(rel_pos, axis=1, keepdims=True) / np.sqrt(2)
 
             # kill dead things
             all_ids[is_dead] *= 0
@@ -371,8 +370,7 @@ class raw_env(AECEnv, EzPickle):
             norm_pos[is_dead] *= 0
 
             # combine the typemasks, positions and angles
-            state = np.concatenate(
-                [all_ids, norm_pos, rel_pos, all_ang], axis=-1)
+            state = np.concatenate([all_ids, norm_pos, rel_pos, all_ang], axis=-1)
 
             # get the agent state as absolute vector
             # typemask is one longer to also include norm_pos
@@ -433,8 +431,7 @@ class raw_env(AECEnv, EzPickle):
                         typemask = np.zeros(self.typemask_width)
                         typemask[4] = 1.0
 
-                    vector = np.concatenate(
-                        (typemask, sword.vector_state), axis=0)
+                    vector = np.concatenate((typemask, sword.vector_state), axis=0)
                     state.append(vector)
 
         # handle empty swords
@@ -454,8 +451,7 @@ class raw_env(AECEnv, EzPickle):
                         typemask = np.zeros(self.typemask_width)
                         typemask[3] = 1.0
 
-                    vector = np.concatenate(
-                        (typemask, arrow.vector_state), axis=0)
+                    vector = np.concatenate((typemask, arrow.vector_state), axis=0)
                     state.append(vector)
 
         # handle empty arrows
@@ -584,8 +580,7 @@ class raw_env(AECEnv, EzPickle):
         self._dones_step_first()
 
     def enable_render(self):
-        self.WINDOW = pygame.display.set_mode(
-            [const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
+        self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
         # self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
         self.render_on = True
         self.draw()
@@ -616,8 +611,7 @@ class raw_env(AECEnv, EzPickle):
         if mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)
-                         ) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
         )
 
     def close(self):
@@ -625,8 +619,7 @@ class raw_env(AECEnv, EzPickle):
             self.closed = True
             if self.render_on:
                 # self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
-                self.WINDOW = pygame.Surface(
-                    (const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+                self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
                 self.render_on = False
                 pygame.event.pump()
                 pygame.display.quit()
@@ -636,8 +629,7 @@ class raw_env(AECEnv, EzPickle):
         self.run = self.zombie_endscreen(self.run, self.zombie_list)
 
         # Zombie Kills all Players
-        self.run = self.zombie_all_players(
-            self.run, self.knight_list, self.archer_list)
+        self.run = self.zombie_all_players(self.run, self.knight_list, self.archer_list)
 
     def reinit(self):
         # Dictionaries for holding new players and their weapons
@@ -666,12 +658,9 @@ class raw_env(AECEnv, EzPickle):
             self.archer_dict[f"archer{self.archer_player_num}"] = Archer(
                 agent_name=name
             )
-            self.archer_dict[f"archer{self.archer_player_num}"].offset(
-                i * 50, 0)
-            self.archer_list.add(
-                self.archer_dict[f"archer{self.archer_player_num}"])
-            self.agent_list.append(
-                self.archer_dict[f"archer{self.archer_player_num}"])
+            self.archer_dict[f"archer{self.archer_player_num}"].offset(i * 50, 0)
+            self.archer_list.add(self.archer_dict[f"archer{self.archer_player_num}"])
+            self.agent_list.append(self.archer_dict[f"archer{self.archer_player_num}"])
             if i != self.num_archers - 1:
                 self.archer_player_num += 1
 
@@ -680,12 +669,9 @@ class raw_env(AECEnv, EzPickle):
             self.knight_dict[f"knight{self.knight_player_num}"] = Knight(
                 agent_name=name
             )
-            self.knight_dict[f"knight{self.knight_player_num}"].offset(
-                i * 50, 0)
-            self.knight_list.add(
-                self.knight_dict[f"knight{self.knight_player_num}"])
-            self.agent_list.append(
-                self.knight_dict[f"knight{self.knight_player_num}"])
+            self.knight_dict[f"knight{self.knight_player_num}"].offset(i * 50, 0)
+            self.knight_list.add(self.knight_dict[f"knight{self.knight_player_num}"])
+            self.agent_list.append(self.knight_dict[f"knight{self.knight_player_num}"])
             if i != self.num_knights - 1:
                 self.knight_player_num += 1
 

@@ -74,8 +74,7 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.agent_order = list(self.agents)
 
-        self.action_spaces = {name: spaces.Discrete(
-            64 * 4) for name in self.agents}
+        self.action_spaces = {name: spaces.Discrete(64 * 4) for name in self.agents}
         self.observation_spaces = {
             name: spaces.Dict(
                 {
@@ -142,8 +141,7 @@ class raw_env(AECEnv):
 
         # Check if given move is a jump
         def check_jump(pos):
-            opponent = [
-                "white"] if self.agent_selection == "player_0" else ["black"]
+            opponent = ["white"] if self.agent_selection == "player_0" else ["black"]
             return self.ch.check_occupancy(raw_env.move64_32[pos], by_players=opponent)
 
         direction = int(action / 64)
@@ -195,8 +193,7 @@ class raw_env(AECEnv):
         legal_moves = []
         for move in moves:
             if move in raw_env.move_to_action[self.agent_selection]:
-                legal_moves.append(
-                    raw_env.move_to_action[self.agent_selection][move])
+                legal_moves.append(raw_env.move_to_action[self.agent_selection][move])
                 continue
 
             srcpos = raw_env.move32_64[move[0]]
@@ -281,7 +278,7 @@ class raw_env(AECEnv):
 class CheckersRules:
 
     size = 8
-    n_positions = int(size ** 2 // 2)
+    n_positions = int(size**2 // 2)
     n_per_row = int(size // 2)
 
     # TODO change players to top/bottom players
@@ -409,8 +406,7 @@ class CheckersRules:
         """
         if not skip_check:
             # Reject illegal moves
-            assert (from_sq, to_sq) in self.legal_moves(
-            ), "The move is not legal."
+            assert (from_sq, to_sq) in self.legal_moves(), "The move is not legal."
 
         # The move is legal
         switch_turn = True
@@ -431,8 +427,7 @@ class CheckersRules:
             # Remove the captured piece
             to_row, to_col = self.sq2pos(to_sq)
             from_row, from_col = self.sq2pos(from_sq)
-            capture_row, capture_col = (
-                from_row + to_row) / 2, (from_col + to_col) / 2
+            capture_row, capture_col = (from_row + to_row) / 2, (from_col + to_col) / 2
             capture_sq = self.pos2sq(capture_row, capture_col)
             for type in ["men", "kings"]:
                 pieces = self._board[self.adversary][type]
@@ -529,8 +524,7 @@ class CheckersRules:
             )
             jumps = itertools.product(
                 [self._last_moved_piece],
-                self.available_jumps(self._turn, piece_type,
-                                     self._last_moved_piece),
+                self.available_jumps(self._turn, piece_type, self._last_moved_piece),
             )
         return list(jumps)
 
@@ -572,8 +566,7 @@ class CheckersRules:
     def flat_board(self):
         # Empty board
         board = (
-            np.ones((self.size, self.size), dtype="int") *
-            CheckersRules.empty_square
+            np.ones((self.size, self.size), dtype="int") * CheckersRules.empty_square
         )
         # Place the pieces
         for sq in self._board["black"]["men"]:
@@ -599,8 +592,7 @@ class CheckersRules:
         black_king = "B"
         white_man = "w"
         white_king = "W"
-        symbols = [empty_playable_square, black_man,
-                   black_king, white_man, white_king]
+        symbols = [empty_playable_square, black_man, black_king, white_man, white_king]
         # Print board
         for i, row in enumerate(self.flat_board()):
             for j, col in enumerate(row):

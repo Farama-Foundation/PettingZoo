@@ -169,7 +169,7 @@ class AECEnv:
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter: int = 2 ** 63) -> AECIterable:
+    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
         """
         Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
         """
@@ -207,8 +207,7 @@ class AECEnv:
             # main contents of step
         """
         if action is not None:
-            raise ValueError(
-                "when an agent is done, the only valid action is None")
+            raise ValueError("when an agent is done, the only valid action is None")
 
         # removes done agent
         agent = self.agent_selection
@@ -283,7 +282,9 @@ class ParallelEnv:
     agents: List[AgentID]
     possible_agents: List[AgentID]
 
-    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> ObsDict:
+    def reset(
+        self, seed: Optional[int] = None, options: Optional[dict] = None
+    ) -> ObsDict:
         """
         Resets the environment and returns a dictionary of observations (keyed by the agent name)
         """

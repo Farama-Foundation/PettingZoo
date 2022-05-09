@@ -84,8 +84,7 @@ class Prospector(pg.sprite.Sprite):
 
     def synchronize_center(self):
         self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotate(
-            self.orig_image, math.degrees(self.body.angle))
+        self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def update_gold(self):
@@ -158,8 +157,7 @@ class Banker(pg.sprite.Sprite):
 
     def synchronize_center(self):
         self.rect.center = utils.flipy(self.body.position)
-        self.image = pg.transform.rotate(
-            self.orig_image, math.degrees(self.body.angle))
+        self.image = pg.transform.rotate(self.orig_image, math.degrees(self.body.angle))
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def update_gold(self):
@@ -310,8 +308,7 @@ class Water:
             new_row = []
             for col in range(self.num_cols):
                 rect = pg.Rect(
-                    col * const.TILE_SIZE, pos[1] +
-                    (row * const.TILE_SIZE), *tile_size
+                    col * const.TILE_SIZE, pos[1] + (row * const.TILE_SIZE), *tile_size
                 )
                 new_row.append(rect)
             self.rects.append(new_row)
@@ -361,8 +358,7 @@ class Background:
     def __init__(self, rng):
         self.num_cols = math.ceil(const.SCREEN_WIDTH / const.TILE_SIZE)
         self.num_rows = (
-            math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) /
-                      const.TILE_SIZE) + 1
+            math.ceil((const.SCREEN_HEIGHT - const.WATER_HEIGHT) / const.TILE_SIZE) + 1
         )
 
         self.tile = utils.load_image(["sand_tile.png"])
@@ -383,8 +379,7 @@ class Background:
         for row in range(self.num_rows):
             new_row = []
             for col in range(self.num_cols):
-                rect = pg.Rect(col * const.TILE_SIZE, row *
-                               const.TILE_SIZE, *tile_size)
+                rect = pg.Rect(col * const.TILE_SIZE, row * const.TILE_SIZE, *tile_size)
                 new_row.append(rect)
             self.rects.append(new_row)
 
@@ -397,8 +392,7 @@ class Background:
                     y += -1
                 x = col + rng.integers(0, 3)
                 choice = rng.integers(0, 4)
-                self.debris[self.rects[y]
-                            [x].topleft] = self.debris_tiles[choice]
+                self.debris[self.rects[y][x].topleft] = self.debris_tiles[choice]
 
     def full_draw(self, screen):
         for row in self.rects:
@@ -594,14 +588,12 @@ class raw_env(AECEnv, EzPickle):
                     self.rewards[k] += group_reward * prospec_find_gold_reward
 
             for k in self.bankers:
-                self.rewards[k] += other_group_reward * \
-                    prospec_find_gold_reward
+                self.rewards[k] += other_group_reward * prospec_find_gold_reward
 
             if prospec_body.nugget is None:
                 position = arbiter.contact_point_set.points[0].point_a
 
-                gold = Gold(position, prospec_body,
-                            self.space, self.all_sprites)
+                gold = Gold(position, prospec_body, self.space, self.all_sprites)
                 self.gold.append(gold)
                 prospec_body.nugget = gold
 
@@ -630,8 +622,7 @@ class raw_env(AECEnv, EzPickle):
 
             normal = arbiter.contact_point_set.normal
             # Correct the angle because banker's head is rotated pi/2
-            corrected = utils.normalize_angle(
-                banker_body.angle + (math.pi / 2))
+            corrected = utils.normalize_angle(banker_body.angle + (math.pi / 2))
             normalized_normal = utils.normalize_angle(normal.angle)
             if (
                 corrected - const.BANKER_HANDOFF_TOLERANCE
@@ -645,24 +636,18 @@ class raw_env(AECEnv, EzPickle):
                 banker_body.nugget = gold_sprite
 
                 for k, v in self.prospectors.items():
-                    self.rewards[k] += other_group_reward * \
-                        banker_receive_gold_reward
+                    self.rewards[k] += other_group_reward * banker_receive_gold_reward
                     if v.body is prospec_body:
-                        self.rewards[k] += ind_reward * \
-                            prospec_handoff_gold_reward
+                        self.rewards[k] += ind_reward * prospec_handoff_gold_reward
                     else:
-                        self.rewards[k] += group_reward * \
-                            prospec_handoff_gold_reward
+                        self.rewards[k] += group_reward * prospec_handoff_gold_reward
 
                 for k, v in self.bankers.items():
-                    self.rewards[k] += other_group_reward * \
-                        prospec_handoff_gold_reward
+                    self.rewards[k] += other_group_reward * prospec_handoff_gold_reward
                     if v.body is banker_body:
-                        self.rewards[k] += ind_reward * \
-                            banker_receive_gold_reward
+                        self.rewards[k] += ind_reward * banker_receive_gold_reward
                     else:
-                        self.rewards[k] += group_reward * \
-                            banker_receive_gold_reward
+                        self.rewards[k] += group_reward * banker_receive_gold_reward
 
             return True
 
@@ -681,15 +666,12 @@ class raw_env(AECEnv, EzPickle):
 
                 for k, v in self.bankers.items():
                     if v.body is banker_body:
-                        self.rewards[k] += ind_reward * \
-                            banker_deposit_gold_reward
+                        self.rewards[k] += ind_reward * banker_deposit_gold_reward
                     else:
-                        self.rewards[k] += group_reward * \
-                            banker_deposit_gold_reward
+                        self.rewards[k] += group_reward * banker_deposit_gold_reward
 
                 for k in self.prospectors:
-                    self.rewards[k] += other_group_reward * \
-                        banker_deposit_gold_reward
+                    self.rewards[k] += other_group_reward * banker_deposit_gold_reward
 
                 self.gold.remove(gold_class)
                 self.all_sprites.remove(gold_class)
@@ -731,8 +713,8 @@ class raw_env(AECEnv, EzPickle):
         x, y = ag.center  # Calculated property added to prospector and banker classes
         sub_screen = np.array(
             capture[
-                max(0, x - delta): min(const.SCREEN_WIDTH, x + delta),
-                max(0, y - delta): min(const.SCREEN_HEIGHT, y + delta),
+                max(0, x - delta) : min(const.SCREEN_WIDTH, x + delta),
+                max(0, y - delta) : min(const.SCREEN_HEIGHT, y + delta),
                 :,
             ],
             dtype=np.uint8,
@@ -830,8 +812,7 @@ class raw_env(AECEnv, EzPickle):
             self.frame += 1
             # If we reached max frames, we're done
             if self.frame == self.max_cycles:
-                self.dones = dict(
-                    zip(self.agents, [True for _ in self.agents]))
+                self.dones = dict(zip(self.agents, [True for _ in self.agents]))
 
         if self.rendering:
             pg.event.pump()
@@ -864,8 +845,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self._cumulative_rewards = dict(
-            zip(self.agents, [0 for _ in self.agents]))
+        self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self.dones = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.rendering = False

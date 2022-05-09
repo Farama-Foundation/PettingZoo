@@ -176,8 +176,7 @@ class raw_env(AECEnv, EzPickle):
                     "observation": spaces.Box(
                         low=0,
                         high=1,
-                        shape=(
-                            self.hanabi_env.vectorized_observation_shape()[0],),
+                        shape=(self.hanabi_env.vectorized_observation_shape()[0],),
                         dtype=np.float32,
                     ),
                     "action_mask": spaces.Box(
@@ -331,8 +330,7 @@ class raw_env(AECEnv, EzPickle):
             self._step_agents()
 
             # Apply action
-            all_observations, reward, done, _ = self.hanabi_env.step(
-                action=action)
+            all_observations, reward, done, _ = self.hanabi_env.step(action=action)
 
             # Update internal state
             self._process_latest_observations(
@@ -345,8 +343,7 @@ class raw_env(AECEnv, EzPickle):
 
     def observe(self, agent_name: str):
         observation = (
-            np.array(self.infos[agent_name]
-                     ["observations_vectorized"], np.float32)
+            np.array(self.infos[agent_name]["observations_vectorized"], np.float32)
             if agent_name in self.infos
             else np.zeros_like(self.observation_spaces[agent_name].low)
         )

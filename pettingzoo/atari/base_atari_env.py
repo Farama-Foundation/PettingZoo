@@ -214,8 +214,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             for agent, rew in zip(self.possible_agents, rewards)
             if agent in self.agents
         }
-        infos = {agent: {}
-                 for agent in self.possible_agents if agent in self.agents}
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not dones[agent]]
         return observations, rewards, dones, infos
 
@@ -239,8 +238,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             )
 
             myImage = pygame.transform.scale(
-                myImage, (screen_width * zoom_factor,
-                          screen_height * zoom_factor)
+                myImage, (screen_width * zoom_factor, screen_height * zoom_factor)
             )
 
             self._screen.blit(myImage, (0, 0))

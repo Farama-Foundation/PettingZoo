@@ -39,8 +39,7 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
 
-        self.action_spaces = {name: spaces.Discrete(
-            8 * 8 * 73) for name in self.agents}
+        self.action_spaces = {name: spaces.Discrete(8 * 8 * 73) for name in self.agents}
         self.observation_spaces = {
             name: spaces.Dict(
                 {
@@ -75,8 +74,7 @@ class raw_env(AECEnv):
         )
         observation = np.dstack((observation[:, :, :7], self.board_history))
         legal_moves = (
-            chess_utils.legal_moves(
-                self.board) if agent == self.agent_selection else []
+            chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
         )
 
         action_mask = np.zeros(4672, "int8")
@@ -120,8 +118,7 @@ class raw_env(AECEnv):
         )
         self.agent_selection = self._agent_selector.next()
 
-        chosen_move = chess_utils.action_to_move(
-            self.board, action, current_index)
+        chosen_move = chess_utils.action_to_move(self.board, action, current_index)
         assert chosen_move in self.board.legal_moves
         self.board.push(chosen_move)
 

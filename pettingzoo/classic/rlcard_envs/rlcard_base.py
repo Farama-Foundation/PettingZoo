@@ -49,8 +49,7 @@ class RLCardBase(AECEnv):
             ]
         )
         self.action_spaces = self._convert_to_dict(
-            [spaces.Discrete(self.env.num_actions)
-             for _ in range(self.num_agents)]
+            [spaces.Discrete(self.env.num_actions) for _ in range(self.num_agents)]
         )
 
     def observation_space(self, agent):
@@ -117,13 +116,11 @@ class RLCardBase(AECEnv):
         obs, player_id = self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)
-        self.rewards = self._convert_to_dict(
-            [0 for _ in range(self.num_agents)])
+        self.rewards = self._convert_to_dict([0 for _ in range(self.num_agents)])
         self._cumulative_rewards = self._convert_to_dict(
             [0 for _ in range(self.num_agents)]
         )
-        self.dones = self._convert_to_dict(
-            [False for _ in range(self.num_agents)])
+        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
         self.infos = self._convert_to_dict(
             [{"legal_moves": []} for _ in range(self.num_agents)]
         )

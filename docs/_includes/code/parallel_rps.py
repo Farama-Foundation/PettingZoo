@@ -86,8 +86,7 @@ class parallel_env(ParallelEnv):
         """
         if len(self.agents) == 2:
             string = "Current state: Agent1: {} , Agent2: {}".format(
-                MOVES[self.state[self.agents[0]]
-                      ], MOVES[self.state[self.agents[1]]]
+                MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
             )
         else:
             string = "Game over"
