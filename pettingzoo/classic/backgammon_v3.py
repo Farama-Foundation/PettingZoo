@@ -1,1 +1,1 @@
-from .backgammon.backgammon_env import env, raw_env
+from .backgammon.backgammon import env, raw_env
