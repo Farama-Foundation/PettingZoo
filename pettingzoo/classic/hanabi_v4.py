@@ -1,1 +1,1 @@
-from .hanabi.hanabi import env, raw_env
+from .hanabi.hanabi_env import env, raw_env

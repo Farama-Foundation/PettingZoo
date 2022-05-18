@@ -5,8 +5,8 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 
 from . import bg_utils
-from .bg_game import BLACK, COLORS, WHITE
-from .bg_game import Backgammon as Game
+from .backgammon_base import BLACK, COLORS, WHITE
+from .backgammon_base import Backgammon as Game
 
 
 def env(**kwargs):

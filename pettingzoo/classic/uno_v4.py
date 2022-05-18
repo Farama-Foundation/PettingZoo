@@ -1,1 +1,1 @@
-from .rlcard_envs.uno import env, raw_env
+from .rlcard_envs.uno_env import env, raw_env

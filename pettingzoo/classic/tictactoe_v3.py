@@ -1,1 +1,1 @@
-from .tictactoe.tictactoe import env, raw_env
+from .tictactoe.tictactoe_env import env, raw_env

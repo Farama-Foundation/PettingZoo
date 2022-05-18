@@ -1,1 +1,1 @@
-from .rlcard_envs.mahjong import env, raw_env
+from .rlcard_envs.mahjong_env import env, raw_env

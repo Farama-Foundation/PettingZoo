@@ -1,1 +1,1 @@
-from .checkers.checkers import env, raw_env
+from .checkers.checkers_env import env, raw_env
