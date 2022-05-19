@@ -37,10 +37,10 @@ def to_bg_format(action, roll):
     low_roll = min(roll)
     high_roll = max(roll)
 
-    if action == base ** 2 * 2:
+    if action == base**2 * 2:
         return ()
 
-    if action < base ** 2:  # Low roll first
+    if action < base**2:  # Low roll first
         dig1 = action % base
         dig2 = action // base
         a = to_bar(dig1, low_roll)
@@ -51,7 +51,7 @@ def to_bg_format(action, roll):
             return (a,)
 
     else:  # High roll first
-        action = action - base ** 2
+        action = action - base**2
         dig1 = action % base
         dig2 = action // base
         a = to_bar(dig1, high_roll)
@@ -74,14 +74,14 @@ def to_gym_format(actions, roll):
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
             if abs(diff1) == abs(high_roll):  # high first
-                a += base ** 2
+                a += base**2
             nums.append(a)
         elif isinstance(act[0], int) or act[0] == "bar":
             a, diff1, bears_off = from_bar(act)
             if bears_off:
                 diff1 = high_roll if abs(diff1) > abs(low_roll) else low_roll
             if abs(diff1) == abs(high_roll):  # high first
-                a += base ** 2
+                a += base**2
             nums.append(a)
         elif len(act) == 2:
             a, diff1, bears_off1 = from_bar(act[0])
@@ -99,7 +99,7 @@ def to_gym_format(actions, roll):
                         diff2 = high_roll
             num = a + base * b
             if diff1 > diff2:  # high first
-                num += base ** 2
+                num += base**2
             nums.append(num)
     return nums
 
