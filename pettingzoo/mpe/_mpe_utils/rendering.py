@@ -7,22 +7,10 @@ import sys
 
 import numpy as np
 from gym import error
-from pyglet.gl import (
-    GL_BLEND,
-    GL_LINE_LOOP,
-    GL_LINE_SMOOTH,
-    GL_LINE_SMOOTH_HINT,
-    GL_LINE_STIPPLE,
-    GL_LINE_STRIP,
-    GL_LINES,
-    GL_NICEST,
-    GL_ONE_MINUS_SRC_ALPHA,
-    GL_POINTS,
-    GL_POLYGON,
-    GL_QUADS,
-    GL_SRC_ALPHA,
-    GL_TRIANGLES,
-)
+from pyglet.gl import (GL_BLEND, GL_LINE_LOOP, GL_LINE_SMOOTH,
+                       GL_LINE_SMOOTH_HINT, GL_LINE_STIPPLE, GL_LINE_STRIP,
+                       GL_LINES, GL_NICEST, GL_ONE_MINUS_SRC_ALPHA, GL_POINTS,
+                       GL_POLYGON, GL_QUADS, GL_SRC_ALPHA, GL_TRIANGLES)
 
 try:
     import pyglet
@@ -32,26 +20,11 @@ except ImportError:
     )
 
 try:
-    from pyglet.gl import (
-        glBegin,
-        glBlendFunc,
-        glClearColor,
-        glColor4f,
-        glDisable,
-        glEnable,
-        glEnd,
-        glHint,
-        glLineStipple,
-        glLineWidth,
-        glPopMatrix,
-        glPushMatrix,
-        glRotatef,
-        glScalef,
-        glTranslatef,
-        gluOrtho2D,
-        glVertex2f,
-        glVertex3f,
-    )
+    from pyglet.gl import (glBegin, glBlendFunc, glClearColor, glColor4f,
+                           glDisable, glEnable, glEnd, glHint, glLineStipple,
+                           glLineWidth, glPopMatrix, glPushMatrix, glRotatef,
+                           glScalef, glTranslatef, gluOrtho2D, glVertex2f,
+                           glVertex3f)
 except ImportError:
     raise ImportError(
         """Error occurred while running `from pyglet.gl import ...`

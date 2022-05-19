@@ -1,7 +1,8 @@
 import os
 import warnings
 
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from .base_atari_env import (BaseAtariEnv, base_env_wrapper_fn,
+                             parallel_wrapper_fn)
 
 avaliable_versions = {
     "robbers": 2,

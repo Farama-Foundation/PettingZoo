@@ -1,6 +1,7 @@
 import os
 
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from .base_atari_env import (BaseAtariEnv, base_env_wrapper_fn,
+                             parallel_wrapper_fn)
 
 
 def raw_env(num_players=2, **kwargs):
