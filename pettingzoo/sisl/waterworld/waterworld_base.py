@@ -87,14 +87,14 @@ class Archea(Agent):
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
         # Set sensorvals to np.inf when object should not be seen by sensor
-        distance_squared = (relative_coord ** 2).sum(axis=1)[None, :]
+        distance_squared = (relative_coord**2).sum(axis=1)[None, :]
         sensorvals[
             (
                 sensorvals < 0
             )  # Wrong direction (by more than 90 degrees in both directions)
             | (sensorvals - object_radius > self._sensor_range)  # Outside sensor range
             | (
-                distance_squared - sensorvals ** 2 > object_radius ** 2
+                distance_squared - sensorvals**2 > object_radius**2
             )  # Sensor does not intersect object
         ] = np.inf
         if same:
@@ -632,7 +632,7 @@ class MAWaterWorld:
         p.set_position(p.position + self.cycle_time * p.velocity)
 
         # Penalize large thrusts
-        accel_penalty = self.thrust_penalty * math.sqrt((action ** 2).sum())
+        accel_penalty = self.thrust_penalty * math.sqrt((action**2).sum())
         # Average thrust penalty among all agents, and assign each agent global portion designated by (1 - local_ratio)
         self.control_rewards = (
             (accel_penalty / self.n_pursuers)
