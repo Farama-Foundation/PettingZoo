@@ -69,7 +69,7 @@ class raw_env(AECEnv):
         self.infos[agent] = {}
         return agent
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.agents = []
