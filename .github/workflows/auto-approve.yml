@@ -3,6 +3,7 @@ on: pull_request_target
 
 jobs:
   build:
+    if: github.repository == 'FaramaFoundation/Pettingzoo'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
