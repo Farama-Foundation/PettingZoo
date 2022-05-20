@@ -1,16 +1,12 @@
-name: Automatic Approve
-on:
-  schedule:
-    - cron: "*/5 * * * *"
+name: Automatic approve
+on: pull_request_target
+
 jobs:
-  automatic-approve:
-    if: github.repository == 'Farama-Foundation/PettingZoo'
-    name: Automatic Approve
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
-      - name: Automatic Approve
-        uses: mheap/automatic-approve-action@v1
-        with:
-          token: ${{ secrets.PAT }}
-          workflows: "linux-test.yml,macos-test.yml"
-          dangerous_files: ""
+    - uses: hmarr/auto-approve-action@v2
+      with:
+        github-token: ${{ secrets.PAT }}
