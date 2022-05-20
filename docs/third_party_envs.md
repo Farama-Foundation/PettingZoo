@@ -28,11 +28,15 @@ Implementation of the Fanorona board game
 
 Multi-Agent traffic control environments.
 
-
 ## PZ Dilemma
 [https://github.com/arjun-prakash/pz_dilemma](https://github.com/arjun-prakash/pz_dilemma)
 
 Collection of prisoner's dilemma games as PettingZoo environments
+
+## Gym Stag Hunt
+[https://github.com/NullDefault/Gym-Stag-Hunt](https://github.com/NullDefault/Gym-Stag-Hunt)
+
+A custom environment that implements a number of Stag Hunt-like social dilemma games. Provided in single-agent (Gym) and multi-agent (PZ) variants.
 
 ## Ants
 [https://github.com/chorsch/ants](https://github.com/chorsch/ants)
