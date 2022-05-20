@@ -4,6 +4,7 @@ on:
     - cron: "*/5 * * * *"
 jobs:
   automatic-approve:
+    if: github.repository == 'Farama-Foundation/PettingZoo'
     name: Automatic Approve
     runs-on: ubuntu-latest
     steps:
