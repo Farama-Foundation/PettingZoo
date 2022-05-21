@@ -1,9 +1,9 @@
 import math
 
+import magent
 import numpy as np
 from gym.utils import EzPickle
 
-import magent
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 
 from .magent_env import magent_parallel_env, make_env

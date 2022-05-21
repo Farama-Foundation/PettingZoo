@@ -4,7 +4,8 @@ from pettingzoo.test.api_test import api_test
 from pettingzoo.test.max_cycles_test import max_cycles_test
 from pettingzoo.test.parallel_test import parallel_api_test
 from pettingzoo.test.render_test import render_test
-from pettingzoo.test.seed_test import check_environment_deterministic, seed_test
+from pettingzoo.test.seed_test import (check_environment_deterministic,
+                                       seed_test)
 from pettingzoo.test.state_test import state_test
 from pettingzoo.utils import aec_to_parallel, parallel_to_aec
 
