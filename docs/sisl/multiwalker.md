@@ -24,9 +24,15 @@ agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 </div>
 
 
-In this environment, bipedal robots attempt to carry a package as far right as possible. A package is placed on top of 3 (by default) bipedal robots which you control. A positive reward is awarded to each walker, which is proportional to the change in the package distance and is scaled by `forward_reward`. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75 steps, the total reward under an optimal policy is around 300 . If `shared_reward` is chosen (True by default), all agents receive the mean reward across agents. The agents also receive a small shaped reward of -5 times the change in their head angle to keep the head straight.
+In this environment, bipedal robots attempt to carry a package placed on top of them towards the right. By default, the number of robots is set to 3.
 
-If a walker falls, it is penalized -10. By default, the environment is done if any walker or the package falls, or if the package goes beyond the left edge of the terrain. In all of these cases, each walker receives an additional reward of -100. If the `terminate_on_fall` setting is set to False, the game continues until the package falls. If the `remove_on_fall` setting is set to True, the walkers are removed from the environment after they fall. The environment is also done if package falls off the right edge of the terrain, with no additional reward or penalty.
+Each walker receives a reward equal to the change in position of the package from the previous timestep, multiplied by the `forward_reward` scaling factor. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75, the total reward under an optimal policy is around 300.
+
+The environment is done if the package falls, or if the package goes beyond the left edge of the terrain. By default, the environment is also done if any walker falls. In all of these cases, each walker receives a reward of -100. The environment is also done if package falls off the right edge of the terrain, with reward 0.
+
+When a walker falls, it receives an additional penalty of -10. If `terminate_on_fall = False`, then the environment is not done when the walker falls, but only when the package falls. If `remove_on_fall = True`, the fallen walker is removed from the environment. The agents also receive a small shaped reward of -5 times the change in their head angle to keep their head oriented horizontally.
+
+If `shared_reward` is chosen (True by default), the agents' individual rewards are averaged to give a single mean reward, which is returned to all agents.
 
 Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 31 element vector containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment's duration is capped at 500 frames by default (can be controlled by the `max_cycles` setting).
 
@@ -80,17 +86,17 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 
 `angle_noise`:  noise applied to neigbours and package rotational observations
 
-`forward_reward`:  scaling factor for the positive reward obtained by bringing the package forward
+`forward_reward`: reward received is `forward_reward` * change in position of the package
 
-`fall_reward`:  reward applied when an agent falls down
+`fall_reward`:  reward applied when an agent falls
 
-`shared_reward`:  whether reward is distributed among all agents or allocated locally
+`shared_reward`:  whether reward is distributed among all agents or allocated individually
 
-`terminate_reward`: reward applied to a walker for failing the environment
+`terminate_reward`: reward applied to each walker if they fail to carry the package to the right edge of the terrain
 
-`terminate_on_fall`: toggles whether agent is done if it falls down
+`terminate_on_fall`: If `True` (default), a single walker falling causes all agents to be done, and they all receive an additional `terminate_reward`. If `False`, then only the fallen agent(s) receive `fall_reward`, and the rest of the agents are not done i.e. the environment continues.
 
-`remove_on_fall`: Remove walker when it falls (only does anything when `terminate_on_fall` is False)
+`remove_on_fall`: Remove a walker when it falls (only works when `terminate_on_fall` is False)
 
 `terrain_length`: length of terrain in number of steps
 
