@@ -1,71 +1,27 @@
-from pettingzoo.atari import (
-    basketball_pong_v3,
-    boxing_v2,
-    combat_plane_v2,
-    combat_tank_v2,
-    double_dunk_v3,
-    entombed_competitive_v3,
-    entombed_cooperative_v3,
-    flag_capture_v2,
-    foozpong_v3,
-    ice_hockey_v2,
-    joust_v3,
-    mario_bros_v3,
-    maze_craze_v3,
-    othello_v3,
-    pong_v3,
-    quadrapong_v4,
-    space_invaders_v2,
-    space_war_v2,
-    surround_v2,
-    tennis_v3,
-    video_checkers_v4,
-    volleyball_pong_v3,
-    warlords_v3,
-    wizard_of_wor_v3,
-)
-from pettingzoo.butterfly import (
-    cooperative_pong_v5,
-    knights_archers_zombies_v10,
-    pistonball_v6,
-    prospector_v4,
-)
-from pettingzoo.classic import (
-    backgammon_v3,
-    checkers_v3,
-    chess_v5,
-    connect_four_v3,
-    dou_dizhu_v4,
-    gin_rummy_v4,
-    go_v5,
-    hanabi_v4,
-    leduc_holdem_v4,
-    mahjong_v4,
-    rps_v2,
-    texas_holdem_no_limit_v6,
-    texas_holdem_v4,
-    tictactoe_v3,
-    uno_v4,
-)
-from pettingzoo.magent import (
-    adversarial_pursuit_v4,
-    battle_v4,
-    battlefield_v5,
-    combined_arms_v6,
-    gather_v5,
-    tiger_deer_v4,
-)
-from pettingzoo.mpe import (
-    simple_adversary_v2,
-    simple_crypto_v2,
-    simple_push_v2,
-    simple_reference_v2,
-    simple_speaker_listener_v3,
-    simple_spread_v2,
-    simple_tag_v2,
-    simple_v2,
-    simple_world_comm_v2,
-)
+from pettingzoo.atari import (basketball_pong_v3, boxing_v2, combat_plane_v2,
+                              combat_tank_v2, double_dunk_v3,
+                              entombed_competitive_v3, entombed_cooperative_v3,
+                              flag_capture_v2, foozpong_v3, ice_hockey_v2,
+                              joust_v3, mario_bros_v3, maze_craze_v3,
+                              othello_v3, pong_v3, quadrapong_v4,
+                              space_invaders_v2, space_war_v2, surround_v2,
+                              tennis_v3, video_checkers_v4, volleyball_pong_v3,
+                              warlords_v3, wizard_of_wor_v3)
+from pettingzoo.butterfly import (cooperative_pong_v5,
+                                  knights_archers_zombies_v10, pistonball_v6,
+                                  prospector_v4)
+from pettingzoo.classic import (backgammon_v3, checkers_v3, chess_v5,
+                                connect_four_v3, dou_dizhu_v4, gin_rummy_v4,
+                                go_v5, hanabi_v4, leduc_holdem_v4, mahjong_v4,
+                                rps_v2, texas_holdem_no_limit_v6,
+                                texas_holdem_v4, tictactoe_v3, uno_v4)
+from pettingzoo.magent import (adversarial_pursuit_v4, battle_v4,
+                               battlefield_v5, combined_arms_v6, gather_v5,
+                               tiger_deer_v4)
+from pettingzoo.mpe import (simple_adversary_v2, simple_crypto_v2,
+                            simple_push_v2, simple_reference_v2,
+                            simple_speaker_listener_v3, simple_spread_v2,
+                            simple_tag_v2, simple_v2, simple_world_comm_v2)
 from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v3
 
 all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
