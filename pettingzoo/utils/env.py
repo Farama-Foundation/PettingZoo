@@ -32,17 +32,21 @@ class AECEnv:
 
     metadata: Dict[str, Any]  # Metadata for the environment
 
-    possible_agents: List[AgentID]  # All agents that may appear in the environment
+    # All agents that may appear in the environment
+    possible_agents: List[AgentID]
     agents: List[AgentID]  # Agents active at any given time
 
     observation_spaces: Dict[
         AgentID, gym.spaces.Space
     ]  # Observation space for each agent
-    action_spaces: Dict[AgentID, gym.spaces.Space]  # Action space for each agent
+    # Action space for each agent
+    action_spaces: Dict[AgentID, gym.spaces.Space]
 
-    dones: Dict[AgentID, bool]  # Whether each agent has just reached a terminal state
+    # Whether each agent has just reached a terminal state
+    dones: Dict[AgentID, bool]
     rewards: Dict[AgentID, float]  # Reward from the last step for each agent
-    _cumulative_rewards: Dict[AgentID, float]  # Cumulative rewards for each agent
+    # Cumulative rewards for each agent
+    _cumulative_rewards: Dict[AgentID, float]
     infos: Dict[
         AgentID, Dict[str, Any]
     ]  # Additional information from the last step for each agent
@@ -59,7 +63,7 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def reset(self, seed: Optional[int] = None) -> None:
+    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> None:
         """
         Resets the environment to a starting state.
         """
@@ -166,7 +170,7 @@ class AECEnv:
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
-    def agent_iter(self, max_iter: int = 2 ** 63) -> AECIterable:
+    def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
         """
         Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
         """
@@ -279,7 +283,9 @@ class ParallelEnv:
     agents: List[AgentID]
     possible_agents: List[AgentID]
 
-    def reset(self, seed: Optional[int] = None) -> ObsDict:
+    def reset(
+        self, seed: Optional[int] = None, options: Optional[dict] = None
+    ) -> ObsDict:
         """
         Resets the environment and returns a dictionary of observations (keyed by the agent name)
         """

@@ -154,7 +154,8 @@ class raw_env(AECEnv, EzPickle):
         )
         self.recentPistons = set()  # Set of pistons that have touched the ball recently
         self.time_penalty = time_penalty
-        self.local_ratio = 0  # TODO: this was a bad idea and the logic this uses should be removed at some point
+        # TODO: this was a bad idea and the logic this uses should be removed at some point
+        self.local_ratio = 0
         self.ball_mass = ball_mass
         self.ball_friction = ball_friction
         self.ball_elasticity = ball_elasticity
@@ -310,7 +311,7 @@ class raw_env(AECEnv, EzPickle):
             cap(piston.position[1] - v * self.pixels_per_position),
         )
 
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed)
         self.space = pymunk.Space(threaded=False)
@@ -339,7 +340,8 @@ class raw_env(AECEnv, EzPickle):
                 + self.piston_radius
                 + self.piston_width * i,  # x position
                 maximum_piston_y
-                - self.np_random.choice(possible_y_displacements),  # y position
+                # y position
+                - self.np_random.choice(possible_y_displacements),
             )
             piston.velociy = 0
             self.pistonList.append(piston)
