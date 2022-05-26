@@ -1,9 +1,4 @@
-import json
-import random
 import subprocess
-import time
-
-import numpy as np
 
 from pettingzoo.test.all_modules import all_environments
 
