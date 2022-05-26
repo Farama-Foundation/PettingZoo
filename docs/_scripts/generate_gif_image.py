@@ -1,16 +1,11 @@
-import json
 import os
 import random
 import subprocess
 import sys
-import time
 from test.all_modules import all_environments
 
 import numpy as np
-import scipy.misc
 from PIL import Image
-
-from pettingzoo.classic import gin_rummy_v0
 
 
 def generate_data(nameline, module):
@@ -36,10 +31,10 @@ def generate_data(nameline, module):
             env.reset()
 
         ndarray = env.render(mode="rgb_array")
-        tot_size = max(ndarray.shape)
-        target_size = 500
-        ratio = target_size / tot_size
-        new_shape = (int(ndarray.shape[1] * ratio), int(ndarray.shape[0] * ratio))
+        # tot_size = max(ndarray.shape)
+        # target_size = 500
+        # ratio = target_size / tot_size
+        # new_shape = (int(ndarray.shape[1] * ratio), int(ndarray.shape[0] * ratio))
         im = Image.fromarray(ndarray)
         # im  = im.resize(new_shape, Image.ANTIALIAS)
         im.save(f"{dir}{str(step).zfill(3)}.png")
