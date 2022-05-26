@@ -4,12 +4,13 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-  # - repo: https://github.com/codespell-project/codespell
-  #   rev: v2.1.0
-  #   hooks:
-  #     - id: codespell
-  #       args:
-  #         - --ignore-words-list=nd,reacher,thist,ths
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+      - id: codespell
+        args:
+          - --ignore-words-list=magent
+          - --skip=*.css,*.js,*.map,*.scss,*svg
   - repo: https://gitlab.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
