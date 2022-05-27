@@ -127,7 +127,7 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         # reset environment
         self.board = Board()
 

@@ -69,7 +69,7 @@ class parallel_env(ParallelEnv):
         self.agents.append(agent_name)
         return agent_name
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.all_dones = {}

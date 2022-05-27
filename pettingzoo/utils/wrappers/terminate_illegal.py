@@ -16,7 +16,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         self._illegal_value = illegal_reward
         self._prev_obs = None
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         self._terminated = False
         self._prev_obs = None
         super().reset(seed=seed, options=options)
