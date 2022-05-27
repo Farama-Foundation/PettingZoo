@@ -278,7 +278,7 @@ class raw_env(AECEnv):
 class CheckersRules:
 
     size = 8
-    n_positions = int(size ** 2 // 2)
+    n_positions = int(size**2 // 2)
     n_per_row = int(size // 2)
 
     # TODO change players to top/bottom players
