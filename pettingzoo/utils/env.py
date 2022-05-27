@@ -62,7 +62,12 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> None:
+    def reset(
+        self,
+        seed: Optional[int] = None,
+        return_info: bool = False,
+        options: Optional[dict] = None,
+    ) -> None:
         """
         Resets the environment to a starting state.
         """
@@ -283,7 +288,10 @@ class ParallelEnv:
     possible_agents: List[AgentID]
 
     def reset(
-        self, seed: Optional[int] = None, options: Optional[dict] = None
+        self,
+        seed: Optional[int] = None,
+        return_info: bool = False,
+        options: Optional[dict] = None,
     ) -> ObsDict:
         """
         Resets the environment and returns a dictionary of observations (keyed by the agent name)

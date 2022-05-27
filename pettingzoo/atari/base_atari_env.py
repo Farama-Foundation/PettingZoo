@@ -161,7 +161,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.ale.reset_game()
@@ -170,7 +170,14 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.frame = 0
 
         obs = self._observe()
-        return {agent: obs for agent in self.agents}
+
+        if not return_info:
+            return {agent: obs for agent in self.agents}
+        else:
+            infos = {
+                agent: {} for agent in self.possible_agents if agent in self.agents
+            }
+            return {agent: obs for agent in self.agents}, infos
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]

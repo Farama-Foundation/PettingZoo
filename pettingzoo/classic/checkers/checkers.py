@@ -120,7 +120,7 @@ class raw_env(AECEnv):
 
         return {"observation": self.observation, "action_mask": action_mask}
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         self.ch = CheckersRules()
         self.num_moves = 0
         self.agents = self.possible_agents[:]
@@ -278,7 +278,7 @@ class raw_env(AECEnv):
 class CheckersRules:
 
     size = 8
-    n_positions = int(size**2 // 2)
+    n_positions = int(size ** 2 // 2)
     n_per_row = int(size // 2)
 
     # TODO change players to top/bottom players
