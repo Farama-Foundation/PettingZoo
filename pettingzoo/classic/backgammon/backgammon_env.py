@@ -5,7 +5,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 
 from . import bg_utils
-from .backgammon import BLACK, COLORS, WHITE
+from .backgammon import BLACK, WHITE
 from .backgammon import Backgammon as Game
 
 
