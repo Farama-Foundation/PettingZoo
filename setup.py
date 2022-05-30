@@ -29,7 +29,7 @@ extras = {
         "chess==1.7.0",
         "rlcard==1.0.4",
         "pygame==2.1.0",
-        "hanabi_learning_environment==0.0.1",
+        "hanabi_learning_environment==0.0.4",
     ],
     "butterfly": ["pygame==2.1.0", "pymunk==6.2.0"],
     "magent": ["magent==0.2.2"],

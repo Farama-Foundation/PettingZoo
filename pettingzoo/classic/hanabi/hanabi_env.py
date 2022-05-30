@@ -76,7 +76,6 @@ class raw_env(AECEnv, EzPickle):
         observation_type: int = 1,
         random_start_player: bool = False,
     ):
-
         """
         Parameter descriptions :
               - colors: int, Number of colors in [2,5].
@@ -266,7 +265,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, seed=None):
+    def reset(self, seed=None, options=None):
         """Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
