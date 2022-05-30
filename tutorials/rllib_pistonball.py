@@ -1,5 +1,4 @@
 import supersuit as ss
-import torch
 from ray import shutdown, tune
 from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
 from ray.rllib.models import ModelCatalog
