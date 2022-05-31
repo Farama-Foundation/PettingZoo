@@ -7,8 +7,10 @@ import gym
 import numpy as np
 
 import pettingzoo
-from pettingzoo.utils.conversions import (aec_to_parallel_wrapper,
-                                          parallel_to_aec_wrapper)
+from pettingzoo.utils.conversions import (
+    aec_to_parallel_wrapper,
+    parallel_to_aec_wrapper,
+)
 from pettingzoo.utils.wrappers import BaseWrapper
 
 missing_attr_warning = """This environment does not have {name} defined.

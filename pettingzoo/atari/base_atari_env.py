@@ -8,8 +8,7 @@ from gym.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
-from pettingzoo.utils.conversions import (parallel_to_aec_wrapper,
-                                          parallel_wrapper_fn)
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
 
 
