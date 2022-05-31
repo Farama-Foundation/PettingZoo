@@ -1,6 +1,5 @@
 import itertools as it
 import math
-import os
 from enum import IntEnum, auto
 
 import numpy as np
@@ -16,7 +15,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from . import constants as const
 from . import utils
-from .manual_control import manual_control
+from .manual_control import manual_control  # noqa: F401
 
 
 class CollisionTypes(IntEnum):

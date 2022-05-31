@@ -1,13 +1,7 @@
-import copy
-import itertools
-import warnings
-
 import gym
-import numpy as np
 
-from pettingzoo import AECEnv, ParallelEnv
+from pettingzoo import ParallelEnv
 from pettingzoo.utils import conversions, wrappers
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env(**kwargs):
