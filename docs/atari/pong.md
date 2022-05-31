@@ -47,6 +47,19 @@ pong_v3.env(num_players=2)
 
 `num_players`:  Number of players (must be either 2 or 4)
 
+### Action Space (Minimal)
+
+In any given turn, an agent can choose from one of 6 actions. (right, left is dummy action, but for the continuous numbering)
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
+
 ### Version History
 
 * v3: Minimal Action Space (1.18.0)

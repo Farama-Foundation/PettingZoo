@@ -47,6 +47,23 @@ This is a timed game: if a player does not take a turn after 10 seconds, then th
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 
+### Action Space (Minimal)
+
+In any given turn, an agent can choose from one of 10 actions.
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
+| 6         | Move upright |
+| 7         | Move upleft |
+| 8         | Move downright |
+| 9         | Move downleft |
+
 ### Version History
 
 * v3: Minimal Action Space (1.18.0)
