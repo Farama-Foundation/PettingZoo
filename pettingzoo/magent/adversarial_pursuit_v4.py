@@ -1,1 +1,1 @@
-from .adversarial_pursuit.adversarial_pursuit import env, raw_env, parallel_env
+from .adversarial_pursuit.adversarial_pursuit import env, parallel_env, raw_env

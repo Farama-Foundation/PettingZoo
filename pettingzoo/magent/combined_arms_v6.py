@@ -1,1 +1,1 @@
-from .combined_arms.combined_arms import env, raw_env, parallel_env
+from .combined_arms.combined_arms import env, parallel_env, raw_env

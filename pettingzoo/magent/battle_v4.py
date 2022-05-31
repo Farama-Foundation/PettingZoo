@@ -1,1 +1,1 @@
-from .battle.battle import env, raw_env, parallel_env
+from .battle.battle import env, parallel_env, raw_env
