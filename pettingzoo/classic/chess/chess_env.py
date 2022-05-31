@@ -110,11 +110,6 @@ class raw_env(AECEnv):
             return self._was_done_step(action)
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
-        next_board = chess_utils.get_observation(self.board, current_agent)
-        self.board_history = np.dstack(
-            (next_board[:, :, 7:], self.board_history[:, :, :-13])
-        )
-        self.agent_selection = self._agent_selector.next()
 
         chosen_move = chess_utils.action_to_move(self.board, action, current_index)
         assert chosen_move in self.board.legal_moves
@@ -136,6 +131,13 @@ class raw_env(AECEnv):
             self.set_game_result(result_val)
 
         self._accumulate_rewards()
+
+        # Update board after applying action
+        next_board = chess_utils.get_observation(self.board, current_agent)
+        self.board_history = np.dstack(
+            (next_board[:, :, 7:], self.board_history[:, :, :-13])
+        )
+        self.agent_selection = self._agent_selector.next() # Give turn to the next agent
 
     def render(self, mode="human"):
         print(self.board)
