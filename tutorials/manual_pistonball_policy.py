@@ -9,6 +9,7 @@ os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 GRAYSCALE_WEIGHTS = np.array([0.299, 0.587, 0.114], dtype=np.float32)
 
+
 # print(GRAYSCALE_WEIGHTS@np.array([68,76,77]))
 def change_observation(obs):
     obs = (obs.astype(np.float32) @ GRAYSCALE_WEIGHTS).astype(np.uint8)

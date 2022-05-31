@@ -1,10 +1,5 @@
-import sys
-from pathlib import Path
-
+from docs._includes.code import aec_rps, parallel_rps
 from pettingzoo.test import api_test, parallel_api_test
-
-from docs._includes.code import aec_rps
-from docs._includes.code import parallel_rps
 
 
 def test_rps_aec_example():

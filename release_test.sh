@@ -9,5 +9,3 @@ pytest ./test/unwrapped_test.py
 pytest ./test/variable_env_test.py
 pytest ./test/doc_examples_test.py
 pytest ./test/specific_env_tests.py
-
-bash ./check_style.sh
