@@ -1,1 +1,1 @@
-from .tiger_deer.tiger_deer_env import env, raw_env, parallel_env
+from .tiger_deer.tiger_deer import env, raw_env, parallel_env
