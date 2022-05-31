@@ -4,10 +4,9 @@ import magent
 import numpy as np
 from gym.utils import EzPickle
 
+from pettingzoo.magent.battle.battle import KILL_REWARD, get_config
+from pettingzoo.magent.magent_env import magent_parallel_env, make_env
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper
-
-from .battle_v4 import KILL_REWARD, get_config
-from .magent_env import magent_parallel_env, make_env
 
 default_map_size = 80
 max_cycles_default = 1000
