@@ -5,9 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pickle5 as pickle
-import PIL
 import ray
-import supersuit as ss
 from ray.rllib.agents.dqn import DQNTrainer
 from ray.rllib.agents.registry import get_agent_class
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv

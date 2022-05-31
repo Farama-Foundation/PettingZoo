@@ -20,6 +20,7 @@ Fixes # (issue), Depends on # (pull request)
 
 # Checklist:
 
+- [ ] I have run the [`pre-commit` checks](https://pre-commit.com/) with `pre-commit run --all-files` (see `CONTRIBUTING.md` instructions to set it up)
 - [ ] I have run `./release_test.sh` and no errors are present.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation

@@ -7,7 +7,6 @@ from gym import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env():
