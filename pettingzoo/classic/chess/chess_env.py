@@ -1,5 +1,3 @@
-import warnings
-
 import chess
 import numpy as np
 from gym import spaces
