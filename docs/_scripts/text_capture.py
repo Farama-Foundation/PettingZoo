@@ -1,10 +1,8 @@
 import json
 import random
-import time
 
 import numpy as np
 
-from pettingzoo.classic import gin_rummy_v0
 from pettingzoo.test.all_modules import all_environments
 
 
@@ -42,7 +40,7 @@ for name, module in all_environments.items():
         text = env.render()
         all_text.append(text)
 
-    max_line_len = max(max(len(l) for l in val.split("\n")) for val in all_text)
+    max_line_len = max(max(len(ln) for ln in val.split("\n")) for val in all_text)
     line_height = max(len(val.split("\n")) for val in all_text)
     line_len = min(max_line_len + 1, 80)
     line_height = min(line_height + 1, 50)
