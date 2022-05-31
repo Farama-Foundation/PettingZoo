@@ -10,7 +10,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 
-from .battle.battle_env import KILL_REWARD, get_config
+from pettingzoo.magent.battle.battle import KILL_REWARD, get_config
 from pettingzoo.magent.magent_env import magent_parallel_env, make_env
 
 default_map_size = 80
