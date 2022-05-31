@@ -1,14 +1,10 @@
 import math
-import warnings
 
 import magent
 import numpy as np
-from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
-from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 
 from .battle_v4 import KILL_REWARD, get_config
 from .magent_env import magent_parallel_env, make_env
