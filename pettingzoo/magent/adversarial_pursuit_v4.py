@@ -1,1 +1,5 @@
-from .adversarial_pursuit.adversarial_pursuit import env, parallel_env, raw_env
+from .adversarial_pursuit.adversarial_pursuit import (  # noqa: F401
+    env,
+    parallel_env,
+    raw_env,
+)

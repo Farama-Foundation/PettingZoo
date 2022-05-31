@@ -2,9 +2,8 @@ import magent
 import numpy as np
 from gym.utils import EzPickle
 
+from pettingzoo.magent.magent_env import magent_parallel_env, make_env
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper
-
-from .magent_env import magent_parallel_env, make_env
 
 default_map_size = 45
 max_cycles_default = 500
