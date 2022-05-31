@@ -7,10 +7,9 @@ from gym.spaces import Box, Discrete
 from gym.utils import EzPickle
 
 from pettingzoo import AECEnv
+from pettingzoo.magent.magent_env import magent_parallel_env, make_env
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
-
-from pettingzoo.magent.magent_env import magent_parallel_env, make_env
 
 default_map_size = 45
 max_cycles_default = 500
