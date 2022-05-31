@@ -3,9 +3,11 @@ import warnings
 
 import numpy as np
 
-from pettingzoo.utils.conversions import (aec_to_parallel_wrapper,
-                                          parallel_to_aec_wrapper,
-                                          turn_based_aec_to_parallel_wrapper)
+from pettingzoo.utils.conversions import (
+    aec_to_parallel_wrapper,
+    parallel_to_aec_wrapper,
+    turn_based_aec_to_parallel_wrapper,
+)
 from pettingzoo.utils.wrappers import BaseWrapper
 
 from .api_test import missing_attr_warning

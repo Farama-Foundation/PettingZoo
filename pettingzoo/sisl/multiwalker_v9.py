@@ -1,1 +1,1 @@
-from .multiwalker.multiwalker_env import env, parallel_env, raw_env
+from .multiwalker.multiwalker import env, parallel_env, raw_env
