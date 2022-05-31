@@ -121,7 +121,9 @@ class raw_env(AECEnv):
             return np.ones([self._N, self._N], dtype=bool)
 
     def _encode_board_planes(self, agent):
-        agent_factor = go_base.BLACK if agent == self.possible_agents[0] else go_base.WHITE
+        agent_factor = (
+            go_base.BLACK if agent == self.possible_agents[0] else go_base.WHITE
+        )
         current_agent_plane_idx = np.where(self._go.board == agent_factor)
         opponent_agent_plane_idx = np.where(self._go.board == -agent_factor)
         current_agent_plane = np.zeros([self._N, self._N], dtype=bool)
