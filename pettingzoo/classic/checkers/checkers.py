@@ -7,7 +7,6 @@ from gym import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env():
@@ -278,7 +277,7 @@ class raw_env(AECEnv):
 class CheckersRules:
 
     size = 8
-    n_positions = int(size**2 // 2)
+    n_positions = int(size ** 2 // 2)
     n_per_row = int(size // 2)
 
     # TODO change players to top/bottom players

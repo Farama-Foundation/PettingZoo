@@ -46,7 +46,7 @@ env = supersuit.sticky_actions_v0(env, repeat_action_probability=0.25)
 env = supersuit.frame_skip_v0(env, 4)
 
 # downscale observation for faster processing
-env = supersuit.resize_v0(env, 84, 84)
+env = supersuit.resize_v1(env, 84, 84)
 
 # allow agent to see everything on the screen despite Atari's flickering screen problem
 env = supersuit.frame_stack_v1(env, 4)

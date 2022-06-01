@@ -1,5 +1,3 @@
-import os
-
 import gym
 import numpy as np
 import pygame
@@ -12,7 +10,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .ball import Ball
 from .cake_paddle import CakePaddle
-from .manual_policy import ManualPolicy
+from .manual_policy import ManualPolicy  # noqa: F401
 from .paddle import Paddle
 
 FPS = 15

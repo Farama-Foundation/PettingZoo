@@ -1,5 +1,4 @@
 import math
-import os
 
 import gym
 import numpy as np
@@ -12,7 +11,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .manual_policy import ManualPolicy
+from .manual_policy import ManualPolicy  # noqa: F401
 
 _image_library = {}
 
