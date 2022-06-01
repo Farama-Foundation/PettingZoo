@@ -137,7 +137,9 @@ class raw_env(AECEnv):
         self.board_history = np.dstack(
             (next_board[:, :, 7:], self.board_history[:, :, :-13])
         )
-        self.agent_selection = self._agent_selector.next() # Give turn to the next agent
+        self.agent_selection = (
+            self._agent_selector.next()
+        )  # Give turn to the next agent
 
     def render(self, mode="human"):
         print(self.board)
