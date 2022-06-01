@@ -107,7 +107,7 @@ class RLCardBase(AECEnv):
         self._accumulate_rewards()
         self._dones_step_first()
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         obs, player_id = self.env.reset()
