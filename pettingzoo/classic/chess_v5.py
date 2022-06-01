@@ -1,1 +1,1 @@
-from .chess.chess_env import env, raw_env
+from .chess.chess_env import env, raw_env  # noqa: F401

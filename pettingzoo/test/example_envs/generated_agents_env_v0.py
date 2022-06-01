@@ -1,9 +1,4 @@
-import copy
-import itertools
-import warnings
-
 import gym
-import numpy as np
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers

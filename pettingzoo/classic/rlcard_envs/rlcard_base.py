@@ -1,11 +1,8 @@
-import random
-
 import numpy as np
 import rlcard
 from gym import spaces
 
 from pettingzoo import AECEnv
-from pettingzoo.utils import wrappers
 
 
 class RLCardBase(AECEnv):
