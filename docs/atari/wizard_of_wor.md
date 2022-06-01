@@ -6,7 +6,7 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
-action-values: "[0,8]"
+action-values: "[1,9]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
 import: "from pettingzoo.atari import wizard_of_wor_v3"
@@ -47,7 +47,6 @@ In any given turn, an agent can choose from one of 9 actions.
 
 | Action    | Behavior  |
 |:---------:|-----------|
-| 0         | No operation |
 | 1         | Fire |
 | 2         | Move up |
 | 3         | Move right |
@@ -56,6 +55,7 @@ In any given turn, an agent can choose from one of 9 actions.
 | 6         | Move upright |
 | 7         | Move upleft |
 | 8         | Move downright |
+| 9         | Move downleft |
 
 ### Version History
 
