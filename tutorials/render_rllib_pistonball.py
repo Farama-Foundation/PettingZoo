@@ -46,7 +46,7 @@ def env_creator():
     )
     env = ss.color_reduction_v0(env, mode="B")
     env = ss.dtype_v0(env, "float32")
-    env = ss.resize_v0(env, x_size=84, y_size=84)
+    env = ss.resize_v1(env, x_size=84, y_size=84)
     env = ss.normalize_obs_v0(env, env_min=0, env_max=1)
     env = ss.frame_stack_v1(env, 3)
     return env
