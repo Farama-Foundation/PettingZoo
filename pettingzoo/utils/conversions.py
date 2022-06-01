@@ -117,15 +117,20 @@ class aec_to_parallel_wrapper(ParallelEnv):
     def unwrapped(self):
         return self.aec_env.unwrapped
 
-    def reset(self, seed=None, options=None):
-        self.aec_env.reset(seed=seed, options=options)
+    def reset(self, seed=None, return_info=False, options=None):
+        self.aec_env.reset(seed=seed, return_info=return_info, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)
             for agent in self.aec_env.agents
             if not self.aec_env.dones[agent]
         }
-        return observations
+
+        if not return_info:
+            return observations
+        else:
+            infos = dict(**self.aec_env.infos)
+            return observations, infos
 
     def step(self, actions):
         rewards = defaultdict(int)
@@ -222,7 +227,7 @@ class parallel_to_aec_wrapper(AECEnv):
     def action_space(self, agent):
         return self.env.action_space(agent)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         self._observations = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
@@ -358,15 +363,20 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
     def action_space(self, agent):
         return self.aec_env.action_space(agent)
 
-    def reset(self, seed=None, options=None):
-        self.aec_env.reset(seed=seed, options=options)
+    def reset(self, seed=None, return_info=False, options=None):
+        self.aec_env.reset(seed=seed, return_info=return_info, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)
             for agent in self.aec_env.agents
             if not self.aec_env.dones[agent]
         }
-        return observations
+
+        if not return_info:
+            return observations
+        else:
+            infos = {**self.aec_env.infos}
+            return observations, infos
 
     def step(self, actions):
         if not self.agents:
