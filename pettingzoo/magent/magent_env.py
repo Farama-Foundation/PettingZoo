@@ -104,7 +104,7 @@ class magent_parallel_env(ParallelEnv):
 
     def seed(self, seed=None):
         if seed is None:
-            seed = seeding.create_seed(seed, max_bytes=4)
+            _, seed = seeding.np_random()
         self.env.set_seed(seed)
 
     def _calc_obs_shapes(self):
