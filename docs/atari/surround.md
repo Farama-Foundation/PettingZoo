@@ -5,7 +5,7 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
-action-values: "[0,4]"
+action-values: "[0,5]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
 import: "from pettingzoo.atari import surround_v2"
@@ -36,6 +36,19 @@ But both players leave a trail of walls behind you, slowly filling the screen wi
 #### Environment parameters
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
+
+### Action Space (Minimal)
+
+In any given turn, an agent can choose from one of 6 actions. (Fire is dummy action, but for the continuous numbering)
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire (dummy) |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
 
 ### Version History
 
