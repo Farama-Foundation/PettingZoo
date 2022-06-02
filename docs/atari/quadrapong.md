@@ -41,6 +41,19 @@ Serves are timed: If the player does not serve within 2 seconds of receiving the
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 
+### Action Space (Minimal)
+
+In any given turn, an agent can choose from one of 6 actions.
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
+
 ### Version History
 
 * v4: Minimal Action Space (1.18.0)

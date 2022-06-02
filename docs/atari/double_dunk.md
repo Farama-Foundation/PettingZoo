@@ -42,6 +42,31 @@ Scoring should be familiar to basketball fans (2-3 points per successful shot).
 
 Environment parameters are common to all Atari environments and are described in the [base Atari documentation](../atari) .
 
+### Action Space
+
+In any given turn, an agent can choose from one of 18 actions.
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
+| 6         | Move upright |
+| 7         | Move upleft |
+| 8         | Move downright |
+| 9         | Move downleft |
+| 10        | Fire up |
+| 11        | Fire right |
+| 12        | Fire left |
+| 13        | Fire down |
+| 14        | Fire upright |
+| 15        | Fire upleft |
+| 16        | Fire downright |
+| 17        | Fire downleft |
+
 ### Version History
 
 * v3: Minimal Action Space (1.18.0)
