@@ -1,9 +1,4 @@
-import copy
-import itertools
-import warnings
-
 import gym
-import numpy as np
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -69,7 +64,7 @@ class raw_env(AECEnv):
         self.infos[agent] = {}
         return agent
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.agents = []

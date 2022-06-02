@@ -51,6 +51,31 @@ combat_tank_v2.env(has_maze=True, is_invisible=False, billiard_hit=True)
 
 `billiard_hit`:  If true, bullets bounce off walls, in fact, like billiards, they only count if they hit the opponent's tank after bouncing off a wall.
 
+### Action Space
+
+In any given turn, an agent can choose from one of 18 actions.
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
+| 6         | Move upright |
+| 7         | Move upleft |
+| 8         | Move downright |
+| 9         | Move downleft |
+| 10        | Fire up |
+| 11        | Fire right |
+| 12        | Fire left |
+| 13        | Fire down |
+| 14        | Fire upright |
+| 15        | Fire upleft |
+| 16        | Fire downright |
+| 17        | Fire downleft |
+
 ### Version History
 
 * v2: Minimal Action Space (1.18.0)

@@ -1,1 +1,1 @@
-from .rlcard_envs.mahjong import env, raw_env
+from .rlcard_envs.mahjong import env, raw_env  # noqa: F401

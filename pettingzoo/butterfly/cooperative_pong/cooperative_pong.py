@@ -1,5 +1,3 @@
-import os
-
 import gym
 import numpy as np
 import pygame
@@ -12,7 +10,7 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .ball import Ball
 from .cake_paddle import CakePaddle
-from .manual_policy import ManualPolicy
+from .manual_policy import ManualPolicy  # noqa: F401
 from .paddle import Paddle
 
 FPS = 15
@@ -314,7 +312,7 @@ class raw_env(AECEnv, EzPickle):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.env.reset()

@@ -71,9 +71,9 @@ def parallel_api_test(par_env, num_cycles=1000):
                 if key_set == agents_set:
                     continue
                 if len(key_set) < len(agents_set):
-                    warnings.warn("Live agent was not given {}".format(k))
+                    warnings.warn(f"Live agent was not given {k}")
                 else:
-                    warnings.warn("Agent was given {} but was done last turn".format(k))
+                    warnings.warn(f"Agent was given {k} but was done last turn")
 
             if hasattr(par_env, "possible_agents"):
                 assert set(par_env.agents).issubset(

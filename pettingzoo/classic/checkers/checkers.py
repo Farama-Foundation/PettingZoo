@@ -7,7 +7,6 @@ from gym import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env():
@@ -120,7 +119,7 @@ class raw_env(AECEnv):
 
         return {"observation": self.observation, "action_mask": action_mask}
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         self.ch = CheckersRules()
         self.num_moves = 0
         self.agents = self.possible_agents[:]

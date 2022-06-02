@@ -56,6 +56,18 @@ zigzaging_bombs=False, fast_bomb=False, invisible_invaders=False)
 
 `invisible_invaders`:  The invaders are invisible, making them more difficult to hit.
 
+### Action Space (Minimal)
+
+In any given turn, an agent can choose from one of 6 actions.
+
+| Action    | Behavior  |
+|:---------:|-----------|
+| 0         | No operation |
+| 1         | Fire |
+| 2         | Move up |
+| 3         | Move right |
+| 4         | Move left |
+| 5         | Move down |
 
 ### Version History
 

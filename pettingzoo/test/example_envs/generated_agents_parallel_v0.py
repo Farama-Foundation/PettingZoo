@@ -1,13 +1,7 @@
-import copy
-import itertools
-import warnings
-
 import gym
-import numpy as np
 
-from pettingzoo import AECEnv, ParallelEnv
+from pettingzoo import ParallelEnv
 from pettingzoo.utils import conversions, wrappers
-from pettingzoo.utils.agent_selector import agent_selector
 
 
 def env(**kwargs):
@@ -69,7 +63,7 @@ class parallel_env(ParallelEnv):
         self.agents.append(agent_name)
         return agent_name
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.all_dones = {}

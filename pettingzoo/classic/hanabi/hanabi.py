@@ -2,14 +2,14 @@ from typing import Dict, List, Optional, Union
 
 import numpy as np
 from gym import spaces
-from gym.utils import EzPickle, seeding
+from gym.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 
 # importing Hanabi and throw error message if pypi package is not installed correctly.
 try:
-    from hanabi_learning_environment.rl_env import HanabiEnv, make
+    from hanabi_learning_environment.rl_env import HanabiEnv
 
 except ModuleNotFoundError:
     raise ImportError(
@@ -265,7 +265,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         """Resets the environment for a new game and returns observations of current player as List of ints
 
         Returns:
