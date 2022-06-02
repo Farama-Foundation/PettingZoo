@@ -1,5 +1,3 @@
-import numpy as np
-
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
@@ -52,7 +50,7 @@ class raw_env(AECEnv):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.has_reset = True

@@ -12,7 +12,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .manual_policy import ManualPolicy
+from .manual_policy import ManualPolicy  # noqa: F401
 from .src import constants as const
 from .src.img import get_image
 from .src.players import Archer, Knight
@@ -691,7 +691,7 @@ class raw_env(AECEnv, EzPickle):
         self.draw()
         self.frames = 0
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.has_reset = True

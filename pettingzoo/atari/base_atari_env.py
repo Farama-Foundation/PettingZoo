@@ -6,9 +6,11 @@ import numpy as np
 from gym import spaces
 from gym.utils import EzPickle, seeding
 
-from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector, wrappers
-from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
+from pettingzoo.utils import wrappers
+from pettingzoo.utils.conversions import (  # noqa: F401
+    parallel_to_aec_wrapper,
+    parallel_wrapper_fn,
+)
 from pettingzoo.utils.env import ParallelEnv
 
 
@@ -161,7 +163,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.ale.reset_game()
@@ -170,7 +172,14 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.frame = 0
 
         obs = self._observe()
-        return {agent: obs for agent in self.agents}
+
+        if not return_info:
+            return {agent: obs for agent in self.agents}
+        else:
+            infos = {
+                agent: {} for agent in self.possible_agents if agent in self.agents
+            }
+            return {agent: obs for agent in self.agents}, infos
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -222,8 +231,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if mode == "human":
-            import os
-
             import pygame
 
             zoom_factor = 4

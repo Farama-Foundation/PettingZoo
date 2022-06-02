@@ -5,7 +5,7 @@ from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 
 from . import bg_utils
-from .backgammon import BLACK, COLORS, WHITE
+from .backgammon import BLACK, WHITE
 from .backgammon import Backgammon as Game
 
 
@@ -133,7 +133,7 @@ class raw_env(AECEnv):
 
         return {"observation": observation, "action_mask": action_mask}
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.agents = self.possible_agents[:]
