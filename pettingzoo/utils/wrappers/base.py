@@ -48,10 +48,10 @@ class BaseWrapper(AECEnv):
             return {
                 agent: self.observation_space(agent) for agent in self.possible_agents
             }
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an `observation_spaces` dict attribute. Use the environment's `observation_space` method instead"
-            )
+            ) from e
 
     @property
     def action_spaces(self):
@@ -60,10 +60,10 @@ class BaseWrapper(AECEnv):
         )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an action_spaces dict attribute. Use the environment's `action_space` method instead"
-            )
+            ) from e
 
     def observation_space(self, agent):
         return self.env.observation_space(agent)
