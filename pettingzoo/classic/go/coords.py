@@ -42,7 +42,7 @@ SGF             'aa'            'sa'            ''
 GTP             'A19'           'T19'           'pass'
 """
 
-from . import go
+from . import go_base
 
 # We provide more than 19 entries here in case of boards larger than 19 x 19.
 _SGF_COLUMNS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -51,21 +51,21 @@ _GTP_COLUMNS = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
 
 def from_flat(flat):
     """Converts from a flattened coordinate to a Minigo coordinate."""
-    if flat == go.N * go.N:
+    if flat == go_base.N * go_base.N:
         return None
-    return divmod(flat, go.N)
+    return divmod(flat, go_base.N)
 
 
 def to_flat(coord):
     """Converts from a Minigo coordinate to a flattened coordinate."""
     if coord is None:
-        return go.N * go.N
-    return go.N * coord[0] + coord[1]
+        return go_base.N * go_base.N
+    return go_base.N * coord[0] + coord[1]
 
 
 def from_sgf(sgfc):
     """Converts from an SGF coordinate to a Minigo coordinate."""
-    if sgfc is None or sgfc == "" or (go.N <= 19 and sgfc == "tt"):
+    if sgfc is None or sgfc == "" or (go_base.N <= 19 and sgfc == "tt"):
         return None
     return _SGF_COLUMNS.index(sgfc[1]), _SGF_COLUMNS.index(sgfc[0])
 
@@ -84,7 +84,7 @@ def from_gtp(gtpc):
         return None
     col = _GTP_COLUMNS.index(gtpc[0])
     row_from_bottom = int(gtpc[1:])
-    return go.N - row_from_bottom, col
+    return go_base.N - row_from_bottom, col
 
 
 def to_gtp(coord):
@@ -92,4 +92,4 @@ def to_gtp(coord):
     if coord is None:
         return "pass"
     y, x = coord
-    return f"{_GTP_COLUMNS[x]}{go.N - y}"
+    return f"{_GTP_COLUMNS[x]}{go_base.N - y}"
