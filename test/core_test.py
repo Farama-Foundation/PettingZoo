@@ -1,5 +1,5 @@
-from pettingzoo.test.api_test import api_test
 from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.test.api_test import api_test
 
 
 def test_core():
