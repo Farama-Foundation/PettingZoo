@@ -11,14 +11,14 @@ from pettingzoo.utils import agent_selector, wrappers
 try:
     from hanabi_learning_environment.rl_env import HanabiEnv
 
-except ModuleNotFoundError:
+except ModuleNotFoundError as e:
     raise ImportError(
         (
             "Hanabi is not installed.\n",
             "Run ´pip3 install hanabi_learning_environment´ from within your project environment.\n",
             "Consult hanabi/README.md for detailed information.",
         )
-    )
+    ) from e
 """
 Wrapper class around Deepmind's Hanabi Learning Environment.
 """

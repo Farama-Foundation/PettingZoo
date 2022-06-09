@@ -25,7 +25,7 @@ def manual_control_test(manual_control):
 
     try:
         manual_control()
-    except Exception:
-        raise Exception("manual_control() has crashed. Please fix it.")
+    except Exception as e:
+        raise Exception("manual_control() has crashed. Please fix it.") from e
 
     manual_in_thread.join()
