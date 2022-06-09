@@ -1,1 +1,1 @@
-from .boxing.boxing import env, raw_env, parallel_env  # noqa: F401
+from .boxing.boxing import env, parallel_env, raw_env  # noqa: F401
