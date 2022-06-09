@@ -51,7 +51,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
       continue-on-error: true
 
-  linux-python3.6-test:
+  linux-python36-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
