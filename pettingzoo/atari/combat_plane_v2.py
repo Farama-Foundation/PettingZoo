@@ -1,1 +1,1 @@
-from .combat_plane.combat_plane import env, raw_env, parallel_env  # noqa: F401
+from .combat_plane.combat_plane import env, parallel_env, raw_env  # noqa: F401

@@ -1,1 +1,1 @@
-from .ice_hockey.ice_hockey import env, raw_env, parallel_env  # noqa: F401
+from .ice_hockey.ice_hockey import env, parallel_env, raw_env  # noqa: F401
