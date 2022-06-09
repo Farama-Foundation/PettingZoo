@@ -12,15 +12,12 @@ on:
 jobs:
   linux-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.6']
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python3.6
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.6
     - name: Install dependencies
       run: |
         sudo apt-get install python-opengl xvfb
