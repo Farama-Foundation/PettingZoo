@@ -90,10 +90,10 @@ class aec_to_parallel_wrapper(ParallelEnv):
             return {
                 agent: self.observation_space(agent) for agent in self.possible_agents
             }
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
-            )
+            ) from e
 
     @property
     def action_spaces(self):
@@ -102,10 +102,10 @@ class aec_to_parallel_wrapper(ParallelEnv):
         )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
-            )
+            ) from e
 
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)
@@ -204,10 +204,10 @@ class parallel_to_aec_wrapper(AECEnv):
             return {
                 agent: self.observation_space(agent) for agent in self.possible_agents
             }
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
-            )
+            ) from e
 
     @property
     def action_spaces(self):
@@ -216,10 +216,10 @@ class parallel_to_aec_wrapper(AECEnv):
         )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
-            )
+            ) from e
 
     def observation_space(self, agent):
         return self.env.observation_space(agent)
@@ -340,10 +340,10 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             return {
                 agent: self.observation_space(agent) for agent in self.possible_agents
             }
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an `observation_spaces` dict attribute. Use the environments `observation_space` method instead"
-            )
+            ) from e
 
     @property
     def action_spaces(self):
@@ -352,10 +352,10 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         )
         try:
             return {agent: self.action_space(agent) for agent in self.possible_agents}
-        except AttributeError:
+        except AttributeError as e:
             raise AttributeError(
                 "The base environment does not have an action_spaces dict attribute. Use the environments `action_space` method instead"
-            )
+            ) from e
 
     def observation_space(self, agent):
         return self.aec_env.observation_space(agent)

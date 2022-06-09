@@ -350,10 +350,10 @@ class raw_env(AECEnv, EzPickle):
         horizontal_offset_range = 30
         vertical_offset_range = 15
         if self.random_drop:
-            self.vertical_offset = self.np_random.randint(
+            self.vertical_offset = self.np_random.random_integers(
                 -vertical_offset_range, vertical_offset_range + 1
             )
-            self.horizontal_offset = self.np_random.randint(
+            self.horizontal_offset = self.np_random.random_integers(
                 -horizontal_offset_range, horizontal_offset_range + 1
             )
         ball_x = (
