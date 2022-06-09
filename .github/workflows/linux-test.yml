@@ -50,4 +50,18 @@ jobs:
         python-platform: ${{ matrix.python-platform }}
         python-version: ${{ matrix.python-version }}
       continue-on-error: true
-
+  linux-python3.6-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python3.6
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+    - name: Install dependencies
+      run: |
+        sudo apt-get install python-opengl xvfb
+        pip install bandit codespell isort flake8 pytest -r requirements.txt
+    -name: Core Python3.6 test
+      run: |
+        pytest test/core_test.py
