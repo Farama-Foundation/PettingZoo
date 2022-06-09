@@ -62,7 +62,15 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install python-opengl xvfb
-        pip install bandit codespell isort flake8 pytest -r requirements.txt
+        pip install bandit codespell isort flake8 pytest
+        pip install pillow
+        pip install scipy
+        pip install pynput
+        pip install gym>=0.21.0
+        pip install pygame==2.1.0
+        pip install numpy>=1.18.0
+        pip install pymunk==6.2.0
+        pip install box2d-py==2.3.5
     - name: Core Python3.6 test
       run: |
         pytest test/core_test.py
