@@ -21,7 +21,7 @@ def calc_hash(new_env, rand_issue, max_env_iters):
     for i in range(3):
         new_env.reset(seed=i)
         for j in range(rand_issue + 1):
-            random.random_integers(0, 1000)
+            random.randint(0, 1000)
             np.random.normal(size=100)
         for agent in new_env.agent_iter(max_env_iters):
             obs, rew, done, info = new_env.last()
