@@ -6,10 +6,7 @@ __pycache__/
 saved_observations/
 build/
 dist/
-PettingZoo.egg-info/
+*.egg-info/
 docs/Gemfile.lock
 docs/Gemfile
 docs/classic/desktop.ini
-docs/Gemfile
-docs/Gemfile
-docs/Gemfile
