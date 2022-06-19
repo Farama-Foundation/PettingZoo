@@ -36,7 +36,16 @@ extras = {
     "mpe": ["pyglet>=1.4.0"],
     "sisl": ["pygame==2.1.0", "box2d-py==2.3.5", "scipy>=1.4.1"],
     "other": ["pillow>=8.0.1"],
-    "tests": ["pynput", "pytest", "codespell", "flake8", "isort"],
+    "tests": [
+        "pynput",
+        "pytest",
+        "codespell",
+        "flake8",
+        "isort",
+        "AutoROM",
+        "bandit",
+        "pytest",
+    ],
 }
 
 extras["all"] = (

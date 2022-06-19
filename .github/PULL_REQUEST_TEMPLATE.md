@@ -21,10 +21,10 @@ Fixes # (issue), Depends on # (pull request)
 # Checklist:
 
 - [ ] I have run the [`pre-commit` checks](https://pre-commit.com/) with `pre-commit run --all-files` (see `CONTRIBUTING.md` instructions to set it up)
-- [ ] I have run `./release_test.sh` and no errors are present.
+- [ ] I have run `pytest -v test/` and no errors are present.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] I solved any possible warnings that `./release_test.sh` has generated that are related to my code to the best of my knowledge.
+- [ ] I solved any possible warnings that `pytest -v test/` has generated that are related to my code to the best of my knowledge.
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 
