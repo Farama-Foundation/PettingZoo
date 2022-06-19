@@ -16,16 +16,16 @@ jobs:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     # - uses: openrndr/setup-opengl@v1.1
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         sudo apt-get install python-opengl xvfb
-        pip install AutoROM bandit codespell isort flake8 pytest -r requirements.txt
+        pip install -e .[tests] -r requirements.txt
         AutoROM -v
     - name: Source distribution test
       run: |
@@ -33,7 +33,7 @@ jobs:
         pip install dist/*.tar.gz
     - name: Release Test
       run: |
-        xvfb-run -s "-screen 0 1024x768x24" bash ./release_test.sh
+        xvfb-run -s "-screen 0 1024x768x24" pytest -v test/
     - name: 13 lines test
       run: |
         if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
@@ -46,8 +46,7 @@ jobs:
     - name: Check code with pyright
       uses: jakebailey/pyright-action@v1
       with:
-        version: 1.1.183
+        version: 1.1.244
         python-platform: ${{ matrix.python-platform }}
         python-version: ${{ matrix.python-version }}
       continue-on-error: true
-

@@ -21,8 +21,7 @@ Contributing code is done through standard github methods:
 4. Submit a pull request. It will be reviewed by maintainers and they'll give feedback or make requests as applicable
 
 ### Considerations
-- Make sure existing tests pass (`pip install -r requirements.txt` and then run `pytest test/pytest_runner.py` -- may also need to apt-get/brew install swig)
-- Make sure linter passes (run `check_style.sh`)
+- Make sure existing tests pass (`pip install -e .[tests] -r requirements.txt` and then run `pytest -v test/` -- may also need to `apt-get`/`brew` `install swig` and `AutoROM -v`)
 - Make sure your new code is properly tested and fully-covered
 - Any fixes to environments should include fixes to the appropriate documentation
 - Changes to environment functionality should be avoided when reasonable, and when they occur the environment version must be bumped.
