@@ -1,13 +1,13 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
+---
 name: Python tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   linux-test:
@@ -16,37 +16,37 @@ jobs:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
-    - uses: actions/checkout@v3
-    # - uses: openrndr/setup-opengl@v1.1
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        sudo apt-get install python-opengl xvfb
-        pip install -e .[tests] -r requirements.txt
-        AutoROM -v
-    - name: Source distribution test
-      run: |
-        python setup.py sdist
-        pip install dist/*.tar.gz
-    - name: Release Test
-      run: |
-        xvfb-run -s "-screen 0 1024x768x24" pytest -v test/
-    - name: 13 lines test
-      run: |
-        if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
-        then
-            pip install stable_baselines3
-            git clone https://github.com/Farama-Foundation/SuperSuit.git
-            pip install -e ./SuperSuit
-            sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
-        fi
-    - name: Check code with pyright
-      uses: jakebailey/pyright-action@v1
-      with:
-        version: 1.1.244
-        python-platform: ${{ matrix.python-platform }}
-        python-version: ${{ matrix.python-version }}
-      continue-on-error: true
+      - uses: actions/checkout@v3
+      # - uses: openrndr/setup-opengl@v1.1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get install python-opengl xvfb
+          pip install -e .[tests] -r requirements.txt
+          AutoROM -v
+      - name: Source distribution test
+        run: |
+          python setup.py sdist
+          pip install dist/*.tar.gz
+      - name: Release Test
+        run: |
+          xvfb-run -s "-screen 0 1024x768x24" pytest -v test/
+      - name: 13 lines test
+        run: |
+          if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
+          then
+              pip install stable_baselines3
+              git clone https://github.com/Farama-Foundation/SuperSuit.git
+              pip install -e ./SuperSuit
+              sed s/total_timesteps=2000000/total_timesteps=2000/g tutorials/13_lines.py | sed s/n_steps=256/n_steps=16/g | xvfb-run -s "-screen 0 1024x768x24" python -
+          fi
+      - name: Check code with pyright
+        uses: jakebailey/pyright-action@v1
+        with:
+          version: 1.1.244
+          python-platform: ${{ matrix.python-platform }}
+          python-version: ${{ matrix.python-version }}
+        continue-on-error: true
