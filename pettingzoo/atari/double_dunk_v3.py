@@ -1,17 +1,1 @@
-import os
-
-from .base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
-
-
-def raw_env(**kwargs):
-    return BaseAtariEnv(
-        game="double_dunk",
-        num_players=2,
-        mode_num=None,
-        env_name=os.path.basename(__file__)[:-3],
-        **kwargs
-    )
-
-
-env = base_env_wrapper_fn(raw_env)
-parallel_env = parallel_wrapper_fn(env)
+from .double_dunk.double_dunk import env, parallel_env, raw_env  # noqa: F401
