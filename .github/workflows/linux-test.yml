@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install python-opengl xvfb
-          pip install -e .[tests] -r requirements.txt
+          pip install -e .[all]
           AutoROM -v
       - name: Source distribution test
         run: |

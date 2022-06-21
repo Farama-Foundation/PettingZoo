@@ -27,7 +27,7 @@ extras = {
     "atari": ["multi_agent_ale_py==0.1.11", "pygame==2.1.0"],
     "classic": [
         "chess==1.7.0",
-        "rlcard==1.0.4",
+        "rlcard==1.0.5",
         "pygame==2.1.0",
         "hanabi_learning_environment==0.0.4",
     ],
@@ -45,6 +45,7 @@ extras = {
         "AutoROM",
         "bandit",
         "pytest",
+        "pytest-cov",
     ],
 }
 
@@ -56,6 +57,7 @@ extras["all"] = (
     + extras["mpe"]
     + extras["sisl"]
     + extras["other"]
+    + extras["tests"]
 )
 
 
