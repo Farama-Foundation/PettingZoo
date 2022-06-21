@@ -1,6 +1,7 @@
 import os
 
 from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from glob import glob
 
 avaliable_2p_versions = {
     "classic": 4,
@@ -32,11 +33,15 @@ def raw_env(num_players=2, game_version="classic", **kwargs):
         game_version in versions
     ), f"pong version {game_version} not supported for number of players {num_players}. Available options are {list(versions)}"
     mode = versions[game_version]
+    name = os.path.basename(__file__).split(".")[0]
+    parent_file = glob('./pettingzoo/atari/' + name + '*.py')
+    version_num = parent_file[0].split('_')[-1].split('.')[0]
+    name = name + "_" + version_num
     return BaseAtariEnv(
         game="pong",
         num_players=num_players,
         mode_num=mode,
-        env_name=os.path.basename(__file__)[:-3],
+        env_name=name,
         **kwargs,
     )
 
