@@ -18,7 +18,7 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        pip install AutoROM pytest -r requirements.txt
+        pip install -e .[all]
         AutoROM -v
     - name: Full Python tests
       run: |
