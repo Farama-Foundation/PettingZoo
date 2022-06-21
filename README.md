@@ -25,6 +25,10 @@ This does not include dependencies for all families of environments (there's a m
 
 We support Python 3.7, 3.8 and 3.9 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.
 
+## Getting started
+
+Get started with PettingZoo by following [the PettingZoo tutorial](https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b), where you'll train multiple agents in the Pistonball environment using PettingZoo, SuperSuit and Stable Baselines 3.
+
 ## API
 
 PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/pdf/2009.14471.pdf), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
