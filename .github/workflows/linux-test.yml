@@ -33,7 +33,7 @@ jobs:
           pip install dist/*.tar.gz
       - name: Release Test
         run: |
-          xvfb-run -s "-screen 0 1024x768x24" pytest -v test/
+          xvfb-run -s "-screen 0 1024x768x24" pytest -v --cov=pettingzoo --cov-report term
       - name: 13 lines test
         run: |
           if [[ $(python -c 'import sys; print(sys.version_info[1])') -lt 10 ]]
