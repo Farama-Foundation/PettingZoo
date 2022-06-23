@@ -10,7 +10,7 @@ help: ## Show this help
 test-all: ## Run ALL tests
 	pytest -v --cov=pettingzoo --cov-report term
 
-test-all-html: ## Run tests with HTML report, see `index.html` file in `htmlcov` folder
+test-all-html: ## Run tests with HTML report, see `index.html` file in the `htmlcov` folder
 	pytest -v --cov=pettingzoo --cov-report html --cov-report term
 
 test-print: ## Run `print_test.py` tests
