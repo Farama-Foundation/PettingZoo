@@ -16,7 +16,7 @@ repos:
     hooks:
       - id: flake8
         args:
-          - '--per-file-ignores=*/__init__.py:F401 test/all_parameter_combs.py:F405'
+          - '--per-file-ignores=*/__init__.py:F401 test/all_parameter_combs_test.py:F405'
           - --extend-ignore=E203
           - --max-complexity=205
           - --max-line-length=300

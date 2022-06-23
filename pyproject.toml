@@ -13,9 +13,6 @@ reportMissingTypeStubs = false
 verboseOutput = true
 
 [tool.pytest.ini_options]
-testpaths = [
-    "test",
-]
-python_files = [
-    "*.py",
+norecursedirs = [
+    "pettingzoo/test"
 ]
