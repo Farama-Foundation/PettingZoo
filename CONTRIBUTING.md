@@ -32,3 +32,13 @@ The CI will run several checks on the new code pushed to the PettingZoo reposito
 2. install the Git hooks by running `pre-commit install`.
 
 Once those two steps are done, the Git hooks will be run automatically at every new commit. The Git hooks can also be run manually with `pre-commit run --all-files`, and if needed they can be skipped (not recommended) with `git commit --no-verify`. **Note:** you may have to run `pre-commit run --all-files` manually a couple of times to make it pass when you commit, as each formatting tool will first format the code and fail the first time but should pass the second time.
+
+### Testing shortcuts
+A few _Make_ commands are provided to quickly test parts of the test suite.
+
+To use it you first need to have _Make_ installed on your local machine:
+- Linux: `sudo apt install make` (depends on the distribution/package manager)
+- MacOS: `brew install make`, the command should then be available as `gmake` instead of `make` (https://formulae.brew.sh/formula/make)
+- Windows: `choco install make` (https://community.chocolatey.org/packages/make)
+
+Then `make help` should give all the available commands and you can use `Tab` when writing the command if it's too long to write. For example to run all the tests, one would write `make test-all`.
