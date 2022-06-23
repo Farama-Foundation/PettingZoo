@@ -14,5 +14,5 @@ verboseOutput = true
 
 [tool.pytest.ini_options]
 norecursedirs = [
-    "pettingzoo/test"
+    "pettingzoo"
 ]
