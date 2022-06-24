@@ -5,6 +5,8 @@ import math
 import os
 import sys
 
+import pygame
+
 import numpy as np
 from gym import error
 from pyglet.gl import (
@@ -98,6 +100,13 @@ class Viewer:
         self.transform = Transform()
         self.max_size = 1
 
+        pygame.init()
+        self.screen = pygame.Surface((width, height))
+
+        pygame.display.set_mode(self.screen.get_size())  # doing this while pyglet is enabled causes sigsegv
+
+        print(self.screen)
+
         glEnable(GL_BLEND)
         # glEnable(GL_MULTISAMPLE)
         glEnable(GL_LINE_SMOOTH)
@@ -108,6 +117,9 @@ class Viewer:
 
     def close(self):
         self.window.close()
+
+        pygame.event.pump()
+        # pygame.display.quit()   doing this while pyglet is enabled causes sigsegv
 
     def window_closed_by_user(self):
         self.close()
@@ -127,6 +139,7 @@ class Viewer:
 
     def add_geom(self, geom):
         self.geoms.append(geom)
+        #pygame.draw(geom)
 
     def add_onetime(self, geom):
         self.onetime_geoms.append(geom)
@@ -164,49 +177,57 @@ class Viewer:
             arr = arr[::-1, :, 0:3]
         self.window.flip()
         self.onetime_geoms = []
+
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        # if not return_rgb_array:  # mode == "Human"
+        #     pygame.display.flip()
+        # return (
+        #     np.transpose(observation, axes=(1, 0, 2)) if return_rgb_array else None
+        # )
+
         return arr
 
     # Convenience
-    def draw_circle(self, radius=10, res=30, filled=True, **attrs):
-        geom = make_circle(radius=radius, res=res, filled=filled)
-        _add_attrs(geom, attrs)
-        self.add_onetime(geom)
-        return geom
-
-    def draw_polygon(self, v, filled=True, **attrs):
-        geom = make_polygon(v=v, filled=filled)
-        _add_attrs(geom, attrs)
-        self.add_onetime(geom)
-        return geom
-
-    def draw_polyline(self, v, **attrs):
-        geom = make_polyline(v=v)
-        _add_attrs(geom, attrs)
-        self.add_onetime(geom)
-        return geom
-
-    def draw_line(self, start, end, **attrs):
-        geom = Line(start, end)
-        _add_attrs(geom, attrs)
-        self.add_onetime(geom)
-        return geom
-
-    def get_array(self):
-        self.window.flip()
-        image_data = (
-            pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
-        )
-        self.window.flip()
-        arr = np.frombuffer(image_data.get_data(), dtype=np.uint8)
-        arr = arr.reshape(self.height, self.width, 4)
-        return arr[::-1, :, 0:3]
-
-
-def _add_attrs(geom, attrs):
-    if "color" in attrs:
-        geom.set_color(*attrs["color"])
-    if "linewidth" in attrs:
-        geom.set_linewidth(attrs["linewidth"])
+#     def draw_circle(self, radius=10, res=30, filled=True, **attrs):
+#         geom = make_circle(radius=radius, res=res, filled=filled)
+#         _add_attrs(geom, attrs)
+#         self.add_onetime(geom)
+#         return geom
+#
+#     def draw_polygon(self, v, filled=True, **attrs):
+#         geom = make_polygon(v=v, filled=filled)
+#         _add_attrs(geom, attrs)
+#         self.add_onetime(geom)
+#         return geom
+#
+#     def draw_polyline(self, v, **attrs):
+#         geom = make_polyline(v=v)
+#         _add_attrs(geom, attrs)
+#         self.add_onetime(geom)
+#         return geom
+#
+#     def draw_line(self, start, end, **attrs):
+#         geom = Line(start, end)
+#         _add_attrs(geom, attrs)
+#         self.add_onetime(geom)
+#         return geom
+#
+#     def get_array(self):
+#         self.window.flip()
+#         image_data = (
+#             pyglet.image.get_buffer_manager().get_color_buffer().get_image_data()
+#         )
+#         self.window.flip()
+#         arr = np.frombuffer(image_data.get_data(), dtype=np.uint8)
+#         arr = arr.reshape(self.height, self.width, 4)
+#         return arr[::-1, :, 0:3]
+#
+#
+# def _add_attrs(geom, attrs):
+#     if "color" in attrs:
+#         geom.set_color(*attrs["color"])
+#     if "linewidth" in attrs:
+#         geom.set_linewidth(attrs["linewidth"])
 
 
 class Geom:
@@ -294,14 +315,14 @@ class LineWidth(Attr):
         glLineWidth(self.stroke)
 
 
-class Point(Geom):
-    def __init__(self):
-        Geom.__init__(self)
-
-    def render1(self):
-        (GL_POINTS)  # draw point
-        glVertex3f(0.0, 0.0, 0.0)
-        glEnd()
+# class Point(Geom):
+#     def __init__(self):
+#         Geom.__init__(self)
+#
+#     def render1(self):
+#         (GL_POINTS)  # draw point
+#         glVertex3f(0.0, 0.0, 0.0)
+#         glEnd()
 
 
 class TextLine:
@@ -375,40 +396,41 @@ def make_circle(radius=10, res=30, filled=True):
     if filled:
         return FilledPolygon(points)
     else:
-        return PolyLine(points, True)
+        raise NotImplementedError()
+        # return PolyLine(points, True)
 
 
-def make_polygon(v, filled=True):
-    if filled:
-        return FilledPolygon(v)
-    else:
-        return PolyLine(v, True)
+# def make_polygon(v, filled=True):
+#     if filled:
+#         return FilledPolygon(v)
+#     else:
+#         return PolyLine(v, True)
 
 
-def make_polyline(v):
-    return PolyLine(v, False)
+# def make_polyline(v):
+#     return PolyLine(v, False)
+#
+#
+# def make_capsule(length, width):
+#     l, r, t, b = 0, length, width / 2, -width / 2
+#     box = make_polygon([(l, b), (l, t), (r, t), (r, b)])
+#     circ0 = make_circle(width / 2)
+#     circ1 = make_circle(width / 2)
+#     circ1.add_attr(Transform(translation=(length, 0)))
+#     geom = Compound([box, circ0, circ1])
+#     return geom
 
 
-def make_capsule(length, width):
-    l, r, t, b = 0, length, width / 2, -width / 2
-    box = make_polygon([(l, b), (l, t), (r, t), (r, b)])
-    circ0 = make_circle(width / 2)
-    circ1 = make_circle(width / 2)
-    circ1.add_attr(Transform(translation=(length, 0)))
-    geom = Compound([box, circ0, circ1])
-    return geom
-
-
-class Compound(Geom):
-    def __init__(self, gs):
-        Geom.__init__(self)
-        self.gs = gs
-        for g in self.gs:
-            g.attrs = [a for a in g.attrs if not isinstance(a, Color)]
-
-    def render1(self):
-        for g in self.gs:
-            g.render()
+# class Compound(Geom):
+#     def __init__(self, gs):
+#         Geom.__init__(self)
+#         self.gs = gs
+#         for g in self.gs:
+#             g.attrs = [a for a in g.attrs if not isinstance(a, Color)]
+#
+#     def render1(self):
+#         for g in self.gs:
+#             g.render()
 
 
 class PolyLine(Geom):
@@ -429,69 +451,69 @@ class PolyLine(Geom):
         self.linewidth.stroke = x
 
 
-class Line(Geom):
-    def __init__(self, start=(0.0, 0.0), end=(0.0, 0.0)):
-        Geom.__init__(self)
-        self.start = start
-        self.end = end
-        self.linewidth = LineWidth(1)
-        self.add_attr(self.linewidth)
-
-    def render1(self):
-        glBegin(GL_LINES)
-        glVertex2f(*self.start)
-        glVertex2f(*self.end)
-        glEnd()
-
-
-class Image(Geom):
-    def __init__(self, fname, width, height):
-        Geom.__init__(self)
-        self.width = width
-        self.height = height
-        img = pyglet.image.load(fname)
-        self.img = img
-        self.flip = False
-
-    def render1(self):
-        self.img.blit(
-            -self.width / 2, -self.height / 2, width=self.width, height=self.height
-        )
+# class Line(Geom):
+#     def __init__(self, start=(0.0, 0.0), end=(0.0, 0.0)):
+#         Geom.__init__(self)
+#         self.start = start
+#         self.end = end
+#         self.linewidth = LineWidth(1)
+#         self.add_attr(self.linewidth)
+#
+#     def render1(self):
+#         glBegin(GL_LINES)
+#         glVertex2f(*self.start)
+#         glVertex2f(*self.end)
+#         glEnd()
 
 
-class SimpleImageViewer:
-    def __init__(self, display=None):
-        self.window = None
-        self.isopen = False
-        self.display = display
+# class Image(Geom):
+#     def __init__(self, fname, width, height):
+#         Geom.__init__(self)
+#         self.width = width
+#         self.height = height
+#         img = pyglet.image.load(fname)
+#         self.img = img
+#         self.flip = False
+#
+#     def render1(self):
+#         self.img.blit(
+#             -self.width / 2, -self.height / 2, width=self.width, height=self.height
+#         )
 
-    def imshow(self, arr):
-        if self.window is None:
-            height, width, channels = arr.shape
-            self.window = pyglet.window.Window(
-                width=width, height=height, display=self.display
-            )
-            self.width = width
-            self.height = height
-            self.isopen = True
-        assert arr.shape == (
-            self.height,
-            self.width,
-            3,
-        ), "You passed in an image with the wrong number shape"
-        image = pyglet.image.ImageData(
-            self.width, self.height, "RGB", arr.tobytes(), pitch=self.width * -3
-        )
-        self.window.clear()
-        self.window.switch_to()
-        self.window.dispatch_events()
-        image.blit(0, 0)
-        self.window.flip()
 
-    def close(self):
-        if self.isopen:
-            self.window.close()
-            self.isopen = False
-
-    def __del__(self):
-        self.close()
+# class SimpleImageViewer:
+#     def __init__(self, display=None):
+#         self.window = None
+#         self.isopen = False
+#         self.display = display
+#
+#     def imshow(self, arr):
+#         if self.window is None:
+#             height, width, channels = arr.shape
+#             self.window = pyglet.window.Window(
+#                 width=width, height=height, display=self.display
+#             )
+#             self.width = width
+#             self.height = height
+#             self.isopen = True
+#         assert arr.shape == (
+#             self.height,
+#             self.width,
+#             3,
+#         ), "You passed in an image with the wrong number shape"
+#         image = pyglet.image.ImageData(
+#             self.width, self.height, "RGB", arr.tobytes(), pitch=self.width * -3
+#         )
+#         self.window.clear()
+#         self.window.switch_to()
+#         self.window.dispatch_events()
+#         image.blit(0, 0)
+#         self.window.flip()
+#
+#     def close(self):
+#         if self.isopen:
+#             self.window.close()
+#             self.isopen = False
+#
+#     def __del__(self):
+#         self.close()

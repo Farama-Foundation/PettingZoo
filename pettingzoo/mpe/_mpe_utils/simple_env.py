@@ -232,6 +232,9 @@ class SimpleEnv(AECEnv):
         self._accumulate_rewards()
 
     def render(self, mode="human"):
+        print(f"@@@@@@@@@@@@@@@@@@@@@@@@@{self.render_geoms}")
+        if self.render_geoms:
+            print(self.render_geoms[0].attrs[1].translation)
         from . import rendering
 
         if self.viewer is None:
