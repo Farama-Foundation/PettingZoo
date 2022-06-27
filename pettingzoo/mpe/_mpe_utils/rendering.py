@@ -100,12 +100,12 @@ class Viewer:
         self.transform = Transform()
         self.max_size = 1
 
-        pygame.init()
-        self.screen = pygame.Surface((width, height))
-
-        pygame.display.set_mode(self.screen.get_size())  # doing this while pyglet is enabled causes sigsegv
-
-        print(self.screen)
+        # pygame.init()
+        # self.screen = pygame.Surface((width, height))
+        #
+        # pygame.display.set_mode(self.screen.get_size())  # doing this while pyglet is enabled causes sigsegv
+        #
+        # print(self.screen)
 
         glEnable(GL_BLEND)
         # glEnable(GL_MULTISAMPLE)
@@ -178,7 +178,7 @@ class Viewer:
         self.window.flip()
         self.onetime_geoms = []
 
-        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        # observation = np.array(pygame.surfarray.pixels3d(self.screen))
         # if not return_rgb_array:  # mode == "Human"
         #     pygame.display.flip()
         # return (
