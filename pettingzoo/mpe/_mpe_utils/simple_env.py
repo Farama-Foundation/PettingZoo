@@ -1,4 +1,5 @@
 import numpy as np
+import pygame
 from gym import spaces
 from gym.utils import seeding
 
@@ -94,6 +95,7 @@ class SimpleEnv(AECEnv):
         self.current_actions = [None] * self.num_agents
 
         self.viewer = None
+        self.screen = None
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -239,6 +241,20 @@ class SimpleEnv(AECEnv):
 
         if self.viewer is None:
             self.viewer = rendering.Viewer(700, 700)
+
+        pygame.init()
+
+        # Set up the drawing window
+        self.screen = pygame.display.set_mode([700, 700])
+
+        # Fill the background with white
+        self.screen.fill((255, 255, 255))
+
+        # # Draw a solid blue circle in the center
+        # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+
+        # Flip the display
+        pygame.display.flip()
 
         # create rendering geometry
         if self.render_geoms is None:
