@@ -11,3 +11,8 @@ strict = ["pettingzoo/utils/env.py"]
 reportMissingImports = true
 reportMissingTypeStubs = false
 verboseOutput = true
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    "pettingzoo"
+]
