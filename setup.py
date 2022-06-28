@@ -27,7 +27,7 @@ extras = {
     "atari": ["multi_agent_ale_py==0.1.11", "pygame==2.1.0"],
     "classic": [
         "chess==1.7.0",
-        "rlcard==1.0.4",
+        "rlcard==1.0.5",
         "pygame==2.1.0",
         "hanabi_learning_environment==0.0.4",
     ],
@@ -36,7 +36,17 @@ extras = {
     "mpe": ["pyglet>=1.4.0"],
     "sisl": ["pygame==2.1.0", "box2d-py==2.3.5", "scipy>=1.4.1"],
     "other": ["pillow>=8.0.1"],
-    "tests": ["pynput", "pytest", "codespell", "flake8", "isort"],
+    "tests": [
+        "pynput",
+        "pytest",
+        "codespell",
+        "flake8",
+        "isort",
+        "AutoROM",
+        "bandit",
+        "pytest",
+        "pytest-cov",
+    ],
 }
 
 extras["all"] = (
@@ -47,6 +57,7 @@ extras["all"] = (
     + extras["mpe"]
     + extras["sisl"]
     + extras["other"]
+    + extras["tests"]
 )
 
 
