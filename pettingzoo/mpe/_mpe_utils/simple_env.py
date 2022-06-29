@@ -96,6 +96,9 @@ class SimpleEnv(AECEnv):
 
         self.viewer = None
         self.screen = None
+        self.width = 700
+        self.height = 700
+        self.max_size = 1
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -234,9 +237,6 @@ class SimpleEnv(AECEnv):
         self._accumulate_rewards()
 
     def render(self, mode="human"):
-        print(f"@@@@@@@@@@@@@@@@@@@@@@@@@{self.render_geoms}")
-        if self.render_geoms:
-            print(self.render_geoms[0].attrs[1].translation)
         from . import rendering
 
         if self.viewer is None:
@@ -245,16 +245,21 @@ class SimpleEnv(AECEnv):
         pygame.init()
 
         # Set up the drawing window
-        self.screen = pygame.display.set_mode([700, 700])
+        self.screen = pygame.display.set_mode([self.width, self.height])
 
         # Fill the background with white
         self.screen.fill((255, 255, 255))
 
         # # Draw a solid blue circle in the center
-        # pygame.draw.circle(screen, (0, 0, 255), (250, 250), 75)
+        x = self.world.agents[0].state.p_pos[0]
+        y = self.world.agents[0].state.p_pos[1]
+        x += self.width // 2
+        y += self.height // 2
+        print(f"X: {x, y}")
+        #pygame.draw.circle(self.screen, (0, 0, 255), (350, 350), 75)
 
         # Flip the display
-        pygame.display.flip()
+        #pygame.display.flip()
 
         # create rendering geometry
         if self.render_geoms is None:
@@ -304,11 +309,31 @@ class SimpleEnv(AECEnv):
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
-        cam_range = np.max(np.abs(np.array(all_poses))) + 1
+        cam_range = np.max(np.abs(np.array(all_poses)))
+        max = cam_range
+        min = -cam_range
         self.viewer.set_max_size(cam_range)
+        #self._update_zoom_factors(cam_range)
         # update geometry positions
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
+            x, y = entity.state.p_pos
+            y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
+            #assert np.abs(x) <= max and np.abs(y) <= max
+            print(f"1: {x, y}, {cam_range}")
+            #pygame.draw.circle(self.screen, (0, 0, 225), (x, y), 5)
+            x = (x / max) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
+            y = (y / max) * self.height // 2 * .9
+            print(f"3: {x, y}")
+            #pygame.draw.circle(self.screen, (0, 0, 225), (x, y), 20)
+            x += self.width // 2
+            y += self.height // 2
+            print(f"4: {x, y}")
+            pygame.draw.circle(self.screen, (0, 0, 225), (x, y), 10)
+            assert 0 < x < self.width and 0 < y < self.height, f"Coordinates {(x, y)} are out of bounds."
+
+            pygame.display.flip()
+
         # render to display or array
         return self.viewer.render(return_rgb_array=mode == "rgb_array")
 
@@ -316,6 +341,20 @@ class SimpleEnv(AECEnv):
     def _reset_render(self):
         self.render_geoms = None
         self.render_geoms_xform = None
+
+    # def _update_zoom_factors(self, current_size):
+    #     max_size = self.max_size = max(current_size, self.max_size)
+    #     updated_width = self.width *
+    #     updated_height = 2 * max_size
+    #     left = -max_size
+    #     right = max_size
+    #     bottom = -max_size
+    #     top = max_size
+    #     assert right > left and top > bottom
+    #     self.scalex = self.width // (right - left)
+    #     self.scaley = self.height // (top - bottom)
+    #     self.translationx = -left * self.scalex
+    #     self.translationy = -bottom * self.scaley
 
     def close(self):
         if self.viewer is not None:
