@@ -5,7 +5,7 @@ actions: "Discrete"
 agents: "2"
 manual-control: "No"
 action-shape: "(1,)"
-action-values: "[1,5]"
+action-values: "[0,4]"
 observation-shape: "(210, 160, 3)"
 observation-values: "(0,255)"
 import: "from pettingzoo.atari import video_checkers_v4"
@@ -46,11 +46,11 @@ In any given turn, an agent can choose from one of 5 actions.
 
 | Action    | Behavior  |
 |:---------:|-----------|
-| 1         | Fire |
-| 2         | Move up |
-| 3         | Move right |
-| 4         | Move left |
-| 5         | Move down |
+| 0         | Fire |
+| 1         | Move up |
+| 2         | Move right |
+| 3         | Move left |
+| 4         | Move down |
 
 
 ### Version History
