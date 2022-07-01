@@ -310,17 +310,15 @@ class SimpleEnv(AECEnv):
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         cam_range = np.max(np.abs(np.array(all_poses)))
-        max = cam_range
-        min = -cam_range
         self.viewer.set_max_size(cam_range)
-        #self._update_zoom_factors(cam_range)
+        
         # update geometry positions
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
             x, y = entity.state.p_pos
             y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
-            x = (x / max) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
-            y = (y / max) * self.height // 2 * .9
+            x = (x / cam_range) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
+            y = (y / cam_range) * self.height // 2 * .9
             x += self.width // 2
             y += self.height // 2
             pygame.draw.circle(self.screen, entity.color * 200, (x, y), entity.size * 350)  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
