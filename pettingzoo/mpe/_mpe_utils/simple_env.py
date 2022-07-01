@@ -311,6 +311,7 @@ class SimpleEnv(AECEnv):
             x += self.width // 2
             y += self.height // 2
             pygame.draw.circle(self.screen, entity.color * 200, (x, y), entity.size * 350)  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
+            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), entity.size * 350, 1)  # borders
             assert 0 < x < self.width and 0 < y < self.height, f"Coordinates {(x, y)} are out of bounds."
 
             pygame.display.flip()
