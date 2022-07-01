@@ -314,7 +314,7 @@ class SimpleEnv(AECEnv):
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), entity.size * 350, 1)  # borders
             assert 0 < x < self.width and 0 < y < self.height, f"Coordinates {(x, y)} are out of bounds."
 
-            pygame.display.flip()
+        pygame.display.flip()
 
         # render to display or array
         return self.viewer.render(return_rgb_array=mode == "rgb_array")
