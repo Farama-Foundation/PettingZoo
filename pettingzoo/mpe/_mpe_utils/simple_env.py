@@ -319,11 +319,8 @@ class SimpleEnv(AECEnv):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
             x, y = entity.state.p_pos
             y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
-            #assert np.abs(x) <= max and np.abs(y) <= max
-            #pygame.draw.circle(self.screen, (0, 0, 225), (x, y), 5)
             x = (x / max) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
             y = (y / max) * self.height // 2 * .9
-            #pygame.draw.circle(self.screen, (0, 0, 225), (x, y), 20)
             x += self.width // 2
             y += self.height // 2
             pygame.draw.circle(self.screen, entity.color * 200, (x, y), entity.size * 350)  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
