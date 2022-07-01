@@ -250,17 +250,6 @@ class SimpleEnv(AECEnv):
         # Fill the background with white
         self.screen.fill((255, 255, 255))
 
-        # # Draw a solid blue circle in the center
-        x = self.world.agents[0].state.p_pos[0]
-        y = self.world.agents[0].state.p_pos[1]
-        x += self.width // 2
-        y += self.height // 2
-        print(f"X: {x, y}")
-        #pygame.draw.circle(self.screen, (0, 0, 255), (350, 350), 75)
-
-        # Flip the display
-        #pygame.display.flip()
-
         # create rendering geometry
         if self.render_geoms is None:
             # import rendering only if we need it (and don't import for headless machines)
@@ -311,7 +300,7 @@ class SimpleEnv(AECEnv):
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         cam_range = np.max(np.abs(np.array(all_poses)))
         self.viewer.set_max_size(cam_range)
-        
+
         # update geometry positions
         for e, entity in enumerate(self.world.entities):
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
