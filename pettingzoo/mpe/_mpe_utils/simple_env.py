@@ -1,9 +1,12 @@
+import os
+
 import numpy as np
 import pygame
 from gym import spaces
 from gym.utils import seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.mpe._mpe_utils.core import Agent
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
@@ -243,6 +246,7 @@ class SimpleEnv(AECEnv):
             self.viewer = rendering.Viewer(700, 700)
 
         pygame.init()
+        game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
 
         # Set up the drawing window
         self.screen = pygame.display.set_mode([self.width, self.height])
@@ -301,8 +305,10 @@ class SimpleEnv(AECEnv):
         cam_range = np.max(np.abs(np.array(all_poses)))
         self.viewer.set_max_size(cam_range)
 
-        # update geometry positions
+        # update geometry and text positions
+        text_line = 0
         for e, entity in enumerate(self.world.entities):
+            # geometry
             self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
             x, y = entity.state.p_pos
             y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
@@ -313,6 +319,23 @@ class SimpleEnv(AECEnv):
             pygame.draw.circle(self.screen, entity.color * 200, (x, y), entity.size * 350)  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
             pygame.draw.circle(self.screen, (0, 0, 0), (x, y), entity.size * 350, 1)  # borders
             assert 0 < x < self.width and 0 < y < self.height, f"Coordinates {(x, y)} are out of bounds."
+
+            # text
+            if isinstance(entity, Agent):
+                if entity.silent:
+                    continue
+                if np.all(entity.state.c == 0):
+                    word = "_"
+                elif self.continuous_actions:
+                    word = "[" + ",".join([f"{comm:.2f}" for comm in entity.state.c]) + "]"
+                else:
+                    word = alphabet[np.argmax(entity.state.c)]
+
+                message = entity.name + " sends " + word + "   "
+                message_x_pos = self.width * .05
+                message_y_pos = self.height * .95 - (self.height * .05 * text_line)
+                game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
+                text_line += 1
 
         pygame.display.flip()
 
