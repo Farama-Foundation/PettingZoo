@@ -238,17 +238,12 @@ class SimpleEnv(AECEnv):
         self._accumulate_rewards()
 
     def render(self, mode="human"):
-
         pygame.init()
         game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
-
-        # Set up the drawing window
-        self.screen = pygame.display.set_mode([self.width, self.height])
-
-        # Fill the background with white
-        self.screen.fill((255, 255, 255))
-
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+        self.screen = pygame.display.set_mode([self.width, self.height])  # Set up the drawing window
+        self.screen.fill((255, 255, 255))  # Fill the background with white
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
@@ -285,7 +280,7 @@ class SimpleEnv(AECEnv):
                 game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
                 text_line += 1
 
-        # render to display or array
+        # render to display
         return pygame.display.flip()
 
     def close(self):
