@@ -240,10 +240,6 @@ class SimpleEnv(AECEnv):
         self._accumulate_rewards()
 
     def render(self, mode="human"):
-        from . import rendering
-
-        if self.viewer is None:
-            self.viewer = rendering.Viewer(700, 700)
 
         pygame.init()
         game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
@@ -262,8 +258,6 @@ class SimpleEnv(AECEnv):
             self.render_geoms = []
             self.render_geoms_xform = []
             for entity in self.world.entities:
-                geom = rendering.make_circle(entity.size)
-                xform = rendering.Transform()
                 if "agent" in entity.name:
                     geom.set_color(*entity.color[:3], alpha=0.5)
                 else:
@@ -276,14 +270,6 @@ class SimpleEnv(AECEnv):
             self.viewer.geoms = []
             for geom in self.render_geoms:
                 self.viewer.add_geom(geom)
-
-            self.viewer.text_lines = []
-            idx = 0
-            for agent in self.world.agents:
-                if not agent.silent:
-                    tline = rendering.TextLine(self.viewer.window, idx)
-                    self.viewer.text_lines.append(tline)
-                    idx += 1
 
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         for idx, other in enumerate(self.world.agents):
