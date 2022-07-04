@@ -137,8 +137,6 @@ class SimpleEnv(AECEnv):
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
-        self._reset_render()
-
         self.agent_selection = self._agent_selector.reset()
         self.steps = 0
 
@@ -250,52 +248,16 @@ class SimpleEnv(AECEnv):
         # Fill the background with white
         self.screen.fill((255, 255, 255))
 
-        # create rendering geometry
-        if self.render_geoms is None:
-            # import rendering only if we need it (and don't import for headless machines)
-            # from gym.envs.classic_control import rendering
-            # from multiagent._mpe_utils import rendering
-            self.render_geoms = []
-            self.render_geoms_xform = []
-            for entity in self.world.entities:
-                if "agent" in entity.name:
-                    geom.set_color(*entity.color[:3], alpha=0.5)
-                else:
-                    geom.set_color(*entity.color[:3])
-                geom.add_attr(xform)
-                self.render_geoms.append(geom)
-                self.render_geoms_xform.append(xform)
-
-            # add geoms to viewer
-            self.viewer.geoms = []
-            for geom in self.render_geoms:
-                self.viewer.add_geom(geom)
-
         alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        for idx, other in enumerate(self.world.agents):
-            if other.silent:
-                continue
-            if np.all(other.state.c == 0):
-                word = "_"
-            elif self.continuous_actions:
-                word = "[" + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
-            else:
-                word = alphabet[np.argmax(other.state.c)]
-
-            message = other.name + " sends " + word + "   "
-
-            self.viewer.text_lines[idx].set_text(message)
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
         cam_range = np.max(np.abs(np.array(all_poses)))
-        self.viewer.set_max_size(cam_range)
 
         # update geometry and text positions
         text_line = 0
         for e, entity in enumerate(self.world.entities):
             # geometry
-            self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
             x, y = entity.state.p_pos
             y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
             x = (x / cam_range) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
@@ -323,32 +285,8 @@ class SimpleEnv(AECEnv):
                 game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
                 text_line += 1
 
-        pygame.display.flip()
-
         # render to display or array
-        return self.viewer.render(return_rgb_array=mode == "rgb_array")
-
-    # reset rendering assets
-    def _reset_render(self):
-        self.render_geoms = None
-        self.render_geoms_xform = None
-
-    # def _update_zoom_factors(self, current_size):
-    #     max_size = self.max_size = max(current_size, self.max_size)
-    #     updated_width = self.width *
-    #     updated_height = 2 * max_size
-    #     left = -max_size
-    #     right = max_size
-    #     bottom = -max_size
-    #     top = max_size
-    #     assert right > left and top > bottom
-    #     self.scalex = self.width // (right - left)
-    #     self.scaley = self.height // (top - bottom)
-    #     self.translationx = -left * self.scalex
-    #     self.translationy = -bottom * self.scaley
+        return pygame.display.flip()
 
     def close(self):
-        if self.viewer is not None:
-            self.viewer.close()
-            self.viewer = None
-        self._reset_render()
+        pygame.display.quit()
