@@ -6,9 +6,9 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
 import gym
 import numpy as np
 
-ObsType = TypeVar("ObsType")
+ObsType = TypeVar("ObsType") | None
 ActionType = TypeVar("ActionType")
-AgentID = str
+AgentID = str | None
 
 ObsDict = Dict[AgentID, ObsType]
 ActionDict = Dict[AgentID, ActionType]
@@ -36,10 +36,10 @@ class AECEnv:
     agents: List[AgentID]  # Agents active at any given time
 
     observation_spaces: Dict[
-        AgentID, gym.spaces.Space
+        AgentID, gym.spaces.Space  # type: ignore
     ]  # Observation space for each agent
     # Action space for each agent
-    action_spaces: Dict[AgentID, gym.spaces.Space]
+    action_spaces: Dict[AgentID, gym.spaces.Space]  # type: ignore
 
     # Whether each agent has just reached a terminal state
     dones: Dict[AgentID, bool]
@@ -114,7 +114,7 @@ class AECEnv:
         """
         pass
 
-    def observation_space(self, agent: str) -> gym.Space:
+    def observation_space(self, agent: AgentID) -> gym.Space:
         """
         Takes in agent and returns the observation space for that agent.
 
@@ -185,6 +185,7 @@ class AECEnv:
         Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
         """
         agent = self.agent_selection
+        assert agent
         observation = self.observe(agent) if observe else None
         return (
             observation,
@@ -354,7 +355,7 @@ class ParallelEnv:
         warnings.warn(
             "Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute."
         )
-        return self.observation_spaces[agent]
+        return self.observation_spaces[agent]  # type: ignore
 
     def action_space(self, agent: AgentID) -> gym.Space:
         """
@@ -367,7 +368,7 @@ class ParallelEnv:
         warnings.warn(
             "Your environment should override the action_space function. Attempting to use the action_spaces dict attribute."
         )
-        return self.action_spaces[agent]
+        return self.action_spaces[agent]  # type: ignore
 
     @property
     def num_agents(self) -> int:
