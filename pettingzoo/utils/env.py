@@ -8,7 +8,7 @@ import numpy as np
 
 ObsType = TypeVar("ObsType") | None
 ActionType = TypeVar("ActionType")
-AgentID = str | None
+AgentID = Optional[str]
 
 ObsDict = Dict[AgentID, ObsType]
 ActionDict = Dict[AgentID, ActionType]
