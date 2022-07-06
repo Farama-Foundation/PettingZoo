@@ -1,16 +1,17 @@
 [tool.pyright]
 
 # add any files/directories with type declaration to include
-include = ["pettingzoo/utils/env.py"]
-exclude = [
-    "**/node_modules",
-    "**/__pycache__",
+include = [
+    "pettingzoo/utils/env.py"
 ]
-strict = ["pettingzoo/utils/env.py"]
-
-reportMissingImports = true
-reportMissingTypeStubs = false
+exclude = [
+]
+strict = [
+]
+# reportMissingImports = true
 verboseOutput = true
+# typeCheckingMode = "basic"
+# pythonVersion = "3.7"
 
 [tool.pytest.ini_options]
 norecursedirs = [
