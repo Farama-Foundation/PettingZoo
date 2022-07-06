@@ -12,6 +12,7 @@ from pettingzoo.utils.agent_selector import agent_selector
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 def make_env(raw_env):
     def env(**kwargs):
         env = raw_env(**kwargs)
@@ -37,9 +38,11 @@ class SimpleEnv(AECEnv):
         self.height = 700
         self.screen = pygame.Surface([self.width, self.height])
         self.max_size = 1
-        self.game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
+        self.game_font = pygame.freetype.Font(
+            os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24
+        )
 
-          # Set up the drawing window
+        # Set up the drawing window
 
         self.renderOn = False
         self.seed()
@@ -242,7 +245,7 @@ class SimpleEnv(AECEnv):
 
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
-        
+
     def enable_render(self):
         self.screen = pygame.display.set_mode(self.screen.get_size())
         self.renderOn = True
@@ -261,7 +264,7 @@ class SimpleEnv(AECEnv):
         return (
             np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
         )
-        
+
     def draw(self):
         # clear screen
         self.screen.fill((255, 255, 255))
@@ -275,14 +278,24 @@ class SimpleEnv(AECEnv):
         for e, entity in enumerate(self.world.entities):
             # geometry
             x, y = entity.state.p_pos
-            y *= -1  # this makes the display mimic the old pyglet setup (ie. flips image)
-            x = (x / cam_range) * self.width // 2 * .9  # the .9 is just to keep entities from appearing "too" out-of-bounds
-            y = (y / cam_range) * self.height // 2 * .9
+            y *= (
+                -1
+            )  # this makes the display mimic the old pyglet setup (ie. flips image)
+            x = (
+                (x / cam_range) * self.width // 2 * 0.9
+            )  # the .9 is just to keep entities from appearing "too" out-of-bounds
+            y = (y / cam_range) * self.height // 2 * 0.9
             x += self.width // 2
             y += self.height // 2
-            pygame.draw.circle(self.screen, entity.color * 200, (x, y), entity.size * 350)  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
-            pygame.draw.circle(self.screen, (0, 0, 0), (x, y), entity.size * 350, 1)  # borders
-            assert 0 < x < self.width and 0 < y < self.height, f"Coordinates {(x, y)} are out of bounds."
+            pygame.draw.circle(
+                self.screen, entity.color * 200, (x, y), entity.size * 350
+            )  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
+            pygame.draw.circle(
+                self.screen, (0, 0, 0), (x, y), entity.size * 350, 1
+            )  # borders
+            assert (
+                0 < x < self.width and 0 < y < self.height
+            ), f"Coordinates {(x, y)} are out of bounds."
 
             # text
             if isinstance(entity, Agent):
@@ -291,14 +304,18 @@ class SimpleEnv(AECEnv):
                 if np.all(entity.state.c == 0):
                     word = "_"
                 elif self.continuous_actions:
-                    word = "[" + ",".join([f"{comm:.2f}" for comm in entity.state.c]) + "]"
+                    word = (
+                        "[" + ",".join([f"{comm:.2f}" for comm in entity.state.c]) + "]"
+                    )
                 else:
                     word = alphabet[np.argmax(entity.state.c)]
 
                 message = entity.name + " sends " + word + "   "
-                message_x_pos = self.width * .05
-                message_y_pos = self.height * .95 - (self.height * .05 * text_line)
-                self.game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
+                message_x_pos = self.width * 0.05
+                message_y_pos = self.height * 0.95 - (self.height * 0.05 * text_line)
+                self.game_font.render_to(
+                    self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0)
+                )
                 text_line += 1
 
     def close(self):
