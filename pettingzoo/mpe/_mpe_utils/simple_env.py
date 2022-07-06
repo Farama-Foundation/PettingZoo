@@ -10,6 +10,7 @@ from pettingzoo.mpe._mpe_utils.core import Agent
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 def make_env(raw_env):
     def env(**kwargs):
@@ -30,6 +31,17 @@ class SimpleEnv(AECEnv):
     ):
         super().__init__()
 
+        pygame.init()
+        self.viewer = None
+        self.width = 700
+        self.height = 700
+        self.screen = pygame.Surface([self.width, self.height])
+        self.max_size = 1
+        self.game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
+
+          # Set up the drawing window
+
+        self.renderOn = False
         self.seed()
 
         self.metadata = {
@@ -96,12 +108,6 @@ class SimpleEnv(AECEnv):
         self.steps = 0
 
         self.current_actions = [None] * self.num_agents
-
-        self.viewer = None
-        self.screen = None
-        self.width = 700
-        self.height = 700
-        self.max_size = 1
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -236,14 +242,29 @@ class SimpleEnv(AECEnv):
 
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
+        
+    def enable_render(self):
+        self.screen = pygame.display.set_mode(self.screen.get_size())
+        self.renderOn = True
+        self.draw()
 
     def render(self, mode="human"):
-        pygame.init()
-        game_font = pygame.freetype.Font(os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24)
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        if not self.renderOn and mode == "human":
+            # sets self.renderOn to true and initializes display
+            self.enable_render()
+        elif mode == "human":
+            self.draw()
 
-        self.screen = pygame.display.set_mode([self.width, self.height])  # Set up the drawing window
-        self.screen.fill((255, 255, 255))  # Fill the background with white
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        if mode == "human":
+            pygame.display.flip()
+        return (
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        )
+        
+    def draw(self):
+        # clear screen
+        self.screen.fill((255, 255, 255))
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
@@ -277,11 +298,11 @@ class SimpleEnv(AECEnv):
                 message = entity.name + " sends " + word + "   "
                 message_x_pos = self.width * .05
                 message_y_pos = self.height * .95 - (self.height * .05 * text_line)
-                game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
+                self.game_font.render_to(self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0))
                 text_line += 1
 
-        # render to display
-        return pygame.display.flip()
-
     def close(self):
-        pygame.display.quit()
+        if self.renderOn:
+            pygame.event.pump()
+            pygame.display.quit()
+            self.renderOn = False
