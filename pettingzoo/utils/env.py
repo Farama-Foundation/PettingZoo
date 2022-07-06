@@ -6,7 +6,7 @@ from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
 import gym
 import numpy as np
 
-ObsType = TypeVar("ObsType") | None
+ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
 AgentID = Optional[str]
 
@@ -81,7 +81,7 @@ class AECEnv:
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
-    def observe(self, agent: str) -> ObsType:
+    def observe(self, agent: str) -> Optional[ObsType]:
         """
         Returns the observation an agent currently can make. `last()` calls this function.
         """
@@ -180,7 +180,9 @@ class AECEnv:
         """
         return AECIterable(self, max_iter)
 
-    def last(self, observe: bool = True) -> Tuple[ObsType, float, bool, Dict[str, Any]]:
+    def last(
+        self, observe: bool = True
+    ) -> Tuple[Optional[ObsType], float, bool, Dict[str, Any]]:
         """
         Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
         """
