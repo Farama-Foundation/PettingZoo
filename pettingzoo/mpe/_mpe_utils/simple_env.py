@@ -246,10 +246,10 @@ class SimpleEnv(AECEnv):
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
 
-    def enable_render(self):
-        self.screen = pygame.display.set_mode(self.screen.get_size())
-        self.renderOn = True
-        self.draw()
+    def enable_render(self, mode="human"):
+        if not self.renderOn and mode == "human":
+            self.screen = pygame.display.set_mode(self.screen.get_size())
+            self.renderOn = True
 
     def render(self, mode="human"):
         self.enable_render()
