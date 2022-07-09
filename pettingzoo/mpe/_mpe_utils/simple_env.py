@@ -1,10 +1,16 @@
+import os
+
 import numpy as np
+import pygame
 from gym import spaces
 from gym.utils import seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.mpe._mpe_utils.core import Agent
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
+
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def make_env(raw_env):
@@ -26,6 +32,19 @@ class SimpleEnv(AECEnv):
     ):
         super().__init__()
 
+        pygame.init()
+        self.viewer = None
+        self.width = 700
+        self.height = 700
+        self.screen = pygame.Surface([self.width, self.height])
+        self.max_size = 1
+        self.game_font = pygame.freetype.Font(
+            os.path.join(os.path.dirname(__file__), "secrcode.ttf"), 24
+        )
+
+        # Set up the drawing window
+
+        self.renderOn = False
         self.seed()
 
         self.metadata = {
@@ -93,8 +112,6 @@ class SimpleEnv(AECEnv):
 
         self.current_actions = [None] * self.num_agents
 
-        self.viewer = None
-
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
@@ -128,8 +145,6 @@ class SimpleEnv(AECEnv):
         self._cumulative_rewards = {name: 0.0 for name in self.agents}
         self.dones = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
-
-        self._reset_render()
 
         self.agent_selection = self._agent_selector.reset()
         self.steps = 0
@@ -231,75 +246,77 @@ class SimpleEnv(AECEnv):
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
 
+    def enable_render(self, mode="human"):
+        if not self.renderOn and mode == "human":
+            self.screen = pygame.display.set_mode(self.screen.get_size())
+            self.renderOn = True
+
     def render(self, mode="human"):
-        from . import rendering
+        self.enable_render()
 
-        if self.viewer is None:
-            self.viewer = rendering.Viewer(700, 700)
+        observation = np.array(pygame.surfarray.pixels3d(self.screen))
+        if mode == "human":
+            self.draw()
+            pygame.display.flip()
+        return (
+            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+        )
 
-        # create rendering geometry
-        if self.render_geoms is None:
-            # import rendering only if we need it (and don't import for headless machines)
-            # from gym.envs.classic_control import rendering
-            # from multiagent._mpe_utils import rendering
-            self.render_geoms = []
-            self.render_geoms_xform = []
-            for entity in self.world.entities:
-                geom = rendering.make_circle(entity.size)
-                xform = rendering.Transform()
-                if "agent" in entity.name:
-                    geom.set_color(*entity.color[:3], alpha=0.5)
-                else:
-                    geom.set_color(*entity.color[:3])
-                geom.add_attr(xform)
-                self.render_geoms.append(geom)
-                self.render_geoms_xform.append(xform)
-
-            # add geoms to viewer
-            self.viewer.geoms = []
-            for geom in self.render_geoms:
-                self.viewer.add_geom(geom)
-
-            self.viewer.text_lines = []
-            idx = 0
-            for agent in self.world.agents:
-                if not agent.silent:
-                    tline = rendering.TextLine(self.viewer.window, idx)
-                    self.viewer.text_lines.append(tline)
-                    idx += 1
-
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        for idx, other in enumerate(self.world.agents):
-            if other.silent:
-                continue
-            if np.all(other.state.c == 0):
-                word = "_"
-            elif self.continuous_actions:
-                word = "[" + ",".join([f"{comm:.2f}" for comm in other.state.c]) + "]"
-            else:
-                word = alphabet[np.argmax(other.state.c)]
-
-            message = other.name + " sends " + word + "   "
-
-            self.viewer.text_lines[idx].set_text(message)
+    def draw(self):
+        # clear screen
+        self.screen.fill((255, 255, 255))
 
         # update bounds to center around agent
         all_poses = [entity.state.p_pos for entity in self.world.entities]
-        cam_range = np.max(np.abs(np.array(all_poses))) + 1
-        self.viewer.set_max_size(cam_range)
-        # update geometry positions
-        for e, entity in enumerate(self.world.entities):
-            self.render_geoms_xform[e].set_translation(*entity.state.p_pos)
-        # render to display or array
-        return self.viewer.render(return_rgb_array=mode == "rgb_array")
+        cam_range = np.max(np.abs(np.array(all_poses)))
 
-    # reset rendering assets
-    def _reset_render(self):
-        self.render_geoms = None
-        self.render_geoms_xform = None
+        # update geometry and text positions
+        text_line = 0
+        for e, entity in enumerate(self.world.entities):
+            # geometry
+            x, y = entity.state.p_pos
+            y *= (
+                -1
+            )  # this makes the display mimic the old pyglet setup (ie. flips image)
+            x = (
+                (x / cam_range) * self.width // 2 * 0.9
+            )  # the .9 is just to keep entities from appearing "too" out-of-bounds
+            y = (y / cam_range) * self.height // 2 * 0.9
+            x += self.width // 2
+            y += self.height // 2
+            pygame.draw.circle(
+                self.screen, entity.color * 200, (x, y), entity.size * 350
+            )  # 350 is an arbitrary scale factor to get pygame to render similar sizes as pyglet
+            pygame.draw.circle(
+                self.screen, (0, 0, 0), (x, y), entity.size * 350, 1
+            )  # borders
+            assert (
+                0 < x < self.width and 0 < y < self.height
+            ), f"Coordinates {(x, y)} are out of bounds."
+
+            # text
+            if isinstance(entity, Agent):
+                if entity.silent:
+                    continue
+                if np.all(entity.state.c == 0):
+                    word = "_"
+                elif self.continuous_actions:
+                    word = (
+                        "[" + ",".join([f"{comm:.2f}" for comm in entity.state.c]) + "]"
+                    )
+                else:
+                    word = alphabet[np.argmax(entity.state.c)]
+
+                message = entity.name + " sends " + word + "   "
+                message_x_pos = self.width * 0.05
+                message_y_pos = self.height * 0.95 - (self.height * 0.05 * text_line)
+                self.game_font.render_to(
+                    self.screen, (message_x_pos, message_y_pos), message, (0, 0, 0)
+                )
+                text_line += 1
 
     def close(self):
-        if self.viewer is not None:
-            self.viewer.close()
-            self.viewer = None
-        self._reset_render()
+        if self.renderOn:
+            pygame.event.pump()
+            pygame.display.quit()
+            self.renderOn = False
