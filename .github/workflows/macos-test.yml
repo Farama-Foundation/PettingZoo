@@ -22,7 +22,6 @@ jobs:
           AutoROM -v
       - name: Full Python tests
         run: |
-          export -n LIBGL_ALWAYS_INDIRECT
           pytest ./test/pytest_runner_test.py
           pytest ./test/all_parameter_combs_test.py
       - name: 13 lines test
