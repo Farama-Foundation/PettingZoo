@@ -690,13 +690,10 @@ class MultiWalkerEnv:
         self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
         if mode == "human":
             pygame.display.flip()
-
-        if mode == "rgb_array":
+        elif mode == "rgb_array":
             return np.transpose(
                 np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
             )
-        else:
-            return self.isopen
 
     def _generate_package(self):
         init_x = np.mean(self.start_x)
