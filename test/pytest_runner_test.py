@@ -16,25 +16,26 @@ from .all_modules import all_environments
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_module(name, env_module):
-    _env = env_module.env()
-    assert str(_env) == os.path.basename(name)
-    api_test(_env)
-    if "classic/" not in name:
-        parallel_api_test(env_module.parallel_env())
+    if "multiwalker" in name:
+        _env = env_module.env()
+        assert str(_env) == os.path.basename(name)
+        api_test(_env)
+        if "classic/" not in name:
+            parallel_api_test(env_module.parallel_env())
 
-    # seed_test(env_module.env, 50)
+        # seed_test(env_module.env, 50)
 
-    # some atari environments fail this test
-    if "atari/" not in name:
-        seed_test(env_module.env, 50)
+        # some atari environments fail this test
+        if "atari/" not in name:
+            seed_test(env_module.env, 50)
 
-    render_test(env_module.env)
+        render_test(env_module.env)
 
-    if "classic/" not in name:
-        max_cycles_test(env_module)
+        if "classic/" not in name:
+            max_cycles_test(env_module)
 
-    if ("butterfly/" in name) or ("mpe/" in name) or ("magent/" in name):
-        state_test(_env, env_module.parallel_env())
+        if ("butterfly/" in name) or ("mpe/" in name) or ("magent/" in name):
+            state_test(_env, env_module.parallel_env())
 
     # recreated_env = pickle.loads(pickle.dumps(_env))
     # recreated_env.seed(42)
