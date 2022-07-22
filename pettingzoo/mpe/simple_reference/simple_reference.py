@@ -1,4 +1,5 @@
 import numpy as np
+from gym.utils import EzPickle
 
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
@@ -7,8 +8,14 @@ from .._mpe_utils.scenario import BaseScenario
 from .._mpe_utils.simple_env import SimpleEnv, make_env
 
 
-class raw_env(SimpleEnv):
+class raw_env(SimpleEnv, EzPickle):
     def __init__(self, local_ratio=0.5, max_cycles=25, continuous_actions=False):
+        EzPickle.__init__(
+            self,
+            local_ratio,
+            max_cycles,
+            continuous_actions,
+        )
         assert (
             0.0 <= local_ratio <= 1.0
         ), "local_ratio is a proportion. Must be between 0 and 1."
