@@ -8,7 +8,7 @@ import numpy as np  # type: ignore
 
 ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
-AgentID = Optional[str]
+AgentID = str
 
 ObsDict = Dict[AgentID, ObsType]
 ActionDict = Dict[AgentID, ActionType]
@@ -235,6 +235,7 @@ class AECEnv:
                 self._skip_agent_selection = self.agent_selection
             self.agent_selection = _dones_order[0]
         else:
+            assert self._skip_agent_selection is not None
             if getattr(self, "_skip_agent_selection", None) is not None:
                 self.agent_selection = self._skip_agent_selection
             self._skip_agent_selection = None
