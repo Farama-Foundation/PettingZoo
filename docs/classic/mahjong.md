@@ -31,7 +31,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#mahjong) and you 
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 
 The main observation space has a (6, 34, 4) shape with the first index representing the encoding plane. The contents of each plane are described in the table below:

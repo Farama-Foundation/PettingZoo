@@ -30,7 +30,7 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:
 
