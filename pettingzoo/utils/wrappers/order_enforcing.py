@@ -58,7 +58,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     def render(self, mode="human"):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
-        assert mode in self.metadata["render_modes"]
+        assert mode in self.metadata["render.modes"]
         self._has_rendered = True
         return super().render(mode)
 
