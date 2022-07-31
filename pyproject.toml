@@ -12,6 +12,7 @@ strict = [
 verboseOutput = true
 # typeCheckingMode = "basic"
 # pythonVersion = "3.7"
+# reportMissingTypeStubs = false
 
 [tool.pytest.ini_options]
 norecursedirs = [
