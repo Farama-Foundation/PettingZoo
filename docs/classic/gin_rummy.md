@@ -46,7 +46,7 @@ gin_rummy_v4.env(knock_reward = 0.5, gin_reward = 1.0, opponents_hand_visible = 
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 The main observation space is 5x52 with the rows representing different planes and columns representing the 52 cards in a deck. The cards are ordered by suit (spades, hearts, diamonds, then clubs) and within each suit are ordered by rank (from Ace to King).
 

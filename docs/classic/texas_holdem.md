@@ -32,7 +32,7 @@ texas_holdem_v4.env(num_players=2)
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 The main observation space is a vector of 72 boolean integers. The first 52 entries depict the current player's hand plus any community cards as follows
 
