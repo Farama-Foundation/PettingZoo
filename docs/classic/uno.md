@@ -38,7 +38,7 @@ uno_v4.env(opponents_hand_visible=False)
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 The main observation space has a shape of (7, 4, 15). Planes 0-2 represent the current player's hand, while planes 4-6 represent the opponent's hand. For these sets of planes, the first index indicates the number of copies of a card, the second index the color, and the last index the card number (including any special cards). Uno is played with 2 identical decks, so a player can have 0, 1, or 2 copies of a given card, which is why each player has 3 planes to represent their hand.
 

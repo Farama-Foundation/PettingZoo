@@ -42,7 +42,7 @@ Our implementation wraps [RLCard](http://rlcard.org/games.html#limit-texas-hold-
 
 ### Observation Space
 
-The observation is a dictionary which contains an `'obs'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
 The main observation space is similar to Texas Hold'em. The first 52 entries represent the union of the current player's hand and the community cards.
 
