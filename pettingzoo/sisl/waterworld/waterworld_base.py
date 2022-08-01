@@ -161,6 +161,9 @@ class MAWaterWorld:
         speed_features=True,
         max_cycles=500,
     ):
+        raise AssertionError(
+            "Please do not use Waterworld, at its current state it is incredibly buggy and the soundness of the environment is not guaranteed."
+        )
         """
         n_pursuers: number of pursuing archea (agents)
         n_evaders: number of evader archea
