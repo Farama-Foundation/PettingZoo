@@ -136,6 +136,6 @@ all_environments = {
     "mpe/simple_world_comm_v2": simple_world_comm_v2,
     "mpe/simple_v2": simple_v2,
     "sisl/multiwalker_v9": multiwalker_v9,
-    "sisl/waterworld_v3": waterworld_v3,
+    # "sisl/waterworld_v3": waterworld_v3,
     "sisl/pursuit_v4": pursuit_v4,
 }
