@@ -15,7 +15,9 @@ def raw_env(game_version="bi-plane", guided_missile=True, **kwargs):
     ), "game_version must be either 'jet' or 'bi-plane'"
     mode = avaliable_versions[game_version] + (0 if guided_missile else 1)
     name = os.path.basename(__file__).split(".")[0]
-    parent_file = glob("./pettingzoo/atari/" + name + "*.py")
+    parent_file = glob(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), name + "*.py")
+    )
     version_num = parent_file[0].split("_")[-1].split(".")[0]
     name = name + "_" + version_num
     return BaseAtariEnv(

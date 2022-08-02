@@ -25,7 +25,9 @@ def raw_env(game_version="robbers", visibilty_level=0, **kwargs):
     base_mode = (avaliable_versions[game_version] - 1) * 4
     mode = base_mode + visibilty_level
     name = os.path.basename(__file__).split(".")[0]
-    parent_file = glob("./pettingzoo/atari/" + name + "*.py")
+    parent_file = glob(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), name + "*.py")
+    )
     version_num = parent_file[0].split("_")[-1].split(".")[0]
     name = name + "_" + version_num
     return BaseAtariEnv(

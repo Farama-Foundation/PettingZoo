@@ -34,7 +34,9 @@ def raw_env(num_players=2, game_version="classic", **kwargs):
     ), f"pong version {game_version} not supported for number of players {num_players}. Available options are {list(versions)}"
     mode = versions[game_version]
     name = os.path.basename(__file__).split(".")[0]
-    parent_file = glob("./pettingzoo/atari/" + name + "*.py")
+    parent_file = glob(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), name + "*.py")
+    )
     version_num = parent_file[0].split("_")[-1].split(".")[0]
     name = name + "_" + version_num
     return BaseAtariEnv(
