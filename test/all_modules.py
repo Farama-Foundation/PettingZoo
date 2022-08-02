@@ -65,7 +65,9 @@ from pettingzoo.mpe import (
     simple_v2,
     simple_world_comm_v2,
 )
-from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v3
+
+# from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v3
+from pettingzoo.sisl import multiwalker_v9, pursuit_v4
 
 all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
 
