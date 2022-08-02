@@ -1,16 +1,14 @@
 import os
-from copy import deepcopy
 
-import ray
 from gym.spaces import Box
 from ray import tune
-from ray.rllib.agents.dqn.dqn_torch_model import DQNTorchModel
-from ray.rllib.agents.registry import get_agent_class
+from ray.rllib.algorithms.dqn.dqn_torch_model import DQNTorchModel
+from ray.rllib.algorithms.dqn import DQNConfig
 from ray.rllib.env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFC
 from ray.rllib.utils.framework import try_import_torch
-from ray.rllib.utils.torch_ops import FLOAT_MAX
+from ray.rllib.utils.torch_utils import FLOAT_MAX
 from ray.tune.registry import register_env
 
 from pettingzoo.classic import leduc_holdem_v4
@@ -65,10 +63,6 @@ if __name__ == "__main__":
         env = leduc_holdem_v4.env()
         return env
 
-    num_cpus = 1
-
-    config = deepcopy(get_agent_class(alg_name)._default_config)
-
     register_env("leduc_holdem", lambda config: PettingZooEnv(env_creator()))
 
     test_env = PettingZooEnv(env_creator())
@@ -76,45 +70,39 @@ if __name__ == "__main__":
     print(obs_space)
     act_space = test_env.action_space
 
-    config["multiagent"] = {
-        "policies": {
+    config = (
+        DQNConfig()
+        .environment(env="leduc_holdem")
+        .rollouts(num_rollout_workers=1, rollout_fragment_length=30, horizon=200)
+        .training(
+            train_batch_size=200, hiddens=[], dueling=False, model={"custom_model": "pa_model"}
+        )
+        .multi_agent(
+            policies={
             "player_0": (None, obs_space, act_space, {}),
             "player_1": (None, obs_space, act_space, {}),
-        },
-        "policy_mapping_fn": lambda agent_id: agent_id,
-    }
-
-    config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-    config["log_level"] = "DEBUG"
-    config["num_workers"] = 1
-    config["rollout_fragment_length"] = 30
-    config["train_batch_size"] = 200
-    config["horizon"] = 200
-    config["no_done_at_end"] = False
-    config["framework"] = "torch"
-    config["model"] = {
-        "custom_model": "pa_model",
-    }
-    config["n_step"] = 1
-
-    config["exploration_config"] = {
-        # The Exploration class to use.
-        "type": "EpsilonGreedy",
-        # Config for the Exploration class' constructor:
-        "initial_epsilon": 0.1,
-        "final_epsilon": 0.0,
-        "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-    }
-    config["hiddens"] = []
-    config["dueling"] = False
-    config["env"] = "leduc_holdem"
-
-    ray.init(num_cpus=num_cpus + 1)
+            },
+            policy_mapping_fn=lambda agent_id: agent_id,
+        )
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
+        .debugging(log_level="DEBUG")
+        .framework(framework="torch")
+        .exploration(
+            exploration_config={
+                # The Exploration class to use.
+                "type": "EpsilonGreedy",
+                # Config for the Exploration class' constructor:
+                "initial_epsilon": 0.1,
+                "final_epsilon": 0.0,
+                "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+            }
+        )
+    )
 
     tune.run(
         alg_name,
         name="DQN",
         stop={"timesteps_total": 10000000},
         checkpoint_freq=10,
-        config=config,
+        config=config.to_dict(),
     )

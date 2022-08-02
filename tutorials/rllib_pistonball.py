@@ -1,5 +1,8 @@
+import os
+
 import supersuit as ss
-from ray import shutdown, tune
+from ray import tune
+from ray.rllib.algorithms.ppo import PPOConfig
 from ray.rllib.env.wrappers.pettingzoo_env import ParallelPettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
@@ -57,30 +60,33 @@ def env_creator(args):
 
 
 if __name__ == "__main__":
-    shutdown()
 
     env_name = "pistonball_v6"
 
     register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))
-
-    test_env = ParallelPettingZooEnv(env_creator({}))
-    obs_space = test_env.observation_space
-    act_space = test_env.action_space
-
     ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
-    def gen_policy(i):
-        config = {
-            "model": {
-                "custom_model": "CNNModelV2",
-            },
-            "gamma": 0.99,
-        }
-        return (None, obs_space, act_space, config)
-
-    policies = {"policy_0": gen_policy(0)}
-
-    policy_ids = list(policies.keys())
+    config = (
+        PPOConfig()
+        .rollouts(num_rollout_workers=4, rollout_fragment_length=512)
+        .training(
+            train_batch_size=512,
+            lr=2e-5,
+            gamma=0.99,
+            lambda_=0.9,
+            use_gae=True,
+            clip_param=0.4,
+            grad_clip=None,
+            entropy_coeff=0.1,
+            vf_loss_coeff=0.25,
+            sgd_minibatch_size=64,
+            num_sgd_iter=10,
+        )
+        .environment(env=env_name, clip_actions=True)
+        .debugging(log_level="ERROR")
+        .framework(framework="torch")
+        .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
+    )
 
     tune.run(
         "PPO",
@@ -88,37 +94,5 @@ if __name__ == "__main__":
         stop={"timesteps_total": 5000000},
         checkpoint_freq=10,
         local_dir="~/ray_results/" + env_name,
-        config={
-            # Environment specific
-            "env": env_name,
-            # General
-            "log_level": "ERROR",
-            "framework": "torch",
-            "num_gpus": 1,
-            "num_workers": 4,
-            "num_envs_per_worker": 1,
-            "compress_observations": False,
-            "batch_mode": "truncate_episodes",
-            # 'use_critic': True,
-            "use_gae": True,
-            "lambda": 0.9,
-            "gamma": 0.99,
-            # "kl_coeff": 0.001,
-            # "kl_target": 1000.,
-            "clip_param": 0.4,
-            "grad_clip": None,
-            "entropy_coeff": 0.1,
-            "vf_loss_coeff": 0.25,
-            "sgd_minibatch_size": 64,
-            "num_sgd_iter": 10,  # epoc
-            "rollout_fragment_length": 512,
-            "train_batch_size": 512,
-            "lr": 2e-05,
-            "clip_actions": True,
-            # Method specific
-            "multiagent": {
-                "policies": policies,
-                "policy_mapping_fn": (lambda agent_id: policy_ids[0]),
-            },
-        },
+        config=config.to_dict(),
     )
