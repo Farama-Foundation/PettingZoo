@@ -1,9 +1,9 @@
 import argparse
 import os
+import pickle
 from pathlib import Path
 
 import numpy as np
-import pickle
 import ray
 from ray.rllib.algorithms.dqn import DQN, DQNConfig
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv

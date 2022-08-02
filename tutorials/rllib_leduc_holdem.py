@@ -2,8 +2,8 @@ import os
 
 from gym.spaces import Box
 from ray import tune
-from ray.rllib.algorithms.dqn.dqn_torch_model import DQNTorchModel
 from ray.rllib.algorithms.dqn import DQNConfig
+from ray.rllib.algorithms.dqn.dqn_torch_model import DQNTorchModel
 from ray.rllib.env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFC
@@ -75,12 +75,15 @@ if __name__ == "__main__":
         .environment(env="leduc_holdem")
         .rollouts(num_rollout_workers=1, rollout_fragment_length=30, horizon=200)
         .training(
-            train_batch_size=200, hiddens=[], dueling=False, model={"custom_model": "pa_model"}
+            train_batch_size=200,
+            hiddens=[],
+            dueling=False,
+            model={"custom_model": "pa_model"},
         )
         .multi_agent(
             policies={
-            "player_0": (None, obs_space, act_space, {}),
-            "player_1": (None, obs_space, act_space, {}),
+                "player_0": (None, obs_space, act_space, {}),
+                "player_1": (None, obs_space, act_space, {}),
             },
             policy_mapping_fn=lambda agent_id: agent_id,
         )
