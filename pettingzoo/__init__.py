@@ -13,4 +13,4 @@ if sys.platform.startswith("linux"):
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
-__version__ = "1.19.0"
+__version__ = "1.20.0"
