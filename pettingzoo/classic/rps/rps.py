@@ -41,8 +41,10 @@ parallel_env = parallel_wrapper_fn(env)
 
 class raw_env(AECEnv):
     """Two-player environment for rock paper scissors.
+
     Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
-    The observation is simply the last opponent action."""
+    The observation is simply the last opponent action.
+    """
 
     metadata = {
         "render_modes": ["human", "rgb_array"],

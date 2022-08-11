@@ -165,7 +165,8 @@ def make_move_mapping(uci_move):
 
 
 def legal_moves(orig_board):
-    """
+    """Returns legal moves.
+
     action space is a 8x8x73 dimensional array
     Each of the 8×8
     positions identifies the square from which to “pick up” a piece. The first 56 planes encode
@@ -194,8 +195,9 @@ def legal_moves(orig_board):
 
 
 def get_observation(orig_board, player):
-    """
-    Observation is an 8x8x(P + L) dimensional array
+    """Returns observation array.
+
+    Observation is an 8x8x(P + L) dimensional array.
     P is going to be your pieces positions + your opponents pieces positions
     L is going to be some metadata such as repetition count,,
     """

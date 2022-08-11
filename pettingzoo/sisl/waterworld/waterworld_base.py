@@ -81,7 +81,7 @@ class Archea(Agent):
         return self._sensors
 
     def sensed(self, object_coord, object_radius, same=False):
-        """Whether object would be sensed by the pursuers"""
+        """Whether object would be sensed by the pursuers."""
         relative_coord = object_coord - np.expand_dims(self.position, 0)
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
@@ -164,7 +164,8 @@ class MAWaterWorld:
         raise AssertionError(
             "Please do not use Waterworld, at its current state it is incredibly buggy and the soundness of the environment is not guaranteed."
         )
-        """
+        """Initializes the `MAWaterWorld` class.
+
         n_pursuers: number of pursuing archea (agents)
         n_evaders: number of evader archea
         n_poison: number of poison archea
@@ -337,7 +338,7 @@ class MAWaterWorld:
         return obs_list[0]
 
     def _caught(self, is_colliding_x_y, n_coop):
-        """Check whether collision results in catching the object
+        """Check whether collision results in catching the object.
 
         This is because you need `n_coop` agents to collide with the object to actually catch it
         """
@@ -354,7 +355,7 @@ class MAWaterWorld:
         return caught_y, x_caught_y
 
     def _closest_dist(self, closest_object_idx, input_sensorvals):
-        """Closest distances according to `idx`"""
+        """Closest distances according to `idx`."""
         sensorvals = []
 
         for pursuer_idx in range(self.n_pursuers):

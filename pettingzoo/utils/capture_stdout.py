@@ -3,7 +3,8 @@ import sys
 
 
 class capture_stdout:
-    """
+    """Class allowing to capture stdout.
+
     usage:
 
     with capture_stdout() as var:

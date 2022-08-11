@@ -31,8 +31,8 @@ class Pursuit:
         surround: bool = True,
         constraint_window: float = 1.0,
     ):
-        """
-        In evade pursuit a set of pursuers must 'tag' a set of evaders
+        """In evade pursuit a set of pursuers must 'tag' a set of evaders.
+
         Required arguments:
             x_size, y_size: World size
             shared_reward: whether the rewards should be shared between all agents
@@ -53,7 +53,6 @@ class Pursuit:
         surround: toggles surround condition for evader removal
         constraint_window: window in which agents can randomly spawn
         """
-
         self.x_size = x_size
         self.y_size = y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
@@ -505,8 +504,9 @@ class Pursuit:
         return xlo, xhi + 1, ylo, yhi + 1, xolo, xohi + 1, yolo, yohi + 1
 
     def remove_agents(self):
-        """
-        Remove agents that are caught. Return tuple (n_evader_removed, n_pursuer_removed, purs_sur)
+        """Remove agents that are caught.
+
+        Return tuple (n_evader_removed, n_pursuer_removed, purs_sur)
         purs_sur: bool array, which pursuers surrounded an evader
         """
         n_pursuer_removed = 0
@@ -569,7 +569,8 @@ class Pursuit:
         return n_evader_removed, n_pursuer_removed, purs_sur
 
     def need_to_surround(self, x, y):
-        """
+        """Compute the number of surrounding grid cells.
+
         Compute the number of surrounding grid cells in x,y position that are open
         (no wall or obstacle)
         """

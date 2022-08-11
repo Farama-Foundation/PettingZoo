@@ -3,11 +3,9 @@ from .base import BaseWrapper
 
 
 class TerminateIllegalWrapper(BaseWrapper):
-    """
-    this wrapper terminates the game with the current player losing
-    in case of illegal values
+    """This wrapper terminates the game with the current player losing in case of illegal values.
 
-    parameters:
+    Parameters:
         - illegal_reward: number that is the value of the player making an illegal move.
     """
 
