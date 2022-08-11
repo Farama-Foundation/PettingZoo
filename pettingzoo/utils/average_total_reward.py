@@ -4,11 +4,10 @@ import numpy as np
 
 
 def average_total_reward(env, max_episodes=100, max_steps=10000000000):
-    """
-    Runs an env object with random actions until either max_episodes or
-    max_steps is reached. Calculates the average total reward over the
-    episodes.
+    """Calculates the average total reward over the episodes.
 
+    Runs an env object with random actions until either max_episodes or
+    max_steps is reached.
     Reward is summed across all agents, making it unsuited for use in zero-sum
     games.
     """
