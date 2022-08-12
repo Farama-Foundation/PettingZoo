@@ -232,8 +232,8 @@ class AECEnv:
                 self._skip_agent_selection = self.agent_selection
             self.agent_selection = _dones_order[0]
         else:
-            assert self._skip_agent_selection is not None
             if getattr(self, "_skip_agent_selection", None) is not None:
+                assert self._skip_agent_selection is not None
                 self.agent_selection = self._skip_agent_selection
             self._skip_agent_selection = None
         self._clear_rewards()
