@@ -8,11 +8,8 @@ exclude = [
 ]
 strict = [
 ]
-# reportMissingImports = true
 verboseOutput = true
-# typeCheckingMode = "basic"
-# pythonVersion = "3.7"
-# reportMissingTypeStubs = false
+typeCheckingMode = "basic"
 
 [tool.pytest.ini_options]
 norecursedirs = [
