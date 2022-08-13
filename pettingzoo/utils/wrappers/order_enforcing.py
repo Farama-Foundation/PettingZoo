@@ -43,7 +43,8 @@ class OrderEnforcingWrapper(BaseWrapper):
             )
         elif value in {
             "rewards",
-            "dones",
+            "terminations",
+            "truncations",
             "infos",
             "agent_selection",
             "num_agents",
