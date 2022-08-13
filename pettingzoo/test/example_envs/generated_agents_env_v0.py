@@ -111,7 +111,7 @@ class raw_env(AECEnv):
         self.rewards[self.np_random.choice(self.agents)] = 1
 
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
 
     def render(self, mode="human"):
         print(self.agents)
