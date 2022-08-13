@@ -149,7 +149,7 @@ class AECEnv:
     def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def _dead_step_first(self) -> AgentID:
+    def _deads_step_first(self) -> AgentID:
         """
         Makes .agent_selection point to first terminated agent. Stores old value of agent_selection
         so that _was_terminated_step can restore the variable after the terminated agent steps.
