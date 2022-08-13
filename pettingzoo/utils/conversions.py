@@ -123,7 +123,7 @@ class aec_to_parallel_wrapper(ParallelEnv):
         observations = {
             agent: self.aec_env.observe(agent)
             for agent in self.aec_env.agents
-            if not self.aec_env.dones[agent]
+            if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
         if not return_info:
