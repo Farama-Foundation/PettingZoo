@@ -226,7 +226,10 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action):
-        if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         cur_agent = self.agent_selection
         current_idx = self._index_map[self.agent_selection]

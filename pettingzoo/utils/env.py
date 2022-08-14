@@ -154,7 +154,11 @@ class AECEnv:
         Makes .agent_selection point to first terminated agent. Stores old value of agent_selection
         so that _was_terminated_step can restore the variable after the terminated agent steps.
         """
-        _deads_order = [agent for agent in self.agents if (self.terminations[agent] or self.truncations[agent])]
+        _deads_order = [
+            agent
+            for agent in self.agents
+            if (self.terminations[agent] or self.truncations[agent])
+        ]
         if _deads_order:
             self._skip_agent_selection = self.agent_selection
             self.agent_selection = _deads_order[0]
@@ -181,7 +185,9 @@ class AECEnv:
         """
         return AECIterable(self, max_iter)
 
-    def last(self, observe: bool = True) -> Tuple[ObsType, float, bool, bool, Dict[str, Any]]:
+    def last(
+        self, observe: bool = True
+    ) -> Tuple[ObsType, float, bool, bool, Dict[str, Any]]:
         """
         Returns observation, cumulative reward, terminated, info   for the current agent (specified by self.agent_selection)
         """
@@ -218,9 +224,9 @@ class AECEnv:
 
         # removes terminated agent
         agent = self.agent_selection
-        assert self.terminations[
-            agent
-        ] or self.truncations[agent], "an agent that was not dead as attempted to be removed"
+        assert (
+            self.terminations[agent] or self.truncations[agent]
+        ), "an agent that was not dead as attempted to be removed"
         del self.terminations[agent]
         del self.truncations[agent]
         del self.rewards[agent]
@@ -229,7 +235,11 @@ class AECEnv:
         self.agents.remove(agent)
 
         # finds next terminated agent or loads next live agent (Stored in _skip_agent_selection)
-        _deads_order = [agent for agent in self.agents if (self.terminations[agent] or self.truncations[agent])]
+        _deads_order = [
+            agent
+            for agent in self.agents
+            if (self.terminations[agent] or self.truncations[agent])
+        ]
         if _deads_order:
             if getattr(self, "_skip_agent_selection", None) is None:
                 self._skip_agent_selection = self.agent_selection
@@ -311,7 +321,9 @@ class ParallelEnv:
 
     def step(
         self, actions: ActionDict
-    ) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]]:
+    ) -> Tuple[
+        ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
+    ]:
         """
         receives a dictionary of actions keyed by the agent name.
         Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary

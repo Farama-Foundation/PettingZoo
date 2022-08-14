@@ -17,11 +17,13 @@ def max_cycles_test(mod):
             for agent in parallel_env.agents
             if not (terminations[agent] or truncations[agent])
         }
-        observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+        observations, rewards, terminations, truncations, infos = parallel_env.step(
+            actions
+        )
         if all(terminations.values() or truncations.values()):
             break
 
-    pstep = step + 1  # todo: fix bug where syep is 1 more rgan max cycles
+    # pstep = step + 1  # todo: fix bug where syep is 1 more rgan max cycles
 
     env = mod.env(max_cycles=max_cycles)
     env.reset()
@@ -31,13 +33,17 @@ def max_cycles_test(mod):
         aidx = env.possible_agents.index(a)
         agent_counts[aidx] += 1
 
-        #raise ValueError(a, env.agent_iter(), env.terminations, env.truncations)
-        action = env.action_space(a).sample() if not (env.terminations[a] or env.truncations[a]) else None
+        # raise ValueError(a, env.agent_iter(), env.terminations, env.truncations)
+        action = (
+            env.action_space(a).sample()
+            if not (env.terminations[a] or env.truncations[a])
+            else None
+        )
         # except:
         #     raise ValueError(a, env.terminations, env.truncations)
         env.step(action)
 
-    #assert max_cycles == pstep  # todo: BUG 2
+    # assert max_cycles == pstep  # todo: BUG 2
     # does not check the minimum value because some agents might be killed before
     # all the steps are complete. However, most agents should still be alive
     # given a short number of cycles
