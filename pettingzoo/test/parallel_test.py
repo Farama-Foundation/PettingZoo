@@ -50,7 +50,10 @@ def parallel_api_test(par_env, num_cycles=1000):
             actions = {
                 agent: sample_action(par_env, obs, agent)
                 for agent in par_env.agents
-                if ((agent in terminated and not terminated[agent]) or (agent in truncated and not truncated[agent]))
+                if (
+                    (agent in terminated and not terminated[agent])
+                    or (agent in truncated and not truncated[agent])
+                )
             }
             obs, rew, terminated, truncated, info = par_env.step(actions)
             for agent in par_env.agents:
@@ -82,7 +85,9 @@ def parallel_api_test(par_env, num_cycles=1000):
                     set(par_env.possible_agents)
                 ), "possible_agents defined but does not contain all agents"
 
-                has_finished |= {agent for agent, d in (terminated.items() or truncated.items()) if d}
+                has_finished |= {
+                    agent for agent, d in (terminated.items() or truncated.items()) if d
+                }
                 if not par_env.agents and has_finished != set(par_env.possible_agents):
                     warnings.warn(
                         "No agents present but not all possible_agents are done"
@@ -98,11 +103,11 @@ def parallel_api_test(par_env, num_cycles=1000):
                     agent
                 ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
 
-            for agent, d in (terminated.items() or truncated.items()):
+            for agent, d in terminated.items() or truncated.items():
                 if d:
                     live_agents.remove(agent)
 
-            #assert set(par_env.agents) == live_agents  # todo: BUG 1
+            # assert set(par_env.agents) == live_agents  # todo: BUG 1
 
             if len(live_agents) == 0:
                 break

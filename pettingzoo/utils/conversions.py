@@ -140,7 +140,7 @@ class aec_to_parallel_wrapper(ParallelEnv):
         observations = {}
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
-                if (self.aec_env.terminations[agent] or self.aec_env.truncations[agent]):
+                if self.aec_env.terminations[agent] or self.aec_env.truncations[agent]:
                     raise AssertionError(
                         f"expected agent {agent} got termination or truncation agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent death (setting an agent's self.terminations or self.truncations entry to True) to happen only at the end of a cycle."
                     )
@@ -159,7 +159,10 @@ class aec_to_parallel_wrapper(ParallelEnv):
         observations = {
             agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
         }
-        while self.aec_env.agents and (self.aec_env.terminations[self.aec_env.agent_selection] or self.aec_env.truncations[self.aec_env.agent_selection]):
+        while self.aec_env.agents and (
+            self.aec_env.terminations[self.aec_env.agent_selection]
+            or self.aec_env.truncations[self.aec_env.agent_selection]
+        ):
             self.aec_env.step(None)
 
         self.agents = self.aec_env.agents
@@ -262,7 +265,10 @@ class parallel_to_aec_wrapper(AECEnv):
         self._cumulative_rewards[new_agent] = 0
 
     def step(self, action):
-        if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             del self._actions[self.agent_selection]
             return self._was_dead_step(action)
         self._actions[self.agent_selection] = action
@@ -397,7 +403,10 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         }
 
         while self.aec_env.agents:
-            if (self.aec_env.terminations[self.aec_env.agent_selection] or self.aec_env.truncations[self.aec_env.agent_selection]):
+            if (
+                self.aec_env.terminations[self.aec_env.agent_selection]
+                or self.aec_env.truncations[self.aec_env.agent_selection]
+            ):
                 self.aec_env.step(None)
             else:
                 break

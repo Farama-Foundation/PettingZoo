@@ -328,7 +328,7 @@ def play_test(env, observation_0, num_cycles):
             terminated == env.terminations[agent]
         ), "terminated from last() and terminations[agent] do not match"
         assert (
-                truncated == env.truncations[agent]
+            truncated == env.truncations[agent]
         ), "truncated from last() and truncations[agent] do not match"
         assert (
             info == env.infos[agent]
@@ -379,8 +379,12 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     ), "Env must be an instance of pettingzoo.AECEnv"
 
     env.reset()
-    assert not any(env.terminations.values()), "terminations must all be False after reset"
-    assert not any(env.truncations.values()), "truncations must all be False after reset"
+    assert not any(
+        env.terminations.values()
+    ), "terminations must all be False after reset"
+    assert not any(
+        env.truncations.values()
+    ), "truncations must all be False after reset"
 
     assert isinstance(env.num_agents, int), "num_agents must be an integer"
     assert env.num_agents != 0, "An environment should have a nonzero number of agents"
@@ -411,7 +415,11 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     assert isinstance(env.infos, dict), "infos must be a dict"
 
     assert (
-        len(env.rewards) == len(env.terminations) == len(env.truncations) == len(env.infos) == len(env.agents)
+        len(env.rewards)
+        == len(env.terminations)
+        == len(env.truncations)
+        == len(env.infos)
+        == len(env.agents)
     ), "rewards, terminations, truncations, infos and agents must have the same length"
 
     test_rewards_terminations_truncations(env, agent_0)
