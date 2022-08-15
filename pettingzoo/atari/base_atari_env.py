@@ -205,7 +205,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         actions = self.action_mapping[actions]
         rewards = self.ale.act(actions)
         self.frame += 1
-        if self.ale.game_over() or self.frame >= self.max_cycles:
+        truncation = self.frame >= self.max_cycles
+
+        if self.ale.game_over():
             dones = {agent: True for agent in self.agents}
         else:
             lives = self.ale.allLives()
@@ -225,7 +227,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not dones[agent]]
-        return observations, rewards, dones, infos
+        return observations, rewards, truncation, dones, infos
 
     def render(self, mode="human"):
         (screen_width, screen_height) = self.ale.getScreenDims()
