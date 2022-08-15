@@ -152,7 +152,7 @@ class AECEnv:
     def _deads_step_first(self) -> AgentID:
         """
         Makes .agent_selection point to first terminated agent. Stores old value of agent_selection
-        so that _was_terminated_step can restore the variable after the terminated agent steps.
+        so that _was_dead_step can restore the variable after the dead agent steps.
         """
         _deads_order = [
             agent
@@ -203,7 +203,7 @@ class AECEnv:
 
     def _was_dead_step(self, action: None) -> None:
         """
-        Helper function that performs step() for terminated agents.
+        Helper function that performs step() for dead agents.
 
         Does the following:
 
@@ -214,8 +214,8 @@ class AECEnv:
         Highly recommended to use at the beginning of step as follows:
 
         def step(self, action):
-            if self.terminations[self.agent_selection]:
-                self._was_terminated_step()
+            if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
+                self._was_dead_step()
                 return
             # main contents of step
         """
@@ -234,7 +234,7 @@ class AECEnv:
         del self.infos[agent]
         self.agents.remove(agent)
 
-        # finds next terminated agent or loads next live agent (Stored in _skip_agent_selection)
+        # finds next dead agent or loads next live agent (Stored in _skip_agent_selection)
         _deads_order = [
             agent
             for agent in self.agents
