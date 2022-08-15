@@ -39,7 +39,7 @@ def main():
     model.learn(total_timesteps=2000000)
     model.save("policy")
 
-# Rendering
+    # Rendering
 
     env = pistonball_v6.env()
     env = ss.color_reduction_v0(env, mode="B")
