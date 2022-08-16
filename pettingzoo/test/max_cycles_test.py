@@ -15,12 +15,15 @@ def max_cycles_test(mod):
         actions = {
             agent: parallel_env.action_space(agent).sample()
             for agent in parallel_env.agents
-            if not ([x or y for x, y in zip(terminations, truncations)][agent])
+            if not {
+                x[0]: x[1] or y[1]
+                for x, y in zip(terminations.items(), truncations.items())
+            }[agent]
         }
         observations, rewards, terminations, truncations, infos = parallel_env.step(
             actions
         )
-        if all(terminations.values() or truncations.values()):
+        if all([x or y for x, y in zip(terminations.values(), truncations.values())]):
             break
 
     # pstep = step + 1  # todo: fix bug where syep is 1 more rgan max cycles
