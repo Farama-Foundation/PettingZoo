@@ -4,6 +4,7 @@ from stable_baselines3.ppo import CnnPolicy
 
 from pettingzoo.butterfly import pistonball_v6
 
+
 def main():
     env = pistonball_v6.parallel_env(
         n_pistons=20,
@@ -54,6 +55,7 @@ def main():
         act = model.predict(obs, deterministic=True)[0] if not done else None
         env.step(act)
         env.render()
+
 
 if __name__ == "__main__":
     main()
