@@ -86,7 +86,12 @@ def parallel_api_test(par_env, num_cycles=1000):
                 ), "possible_agents defined but does not contain all agents"
 
                 has_finished |= {
-                    agent for agent, d in (terminated.items() or truncated.items()) if d
+                    agent
+                    for agent, d in [
+                        (x[0], x[1] or y[1])
+                        for x, y in zip(terminated.items(), truncated.items())
+                    ]
+                    if d
                 }
                 if not par_env.agents and has_finished != set(par_env.possible_agents):
                     warnings.warn(
@@ -103,7 +108,10 @@ def parallel_api_test(par_env, num_cycles=1000):
                     agent
                 ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
 
-            for agent, d in terminated.items() or truncated.items():
+            for agent, d in [
+                (x[0], x[1] or y[1])
+                for x, y in zip(terminated.items(), truncated.items())
+            ]:
                 if d:
                     live_agents.remove(agent)
 
