@@ -189,7 +189,7 @@ class AECEnv:
         self, observe: bool = True
     ) -> Tuple[ObsType, float, bool, bool, Dict[str, Any]]:
         """
-        Returns observation, cumulative reward, terminated, info   for the current agent (specified by self.agent_selection)
+        Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)
         """
         agent = self.agent_selection
         observation = self.observe(agent) if observe else None
