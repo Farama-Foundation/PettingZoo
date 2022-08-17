@@ -1,4 +1,6 @@
+from ast import Dict
 import os
+from typing import Optional
 
 import numpy as np
 import pygame
@@ -46,7 +48,12 @@ class raw_env(RLCardBase):
     def __init__(self, num_players=2):
         super().__init__("limit-holdem", num_players, (72,))
 
-    def render(self, mode="human"):
+    def render(
+        self,
+        mode="human",
+        most_recent_move: Optional[Dict] = None,
+        win_message: Optional[str] = None,
+    ):
         def calculate_width(self, screen_width, i):
             return int(
                 (
@@ -86,6 +93,7 @@ class raw_env(RLCardBase):
 
         bg_color = (7, 99, 36)
         white = (255, 255, 255)
+        blue = (67, 192, 250)
         self.screen.fill(bg_color)
 
         chips = {
@@ -136,7 +144,18 @@ class raw_env(RLCardBase):
 
             # Load and blit text for player name
             font = get_font(os.path.join("font", "Minecraft.ttf"), 36)
-            text = font.render("Player " + str(i + 1), True, white)
+
+            name = "Your player" if player == "player_0" else "Opponent"
+            move = most_recent_move[player]
+            move_map = {
+                None: "",
+                0: "Call",
+                1: "Raise",
+                2: "Fold",
+                3: "Check",
+            }
+
+            text = font.render(f"{name}: move = {move_map[move]}", True, white)
             textRect = text.get_rect()
             if i % 2 == 0:
                 textRect.center = (
@@ -273,6 +292,17 @@ class raw_env(RLCardBase):
                             )
                         ),
                     )
+
+        if win_message is not None:
+            # Load and blit text for player name
+            font = get_font(os.path.join("font", "Minecraft.ttf"), 42)
+            text = font.render(win_message, True, blue)
+            textRect = text.get_rect()
+            textRect.center = (
+                screen_width // 2,
+                screen_height // 2,
+            )
+            self.screen.blit(text, textRect)
 
         if mode == "human":
             pygame.display.update()

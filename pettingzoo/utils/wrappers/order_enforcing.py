@@ -55,12 +55,12 @@ class OrderEnforcingWrapper(BaseWrapper):
                 f"'{type(self).__name__}' object has no attribute '{value}'"
             )
 
-    def render(self, mode="human"):
+    def render(self, mode="human", **kwargs):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
         assert mode in self.metadata["render_modes"]
         self._has_rendered = True
-        return super().render(mode)
+        return super().render(mode, **kwargs)
 
     def step(self, action):
         if not self._has_reset:

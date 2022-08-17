@@ -78,8 +78,8 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self, mode="human", **kwargs):
+        return self.env.render(mode, **kwargs)
 
     def reset(self, seed=None, return_info=False, options=None):
         self.env.reset(seed=seed, options=options)
