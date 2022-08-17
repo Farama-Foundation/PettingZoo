@@ -222,7 +222,7 @@ class AECEnv:
         if action is not None:
             raise ValueError("when an agent is dead, the only valid action is None")
 
-        # removes terminated agent
+        # removes dead agent
         agent = self.agent_selection
         assert (
             self.terminations[agent] or self.truncations[agent]
