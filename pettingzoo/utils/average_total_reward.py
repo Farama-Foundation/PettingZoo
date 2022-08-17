@@ -14,6 +14,7 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
     total_reward = 0
     total_steps = 0
     done = False
+    num_episodes = 0
 
     for episode in range(max_episodes):
         if total_steps >= max_steps:

@@ -1,4 +1,4 @@
-import importlib
+import importlib.util
 import pkgutil
 import re
 
@@ -46,8 +46,10 @@ def deprecated_handler(env_name, module_path, module_name):
                         )
 
     # This constructs the module but doesn't execute its code
+    assert spec
     module = importlib.util.module_from_spec(spec)
     # This executes the module and will raise any exceptions
     # that would typically be raised by just `import blah`
+    assert spec.loader
     spec.loader.exec_module(module)
     return module
