@@ -764,7 +764,7 @@ class raw_env(AECEnv, EzPickle):
         return state
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
+        if self.terminations[self.agent_selection]:
             return self._was_done_step(action)
         agent_id = self.agent_selection
         all_agents_updated = self._agent_selector.is_last()
@@ -811,7 +811,7 @@ class raw_env(AECEnv, EzPickle):
             self.frame += 1
             # If we reached max frames, we're done
             if self.frame == self.max_cycles:
-                self.dones = dict(zip(self.agents, [True for _ in self.agents]))
+                self.truncations = dict(zip(self.agents, [True for _ in self.agents]))
 
         if self.rendering:
             pg.event.pump()
@@ -825,7 +825,8 @@ class raw_env(AECEnv, EzPickle):
             self.seed(seed=seed)
 
         self.screen = pg.Surface(const.SCREEN_SIZE)
-        self.done = False
+        self.terminate = False
+        self.truncate = False
 
         self.background.generate_debris(self.rng)
         self.water.generate_debris(self.rng)
@@ -845,7 +846,8 @@ class raw_env(AECEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.rendering = False
         self.frame = 0
