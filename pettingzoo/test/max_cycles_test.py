@@ -26,7 +26,7 @@ def max_cycles_test(mod):
         if all([x or y for x, y in zip(terminations.values(), truncations.values())]):
             break
 
-    # pstep = step + 1  # todo: fix bug where syep is 1 more rgan max cycles
+    pstep = step + 1
 
     env = mod.env(max_cycles=max_cycles)
     env.reset()
@@ -46,7 +46,7 @@ def max_cycles_test(mod):
         #     raise ValueError(a, env.terminations, env.truncations)
         env.step(action)
 
-    # assert max_cycles == pstep  # todo: BUG 2
+    assert max_cycles == pstep
     # does not check the minimum value because some agents might be killed before
     # all the steps are complete. However, most agents should still be alive
     # given a short number of cycles
