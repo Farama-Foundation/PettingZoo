@@ -109,5 +109,5 @@ class raw_env(AECEnv, EzPickle):
 
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
         self.steps += 1

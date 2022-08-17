@@ -577,7 +577,7 @@ class raw_env(AECEnv, EzPickle):
         self.rewards[self.agent_selection] = next_agent.score
 
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
 
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])

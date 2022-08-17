@@ -143,7 +143,8 @@ class SimpleEnv(AECEnv):
         self.agents = self.possible_agents[:]
         self.rewards = {name: 0.0 for name in self.agents}
         self._cumulative_rewards = {name: 0.0 for name in self.agents}
-        self.dones = {name: False for name in self.agents}
+        self.terminations = {name: False for name in self.agents}
+        self.truncations = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
         self.agent_selection = self._agent_selector.reset()
@@ -225,8 +226,11 @@ class SimpleEnv(AECEnv):
         assert len(action) == 0
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         cur_agent = self.agent_selection
         current_idx = self._index_map[self.agent_selection]
         next_idx = (current_idx + 1) % self.num_agents
@@ -239,7 +243,7 @@ class SimpleEnv(AECEnv):
             self.steps += 1
             if self.steps >= self.max_cycles:
                 for a in self.agents:
-                    self.dones[a] = True
+                    self.truncations[a] = True
         else:
             self._clear_rewards()
 

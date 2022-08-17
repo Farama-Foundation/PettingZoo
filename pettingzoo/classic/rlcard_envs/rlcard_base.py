@@ -105,7 +105,7 @@ class RLCardBase(AECEnv):
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = next_player
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
 
     def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:

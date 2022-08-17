@@ -123,7 +123,7 @@ class aec_to_parallel_wrapper(ParallelEnv):
         observations = {
             agent: self.aec_env.observe(agent)
             for agent in self.aec_env.agents
-            if not self.aec_env.dones[agent]
+            if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
         if not return_info:
@@ -134,34 +134,39 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
     def step(self, actions):
         rewards = defaultdict(int)
-        dones = {}
+        terminations = {}
+        truncations = {}
         infos = {}
         observations = {}
         for agent in self.aec_env.agents:
             if agent != self.aec_env.agent_selection:
-                if self.aec_env.dones[agent]:
+                if self.aec_env.terminations[agent] or self.aec_env.truncations[agent]:
                     raise AssertionError(
-                        f"expected agent {agent} got done agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent termination (setting an agent's self.dones entry to True) to happen only at the end of a cycle."
+                        f"expected agent {agent} got termination or truncation agent {self.aec_env.agent_selection}. Parallel environment wrapper expects all agent death (setting an agent's self.terminations or self.truncations entry to True) to happen only at the end of a cycle."
                     )
                 else:
                     raise AssertionError(
                         f"expected agent {agent} got agent {self.aec_env.agent_selection}, Parallel environment wrapper expects agents to step in a cycle."
                     )
-            obs, rew, done, info = self.aec_env.last()
+            obs, rew, termination, truncation, info = self.aec_env.last()
             self.aec_env.step(actions[agent])
             for agent in self.aec_env.agents:
                 rewards[agent] += self.aec_env.rewards[agent]
 
-        dones = dict(**self.aec_env.dones)
+        terminations = dict(**self.aec_env.terminations)
+        truncations = dict(**self.aec_env.truncations)
         infos = dict(**self.aec_env.infos)
         observations = {
             agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
         }
-        while self.aec_env.agents and self.aec_env.dones[self.aec_env.agent_selection]:
+        while self.aec_env.agents and (
+            self.aec_env.terminations[self.aec_env.agent_selection]
+            or self.aec_env.truncations[self.aec_env.agent_selection]
+        ):
             self.aec_env.step(None)
 
         self.agents = self.aec_env.agents
-        return observations, rewards, dones, infos
+        return observations, rewards, terminations, truncations, infos
 
     def render(self, mode="human"):
         return self.aec_env.render(mode)
@@ -234,7 +239,8 @@ class parallel_to_aec_wrapper(AECEnv):
         self._actions = {agent: None for agent in self.agents}
         self._agent_selector = agent_selector(self._live_agents)
         self.agent_selection = self._agent_selector.reset()
-        self.dones = {agent: False for agent in self.agents}
+        self.terminations = {agent: False for agent in self.agents}
+        self.truncations = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
@@ -252,21 +258,26 @@ class parallel_to_aec_wrapper(AECEnv):
         self._agent_selector.agent_order.append(new_agent)
         self.agent_selection = self._agent_selector.next()
         self.agents.append(new_agent)
-        self.dones[new_agent] = False
+        self.terminations[new_agent] = False
+        self.truncations[new_agent] = False
         self.infos[new_agent] = {}
         self.rewards[new_agent] = 0
         self._cumulative_rewards[new_agent] = 0
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             del self._actions[self.agent_selection]
-            return self._was_done_step(action)
+            return self._was_dead_step(action)
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
-            obss, rews, dones, infos = self.env.step(self._actions)
+            obss, rews, terminations, truncations, infos = self.env.step(self._actions)
 
             self._observations = copy.copy(obss)
-            self.dones = copy.copy(dones)
+            self.terminations = copy.copy(terminations)
+            self.truncations = copy.copy(truncations)
             self.infos = copy.copy(infos)
             self.rewards = copy.copy(rews)
             self._cumulative_rewards = copy.copy(rews)
@@ -283,7 +294,7 @@ class parallel_to_aec_wrapper(AECEnv):
                 self._agent_selector = agent_selector(self.env.agents)
                 self.agent_selection = self._agent_selector.reset()
 
-            self._dones_step_first()
+            self._deads_step_first()
         else:
             if self._agent_selector.is_first():
                 self._clear_rewards()
@@ -296,7 +307,8 @@ class parallel_to_aec_wrapper(AECEnv):
         return (
             observation,
             self._cumulative_rewards[agent],
-            self.dones[agent],
+            self.terminations[agent],
+            self.truncations[agent],
             self.infos[agent],
         )
 
@@ -369,7 +381,7 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         observations = {
             agent: self.aec_env.observe(agent)
             for agent in self.aec_env.agents
-            if not self.aec_env.dones[agent]
+            if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
         if not return_info:
@@ -383,14 +395,18 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             return {}, {}, {}, {}
         self.aec_env.step(actions[self.aec_env.agent_selection])
         rewards = {**self.aec_env.rewards}
-        dones = {**self.aec_env.dones}
+        terminations = {**self.aec_env.terminations}
+        truncations = {**self.aec_env.truncations}
         infos = {**self.aec_env.infos}
         observations = {
             agent: self.aec_env.observe(agent) for agent in self.aec_env.agents
         }
 
         while self.aec_env.agents:
-            if self.aec_env.dones[self.aec_env.agent_selection]:
+            if (
+                self.aec_env.terminations[self.aec_env.agent_selection]
+                or self.aec_env.truncations[self.aec_env.agent_selection]
+            ):
                 self.aec_env.step(None)
             else:
                 break
@@ -399,7 +415,7 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         for agent in self.aec_env.agents:
             infos[agent]["active_agent"] = self.aec_env.agent_selection
         self.agents = self.aec_env.agents
-        return observations, rewards, dones, infos
+        return observations, rewards, terminations, truncations, infos
 
     def render(self, mode="human"):
         return self.aec_env.render(mode)

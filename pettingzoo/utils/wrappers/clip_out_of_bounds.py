@@ -20,7 +20,11 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
     def step(self, action):
         space = self.action_space(self.agent_selection)
         if not (
-            action is None and self.dones[self.agent_selection]
+            action is None
+            and (
+                self.terminations[self.agent_selection]
+                or self.truncations[self.agent_selection]
+            )
         ) and not space.contains(action):
             assert (
                 space.shape == action.shape
