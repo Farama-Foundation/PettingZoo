@@ -49,9 +49,9 @@ def get_valid_angle(randomizer):
 
     angle = 0
     while (
-        (a1 < angle < b1)
-        or (a2 < angle < b2)
-        or (c1 < angle < d1)
+        (angle > a1 and angle < b1)
+        or (angle > a2 and angle < b2)
+        or (angle > c1 and angle < d1)
         or (angle > c2)
         or (angle < d2)
     ):
