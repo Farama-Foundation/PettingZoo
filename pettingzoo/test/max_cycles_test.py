@@ -15,10 +15,7 @@ def max_cycles_test(mod):
         actions = {
             agent: parallel_env.action_space(agent).sample()
             for agent in parallel_env.agents
-            if not {
-                x[0]: x[1] or y[1]
-                for x, y in zip(terminations.items(), truncations.items())
-            }[agent]
+            if not (terminations[agent] or truncations[agent])
         }
         observations, rewards, terminations, truncations, infos = parallel_env.step(
             actions
