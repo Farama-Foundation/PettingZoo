@@ -77,6 +77,7 @@ class AECEnv:
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
+    # TODO: Remove `Optional` type below
     def observe(self, agent: str) -> Optional[ObsType]:
         """Returns the observation an agent currently can make.
 
