@@ -115,7 +115,7 @@ def parallel_api_test(par_env, num_cycles=1000):
                 if d:
                     live_agents.remove(agent)
 
-            # assert set(par_env.agents) == live_agents  # todo: BUG 1
+            assert set(par_env.agents) == live_agents
 
             if len(live_agents) == 0:
                 break
