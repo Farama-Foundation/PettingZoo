@@ -485,7 +485,7 @@ class raw_env(AECEnv, EzPickle):
 
     def step(self, action):
         # check if the particular agent is done
-        if self.dones[self.agent_selection]:
+        if self.terminations[self.agent_selection]:
             return self._was_done_step(action)
 
         # agent_list : list of agent instance indexed by number
@@ -547,8 +547,10 @@ class raw_env(AECEnv, EzPickle):
             self.check_game_end()
             self.frames += 1
 
-        done = not self.run or self.frames >= self.max_cycles
-        self.dones = {a: done for a in self.agents}
+        terminate = not self.run
+        truncate = self.frames >= self.max_cycles
+        self.terminations = {a: terminate for a in self.agents}
+        self.truncations = {a: truncate for a in self.agents}
 
         # manage the kill list
         if self._agent_selector.is_last():
@@ -557,8 +559,8 @@ class raw_env(AECEnv, EzPickle):
             for k in self.kill_list:
                 # kill the agent
                 _live_agents.remove(k)
-                # set the done for this agent for one round
-                self.dones[k] = True
+                # set the termination for this agent for one round
+                self.terminations[k] = True
                 # add that we know this guy is dead
                 self.dead_agents.append(k)
 
@@ -700,7 +702,8 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self._cumulative_rewards = {a: 0 for a in self.agents}
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self.reinit()
 
