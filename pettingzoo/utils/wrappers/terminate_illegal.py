@@ -29,6 +29,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         current_agent = self.agent_selection
         if self._prev_obs is None:
             self.observe(self.agent_selection)
+        assert self._prev_obs
         assert (
             "action_mask" in self._prev_obs
         ), "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"

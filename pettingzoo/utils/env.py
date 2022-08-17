@@ -3,8 +3,8 @@ from __future__ import annotations
 import warnings
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
 
-import gym  # type: ignore
-import numpy as np  # type: ignore
+import gym.spaces
+import numpy as np
 
 ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
@@ -36,10 +36,10 @@ class AECEnv:
     agents: List[AgentID]  # Agents active at any given time
 
     observation_spaces: Dict[
-        AgentID, gym.spaces.Space  # type: ignore
+        AgentID, gym.spaces.Space
     ]  # Observation space for each agent
     # Action space for each agent
-    action_spaces: Dict[AgentID, gym.spaces.Space]  # type: ignore
+    action_spaces: Dict[AgentID, gym.spaces.Space]
 
     # Whether each agent has just reached a terminal state
     dones: Dict[AgentID, bool]
@@ -112,7 +112,7 @@ class AECEnv:
         """
         pass
 
-    def observation_space(self, agent: AgentID) -> gym.Space:
+    def observation_space(self, agent: AgentID) -> gym.spaces.Space:
         """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
@@ -124,7 +124,7 @@ class AECEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: str) -> gym.Space:
+    def action_space(self, agent: str) -> gym.spaces.Space:
         """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
@@ -286,6 +286,10 @@ class ParallelEnv:
 
     agents: List[AgentID]
     possible_agents: List[AgentID]
+    observation_spaces: Dict[
+        AgentID, gym.spaces.Space
+    ]  # Observation space for each agent
+    action_spaces: Dict[AgentID, gym.spaces.Space]
 
     def reset(
         self,
@@ -341,7 +345,7 @@ class ParallelEnv:
             )
         )
 
-    def observation_space(self, agent: AgentID) -> gym.Space:
+    def observation_space(self, agent: AgentID) -> gym.spaces.Space:
         """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
@@ -351,9 +355,9 @@ class ParallelEnv:
         warnings.warn(
             "Your environment should override the observation_space function. Attempting to use the observation_spaces dict attribute."
         )
-        return self.observation_spaces[agent]  # type: ignore
+        return self.observation_spaces[agent]
 
-    def action_space(self, agent: AgentID) -> gym.Space:
+    def action_space(self, agent: AgentID) -> gym.spaces.Space:
         """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
@@ -363,7 +367,7 @@ class ParallelEnv:
         warnings.warn(
             "Your environment should override the action_space function. Attempting to use the action_spaces dict attribute."
         )
-        return self.action_spaces[agent]  # type: ignore
+        return self.action_spaces[agent]
 
     @property
     def num_agents(self) -> int:
