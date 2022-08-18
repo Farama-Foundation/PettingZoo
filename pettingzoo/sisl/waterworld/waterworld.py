@@ -72,7 +72,10 @@ class raw_env(AECEnv):
         return self.env.render(mode)
 
     def step(self, action):
-        if self.terminations[self.agent_selection] and self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            and self.truncations[self.agent_selection]
+        ):
             return self._was_done_step(action)
         agent = self.agent_selection
 

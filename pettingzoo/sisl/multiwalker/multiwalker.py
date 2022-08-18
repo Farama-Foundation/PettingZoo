@@ -77,7 +77,10 @@ class raw_env(AECEnv, EzPickle):
         return self.env.observe(self.agent_name_mapping[agent])
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             self._was_dead_step(action)
             return
         agent = self.agent_selection
@@ -89,7 +92,9 @@ class raw_env(AECEnv, EzPickle):
             for agent in self.rewards:
                 self.rewards[agent] = last_rewards[self.agent_name_mapping[agent]]
             for agent in self.terminations:
-                self.terminations[agent] = self.env.get_last_dones()[self.agent_name_mapping[agent]]
+                self.terminations[agent] = self.env.get_last_dones()[
+                    self.agent_name_mapping[agent]
+                ]
             self.agent_name_mapping = {
                 agent: i
                 for i, (agent, done) in enumerate(
