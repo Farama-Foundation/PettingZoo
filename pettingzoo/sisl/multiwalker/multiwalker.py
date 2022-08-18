@@ -63,7 +63,8 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
     def close(self):
@@ -76,18 +77,19 @@ class raw_env(AECEnv, EzPickle):
         return self.env.observe(self.agent_name_mapping[agent])
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            self._was_dead_step(action)
+            return
         agent = self.agent_selection
         action = np.array(action, dtype=np.float32)
         is_last = self._agent_selector.is_last()
         self.env.step(action, self.agent_name_mapping[agent], is_last)
         if is_last:
             last_rewards = self.env.get_last_rewards()
-            for r in self.rewards:
-                self.rewards[r] = last_rewards[self.agent_name_mapping[r]]
-            for d in self.dones:
-                self.dones[d] = self.env.get_last_dones()[self.agent_name_mapping[d]]
+            for agent in self.rewards:
+                self.rewards[agent] = last_rewards[self.agent_name_mapping[agent]]
+            for agent in self.terminations:
+                self.terminations[agent] = self.env.get_last_dones()[self.agent_name_mapping[agent]]
             self.agent_name_mapping = {
                 agent: i
                 for i, (agent, done) in enumerate(
@@ -95,9 +97,9 @@ class raw_env(AECEnv, EzPickle):
                 )
             }
             iter_agents = self.agents[:]
-            for a, d in self.dones.items():
-                if d:
-                    iter_agents.remove(a)
+            for agent in self.terminations:
+                if self.terminations[agent] or self.truncations[agent]:
+                    iter_agents.remove(agent)
             self._agent_selector.reinit(iter_agents)
         else:
             self._clear_rewards()
@@ -105,7 +107,7 @@ class raw_env(AECEnv, EzPickle):
             self.agent_selection = self._agent_selector.next()
 
         if self.env.frames >= self.env.max_cycles:
-            self.dones = dict(zip(self.agents, [True for _ in self.agents]))
+            self.terminations = dict(zip(self.agents, [True for _ in self.agents]))
 
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()

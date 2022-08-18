@@ -55,7 +55,8 @@ class raw_env(AECEnv, EzPickle):
         self.agents = self.possible_agents[:]
         self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
@@ -71,17 +72,18 @@ class raw_env(AECEnv, EzPickle):
             return self.env.render(mode)
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            self._was_done_step(action)
+            return
         agent = self.agent_selection
         self.env.step(
             action, self.agent_name_mapping[agent], self._agent_selector.is_last()
         )
-        for k in self.dones:
+        for k in self.terminations:
             if self.env.frames >= self.env.max_cycles:
-                self.dones[k] = True
+                self.truncations[k] = True
             else:
-                self.dones[k] = self.env.is_terminal
+                self.terminations[k] = self.env.is_terminal
         for k in self.agents:
             self.rewards[k] = self.env.latest_reward_state[self.agent_name_mapping[k]]
         self.steps += 1
