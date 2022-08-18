@@ -77,10 +77,7 @@ class raw_env(AECEnv, EzPickle):
         return self.env.observe(self.agent_name_mapping[agent])
 
     def step(self, action):
-        if (
-            self.terminations[self.agent_selection]
-            or self.truncations[self.agent_selection]
-        ):
+        if self.terminations[self.agent_selection]:
             self._was_dead_step(action)
             return
         agent = self.agent_selection
