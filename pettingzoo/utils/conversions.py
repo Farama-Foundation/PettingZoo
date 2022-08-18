@@ -260,7 +260,8 @@ class parallel_to_aec_wrapper(AECEnv):
     def step(self, action):
         if self.dones[self.agent_selection]:
             del self._actions[self.agent_selection]
-            return self._was_done_step(action)  # type: ignore
+            assert action is None
+            return self._was_done_step(action)
         self._actions[self.agent_selection] = action  # type: ignore
         if self._agent_selector.is_last():
             obss, rews, dones, infos = self.env.step(self._actions)
