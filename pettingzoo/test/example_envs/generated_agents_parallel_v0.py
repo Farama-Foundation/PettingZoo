@@ -101,7 +101,11 @@ class parallel_env(ParallelEnv):
         all_rewards = {agent: 0 for agent in self.agents}
         all_rewards[self.np_random.choice(self.agents)] = 1
         all_observes = {agent: self.observe(agent) for agent in self.agents}
-        self.agents = [agent for agent in self.agents if not (all_truncations[agent] or all_terminations[agent])]
+        self.agents = [
+            agent
+            for agent in self.agents
+            if not (all_truncations[agent] or all_terminations[agent])
+        ]
         return all_observes, all_rewards, all_terminations, all_truncations, all_infos
 
     def render(self, mode="human"):

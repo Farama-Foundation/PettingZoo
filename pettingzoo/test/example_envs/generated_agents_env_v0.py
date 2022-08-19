@@ -85,7 +85,10 @@ class raw_env(AECEnv):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
 
         self._clear_rewards()
