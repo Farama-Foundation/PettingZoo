@@ -72,8 +72,9 @@ class raw_env(AECEnv):
         return self.env.render(mode)
 
     def step(self, action):
-        if self.terminations[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            self._was_dead_step(action)
+            return
         agent = self.agent_selection
 
         is_last = self._agent_selector.is_last()
