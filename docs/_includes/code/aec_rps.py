@@ -120,7 +120,8 @@ class raw_env(AECEnv):
         - agents
         - rewards
         - _cumulative_rewards
-        - dones
+        - terminations
+        - truncations
         - infos
         - agent_selection
         And must set up the environment so that render(), step(), and observe()
@@ -131,7 +132,8 @@ class raw_env(AECEnv):
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
-        self.dones = {agent: False for agent in self.agents}
+        self.terminations = {agent: False for agent in self.agents}
+        self.truncations = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
         self.state = {agent: NONE for agent in self.agents}
         self.observations = {agent: NONE for agent in self.agents}
@@ -148,16 +150,18 @@ class raw_env(AECEnv):
         agent_selection) and needs to update
         - rewards
         - _cumulative_rewards (accumulating the rewards)
-        - dones
+        - terminations
+        - truncations
         - infos
         - agent_selection (to the next agent)
         And any internal state used by observe() or render()
         """
-        if self.dones[self.agent_selection]:
-            # handles stepping an agent which is already done
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            # handles stepping an agent which is already dead
             # accepts a None action for the one agent, and moves the agent_selection to
-            # the next done agent,  or if there are no more done agents, to the next live agent
-            return self._was_done_step(action)
+            # the next dead agent,  or if there are no more dead agents, to the next live agent
+            self._was_dead_step(action)
+            return
 
         agent = self.agent_selection
 
@@ -177,8 +181,8 @@ class raw_env(AECEnv):
             ]
 
             self.num_moves += 1
-            # The dones dictionary must be updated for all players.
-            self.dones = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
+            # The truncations dictionary must be updated for all players.
+            self.truncations = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
 
             # observe the current state
             for i in self.agents:
