@@ -485,7 +485,10 @@ class raw_env(AECEnv, EzPickle):
 
     def step(self, action):
         # check if the particular agent is done
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             self._was_dead_step(action)
             return
 
