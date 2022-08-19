@@ -156,7 +156,10 @@ class raw_env(AECEnv):
         - agent_selection (to the next agent)
         And any internal state used by observe() or render()
         """
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             # handles stepping an agent which is already dead
             # accepts a None action for the one agent, and moves the agent_selection to
             # the next dead agent,  or if there are no more dead agents, to the next live agent
@@ -182,7 +185,9 @@ class raw_env(AECEnv):
 
             self.num_moves += 1
             # The truncations dictionary must be updated for all players.
-            self.truncations = {agent: self.num_moves >= NUM_ITERS for agent in self.agents}
+            self.truncations = {
+                agent: self.num_moves >= NUM_ITERS for agent in self.agents
+            }
 
             # observe the current state
             for i in self.agents:
