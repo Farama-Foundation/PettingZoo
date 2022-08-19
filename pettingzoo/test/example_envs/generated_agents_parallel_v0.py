@@ -66,7 +66,6 @@ class parallel_env(ParallelEnv):
     def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
             self.seed(seed=seed)
-        self.all_dones = {}
         self.agents = []
         self.num_steps = 0
         for i in range(5):
@@ -77,14 +76,15 @@ class parallel_env(ParallelEnv):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
     def step(self, actions):
-        done = self.num_steps >= self.max_cycles
+        truncated = self.num_steps >= self.max_cycles
         for agent in self.agents:
             assert agent in actions
-        all_dones = {agent: done for agent in self.agents}
-        if not done:
+        all_truncations = {agent: truncated for agent in self.agents}
+        all_terminations = {agent: False for agent in self.agents}
+        if not truncated:
             for i in range(6):
                 if self.np_random.random() < 0.1 and len(self.agents) >= 10:
-                    all_dones[self.np_random.choice(self.agents)] = True
+                    all_terminations[self.np_random.choice(self.agents)] = True
 
             for i in range(3):
                 if self.np_random.random() < 0.1:
@@ -94,14 +94,15 @@ class parallel_env(ParallelEnv):
                         type = self.np_random.choice(self.types)
 
                     new_agent = self.add_agent(type)
-                    all_dones[new_agent] = False
+                    all_terminations[new_agent] = False
+                    all_truncations[new_agent] = False
 
         all_infos = {agent: {} for agent in self.agents}
         all_rewards = {agent: 0 for agent in self.agents}
         all_rewards[self.np_random.choice(self.agents)] = 1
         all_observes = {agent: self.observe(agent) for agent in self.agents}
-        self.agents = [agent for agent in self.agents if not all_dones[agent]]
-        return all_observes, all_rewards, all_dones, all_infos
+        self.agents = [agent for agent in self.agents if not (all_truncations[agent] or all_terminations[agent])]
+        return all_observes, all_rewards, all_terminations, all_truncations, all_infos
 
     def render(self, mode="human"):
         print(self.agents)

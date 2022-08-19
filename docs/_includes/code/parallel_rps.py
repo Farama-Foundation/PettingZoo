@@ -125,7 +125,8 @@ class parallel_env(ParallelEnv):
         step(action) takes in an action for each agent and should return the
         - observations
         - rewards
-        - dones
+        - terminations
+        - truncations
         - infos
         dicts where each dict looks like {agent_1: item_1, agent_2: item_2}
         """
@@ -140,9 +141,11 @@ class parallel_env(ParallelEnv):
             (actions[self.agents[0]], actions[self.agents[1]])
         ]
 
+        terminations = {agent: False for agent in self.agents}
+
         self.num_moves += 1
-        env_done = self.num_moves >= NUM_ITERS
-        dones = {agent: env_done for agent in self.agents}
+        env_truncation = self.num_moves >= NUM_ITERS
+        truncations = {agent: env_truncation for agent in self.agents}
 
         # current observation is just the other player's most recent action
         observations = {
@@ -154,7 +157,7 @@ class parallel_env(ParallelEnv):
         # still be an entry for each agent
         infos = {agent: {} for agent in self.agents}
 
-        if env_done:
+        if env_truncation:
             self.agents = []
 
-        return observations, rewards, dones, infos
+        return observations, rewards, terminations, truncations, infos
