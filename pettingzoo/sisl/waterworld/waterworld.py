@@ -60,7 +60,8 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         self.rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
         self._cumulative_rewards = dict(zip(self.agents, [(0) for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
     def close(self):
@@ -71,8 +72,9 @@ class raw_env(AECEnv):
         return self.env.render(mode)
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            self._was_dead_step(action)
+            return
         agent = self.agent_selection
 
         is_last = self._agent_selector.is_last()
@@ -85,9 +87,9 @@ class raw_env(AECEnv):
                 self.rewards[r] += self.env.last_rewards[self.agent_name_mapping[r]]
 
         if self.env.frames >= self.env.max_cycles:
-            self.dones = dict(zip(self.agents, [True for _ in self.agents]))
+            self.truncations = dict(zip(self.agents, [True for _ in self.agents]))
         else:
-            self.dones = dict(zip(self.agents, self.env.last_dones))
+            self.terminations = dict(zip(self.agents, self.env.last_dones))
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
