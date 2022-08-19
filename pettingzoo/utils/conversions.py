@@ -270,7 +270,8 @@ class parallel_to_aec_wrapper(AECEnv):
             or self.truncations[self.agent_selection]
         ):
             del self._actions[self.agent_selection]
-            return self._was_dead_step(action)
+            self._was_dead_step(action)
+            return
         self._actions[self.agent_selection] = action
         if self._agent_selector.is_last():
             obss, rews, terminations, truncations, infos = self.env.step(self._actions)
