@@ -45,7 +45,8 @@ class raw_env(AECEnv):
         }
 
         self.rewards = {i: 0 for i in self.agents}
-        self.dones = {i: False for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
         self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
@@ -89,8 +90,8 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            return self._was_dead_step(action)
         # check if input action is a valid move (0 == empty spot)
         assert self.board.squares[action] == 0, "played illegal move"
         # play turn
@@ -117,7 +118,7 @@ class raw_env(AECEnv):
                 self.rewards[self.agents[0]] -= 1
 
             # once either play wins or there is a draw, game over, both players are done
-            self.dones = {i: True for i in self.agents}
+            self.terminations = {i: True for i in self.agents}
 
         # Switch selection to next agents
         self._cumulative_rewards[self.agent_selection] = 0
@@ -132,7 +133,8 @@ class raw_env(AECEnv):
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {i: 0 for i in self.agents}
-        self.dones = {i: False for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
         self.infos = {i: {} for i in self.agents}
         # selects the first agent
         self._agent_selector.reinit(self.agents)

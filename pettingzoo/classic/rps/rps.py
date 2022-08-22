@@ -92,7 +92,8 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
-        self.dones = {agent: False for agent in self.agents}
+        self.terminations = {agent: False for agent in self.agents}
+        self.truncations = {agent: False for agent in self.agents}
         self.infos = {agent: {} for agent in self.agents}
 
         self.state = {agent: self._none for agent in self.agents}
@@ -316,8 +317,8 @@ class raw_env(AECEnv):
         self.reinit()
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+            return self._was_dead_step(action)
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
@@ -345,7 +346,7 @@ class raw_env(AECEnv):
 
             self.num_moves += 1
 
-            self.dones = {
+            self.truncations = {
                 agent: self.num_moves >= self.max_cycles for agent in self.agents
             }
 

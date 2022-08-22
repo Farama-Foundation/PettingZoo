@@ -105,8 +105,8 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if self.truncations[self.agent_selection] or self.terminations[self.agent_selection]:
+            return self._was_dead_step(action)
         # assert valid move
         assert self.board[0:7][action] == 0, "played illegal move."
 
@@ -124,11 +124,11 @@ class raw_env(AECEnv):
         if winner:
             self.rewards[self.agent_selection] += 1
             self.rewards[next_agent] -= 1
-            self.dones = {i: True for i in self.agents}
+            self.terminations = {i: True for i in self.agents}
         # check if there is a tie
         elif all(x in [1, 2] for x in self.board):
             # once either play wins or there is a draw, game over, both players are done
-            self.dones = {i: True for i in self.agents}
+            self.terminations = {i: True for i in self.agents}
         else:
             # no winner yet
             self.agent_selection = next_agent
@@ -142,7 +142,8 @@ class raw_env(AECEnv):
         self.agents = self.possible_agents[:]
         self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {name: 0 for name in self.agents}
-        self.dones = {i: False for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
         self.infos = {i: {} for i in self.agents}
 
         self._agent_selector = agent_selector(self.agents)
