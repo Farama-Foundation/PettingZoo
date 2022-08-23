@@ -90,7 +90,10 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 8 indicating position to move on tictactoe board
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         # check if input action is a valid move (0 == empty spot)
         assert self.board.squares[action] == 0, "played illegal move"

@@ -108,7 +108,10 @@ class raw_env(AECEnv):
             self.infos[name] = {"legal_moves": []}
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)

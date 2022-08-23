@@ -74,7 +74,10 @@ class raw_env(AECEnv):
         self.np_random = np.random.RandomState(seed)
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
 
         if action != 26**2 * 2:
@@ -90,7 +93,9 @@ class raw_env(AECEnv):
             else:
                 self.rewards[self.agent_selection] = -1
                 self.rewards[opp_agent] = 1
-            self.terminations = {i: True for i in self.agents}  # only update terminations, the game is over with winner
+            self.terminations = {
+                i: True for i in self.agents
+            }  # only update terminations, the game is over with winner
         else:
             self._clear_rewards()
 

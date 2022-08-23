@@ -317,7 +317,10 @@ class raw_env(AECEnv):
         self.reinit()
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         agent = self.agent_selection
 

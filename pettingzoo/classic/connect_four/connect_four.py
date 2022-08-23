@@ -105,7 +105,10 @@ class raw_env(AECEnv):
 
     # action in this case is a value from 0 to 6 indicating position to move on the flat representation of the connect4 board
     def step(self, action):
-        if self.truncations[self.agent_selection] or self.terminations[self.agent_selection]:
+        if (
+            self.truncations[self.agent_selection]
+            or self.terminations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         # assert valid move
         assert self.board[0:7][action] == 0, "played illegal move."

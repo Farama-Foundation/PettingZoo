@@ -222,7 +222,10 @@ class raw_env(AECEnv):
         return legal_moves
 
     def step(self, action):
-        if self.terminations[self.agent_selection] or self.truncations[self.agent_selection]:
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             return self._was_dead_step(action)
         if action not in self.legal_moves():
             warnings.warn(
@@ -249,7 +252,6 @@ class raw_env(AECEnv):
 
         self.terminations[self.agent_order[0]] = winner is not None
         self.terminations[self.agent_order[1]] = winner is not None
-
 
         self._accumulate_rewards()
 

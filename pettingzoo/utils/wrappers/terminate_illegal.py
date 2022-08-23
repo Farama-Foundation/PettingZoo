@@ -36,11 +36,16 @@ class TerminateIllegalWrapper(BaseWrapper):
         ), "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"
         _prev_action_mask = self._prev_obs["action_mask"]
         self._prev_obs = None
-        if self._terminated and (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
+        if self._terminated and (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
             self._was_dead_step(action)
-        elif (not self.terminations[self.agent_selection] and
-            not self.truncations[self.agent_selection] and
-            not _prev_action_mask[action]):
+        elif (
+            not self.terminations[self.agent_selection]
+            and not self.truncations[self.agent_selection]
+            and not _prev_action_mask[action]
+        ):
             EnvLogger.warn_on_illegal_move()
             self._cumulative_rewards[self.agent_selection] = 0
             self.terminations = {d: True for d in self.agents}
