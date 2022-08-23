@@ -54,6 +54,8 @@ class raw_env(AECEnv):
 
         self.rewards = None
         self.infos = {name: {} for name in self.agents}
+        self.truncations = {name: False for name in self.agents}
+        self.terminations = {name: False for name in self.agents}
 
         self.agent_selection = None
 
@@ -101,7 +103,6 @@ class raw_env(AECEnv):
     def set_game_result(self, result_val):
         for i, name in enumerate(self.agents):
             self.terminations[name] = True
-            self.truncations[name] = True
             result_coef = 1 if i == 0 else -1
             self.rewards[name] = result_val * result_coef
             self.infos[name] = {"legal_moves": []}
