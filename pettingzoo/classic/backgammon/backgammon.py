@@ -74,8 +74,11 @@ class raw_env(AECEnv):
         self.np_random = np.random.RandomState(seed)
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
 
         if action != 26**2 * 2:
             action = bg_utils.to_bg_format(action, self.roll)
@@ -90,7 +93,9 @@ class raw_env(AECEnv):
             else:
                 self.rewards[self.agent_selection] = -1
                 self.rewards[opp_agent] = 1
-            self.dones = {i: True for i in self.agents}
+            self.terminations = {
+                i: True for i in self.agents
+            }  # only update terminations, the game is over with winner
         else:
             self._clear_rewards()
 
@@ -137,13 +142,14 @@ class raw_env(AECEnv):
         if seed is not None:
             self.seed(seed=seed)
         self.agents = self.possible_agents[:]
-        self.dones = {i: False for i in self.agents}
         self.infos = {i: {"legal_moves": []} for i in self.agents}
         self._agent_order = list(self.agents)
         self._agent_selector.reinit(self._agent_order)
         self.agent_selection = self._agent_selector.reset()
         self.rewards = {i: 0 for i in self.agents}
         self._cumulative_rewards = {i: 0 for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
         self.colors = {}
         self.double_roll = 0
         self.game = Game()

@@ -53,8 +53,9 @@ class raw_env(AECEnv):
         }
 
         self.rewards = None
-        self.dones = None
         self.infos = {name: {} for name in self.agents}
+        self.truncations = {name: False for name in self.agents}
+        self.terminations = {name: False for name in self.agents}
 
         self.agent_selection = None
 
@@ -93,21 +94,25 @@ class raw_env(AECEnv):
 
         self.rewards = {name: 0 for name in self.agents}
         self._cumulative_rewards = {name: 0 for name in self.agents}
-        self.dones = {name: False for name in self.agents}
+        self.terminations = {name: False for name in self.agents}
+        self.truncations = {name: False for name in self.agents}
         self.infos = {name: {} for name in self.agents}
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
 
     def set_game_result(self, result_val):
         for i, name in enumerate(self.agents):
-            self.dones[name] = True
+            self.terminations[name] = True
             result_coef = 1 if i == 0 else -1
             self.rewards[name] = result_val * result_coef
             self.infos[name] = {"legal_moves": []}
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
 

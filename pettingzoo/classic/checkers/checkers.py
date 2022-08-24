@@ -130,7 +130,8 @@ class raw_env(AECEnv):
         self.last_turn = "black"
         self.rewards = {name: 0 for name in self.agents}
         self._cumulative_rewards = {name: 0 for name in self.agents}
-        self.dones = {name: False for name in self.agents}
+        self.truncations = {name: False for name in self.agents}
+        self.terminations = {name: False for name in self.agents}
         self.winner = -1
 
     # Parse action from (256) action space into (32)x(32) action space
@@ -221,8 +222,11 @@ class raw_env(AECEnv):
         return legal_moves
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         if action not in self.legal_moves():
             warnings.warn(
                 "Bad checkers move made, game terminating with current player losing. \n env.infos[player]['legal_moves'] contains a list of all legal moves that can be chosen."
@@ -246,8 +250,8 @@ class raw_env(AECEnv):
             self.rewards[self.agents[0]] = -1
             self.rewards[self.agents[1]] = 1
 
-        self.dones[self.agent_order[0]] = winner is not None
-        self.dones[self.agent_order[1]] = winner is not None
+        self.terminations[self.agent_order[0]] = winner is not None
+        self.terminations[self.agent_order[1]] = winner is not None
 
         self._accumulate_rewards()
 
