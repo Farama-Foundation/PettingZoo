@@ -155,7 +155,6 @@ class magent_parallel_env(ParallelEnv):
         self.agents = self.possible_agents[:]
         self.env.reset()
         self.frames = 0
-        self.terminations = {agent: False for agent in self.possible_agents}
         self.team_sizes = [self.env.get_num(handle) for handle in self.handles]
         self.generate_map()
         return self._compute_observations()
@@ -267,14 +266,16 @@ class magent_parallel_env(ParallelEnv):
         self.frames += 1
 
         step_done = self.env.step()
-        trunc_done = self.frames >= self.max_cycles
 
-        infos = {agent: {} for agent in self.agents}
-        truncations = {agent: trunc_done for agent in self.agents}
+        truncations = {agent: self.frames >= self.max_cycles for agent in self.agents}
         terminations = self._compute_terminates(step_done)
-        rewards = self._compute_rewards()
         observations = self._compute_observations()
-        self.terminations = terminations
+        rewards = self._compute_rewards()
+        infos = {agent: {} for agent in self.agents}
         self.env.clear_dead()
-        self.agents = [agent for agent in self.agents if not self.terminations[agent]]
-        return observations, rewards, truncations, terminations, infos
+        self.agents = [
+            agent
+            for agent in self.agents
+            if not (terminations[agent] or truncations[agent])
+        ]
+        return observations, rewards, terminations, truncations, infos
