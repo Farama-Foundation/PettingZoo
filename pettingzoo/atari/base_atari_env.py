@@ -227,7 +227,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not terminations[agent]]
-        return observations, rewards, truncations, terminations, infos
+        return observations, rewards, terminations, truncations, infos
 
     def render(self, mode="human"):
         (screen_width, screen_height) = self.ale.getScreenDims()
