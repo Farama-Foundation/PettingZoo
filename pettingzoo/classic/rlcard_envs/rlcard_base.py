@@ -101,7 +101,7 @@ class RLCardBase(AECEnv):
             )
             self.next_legal_moves = []
             self.terminations = self._convert_to_dict(
-                [False for _ in range(self.num_agents)]
+                [True for _ in range(self.num_agents)]
             )
             self.truncations = self._convert_to_dict(
                 [False for _ in range(self.num_agents)]
