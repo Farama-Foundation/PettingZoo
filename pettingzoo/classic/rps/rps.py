@@ -315,10 +315,14 @@ class raw_env(AECEnv):
 
     def step(self, action):
         if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+            self._was_done_step(action)
+            return
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
+
+        # record the history
+        self.history[self.num_moves] = action
 
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
@@ -340,8 +344,6 @@ class raw_env(AECEnv):
                     else:
                         rewards = (-1, 1)
             self.rewards[self.agents[0]], self.rewards[self.agents[1]] = rewards
-
-            self.history[self.num_moves] = action
 
             self.num_moves += 1
 
