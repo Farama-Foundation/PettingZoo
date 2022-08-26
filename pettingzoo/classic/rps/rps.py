@@ -76,7 +76,6 @@ class raw_env(AECEnv):
         }
 
         self.screen = None
-        self.history = [0] * (2 * 5)
 
         self.reinit()
 
@@ -321,9 +320,6 @@ class raw_env(AECEnv):
 
         self.state[self.agent_selection] = action
 
-        # record the history
-        self.history[self.num_moves] = action
-
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
 
@@ -350,12 +346,16 @@ class raw_env(AECEnv):
             self.dones = {
                 agent: self.num_moves >= self.max_cycles for agent in self.agents
             }
-
-            # observe the current state
             for i in self.agents:
                 self.observations[i] = self.state[
                     self.agents[1 - self.agent_name_mapping[i]]
                 ]
+
+            # record history by pushing back
+            self.history[2:] = self.history[:-2]
+            self.history[0] = self.state[self.agents[0]]
+            self.history[1] = self.state[self.agents[1]]
+
         else:
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = self._none
 
