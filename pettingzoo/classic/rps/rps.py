@@ -98,6 +98,8 @@ class raw_env(AECEnv):
         self.state = {agent: self._none for agent in self.agents}
         self.observations = {agent: self._none for agent in self.agents}
 
+        self.history = [0] * (2 * 5)
+
         self.num_moves = 0
 
     def render(self, mode="human"):
@@ -291,10 +293,6 @@ class raw_env(AECEnv):
                             screen_height / 12,
                         ),
                     )
-                if self._moves[self.state[self.agents[1]]] != "None":
-                    self.history = [
-                        self._moves[self.state[self.agents[i]]]
-                    ] + self.history[:-1]
 
         if mode == "human":
             pygame.display.update()
@@ -342,6 +340,8 @@ class raw_env(AECEnv):
                     else:
                         rewards = (-1, 1)
             self.rewards[self.agents[0]], self.rewards[self.agents[1]] = rewards
+
+            self.history[self.num_moves] = action
 
             self.num_moves += 1
 
