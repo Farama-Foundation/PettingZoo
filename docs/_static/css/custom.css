@@ -10,6 +10,11 @@ h3 {
     font-size: 1.45rem;
 }
 
+.sidebar-logo-container {
+    display: flex;
+    height: 100px;
+}
+
 .cookie_alert {
     position: fixed;
     display: flex;

@@ -11,18 +11,7 @@ import: "from pettingzoo.classic import rps_v2"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Rock Paper Scissors
 
 Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock.
 

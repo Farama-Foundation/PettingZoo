@@ -11,18 +11,7 @@ import: "from pettingzoo.classic import uno_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Uno
 
 Uno is shedding game involving 2 players. At the beginning, each player receives 7 cards and the winner is the first player with no cards left. In order to discard a card from their hand, a player must match either the color or number of the card on top of the discard pile. If the player does not have a card to discard, then they will take a card from the draw pile. The deck of cards include 4 colors (blue, green, yellow, and red), 10 numbers (0 to 9), and special cards (Wild, Wild Draw Four, Draw Two, Skip, and Reverse).
 

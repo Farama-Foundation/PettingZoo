@@ -4,6 +4,14 @@ title: Butterfly Environments
 
 # Butterfly
 
+```{toctree}
+:hidden:
+butterfly/cooperative_pong
+butterfly/knights_archers_zombies
+butterfly/pistonball
+butterfly/prospector
+```
+
 The unique dependencies for this set of environments can be installed via:
 
 ````bash

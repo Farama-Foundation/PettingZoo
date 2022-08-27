@@ -13,16 +13,7 @@ import: "from pettingzoo.sisl import multiwalker_v9"
 agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
+# Multiwalker
 
 In this environment, bipedal robots attempt to carry a package placed on top of them towards the right. By default, the number of robots is set to 3.
 

@@ -12,18 +12,8 @@ state-values: "(-inf,inf)"
 import: "from pettingzoo.mpe import simple_tag_v2"
 agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Simple Tag
 
 This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By default, there is 1 good agent, 3 adversaries and 2 obstacles.
 

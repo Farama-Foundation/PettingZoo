@@ -14,18 +14,7 @@ import: "from pettingzoo.butterfly import prospector_v4"
 agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Prospector
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at
 the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river

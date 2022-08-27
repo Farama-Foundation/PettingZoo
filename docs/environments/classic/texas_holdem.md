@@ -11,18 +11,9 @@ import: "from pettingzoo.classic import texas_holdem_v4"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Texas Hold'em
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-### Arguments
+## Arguments
 
 ``` python
 texas_holdem_v4.env(num_players=2)

@@ -4,7 +4,40 @@ title: Atari Environments
 
 # Atari
 
+```{toctree}
+:hidden:
+atari/basketball_pong
+atari/boxing
+atari/combat_plane
+atari/combat_tank
+atari/double_dunk
+atari/entombed_competitive
+atari/entombed_cooperative
+atari/flag_capture
+atari/foozpong
+atari/ice_hockey
+atari/joust
+atari/mario_bros
+atari/maze_craze
+atari/othello
+atari/pong
+atari/quadrapong
+atari/space_invaders
+atari/space_war
+atari/surround
+atari/tennis
+atari/video_checkers
+atari/volleyball_pong
+atari/warlords
+atari/wizard_of_wor
+```
+
+
 The Atari environments are based off the [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment). This environment was instrumental in the development of modern reinforcement learning, and so we hope that our [multi-agent version](https://github.com/Farama-Foundation/Multi-Agent-ALE) of it will be useful in the development of multi-agent reinforcement learning.
+
+```{raw} html
+    :file: atari/list.html
+```
 
 ### Games Overview
 

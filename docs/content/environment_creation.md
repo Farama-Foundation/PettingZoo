@@ -1,5 +1,4 @@
 ---
-layout: "contents"
 title: Environment Creation
 ---
 # Environment Creation

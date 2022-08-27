@@ -4,6 +4,16 @@ title: MAgent Environments
 
 # MAgent
 
+```{toctree}
+:hidden:
+magent/adversarial_pursuit
+magent/battle
+magent/battlefield
+magent/combined_arms
+magent/gather
+magent/tiger_deer
+```
+
 The unique dependencies for this set of environments can be installed via:
 
 ````bash

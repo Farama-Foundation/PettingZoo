@@ -14,18 +14,7 @@ import: "from pettingzoo.mpe import simple_spread_v2"
 agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Simple Spread
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.
 

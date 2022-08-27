@@ -13,16 +13,7 @@ import: "from pettingzoo.magent import adversarial_pursuit_v4"
 agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
+# Adversarial Pursuit
 
 The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so they can be tagged continually.
 

@@ -12,18 +12,8 @@ num-states: "10^26"
 import: "from pettingzoo.classic import backgammon_v3"
 agent-labels: "agents= ['player_0', 'player_1']"
 ---
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Backgammon
 
 Backgammon is a 2-player turn-based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.
 

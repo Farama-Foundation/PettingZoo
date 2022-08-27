@@ -1,5 +1,4 @@
 ---
-layout: "contents"
 title: API
 ---
 # API

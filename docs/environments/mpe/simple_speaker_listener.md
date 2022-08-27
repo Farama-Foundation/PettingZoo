@@ -14,18 +14,7 @@ import: "from pettingzoo.mpe import simple_speaker_listener_v3"
 agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
-
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
-
-
-
+# Simple Speaker Listener
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 
