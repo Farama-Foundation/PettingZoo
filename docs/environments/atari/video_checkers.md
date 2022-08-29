@@ -1,29 +1,32 @@
 ---
-layout: "docu"
 title: "Video Checkers"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "[0,4]"
-observation-shape: "(210, 160, 3)"
-observation-values: "(0,255)"
-import: "from pettingzoo.atari import video_checkers_v4"
-agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Video Checkers
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
+```{figure} atari_video_checkers.gif 
+:width: 140px
+:name: video_checkers
+```
 
+This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
+| Import               | `from pettingzoo.atari import video_checkers_v4` |
+|----------------------|--------------------------------------------------|
+| Actions              | Discrete                                         |
+| Parallel API         | Yes                                              |
+| Manual Control       | No                                               |
+| Agents               | `agents= ['first_0', 'second_0']`                |
+| Agents               | 2                                                |
+| Action Shape         | (1,)                                             |
+| Action Values        | [0,4]                                            |
+| Observation Shape    | (210, 160, 3)                                    |
+| Observation Values   | (0,255)                                          |
 
+```{figure} ../../_static/img/aec/atari_video_checkers_aec.svg
+:width: 200px
+:name: video_checkers
+```
 
 A classical strategy game with arcade style controls.
 

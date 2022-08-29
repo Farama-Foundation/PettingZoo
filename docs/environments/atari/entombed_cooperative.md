@@ -1,31 +1,33 @@
 ---
-layout: "docu"
 title: "Entombed: Cooperative"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "[0,17]"
-observation-shape: "(210, 160, 3)"
-observation-values: "(0,255)"
-average-total-reward: "6.23"
-import: "from pettingzoo.atari import entombed_cooperative_v3"
-agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Emtombed: Cooperative
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
+```{figure} atari_entombed_cooperative.gif 
+:width: 140px
+:name: entombed_cooperative
+```
 
+This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
+| Import               | `from pettingzoo.atari import entombed_cooperative_v3` |
+|----------------------|--------------------------------------------------------|
+| Actions              | Discrete                                               |
+| Parallel API         | Yes                                                    |
+| Manual Control       | No                                                     |
+| Agents               | `agents= ['first_0', 'second_0']`                      |
+| Agents               | 2                                                      |
+| Action Shape         | (1,)                                                   |
+| Action Values        | [0,17]                                                 |
+| Observation Shape    | (210, 160, 3)                                          |
+| Observation Values   | (0,255)                                                |
+| Average Total Reward | 6.23                                                   |
 
-
+```{figure} ../../_static/img/aec/atari_entombed_cooperative_aec.svg
+:width: 200px
+:name: entombed_cooperative
+```
 
 Entombed's cooperative version is an exploration game
 where you need to work with your teammate to make it

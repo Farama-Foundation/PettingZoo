@@ -4,7 +4,6 @@ firstpage:
 lastpage:
 ---
 
-Environments can be interacted with in a manner very similar to Gym:
 
 
 ```{toctree}
@@ -36,4 +35,23 @@ environments/third_party_envs
 
 Github <https://github.com/Farama-Foundation/PettingZoo>
 
+```
+
+```{figure} environments/atari/atari_warlords.gif
+    :width: 160px
+    :name: warlods
+```
+
+## Usage
+
+Environments can be interacted with in a manner very similar to Gym:
+
+```python
+  from pettingzoo.butterfly import knights_archers_zombies_v10
+  env = knights_archers_zombies_v10.env()
+  env.reset()
+  for agent in env.agent_iter():
+      observation, reward, done, info = env.last()
+      action = policy(observation, agent)
+      env.step(action)
 ```

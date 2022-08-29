@@ -1,29 +1,32 @@
 ---
-layout: "docu"
 title: "Foozpong"
-actions: "Discrete"
-agents: "4"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "[0,5]"
-observation-shape: "(210, 160, 3)"
-observation-values: "(0,255)"
-import: "from pettingzoo.atari import foozpong_v3"
-agent-labels: "agents= ['first_0', 'second_0', 'third_0', 'fourth_0']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Foozpong
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
+```{figure} atari_foozpong.gif 
+:width: 140px
+:name: foozpong
+```
 
+This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
+| Import               | `from pettingzoo.atari import foozpong_v3`               |
+|----------------------|----------------------------------------------------------|
+| Actions              | Discrete                                                 |
+| Parallel API         | Yes                                                      |
+| Manual Control       | No                                                       |
+| Agents               | `agents= ['first_0', 'second_0', 'third_0', 'fourth_0']` |
+| Agents               | 4                                                        |
+| Action Shape         | (1,)                                                     |
+| Action Values        | [0,5]                                                    |
+| Observation Shape    | (210, 160, 3)                                            |
+| Observation Values   | (0,255)                                                  |
 
+```{figure} ../../_static/img/aec/atari_foozpong_aec.svg
+:width: 200px
+:name: foozpong
+```
 
 Four player team battle.
 

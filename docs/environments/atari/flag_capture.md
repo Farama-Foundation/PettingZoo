@@ -1,30 +1,32 @@
 ---
-layout: "docu"
 title: "Flag Capture"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "[0,9]"
-observation-shape: "(210, 160, 3)"
-observation-values: "(0,255)"
-import: "from pettingzoo.atari import flag_capture_v2"
-agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Flag Capture
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
+```{figure} atari_flag_capture.gif 
+:width: 140px
+:name: flag_capture
+```
 
+This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
+| Import               | `from pettingzoo.atari import flag_capture_v2` |
+|----------------------|------------------------------------------------|
+| Actions              | Discrete                                       |
+| Parallel API         | Yes                                            |
+| Manual Control       | No                                             |
+| Agents               | `agents= ['first_0', 'second_0']`              |
+| Agents               | 2                                              |
+| Action Shape         | (1,)                                           |
+| Action Values        | [0,9]                                          |
+| Observation Shape    | (210, 160, 3)                                  |
+| Observation Values   | (0,255)                                        |
 
-
+```{figure} ../../_static/img/aec/atari_flag_capture_aec.svg
+:width: 200px
+:name: flag_capture
+```
 
 A battle of memory and information.
 

@@ -1,30 +1,32 @@
 ---
-layout: "docu"
 title: "Entombed: Competitive"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "[0,17]"
-observation-shape: "(210, 160, 3)"
-observation-values: "(0,255)"
-import: "from pettingzoo.atari import entombed_competitive_v3"
-agent-labels: "agents= ['first_0', 'second_0']"
 ---
 
-<div class="docu-info" markdown="1">
-{% include info_box.md %}
-</div>
+# Emtombed: Competitive
 
-<div class="docu-content" markdown="1">
-<div class="appear_big env-title" markdown="1">
-{% include env_icon.md %}
-## {{page.title}}
-</div>
+```{figure} atari_entombed_competitive.gif 
+:width: 140px
+:name: entombed_competitive
+```
 
+This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.
 
+| Import             | `from pettingzoo.atari import entombed_competitive_v3` |
+|--------------------|--------------------------------------------------------|
+| Actions            | Discrete                                               |
+| Parallel API       | Yes                                                    |
+| Manual Control     | No                                                     |
+| Agents             | `agents= ['first_0', 'second_0']`                      |
+| Agents             | 2                                                      |
+| Action Shape       | (1,)                                                   |
+| Action Values      | [0,17]                                                 |
+| Observation Shape  | (210, 160, 3)                                          |
+| Observation Values | (0,255)                                                |
 
-
+```{figure} ../../_static/img/aec/atari_entombed_competitive_aec.svg
+:width: 200px
+:name: entombed_competitive
+```
 
 Entombed's competitive version is a race to last the longest.
 
