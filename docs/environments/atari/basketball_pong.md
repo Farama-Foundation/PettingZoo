@@ -7,7 +7,7 @@ alt_title: "BasketBallPong"
 
 ```{figure} atari_basketball_pong.gif 
 :width: 140px
-:name: air_raid
+:name: basketball_pong
 ```
 
 This environment is part of the <a href='..'>Atari environments</a>. Please read that page first for general information.

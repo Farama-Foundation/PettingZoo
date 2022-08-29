@@ -14,6 +14,31 @@ agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 
 # Pursuit
 
+```{figure} sisl_pursuit.gif 
+:width: 140px
+:name: pursuit
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.sisl import pursuit_v4`               |
+|----------------------|--------------------------------------------------------|
+| Actions              | Discrete                                               |
+| Parallel API         | Yes                                                    |
+| Manual Control       | Yes                                                    |
+| Agents               | `agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']` |
+| Agents               | 8 (+/-)                                                |
+| Action Shape         | (5)                                                    |
+| Action Values        | Discrete(5)                                            |
+| Observation Shape    | (7, 7, 3)                                              |
+| Observation Values   | [0, 30]                                                |
+| Average Total Reward | 30.3                                                   |
+
+```{figure} ../../_static/img/aec/sisl_pursuit_aec.svg
+:width: 200px
+:name: pursuit
+```
+
 By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding the red pursuer agents. The environment terminates when every evader has been caught, or when 500 cycles are completed.  Note that this environment has already had the reward pruning optimization described in section 4.1 of the PettingZoo paper applied.
 
 Observation shape takes the full form of `(obs_range, obs_range, 3)` where the first channel is 1s where there is a wall, the second channel indicates the number of allies in each coordinate and the third channel indicates the number of opponents in each coordinate.

@@ -15,6 +15,31 @@ agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 
 # Multiwalker
 
+```{figure} sisl_multiwalker.gif 
+:width: 140px
+:name: multiwalker
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.sisl import multiwalker_v9`   |
+|----------------------|------------------------------------------------|
+| Actions              | Continuous                                     |
+| Parallel API         | Yes                                            |
+| Manual Control       | No                                             |
+| Agents               | `agents= ['walker_0', 'walker_1', 'walker_2']` |
+| Agents               | 3                                              |
+| Action Shape         | (4,)                                           |
+| Action Values        | (-1, 1)                                        |
+| Observation Shape    | (31,)                                          |
+| Observation Values   | [-inf,inf]                                     |
+| Average Total Reward | -300.86                                        |
+
+```{figure} ../../_static/img/aec/sisl_multiwalker_aec.svg
+:width: 200px
+:name: multiwalker
+```
+
 In this environment, bipedal robots attempt to carry a package placed on top of them towards the right. By default, the number of robots is set to 3.
 
 Each walker receives a reward equal to the change in position of the package from the previous timestep, multiplied by the `forward_reward` scaling factor. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75, the total reward under an optimal policy is around 300.
