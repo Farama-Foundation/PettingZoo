@@ -789,7 +789,7 @@ class MultiWalkerEnv:
                 self.terrain.append(t)
 
             elif state == STAIRS and oneshot:
-                stair_height = +1 if self.np_random.rand() > 0.5 else -1
+                stair_height = +1 if self.np_random.random() > 0.5 else -1
                 stair_width = self.np_random.random_integers(4, 5)
                 stair_steps = self.np_random.random_integers(3, 5)
                 original_y = y

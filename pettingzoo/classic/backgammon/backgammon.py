@@ -97,7 +97,7 @@ class raw_env(AECEnv):
         if self.double_roll == 0:
             self.agent_selection = self._agent_selector.next()
 
-            roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+            roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
             if roll[0] == roll[1]:
                 self.double_roll = 2
             if self.colors[self.agent_selection] == WHITE:
@@ -150,9 +150,9 @@ class raw_env(AECEnv):
 
         opp_agent = bg_utils.opp_agent(self, self.agent_selection)
 
-        roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+        roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
         while roll[0] == roll[1]:
-            roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+            roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
         if roll[0] > roll[1]:
             self.colors[self.agent_selection] = WHITE
             self.colors[opp_agent] = BLACK
