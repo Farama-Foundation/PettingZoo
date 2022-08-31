@@ -1,5 +1,6 @@
 import numpy as np
 from gym import spaces
+from gym.utils import seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -71,7 +72,7 @@ class raw_env(AECEnv):
         return self.action_spaces[agent]
 
     def seed(self, seed=None):
-        self.np_random = np.random.RandomState(seed)
+        self.np_random, _ = seeding.np_random(seed)
 
     def step(self, action):
         if self.dones[self.agent_selection]:

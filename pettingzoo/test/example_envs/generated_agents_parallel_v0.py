@@ -1,4 +1,5 @@
 import gym
+from gym.utils import seeding
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import conversions, wrappers
@@ -74,7 +75,7 @@ class parallel_env(ParallelEnv):
         return {agent: self.observe(agent) for agent in self.agents}
 
     def seed(self, seed=None):
-        self.np_random, _ = gym.utils.seeding.np_random(seed)
+        self.np_random, _ = seeding.np_random(seed)
 
     def step(self, actions):
         done = self.num_steps >= self.max_cycles
