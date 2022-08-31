@@ -4,7 +4,7 @@ import pygame
 
 def get_small_random_value(randomizer):
     # generates a small random value between [0, 1/100)
-    return (1 / 100) * randomizer.rand()
+    return (1 / 100) * randomizer.random()
 
 
 class Ball(pygame.sprite.Sprite):
