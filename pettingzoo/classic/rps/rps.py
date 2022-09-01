@@ -76,7 +76,6 @@ class raw_env(AECEnv):
         }
 
         self.screen = None
-        self.history = [0] * (2 * 5)
 
         self.reinit()
 
@@ -98,6 +97,8 @@ class raw_env(AECEnv):
 
         self.state = {agent: self._none for agent in self.agents}
         self.observations = {agent: self._none for agent in self.agents}
+
+        self.history = [0] * (2 * 5)
 
         self.num_moves = 0
 
@@ -292,10 +293,6 @@ class raw_env(AECEnv):
                             screen_height / 12,
                         ),
                     )
-                if self._moves[self.state[self.agents[1]]] != "None":
-                    self.history = [
-                        self._moves[self.state[self.agents[i]]]
-                    ] + self.history[:-1]
 
         if mode == "human":
             pygame.display.update()
@@ -321,7 +318,9 @@ class raw_env(AECEnv):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            return self._was_dead_step(action)
+            self._was_dead_step(action)
+            return
+
         agent = self.agent_selection
 
         self.state[self.agent_selection] = action
@@ -352,12 +351,16 @@ class raw_env(AECEnv):
             self.truncations = {
                 agent: self.num_moves >= self.max_cycles for agent in self.agents
             }
-
-            # observe the current state
             for i in self.agents:
                 self.observations[i] = self.state[
                     self.agents[1 - self.agent_name_mapping[i]]
                 ]
+
+            # record history by pushing back
+            self.history[2:] = self.history[:-2]
+            self.history[0] = self.state[self.agents[0]]
+            self.history[1] = self.state[self.agents[1]]
+
         else:
             self.state[self.agents[1 - self.agent_name_mapping[agent]]] = self._none
 

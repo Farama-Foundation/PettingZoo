@@ -1,6 +1,6 @@
 import warnings
 
-import gym
+from gym.utils import seeding
 
 from ..env import ParallelEnv
 
@@ -22,7 +22,7 @@ class BaseParallelWraper(ParallelEnv):
             pass
 
     def reset(self, seed=None, return_info=False, options=None):
-        self.np_random, _ = gym.utils.seeding.np_random(seed)
+        self.np_random, _ = seeding.np_random(seed)
 
         if not return_info:
             res = self.env.reset(seed=seed, options=options)

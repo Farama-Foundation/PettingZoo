@@ -1,5 +1,6 @@
 import numpy as np
 from gym import spaces
+from gym.utils import seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -71,7 +72,7 @@ class raw_env(AECEnv):
         return self.action_spaces[agent]
 
     def seed(self, seed=None):
-        self.np_random = np.random.RandomState(seed)
+        self.np_random, _ = seeding.np_random(seed)
 
     def step(self, action):
         if (
@@ -102,7 +103,7 @@ class raw_env(AECEnv):
         if self.double_roll == 0:
             self.agent_selection = self._agent_selector.next()
 
-            roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+            roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
             if roll[0] == roll[1]:
                 self.double_roll = 2
             if self.colors[self.agent_selection] == WHITE:
@@ -156,9 +157,9 @@ class raw_env(AECEnv):
 
         opp_agent = bg_utils.opp_agent(self, self.agent_selection)
 
-        roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+        roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
         while roll[0] == roll[1]:
-            roll = self.np_random.randint(1, 7), self.np_random.randint(1, 7)
+            roll = self.np_random.integers(1, 7), self.np_random.integers(1, 7)
         if roll[0] > roll[1]:
             self.colors[self.agent_selection] = WHITE
             self.colors[opp_agent] = BLACK
