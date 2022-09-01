@@ -270,13 +270,13 @@ class MAWaterWorld:
         return [seed]
 
     def _generate_coord(self, radius):
-        coord = self.np_random.rand(2)
+        coord = self.np_random.random(2)
         # Create random coordinate that avoids obstacles
         while (
             ssd.cdist(coord[None, :], self.obstacle_coords)
             <= radius * 2 + self.obstacle_radius
         ):
-            coord = self.np_random.rand(2)
+            coord = self.np_random.random(2)
         return coord
 
     def reset(self):
@@ -284,7 +284,7 @@ class MAWaterWorld:
         # Initialize obstacles
         if self.initial_obstacle_coord is None:
             # Generate obstacle positions in range [0, 1)
-            self.obstacle_coords = self.np_random.rand(self.n_obstacles, 2)
+            self.obstacle_coords = self.np_random.random(self.n_obstacles, 2)
         else:
             self.obstacle_coords = self.initial_obstacle_coord[None, :]
         # Set each obstacle's velocity to 0
@@ -300,7 +300,7 @@ class MAWaterWorld:
         for evader in self._evaders:
             evader.set_position(self._generate_coord(evader._radius))
             # Generate velocity such that speed <= self.evader_speed
-            velocity = self.np_random.rand(2) - 0.5
+            velocity = self.np_random.random(2) - 0.5
             speed = np.linalg.norm(velocity)
             if speed > self.evader_speed:
                 # Limit speed to self.evader_speed
@@ -312,7 +312,7 @@ class MAWaterWorld:
             poison.set_position(self._generate_coord(poison._radius))
             # Generate both velocity components from range [-self.poison_speed, self.poison_speed)
             # Generate velocity such that speed <= self.poison_speed
-            velocity = self.np_random.rand(2) - 0.5
+            velocity = self.np_random.random(2) - 0.5
             speed = np.linalg.norm(velocity)
             if speed > self.poison_speed:
                 # Limit speed to self.poison_speed
@@ -556,7 +556,7 @@ class MAWaterWorld:
                     # Generate both velocity components from range [-self.evader_speed, self.evader_speed)
                     objects[object_idx].set_velocity(
                         (
-                            self.np_random.rand(
+                            self.np_random.random(
                                 2,
                             )
                             - 0.5

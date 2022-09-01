@@ -1,4 +1,5 @@
 import gym
+from gym.utils import seeding
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import conversions, wrappers
@@ -45,8 +46,8 @@ class parallel_env(ParallelEnv):
 
     def add_type(self):
         type_id = len(self.types)
-        num_actions = self.np_random.random_integers(3, 10)
-        obs_size = self.np_random.random_integers(10, 50)
+        num_actions = self.np_random.integers(3, 10)
+        obs_size = self.np_random.integers(10, 50)
         obs_space = gym.spaces.Box(low=0, high=1, shape=(obs_size,))
         act_space = gym.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"
@@ -74,7 +75,7 @@ class parallel_env(ParallelEnv):
         return {agent: self.observe(agent) for agent in self.agents}
 
     def seed(self, seed=None):
-        self.np_random, _ = gym.utils.seeding.np_random(seed)
+        self.np_random, _ = seeding.np_random(seed)
 
     def step(self, actions):
         done = self.num_steps >= self.max_cycles

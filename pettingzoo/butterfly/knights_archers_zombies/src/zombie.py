@@ -28,7 +28,7 @@ class Zombie(pygame.sprite.Sprite):
         )
 
     def update(self):
-        rand_x = self.randomizer.random_integers(0, 10)
+        rand_x = self.randomizer.integers(0, 10)
 
         self.rect.y += const.ZOMBIE_Y_SPEED
 
