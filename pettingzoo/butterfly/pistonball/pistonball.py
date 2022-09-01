@@ -580,6 +580,9 @@ class raw_env(AECEnv, EzPickle):
             self.terminations = dict(
                 zip(self.agents, [self.terminate for _ in self.agents])
             )
+            self.truncations = dict(
+                zip(self.agents, [self.truncate for _ in self.agents])
+            )
 
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
