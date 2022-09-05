@@ -16,7 +16,7 @@ jobs:
         run: pip install -r ./docs/requirements.txt && pip install .
       
       - name: Build
-        run: sphinx-build -b dirhtml -v docs/source build
+        run: sphinx-build -b dirhtml -v docs build
 
       - name: Move 404
         run: mv ./build/404/index.html ./build/404.html
