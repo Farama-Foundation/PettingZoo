@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Rock Paper Scissors"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(3)"
-action-values: "Discrete(3)"
-observation-shape: "Discrete(4)"
-observation-values: "Discrete(4)"
-import: "from pettingzoo.classic import rps_v2"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Rock Paper Scissors
+
+```{figure} classic_rps.gif 
+:width: 140px
+:name: rps
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import rps_v2` |
+|--------------------|-----------------------------------------|
+| Actions            | Discrete                                |
+| Parallel API       | Yes                                     |
+| Manual Control     | No                                      |
+| Agents             | `agents= ['player_0', 'player_1']`      |
+| Agents             | 2                                       |
+| Action Shape       | Discrete(3)                             |
+| Action Values      | Discrete(3)                             |
+| Observation Shape  | Discrete(4)                             |
+| Observation Values | Discrete(4)                             |
+
+```{figure} ../../_static/img/aec/classic_rps_aec.svg
+:width: 200px
+:name: rps
+```
 
 Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock.
 

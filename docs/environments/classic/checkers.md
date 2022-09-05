@@ -1,20 +1,32 @@
 ---
-layout: "docu"
 title: "Checkers"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(8*8*4)"
-action-values: "Discrete(8*8*4)"
-observation-shape: "Box(8, 8, 4)"
-observation-values: "[0, 1]"
-num-states: "10^21"
-import: "from pettingzoo.classic import checkers_v3"
-agent-labels: "agents= ['player_0', 'player_1']"
-
 ---
 
 # Checkers
+
+```{figure} classic_checkers.gif 
+:width: 140px
+:name: checkers
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import checkers_v3` |
+|--------------------|----------------------------------------------|
+| Actions            | Discrete                                     |
+| Parallel API       | Yes                                          |
+| Manual Control     | No                                           |
+| Agents             | `agents= ['player_0', 'player_1']`           |
+| Agents             | 2                                            |
+| Action Shape       | Discrete(884)                                |
+| Action Values      | Discrete(884)                                |
+| Observation Shape  | Box(8, 8, 4)                                 |
+| Observation Values | [0, 1]                                       |
+
+```{figure} ../../_static/img/aec/classic_checkers_aec.svg
+:width: 200px
+:name: checkers
+```
 
 Checkers (also called Draughts) is a 2-player turn based game. Our implementation is based on the OpenAI gym checkers implementation, with changes to the observation and action spaces.
 

@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Connect Four"
-agents: "2"
-manual-control: "No"
-action-shape: "(1,)"
-action-values: "Discrete(7)"
-observation-shape: "(6, 7, 2)"
-observation-values: "[0,1]"
-import: "from pettingzoo.classic import connect_four_v3"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Connect Four
+
+```{figure} classic_connect_four.gif 
+:width: 140px
+:name: connect_four
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import connect_four_v3` |
+|--------------------|--------------------------------------------------|
+| Actions            | Discrete                                         |
+| Parallel API       | Yes                                              |
+| Manual Control     | No                                               |
+| Agents             | `agents= ['player_0', 'player_1']`               |
+| Agents             | 2                                                |
+| Action Shape       | (1,)                                             |
+| Action Values      | Discrete(7)                                      |
+| Observation Shape  | (6, 7, 2)                                        |
+| Observation Values | [0,1]                                            |
+
+```{figure} ../../_static/img/aec/classic_connect_four_aec.svg
+:width: 200px
+:name: connect_four
+```
 
 Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.
 

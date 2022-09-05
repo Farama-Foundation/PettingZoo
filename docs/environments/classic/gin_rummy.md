@@ -1,19 +1,32 @@
 ---
-layout: "docu"
 title: "Gin Rummy"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(110)"
-action-values: "Discrete(110)"
-observation-shape: "(5, 52)"
-observation-values: "[0,1]"
-num-states: "10^52"
-import: "from pettingzoo.classic import gin_rummy_v4"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Gin Rummy
+
+```{figure} classic_gin_rummy.gif 
+:width: 140px
+:name: gin_rummy
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import gin_rummy_v4` |
+|--------------------|-----------------------------------------------|
+| Actions            | Discrete                                      |
+| Parallel API       | Yes                                           |
+| Manual Control     | No                                            |
+| Agents             | `agents= ['player_0', 'player_1']`            |
+| Agents             | 2                                             |
+| Action Shape       | Discrete(110)                                 |
+| Action Values      | Discrete(110)                                 |
+| Observation Shape  | (5, 52)                                       |
+| Observation Values | [0,1]                                         |
+
+```{figure} ../../_static/img/aec/classic_gin_rummy_aec.svg
+:width: 200px
+:name: gin_rummy
+```
 
 Gin Rummy is a 2-player card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or in a sequence of the same suit.
 

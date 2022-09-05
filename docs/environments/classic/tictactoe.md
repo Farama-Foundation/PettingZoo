@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Tic Tac Toe"
-agents: "2"
-manual-control: "No"
-action-shape: "(1)"
-action-values: "[0, 8]"
-observation-shape: "(3, 3, 2)"
-observation-values: "[0,1]"
-import: "from pettingzoo.classic import tictactoe_v3"
-agent-labels: "agents= ['player_1', 'player_2']"
 ---
 
 # Tic Tac Toe
+
+```{figure} classic_tictactoe.gif 
+:width: 140px
+:name: tictactoe
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import tictactoe_v3` |
+|--------------------|-----------------------------------------------|
+| Actions            | Discrete                                      |
+| Parallel API       | Yes                                           |
+| Manual Control     | No                                            |
+| Agents             | `agents= ['player_1', 'player_2']`            |
+| Agents             | 2                                             |
+| Action Shape       | (1)                                           |
+| Action Values      | [0, 8]                                        |
+| Observation Shape  | (3, 3, 2)                                     |
+| Observation Values | [0,1]                                         |
+
+```{figure} ../../_static/img/aec/classic_tictactoe_aec.svg
+:width: 200px
+:name: tictactoe
+```
 
 Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
 

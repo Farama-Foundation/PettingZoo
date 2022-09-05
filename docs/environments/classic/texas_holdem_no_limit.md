@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Texas Hold'em No Limit"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(5)"
-action-values: "Discrete(5)"
-observation-shape: "(54,)"
-observation-values: "[0, 100]"
-import: "from pettingzoo.classic import texas_holdem_no_limit_v6"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Texas Hold'em No Limit
+
+```{figure} classic_texas_holdem_no_limit.gif 
+:width: 140px
+:name: texas_holdem_no_limit
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import texas_holdem_no_limit_v6` |
+|--------------------|-----------------------------------------------------------|
+| Actions            | Discrete                                                  |
+| Parallel API       | Yes                                                       |
+| Manual Control     | No                                                        |
+| Agents             | `agents= ['player_0', 'player_1']`                        |
+| Agents             | 2                                                         |
+| Action Shape       | Discrete(5)                                               |
+| Action Values      | Discrete(5)                                               |
+| Observation Shape  | (54,)                                                     |
+| Observation Values | [0, 100]                                                  |
+
+```{figure} ../../_static/img/aec/classic_texas_holdem_no_limit_aec.svg
+:width: 200px
+:name: texas_holdem_no_limit
+```
 
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
 

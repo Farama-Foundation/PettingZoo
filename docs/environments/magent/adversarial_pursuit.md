@@ -4,7 +4,6 @@ title: "Adversarial Pursuit"
 
 # Adversarial Pursuit
 
-
 ```{figure} magent_adversarial_pursuit.gif 
 :width: 140px
 :name: adversarial_pursuit

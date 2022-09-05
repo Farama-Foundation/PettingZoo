@@ -1,19 +1,32 @@
 ---
-layout: "docu"
 title: "Backgammon"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(26^2 * 2 + 1)"
-action-values: "Discrete(26^2 * 2 + 1)"
-observation-shape: "(198,)"
-observation-values: "[0, 7.5]"
-num-states: "10^26"
-import: "from pettingzoo.classic import backgammon_v3"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Backgammon
+
+```{figure} classic_backgammon.gif 
+:width: 140px
+:name: backgammon
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import backgammon_v3` |
+|--------------------|------------------------------------------------|
+| Actions            | Discrete                                       |
+| Parallel API       | Yes                                            |
+| Manual Control     | No                                             |
+| Agents             | `agents= ['player_0', 'player_1']`             |
+| Agents             | 2                                              |
+| Action Shape       | Discrete(26^2 * 2 + 1)                         |
+| Action Values      | Discrete(26^2 * 2 + 1)                         |
+| Observation Shape  | (198,)                                         |
+| Observation Values | [0, 7.5]                                       |
+
+```{figure} ../../_static/img/aec/classic_backgammon_aec.svg
+:width: 200px
+:name: backgammon
+```
 
 Backgammon is a 2-player turn-based board game. Players take turns rolling 2 dice and moving checkers forward according to those rolls. A player wins if they are the first to remove all of their checkers from the board.
 

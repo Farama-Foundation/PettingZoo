@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Dou Dizhu"
-agents: "3"
-manual-control: "No"
-action-shape: "Discrete(27472)"
-action-values: "Discrete(27472)"
-observation-shape: "(901,),(790,)"
-observation-values: "[0,1]"
-import: "from pettingzoo.classic import dou_dizhu_v4"
-agent-labels: "agents= ['landlord_0', 'peasant_0', 'peasant_1']"
 ---
 
 # Dou Dizhu
+
+```{figure} classic_dou_dizhu.gif 
+:width: 140px
+:name: dou_dizhu
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import dou_dizhu_v4`      |
+|--------------------|----------------------------------------------------|
+| Actions            | Discrete                                           |
+| Parallel API       | Yes                                                |
+| Manual Control     | No                                                 |
+| Agents             | `agents= ['landlord_0', 'peasant_0', 'peasant_1']` |
+| Agents             | 3                                                  |
+| Action Shape       | Discrete(27472)                                    |
+| Action Values      | Discrete(27472)                                    |
+| Observation Shape  | (901,),(790,)                                      |
+| Observation Values | [0,1]                                              |
+
+```{figure} ../../_static/img/aec/classic_dou_dizhu_aec.svg
+:width: 200px
+:name: dou_dizhu
+```
 
 Dou Dizhu, or *Fighting the Landlord*, is a shedding game involving 3 players and a deck of cards plus 2 jokers with suits being irrelevant. Heuristically, one player is designated the "Landlord" and the others become the "Peasants". The objective of the game is to be the first one to have no cards left. If the first person to have no cards left is part of the "Peasant" team, then all members of the "Peasant" team receive a reward (+1). If the "Landlord" wins, then only the "Landlord" receives a reward (+1).
 

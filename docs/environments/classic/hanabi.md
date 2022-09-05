@@ -1,18 +1,33 @@
 ---
-actions: "Discrete"
 title: "Hanabi"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(20)"
-action-values: "Discrete(20)"
-observation-shape: "(658,)"
-observation-values: "[0,1]"
-average-total-reward: "0.0"
-import: "from pettingzoo.classic import hanabi_v4"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Hanabi
+
+```{figure} classic_hanabi.gif 
+:width: 140px
+:name: hanabi
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.classic import hanabi_v4` |
+|----------------------|--------------------------------------------|
+| Actions              | Discrete                                   |
+| Parallel API         | Yes                                        |
+| Manual Control       | No                                         |
+| Agents               | `agents= ['player_0', 'player_1']`         |
+| Agents               | 2                                          |
+| Action Shape         | Discrete(20)                               |
+| Action Values        | Discrete(20)                               |
+| Observation Shape    | (658,)                                     |
+| Observation Values   | [0,1]                                      |
+| Average Total Reward | 0.0                                        |
+
+```{figure} ../../_static/img/aec/classic_hanabi_aec.svg
+:width: 200px
+:name: hanabi
+```
 
 Hanabi is a 2-5 player cooperative game where players work together to form fireworks of different colors. A firework is a set of cards of the same color, ordered from 1 to 5. Cards in the game have both a color and number; each player can view the cards another player holds, but not their own. Players cannot directly communicate with each other, but must instead remove an info token from play in order to give information. Players can tell other players which of the cards in their hand is a specific color, or a specific number. There are initially 8 info tokens, but players can discard cards in their hand to return an info token into play. Players can also play a card from their hand: the card must either begin a new firework or be appended in order to an existing firework. However, 2 fireworks cannot have the same color, and a single firework cannot repeat numbers. If the played card does not satisfy these conditions, a life token is placed. The game ends when either 3 life tokens have been placed, all 5 fireworks have been completed, or all cards have been drawn from the deck. Points are awarded based on the largest card value in each created firework.
 

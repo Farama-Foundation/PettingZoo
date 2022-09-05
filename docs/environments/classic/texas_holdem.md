@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Texas Hold'em"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(4)"
-action-values: "Discrete(4)"
-observation-shape: "(72,)"
-observation-values: "[0, 1]"
-import: "from pettingzoo.classic import texas_holdem_v4"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Texas Hold'em
+
+```{figure} classic_texas_holdem.gif 
+:width: 140px
+:name: texas_holdem
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import texas_holdem_v4` |
+|--------------------|--------------------------------------------------|
+| Actions            | Discrete                                         |
+| Parallel API       | Yes                                              |
+| Manual Control     | No                                               |
+| Agents             | `agents= ['player_0', 'player_1']`               |
+| Agents             | 2                                                |
+| Action Shape       | Discrete(4)                                      |
+| Action Values      | Discrete(4)                                      |
+| Observation Shape  | (72,)                                            |
+| Observation Values | [0, 1]                                           |
+
+```{figure} ../../_static/img/aec/classic_texas_holdem_aec.svg
+:width: 200px
+:name: texas_holdem
+```
 
 ## Arguments
 

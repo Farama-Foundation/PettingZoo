@@ -1,19 +1,32 @@
 ---
-layout: "docu"
 title: "Chess"
-actions: "Discrete"
-agents: "2"
-manual-control: "No"
-action-shape: "Discrete(4672)"
-action-values: "Discrete(4672)"
-observation-shape: "(8,8,20)"
-observation-values: "[0,1]"
-num-states: "?"
-import: "from pettingzoo.classic.chess_v5"
-agent-labels: "agents= ['player_0', 'player_1']"
 ---
 
 # Chess
+
+```{figure} classic_chess.gif 
+:width: 140px
+:name: chess
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic.chess_v5` |
+|--------------------|------------------------------------|
+| Actions            | Discrete                           |
+| Parallel API       | Yes                                |
+| Manual Control     | No                                 |
+| Agents             | `agents= ['player_0', 'player_1']` |
+| Agents             | 2                                  |
+| Action Shape       | Discrete(4672)                     |
+| Action Values      | Discrete(4672)                     |
+| Observation Shape  | (8,8,20)                           |
+| Observation Values | [0,1]                              |
+
+```{figure} ../../_static/img/aec/classic_chess_aec.svg
+:width: 200px
+:name: chess
+```
 
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 

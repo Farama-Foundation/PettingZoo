@@ -1,17 +1,32 @@
 ---
-actions: "Discrete"
 title: "Mahjong"
-agents: "4"
-manual-control: "No"
-action-shape: "Discrete(38)"
-action-values: "Discrete(38)"
-observation-shape: "(6, 34, 4)"
-observation-values: "[0, 1]"
-import: "from pettingzoo.classic import mahjong_v4"
-agent-labels: "agents= ['player_0', 'player_1', 'player_2', 'player_3']"
 ---
 
 # Mahjong
+
+```{figure} classic_mahjong.gif 
+:width: 140px
+:name: mahjong
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import mahjong_v4`                |
+|--------------------|------------------------------------------------------------|
+| Actions            | Discrete                                                   |
+| Parallel API       | Yes                                                        |
+| Manual Control     | No                                                         |
+| Agents             | `agents= ['player_0', 'player_1', 'player_2', 'player_3']` |
+| Agents             | 4                                                          |
+| Action Shape       | Discrete(38)                                               |
+| Action Values      | Discrete(38)                                               |
+| Observation Shape  | (6, 34, 4)                                                 |
+| Observation Values | [0, 1]                                                     |
+
+```{figure} ../../_static/img/aec/classic_mahjong_aec.svg
+:width: 200px
+:name: mahjong
+```
 
 Mahjong is a tile-based game with 4 players. It uses a deck of 136 tiles that is comprised of 4 identical sets of 34 unique tiles. The objective is to form 4 sets and a pair with the 14th drawn tile. If no player wins, no player receives a reward.
 
