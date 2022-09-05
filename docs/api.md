@@ -103,7 +103,7 @@ When an agent is done, it's removed from `agents`, so when the environments done
 If you have a wrapped environment, and you want to get the unwrapped environment underneath all the layers of wrappers (so that you can manually call a function or change some underlying aspect of the environment), you can use the `.unwrapped` attribute. If the environment is already a base environment, the `.unwrapped` attribute will just return itself.
 
 ``` python
-base_env = prospector_v4.env().unwrapped
+base_env = knights_archers_zombies_v10.env().unwrapped
 ```
 
 ### Variable Numbers of Agents (Death)
@@ -120,7 +120,7 @@ In certain cases, separating agent from environment actions is helpful for study
 Environments are by default wrapped in a handful of lightweight wrappers that handle error messages and ensure reasonable behavior given incorrect usage (i.e. playing illegal moves or stepping before resetting). However, these add a very small amount of overhead. If you want to create an environment without them, you can do so by using the `raw_env()` constructor contained within each module:
 
 ``` python
-env = prospector_v4.raw_env(<environment parameters>)
+env = knights_archers_zombies_v10.raw_env(<environment parameters>)
 ```
 
 ## Parallel API
