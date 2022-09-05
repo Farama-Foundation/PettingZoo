@@ -1,20 +1,35 @@
 ---
-actions: "Continuous"
 title: "Prospector"
-agents: "7"
-manual-control: "Yes"
-action-shape: "(3,), (2,)"
-action-values: "[-1, 1]"
-observation-shape: "(150, 150, 3), (154, 154, 3)"
-observation-values: "(0, 255)"
-state-shape: "(720, 1280, 3)"
-state-values: "(0, 255)"
-average-total-reward: "0"
-import: "from pettingzoo.butterfly import prospector_v4"
-agent-labels: "agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']"
 ---
 
 # Prospector
+
+```{figure} butterfly_prospector.gif 
+:width: 200px
+:name: prospector
+```
+
+This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.butterfly import prospector_v4`                                                              |
+|----------------------|---------------------------------------------------------------------------------------------------------------|
+| Actions              | Continuous                                                                                                    |
+| Parallel API         | Yes                                                                                                           |
+| Manual Control       | Yes                                                                                                           |
+| Agents               | `agents= ['prospector_0, 'prospector_1', 'prospector_2', 'prospector_3', 'banker_0', 'banker_1', 'banker_2']` |
+| Agents               | 7                                                                                                             |
+| Action Shape         | (3,), (2,)                                                                                                    |
+| Action Values        | [-1, 1]                                                                                                       |
+| Observation Shape    | (150, 150, 3), (154, 154, 3)                                                                                  |
+| Observation Values   | (0, 255)                                                                                                      |
+| State Shape          | (720, 1280, 3)                                                                                                |
+| State Values         | (0, 255)                                                                                                      |
+| Average Total Reward | 0                                                                                                             |
+
+```{figure} ../../_static/img/aec/butterfly_prospector_aec.svg
+:width: 200px
+:name: prospector
+```
 
 This game is inspired by gold panning in the American "wild west" movies. There's a blue river at
 the bottom of the screen, which contains gold. 4 "prospector" agents can move and touch the river

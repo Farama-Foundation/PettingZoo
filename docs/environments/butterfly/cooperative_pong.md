@@ -1,23 +1,35 @@
 ---
-action-type: "Discrete"
 title: "Cooperative Pong"
-actions: Discrete
-agents: "2"
-manual-control: "Yes"
-action-shape: "Discrete(3)"
-action-values: "[0, 5]"
-action-values: "[0, 1]"
-observation-shape: "(280, 480, 3)"
-observation-values: "[0, 255]"
-state-shape: "(560, 960, 3)"
-state-values: "(0, 255)"
-average-total-reward: "-92.9"
-import: "from pettingzoo.butterfly import cooperative_pong_v4"
-agent-labels: "agents= ['paddle_0', 'paddle_1']"
-aec-diagram: "cooperative_pong_aec.png"
 ---
 
 # Cooperative Pong
+
+```{figure} butterfly_cooperative_pong.gif 
+:width: 200px
+:name: cooperative_pong
+```
+
+This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.butterfly import cooperative_pong_v4` |
+|----------------------|--------------------------------------------------------|
+| Actions              | Discrete                                               |
+| Parallel API         | Yes                                                    |
+| Manual Control       | Yes                                                    |
+| Agents               | `agents= ['paddle_0', 'paddle_1']`                     |
+| Agents               | 2                                                      |
+| Action Shape         | Discrete(3)                                            |
+| Action Values        | [0, 1]                                                 |
+| Observation Shape    | (280, 480, 3)                                          |
+| Observation Values   | [0, 255]                                               |
+| State Shape          | (560, 960, 3)                                          |
+| State Values         | (0, 255)                                               |
+| Average Total Reward | -92.9                                                  |
+
+```{figure} ../../_static/img/aec/butterfly_cooperative_pong_aec.svg
+:width: 200px
+:name: cooperative_pong
+```
 
 Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default. The observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, each agent receives a reward of `max_reward / max_cycles` (default 0.11) at each timestep. Otherwise, each agent receives a reward of `off_screen_penalty` (default -10) and the game ends.
 

@@ -1,22 +1,36 @@
 ---
-action-type: "either"
 title: "Pistonball"
 alt_title: "PistonBall"
-actions: Either
-agents: "20"
-manual-control: "Yes"
-action-shape: "(1,)"
-action-values: "[-1, 1]"
-observation-shape: "(457, 120, 3)"
-observation-values: "(0, 255)"
-state-shape: "(560, 880, 3)"
-state-values: "(0, 255)"
-average-total-reward: "-91.2"
-import: "from pettingzoo.butterfly import pistonball_v6"
-agent-labels: "agents= ['piston_0', 'piston_1', ..., 'piston_19']"
 ---
 
 # Pistonball
+
+```{figure} butterfly_pistonball.gif 
+:width: 200px
+:name: pistonball
+```
+
+This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.butterfly import pistonball_v6`     |
+|----------------------|------------------------------------------------------|
+| Actions              | Either                                               |
+| Parallel API         | Yes                                                  |
+| Manual Control       | Yes                                                  |
+| Agents               | `agents= ['piston_0', 'piston_1', ..., 'piston_19']` |
+| Agents               | 20                                                   |
+| Action Shape         | (1,)                                                 |
+| Action Values        | [-1, 1]                                              |
+| Observation Shape    | (457, 120, 3)                                        |
+| Observation Values   | (0, 255)                                             |
+| State Shape          | (560, 880, 3)                                        |
+| State Values         | (0, 255)                                             |
+| Average Total Reward | -91.2                                                |
+
+```{figure} ../../_static/img/aec/butterfly_pistonball_aec.svg
+:width: 200px
+:name: pistonball
+```
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent's observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor of 4, so that in both the discrete and continuous action space, the action 1 will move a piston 4 pixels up, and -1 will move pistons 4 pixels down.
 
