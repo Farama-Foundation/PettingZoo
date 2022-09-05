@@ -26,7 +26,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (62,)                                                      |
 | State Values       | (-inf,inf)                                                 |
 
-```{figure} ../../_static/img/aec/mpe_simple_tag.svg
+```{figure} ../../_static/img/aec/mpe_simple_tag_aec.svg
 :width: 200px
 :name: simple_tag
 ```

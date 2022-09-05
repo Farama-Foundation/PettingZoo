@@ -27,7 +27,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Values         | (-inf,inf)                                    |
 | Average Total Reward | -115.6                                        |
 
-```{figure} ../../_static/img/aec/mpe_simple_spread.svg
+```{figure} ../../_static/img/aec/mpe_simple_spread_aec.svg
 :width: 200px
 :name: simple_spread
 ```

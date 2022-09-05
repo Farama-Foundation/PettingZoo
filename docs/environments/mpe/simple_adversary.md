@@ -26,7 +26,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (28,)                                            |
 | State Values       | (-inf,inf)                                       |
 
-```{figure} ../../_static/img/aec/mpe_simple_adversary.svg
+```{figure} ../../_static/img/aec/mpe_simple_adversary_aec.svg
 :width: 200px
 :name: simple_adversary
 ```

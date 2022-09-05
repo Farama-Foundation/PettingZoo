@@ -26,7 +26,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (20,)                                         |
 | State Values       | (-inf,inf)                                    |
 
-```{figure} ../../_static/img/aec/mpe_simple_crypto.svg
+```{figure} ../../_static/img/aec/mpe_simple_crypto_aec.svg
 :width: 200px
 :name: simple_crypto
 ```
