@@ -11,9 +11,9 @@ lastpage:
 :caption: Basic
 
 content/api
-content/tutorials
-content/wrappers
 content/environment_creation
+content/wrappers
+content/tutorials
 ```
 
 ```{toctree}
