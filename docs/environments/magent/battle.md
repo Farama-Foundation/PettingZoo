@@ -1,19 +1,34 @@
 ---
-actions: "Discrete"
 title: "Battle"
-agents: "162"
-manual-control: "No"
-action-shape: "(21)"
-action-values: "Discrete(21)"
-observation-shape: "(13,13,5)"
-observation-values: "[0,2]"
-state-shape: "(45, 45, 5)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import battle_v4"
-agent-labels: "agents= [red_[0-80], blue_[0-80]]"
 ---
 
 # Battle
+
+```{figure} magent_battle.gif 
+:width: 140px
+:name: battle
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import battle_v4` |
+|--------------------|-------------------------------------------|
+| Actions            | Discrete                                  |
+| Parallel API       | Yes                                       |
+| Manual Control     | No                                        |
+| Agents             | `agents= [red_[0-80], blue_[0-80]]`       |
+| Agents             | 162                                       |
+| Action Shape       | (21)                                      |
+| Action Values      | Discrete(21)                              |
+| Observation Shape  | (13,13,5)                                 |
+| Observation Values | [0,2]                                     |
+| State Shape        | (45, 45, 5)                               |
+| State Values       | (0, 2)                                    |
+
+```{figure} ../../_static/img/aec/magent_battle_aec.svg
+:width: 200px
+:name: battle
+```
 
 A large-scale team battle. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
 

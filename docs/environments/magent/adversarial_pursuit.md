@@ -1,19 +1,35 @@
 ---
-actions: "Discrete"
 title: "Adversarial Pursuit"
-agents: "75"
-manual-control: "No"
-action-shape: "(9),(13)"
-action-values: "Discrete(9),(13)"
-observation-shape: "(9,9,5), (10,10,9)"
-observation-values: "[0,2]"
-state-shape: "(45, 45, 5)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import adversarial_pursuit_v4"
-agent-labels: "agents= [predator_[0-24], prey_[0-49]]"
 ---
 
 # Adversarial Pursuit
+
+
+```{figure} magent_adversarial_pursuit.gif 
+:width: 140px
+:name: adversarial_pursuit
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import adversarial_pursuit_v4` |
+|--------------------|--------------------------------------------------------|
+| Actions            | Discrete                                               |
+| Parallel API       | Yes                                                    |
+| Manual Control     | No                                                     |
+| Agents             | `agents= [predator_[0-24], prey_[0-49]]`               |
+| Agents             | 75                                                     |
+| Action Shape       | (9),(13)                                               |
+| Action Values      | Discrete(9),(13)                                       |
+| Observation Shape  | (9,9,5), (10,10,9)                                     |
+| Observation Values | [0,2]                                                  |
+| State Shape        | (45, 45, 5)                                            |
+| State Values       | (0, 2)                                                 |
+
+```{figure} ../../_static/img/aec/magent_adversarial_pursuit_aec.svg
+:width: 200px
+:name: adversarial_pursuit
+```
 
 The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so they can be tagged continually.
 

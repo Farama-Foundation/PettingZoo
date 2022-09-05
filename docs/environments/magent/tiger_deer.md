@@ -1,20 +1,34 @@
 ---
-layout: "docu"
 title: "Tiger-Deer"
-actions: "Discrete"
-agents: "121"
-manual-control: "No"
-action-shape: "(5),(9)"
-action-values: "Discrete(5),(9)"
-observation-shape: "(3,3,5), (9,9,5)"
-observation-values: "[0,2]"
-state-shape: "(45, 45, 5)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import tiger_deer_v3"
-agent-labels: "agents= [ deer_[0-100], tiger_[0-19] ]"
 ---
 
 # Tiger-Deer
+
+```{figure} magent_tiger_deer.gif 
+:width: 140px
+:name: tiger_deer
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import tiger_deer_v3` |
+|--------------------|-----------------------------------------------|
+| Actions            | Discrete                                      |
+| Parallel API       | Yes                                           |
+| Manual Control     | No                                            |
+| Agents             | `agents= [ deer_[0-100], tiger_[0-19] ]`      |
+| Agents             | 121                                           |
+| Action Shape       | (5),(9)                                       |
+| Action Values      | Discrete(5),(9)                               |
+| Observation Shape  | (3,3,5), (9,9,5)                              |
+| Observation Values | [0,2]                                         |
+| State Shape        | (45, 45, 5)                                   |
+| State Values       | (0, 2)                                        |
+
+```{figure} ../../_static/img/aec/magent_tiger_deer_aec.svg
+:width: 200px
+:name: tiger_deer
+```
 
 In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8 health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.
 

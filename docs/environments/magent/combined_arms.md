@@ -1,19 +1,34 @@
 ---
-actions: "Discrete"
 title: "Combined Arms"
-agents: "162"
-manual-control: "No"
-action-shape: "(9),(25)"
-action-values: "Discrete(9),(25)"
-observation-shape: "(13,13,9)"
-observation-values: "[0,2]"
-state-shape: "(45, 45, 9)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import combined_arms_v6"
-agent-labels: "agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]"
 ---
 
 # Combined Arms
+
+```{figure} magent_combined_arms.gif 
+:width: 140px
+:name: combined_arms
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import combined_arms_v6`                                   |
+|--------------------|------------------------------------------------------------------------------------|
+| Actions            | Discrete                                                                           |
+| Parallel API       | Yes                                                                                |
+| Manual Control     | No                                                                                 |
+| Agents             | `agents= [redmelee_[0-44], redranged_[0-35], bluemelee_[0-44], blueranged_[0-35]]` |
+| Agents             | 162                                                                                |
+| Action Shape       | (9),(25)                                                                           |
+| Action Values      | Discrete(9),(25)                                                                   |
+| Observation Shape  | (13,13,9)                                                                          |
+| Observation Values | [0,2]                                                                              |
+| State Shape        | (45, 45, 9)                                                                        |
+| State Values       | (0, 2)                                                                             |
+
+```{figure} ../../_static/img/aec/magent_combined_arms_aec.svg
+:width: 200px
+:name: combined_arms
+```
 
 A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack farther and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so). Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
 

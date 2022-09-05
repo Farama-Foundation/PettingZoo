@@ -1,19 +1,34 @@
 ---
-actions: "Discrete"
 title: "Gather"
-agents: "495"
-manual-control: "No"
-action-shape: "(33)"
-action-values: "Discrete(33)"
-observation-shape: "(15,15,5)"
-observation-values: "[0,2]"
-state-shape: "(200, 200, 5)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import gather_v4"
-agent-labels: "agents= [ omnivore_[0-494] ]"
 ---
 
 # Gather
+
+```{figure} magent_gather.gif 
+:width: 140px
+:name: gather
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import gather_v4` |
+|--------------------|-------------------------------------------|
+| Actions            | Discrete                                  |
+| Parallel API       | Yes                                       |
+| Manual Control     | No                                        |
+| Agents             | `agents= [ omnivore_[0-494] ]`            |
+| Agents             | 495                                       |
+| Action Shape       | (33)                                      |
+| Action Values      | Discrete(33)                              |
+| Observation Shape  | (15,15,5)                                 |
+| Observation Values | [0,2]                                     |
+| State Shape        | (200, 200, 5)                             |
+| State Values       | (0, 2)                                    |
+
+```{figure} ../../_static/img/aec/magent_gather_aec.svg
+:width: 200px
+:name: gather
+```
 
 In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
 

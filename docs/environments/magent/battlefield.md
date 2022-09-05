@@ -1,19 +1,34 @@
 ---
-actions: "Discrete"
 title: "Battlefield"
-agents: "24"
-manual-control: "No"
-action-shape: "(21)"
-action-values: "Discrete(21)"
-observation-shape: "(13,13,5)"
-observation-values: "[0,2]"
-state-shape: "(80, 80, 5)"
-state-values: "(0, 2)"
-import: "from pettingzoo.magent import battlefield_v4"
-agent-labels: "agents= [red_[0-11], blue_[0-11]]"
 ---
 
 # Battlefield
+
+```{figure} magent_battlefield.gif 
+:width: 140px
+:name: battlefield
+```
+
+This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.magent import battlefield_v4` |
+|--------------------|------------------------------------------------|
+| Actions            | Discrete                                       |
+| Parallel API       | Yes                                            |
+| Manual Control     | No                                             |
+| Agents             | `agents= [red_[0-11], blue_[0-11]]`            |
+| Agents             | 24                                             |
+| Action Shape       | (21)                                           |
+| Action Values      | Discrete(21)                                   |
+| Observation Shape  | (13,13,5)                                      |
+| Observation Values | [0,2]                                          |
+| State Shape        | (80, 80, 5)                                    |
+| State Values       | (0, 2)                                         |
+
+```{figure} ../../_static/img/aec/magent_battlefield_aec.svg
+:width: 200px
+:name: battlefield
+```
 
 Same as [battle](./battle) but with fewer agents arrayed in a larger space with obstacles.
 
