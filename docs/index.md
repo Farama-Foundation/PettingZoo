@@ -4,8 +4,6 @@ firstpage:
 lastpage:
 ---
 
-
-
 ```{toctree}
 :hidden:
 :caption: Basic
@@ -36,6 +34,8 @@ environments/third_party_envs
 Github <https://github.com/Farama-Foundation/PettingZoo>
 
 ```
+
+<br>
 
 ```{figure} environments/atari/atari_warlords.gif
     :width: 160px
