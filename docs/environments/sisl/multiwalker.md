@@ -2,15 +2,6 @@
 actions: "Continuous"
 title: "Multiwalker"
 alt_title: "MultiWalker"
-agents: "3"
-manual-control: "No"
-action-shape: "(4,)"
-action-values: "(-1, 1)"
-observation-shape: "(31,)"
-observation-values: "[-inf,inf]"
-average-total-reward: "-300.86"
-import: "from pettingzoo.sisl import multiwalker_v9"
-agent-labels: "agents= ['walker_0', 'walker_1', 'walker_2']"
 ---
 
 # Multiwalker

@@ -1,20 +1,36 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple Spread"
-agents: "3"
-manual-control: "No"
-action-shape: "(5)"
-action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
-observation-shape: "(18)"
-observation-values: "(-inf,inf)"
-state-shape: "(54,)"
-state-values: "(-inf,inf)"
-average-total-reward: "-115.6"
-import: "from pettingzoo.mpe import simple_spread_v2"
-agent-labels: "agents= [agent_0, agent_1, agent_2]"
 ---
 
 # Simple Spread
+
+```{figure} mpe_simple_spread.gif 
+:width: 140px
+:name: simple_spread
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.mpe import simple_spread_v2` |
+|----------------------|-----------------------------------------------|
+| Actions              | Discrete/Continuous                           |
+| Parallel API         | Yes                                           |
+| Manual Control       | No                                            |
+| Agents               | `agents= [agent_0, agent_1, agent_2]`         |
+| Agents               | 3                                             |
+| Action Shape         | (5)                                           |
+| Action Values        | Discrete(5)/Box(0.0, 1.0, (5))                |
+| Observation Shape    | (18)                                          |
+| Observation Values   | (-inf,inf)                                    |
+| State Shape          | (54,)                                         |
+| State Values         | (-inf,inf)                                    |
+| Average Total Reward | -115.6                                        |
+
+```{figure} ../../_static/img/aec/mpe_simple_spread.svg
+:width: 200px
+:name: simple_spread
+```
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.
 

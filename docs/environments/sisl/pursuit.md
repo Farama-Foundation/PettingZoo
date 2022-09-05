@@ -1,15 +1,6 @@
 ---
 actions: "Discrete"
 title: "Pursuit"
-agents: "8 (+/-)"
-manual-control: "Yes"
-action-shape: "(5)"
-action-values: "Discrete(5)"
-observation-shape: "(7, 7, 3)"
-observation-values: "[0, 30]"
-average-total-reward: "30.3"
-import: "from pettingzoo.sisl import pursuit_v4"
-agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_7']"
 ---
 
 # Pursuit

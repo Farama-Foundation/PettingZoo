@@ -1,20 +1,36 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple Speaker Listener"
-agents: "2"
-manual-control: "No"
-action-shape: "(3),(5)"
-action-values: "Discrete(3),(5)/Box(0.0, 1.0, (3)), Box(0.0, 1.0, (5))"
-observation-shape: "(3),(11)"
-observation-values: "(-inf,inf)"
-state-shape: "(14,)"
-state-values: "(-inf,inf)"
-average-total-reward: "-80.9"
-import: "from pettingzoo.mpe import simple_speaker_listener_v3"
-agent-labels: "agents=[speaker_0, listener_0]"
 ---
 
 # Simple Speaker Listener
+
+```{figure} mpe_simple_speaker_listener.gif 
+:width: 140px
+:name: simple_speaker_listener
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.mpe import simple_speaker_listener_v3` |
+|----------------------|---------------------------------------------------------|
+| Actions              | Discrete/Continuous                                     |
+| Parallel API         | Yes                                                     |
+| Manual Control       | No                                                      |
+| Agents               | `agents=[speaker_0, listener_0]`                        |
+| Agents               | 2                                                       |
+| Action Shape         | (3),(5)                                                 |
+| Action Values        | Discrete(3),(5)/Box(0.0, 1.0, (3)), Box(0.0, 1.0, (5))  |
+| Observation Shape    | (3),(11)                                                |
+| Observation Values   | (-inf,inf)                                              |
+| State Shape          | (14,)                                                   |
+| State Values         | (-inf,inf)                                              |
+| Average Total Reward | -80.9                                                   |
+
+```{figure} ../../_static/img/aec/mpe_simple_speaker_listener.svg
+:width: 200px
+:name: simple_speaker_listener
+```
 
 This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 

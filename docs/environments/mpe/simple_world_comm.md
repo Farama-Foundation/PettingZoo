@@ -1,19 +1,35 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple World Comm"
-agents: "6"
-manual-control: "No"
-action-shape: "(5),(20)"
-action-values: "Discrete(5),(20)/Box(0.0, 1.0, (5)), Box(0.0, 1.0, (9))"
-observation-shape: "(28),(34)"
-observation-values: "(-inf,inf)"
-state-shape: "(192,)"
-state-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_world_comm_v2"
-agent-labels: "agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]"
 ---
 
 # Simple World Comm
+
+```{figure} mpe_simple_world_comm.gif 
+:width: 140px
+:name: simple_world_comm
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.mpe import simple_world_comm_v2`                                   |
+|--------------------|-------------------------------------------------------------------------------------|
+| Actions            | Discrete/Continuous                                                                 |
+| Parallel API       | Yes                                                                                 |
+| Manual Control     | No                                                                                  |
+| Agents             | `agents=[leadadversary_0, adversary_0, adversary_1, adversary_3, agent_0, agent_1]` |
+| Agents             | 6                                                                                   |
+| Action Shape       | (5),(20)                                                                            |
+| Action Values      | Discrete(5),(20)/Box(0.0, 1.0, (5)), Box(0.0, 1.0, (9))                             |
+| Observation Shape  | (28),(34)                                                                           |
+| Observation Values | (-inf,inf)                                                                          |
+| State Shape        | (192,)                                                                              |
+| State Values       | (-inf,inf)                                                                          |
+
+```{figure} ../../_static/img/aec/mpe_simple_world_comm.svg
+:width: 200px
+:name: simple_world_comm
+```
 
 This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are 'forests' that hide agents inside from being seen, and there is a ‘leader adversary' that can see the agents at all times and can communicate with the other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.
 

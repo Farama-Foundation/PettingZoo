@@ -6,15 +6,14 @@ title: MPE Environments
 
 ```{toctree}
 :hidden:
+mpe/simple
 mpe/simple_adversary
 mpe/simple_crypto
 mpe/simple_push
-mpe/simple_reference
 mpe/simple_speaker_listener
 mpe/simple_spread
 mpe/simple_tag
 mpe/simple_world_comm
-mpe/simple
 ```
 
 The unique dependencies for this set of environments can be installed via:

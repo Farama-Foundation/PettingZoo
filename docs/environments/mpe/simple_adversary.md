@@ -1,19 +1,35 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple Adversary"
-agents: "3"
-manual-control: "No"
-action-shape: "(5)"
-action-values: "Discrete(5)/Box(0.0, 1.0, (5))"
-observation-shape: "(8),(10)"
-observation-values: "(-inf,inf)"
-state-shape: "(28,)"
-state-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_adversary_v2"
-agent-labels: "agents= [adversary_0, agent_0,agent_1]"
 ---
 
 # Simple Adversary
+
+```{figure} mpe_simple_adversary.gif 
+:width: 140px
+:name: simple_adversary
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.mpe import simple_adversary_v2` |
+|--------------------|--------------------------------------------------|
+| Actions            | Discrete/Continuous                              |
+| Parallel API       | Yes                                              |
+| Manual Control     | No                                               |
+| Agents             | `agents= [adversary_0, agent_0,agent_1]`         |
+| Agents             | 3                                                |
+| Action Shape       | (5)                                              |
+| Action Values      | Discrete(5)/Box(0.0, 1.0, (5))                   |
+| Observation Shape  | (8),(10)                                         |
+| Observation Values | (-inf,inf)                                       |
+| State Shape        | (28,)                                            |
+| State Values       | (-inf,inf)                                       |
+
+```{figure} ../../_static/img/aec/mpe_simple_adversary.svg
+:width: 200px
+:name: simple_adversary
+```
 
 In this environment, there is 1 adversary (red), N good agents (green), N landmarks (default N=2). All agents observe the position of landmarks and other agents. One landmark is the ‘target landmark’ (colored green). Good agents are rewarded based on how close the closest one of them is to the target landmark, but negatively rewarded based on how close the adversary is to the target landmark. The adversary is rewarded based on distance to the target, but it doesn’t know which landmark is the target landmark. All rewards are unscaled Euclidean distance (see main MPE documentation for average distance). This means good agents have to learn to ‘split up’ and cover all landmarks to deceive the adversary.
 

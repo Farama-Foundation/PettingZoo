@@ -2,15 +2,6 @@
 actions: "Continuous"
 title: "Waterworld"
 alt_title: "WaterWorld"
-agents: "5"
-manual-control: "No"
-action-shape: "(2,)"
-action-values: "[-0.01, 0.01]"
-observation-shape: "(242,)"
-observation-values: "[-√2, 2*√2]"
-average-total-reward: "-68.3"
-import: "from pettingzoo.sisl import waterworld_v3"
-agent-labels: "agents= ['pursuer_0', 'pursuer_1', ..., 'pursuer_4']"
 ---
 
 # Waterworld

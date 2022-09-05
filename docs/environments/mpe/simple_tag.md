@@ -1,19 +1,35 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple Tag"
-agents: "4"
-manual-control: "No"
-action-shape: "(5)"
-action-values: "Discrete(5)/Box(0.0, 1.0, (50))"
-observation-shape: "(14),(16)"
-observation-values: "(-inf,inf)"
-state-shape: "(62,)"
-state-values: "(-inf,inf)"
-import: "from pettingzoo.mpe import simple_tag_v2"
-agent-labels: "agents= [adversary_0, adversary_1, adversary_2, agent_0]"
 ---
 
 # Simple Tag
+
+```{figure} mpe_simple_tag.gif 
+:width: 140px
+:name: simple_tag
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.mpe import simple_tag_v2`                 |
+|--------------------|------------------------------------------------------------|
+| Actions            | Discrete/Continuous                                        |
+| Parallel API       | Yes                                                        |
+| Manual Control     | No                                                         |
+| Agents             | `agents= [adversary_0, adversary_1, adversary_2, agent_0]` |
+| Agents             | 4                                                          |
+| Action Shape       | (5)                                                        |
+| Action Values      | Discrete(5)/Box(0.0, 1.0, (50))                            |
+| Observation Shape  | (14),(16)                                                  |
+| Observation Values | (-inf,inf)                                                 |
+| State Shape        | (62,)                                                      |
+| State Values       | (-inf,inf)                                                 |
+
+```{figure} ../../_static/img/aec/mpe_simple_tag.svg
+:width: 200px
+:name: simple_tag
+```
 
 This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By default, there is 1 good agent, 3 adversaries and 2 obstacles.
 

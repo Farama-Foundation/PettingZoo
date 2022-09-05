@@ -1,20 +1,35 @@
 ---
 actions: "Discrete/Continuous"
 title: "Simple Reference"
-agents: "2"
-manual-control: "No"
-action-shape: "(50)"
-action-values: "Discrete(50)/Box(0.0, 1.0, (15))"
-observation-shape: "(21)"
-observation-values: "(-inf,inf)"
-state-shape: "(42,)"
-state-values: "(-inf,inf)"
-average-total-reward: "-57.1"
-import: "from pettingzoo.mpe import simple_reference_v2"
-agent-labels: "agents= [agent_0, agent_1]"
 ---
 
 # Simple Reference
+
+```{figure} mpe_simple_reference.gif 
+:width: 140px
+:name: simple_reference
+```
+
+This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.mpe import simple_reference_v2` |
+|--------------------|--------------------------------------------------|
+| Actions            | Discrete/Continuous                              |
+| Parallel API       | Yes                                              |
+| Manual Control     | No                                               |
+| Agents             | `agents= [adversary_0, agent_0,agent_1]`         |
+| Agents             | 3                                                |
+| Action Shape       | (5)                                              |
+| Action Values      | Discrete(5)/Box(0.0, 1.0, (5))                   |
+| Observation Shape  | (8),(10)                                         |
+| Observation Values | (-inf,inf)                                       |
+| State Shape        | (28,)                                            |
+| State Values       | (-inf,inf)                                       |
+
+```{figure} ../../_static/img/aec/mpe_simple_reference.svg
+:width: 200px
+:name: simple_reference
+```
 
 This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.
 
