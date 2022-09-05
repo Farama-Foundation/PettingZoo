@@ -1,5 +1,6 @@
 ---
 title: Classic Environments
+firstpage:
 ---
 
 # Classic
@@ -21,6 +22,10 @@ classic/texas_holdem_no_limit
 classic/texas_holdem
 classic/tictactoe
 classic/uno
+```
+
+```{raw} html
+    :file: classic/list.html
 ```
 
 The unique dependencies for this set of environments can be installed via:
@@ -48,10 +53,3 @@ Many of the classic environments are based on [RLCard](https://github.com/dataml
   year={2019}
 }
 ```
-
-</div>
-<div class="selection-table-container" markdown="1">
-## Classic
-
-{% include bigtable.html group="classic/" cols=3 %}
-</div>

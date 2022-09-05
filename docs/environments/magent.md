@@ -1,5 +1,6 @@
 ---
 title: MAgent Environments
+firstpage:
 ---
 
 # MAgent
@@ -12,6 +13,10 @@ magent/battlefield
 magent/combined_arms
 magent/gather
 magent/tiger_deer
+```
+
+```{raw} html
+    :file: magent/list.html
 ```
 
 The unique dependencies for this set of environments can be installed via:
@@ -64,9 +69,3 @@ The MAgent environments were originally created for the following work:
 
 Please cite this paper if you use these environments in your research.
 
-</div>
-<div class="selection-table-container" markdown="1">
-## MAgent
-
-{% include bigtable.html group="magent/" cols=3 %}
-</div>

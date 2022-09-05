@@ -1,5 +1,6 @@
 ---
 title: SISL Environments
+firstpage:
 ---
 
 # SISL
@@ -9,6 +10,10 @@ title: SISL Environments
 sisl/multiwalker
 sisl/pursuit
 sisl/waterworld
+```
+
+```{raw} html
+    :file: sisl/list.html
 ```
 
 The unique dependencies for this set of environments can be installed via:
@@ -33,10 +38,3 @@ If you use these environments, please additionally cite:
   organization={Springer}
 }
 ```
-
-</div>
-<div class="selection-table-container" markdown="1">
-## SISL
-
-{% include bigtable.html group="sisl/" cols=3 %}
-</div>

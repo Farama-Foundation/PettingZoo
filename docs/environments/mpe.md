@@ -1,5 +1,6 @@
 ---
 title: MPE Environments
+firstpage:
 ---
 
 # MPE
@@ -14,6 +15,10 @@ mpe/simple_speaker_listener
 mpe/simple_spread
 mpe/simple_tag
 mpe/simple_world_comm
+```
+
+```{raw} html
+    :file: mpe/list.html
 ```
 
 The unique dependencies for this set of environments can be installed via:
@@ -95,10 +100,3 @@ But were first released as a part of this work:
 ```
 
 Please cite one or both of these if you use these environments in your research.
-
-</div>
-<div class="selection-table-container" markdown="1">
-## MPE
-
-{% include bigtable.html group="mpe/" cols=3 %}
-</div>

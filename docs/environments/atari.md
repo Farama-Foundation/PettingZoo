@@ -1,5 +1,6 @@
 ---
 title: Atari Environments
+firstpage:
 ---
 
 # Atari
@@ -151,11 +152,3 @@ Various extensions to the Arcade Learning Environment were introduced in:
   year={2018}
 }
 ```
-
-</div>
-
-<div class="selection-table-container" markdown="1">
-## Atari
-
-{% include bigtable.html group="atari/" cols=3 %}
-</div>
