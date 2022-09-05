@@ -31,7 +31,6 @@ all_envs = {
         "cooperative_pong",
         "knights_archers_zombies",
         "pistonball",
-        "prospector",
     ],
     "classic": [
         "backgammon",

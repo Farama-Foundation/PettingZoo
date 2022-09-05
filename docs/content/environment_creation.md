@@ -101,16 +101,16 @@ for i in range(100):
 
 The DeprecatedModule is used in PettingZoo to help guide the user away from old obsolete environment versions and toward new ones. If you wish to create a similar versioning system, this may be helpful.
 
-For example, when the user tries to import the `prospector_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
+For example, when the user tries to import the `knights_archers_zombies_v0` environment, they import the following variable (defined in `pettingzoo/butterfly/__init__.py`):
 ``` python
 from pettingzoo.utils.deprecated_module import DeprecatedModule
-prospector_v0 = DeprecatedModule("prospector", "v0", "v3")
+knights_archers_zombies_v0 = DeprecatedModule("knights_archers_zombies", "v0", "v10")
 ```
-This declaration tells the user that `prospector_v0` is deprecated and `prospector_v4` should be used instead. In particular, it gives the following error:
+This declaration tells the user that `knights_archers_zombies_v0` is deprecated and `knights_archers_zombies_v10` should be used instead. In particular, it gives the following error:
 ``` python
-from pettingzoo.butterfly import prospector_v0
-prospector_v0.env()
-# pettingzoo.utils.deprecated_module.DeprecatedEnv: prospector_v0 is now deprecated, use prospector_v4 instead
+from pettingzoo.butterfly import knights_archers_zombies_v0
+knights_archers_zombies_v0.env()
+# pettingzoo.utils.deprecated_module.DeprecatedEnv: knights_archers_zombies_v0 is now deprecated, use knights_archers_zombies_v10 instead
 ```
 
 ## Tests

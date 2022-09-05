@@ -10,7 +10,6 @@ firstpage:
 butterfly/cooperative_pong
 butterfly/knights_archers_zombies
 butterfly/pistonball
-butterfly/prospector
 ```
 
 ```{raw} html
