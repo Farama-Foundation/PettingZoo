@@ -25,7 +25,7 @@ all_envs = {
         "video_checkers",
         "volleyball_pong",
         "warlords",
-        "wizard_of_wor"
+        "wizard_of_wor",
     ],
     "butterfly": [
         "cooperative_pong",
@@ -55,7 +55,7 @@ all_envs = {
         "battlefield",
         "combined_arms",
         "gather",
-        "tiger_deer", 
+        "tiger_deer",
     ],
     "mpe": [
         "simple_adversary",
