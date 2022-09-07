@@ -1,5 +1,6 @@
 ---
 title: "Connect Four"
+env_icon: "/_static/img/icons/Classic/ConnectFour.png"
 ---
 
 # Connect Four

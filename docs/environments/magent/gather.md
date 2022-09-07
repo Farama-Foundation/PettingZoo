@@ -1,5 +1,6 @@
 ---
 title: "Gather"
+env_icon: "/_static/img/icons/MAgent/Gather.png"
 ---
 
 # Gather

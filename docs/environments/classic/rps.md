@@ -1,5 +1,6 @@
 ---
 title: "Rock Paper Scissors"
+env_icon: "/_static/img/icons/Classic/RockPaperScissors.png"
 ---
 
 # Rock Paper Scissors

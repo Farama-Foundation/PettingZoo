@@ -1,5 +1,6 @@
 ---
 title: "Texas Hold'em"
+env_icon: "/_static/img/icons/Classic/TexasHold'em.png"
 ---
 
 # Texas Hold'em

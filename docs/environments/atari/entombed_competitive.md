@@ -1,5 +1,6 @@
 ---
 title: "Entombed: Competitive"
+env_icon: "/_static/img/icons/Atari/EntombedCompetititve.png"
 ---
 
 # Emtombed: Competitive

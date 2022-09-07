@@ -1,5 +1,6 @@
 ---
 title: "Tennis"
+env_icon: "/_static/img/icons/Atari/Tennis.png"
 ---
 
 # Tennis

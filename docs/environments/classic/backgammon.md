@@ -1,5 +1,6 @@
 ---
 title: "Backgammon"
+env_icon: "/_static/img/icons/Classic/Backgammon.png"
 ---
 
 # Backgammon

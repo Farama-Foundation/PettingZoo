@@ -1,6 +1,6 @@
 ---
-actions: "Discrete/Continuous"
 title: "Simple"
+env_icon: "/_static/img/icons/MPE/Simple.png"
 ---
 
 # Simple
@@ -46,5 +46,3 @@ simple_v2.env(max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-
-</div>

@@ -1,5 +1,6 @@
 ---
 title: "Adversarial Pursuit"
+env_icon: "/_static/img/icons/MAgent/AdversarialPursuit.png"
 ---
 
 # Adversarial Pursuit

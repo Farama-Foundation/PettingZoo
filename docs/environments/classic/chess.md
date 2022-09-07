@@ -1,5 +1,6 @@
 ---
 title: "Chess"
+env_icon: "/_static/img/icons/Classic/Chess.png"
 ---
 
 # Chess

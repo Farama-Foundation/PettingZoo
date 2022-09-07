@@ -1,5 +1,6 @@
 ---
 title: "Foozpong"
+env_icon: "/_static/img/icons/Atari/Foozpong.png"
 ---
 
 # Foozpong

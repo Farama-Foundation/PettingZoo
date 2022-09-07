@@ -1,6 +1,6 @@
 ---
-actions: "Discrete"
 title: "Pursuit"
+env_icon: "/_static/img/icons/SISL/Pursuit.png"
 ---
 
 # Pursuit

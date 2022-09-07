@@ -1,5 +1,6 @@
 ---
 title: "Maze Craze"
+env_icon: "/_static/img/icons/Atari/MazeCraze.png"
 ---
 
 # Maze Craze

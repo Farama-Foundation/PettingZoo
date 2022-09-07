@@ -1,5 +1,6 @@
 ---
 title: "Entombed: Cooperative"
+env_icon: "/_static/img/icons/Atari/EntombedCooperative.png"
 ---
 
 # Emtombed: Cooperative

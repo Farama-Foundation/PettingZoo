@@ -1,5 +1,6 @@
 ---
 title: "Warlords"
+env_icon: "/_static/img/icons/Atari/Warlords.png"
 ---
 
 # Warlords

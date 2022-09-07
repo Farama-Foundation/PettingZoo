@@ -1,6 +1,6 @@
 ---
-actions: "Discrete/Continuous"
 title: "Simple Push"
+env_icon: "/_static/img/icons/MPE/SimplePush.png"
 ---
 
 # Simple Push
@@ -50,5 +50,3 @@ simple_push_v2.env(max_cycles=25, continuous_actions=False)
 
 
 `max_cycles`:  number of frames (a step for each agent) until game terminates
-
-</div>

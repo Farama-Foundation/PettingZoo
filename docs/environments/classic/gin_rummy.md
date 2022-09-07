@@ -1,5 +1,6 @@
 ---
 title: "Gin Rummy"
+env_icon: "/_static/img/icons/Classic/GinRummy.png"
 ---
 
 # Gin Rummy

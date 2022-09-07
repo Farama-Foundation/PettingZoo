@@ -1,5 +1,6 @@
 ---
 title: "Volleyball Pong"
+env_icon: "/_static/img/icons/Atari/VolleyballPong.png"
 ---
 
 # Volleyball Pong

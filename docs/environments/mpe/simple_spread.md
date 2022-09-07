@@ -1,6 +1,6 @@
 ---
-actions: "Discrete/Continuous"
 title: "Simple Spread"
+env_icon: "/_static/img/icons/MPE/SimpleSpread.png"
 ---
 
 # Simple Spread
@@ -55,4 +55,3 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-</div>

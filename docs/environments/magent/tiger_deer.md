@@ -1,5 +1,6 @@
 ---
 title: "Tiger-Deer"
+env_icon: "/_static/img/icons/MAgent/Tiger-Deer.png"
 ---
 
 # Tiger-Deer

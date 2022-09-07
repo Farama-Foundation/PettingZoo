@@ -1,5 +1,6 @@
 ---
 title: "Combined Arms"
+env_icon: "/_static/img/icons/MAgent/CombinedArms.png"
 ---
 
 # Combined Arms

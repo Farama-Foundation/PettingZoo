@@ -1,6 +1,7 @@
 ---
 title: "Pistonball"
 alt_title: "PistonBall"
+env_icon: "/_static/img/icons/Butterfly/Pistonball.png"
 ---
 
 # Pistonball

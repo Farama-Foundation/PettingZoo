@@ -56,3 +56,17 @@ h3 {
 .cookie_alert button svg {
     width: 100%;
 }
+
+.theme-env-icon-container {
+    margin-top: 24px;
+    margin-bottom: -18px;
+}
+
+.theme-env-icon-container:has(+ div > h1), 
+.theme-env-icon-container:has(+ div > h2)  {
+    margin-bottom: -24px;
+}
+
+.theme-env-icon {
+    height: 32px;
+}

@@ -1,5 +1,6 @@
 ---
 title: "Go"
+env_icon: "/_static/img/icons/Classic/Go.png"
 ---
 
 # Go

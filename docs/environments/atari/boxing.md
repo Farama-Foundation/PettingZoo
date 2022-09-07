@@ -1,5 +1,6 @@
 ---
 title: "Boxing"
+env_icon: "/_static/img/icons/Atari/Boxing.png"
 ---
 
 # Boxing

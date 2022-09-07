@@ -1,5 +1,6 @@
 ---
 title: "Uno"
+env_icon: "/_static/img/icons/Classic/Uno.png"
 ---
 
 # Uno

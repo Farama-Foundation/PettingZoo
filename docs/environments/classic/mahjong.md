@@ -1,5 +1,6 @@
 ---
 title: "Mahjong"
+env_icon: "/_static/img/icons/Classic/Mahjong.png"
 ---
 
 # Mahjong

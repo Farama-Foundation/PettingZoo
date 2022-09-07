@@ -1,5 +1,6 @@
 ---
 title: "Dou Dizhu"
+env_icon: "/_static/img/icons/Classic/DouDizhu.png"
 ---
 
 # Dou Dizhu

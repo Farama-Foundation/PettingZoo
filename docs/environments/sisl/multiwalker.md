@@ -1,7 +1,7 @@
 ---
-actions: "Continuous"
 title: "Multiwalker"
 alt_title: "MultiWalker"
+env_icon: "/_static/img/icons/SISL/MultiWalker.png"
 ---
 
 # Multiwalker

@@ -1,5 +1,6 @@
 ---
 title: "Checkers"
+env_icon: "/_static/img/icons/Classic/Checkers.png"
 ---
 
 # Checkers

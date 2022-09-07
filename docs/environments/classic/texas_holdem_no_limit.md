@@ -1,5 +1,6 @@
 ---
 title: "Texas Hold'em No Limit"
+env_icon: "/_static/img/icons/Classic/TexasHold'emNoLimit.png"
 ---
 
 # Texas Hold'em No Limit

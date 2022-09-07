@@ -1,6 +1,7 @@
 ---
 title: "Wizard of Wor"
 alt_title: "WizardOfWor"
+env_icon: "/_static/img/icons/Atari/WizardOfWor.png"
 ---
 
 # Wizard of Wor

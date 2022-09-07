@@ -1,5 +1,6 @@
 ---
 title: "Cooperative Pong"
+env_icon: "/_static/img/icons/Butterfly/CooperativePong.png"
 ---
 
 # Cooperative Pong

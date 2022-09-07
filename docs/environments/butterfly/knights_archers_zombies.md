@@ -1,5 +1,6 @@
 ---
 title: "Knights Archers Zombies ('KAZ')"
+env_icon: "/_static/img/icons/Butterfly/KnightsArchersZombies('KAZ').png"
 ---
 
 # Knights Archers Zombies ('KAZ')

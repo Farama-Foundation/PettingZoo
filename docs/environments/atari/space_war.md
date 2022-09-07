@@ -1,6 +1,7 @@
 ---
 title: "Space War"
 alt_title: "Spacewar"
+env_icon: "/_static/img/icons/Atari/Spacewar.png"
 ---
 
 # Space War

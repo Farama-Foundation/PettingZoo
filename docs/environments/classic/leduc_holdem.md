@@ -1,5 +1,6 @@
 ---
 title: "Leduc Hold'em"
+env_icon: "/_static/img/icons/Classic/LeducHold'em.png"
 ---
 
 # Leduc Hold'em

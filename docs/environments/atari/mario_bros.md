@@ -1,5 +1,6 @@
 ---
 title: "Mario Bros"
+env_icon: "/_static/img/icons/Atari/MarioBros.png"
 ---
 
 # Mario Bros

@@ -1,7 +1,7 @@
 ---
-actions: "Continuous"
 title: "Waterworld"
 alt_title: "WaterWorld"
+env_icon: "/_static/img/icons/SISL/WaterWorld.png"
 ---
 
 # Waterworld

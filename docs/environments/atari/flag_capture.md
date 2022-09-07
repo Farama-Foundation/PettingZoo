@@ -1,5 +1,6 @@
 ---
 title: "Flag Capture"
+env_icon: "/_static/img/icons/Atari/FlagCapture.png"
 ---
 
 # Flag Capture

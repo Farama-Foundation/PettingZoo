@@ -1,5 +1,6 @@
 ---
 title: "Joust"
+env_icon: "/_static/img/icons/Atari/Joust.png"
 ---
 
 # Joust

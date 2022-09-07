@@ -1,5 +1,6 @@
 ---
 title: "Double Dunk"
+env_icon: "/_static/img/icons/Atari/DoubleDunk.png"
 ---
 
 # Double Dunk

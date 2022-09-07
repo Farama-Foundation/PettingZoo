@@ -1,5 +1,6 @@
 ---
 title: "Battlefield"
+env_icon: "/_static/img/icons/MAgent/Battlefield.png"
 ---
 
 # Battlefield

@@ -1,5 +1,6 @@
 ---
 title: "Tic Tac Toe"
+env_icon: "/_static/img/icons/Classic/TicTacToe.png"
 ---
 
 # Tic Tac Toe

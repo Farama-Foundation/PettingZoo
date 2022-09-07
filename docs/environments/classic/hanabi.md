@@ -1,5 +1,6 @@
 ---
 title: "Hanabi"
+env_icon: "/_static/img/icons/Classic/Hanabi.png"
 ---
 
 # Hanabi

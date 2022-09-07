@@ -1,6 +1,6 @@
 ---
-actions: "Discrete/Continuous"
 title: "Simple Speaker Listener"
+env_icon: "/_static/img/icons/MPE/SimpleSpeakerListener.png"
 ---
 
 # Simple Speaker Listener
@@ -53,4 +53,3 @@ simple_speaker_listener_v2.env(max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
-</div>

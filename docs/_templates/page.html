@@ -68,11 +68,6 @@
           <span>{% trans %}Back to top{% endtrans %}</span>
         </a>
         <div class="content-icon-container">
-          {% if theme_top_of_page_button == "edit" -%}
-          {%- include "components/edit-this-page.html" with context -%}
-          {%- elif theme_top_of_page_button != None -%}
-          {{ warning("Got an unsupported value for 'top_of_page_button'") }}
-          {%- endif -%}
           {#- Theme toggle -#}
           <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
@@ -88,6 +83,11 @@
           </label>
         </div>
         <article role="main">
+          {% if meta and meta.get("env_icon") -%}
+            <div class="theme-env-icon-container">
+              <img class="theme-env-icon" src="{{ meta.get('env_icon') }}">
+            </div>
+          {%- endif %}
           {% block content %}{{ body }}{% endblock %}
         </article>
       </div>
