@@ -105,7 +105,6 @@ def generate_page(env_type_id, env_list, limit=-1, base_path=""):
 <!DOCTYPE html>
 <html>
     <body>
-        <link rel="stylesheet" href="../../_static/css/env_pages.css">
         <div class="env-grid">
             {cells}
         </div>
