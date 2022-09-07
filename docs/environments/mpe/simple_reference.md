@@ -1,6 +1,6 @@
 ---
 title: "Simple Reference"
-env_icon: "/_static/img/icons/MPE/SimpleReference.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleReference.png"
 ---
 
 # Simple Reference

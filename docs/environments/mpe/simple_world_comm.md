@@ -1,6 +1,6 @@
 ---
 title: "Simple World Comm"
-env_icon: "/_static/img/icons/MPE/SimpleWorldComm.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleWorldComm.png"
 ---
 
 # Simple World Comm

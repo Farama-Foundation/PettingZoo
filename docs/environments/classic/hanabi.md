@@ -1,6 +1,6 @@
 ---
 title: "Hanabi"
-env_icon: "/_static/img/icons/Classic/Hanabi.png"
+env_icon: "../../../_static/img/icons/Classic/Hanabi.png"
 ---
 
 # Hanabi
@@ -150,4 +150,3 @@ If an illegal action is taken, the game terminates and the one player that took 
 * v2: Fixed default parameters (1.4.2)
 * v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
-</div>

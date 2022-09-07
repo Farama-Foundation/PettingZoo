@@ -1,6 +1,6 @@
 ---
 title: "Simple Push"
-env_icon: "/_static/img/icons/MPE/SimplePush.png"
+env_icon: "../../../_static/img/icons/MPE/SimplePush.png"
 ---
 
 # Simple Push

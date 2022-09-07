@@ -1,6 +1,6 @@
 ---
 title: "Surround"
-env_icon: "/_static/img/icons/Atari/Surround.png"
+env_icon: "../../../_static/img/icons/Atari/Surround.png"
 ---
 
 # Surround

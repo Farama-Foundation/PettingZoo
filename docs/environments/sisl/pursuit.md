@@ -1,6 +1,6 @@
 ---
 title: "Pursuit"
-env_icon: "/_static/img/icons/SISL/Pursuit.png"
+env_icon: "../../../_static/img/icons/SISL/Pursuit.png"
 ---
 
 # Pursuit
@@ -81,4 +81,3 @@ catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
 * v0: Initial versions release (1.0.0)
-</div>

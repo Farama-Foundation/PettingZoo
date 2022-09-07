@@ -1,6 +1,6 @@
 ---
 title: "Simple Tag"
-env_icon: "/_static/img/icons/MPE/SimpleTag.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleTag.png"
 ---
 
 # Simple Tag

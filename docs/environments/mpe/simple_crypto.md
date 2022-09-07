@@ -1,6 +1,6 @@
 ---
 title: "Simple Crypto"
-env_icon: "/_static/img/icons/MPE/SimpleCrypto.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleCrypto.png"
 ---
 
 # Simple Crypto

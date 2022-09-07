@@ -1,6 +1,6 @@
 ---
 title: "Space Invaders"
-env_icon: "/_static/img/icons/Atari/SpaceInvaders.png"
+env_icon: "../../../_static/img/icons/Atari/SpaceInvaders.png"
 ---
 
 # Space Invaders

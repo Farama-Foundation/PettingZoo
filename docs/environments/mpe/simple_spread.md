@@ -1,6 +1,6 @@
 ---
 title: "Simple Spread"
-env_icon: "/_static/img/icons/MPE/SimpleSpread.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleSpread.png"
 ---
 
 # Simple Spread

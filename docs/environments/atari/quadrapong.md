@@ -1,6 +1,6 @@
 ---
 title: "Quadrapong"
-env_icon: "/_static/img/icons/Atari/Quadrapong.png"
+env_icon: "../../../_static/img/icons/Atari/Quadrapong.png"
 ---
 
 # Quadrapong

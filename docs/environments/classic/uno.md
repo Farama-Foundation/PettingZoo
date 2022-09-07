@@ -1,6 +1,6 @@
 ---
 title: "Uno"
-env_icon: "/_static/img/icons/Classic/Uno.png"
+env_icon: "../../../_static/img/icons/Classic/Uno.png"
 ---
 
 # Uno
@@ -122,4 +122,3 @@ For example, you would use action `6` to put down a red "6" card or action `60` 
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
-</div>

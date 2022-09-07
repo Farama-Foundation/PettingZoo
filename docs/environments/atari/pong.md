@@ -1,6 +1,6 @@
 ---
 title: "Pong"
-env_icon: "/_static/img/icons/Atari/Pong.png"
+env_icon: "../../../_static/img/icons/Atari/Pong.png"
 ---
 
 # Pong

@@ -1,6 +1,6 @@
 ---
 title: "Simple Adversary"
-env_icon: "/_static/img/icons/MPE/SimpleAdversary.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleAdversary.png"
 ---
 
 # Simple Adversary

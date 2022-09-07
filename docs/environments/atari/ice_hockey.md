@@ -1,6 +1,6 @@
 ---
 title: "Ice Hockey"
-env_icon: "/_static/img/icons/Atari/IceHockey.png"
+env_icon: "../../../_static/img/icons/Atari/IceHockey.png"
 ---
 
 # Ice Hockey

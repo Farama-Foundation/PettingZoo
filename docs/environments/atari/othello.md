@@ -1,6 +1,6 @@
 ---
 title: "Othello"
-env_icon: "/_static/img/icons/Atari/Othello.png"
+env_icon: "../../../_static/img/icons/Atari/Othello.png"
 ---
 
 # Othello

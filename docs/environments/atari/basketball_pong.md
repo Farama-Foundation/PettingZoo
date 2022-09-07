@@ -1,7 +1,7 @@
 ---
 title: "Basketball Pong"
 alt_title: "BasketBallPong"
-env_icon: "/_static/img/icons/Atari/BasketBallPong.png"
+env_icon: "../../../_static/img/icons/Atari/BasketBallPong.png"
 ---
 
 # Basketball Pong

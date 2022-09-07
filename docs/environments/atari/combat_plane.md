@@ -1,6 +1,6 @@
 ---
 title: "Combat: Plane"
-env_icon: "/_static/img/icons/Atari/CombatPlane.png"
+env_icon: "../../../_static/img/icons/Atari/CombatPlane.png"
 ---
 
 # Combat: Plane

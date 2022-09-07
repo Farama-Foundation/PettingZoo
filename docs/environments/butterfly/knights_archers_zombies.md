@@ -1,6 +1,6 @@
 ---
 title: "Knights Archers Zombies ('KAZ')"
-env_icon: "/_static/img/icons/Butterfly/KnightsArchersZombies('KAZ').png"
+env_icon: "../../../_static/img/icons/Butterfly/KnightsArchersZombies('KAZ').png"
 ---
 
 # Knights Archers Zombies ('KAZ')
@@ -177,4 +177,3 @@ knights_archers_zombies_v10.env(
 * v2: Fixed bug in how `dones` were computed (1.3.1)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
-</div>

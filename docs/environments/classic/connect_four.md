@@ -1,6 +1,6 @@
 ---
 title: "Connect Four"
-env_icon: "/_static/img/icons/Classic/ConnectFour.png"
+env_icon: "../../../_static/img/icons/Classic/ConnectFour.png"
 ---
 
 # Connect Four
@@ -59,4 +59,3 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
-</div>

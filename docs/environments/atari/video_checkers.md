@@ -1,6 +1,6 @@
 ---
 title: "Video Checkers"
-env_icon: "/_static/img/icons/Atari/VideoCheckers.png"
+env_icon: "../../../_static/img/icons/Atari/VideoCheckers.png"
 ---
 
 # Video Checkers

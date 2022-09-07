@@ -1,6 +1,6 @@
 ---
 title: "Combat: Tank"
-env_icon: "/_static/img/icons/Atari/CombatTank.png"
+env_icon: "../../../_static/img/icons/Atari/CombatTank.png"
 ---
 
 # Combat: Tank

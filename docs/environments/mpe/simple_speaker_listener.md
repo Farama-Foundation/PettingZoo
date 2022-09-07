@@ -1,6 +1,6 @@
 ---
 title: "Simple Speaker Listener"
-env_icon: "/_static/img/icons/MPE/SimpleSpeakerListener.png"
+env_icon: "../../../_static/img/icons/MPE/SimpleSpeakerListener.png"
 ---
 
 # Simple Speaker Listener

@@ -1,6 +1,6 @@
 ---
 title: "Mahjong"
-env_icon: "/_static/img/icons/Classic/Mahjong.png"
+env_icon: "../../../_static/img/icons/Classic/Mahjong.png"
 ---
 
 # Mahjong
@@ -113,4 +113,3 @@ For example, you would use action `34` to pong or action `37` to stand.
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
-</div>

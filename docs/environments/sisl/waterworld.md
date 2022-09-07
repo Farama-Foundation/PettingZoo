@@ -1,7 +1,7 @@
 ---
 title: "Waterworld"
 alt_title: "WaterWorld"
-env_icon: "/_static/img/icons/SISL/WaterWorld.png"
+env_icon: "../../../_static/img/icons/SISL/WaterWorld.png"
 ---
 
 # Waterworld
@@ -131,4 +131,3 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
 * v0: Initial versions release (1.0.0)
-</div>
