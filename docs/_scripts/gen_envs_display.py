@@ -73,11 +73,12 @@ all_envs = {
 
 
 def create_grid_cell(type_id, env_id, base_path):
+    # The relative image path assumes that the list will be at /environment/env_type/
     return f"""
             <a href="{base_path}{env_id}">
                 <div class="env-grid__cell">
                     <div class="cell__image-container">
-                        <img src="/_images/{type_id}_{env_id}.gif">
+                        <img src="../../_images/{type_id}_{env_id}.gif">
                     </div>
                     <div class="cell__title">
                         <span>{' '.join(env_id.split('_')).title()}</span>
