@@ -165,20 +165,11 @@ nav:
       - title: "Classic"
         url: "/classic"
         subsublinks:
-          - title: "Backgammon"
-            url: "/classic/backgammon"
-
-          - title: "Checkers"
-            url: "/classic/checkers"
-
           - title: "Chess"
             url: "/classic/chess"
 
           - title: "Connect Four"
             url: "/classic/connect_four"
-
-          - title: "Dou Dizhu"
-            url: "/classic/dou_dizhu"
 
           - title: "Gin Rummy"
             url: "/classic/gin_rummy"
@@ -192,9 +183,6 @@ nav:
           - title: "Leduc Hold'em"
             url: "/classic/leduc_holdem"
 
-          - title: "Mahjong"
-            url: "/classic/mahjong"
-
           - title: "Rock Paper Scissors"
             url: "/classic/rps"
 
@@ -207,9 +195,6 @@ nav:
 
           - title: "Tic Tac Toe"
             url: "/classic/tictactoe"
-
-          - title: "Uno"
-            url: "/classic/uno"
 
       - title: "MAgent"
         url: "/magent"
