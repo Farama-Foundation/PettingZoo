@@ -7,7 +7,7 @@ from pettingzoo.butterfly import pistonball_v6
 
 def main():
     env = pistonball_v6.parallel_env(
-        n_pistons=20,
+        n_pistons=10,
         time_penalty=-0.1,
         continuous=True,
         random_drop=True,
