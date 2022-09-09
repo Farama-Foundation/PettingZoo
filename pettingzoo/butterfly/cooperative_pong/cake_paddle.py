@@ -71,20 +71,18 @@ class CakePaddle(pygame.sprite.Sprite):
         return True, b_rect, b_speed
 
     def process_collision(self, b_rect, b_speed, paddle_type):
-        """
+        """Returns if ball collides with paddle.
 
-        Parameters
-        ----------
-        b_rect : Ball rect
-        dx, dy : Ball speed along single axis
-        b_speed : Ball speed
-        ignore paddle type
+        Args:
+            b_rect : Ball rect
+            dx, dy : Ball speed along single axis
+            b_speed : Ball speed
+            ignore paddle type
 
-        Returns
-        -------
-        is_collision: 1 if ball collides with paddle
-        b_rect: new ball rect
-        b_speed: new ball speed
+        Returns:
+            is_collision: 1 if ball collides with paddle
+            b_rect: new ball rect
+            b_speed: new ball speed
 
         """
         if self.rect4.colliderect(b_rect):

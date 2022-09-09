@@ -3,11 +3,9 @@ from .base import BaseWrapper
 
 
 class TerminateIllegalWrapper(BaseWrapper):
-    """
-    this wrapper terminates the game with the current player losing
-    in case of illegal values
+    """This wrapper terminates the game with the current player losing in case of illegal values.
 
-    parameters:
+    Parameters:
         - illegal_reward: number that is the value of the player making an illegal move.
     """
 
@@ -31,6 +29,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         current_agent = self.agent_selection
         if self._prev_obs is None:
             self.observe(self.agent_selection)
+        assert self._prev_obs
         assert (
             "action_mask" in self._prev_obs
         ), "action_mask must always be part of environment observation as an element in a dictionary observation to use the TerminateIllegalWrapper"

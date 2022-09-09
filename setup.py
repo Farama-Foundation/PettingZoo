@@ -46,6 +46,7 @@ extras = {
         "bandit",
         "pytest",
         "pytest-cov",
+        "pre-commit",
     ],
 }
 

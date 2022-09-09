@@ -41,8 +41,11 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         max_cycles=100000,
         auto_rom_install_path=None,
     ):
-        """Frameskip should be either a tuple (indicating a random range to
-        choose from, with the top value exclude), or an int."""
+        """Initializes the `ParallelAtariEnv` class.
+
+        Frameskip should be either a tuple (indicating a random range to
+        choose from, with the top value exclude), or an int.
+        """
         EzPickle.__init__(
             self,
             game,
@@ -264,9 +267,12 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             self._screen = None
 
     def clone_state(self):
-        """Clone emulator state w/o system state. Restoring this state will
-        *not* give an identical environment. For complete cloning and restoring
-        of the full state, see `{clone,restore}_full_state()`."""
+        """Clone emulator state w/o system state.
+
+        Restoring this state will *not* give an identical environment.
+        For complete cloning and restoring of the full state,
+        see `{clone,restore}_full_state()`.
+        """
         state_ref = self.ale.cloneState()
         state = self.ale.encodeState(state_ref)
         self.ale.deleteState(state_ref)
@@ -280,7 +286,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def clone_full_state(self):
         """Clone emulator state w/ system state including pseudorandomness.
-        Restoring this state will give an identical environment."""
+
+        Restoring this state will give an identical environment.
+        """
         state_ref = self.ale.cloneSystemState()
         state = self.ale.encodeState(state_ref)
         self.ale.deleteState(state_ref)

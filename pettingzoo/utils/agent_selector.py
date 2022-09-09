@@ -1,6 +1,7 @@
 class agent_selector:
-    """
-    Outputs an agent in the given order whenever agent_select is called. Can reinitialize to a new order
+    """Outputs an agent in the given order whenever agent_select is called.
+
+    Can reinitialize to a new order
     """
 
     def __init__(self, agent_order):
@@ -21,9 +22,7 @@ class agent_selector:
         return self.selected_agent
 
     def is_last(self):
-        """
-        Does not work as expected if you change the order
-        """
+        """Does not work as expected if you change the order."""
         return self.selected_agent == self.agent_order[-1]
 
     def is_first(self):

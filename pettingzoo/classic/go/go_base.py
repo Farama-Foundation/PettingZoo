@@ -14,7 +14,8 @@
 
 # Code from: https://github.com/tensorflow/minigo
 
-"""
+"""Minimalist Go engine.
+
 A board is a NxN numpy array.
 A Coordinate is a tuple index into the board.
 A Move is a (Coordinate c | None).
@@ -85,8 +86,8 @@ def place_stones(board, color, stones):
 
 
 def replay_position(position, result):
-    """
-    Wrapper for a go.Position which replays its history.
+    """Wrapper for a go.Position which replays its history.
+
     Assumes an empty start position! (i.e. no handicap, and history must be exhaustive.)
 
     Result must be passed in, since a resign cannot be inferred from position
@@ -120,7 +121,7 @@ def find_reached(board, c):
 
 
 def is_koish(board, c):
-    "Check if c is surrounded on all sides by 1 color, and return that color"
+    """Check if c is surrounded on all sides by 1 color, and return that color."""
     if board[c] != EMPTY:
         return None
     neighbors = {board[n] for n in NEIGHBORS[c]}
@@ -131,7 +132,7 @@ def is_koish(board, c):
 
 
 def is_eyeish(board, c):
-    "Check if c is an eye, for the purpose of restricting MC rollouts."
+    """Check if c is an eye, for the purpose of restricting MC rollouts."""
     # pass is fine.
     if c is None:
         return
@@ -152,7 +153,8 @@ def is_eyeish(board, c):
 
 
 class Group(namedtuple("Group", ["id", "stones", "liberties", "color"])):
-    """
+    """Defines a Group.
+
     stones: a frozenset of Coordinates belonging to this group
     liberties: a frozenset of Coordinates that are empty and adjacent to this group.
     color: color of this group
@@ -325,7 +327,8 @@ class Position:
         board_deltas=None,
         to_play=BLACK,
     ):
-        """
+        """Initializes the `Position` class.
+
         board: a numpy array
         n: an int representing moves played so far
         komi: a float, representing points given to the second player.
@@ -435,7 +438,7 @@ class Position:
         return not potential_libs
 
     def is_move_legal(self, move):
-        "Checks that a move is on an empty space, not on ko, and not suicide"
+        """Checks that a move is on an empty space, not on ko, and not suicide."""
         if move is None:
             return True
         if self.board[move] != EMPTY:
@@ -448,7 +451,7 @@ class Position:
         return True
 
     def all_legal_moves(self):
-        "Returns a np.array of size go.N**2 + 1, with 1 = legal, 0 = illegal"
+        """Returns a np.array of size go.N**2 + 1, with 1 = legal, 0 = illegal."""
         # by default, every move is legal
         legal_moves = np.ones([N, N], dtype=np.int8)
         # ...unless there is already a stone there
@@ -566,7 +569,7 @@ class Position:
         )
 
     def score(self):
-        "Return score from B perspective. If W is winning, score is negative."
+        """Return score from B perspective. If W is winning, score is negative."""
         working_board = np.copy(self.board)
         while EMPTY in working_board:
             unassigned_spaces = np.where(working_board == EMPTY)
