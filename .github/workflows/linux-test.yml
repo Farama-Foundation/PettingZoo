@@ -34,10 +34,3 @@ jobs:
       - name: Release Test
         run: |
           xvfb-run -s "-screen 0 1024x768x24" pytest -v --cov=pettingzoo --cov-report term
-      - name: Check code with pyright
-        uses: jakebailey/pyright-action@v1
-        with:
-          version: 1.1.244
-          python-platform: ${{ matrix.python-platform }}
-          python-version: ${{ matrix.python-version }}
-        continue-on-error: true

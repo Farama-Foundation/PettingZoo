@@ -4,10 +4,7 @@ import numpy as np
 
 
 def random_demo(env, render=True, episodes=1):
-    """
-    Runs an env object with random actions.
-    """
-
+    """Runs an env object with random actions."""
     total_reward = 0
     done = False
     completed_episodes = 0

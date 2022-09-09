@@ -6,9 +6,7 @@ from .base import BaseWrapper
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):
-    """
-    this wrapper crops out of bounds actions for Box spaces
-    """
+    """This wrapper crops out of bounds actions for Box spaces."""
 
     def __init__(self, env):
         super().__init__(env)
