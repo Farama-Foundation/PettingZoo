@@ -7,21 +7,16 @@ firstpage:
 
 ```{toctree}
 :hidden:
-classic/backgammon
-classic/checkers
 classic/chess
 classic/connect_four
-classic/dou_dizhu
 classic/gin_rummy
 classic/go
 classic/hanabi
 classic/leduc_holdem
-classic/mahjong
 classic/rps
 classic/texas_holdem_no_limit
 classic/texas_holdem
 classic/tictactoe
-classic/uno
 ```
 
 ```{raw} html
