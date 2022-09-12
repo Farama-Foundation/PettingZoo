@@ -8,7 +8,7 @@ title: "[Bug Report] Bug title"
 A clear and concise description of what the bug is.
 
 **Code example**
-Bug reports without minimal code examples tend to taks 5-10x longer to solve. 
+Bug reports without minimal code examples take 5-10x longer to solve. 
 We'll give you a cookie if you add the stack trace too!
 Save time, add code.
 
