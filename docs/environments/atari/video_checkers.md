@@ -64,4 +64,4 @@ In any given turn, an agent can choose from one of 5 actions.
 * v2: Fixed checkers rewards (1.5.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
-</div>
+

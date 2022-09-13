@@ -74,4 +74,4 @@ In any given turn, an agent can choose from one of 10 actions.
 * v2: Breaking changes to entire API (1.4.0)
 * v1: Fixed othello auto reset issue (1.2.1)
 * v0: Initial versions release (1.0.0)
-</div>
+
