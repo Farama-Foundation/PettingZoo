@@ -3,12 +3,11 @@ from scipy.ndimage import zoom
 
 
 def rectangle_map(xs, ys, xb=0.3, yb=0.2):
-    """
-    Returns a 2D 'map' with a rectangle building centered in the middle
+    """Returns a 2D 'map' with a rectangle building centered in the middle.
+
     Map is a 2D numpy array
     xb and yb are buffers for each dim representing the raio of the map to leave open on each side
     """
-
     rmap = np.zeros((xs, ys), dtype=np.int32)
     for i in range(xs):
         for j in range(ys):
@@ -21,8 +20,8 @@ def rectangle_map(xs, ys, xb=0.3, yb=0.2):
 
 
 def complex_map(xs, ys):
-    """
-    Returns a 2D 'map' with a four different obstacles
+    """Returns a 2D 'map' with a four different obstacles.
+
     Map is a 2D numpy array
     """
     cmap = np.zeros((xs, ys), dtype=np.int32)
@@ -70,8 +69,8 @@ def multi_scale_map(
 
 
 def add_rectangle(input_map, xc, yc, xl, yl):
-    """
-    Add a rectangle to the input map
+    """Add a rectangle to the input map.
+
     centered a xc, yc with dimensions xl, yl.
     Input specs are normalized wrt the map.
     """

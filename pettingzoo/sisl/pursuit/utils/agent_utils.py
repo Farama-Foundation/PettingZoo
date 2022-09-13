@@ -16,8 +16,8 @@ def create_agents(
     randinit=False,
     constraints=None,
 ):
-    """
-    Initializes the agents on a map (map_matrix)
+    """Initializes the agents on a map (map_matrix).
+
     -nagents: the number of agents to put on the map
     -randinit: if True will place agents in random, feasible locations
                if False will place all agents at 0
@@ -47,9 +47,7 @@ def create_agents(
 
 
 def feasible_position_exp(randomizer, map_matrix, expanded_mat, constraints=None):
-    """
-    Returns a feasible position on map (map_matrix)
-    """
+    """Returns a feasible position on map (map_matrix)."""
     xs, ys = map_matrix.shape
     while True:
         if constraints is None:

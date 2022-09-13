@@ -3,7 +3,7 @@ from __future__ import annotations
 import warnings
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, TypeVar
 
-import gym
+import gym.spaces
 import numpy as np
 
 ObsType = TypeVar("ObsType")
@@ -23,10 +23,10 @@ See docs/dev_docs.md for additional documentation and an example environment.
 
 
 class AECEnv:
-    """
-    The AECEnv steps agents one at a time. If you are unsure if you
-    have implemented a AECEnv correctly, try running the `api_test` documented in
-    the Developer documentation on the website.
+    """The AECEnv steps agents one at a time.
+
+    If you are unsure if you have implemented a AECEnv correctly, try running
+    the `api_test` documented in the Developer documentation on the website.
     """
 
     metadata: Dict[str, Any]  # Metadata for the environment
@@ -56,9 +56,9 @@ class AECEnv:
         pass
 
     def step(self, action: ActionType) -> None:
-        """
-        Accepts and executes the action of the current agent_selection
-        in the environment, automatically switches control to the next agent.
+        """Accepts and executes the action of the current agent_selection in the environment.
+
+        Automatically switches control to the next agent.
         """
         raise NotImplementedError
 
@@ -68,28 +68,26 @@ class AECEnv:
         return_info: bool = False,
         options: Optional[dict] = None,
     ) -> None:
-        """
-        Resets the environment to a starting state.
-        """
+        """Resets the environment to a starting state."""
         raise NotImplementedError
 
     def seed(self, seed: Optional[int] = None) -> None:
-        """
-        Reseeds the environment (making the resulting environment deterministic).
-        """
+        """Reseeds the environment (making the resulting environment deterministic)."""
         raise NotImplementedError(
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
 
-    def observe(self, agent: str) -> ObsType:
-        """
-        Returns the observation an agent currently can make. `last()` calls this function.
+    # TODO: Remove `Optional` type below
+    def observe(self, agent: str) -> Optional[ObsType]:
+        """Returns the observation an agent currently can make.
+
+        `last()` calls this function.
         """
         raise NotImplementedError
 
     def render(self, mode: str = "human") -> None | np.ndarray | str:
-        """
-        Displays a rendered frame from the environment, if supported.
+        """Displays a rendered frame from the environment, if supported.
+
         Alternate render modes in the default environments are `'rgb_array'`
         which returns a numpy array and is supported by all environments outside of classic,
         and `'ansi'` which returns the strings printed (specific to classic environments).
@@ -97,9 +95,9 @@ class AECEnv:
         raise NotImplementedError
 
     def state(self) -> np.ndarray:
-        """
-        State returns a global view of the environment appropriate for
-        centralized training decentralized execution methods like QMIX
+        """State returns a global view of the environment.
+
+        It is appropriate for centralized training decentralized execution methods like QMIX
         """
         raise NotImplementedError(
             "state() method has not been implemented in the environment {}.".format(
@@ -108,15 +106,15 @@ class AECEnv:
         )
 
     def close(self):
-        """
-        Closes the rendering window, subprocesses, network connections, or any other resources
-        that should be released.
+        """Closes any resources that should be released.
+
+        Closes the rendering window, subprocesses, network connections,
+        or any other resources that should be released.
         """
         pass
 
-    def observation_space(self, agent: str) -> gym.Space:
-        """
-        Takes in agent and returns the observation space for that agent.
+    def observation_space(self, agent: AgentID) -> gym.spaces.Space:
+        """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
 
@@ -127,9 +125,8 @@ class AECEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: str) -> gym.Space:
-        """
-        Takes in agent and returns the action space for that agent.
+    def action_space(self, agent: str) -> gym.spaces.Space:
+        """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
 
@@ -149,9 +146,10 @@ class AECEnv:
         return len(self.possible_agents)
 
     def _dones_step_first(self) -> AgentID:
-        """
-        Makes .agent_selection point to first done agent. Stores old value of agent_selection
-        so that _was_done_step can restore the variable after the done agent steps.
+        """Makes .agent_selection point to first done agent.
+
+        Stores old value of agent_selection so that _was_done_step
+        can restore the variable after the done agent steps.
         """
         _dones_order = [agent for agent in self.agents if self.dones[agent]]
         if _dones_order:
@@ -160,31 +158,34 @@ class AECEnv:
         return self.agent_selection
 
     def _clear_rewards(self) -> None:
-        """
-        Clears all items in .rewards
-        """
+        """Clears all items in .rewards."""
         for agent in self.rewards:
             self.rewards[agent] = 0
 
     def _accumulate_rewards(self) -> None:
-        """
-        Adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
-        called near the end of a step() method
+        """Adds .rewards dictionary to ._cumulative_rewards dictionary.
+
+        Typically called near the end of a step() method
         """
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
 
     def agent_iter(self, max_iter: int = 2**63) -> AECIterable:
-        """
-        Yields the current agent (self.agent_selection) when used in a loop where you step() each iteration.
+        """Yields the current agent (self.agent_selection).
+
+        Needs to be used in a loop where you step() each iteration.
         """
         return AECIterable(self, max_iter)
 
-    def last(self, observe: bool = True) -> Tuple[ObsType, float, bool, Dict[str, Any]]:
-        """
-        Returns observation, cumulative reward, done, info   for the current agent (specified by self.agent_selection)
+    def last(
+        self, observe: bool = True
+    ) -> Tuple[Optional[ObsType], float, bool, Dict[str, Any]]:
+        """Returns observation, cumulative reward, done, info.
+
+        This is for the current agent (specified by self.agent_selection)
         """
         agent = self.agent_selection
+        assert agent
         observation = self.observe(agent) if observe else None
         return (
             observation,
@@ -194,8 +195,7 @@ class AECEnv:
         )
 
     def _was_done_step(self, action: None) -> None:
-        """
-        Helper function that performs step() for done agents.
+        """Helper function that performs step() for done agents.
 
         Does the following:
 
@@ -203,13 +203,14 @@ class AECEnv:
         2. Loads next agent into .agent_selection: if another agent is done, loads that one, otherwise load next live agent
         3. Clear the rewards dict
 
-        Highly recommended to use at the beginning of step as follows:
+        Examples:
+            Highly recommended to use at the beginning of step as follows:
 
-        def step(self, action):
-            if self.dones[self.agent_selection]:
-                self._was_done_step()
-                return
-            # main contents of step
+            def step(self, action):
+                if self.dones[self.agent_selection]:
+                    self._was_done_step()
+                    return
+                # main contents of step
         """
         if action is not None:
             raise ValueError("when an agent is done, the only valid action is None")
@@ -233,14 +234,13 @@ class AECEnv:
             self.agent_selection = _dones_order[0]
         else:
             if getattr(self, "_skip_agent_selection", None) is not None:
+                assert self._skip_agent_selection is not None
                 self.agent_selection = self._skip_agent_selection
             self._skip_agent_selection = None
         self._clear_rewards()
 
     def __str__(self) -> str:
-        """
-        returns a name which looks like: "space_invaders_v1"
-        """
+        """Returns a name which looks like: `space_invaders_v1`."""
         if hasattr(self, "metadata"):
             return self.metadata.get("name", self.__class__.__name__)
         else:
@@ -276,8 +276,9 @@ class AECIterator(Iterator):
 
 
 class ParallelEnv:
-    """
-    The Parallel environment steps every live agent at once. If you are unsure if you
+    """Parallel environment class.
+
+    It steps every live agent at once. If you are unsure if you
     have implemented a ParallelEnv correctly, try running the `parallel_api_test` in
     the Developer documentation on the website.
     """
@@ -286,6 +287,10 @@ class ParallelEnv:
 
     agents: List[AgentID]
     possible_agents: List[AgentID]
+    observation_spaces: Dict[
+        AgentID, gym.spaces.Space
+    ]  # Observation space for each agent
+    action_spaces: Dict[AgentID, gym.spaces.Space]
 
     def reset(
         self,
@@ -293,15 +298,14 @@ class ParallelEnv:
         return_info: bool = False,
         options: Optional[dict] = None,
     ) -> ObsDict:
-        """
-        Resets the environment and returns a dictionary of observations (keyed by the agent name)
+        """Resets the environment.
+
+        And returns a dictionary of observations (keyed by the agent name)
         """
         raise NotImplementedError
 
     def seed(self, seed=None):
-        """
-        Reseeds the environment (making it deterministic).
-        """
+        """Reseeds the environment (making it deterministic)."""
         raise NotImplementedError(
             "Calling seed externally is deprecated; call reset(seed=seed) instead"
         )
@@ -309,16 +313,16 @@ class ParallelEnv:
     def step(
         self, actions: ActionDict
     ) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
-        """
-        receives a dictionary of actions keyed by the agent name.
+        """Receives a dictionary of actions keyed by the agent name.
+
         Returns the observation dictionary, reward dictionary, done dictionary,
         and info dictionary, where each dictionary is keyed by the agent.
         """
         raise NotImplementedError
 
     def render(self, mode="human") -> None | np.ndarray | str:
-        """
-        Displays a rendered frame from the environment, if supported.
+        """Displays a rendered frame from the environment, if supported.
+
         Alternate render modes in the default environments are `'rgb_array'`
         which returns a numpy array and is supported by all environments outside
         of classic, and `'ansi'` which returns the strings printed
@@ -327,13 +331,12 @@ class ParallelEnv:
         raise NotImplementedError
 
     def close(self):
-        """
-        Closes the rendering window.
-        """
+        """Closes the rendering window."""
         pass
 
     def state(self) -> np.ndarray:
-        """
+        """Returns the state.
+
         State returns a global view of the environment appropriate for
         centralized training decentralized execution methods like QMIX
         """
@@ -343,9 +346,8 @@ class ParallelEnv:
             )
         )
 
-    def observation_space(self, agent: AgentID) -> gym.Space:
-        """
-        Takes in agent and returns the observation space for that agent.
+    def observation_space(self, agent: AgentID) -> gym.spaces.Space:
+        """Takes in agent and returns the observation space for that agent.
 
         MUST return the same value for the same agent name
 
@@ -356,9 +358,8 @@ class ParallelEnv:
         )
         return self.observation_spaces[agent]
 
-    def action_space(self, agent: AgentID) -> gym.Space:
-        """
-        Takes in agent and returns the action space for that agent.
+    def action_space(self, agent: AgentID) -> gym.spaces.Space:
+        """Takes in agent and returns the action space for that agent.
 
         MUST return the same value for the same agent name
 
@@ -378,8 +379,9 @@ class ParallelEnv:
         return len(self.possible_agents)
 
     def __str__(self) -> str:
-        """
-        returns a name which looks like: "space_invaders_v1" by default
+        """Returns the name.
+
+        Which looks like: "space_invaders_v1" by default
         """
         if hasattr(self, "metadata"):
             return self.metadata.get("name", self.__class__.__name__)
