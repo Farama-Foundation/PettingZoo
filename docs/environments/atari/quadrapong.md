@@ -65,4 +65,4 @@ In any given turn, an agent can choose from one of 6 actions.
 * v1: Breaking changes to entire API (1.4.0)
 * v2: Fixed quadrapong rewards (1.2.0)
 * v0: Initial versions release (1.0.0)
-</div>
+

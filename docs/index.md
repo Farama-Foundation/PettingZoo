@@ -16,6 +16,9 @@ content/basic_usage
 :caption: API
 
 content/core
+content/api
+content/environment_creation
+content/environment_tests
 content/wrappers
 cont   s
 ```
