@@ -1,7 +1,7 @@
 ---
-title: API
+title: Basic Usage
 ---
-# API
+# Basic Usage
 
 ## Initializing Environments
 

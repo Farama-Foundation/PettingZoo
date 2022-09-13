@@ -6,12 +6,18 @@ lastpage:
 
 ```{toctree}
 :hidden:
-:caption: Basic
+:caption: Introduction
 
-content/api
-content/environment_creation
+content/basic_usage
+```
+
+```{toctree}
+:hidden:
+:caption: API
+
+content/core
 content/wrappers
-content/tutorials
+cont   s
 ```
 
 ```{toctree}
@@ -25,6 +31,12 @@ environments/magent
 environments/mpe
 environments/sisl
 environments/third_party_envs
+```
+
+```{toctree}
+:hidden:
+:caption: Tutorial
+content/environment_creation
 ```
 
 ```{toctree}
