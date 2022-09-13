@@ -33,6 +33,7 @@ environments/third_party_envs
 :caption: Development
 
 Github <https://github.com/Farama-Foundation/PettingZoo>
+Donate <https://farama.org/donations>
 
 ```
 
