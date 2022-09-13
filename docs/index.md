@@ -10,6 +10,7 @@ lastpage:
 
 content/api
 content/environment_creation
+content/environment_tests
 content/wrappers
 content/tutorials
 ```
