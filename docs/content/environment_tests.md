@@ -1,4 +1,4 @@
-# Environment Tests
+# Testing Environments
 
 PettingZoo has a number of compliance tests for environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.
 
