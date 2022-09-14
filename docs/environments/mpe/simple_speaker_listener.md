@@ -32,7 +32,7 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 :name: simple_speaker_listener
 ```
 
-This environment is similar to simple_reference, except that one agent is the ‘speaker’ (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
+This environment is similar to simple_reference, except that one agent is the 'speaker' (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 
 Speaker observation space: `[goal_id]`
 
