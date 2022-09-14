@@ -1,7 +1,5 @@
 ---
-title: "Pistonball"
-alt_title: "PistonBall"
-env_icon: "../../../_static/img/icons/Butterfly/Pistonball.png"
+env_icon: "../../../_static/img/icons/butterfly/pistonball.png"
 ---
 
 # Pistonball
@@ -79,3 +77,4 @@ ball_elasticity=1.5, max_cycles=125)
 * v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
 * v1: Fix to continuous mode (1.0.1)
 * v0: Initial versions release (1.0.0)
+

@@ -1,6 +1,5 @@
 ---
-title: "Surround"
-env_icon: "../../../_static/img/icons/Atari/Surround.png"
+env_icon: "../../../_static/img/icons/atari/surround.png"
 ---
 
 # Surround
@@ -59,4 +58,5 @@ In any given turn, an agent can choose from one of 6 actions. (Fire is dummy act
 * v2: Minimal Action Space (1.18.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+
 

@@ -1,6 +1,5 @@
 ---
-title: "Texas Hold'em No Limit"
-env_icon: "../../../_static/img/icons/Classic/TexasHold'emNoLimit.png"
+env_icon: "../../../_static/img/icons/classic/texas_holdem_no_limit.png"
 ---
 
 # Texas Hold'em No Limit
@@ -91,3 +90,4 @@ The legal moves available to the current agent are found in the `action_mask` el
 * v2: Bumped RLCard version, bug fixes, legal action mask in observation replaced illegal move list in infos (1.5.0)
 * v1: Bumped RLCard version, fixed observation space, adopted new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
+

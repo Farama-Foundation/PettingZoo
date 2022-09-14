@@ -1,6 +1,5 @@
 ---
-title: "Entombed: Competitive"
-env_icon: "../../../_static/img/icons/Atari/EntombedCompetititve.png"
+env_icon: "../../../_static/img/icons/atari/entombed_competitive.png"
 ---
 
 # Emtombed: Competitive
@@ -75,4 +74,5 @@ In any given turn, an agent can choose from one of 18 actions.
 * v2: Breaking changes to entire API, fixed Entombed rewards (1.4.0)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+
 

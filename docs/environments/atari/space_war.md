@@ -1,7 +1,5 @@
 ---
-title: "Space War"
-alt_title: "Spacewar"
-env_icon: "../../../_static/img/icons/Atari/Spacewar.png"
+env_icon: "../../../_static/img/icons/atari/space_war.png"
 ---
 
 # Space War
@@ -73,4 +71,5 @@ In any given turn, an agent can choose from one of 18 actions.
 * v2: Minimal Action Space (1.18.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+
 

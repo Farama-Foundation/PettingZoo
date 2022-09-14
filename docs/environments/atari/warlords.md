@@ -1,6 +1,5 @@
 ---
-title: "Warlords"
-env_icon: "../../../_static/img/icons/Atari/Warlords.png"
+env_icon: "../../../_static/img/icons/atari/warlords.png"
 ---
 
 # Warlords
@@ -60,4 +59,5 @@ In any given turn, an agent can choose from one of 6 actions.
 * v2: Breaking changes to entire API (1.4.0)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+
 

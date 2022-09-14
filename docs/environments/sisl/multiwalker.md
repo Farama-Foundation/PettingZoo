@@ -1,7 +1,6 @@
 ---
-title: "Multiwalker"
-alt_title: "MultiWalker"
-env_icon: "../../../_static/img/icons/SISL/MultiWalker.png"
+env_icon: "../../../_static/img/icons/sisl/multiwalker.png"
+firstpage: 
 ---
 
 # Multiwalker
@@ -120,3 +119,4 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 * v2: Various fixes and environment argument changes (1.3.1)
 * v1: Fixes to how all environments handle premature death (1.3.0)
 * v0: Initial versions release (1.0.0)
+

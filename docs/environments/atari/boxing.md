@@ -1,6 +1,5 @@
 ---
-title: "Boxing"
-env_icon: "../../../_static/img/icons/Atari/Boxing.png"
+env_icon: "../../../_static/img/icons/atari/boxing.png"
 ---
 
 # Boxing
@@ -78,4 +77,5 @@ In any given turn, an agent can choose from one of 18 actions.
 * v2: Minimal Action Space (1.18.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+
 

@@ -1,6 +1,5 @@
 ---
-title: "Simple Tag"
-env_icon: "../../../_static/img/icons/MPE/SimpleTag.png"
+env_icon: "../../../_static/img/icons/mpe/simple_tag.png"
 ---
 
 # Simple Tag
@@ -65,3 +64,4 @@ simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25,
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+

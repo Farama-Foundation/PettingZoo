@@ -1,6 +1,6 @@
 ---
-title: "Cooperative Pong"
-env_icon: "../../../_static/img/icons/Butterfly/CooperativePong.png"
+env_icon: "../../../_static/img/icons/butterfly/cooperative_pong.png"
+firstpage: 
 ---
 
 # Cooperative Pong
@@ -70,3 +70,4 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 * v2: Misc fixes (1.4.0)
 * v1: Fixed bug in how `dones` were computed (1.3.1)
 * v0: Initial versions release (1.0.0)
+

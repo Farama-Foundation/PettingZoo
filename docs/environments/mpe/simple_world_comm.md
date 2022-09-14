@@ -1,6 +1,5 @@
 ---
-title: "Simple World Comm"
-env_icon: "../../../_static/img/icons/MPE/SimpleWorldComm.png"
+env_icon: "../../../_static/img/icons/mpe/simple_world_comm.png"
 ---
 
 # Simple World Comm
@@ -75,3 +74,4 @@ simple_world_comm.env(num_good=2, num_adversaries=4, num_obstacles=1,
 `num_forests`: number of forests that can hide agents inside from being seen
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+

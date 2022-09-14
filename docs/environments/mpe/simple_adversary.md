@@ -1,6 +1,5 @@
 ---
-title: "Simple Adversary"
-env_icon: "../../../_static/img/icons/MPE/SimpleAdversary.png"
+env_icon: "../../../_static/img/icons/mpe/simple_adversary.png"
 ---
 
 # Simple Adversary
@@ -54,3 +53,4 @@ simple_adversary_v2.env(N=2, max_cycles=25, continuous_actions=False)
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+

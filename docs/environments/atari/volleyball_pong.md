@@ -1,6 +1,5 @@
 ---
-title: "Volleyball Pong"
-env_icon: "../../../_static/img/icons/Atari/VolleyballPong.png"
+env_icon: "../../../_static/img/icons/atari/volleyball_pong.png"
 ---
 
 # Volleyball Pong
@@ -73,4 +72,5 @@ In any given turn, an agent can choose from one of 6 actions.
 * v2: No action timer (1.9.0)
 * v1: Breaking changes to entire API (1.4.0)
 * v0: Initial versions release (1.0.0)
+
 

@@ -1,6 +1,5 @@
 ---
-title: "Simple Reference"
-env_icon: "../../../_static/img/icons/MPE/SimpleReference.png"
+env_icon: "../../../_static/img/icons/mpe/simple_reference.png"
 ---
 
 # Simple Reference
@@ -57,3 +56,4 @@ simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False
 `max_cycles`:  number of frames (a step for each agent) until game terminates
 
 `continuous_actions`: Whether agent action spaces are discrete(default) or continuous
+

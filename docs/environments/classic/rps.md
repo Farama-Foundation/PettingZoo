@@ -1,6 +1,5 @@
 ---
-title: "Rock Paper Scissors"
-env_icon: "../../../_static/img/icons/Classic/RockPaperScissors.png"
+env_icon: "../../../_static/img/icons/classic/rps.png"
 ---
 
 # Rock Paper Scissors
@@ -110,3 +109,4 @@ If the game ends in a draw, both players will receive a reward of 0.
 * v2: Merge RPS and rock paper lizard scissors spock environments, add num_actions and max_cycles arguments (1.9.0)
 * v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
 * v0: Initial versions release (1.0.0)
+
