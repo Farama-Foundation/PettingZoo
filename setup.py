@@ -69,9 +69,9 @@ setup(
     author_email="jkterry@farama.org",
     description="Gym for multi-agent reinforcement learning",
     url="https://github.com/Farama-Foundation/PettingZoo",
+    license_files = ('LICENSE.txt',),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    license_files = ('LICENSE.txt',),
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
     python_requires=">=3.7, <3.11",
     packages=["pettingzoo"]
