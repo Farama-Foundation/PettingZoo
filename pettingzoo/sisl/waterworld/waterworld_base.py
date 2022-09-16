@@ -81,7 +81,7 @@ class Archea(Agent):
         return self._sensors
 
     def sensed(self, object_coord, object_radius, same=False):
-        """Whether object would be sensed by the pursuers"""
+        """Whether object would be sensed by the pursuers."""
         relative_coord = object_coord - np.expand_dims(self.position, 0)
         # Projection of object coordinate in direction of sensor
         sensorvals = self.sensors.dot(relative_coord.T)
@@ -164,7 +164,8 @@ class MAWaterWorld:
         raise AssertionError(
             "Please do not use Waterworld, at its current state it is incredibly buggy and the soundness of the environment is not guaranteed."
         )
-        """
+        """Initializes the `MAWaterWorld` class.
+
         n_pursuers: number of pursuing archea (agents)
         n_evaders: number of evader archea
         n_poison: number of poison archea
@@ -270,13 +271,13 @@ class MAWaterWorld:
         return [seed]
 
     def _generate_coord(self, radius):
-        coord = self.np_random.rand(2)
+        coord = self.np_random.random(2)
         # Create random coordinate that avoids obstacles
         while (
             ssd.cdist(coord[None, :], self.obstacle_coords)
             <= radius * 2 + self.obstacle_radius
         ):
-            coord = self.np_random.rand(2)
+            coord = self.np_random.random(2)
         return coord
 
     def reset(self):
@@ -284,7 +285,7 @@ class MAWaterWorld:
         # Initialize obstacles
         if self.initial_obstacle_coord is None:
             # Generate obstacle positions in range [0, 1)
-            self.obstacle_coords = self.np_random.rand(self.n_obstacles, 2)
+            self.obstacle_coords = self.np_random.random(self.n_obstacles, 2)
         else:
             self.obstacle_coords = self.initial_obstacle_coord[None, :]
         # Set each obstacle's velocity to 0
@@ -300,7 +301,7 @@ class MAWaterWorld:
         for evader in self._evaders:
             evader.set_position(self._generate_coord(evader._radius))
             # Generate velocity such that speed <= self.evader_speed
-            velocity = self.np_random.rand(2) - 0.5
+            velocity = self.np_random.random(2) - 0.5
             speed = np.linalg.norm(velocity)
             if speed > self.evader_speed:
                 # Limit speed to self.evader_speed
@@ -312,7 +313,7 @@ class MAWaterWorld:
             poison.set_position(self._generate_coord(poison._radius))
             # Generate both velocity components from range [-self.poison_speed, self.poison_speed)
             # Generate velocity such that speed <= self.poison_speed
-            velocity = self.np_random.rand(2) - 0.5
+            velocity = self.np_random.random(2) - 0.5
             speed = np.linalg.norm(velocity)
             if speed > self.poison_speed:
                 # Limit speed to self.poison_speed
@@ -337,7 +338,7 @@ class MAWaterWorld:
         return obs_list[0]
 
     def _caught(self, is_colliding_x_y, n_coop):
-        """Check whether collision results in catching the object
+        """Check whether collision results in catching the object.
 
         This is because you need `n_coop` agents to collide with the object to actually catch it
         """
@@ -354,7 +355,7 @@ class MAWaterWorld:
         return caught_y, x_caught_y
 
     def _closest_dist(self, closest_object_idx, input_sensorvals):
-        """Closest distances according to `idx`"""
+        """Closest distances according to `idx`."""
         sensorvals = []
 
         for pursuer_idx in range(self.n_pursuers):
@@ -556,7 +557,7 @@ class MAWaterWorld:
                     # Generate both velocity components from range [-self.evader_speed, self.evader_speed)
                     objects[object_idx].set_velocity(
                         (
-                            self.np_random.rand(
+                            self.np_random.random(
                                 2,
                             )
                             - 0.5

@@ -55,7 +55,7 @@ def get_valid_angle(randomizer):
         or (angle > c2)
         or (angle < d2)
     ):
-        angle = 2 * np.pi * randomizer.rand()
+        angle = 2 * np.pi * randomizer.random()
 
     return angle
 
@@ -202,9 +202,7 @@ class CooperativePong:
         return observation
 
     def state(self):
-        """
-        Returns an observation of the global environment
-        """
+        """Returns an observation of the global environment."""
         state = pygame.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)

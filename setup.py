@@ -32,7 +32,7 @@ extras = {
         "hanabi_learning_environment==0.0.4",
     ],
     "butterfly": ["pygame==2.1.0", "pymunk==6.2.0"],
-    "magent": ["magent==0.2.3"],
+    "magent": ["magent==0.2.4"],
     "mpe": ["pygame==2.1.0"],
     "sisl": ["pygame==2.1.0", "box2d-py==2.3.5", "scipy>=1.4.1"],
     "other": ["pillow>=8.0.1"],
@@ -46,6 +46,7 @@ extras = {
         "bandit",
         "pytest",
         "pytest-cov",
+        "pre-commit",
     ],
 }
 
@@ -68,6 +69,7 @@ setup(
     author_email="jkterry@farama.org",
     description="Gym for multi-agent reinforcement learning",
     url="https://github.com/Farama-Foundation/PettingZoo",
+    license_files = ('LICENSE.txt',),
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],

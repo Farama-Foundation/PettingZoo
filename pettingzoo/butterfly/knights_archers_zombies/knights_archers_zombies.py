@@ -196,7 +196,7 @@ class raw_env(AECEnv, EzPickle):
             zombie = Zombie(self.np_random)
 
             if self.zombie_spawn_rate >= self.spawn_rate:
-                zombie.rect.x = self.np_random.random_integers(0, const.SCREEN_WIDTH)
+                zombie.rect.x = self.np_random.integers(0, const.SCREEN_WIDTH)
                 zombie.rect.y = 5
 
                 self.zombie_list.add(zombie)
@@ -389,9 +389,7 @@ class raw_env(AECEnv, EzPickle):
             return state
 
     def state(self):
-        """
-        Returns an observation of the global environment
-        """
+        """Returns an observation of the global environment."""
         if not self.vector_state:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)

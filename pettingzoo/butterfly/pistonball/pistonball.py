@@ -214,9 +214,7 @@ class raw_env(AECEnv, EzPickle):
         return observation
 
     def state(self):
-        """
-        Returns an observation of the global environment
-        """
+        """Returns an observation of the global environment."""
         state = pygame.surfarray.pixels3d(self.screen).copy()
         state = np.rot90(state, k=3)
         state = np.fliplr(state)
@@ -350,10 +348,10 @@ class raw_env(AECEnv, EzPickle):
         horizontal_offset_range = 30
         vertical_offset_range = 15
         if self.random_drop:
-            self.vertical_offset = self.np_random.random_integers(
+            self.vertical_offset = self.np_random.integers(
                 -vertical_offset_range, vertical_offset_range + 1
             )
-            self.horizontal_offset = self.np_random.random_integers(
+            self.horizontal_offset = self.np_random.integers(
                 -horizontal_offset_range, horizontal_offset_range + 1
             )
         ball_x = (
