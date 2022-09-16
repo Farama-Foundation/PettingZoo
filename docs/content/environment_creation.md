@@ -10,14 +10,14 @@ This documentation overviews creating new environments and relevant useful wrapp
 This is a carefully commented version of the PettingZoo rock paper scissors environment.
 
 ```{eval-rst}
-.. literalinclude:: code-examples/aec_rps.py
+.. literalinclude:: ../code_examples/aec_rps.py
    :language: python
 ```
 
 ## Example Custom Parallel Environment
 
 ```{eval-rst}
-.. literalinclude:: code-examples/parallel_rps.py
+.. literalinclude:: ../code_examples/parallel_rps.py
    :language: python
 ```
 

@@ -47,6 +47,7 @@ content/environment_creation
 :caption: Development
 
 Github <https://github.com/Farama-Foundation/PettingZoo>
+Donate <https://farama.org/donations>
 
 ```
 
