@@ -80,7 +80,7 @@ setup(
     packages=["pettingzoo"]
     + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
-    install_requires=["numpy>=1.18.0", "gym>=0.24.1"],
+    install_requires=["numpy>=1.18.0", "gym>=0.26.1"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
