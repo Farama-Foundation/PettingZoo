@@ -71,6 +71,7 @@ setup(
     url="https://github.com/Farama-Foundation/PettingZoo",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    license_files = ('LICENSE.txt',),
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
     python_requires=">=3.7, <3.11",
     packages=["pettingzoo"]
