@@ -59,7 +59,7 @@ napoleon_custom_sections = [("Returns", "params_style")]
 #
 html_theme = "furo"
 html_title = "PettingZoo Documentation"
-html_baseurl = "https://www.pettingzoo.ml"
+html_baseurl = "https://pettingzoo.farama.org"
 html_copy_source = False
 html_favicon = "_static/img/favicon.png"
 html_theme_options = {
