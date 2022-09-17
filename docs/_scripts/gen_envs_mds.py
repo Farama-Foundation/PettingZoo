@@ -78,9 +78,8 @@ if __name__ == "__main__":
             }
 
             if i == 0:
-                print("first")
                 frontmatter_options["firstpage"] = ""
-            elif i == len(os.listdir(env_type_path)) - 1:
+            elif i == len(envs_list) - 1:
                 frontmatter_options["lastpage"] = ""
 
             docs_text = get_docs_from_py(
@@ -89,7 +88,7 @@ if __name__ == "__main__":
                 else env_dir_path + ".py"
             )
             docs_env_path = os.path.join(
-                "..", "environments", env_type, env_name + ".md"
+                "..", "environments", env_type, "_" + env_name + ".md"
             )
             create_docs_md(
                 docs_env_path,

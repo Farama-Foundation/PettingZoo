@@ -7,9 +7,9 @@ firstpage:
 
 ```{toctree}
 :hidden:
-sisl/multiwalker
-sisl/pursuit
-sisl/waterworld
+sisl/_multiwalker
+sisl/_pursuit
+sisl/_waterworld
 ```
 
 ```{raw} html

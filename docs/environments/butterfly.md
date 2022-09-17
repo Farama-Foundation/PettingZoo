@@ -7,9 +7,9 @@ firstpage:
 
 ```{toctree}
 :hidden:
-butterfly/cooperative_pong
-butterfly/knights_archers_zombies
-butterfly/pistonball
+butterfly/_cooperative_pong
+butterfly/_knights_archers_zombies
+butterfly/_pistonball
 ```
 
 ```{raw} html

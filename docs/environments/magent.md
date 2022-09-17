@@ -7,12 +7,12 @@ firstpage:
 
 ```{toctree}
 :hidden:
-magent/adversarial_pursuit
-magent/battle
-magent/battlefield
-magent/combined_arms
-magent/gather
-magent/tiger_deer
+magent/_adversarial_pursuit
+magent/_battle
+magent/_battlefield
+magent/_combined_arms
+magent/_gather
+magent/_tiger_deer
 ```
 
 ```{raw} html

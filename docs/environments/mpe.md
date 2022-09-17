@@ -7,14 +7,14 @@ firstpage:
 
 ```{toctree}
 :hidden:
-mpe/simple
-mpe/simple_adversary
-mpe/simple_crypto
-mpe/simple_push
-mpe/simple_speaker_listener
-mpe/simple_spread
-mpe/simple_tag
-mpe/simple_world_comm
+mpe/_simple
+mpe/_simple_adversary
+mpe/_simple_crypto
+mpe/_simple_push
+mpe/_simple_speaker_listener
+mpe/_simple_spread
+mpe/_simple_tag
+mpe/_simple_world_comm
 ```
 
 ```{raw} html
