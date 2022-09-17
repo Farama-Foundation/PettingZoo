@@ -1,0 +1,484 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Adversarial Pursuit" href="adversarial_pursuit/" /><link rel="prev" title="Tic Tac Toe" href="../classic/tictactoe/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/environments/magent.html" />
+
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>MAgent - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">PettingZoo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/img/PettingZoo.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">PettingZoo Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../content/api/">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/wrappers/">Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Environments</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../atari/">Atari</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../atari/basketball_pong/">Basketball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/boxing/">Boxing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/combat_plane/">Combat: Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/combat_tank/">Combat: Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/double_dunk/">Double Dunk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/entombed_competitive/">Emtombed: Competitive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/entombed_cooperative/">Emtombed: Cooperative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/flag_capture/">Flag Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/foozpong/">Foozpong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/ice_hockey/">Ice Hockey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/joust/">Joust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/mario_bros/">Mario Bros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/maze_craze/">Maze Craze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/othello/">Othello</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/pong/">Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/quadrapong/">Quadrapong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/space_invaders/">Space Invaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/space_war/">Space War</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/surround/">Surround</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/tennis/">Tennis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/video_checkers/">Video Checkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/volleyball_pong/">Volleyball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/warlords/">Warlords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/wizard_of_wor/">Wizard of Wor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../butterfly/">Butterfly</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/cooperative_pong/">Cooperative Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/knights_archers_zombies/">Knights Archers Zombies (‘KAZ’)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/pistonball/">Pistonball</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../classic/chess/">Chess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/connect_four/">Connect Four</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/gin_rummy/">Gin Rummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/go/">Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/hanabi/">Hanabi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/leduc_holdem/">Leduc Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/rps/">Rock Paper Scissors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/texas_holdem_no_limit/">Texas Hold’em No Limit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/texas_holdem/">Texas Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/tictactoe/">Tic Tac Toe</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">MAgent</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="adversarial_pursuit/">Adversarial Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="battle/">Battle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="battlefield/">Battlefield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="combined_arms/">Combined Arms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gather/">Gather</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiger_deer/">Tiger-Deer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple/">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_adversary/">Simple Adversary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_crypto/">Simple Crypto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_spread/">Simple Spread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_tag/">Simple Tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_world_comm/">Simple World Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/multiwalker/">Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/pursuit/">Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/waterworld/">Waterworld</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../third_party_envs/">Third-Party Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://farama.org/donations">Donate</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+          <section id="magent">
+<h1>MAgent<a class="headerlink" href="#magent" title="Permalink to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="env-grid">
+            
+            <a href="adversarial_pursuit">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_adversarial_pursuit.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Adversarial Pursuit</span>
+                    </div>
+                </div>
+            </a>
+    
+
+            <a href="battle">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_battle.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Battle</span>
+                    </div>
+                </div>
+            </a>
+    
+
+            <a href="battlefield">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_battlefield.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Battlefield</span>
+                    </div>
+                </div>
+            </a>
+    
+
+            <a href="combined_arms">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_combined_arms.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Combined Arms</span>
+                    </div>
+                </div>
+            </a>
+    
+
+            <a href="gather">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_gather.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Gather</span>
+                    </div>
+                </div>
+            </a>
+    
+
+            <a href="tiger_deer">
+                <div class="env-grid__cell">
+                    <div class="cell__image-container">
+                        <img src="../../_images/magent_tiger_deer.gif">
+                    </div>
+                    <div class="cell__title">
+                        <span>Tiger Deer</span>
+                    </div>
+                </div>
+            </a>
+    
+        </div>
+        
+    </body>
+</html>
+    <p>The unique dependencies for this set of environments can be installed via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pettingzoo<span class="o">[</span>magent<span class="o">]</span>
+</pre></div>
+</div>
+<p>MAgent is a set of environments where large numbers of pixel agents in a gridworld interact in battles or other competitive scenarios. These environments were originally derived from the <a class="reference external" href="https://github.com/geek-ai/MAgent">MAgent</a> codebase.</p>
+<section id="types-of-environments">
+<h2>Types of Environments<a class="headerlink" href="#types-of-environments" title="Permalink to this heading">#</a></h2>
+<p>All environments, except Gather, are competitive team games where agents in each team must cooperate to defeat the other team. Note that reward is allocated entirely individually.</p>
+<p>Gather is a competitive free for all game where agents try to stay alive for as long as possible, either by gathering food or killing other agents.</p>
+</section>
+<section id="key-concepts">
+<h2>Key Concepts<a class="headerlink" href="#key-concepts" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Observation view</strong>: All agents observe a box around themselves. They see whether the coordinates are empty, contain an obstacle, or contain an agent in any of the observation channels. If an agent is on a coordinate, that entry will contain the value (agent’s HP / max agent HP).</p></li>
+<li><p><strong>Feature vector</strong>: The feature vector contains information about the agent itself, rather than its surrounding. In normal mode it contains <code class="docutils literal notranslate"><span class="pre">&lt;agent_id,</span> <span class="pre">action,</span> <span class="pre">last_reward&gt;</span></code>, in minimap mode it also contains the agent position on the map, normalized to 0-1.</p></li>
+<li><p><strong>Observation</strong>: The observation is 3D observation view concatenated with the 1D feature vector by repeating the value of the feature across an entire image channel.</p></li>
+<li><p><strong>Minimap mode</strong>: For most of the games (Battle, Battlefield, Combined Arms, Gather), the agents have access to additional global information: two density maps of the teams’ respective presences on the map that are binned and concatenated onto the agent’s observation view (concatenated in the channel dimension, axis=2). Their own absolute positions on the global map is appended to the feature vector. This feature can be turned on or off with the <code class="docutils literal notranslate"><span class="pre">minimap_mode</span></code> environment argument.</p></li>
+<li><p><strong>Moving and attacking</strong>: An agent can only act or move each step, so the action space is the concatenations of all possible moves and all possible attacks.</p></li>
+<li><p><strong>State</strong> *: A global observation of the environment can be retrieved by calling <code class="docutils literal notranslate"><span class="pre">env.state()</span></code>. The state observation space is a 3D observation of the complete map with dimensions equal to the map size. The first channel shows the walls in the map, where each element represents if the coordinate is empty or has an obstacle. Concatenated to this channel there is another pair of channels for each agent type, which sees if the coordinates contain an agent of that type bined to the value (agent’s HP/ max agent HP). If extra features are selected the respective feature vector is concatenated and bined to each agent in the observation state.</p></li>
+</ul>
+</section>
+<section id="termination">
+<h2>Termination<a class="headerlink" href="#termination" title="Permalink to this heading">#</a></h2>
+<p>The game terminates after all agents of either team have died. This means that in the battle environments, where HP heals over time instead of decays, the game will go on for a very long time with random actions.</p>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
+<p>The MAgent environments were originally created for the following work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">DBLP</span><span class="p">:</span><span class="n">journals</span><span class="o">/</span><span class="n">corr</span><span class="o">/</span><span class="nb">abs</span><span class="o">-</span><span class="mi">1712</span><span class="o">-</span><span class="mi">00600</span><span class="p">,</span>
+  <span class="n">author</span>    <span class="o">=</span> <span class="p">{</span><span class="n">Lianmin</span> <span class="n">Zheng</span> <span class="ow">and</span> <span class="n">Jiacheng</span> <span class="n">Yang</span> <span class="ow">and</span> <span class="n">Han</span> <span class="n">Cai</span> <span class="ow">and</span> <span class="n">Weinan</span> <span class="n">Zhang</span> <span class="ow">and</span> <span class="n">Jun</span> <span class="n">Wang</span> <span class="ow">and</span> <span class="n">Yong</span> <span class="n">Yu</span><span class="p">},</span>
+  <span class="n">title</span>     <span class="o">=</span> <span class="p">{</span><span class="n">MAgent</span><span class="p">:</span> <span class="p">{</span><span class="n">A</span><span class="p">}</span> <span class="n">Many</span><span class="o">-</span><span class="n">Agent</span> <span class="n">Reinforcement</span> <span class="n">Learning</span> <span class="n">Platform</span> <span class="k">for</span> <span class="n">Artificial</span> <span class="n">Collective</span> <span class="n">Intelligence</span><span class="p">},</span>
+  <span class="n">journal</span>   <span class="o">=</span> <span class="p">{</span><span class="n">CoRR</span><span class="p">},</span>
+  <span class="n">volume</span>    <span class="o">=</span> <span class="p">{</span><span class="nb">abs</span><span class="o">/</span><span class="mf">1712.00600</span><span class="p">},</span>
+  <span class="n">year</span>      <span class="o">=</span> <span class="p">{</span><span class="mi">2017</span><span class="p">},</span>
+  <span class="n">url</span>       <span class="o">=</span> <span class="p">{</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arxiv</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="nb">abs</span><span class="o">/</span><span class="mf">1712.00600</span><span class="p">},</span>
+  <span class="n">eprint</span>    <span class="o">=</span> <span class="p">{</span><span class="mf">1712.00600</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Please cite this paper if you use these environments in your research.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="adversarial_pursuit/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Adversarial Pursuit</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">MAgent</a><ul>
+<li><a class="reference internal" href="#types-of-environments">Types of Environments</a></li>
+<li><a class="reference internal" href="#key-concepts">Key Concepts</a></li>
+<li><a class="reference internal" href="#termination">Termination</a></li>
+<li><a class="reference internal" href="#citation">Citation</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>
