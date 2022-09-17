@@ -1,0 +1,531 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Tutorials" href="../tutorials/" /><link rel="prev" title="Testing Environments" href="../environment_tests/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/content/wrappers.html" />
+
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>Wrappers - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">PettingZoo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/img/PettingZoo.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">PettingZoo Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api/">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment_tests/">Testing Environments</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Environments</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/atari/">Atari</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/basketball_pong/">Basketball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/boxing/">Boxing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/combat_plane/">Combat: Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/combat_tank/">Combat: Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/double_dunk/">Double Dunk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/entombed_competitive/">Emtombed: Competitive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/entombed_cooperative/">Emtombed: Cooperative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/flag_capture/">Flag Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/foozpong/">Foozpong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/ice_hockey/">Ice Hockey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/joust/">Joust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/mario_bros/">Mario Bros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/maze_craze/">Maze Craze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/othello/">Othello</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/pong/">Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/quadrapong/">Quadrapong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/space_invaders/">Space Invaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/space_war/">Space War</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/surround/">Surround</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/tennis/">Tennis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/video_checkers/">Video Checkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/volleyball_pong/">Volleyball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/warlords/">Warlords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/atari/wizard_of_wor/">Wizard of Wor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/butterfly/">Butterfly</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/butterfly/cooperative_pong/">Cooperative Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/butterfly/knights_archers_zombies/">Knights Archers Zombies (‘KAZ’)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/butterfly/pistonball/">Pistonball</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/chess/">Chess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/connect_four/">Connect Four</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/gin_rummy/">Gin Rummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/go/">Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/hanabi/">Hanabi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/rps/">Rock Paper Scissors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/texas_holdem_no_limit/">Texas Hold’em No Limit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/texas_holdem/">Texas Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/classic/tictactoe/">Tic Tac Toe</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/magent/">MAgent</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/adversarial_pursuit/">Adversarial Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/battle/">Battle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/battlefield/">Battlefield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/combined_arms/">Combined Arms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/gather/">Gather</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/tiger_deer/">Tiger-Deer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple/">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_spread/">Simple Spread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_tag/">Simple Tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_world_comm/">Simple World Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/multiwalker/">Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/pursuit/">Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/waterworld/">Waterworld</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../environments/third_party_envs/">Third-Party Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://farama.org/donations">Donate</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+          <section id="wrappers">
+<h1>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this heading">#</a></h1>
+<p>PettingZoo include wrappers via the SuperSuit companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">from</span> <span class="nn">supersuit</span> <span class="kn">import</span> <span class="n">color_reduction_v0</span><span class="p">,</span> <span class="n">frame_stack_v1</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;SpaceInvaders-v0&#39;</span><span class="p">)</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similarly, using SuperSuit with PettingZoo environments looks like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v0</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v0</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="included-functions">
+<h2>Included Functions<a class="headerlink" href="#included-functions" title="Permalink to this heading">#</a></h2>
+<p>Supersuit includes the following wrappers:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clip_reward_v0(env,</span> <span class="pre">lower_bound=-1,</span> <span class="pre">upper_bound=1)</span></code> clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clip_actions_v0(env)</span></code> clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color_reduction_v0(env,</span> <span class="pre">mode='full')</span></code> simplifies color information in graphical ((x,y,3) shaped) environments. <code class="docutils literal notranslate"><span class="pre">mode='full'</span></code> fully greyscales of the observation. This can be computationally intensive. Arguments of ‘R’, ‘G’ or ‘B’ just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype_v0(env,</span> <span class="pre">dtype)</span></code> recasts your observation as a certain dtype. Many graphical games return <code class="docutils literal notranslate"><span class="pre">uint8</span></code> observations, while neural networks generally want <code class="docutils literal notranslate"><span class="pre">float16</span></code> or <code class="docutils literal notranslate"><span class="pre">float32</span></code>. <code class="docutils literal notranslate"><span class="pre">dtype</span></code> can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flatten_v0(env)</span></code> flattens observations into a 1D array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_skip_v0(env,</span> <span class="pre">num_frames)</span></code> skips <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gym Atari’s frameskip parameter, <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> can also be a tuple <code class="docutils literal notranslate"><span class="pre">(min_skip,</span> <span class="pre">max_skip)</span></code>, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delay_observations_v0(env,</span> <span class="pre">delay)</span></code> Delays observation by <code class="docutils literal notranslate"><span class="pre">delay</span></code> frames. Before <code class="docutils literal notranslate"><span class="pre">delay</span></code> frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sticky_actions_v0(env,</span> <span class="pre">repeat_action_probability)</span></code> assigns a probability of an old action “sticking” to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_stack_v1(env,</span> <span class="pre">num_frames=4)</span></code> stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don’t yet exist are filled with 0s. <code class="docutils literal notranslate"><span class="pre">num_frames=1</span></code> is analogous to not using this function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_observation_v0(env,</span> <span class="pre">memory)</span></code> the resulting observation becomes the max over <code class="docutils literal notranslate"><span class="pre">memory</span></code> number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing <code class="docutils literal notranslate"><span class="pre">memory=2</span></code> and then a  <code class="docutils literal notranslate"><span class="pre">frame_skip</span></code> of 4.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalize_obs_v0(env,</span> <span class="pre">env_min=0,</span> <span class="pre">env_max=1)</span></code> linearly scales observations to the range <code class="docutils literal notranslate"><span class="pre">env_min</span></code> (default 0) to <code class="docutils literal notranslate"><span class="pre">env_max</span></code> (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reshape_v0(env,</span> <span class="pre">shape)</span></code> reshapes observations into given shape.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resize_v1(env,</span> <span class="pre">x_size,</span> <span class="pre">y_size,</span> <span class="pre">linear_interp=False)</span></code> Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting <code class="docutils literal notranslate"><span class="pre">linear_interp=True</span></code> (it’s faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nan_noop_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the <code class="docutils literal notranslate"><span class="pre">step(action,</span> <span class="pre">no_op_action)</span></code> function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nan_zeros_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nan_random_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_actions_v0(env,</span> <span class="pre">scale)</span></code> Scales the high and low bounds of the action space by the <code class="docutils literal notranslate"><span class="pre">scale</span></code> argument in <strong>init</strong>(). Additionally, scales any actions by the same value when step() is called.</p></li>
+</ul>
+</section>
+<section id="included-multi-agent-only-functions">
+<h2>Included Multi-Agent Only Functions<a class="headerlink" href="#included-multi-agent-only-functions" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">agent_indicator_v0(env,</span> <span class="pre">type_only=False)</span></code> Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <code class="docutils literal notranslate"><span class="pre">type_only</span></code> parameter to parse the name of the agent as <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_&lt;n&gt;</span></code> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the <a class="reference external" href="https://www.pettingzoo.ml/magent/battle">MAgent battle environment</a> the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">black_death_v2(env)</span></code> Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name “black death” does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pad_action_space_v0(env)</span></code> pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pad_observations_v0(env)</span></code> pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.</p></li>
+</ul>
+</section>
+<section id="environment-vectorization">
+<h2>Environment Vectorization<a class="headerlink" href="#environment-vectorization" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">concat_vec_envs_v0(vec_env,</span> <span class="pre">num_vec_envs,</span> <span class="pre">num_cpus=0,</span> <span class="pre">base_class='gym')</span></code> takes in an <code class="docutils literal notranslate"><span class="pre">vec_env</span></code> which is vector environment (should not have multithreading enabled). Creates a new vector environment with <code class="docutils literal notranslate"><span class="pre">num_vec_envs</span></code> copies of that vector environment concatenated together and runs them on <code class="docutils literal notranslate"><span class="pre">num_cpus</span></code> cpus as balanced as possible between cpus. <code class="docutils literal notranslate"><span class="pre">num_cpus=0</span></code> or <code class="docutils literal notranslate"><span class="pre">num_cpus=1</span></code> means to create 0 new threads, i.e. run the process in an efficient single threaded manner. A use case for this function is given below. If the base class of the resulting vector environment matters as it does for stable baselines, you can use the <code class="docutils literal notranslate"><span class="pre">base_class</span></code> parameter to switch between <code class="docutils literal notranslate"><span class="pre">&quot;gym&quot;</span></code> base class and <code class="docutils literal notranslate"><span class="pre">&quot;stable_baselines3&quot;</span></code>’s base class. Note that both have identical functionality.</p></li>
+</ul>
+<section id="parallel-environment-vectorization">
+<h3>Parallel Environment Vectorization<a class="headerlink" href="#parallel-environment-vectorization" title="Permalink to this heading">#</a></h3>
+<p>Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of “environments”:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_1</span>
+<span class="n">agent_2</span>
+<span class="n">agent_3</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Where each agent’s observation, reward, done, and info will be that environment’s data.</p>
+<p>The following function performs this conversion.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pettingzoo_env_to_vec_env_v0(env)</span></code>: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gym vector environment where each “environment” in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper). This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines’s A2C out of box (example below).</p></li>
+</ul>
+<p>You can also use the <code class="docutils literal notranslate"><span class="pre">concat_vec_envs_v0</span></code> functionality to train on several vector environments in parallel, forming a vector which looks like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env_1_agent_1</span>
+<span class="n">env_1_agent_2</span>
+<span class="n">env_1_agent_3</span>
+<span class="n">env_2_agent_1</span>
+<span class="n">env_2_agent_2</span>
+<span class="n">env_2_agent_3</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>So you can for example train 4 copies of pettingzoo’s pistonball environment in parallel with some code like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stable_baselines3</span> <span class="kn">import</span> <span class="n">PPO</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s1">&#39;stable_baselines3&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span><span class="s1">&#39;CnnPolicy&#39;</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000000</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vectorize_aec_env_v0(aec_env,</span> <span class="pre">num_envs,</span> <span class="pre">num_cpus=0)</span></code> creates an AEC Vector env (API documented in source <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py">here</a>). <code class="docutils literal notranslate"><span class="pre">num_cpus=0</span></code> indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.</p></li>
+</ul>
+<section id="note-on-multiprocessing">
+<h4>Note on multiprocessing<a class="headerlink" href="#note-on-multiprocessing" title="Permalink to this heading">#</a></h4>
+<p>Turning on multiprocessing runs each environment in it’s own process. Turning this on is typically much slower for fast environments (like card games), but much faster for slow environments (like robotics simulations). Determining which case you are will require testing.</p>
+<p>On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="lambda-functions">
+<h2>Lambda Functions<a class="headerlink" href="#lambda-functions" title="Permalink to this heading">#</a></h2>
+<p>If none of the included in micro-wrappers are suitable for your needs, you can use a lambda function (or submit a PR).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">action_lambda_v1(env,</span> <span class="pre">change_action_fn,</span> <span class="pre">change_space_fn)</span></code> allows you to define arbitrary changes to the actions via <code class="docutils literal notranslate"><span class="pre">change_action_fn(action,</span> <span class="pre">space)</span> <span class="pre">:</span> <span class="pre">action</span></code> and to the action spaces with <code class="docutils literal notranslate"><span class="pre">change_space_fn(action_space)</span> <span class="pre">:</span> <span class="pre">action_space</span></code>. Remember that you are transforming the actions received by the wrapper to the actions expected by the base environment. In multi-agent environments only, the lambda functions can optionally accept an extra <code class="docutils literal notranslate"><span class="pre">agent</span></code> parameter, which lets you know the agent name of the action/action space, e.g. <code class="docutils literal notranslate"><span class="pre">change_action_fn(action,</span> <span class="pre">space,</span> <span class="pre">agent)</span> <span class="pre">:</span> <span class="pre">action</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">observation_lambda_v0(env,</span> <span class="pre">observation_fn,</span> <span class="pre">observation_space_fn)</span></code> allows you to define arbitrary changes to the via <code class="docutils literal notranslate"><span class="pre">observation_fn(observation,</span> <span class="pre">obs_space)</span> <span class="pre">:</span> <span class="pre">observation</span></code>, and <code class="docutils literal notranslate"><span class="pre">observation_space_fn(obs_space)</span> <span class="pre">:</span> <span class="pre">obs_space</span></code>. For Box-Box transformations the space transformation will be inferred from <code class="docutils literal notranslate"><span class="pre">change_observation_fn</span></code> if <code class="docutils literal notranslate"><span class="pre">change_obs_space_fn=None</span></code> by passing the <code class="docutils literal notranslate"><span class="pre">high</span></code> and <code class="docutils literal notranslate"><span class="pre">low</span></code> bounds through the <code class="docutils literal notranslate"><span class="pre">observation_space_fn</span></code>. In multi-agent environments only, the lambda functions can optionally accept an <code class="docutils literal notranslate"><span class="pre">agent</span></code> parameter, which lets you know the agent name of the observation/observation space, e.g. <code class="docutils literal notranslate"><span class="pre">observation_fn(observation,</span> <span class="pre">obs_space,</span> <span class="pre">agent)</span> <span class="pre">:</span> <span class="pre">observation</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reward_lambda_v0(env,</span> <span class="pre">change_reward_fn)</span></code> allows you to make arbitrary changes to rewards by passing in a <code class="docutils literal notranslate"><span class="pre">change_reward_fn(reward)</span> <span class="pre">:</span> <span class="pre">reward</span></code> function. For Gym environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.</p></li>
+</ul>
+<section id="lambda-function-examples">
+<h3>Lambda Function Examples<a class="headerlink" href="#lambda-function-examples" title="Permalink to this heading">#</a></h3>
+<p>Adding noise to a Box observation looks like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">observation_lambda_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">observation_lambda_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
+    <span class="k">lambda</span> <span class="n">obs_space</span> <span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">obs_space</span><span class="o">.</span><span class="n">low</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="n">obs_space</span><span class="o">.</span><span class="n">high</span><span class="o">+</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">one_hot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">v</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">action_lambda_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span>
+    <span class="k">lambda</span> <span class="n">action</span><span class="p">,</span> <span class="n">act_space</span> <span class="p">:</span> <span class="n">one_hot</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">act_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+    <span class="k">lambda</span> <span class="n">act_space</span> <span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="n">act_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Note that many of the supersuit wrappers are implemented with a lambda wrapper behind the scenes. See <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/generic_wrappers/basic_wrappers.py">here</a> for some examples.</p>
+</section>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
+<p>If you use this in your research, please cite:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">SuperSuit</span><span class="p">,</span>
+  <span class="n">Title</span> <span class="o">=</span> <span class="p">{</span><span class="n">SuperSuit</span><span class="p">:</span> <span class="n">Simple</span> <span class="n">Microwrappers</span> <span class="k">for</span> <span class="n">Reinforcement</span> <span class="n">Learning</span> <span class="n">Environments</span><span class="p">},</span>
+  <span class="n">Author</span> <span class="o">=</span> <span class="p">{</span><span class="n">Terry</span><span class="p">,</span> <span class="n">J</span> <span class="n">K</span> <span class="ow">and</span> <span class="n">Black</span><span class="p">,</span> <span class="n">Benjamin</span> <span class="ow">and</span> <span class="n">Hari</span><span class="p">,</span> <span class="n">Ananth</span><span class="p">},</span>
+  <span class="n">journal</span><span class="o">=</span><span class="p">{</span><span class="n">arXiv</span> <span class="n">preprint</span> <span class="n">arXiv</span><span class="p">:</span><span class="mf">2008.08932</span><span class="p">},</span>
+  <span class="n">year</span><span class="o">=</span><span class="p">{</span><span class="mi">2020</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../tutorials/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Tutorials</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../environment_tests/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Testing Environments</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Wrappers</a><ul>
+<li><a class="reference internal" href="#included-functions">Included Functions</a></li>
+<li><a class="reference internal" href="#included-multi-agent-only-functions">Included Multi-Agent Only Functions</a></li>
+<li><a class="reference internal" href="#environment-vectorization">Environment Vectorization</a><ul>
+<li><a class="reference internal" href="#parallel-environment-vectorization">Parallel Environment Vectorization</a><ul>
+<li><a class="reference internal" href="#note-on-multiprocessing">Note on multiprocessing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lambda-functions">Lambda Functions</a><ul>
+<li><a class="reference internal" href="#lambda-function-examples">Lambda Function Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#citation">Citation</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

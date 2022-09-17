@@ -1,0 +1,456 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="prev" title="Waterworld" href="../sisl/waterworld/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/environments/third_party_envs.html" />
+
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+        <title>Third-Party Environments - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style>
+
+</head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../"><div class="brand">PettingZoo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/img/PettingZoo.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">PettingZoo Documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search/" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../content/api/">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/wrappers/">Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Environments</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../atari/">Atari</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../atari/basketball_pong/">Basketball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/boxing/">Boxing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/combat_plane/">Combat: Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/combat_tank/">Combat: Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/double_dunk/">Double Dunk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/entombed_competitive/">Emtombed: Competitive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/entombed_cooperative/">Emtombed: Cooperative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/flag_capture/">Flag Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/foozpong/">Foozpong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/ice_hockey/">Ice Hockey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/joust/">Joust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/mario_bros/">Mario Bros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/maze_craze/">Maze Craze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/othello/">Othello</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/pong/">Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/quadrapong/">Quadrapong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/space_invaders/">Space Invaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/space_war/">Space War</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/surround/">Surround</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/tennis/">Tennis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/video_checkers/">Video Checkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/volleyball_pong/">Volleyball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/warlords/">Warlords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../atari/wizard_of_wor/">Wizard of Wor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../butterfly/">Butterfly</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/cooperative_pong/">Cooperative Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/knights_archers_zombies/">Knights Archers Zombies (‘KAZ’)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../butterfly/pistonball/">Pistonball</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../classic/chess/">Chess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/connect_four/">Connect Four</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/gin_rummy/">Gin Rummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/go/">Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/hanabi/">Hanabi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/leduc_holdem/">Leduc Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/rps/">Rock Paper Scissors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/texas_holdem_no_limit/">Texas Hold’em No Limit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/texas_holdem/">Texas Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../classic/tictactoe/">Tic Tac Toe</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../magent/">MAgent</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../magent/adversarial_pursuit/">Adversarial Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../magent/battle/">Battle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../magent/battlefield/">Battlefield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../magent/combined_arms/">Combined Arms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../magent/gather/">Gather</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../magent/tiger_deer/">Tiger-Deer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple/">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_adversary/">Simple Adversary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_crypto/">Simple Crypto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_spread/">Simple Spread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_tag/">Simple Tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mpe/simple_world_comm/">Simple World Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/multiwalker/">Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/pursuit/">Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sisl/waterworld/">Waterworld</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Third-Party Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://farama.org/donations">Donate</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+          <section id="third-party-environments">
+<h1>Third-Party Environments<a class="headerlink" href="#third-party-environments" title="Permalink to this heading">#</a></h1>
+<section id="bombermanai">
+<h2>BomberManAI<a class="headerlink" href="#bombermanai" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/NaIwo/BomberManAI">https://github.com/NaIwo/BomberManAI</a></p>
+<p>PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.</p>
+</section>
+<section id="starcraft-multi-agent-challenge">
+<h2>StarCraft Multi-Agent Challenge<a class="headerlink" href="#starcraft-multi-agent-challenge" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/oxwhirl/smac">https://github.com/oxwhirl/smac</a></p>
+<p>Collection of widely used StarCraft2 based cooperative environments.</p>
+</section>
+<section id="hearthstone-battlegrounds-simulator">
+<h2>Hearthstone Battlegrounds Simulator<a class="headerlink" href="#hearthstone-battlegrounds-simulator" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/JDBumgardner/stone_ground_hearth_battles">https://github.com/JDBumgardner/stone_ground_hearth_battles</a></p>
+<p>PettingZoo environment wrapper for Blizzard’s Hearthstone game.</p>
+</section>
+<section id="fanorona-aec">
+<h2>Fanorona AEC<a class="headerlink" href="#fanorona-aec" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/AbhijeetKrishnan/fanorona-aec">https://github.com/AbhijeetKrishnan/fanorona-aec</a></p>
+<p>Implementation of the Fanorona board game</p>
+</section>
+<section id="longroad-envs">
+<h2>Longroad Envs<a class="headerlink" href="#longroad-envs" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/grzPat/longroad-envs">https://github.com/grzPat/longroad-envs</a></p>
+<p>Multi-Agent traffic control environments.</p>
+</section>
+<section id="pz-dilemma">
+<h2>PZ Dilemma<a class="headerlink" href="#pz-dilemma" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/arjun-prakash/pz_dilemma">https://github.com/arjun-prakash/pz_dilemma</a></p>
+<p>Collection of prisoner’s dilemma games as PettingZoo environments</p>
+</section>
+<section id="ants">
+<h2>Ants<a class="headerlink" href="#ants" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/chorsch/ants">https://github.com/chorsch/ants</a></p>
+<p>Simplified simulation of an ant colony</p>
+</section>
+<section id="generalized-rock-paper-scissors">
+<h2>Generalized Rock Paper Scissors<a class="headerlink" href="#generalized-rock-paper-scissors" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/afozk95/PettingZoo/tree/add_generalized_rps">https://github.com/afozk95/PettingZoo/tree/add_generalized_rps</a></p>
+<p>More general n-players form of the Rock Paper Scissors environments in PettingZoo</p>
+</section>
+<section id="pz-risk">
+<h2>PZ Risk<a class="headerlink" href="#pz-risk" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/mahi97/pz_risk">https://github.com/mahi97/pz_risk</a></p>
+<p>Implementation of the Risk board game as a PettingZoo environment</p>
+</section>
+<section id="sumo-rl">
+<h2>Sumo-RL<a class="headerlink" href="#sumo-rl" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/LucasAlegre/sumo-rl">https://github.com/LucasAlegre/sumo-rl</a></p>
+<p>PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation</p>
+</section>
+<section id="sequential-social-delima-games">
+<h2>Sequential Social Delima Games<a class="headerlink" href="#sequential-social-delima-games" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197">https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197</a></p>
+<p>Set of two environments with numerous multi-agent equilibria popular with researchers</p>
+</section>
+<section id="neural-mmo">
+<h2>Neural MMO<a class="headerlink" href="#neural-mmo" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/jsuarez5341/neural-mmo">https://github.com/jsuarez5341/neural-mmo</a></p>
+<p>Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems</p>
+</section>
+<section id="cookingzoo">
+<h2>CookingZoo<a class="headerlink" href="#cookingzoo" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/DavidRother/gym-cooking">https://github.com/DavidRother/gym-cooking</a></p>
+<p>Maintained fork of too many cooks game with PettingZoo API support</p>
+</section>
+<section id="snim">
+<h2>SNIM<a class="headerlink" href="#snim" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py">https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py</a></p>
+<p>PettingZoo based supply chain management environment</p>
+</section>
+<section id="citylearn">
+<h2>CityLearn<a class="headerlink" href="#citylearn" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/apigott/CityLearn">https://github.com/apigott/CityLearn</a></p>
+<p>PettingZoo environments for city grid power management, based on the CityLearn simulator.</p>
+</section>
+<section id="racecar-gym">
+<h2>Racecar Gym<a class="headerlink" href="#racecar-gym" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/axelbr/racecar_gym">https://github.com/axelbr/racecar_gym</a></p>
+<p>Multi-Agent racing environment that supports the PettingZoo API.</p>
+</section>
+<section id="mu-torere">
+<h2>Mu Torere<a class="headerlink" href="#mu-torere" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/Aroksak/MuTorere">https://github.com/Aroksak/MuTorere</a></p>
+<p>PettingZoo based implementation of the Mū tōrere board game from New Zealand</p>
+</section>
+<section id="skyjo-rl">
+<h2>skyjo_rl<a class="headerlink" href="#skyjo-rl" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/michaelfeil/skyjo_rl">https://github.com/michaelfeil/skyjo_rl</a></p>
+<p>PettingZoo based implementation of the SkyJo board game</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Third-Party Environments</a><ul>
+<li><a class="reference internal" href="#bombermanai">BomberManAI</a></li>
+<li><a class="reference internal" href="#starcraft-multi-agent-challenge">StarCraft Multi-Agent Challenge</a></li>
+<li><a class="reference internal" href="#hearthstone-battlegrounds-simulator">Hearthstone Battlegrounds Simulator</a></li>
+<li><a class="reference internal" href="#fanorona-aec">Fanorona AEC</a></li>
+<li><a class="reference internal" href="#longroad-envs">Longroad Envs</a></li>
+<li><a class="reference internal" href="#pz-dilemma">PZ Dilemma</a></li>
+<li><a class="reference internal" href="#ants">Ants</a></li>
+<li><a class="reference internal" href="#generalized-rock-paper-scissors">Generalized Rock Paper Scissors</a></li>
+<li><a class="reference internal" href="#pz-risk">PZ Risk</a></li>
+<li><a class="reference internal" href="#sumo-rl">Sumo-RL</a></li>
+<li><a class="reference internal" href="#sequential-social-delima-games">Sequential Social Delima Games</a></li>
+<li><a class="reference internal" href="#neural-mmo">Neural MMO</a></li>
+<li><a class="reference internal" href="#cookingzoo">CookingZoo</a></li>
+<li><a class="reference internal" href="#snim">SNIM</a></li>
+<li><a class="reference internal" href="#citylearn">CityLearn</a></li>
+<li><a class="reference internal" href="#racecar-gym">Racecar Gym</a></li>
+<li><a class="reference internal" href="#mu-torere">Mu Torere</a></li>
+<li><a class="reference internal" href="#skyjo-rl">skyjo_rl</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>
