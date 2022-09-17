@@ -4,7 +4,7 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gym](https://github.com/openai/gym).
 
-Our website, with comprehensive documentation, is [pettingzoo.ml](https://www.pettingzoo.ml)
+Our website, with comprehensive documentation, is [pettingzoo.ml](https://pettingzoo.farama.org)
 
 PettingZoo also has a discord server for development purposes that you can join here: https://discord.gg/nHg2JRN489
 
@@ -12,12 +12,12 @@ PettingZoo also has a discord server for development purposes that you can join 
 
 PettingZoo includes the following families of environments:
 
-* [Atari](https://www.pettingzoo.ml/atari): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
-* [Butterfly](https://www.pettingzoo.ml/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
-* [Classic](https://www.pettingzoo.ml/classic): Classical games including card games, board games, etc.
-* [MAgent](https://www.pettingzoo.ml/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
-* [MPE](https://www.pettingzoo.ml/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
-* [SISL](https://www.pettingzoo.ml/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+* [Atari](https://pettingzoo.farama.org/environments/atari/): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
+* [Butterfly](https://pettingzoo.farama.org/environments/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
+* [Classic](https://pettingzoo.farama.org/environments/classic): Classical games including card games, board games, etc.
+* [MAgent](https://pettingzoo.farama.org/environments/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
+* [MPE](https://pettingzoo.farama.org/environments/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
+* [SISL](https://pettingzoo.farama.org/environments/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
 
 To install the pettingzoo base library, use `pip install pettingzoo`
 
@@ -50,11 +50,11 @@ for agent in env.agent_iter():
     env.step(action)
 ```
 
-For the complete API documentation, please see https://www.pettingzoo.ml/api
+For the complete API documentation, please see https://pettingzoo.farama.org/content/api/
 
 ### Parallel API
 
-In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://www.pettingzoo.ml/api#parallel-api
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://pettingzoo.farama.org/content/api/#parallel-api
 
 ## SuperSuit
 
