@@ -1,3 +1,5 @@
+"""Setups up the PettingZoo module."""
+
 from setuptools import find_packages, setup
 
 with open("README.md") as fh:
@@ -13,6 +15,7 @@ with open("README.md") as fh:
 
 
 def get_version():
+    """Gets the pettingzoo version."""
     path = "pettingzoo/__init__.py"
     with open(path) as file:
         lines = file.readlines()
@@ -69,6 +72,7 @@ setup(
     author_email="jkterry@farama.org",
     description="Gym for multi-agent reinforcement learning",
     url="https://github.com/Farama-Foundation/PettingZoo",
+    license_files=("LICENSE.txt",),
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords=["Reinforcement Learning", "game", "RL", "AI", "gym"],
