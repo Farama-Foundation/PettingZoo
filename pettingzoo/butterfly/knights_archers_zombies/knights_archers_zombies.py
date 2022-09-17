@@ -389,9 +389,7 @@ class raw_env(AECEnv, EzPickle):
             return state
 
     def state(self):
-        """
-        Returns an observation of the global environment
-        """
+        """Returns an observation of the global environment."""
         if not self.vector_state:
             state = pygame.surfarray.pixels3d(self.WINDOW).copy()
             state = np.rot90(state, k=3)
