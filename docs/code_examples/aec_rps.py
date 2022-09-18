@@ -121,6 +121,7 @@ class raw_env(AECEnv):
         - _cumulative_rewards
         - terminations
         - truncations
+        - dones
         - infos
         - agent_selection
         And must set up the environment so that render(), step(), and observe()
