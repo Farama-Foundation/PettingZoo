@@ -322,7 +322,7 @@ class ParallelEnv:
     ) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
     ]:
-        """ Receives a dictionary of actions keyed by the agent name.
+        """Receives a dictionary of actions keyed by the agent name.
 
         Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary
         and info dictionary, where each dictionary is keyed by the agent.
