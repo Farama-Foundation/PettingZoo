@@ -313,8 +313,11 @@ class raw_env(AECEnv, EzPickle):
             By default a list of integers, describing the logic state of the game from the view of the agent.
             Can be a returned as a descriptive dictionary, if as_vector=False.
         """
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         action = int(action)
 
         agent_on_turn = self.agent_selection
@@ -360,7 +363,8 @@ class raw_env(AECEnv, EzPickle):
         """Updates internal state."""
         self.latest_observations = obs
         self.rewards = {a: reward for a in self.agents}
-        self.dones = {player_name: done for player_name in self.agents}
+        self.terminations = {player_name: done for player_name in self.agents}
+        self.truncations = {player_name: done for player_name in self.agents}
 
         # Here we have to deal with the player index with offset = 1
         self.infos = {

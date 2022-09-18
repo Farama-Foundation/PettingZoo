@@ -49,9 +49,9 @@ def get_valid_angle(randomizer):
 
     angle = 0
     while (
-        (angle > a1 and angle < b1)
-        or (angle > a2 and angle < b2)
-        or (angle > c1 and angle < d1)
+        (a1 < angle < b1)
+        or (a2 < angle < b2)
+        or (c1 < angle < d1)
         or (angle > c2)
         or (angle < d2)
     ):
@@ -140,7 +140,8 @@ class CooperativePong:
 
     def reinit(self):
         self.rewards = dict(zip(self.agents, [0.0] * len(self.agents)))
-        self.dones = dict(zip(self.agents, [False] * len(self.agents)))
+        self.terminations = dict(zip(self.agents, [False] * len(self.agents)))
+        self.truncations = dict(zip(self.agents, [False] * len(self.agents)))
         self.infos = dict(zip(self.agents, [{}] * len(self.agents)))
         self.score = 0
 
@@ -162,7 +163,8 @@ class CooperativePong:
         self.p0.speed = self.speed[1]
         self.p1.speed = self.speed[2]
 
-        self.done = False
+        self.terminate = False
+        self.truncate = False
 
         self.num_frames = 0
 
@@ -215,7 +217,6 @@ class CooperativePong:
         self.ball.draw(self.screen)
 
     def step(self, action, agent):
-
         # update p0, p1 accordingly
         # action: 0: do nothing,
         # action: 1: p[i] move up
@@ -226,28 +227,28 @@ class CooperativePong:
         elif agent == self.agents[1]:
             self.p1.update(self.area, action)
 
-            # do the rest if not done
-            if not self.done:
+            # do the rest if not terminated
+            if not self.terminate:
                 # update ball position
-                self.done = self.ball.update2(self.area, self.p0, self.p1)
+                self.terminate = self.ball.update2(self.area, self.p0, self.p1)
 
                 # do the miscellaneous stuff after the last agent has moved
                 # reward is the length of time ball is in play
                 reward = 0
                 # ball is out-of-bounds
-                if self.done:
+                if self.terminate:
                     reward = self.off_screen_penalty
                     self.score += reward
-                if not self.done:
+                if not self.terminate:
                     self.num_frames += 1
                     reward = self.max_reward / self.max_cycles
                     self.score += reward
-                    if self.num_frames == self.max_cycles:
-                        self.done = True
+                    self.truncate = self.num_frames >= self.max_cycles
 
                 for ag in self.agents:
                     self.rewards[ag] = reward
-                    self.dones[ag] = self.done
+                    self.terminations[ag] = self.terminate
+                    self.truncations[ag] = self.truncate
                     self.infos[ag] = {}
 
         if self.renderOn:
@@ -292,7 +293,8 @@ class raw_env(AECEnv, EzPickle):
         # dicts
         self.observations = {}
         self.rewards = self.env.rewards
-        self.dones = self.env.dones
+        self.terminations = self.env.terminations
+        self.truncations = self.env.truncations
         self.infos = self.env.infos
 
         self.score = self.env.score
@@ -318,7 +320,8 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.reset()
         self.rewards = self.env.rewards
         self._cumulative_rewards = {a: 0 for a in self.agents}
-        self.dones = self.env.dones
+        self.terminations = self.env.terminations
+        self.truncations = self.env.truncations
         self.infos = self.env.infos
 
     def observe(self, agent):
@@ -336,8 +339,12 @@ class raw_env(AECEnv, EzPickle):
         return self.env.render(mode)
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            self._was_dead_step(action)
+            return
         agent = self.agent_selection
         if not self.action_spaces[agent].contains(action):
             raise Exception(
@@ -349,7 +356,8 @@ class raw_env(AECEnv, EzPickle):
         # select next agent and observe
         self.agent_selection = self._agent_selector.next()
         self.rewards = self.env.rewards
-        self.dones = self.env.dones
+        self.terminations = self.env.terminations
+        self.truncations = self.env.truncations
         self.infos = self.env.infos
 
         self.score = self.env.score

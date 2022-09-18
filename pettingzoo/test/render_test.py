@@ -10,8 +10,8 @@ def collect_render_results(env, mode):
     for i in range(5):
         if i > 0:
             for agent in env.agent_iter(env.num_agents // 2 + 1):
-                obs, reward, done, info = env.last()
-                if done:
+                obs, reward, terminated, truncated, info = env.last()
+                if terminated or truncated:
                     action = None
                 elif isinstance(obs, dict) and "action_mask" in obs:
                     action = random.choice(np.flatnonzero(obs["action_mask"]))

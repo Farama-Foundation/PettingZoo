@@ -87,8 +87,11 @@ class RLCardBase(AECEnv):
         return {"observation": observation, "action_mask": action_mask}
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         obs, next_player_id = self.env.step(action)
         next_player = self._int_to_name(next_player_id)
         self._last_obs = self.observe(self.agent_selection)
@@ -97,15 +100,18 @@ class RLCardBase(AECEnv):
                 self._scale_rewards(self.env.get_payoffs())
             )
             self.next_legal_moves = []
-            self.dones = self._convert_to_dict(
-                [True if self.env.is_over() else False for _ in range(self.num_agents)]
+            self.terminations = self._convert_to_dict(
+                [True for _ in range(self.num_agents)]
+            )
+            self.truncations = self._convert_to_dict(
+                [False for _ in range(self.num_agents)]
             )
         else:
             self.next_legal_moves = obs["legal_actions"]
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = next_player
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
 
     def reset(self, seed=None, return_info=False, options=None):
         if seed is not None:
@@ -117,7 +123,12 @@ class RLCardBase(AECEnv):
         self._cumulative_rewards = self._convert_to_dict(
             [0 for _ in range(self.num_agents)]
         )
-        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
+        self.terminations = self._convert_to_dict(
+            [False for _ in range(self.num_agents)]
+        )
+        self.truncations = self._convert_to_dict(
+            [False for _ in range(self.num_agents)]
+        )
         self.infos = self._convert_to_dict(
             [{"legal_moves": []} for _ in range(self.num_agents)]
         )

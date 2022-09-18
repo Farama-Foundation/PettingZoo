@@ -42,7 +42,8 @@ class AECEnv:
     action_spaces: Dict[AgentID, gym.spaces.Space]
 
     # Whether each agent has just reached a terminal state
-    dones: Dict[AgentID, bool]
+    terminations: Dict[AgentID, bool]
+    truncations: Dict[AgentID, bool]
     rewards: Dict[AgentID, float]  # Reward from the last step for each agent
     # Cumulative rewards for each agent
     _cumulative_rewards: Dict[AgentID, float]
@@ -145,16 +146,19 @@ class AECEnv:
     def max_num_agents(self) -> int:
         return len(self.possible_agents)
 
-    def _dones_step_first(self) -> AgentID:
-        """Makes .agent_selection point to first done agent.
+    def _deads_step_first(self) -> AgentID:
+        """Makes .agent_selection point to first terminated agent.
 
-        Stores old value of agent_selection so that _was_done_step
-        can restore the variable after the done agent steps.
+        Stores old value of agent_selection so that _was_dead_step can restore the variable after the dead agent steps.
         """
-        _dones_order = [agent for agent in self.agents if self.dones[agent]]
-        if _dones_order:
+        _deads_order = [
+            agent
+            for agent in self.agents
+            if (self.terminations[agent] or self.truncations[agent])
+        ]
+        if _deads_order:
             self._skip_agent_selection = self.agent_selection
-            self.agent_selection = _dones_order[0]
+            self.agent_selection = _deads_order[0]
         return self.agent_selection
 
     def _clear_rewards(self) -> None:
@@ -179,59 +183,62 @@ class AECEnv:
 
     def last(
         self, observe: bool = True
-    ) -> Tuple[Optional[ObsType], float, bool, Dict[str, Any]]:
-        """Returns observation, cumulative reward, done, info.
-
-        This is for the current agent (specified by self.agent_selection)
-        """
+    ) -> Tuple[Optional[ObsType], float, bool, bool, Dict[str, Any]]:
+        """Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""
         agent = self.agent_selection
         assert agent
         observation = self.observe(agent) if observe else None
         return (
             observation,
             self._cumulative_rewards[agent],
-            self.dones[agent],
+            self.terminations[agent],
+            self.truncations[agent],
             self.infos[agent],
         )
 
-    def _was_done_step(self, action: None) -> None:
-        """Helper function that performs step() for done agents.
+    def _was_dead_step(self, action: None) -> None:
+        """Helper function that performs step() for dead agents.
 
         Does the following:
 
-        1. Removes done agent from .agents, .dones, .rewards, ._cumulative_rewards, and .infos
-        2. Loads next agent into .agent_selection: if another agent is done, loads that one, otherwise load next live agent
+        1. Removes dead agent from .agents, .terminations, .truncations, .rewards, ._cumulative_rewards, and .infos
+        2. Loads next agent into .agent_selection: if another agent is dead, loads that one, otherwise load next live agent
         3. Clear the rewards dict
 
         Examples:
             Highly recommended to use at the beginning of step as follows:
 
-            def step(self, action):
-                if self.dones[self.agent_selection]:
-                    self._was_done_step()
-                    return
-                # main contents of step
+        def step(self, action):
+            if (self.terminations[self.agent_selection] or self.truncations[self.agent_selection]):
+                self._was_dead_step()
+                return
+            # main contents of step
         """
         if action is not None:
-            raise ValueError("when an agent is done, the only valid action is None")
+            raise ValueError("when an agent is dead, the only valid action is None")
 
-        # removes done agent
+        # removes dead agent
         agent = self.agent_selection
-        assert self.dones[
-            agent
-        ], "an agent that was not done as attempted to be removed"
-        del self.dones[agent]
+        assert (
+            self.terminations[agent] or self.truncations[agent]
+        ), "an agent that was not dead as attempted to be removed"
+        del self.terminations[agent]
+        del self.truncations[agent]
         del self.rewards[agent]
         del self._cumulative_rewards[agent]
         del self.infos[agent]
         self.agents.remove(agent)
 
-        # finds next done agent or loads next live agent (Stored in _skip_agent_selection)
-        _dones_order = [agent for agent in self.agents if self.dones[agent]]
-        if _dones_order:
+        # finds next dead agent or loads next live agent (Stored in _skip_agent_selection)
+        _deads_order = [
+            agent
+            for agent in self.agents
+            if (self.terminations[agent] or self.truncations[agent])
+        ]
+        if _deads_order:
             if getattr(self, "_skip_agent_selection", None) is None:
                 self._skip_agent_selection = self.agent_selection
-            self.agent_selection = _dones_order[0]
+            self.agent_selection = _deads_order[0]
         else:
             if getattr(self, "_skip_agent_selection", None) is not None:
                 assert self._skip_agent_selection is not None
@@ -312,10 +319,12 @@ class ParallelEnv:
 
     def step(
         self, actions: ActionDict
-    ) -> Tuple[ObsDict, Dict[str, float], Dict[str, bool], Dict[str, dict]]:
+    ) -> Tuple[
+        ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
+    ]:
         """Receives a dictionary of actions keyed by the agent name.
 
-        Returns the observation dictionary, reward dictionary, done dictionary,
+        Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary
         and info dictionary, where each dictionary is keyed by the agent.
         """
         raise NotImplementedError
