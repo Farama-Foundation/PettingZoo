@@ -167,9 +167,9 @@ class AECEnv:
             self.rewards[agent] = 0
 
     def _accumulate_rewards(self) -> None:
-        """
-        Adds .rewards dictionary to ._cumulative_rewards dictionary. Typically
-        called near the end of a step() method
+        """Adds .rewards dictionary to ._cumulative_rewards dictionary.
+
+        Typically called near the end of a step() method
         """
         for agent, reward in self.rewards.items():
             self._cumulative_rewards[agent] += reward
