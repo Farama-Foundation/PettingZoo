@@ -4,8 +4,8 @@ from .base import BaseWrapper
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):
-    """
-    this wrapper crashes for out of bounds actions
+    """This wrapper crashes for out of bounds actions.
+
     Should be used for Discrete spaces
     """
 

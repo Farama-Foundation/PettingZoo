@@ -1,10 +1,15 @@
 import copy
 import warnings
 from collections import defaultdict
+from typing import Dict, Optional
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
+
+ActionType = Optional[int]
+AgentID = str
+ActionDict = Dict[AgentID, ActionType]
 
 
 def parallel_wrapper_fn(env_fn):
@@ -236,7 +241,7 @@ class parallel_to_aec_wrapper(AECEnv):
         self._observations = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
-        self._actions = {agent: None for agent in self.agents}
+        self._actions: ActionDict = {agent: None for agent in self.agents}
         self._agent_selector = agent_selector(self._live_agents)
         self.agent_selection = self._agent_selector.reset()
         self.terminations = {agent: False for agent in self.agents}
@@ -264,12 +269,15 @@ class parallel_to_aec_wrapper(AECEnv):
         self.rewards[new_agent] = 0
         self._cumulative_rewards[new_agent] = 0
 
-    def step(self, action):
+    def step(self, action: ActionType):
+        if action is not None:
+            action = int(action)
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
             del self._actions[self.agent_selection]
+            assert action is None
             self._was_dead_step(action)
             return
         self._actions[self.agent_selection] = action

@@ -210,9 +210,7 @@ class magent_parallel_env(ParallelEnv):
         }
 
     def state(self):
-        """
-        Returns an observation of the global environment
-        """
+        """Returns an observation of the global environment."""
         state = np.copy(self.base_state)
 
         for handle in self._all_handles:
