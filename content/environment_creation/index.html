@@ -410,6 +410,8 @@
 <span class="sd">        - agents</span>
 <span class="sd">        - rewards</span>
 <span class="sd">        - _cumulative_rewards</span>
+<span class="sd">        - terminations</span>
+<span class="sd">        - truncations</span>
 <span class="sd">        - dones</span>
 <span class="sd">        - infos</span>
 <span class="sd">        - agent_selection</span>
@@ -420,7 +422,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cumulative_rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dones</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
@@ -437,16 +440,21 @@
 <span class="sd">        agent_selection) and needs to update</span>
 <span class="sd">        - rewards</span>
 <span class="sd">        - _cumulative_rewards (accumulating the rewards)</span>
-<span class="sd">        - dones</span>
+<span class="sd">        - terminations</span>
+<span class="sd">        - truncations</span>
 <span class="sd">        - infos</span>
 <span class="sd">        - agent_selection (to the next agent)</span>
 <span class="sd">        And any internal state used by observe() or render()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dones</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]:</span>
-            <span class="c1"># handles stepping an agent which is already done</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="c1"># handles stepping an agent which is already dead</span>
             <span class="c1"># accepts a None action for the one agent, and moves the agent_selection to</span>
-            <span class="c1"># the next done agent,  or if there are no more done agents, to the next live agent</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_done_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="c1"># the next dead agent,  or if there are no more dead agents, to the next live agent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="k">return</span>
 
         <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
 
@@ -466,8 +474,10 @@
             <span class="p">]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="c1"># The dones dictionary must be updated for all players.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dones</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">&gt;=</span> <span class="n">NUM_ITERS</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="c1"># The truncations dictionary must be updated for all players.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">agent</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">&gt;=</span> <span class="n">NUM_ITERS</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
+            <span class="p">}</span>
 
             <span class="c1"># observe the current state</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
@@ -613,7 +623,8 @@
 <span class="sd">        step(action) takes in an action for each agent and should return the</span>
 <span class="sd">        - observations</span>
 <span class="sd">        - rewards</span>
-<span class="sd">        - dones</span>
+<span class="sd">        - terminations</span>
+<span class="sd">        - truncations</span>
 <span class="sd">        - infos</span>
 <span class="sd">        dicts where each dict looks like {agent_1: item_1, agent_2: item_2}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -628,9 +639,11 @@
             <span class="p">(</span><span class="n">actions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">actions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         <span class="p">]</span>
 
+        <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">env_done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">&gt;=</span> <span class="n">NUM_ITERS</span>
-        <span class="n">dones</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env_done</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="n">env_truncation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">&gt;=</span> <span class="n">NUM_ITERS</span>
+        <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env_truncation</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
         <span class="c1"># current observation is just the other player&#39;s most recent action</span>
         <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
@@ -642,10 +655,10 @@
         <span class="c1"># still be an entry for each agent</span>
         <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">env_done</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">env_truncation</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span>
+        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
 </pre></div>
 </div>
 </section>
