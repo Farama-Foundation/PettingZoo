@@ -200,11 +200,14 @@ def test_reward(reward):
             assert False, "Reward NumPy array is not a numeric dtype"
 
 
-def test_rewards_dones(env, agent_0):
+def test_rewards_terminations_truncations(env, agent_0):
     for agent in env.agents:
         assert isinstance(
-            env.dones[agent], bool
-        ), "Agent's values in dones must be True or False"
+            env.terminations[agent], bool
+        ), "Agent's values in terminations must be True or False"
+        assert isinstance(
+            env.truncations[agent], bool
+        ), "Agent's values in truncations must be True or False"
         float(
             env.rewards[agent]
         )  # "Rewards for each agent must be convertible to float
@@ -218,13 +221,14 @@ def play_test(env, observation_0, num_cycles):
     consistent. In particular it checks:
 
     * Whether the reward returned by last is the accumulated reward
-    * Whether the agents list shrinks when agents are done
-    * Whether the keys of the rewards, dones, infos are equal to the agents list
+    * Whether the agents list shrinks when agents are terminated or truncated
+    * Whether the keys of the rewards, terminations, truncations, infos are equal to the agents list
     * tests that the observation is in bounds.
     """
     env.reset()
 
-    done = {agent: False for agent in env.agents}
+    terminated = {agent: False for agent in env.agents}
+    truncated = {agent: False for agent in env.agents}
     live_agents = set(env.agents[:])
     has_finished = set()
     generated_agents = set()
@@ -237,8 +241,8 @@ def play_test(env, observation_0, num_cycles):
         assert isinstance(
             env.infos[agent], dict
         ), "an environment agent's info must be a dictionary"
-        prev_observe, reward, done, info = env.last()
-        if done:
+        prev_observe, reward, terminated, truncated, info = env.last()
+        if terminated or truncated:
             action = None
         elif isinstance(prev_observe, dict) and "action_mask" in prev_observe:
             action = random.choice(np.flatnonzero(prev_observe["action_mask"]))
@@ -252,7 +256,7 @@ def play_test(env, observation_0, num_cycles):
             set(env.agents)
         ), "environment must delete agents as the game continues"
 
-        if done:
+        if terminated or truncated:
             live_agents.remove(agent)
             has_finished.add(agent)
 
@@ -271,13 +275,16 @@ def play_test(env, observation_0, num_cycles):
         ), "env.num_agents is not equal to len(env.agents)"
         assert set(env.rewards.keys()) == (
             set(env.agents)
-        ), "agents should not be given a reward if they were done last turn"
-        assert set(env.dones.keys()) == (
+        ), "agents should not be given a reward if they were terminated or truncated last turn"
+        assert set(env.terminations.keys()) == (
             set(env.agents)
-        ), "agents should not be given a done if they were done last turn"
+        ), "agents should not be given a termination if they were terminated or truncated last turn"
+        assert set(env.truncations.keys()) == (
+            set(env.agents)
+        ), "agents should not be given a truncation if they were terminated or truncated last turn"
         assert set(env.infos.keys()) == (
             set(env.agents)
-        ), "agents should not be given an info if they were done last turn"
+        ), "agents should not be given an info if they were terminated or truncated last turn"
         if hasattr(env, "possible_agents"):
             assert set(env.agents).issubset(
                 set(env.possible_agents)
@@ -308,17 +315,21 @@ def play_test(env, observation_0, num_cycles):
 
     env.reset()
     for agent in env.agent_iter(env.num_agents * 2):
-        obs, reward, done, info = env.last()
-        if done:
+        obs, reward, terminated, truncated, info = env.last()
+        if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
             action = random.choice(np.flatnonzero(obs["action_mask"]))
         else:
             action = env.action_space(agent).sample()
-        assert isinstance(done, bool), "Done from last is not True or False"
+        assert isinstance(terminated, bool), "terminated from last is not True or False"
+        assert isinstance(truncated, bool), "terminated from last is not True or False"
         assert (
-            done == env.dones[agent]
-        ), "Done from last() and dones[agent] do not match"
+            terminated == env.terminations[agent]
+        ), "terminated from last() and terminations[agent] do not match"
+        assert (
+            truncated == env.truncations[agent]
+        ), "truncated from last() and truncations[agent] do not match"
         assert (
             info == env.infos[agent]
         ), "Info from last() and infos[agent] do not match"
@@ -335,8 +346,8 @@ def test_action_flexibility(env):
     agent = env.agent_selection
     action_space = env.action_space(agent)
     if isinstance(action_space, gym.spaces.Discrete):
-        obs, reward, done, info = env.last()
-        if done:
+        obs, reward, terminated, truncated, info = env.last()
+        if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
             action = random.choice(np.flatnonzero(obs["action_mask"]))
@@ -368,17 +379,22 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     ), "Env must be an instance of pettingzoo.AECEnv"
 
     env.reset()
-    assert not any(env.dones.values()), "dones must all be False after reset"
+    assert not any(
+        env.terminations.values()
+    ), "terminations must all be False after reset"
+    assert not any(
+        env.truncations.values()
+    ), "truncations must all be False after reset"
 
     assert isinstance(env.num_agents, int), "num_agents must be an integer"
     assert env.num_agents != 0, "An environment should have a nonzero number of agents"
     assert env.num_agents > 0, "An environment should have a positive number of agents"
 
     env.reset()
-    observation_0, _, _, _ = env.last()
+    observation_0, _, _, _, _ = env.last()
     test_observation(observation_0, observation_0)
 
-    non_observe, _, _, _ = env.last(observe=False)
+    non_observe, _, _, _, _ = env.last(observe=False)
     assert non_observe is None, "last must return a None when observe=False"
 
     progress_report("Finished test_observation")
@@ -394,18 +410,23 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     progress_report("Finished play test")
 
     assert isinstance(env.rewards, dict), "rewards must be a dict"
-    assert isinstance(env.dones, dict), "dones must be a dict"
+    assert isinstance(env.terminations, dict), "terminations must be a dict"
+    assert isinstance(env.truncations, dict), "truncations must be a dict"
     assert isinstance(env.infos, dict), "infos must be a dict"
 
     assert (
-        len(env.rewards) == len(env.dones) == len(env.infos) == len(env.agents)
-    ), "rewards, dones, infos and agents must have the same length"
+        len(env.rewards)
+        == len(env.terminations)
+        == len(env.truncations)
+        == len(env.infos)
+        == len(env.agents)
+    ), "rewards, terminations, truncations, infos and agents must have the same length"
 
-    test_rewards_dones(env, agent_0)
+    test_rewards_terminations_truncations(env, agent_0)
 
     test_action_flexibility(env)
 
-    progress_report("Finished test_rewards_dones")
+    progress_report("Finished test_rewards_terminations_truncations")
 
     # checks unwrapped attribute
     assert not isinstance(env.unwrapped, aec_to_parallel_wrapper)

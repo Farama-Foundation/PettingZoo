@@ -42,30 +42,35 @@ def parallel_api_test(par_env, num_cycles=1000):
         obs = par_env.reset()
         assert isinstance(obs, dict)
         assert set(obs.keys()) == (set(par_env.agents))
-        done = {agent: False for agent in par_env.agents}
+        terminated = {agent: False for agent in par_env.agents}
+        truncated = {agent: False for agent in par_env.agents}
         live_agents = set(par_env.agents[:])
         has_finished = set()
         for _ in range(num_cycles):
             actions = {
                 agent: sample_action(par_env, obs, agent)
                 for agent in par_env.agents
-                if agent in done and not done[agent]
+                if (
+                    (agent in terminated and not terminated[agent])
+                    or (agent in truncated and not truncated[agent])
+                )
             }
-            obs, rew, done, info = par_env.step(actions)
+            obs, rew, terminated, truncated, info = par_env.step(actions)
             for agent in par_env.agents:
-                assert agent not in has_finished, "agent cannot be revived once done"
+                assert agent not in has_finished, "agent cannot be revived once dead"
 
                 if agent not in live_agents:
                     live_agents.add(agent)
 
             assert isinstance(obs, dict)
             assert isinstance(rew, dict)
-            assert isinstance(done, dict)
+            assert isinstance(terminated, dict)
+            assert isinstance(truncated, dict)
             assert isinstance(info, dict)
 
             agents_set = set(live_agents)
-            keys = "observation reward done info".split()
-            vals = [obs, rew, done, info]
+            keys = "observation reward terminated truncated info".split()
+            vals = [obs, rew, terminated, truncated, info]
             for k, v in zip(keys, vals):
                 key_set = set(v.keys())
                 if key_set == agents_set:
@@ -73,14 +78,21 @@ def parallel_api_test(par_env, num_cycles=1000):
                 if len(key_set) < len(agents_set):
                     warnings.warn(f"Live agent was not given {k}")
                 else:
-                    warnings.warn(f"Agent was given {k} but was done last turn")
+                    warnings.warn(f"Agent was given {k} but was dead last turn")
 
             if hasattr(par_env, "possible_agents"):
                 assert set(par_env.agents).issubset(
                     set(par_env.possible_agents)
                 ), "possible_agents defined but does not contain all agents"
 
-                has_finished |= {agent for agent, d in done.items() if d}
+                has_finished |= {
+                    agent
+                    for agent, d in [
+                        (x[0], x[1] or y[1])
+                        for x, y in zip(terminated.items(), truncated.items())
+                    ]
+                    if d
+                }
                 if not par_env.agents and has_finished != set(par_env.possible_agents):
                     warnings.warn(
                         "No agents present but not all possible_agents are done"
@@ -96,7 +108,10 @@ def parallel_api_test(par_env, num_cycles=1000):
                     agent
                 ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
 
-            for agent, d in done.items():
+            for agent, d in [
+                (x[0], x[1] or y[1])
+                for x, y in zip(terminated.items(), truncated.items())
+            ]:
                 if d:
                     live_agents.remove(agent)
 

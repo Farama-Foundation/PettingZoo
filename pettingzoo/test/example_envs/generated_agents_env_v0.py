@@ -58,7 +58,8 @@ class raw_env(AECEnv):
         self._agent_counters[type] += 1
         agent = f"{type}_{agent_id}"
         self.agents.append(agent)
-        self.dones[agent] = False
+        self.terminations[agent] = False
+        self.truncations[agent] = False
         self.rewards[agent] = 0
         self._cumulative_rewards[agent] = 0
         self.infos[agent] = {}
@@ -70,7 +71,8 @@ class raw_env(AECEnv):
         self.agents = []
         self.rewards = {}
         self._cumulative_rewards = {}
-        self.dones = {}
+        self.terminations = {}
+        self.truncations = {}
         self.infos = {}
         self.num_steps = 0
         for i in range(5):
@@ -83,8 +85,11 @@ class raw_env(AECEnv):
         self.np_random, _ = gym.utils.seeding.np_random(seed)
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
 
         self._clear_rewards()
         self._cumulative_rewards[self.agent_selection] = 0
@@ -99,19 +104,19 @@ class raw_env(AECEnv):
 
                     agent = self.add_agent(type)
                     if len(self.agents) >= 20:
-                        self.dones[self.np_random.choice(self.agents)] = True
+                        self.terminations[self.np_random.choice(self.agents)] = True
 
         if self._agent_selector.is_last():
             self.num_steps += 1
 
         if self.num_steps > self.max_cycles:
             for agent in self.agents:
-                self.dones[agent] = True
+                self.truncations[agent] = True
 
         self.rewards[self.np_random.choice(self.agents)] = 1
 
         self._accumulate_rewards()
-        self._dones_step_first()
+        self._deads_step_first()
 
     def render(self, mode="human"):
         print(self.agents)

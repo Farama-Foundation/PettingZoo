@@ -161,8 +161,11 @@ class raw_env(AECEnv):
         return {"observation": observation, "action_mask": action_mask}
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
         self._go = self._go.play_move(coords.from_flat(action))
         self._last_obs = self.observe(self.agent_selection)
         current_agent_plane, opponent_agent_plane = self._encode_board_planes(
@@ -173,7 +176,9 @@ class raw_env(AECEnv):
         )
         next_player = self._agent_selector.next()
         if self._go.is_game_over():
-            self.dones = self._convert_to_dict([True for _ in range(self.num_agents)])
+            self.terminations = self._convert_to_dict(
+                [True for _ in range(self.num_agents)]
+            )
             self.rewards = self._convert_to_dict(
                 self._encode_rewards(self._go.result())
             )
@@ -196,7 +201,12 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.reset()
         self._cumulative_rewards = self._convert_to_dict(np.array([0.0, 0.0]))
         self.rewards = self._convert_to_dict(np.array([0.0, 0.0]))
-        self.dones = self._convert_to_dict([False for _ in range(self.num_agents)])
+        self.terminations = self._convert_to_dict(
+            [False for _ in range(self.num_agents)]
+        )
+        self.truncations = self._convert_to_dict(
+            [False for _ in range(self.num_agents)]
+        )
         self.infos = self._convert_to_dict([{} for _ in range(self.num_agents)])
         self.next_legal_moves = self._encode_legal_actions(self._go.all_legal_moves())
         self._last_obs = self.observe(self.agents[0])

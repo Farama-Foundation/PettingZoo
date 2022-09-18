@@ -155,12 +155,11 @@ class magent_parallel_env(ParallelEnv):
         self.agents = self.possible_agents[:]
         self.env.reset()
         self.frames = 0
-        self.all_dones = {agent: False for agent in self.possible_agents}
         self.team_sizes = [self.env.get_num(handle) for handle in self.handles]
         self.generate_map()
-        return self._observe_all()
+        return self._compute_observations()
 
-    def _observe_all(self):
+    def _compute_observations(self):
         observes = [None] * self.max_num_agents
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
@@ -184,7 +183,7 @@ class magent_parallel_env(ParallelEnv):
             if agent in ret_agents
         }
 
-    def _all_rewards(self):
+    def _compute_rewards(self):
         rewards = np.zeros(self.max_num_agents)
         for handle in self.handles:
             ids = self.env.get_agent_id(handle)
@@ -196,7 +195,7 @@ class magent_parallel_env(ParallelEnv):
             if agent in ret_agents
         }
 
-    def _all_dones(self, step_done=False):
+    def _compute_terminates(self, step_done):
         dones = np.ones(self.max_num_agents, dtype=bool)
         if not step_done:
             for i, handle in enumerate(self.handles):
@@ -263,13 +262,18 @@ class magent_parallel_env(ParallelEnv):
             start_point += size
 
         self.frames += 1
-        done = self.env.step() or self.frames >= self.max_cycles
 
-        all_infos = {agent: {} for agent in self.agents}
-        all_dones = self._all_dones(done)
-        all_rewards = self._all_rewards()
-        all_observes = self._observe_all()
-        self.all_dones = all_dones
+        step_done = self.env.step()
+
+        truncations = {agent: self.frames >= self.max_cycles for agent in self.agents}
+        terminations = self._compute_terminates(step_done)
+        observations = self._compute_observations()
+        rewards = self._compute_rewards()
+        infos = {agent: {} for agent in self.agents}
         self.env.clear_dead()
-        self.agents = [agent for agent in self.agents if not self.all_dones[agent]]
-        return all_observes, all_rewards, all_dones, all_infos
+        self.agents = [
+            agent
+            for agent in self.agents
+            if not (terminations[agent] or truncations[agent])
+        ]
+        return observations, rewards, terminations, truncations, infos

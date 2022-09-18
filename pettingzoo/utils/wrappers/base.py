@@ -86,7 +86,8 @@ class BaseWrapper(AECEnv):
 
         self.agent_selection = self.env.agent_selection
         self.rewards = self.env.rewards
-        self.dones = self.env.dones
+        self.terminations = self.env.terminations
+        self.truncations = self.env.truncations
         self.infos = self.env.infos
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards
@@ -102,7 +103,8 @@ class BaseWrapper(AECEnv):
 
         self.agent_selection = self.env.agent_selection
         self.rewards = self.env.rewards
-        self.dones = self.env.dones
+        self.terminations = self.env.terminations
+        self.truncations = self.env.truncations
         self.infos = self.env.infos
         self.agents = self.env.agents
         self._cumulative_rewards = self.env._cumulative_rewards

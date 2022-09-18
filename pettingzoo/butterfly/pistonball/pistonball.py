@@ -159,7 +159,8 @@ class raw_env(AECEnv, EzPickle):
         self.ball_friction = ball_friction
         self.ball_elasticity = ball_elasticity
 
-        self.done = False
+        self.terminate = False
+        self.truncate = False
 
         self.pixels_per_position = 4
         self.n_piston_positions = 16
@@ -396,10 +397,12 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
 
         self.has_reset = True
-        self.done = False
+        self.terminate = False
+        self.truncate = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))
         self._cumulative_rewards = dict(zip(self.agents, [0 for _ in self.agents]))
-        self.dones = dict(zip(self.agents, [False for _ in self.agents]))
+        self.terminations = dict(zip(self.agents, [False for _ in self.agents]))
+        self.truncations = dict(zip(self.agents, [False for _ in self.agents]))
         self.infos = dict(zip(self.agents, [{} for _ in self.agents]))
 
         self.frames = 0
@@ -521,8 +524,12 @@ class raw_env(AECEnv, EzPickle):
         )
 
     def step(self, action):
-        if self.dones[self.agent_selection]:
-            return self._was_done_step(action)
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            self._was_dead_step(action)
+            return
 
         action = np.asarray(action)
         agent = self.agent_selection
@@ -542,14 +549,14 @@ class raw_env(AECEnv, EzPickle):
                 + self.ball.velocity[0] * self.dt
             )
             if ball_next_x <= self.wall_width + 1:
-                self.done = True
+                self.terminate = True
             # ensures that the ball can't pass through the wall
             ball_min_x = max(self.wall_width, ball_min_x)
             self.draw()
             local_reward = self.get_local_reward(self.lastX, ball_min_x)
             # Opposite order due to moving right to left
             global_reward = (100 / self.distance) * (self.lastX - ball_min_x)
-            if not self.done:
+            if not self.terminate:
                 global_reward += self.time_penalty
             total_reward = [
                 global_reward * (1 - self.local_ratio)
@@ -563,13 +570,17 @@ class raw_env(AECEnv, EzPickle):
         else:
             self._clear_rewards()
 
-        if self.frames >= self.max_cycles:
-            self.done = True
+        self.truncate = self.frames >= self.max_cycles
         # Clear the list of recent pistons for the next reward cycle
         if self.frames % self.recentFrameLimit == 0:
             self.recentPistons = set()
         if self._agent_selector.is_last():
-            self.dones = dict(zip(self.agents, [self.done for _ in self.agents]))
+            self.terminations = dict(
+                zip(self.agents, [self.terminate for _ in self.agents])
+            )
+            self.truncations = dict(
+                zip(self.agents, [self.truncate for _ in self.agents])
+            )
 
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
