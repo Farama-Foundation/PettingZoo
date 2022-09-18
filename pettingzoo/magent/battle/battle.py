@@ -1,7 +1,7 @@
 """
 # Battle
 
-```{figure} magent_battle.gif 
+```{figure} magent_battle.gif
 :width: 140px
 :name: battle
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 :name: battle
 ```
 
-A large-scale team battle. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
+A large-scale team battle. Agents are rewarded for their individual performance, and not for the performance of their neighbors, so coordination is difficult.  Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by
+each attack, and recover 0.1 HP every turn.
 
 Like all MAgent environments, agents can either move or attack each turn. An attack against another agent on their own team will not be registered.
 

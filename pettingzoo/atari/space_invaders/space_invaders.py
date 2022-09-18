@@ -1,7 +1,7 @@
 """
 # Space Invaders
 
-```{figure} atari_space_invaders.gif 
+```{figure} atari_space_invaders.gif
 :width: 140px
 :name: space_invaders
 ```

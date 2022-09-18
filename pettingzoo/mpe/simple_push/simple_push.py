@@ -1,7 +1,7 @@
 """
 # Simple Push
 
-```{figure} mpe_simple_push.gif 
+```{figure} mpe_simple_push.gif
 :width: 140px
 :name: simple_push
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 :name: simple_push
 ```
 
-This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.
+This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to
+push the good agent away from the landmark.
 
 Agent observation space: `[self_vel, goal_rel_position, goal_landmark_id, all_landmark_rel_positions, landmark_ids, other_agent_rel_positions]`
 

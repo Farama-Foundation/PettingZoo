@@ -1,7 +1,7 @@
 """
 # Combat: Plane
 
-```{figure} atari_combat_plane.gif 
+```{figure} atari_combat_plane.gif
 :width: 140px
 :name: combat_plane
 ```

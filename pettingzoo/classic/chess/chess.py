@@ -1,7 +1,7 @@
 """
 # Chess
 
-```{figure} classic_chess.gif 
+```{figure} classic_chess.gif
 :width: 140px
 :name: chess
 ```
@@ -41,7 +41,8 @@ Like AlphaZero, the main observation space is an 8x8 image representing the boar
 * Channel 4: Is black or white
 * Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
 * Channel 6: All ones to help neural networks find board edges in padded convolutions
-* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
+* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant
+possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
 * Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
 
 Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
@@ -50,7 +51,8 @@ Unlike AlphaZero, the observation space does not stack the observations previous
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 

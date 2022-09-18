@@ -1,7 +1,7 @@
 """
 # Joust
 
-```{figure} atari_joust.gif 
+```{figure} atari_joust.gif
 :width: 140px
 :name: joust
 ```

@@ -1,7 +1,7 @@
 """
 # Video Checkers
 
-```{figure} atari_video_checkers.gif 
+```{figure} atari_video_checkers.gif
 :width: 140px
 :name: video_checkers
 ```

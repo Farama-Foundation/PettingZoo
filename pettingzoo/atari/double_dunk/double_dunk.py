@@ -1,7 +1,7 @@
 """
 # Double Dunk
 
-```{figure} atari_double_dunk.gif 
+```{figure} atari_double_dunk.gif
 :width: 140px
 :name: double_dunk
 ```

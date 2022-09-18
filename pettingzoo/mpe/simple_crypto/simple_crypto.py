@@ -1,7 +1,7 @@
 """
 # Simple Crypto
 
-```{figure} mpe_simple_crypto.gif 
+```{figure} mpe_simple_crypto.gif
 :width: 140px
 :name: simple_crypto
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 :name: simple_crypto
 ```
 
-In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams reconstruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode) which they must learn to use to encrypt the message.
+In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams
+reconstruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode) which they must learn to use to encrypt the message.
 
 
 Alice observation space: `[message, private_key]`
@@ -58,14 +59,6 @@ simple_crypto_v2.env(max_cycles=25, continuous_actions=False)
 
 """
 
-"""Simple crypto environment.
-
-Scenario:
-1 speaker, 2 listeners (one of which is an adversary). Good agents rewarded for proximity to goal, and distance from
-adversary to goal. Adversary is rewarded for its distance to the goal.
-"""
-
-
 import numpy as np
 from gym.utils import EzPickle
 
@@ -74,6 +67,13 @@ from pettingzoo.utils.conversions import parallel_wrapper_fn
 from .._mpe_utils.core import Agent, Landmark, World
 from .._mpe_utils.scenario import BaseScenario
 from .._mpe_utils.simple_env import SimpleEnv, make_env
+
+"""Simple crypto environment.
+
+Scenario:
+1 speaker, 2 listeners (one of which is an adversary). Good agents rewarded for proximity to goal, and distance from
+adversary to goal. Adversary is rewarded for its distance to the goal.
+"""
 
 
 class raw_env(SimpleEnv, EzPickle):

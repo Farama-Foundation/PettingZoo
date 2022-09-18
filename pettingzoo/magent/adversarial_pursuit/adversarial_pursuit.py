@@ -1,7 +1,7 @@
 """
 # Adversarial Pursuit
 
-```{figure} magent_adversarial_pursuit.gif 
+```{figure} magent_adversarial_pursuit.gif
 :width: 140px
 :name: adversarial_pursuit
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 :name: adversarial_pursuit
 ```
 
-The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so they can be tagged continually.
+The red agents must navigate the obstacles and tag (similar to attacking, but without damaging) the blue agents. The blue agents should try to avoid being tagged. To be effective, the red agents, who are much are slower and larger than the blue agents, must work together to trap blue agents so
+they can be tagged continually.
 
 ### Arguments
 

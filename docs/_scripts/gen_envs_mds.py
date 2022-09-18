@@ -2,7 +2,6 @@
 This script reads documentation from /pettingzoo and puts it into md files inside the docs/ directory
 """
 
-from genericpath import isdir
 import os
 import re
 

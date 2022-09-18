@@ -1,7 +1,7 @@
 """
 # Boxing
 
-```{figure} atari_boxing.gif 
+```{figure} atari_boxing.gif
 :width: 140px
 :name: boxing
 ```

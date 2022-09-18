@@ -1,7 +1,7 @@
 """
 # Simple Tag
 
-```{figure} mpe_simple_tag.gif 
+```{figure} mpe_simple_tag.gif
 :width: 140px
 :name: simple_tag
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 :name: simple_tag
 ```
 
-This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By default, there is 1 good agent, 3 adversaries and 2 obstacles.
+This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By
+default, there is 1 good agent, 3 adversaries and 2 obstacles.
 
 So that good agents don't run to infinity, they are also penalized for exiting the area by the following function:
 

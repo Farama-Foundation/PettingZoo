@@ -1,7 +1,7 @@
 """
 # Wizard of Wor
 
-```{figure} atari_wizard_of_wor.gif 
+```{figure} atari_wizard_of_wor.gif
 :width: 140px
 :name: wizard_of_wor
 ```

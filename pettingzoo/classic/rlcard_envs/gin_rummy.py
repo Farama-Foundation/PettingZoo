@@ -1,7 +1,7 @@
 """
 # Gin Rummy
 
-```{figure} classic_gin_rummy.gif 
+```{figure} classic_gin_rummy.gif
 :width: 140px
 :name: gin_rummy
 ```
@@ -66,7 +66,8 @@ The main observation space is 5x52 with the rows representing different planes a
 
 #### Legal Actions Mask
 
-The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ### Action Space
 

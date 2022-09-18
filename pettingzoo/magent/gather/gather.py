@@ -1,7 +1,7 @@
 """
 # Gather
 
-```{figure} magent_gather.gif 
+```{figure} magent_gather.gif
 :width: 140px
 :name: gather
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 :name: gather
 ```
 
-In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
+In gather, the agents gain reward by eating food. Food needs to be broken down by 5 "attacks" before it is absorbed. Since there is finite food on the map, there is competitive pressure between agents over the food. You expect to see that agents coordinate by not attacking each other until food is
+scarce. When food is scarce, agents may attack each other to try to monopolize the food. Agents can kill each other with a single attack.
 
 ### Arguments
 

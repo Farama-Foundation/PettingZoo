@@ -1,7 +1,7 @@
 """
 # Multiwalker
 
-```{figure} sisl_multiwalker.gif 
+```{figure} sisl_multiwalker.gif
 :width: 140px
 :name: multiwalker
 ```
@@ -28,21 +28,26 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 
 In this environment, bipedal robots attempt to carry a package placed on top of them towards the right. By default, the number of robots is set to 3.
 
-Each walker receives a reward equal to the change in position of the package from the previous timestep, multiplied by the `forward_reward` scaling factor. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75, the total reward under an optimal policy is around 300.
+Each walker receives a reward equal to the change in position of the package from the previous timestep, multiplied by the `forward_reward` scaling factor. The maximum achievable total reward depends on the terrain length; as a reference, for a terrain length of 75, the total reward under an
+optimal policy is around 300.
 
-The environment is done if the package falls, or if the package goes beyond the left edge of the terrain. By default, the environment is also done if any walker falls. In all of these cases, each walker receives a reward of -100. The environment is also done if package falls off the right edge of the terrain, with reward 0.
+The environment is done if the package falls, or if the package goes beyond the left edge of the terrain. By default, the environment is also done if any walker falls. In all of these cases, each walker receives a reward of -100. The environment is also done if package falls off the right edge of
+the terrain, with reward 0.
 
-When a walker falls, it receives an additional penalty of -10. If `terminate_on_fall = False`, then the environment is not done when the walker falls, but only when the package falls. If `remove_on_fall = True`, the fallen walker is removed from the environment. The agents also receive a small shaped reward of -5 times the change in their head angle to keep their head oriented horizontally.
+When a walker falls, it receives an additional penalty of -10. If `terminate_on_fall = False`, then the environment is not done when the walker falls, but only when the package falls. If `remove_on_fall = True`, the fallen walker is removed from the environment. The agents also receive a small
+shaped reward of -5 times the change in their head angle to keep their head oriented horizontally.
 
 If `shared_reward` is chosen (True by default), the agents' individual rewards are averaged to give a single mean reward, which is returned to all agents.
 
-Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 31 element vector containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment's duration is capped at 500 frames by default (can be controlled by the `max_cycles` setting).
+Each walker exerts force on two joints in their two legs, giving a continuous action space represented as a 4 element vector. Each walker observes via a 31 element vector containing simulated noisy lidar data about the environment and information about neighboring walkers. The environment's
+duration is capped at 500 frames by default (can be controlled by the `max_cycles` setting).
 
 
 
 ### Observation Space
 
-Each agent receives an observation composed of various physical properties of its legs and joints, as well as LIDAR readings from the space immediately in front and below the robot. The observation also includes information about neighboring walkers, and the package. The neighbour and package observations have normally distributed signal noise controlled by `position_noise` and `angle_noise`. For walkers without neighbors, observations about neighbor positions are zero.
+Each agent receives an observation composed of various physical properties of its legs and joints, as well as LIDAR readings from the space immediately in front and below the robot. The observation also includes information about neighboring walkers, and the package. The neighbour and package
+observations have normally distributed signal noise controlled by `position_noise` and `angle_noise`. For walkers without neighbors, observations about neighbor positions are zero.
 
 
 

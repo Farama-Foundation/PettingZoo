@@ -1,7 +1,7 @@
 """
 # Quadrapong
 
-```{figure} atari_quadrapong.gif 
+```{figure} atari_quadrapong.gif
 :width: 140px
 :name: quadrapong
 ```

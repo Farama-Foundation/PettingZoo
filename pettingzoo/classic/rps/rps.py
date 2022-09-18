@@ -1,7 +1,7 @@
 """
 # Rock Paper Scissors
 
-```{figure} classic_rps.gif 
+```{figure} classic_rps.gif
 :width: 140px
 :name: rps
 ```
@@ -25,9 +25,11 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 :name: rps
 ```
 
-Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats scissors, scissors beat paper, and paper beats rock.
+Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats
+scissors, scissors beat paper, and paper beats rock.
 
-The game can be expanded to have extra actions by adding new action pairs. Adding the new actions in pairs allows for a more balanced game. This means that the final game will have an odd number of actions and each action wins over exactly half of the other actions while being defeated by the other half. The most common expansion of this game is [Rock, Paper, Scissors, Lizard, Spock](http://www.samkass.com/theories/RPSSL.html), in which only one extra action pair is added.
+The game can be expanded to have extra actions by adding new action pairs. Adding the new actions in pairs allows for a more balanced game. This means that the final game will have an odd number of actions and each action wins over exactly half of the other actions while being defeated by the
+other half. The most common expansion of this game is [Rock, Paper, Scissors, Lizard, Spock](http://www.samkass.com/theories/RPSSL.html), in which only one extra action pair is added.
 
 ### Arguments
 
@@ -43,7 +45,8 @@ rps_v2.env(num_actions=3, max_cycles=15)
 
 #### Rock, Paper, Scissors
 
-If 3 actions are required, the game played is the standard Rock, Paper, Scissors. The observation is the last opponent action and its space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted. Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
+If 3 actions are required, the game played is the standard Rock, Paper, Scissors. The observation is the last opponent action and its space is a scalar value with 4 possible values. Since both players reveal their choices at the same time, the observation is None until both players have acted.
+Therefore, 3 represents no action taken yet. Rock is represented with 0, paper with 1 and scissors with 2.
 
 | Value  |  Observation |
 | :----: | :---------:  |
@@ -54,7 +57,9 @@ If 3 actions are required, the game played is the standard Rock, Paper, Scissors
 
 #### Expanded Game
 
-If the number of actions required in the game is greater than 3, the observation is still the last opponent action and its space is a scalar with 1 + n possible values, where n is the number of actions. The observation will as well be None until both players have acted and the largest possible scalar value for the space, 1 + n, represents no action taken yet. The additional actions are encoded in increasing order starting from the 0 Rock action. If 5 actions are required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation space with 7 possible actions.   
+If the number of actions required in the game is greater than 3, the observation is still the last opponent action and its space is a scalar with 1 + n possible values, where n is the number of actions. The observation will as well be None until both players have acted and the largest possible
+scalar value for the space, 1 + n, represents no action taken yet. The additional actions are encoded in increasing order starting from the 0 Rock action. If 5 actions are required the game is expanded to Rock, Paper, Scissors, Lizard, Spock. The following table shows an example of an observation
+space with 7 possible actions.
 
 | Value  |  Observation |
 | :----: | :---------:  |

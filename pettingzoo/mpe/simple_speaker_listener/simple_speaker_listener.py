@@ -1,7 +1,7 @@
 """
 # Simple Speaker Listener
 
-```{figure} mpe_simple_speaker_listener.gif 
+```{figure} mpe_simple_speaker_listener.gif
 :width: 140px
 :name: simple_speaker_listener
 ```

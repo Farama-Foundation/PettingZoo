@@ -1,7 +1,7 @@
 """
 # Basketball Pong
 
-```{figure} atari_basketball_pong.gif 
+```{figure} atari_basketball_pong.gif
 :width: 140px
 :name: basketball_pong
 ```

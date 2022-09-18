@@ -1,7 +1,7 @@
 """
 # Tennis
 
-```{figure} atari_tennis.gif 
+```{figure} atari_tennis.gif
 :width: 140px
 :name: tennis
 ```

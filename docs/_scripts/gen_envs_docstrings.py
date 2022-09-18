@@ -26,7 +26,7 @@ def insert_docstring_into_python_file(file_path, doc):
     doc = remove_front_matter(doc)
     with open(file_path, "r+", encoding="utf-8") as file:
         file_text = file.read()
-   
+
         file_text = f'"""\n{doc}\n"""\n\n' + file_text
 
         file.seek(0)

@@ -1,7 +1,7 @@
 """
 # Mario Bros
 
-```{figure} atari_mario_bros.gif 
+```{figure} atari_mario_bros.gif
 :width: 140px
 :name: mario_bros
 ```

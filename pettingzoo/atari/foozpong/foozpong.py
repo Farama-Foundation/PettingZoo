@@ -1,7 +1,7 @@
 """
 # Foozpong
 
-```{figure} atari_foozpong.gif 
+```{figure} atari_foozpong.gif
 :width: 140px
 :name: foozpong
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 
 Four player team battle.
 
-Get the ball past your opponent's defenders to the scoring area. Like traditional foozball, the board has alternating layers of paddles from each team between the goal areas. To succeed at this game, the two players on each side must coordinate to allow the ball to be passed between these layers up the board and into your opponent's scoring area. Specifically,
+Get the ball past your opponent's defenders to the scoring area. Like traditional foozball, the board has alternating layers of paddles from each team between the goal areas. To succeed at this game, the two players on each side must coordinate to allow the ball to be passed between these layers
+up the board and into your opponent's scoring area. Specifically,
 `first_0` and `third_0` are on one team and `second_0` and `fourth_0` are on the other.
 
 Scoring a point gives your team +1 reward and your opponent's team -1 reward.

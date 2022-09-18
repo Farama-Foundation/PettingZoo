@@ -1,7 +1,7 @@
 """
 # Simple Spread
 
-```{figure} mpe_simple_spread.gif 
+```{figure} mpe_simple_spread.gif
 :width: 140px
 :name: simple_spread
 ```
@@ -30,7 +30,8 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.
 
-More specifically, all agents are globally rewarded based on how far the closest agent is to each landmark (sum of the minimum distances). Locally, the agents are penalized if they collide with other agents (-1 for each collision). The relative weights of these rewards can be controlled with the `local_ratio` parameter.
+More specifically, all agents are globally rewarded based on how far the closest agent is to each landmark (sum of the minimum distances). Locally, the agents are penalized if they collide with other agents (-1 for each collision). The relative weights of these rewards can be controlled with the
+`local_ratio` parameter.
 
 Agent observations: `[self_vel, self_pos, landmark_rel_positions, other_agent_rel_positions, communication]`
 

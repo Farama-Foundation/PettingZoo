@@ -1,7 +1,7 @@
 """
 # Surround
 
-```{figure} atari_surround.gif 
+```{figure} atari_surround.gif
 :width: 140px
 :name: surround
 ```
@@ -29,7 +29,8 @@ A competitive game of planning and strategy.
 
 In surround, your goal is to avoid the walls. If you run into a wall, you are rewarded -1 points, and your opponent, +1 points.
 
-But both players leave a trail of walls behind you, slowly filling the screen with obstacles. To avoid the obstacles as long as possible, you must plan your path to conserve space. Once that is mastered, a higher level aspect of the game comes into play, where both players literally try to surround the other with walls, so their opponent will run out of room and be forced to run into a wall.
+But both players leave a trail of walls behind you, slowly filling the screen with obstacles. To avoid the obstacles as long as possible, you must plan your path to conserve space. Once that is mastered, a higher level aspect of the game comes into play, where both players literally try to
+surround the other with walls, so their opponent will run out of room and be forced to run into a wall.
 
 [Official surround manual](https://atariage.com/manual_html_page.php?SoftwareLabelID=943)
 

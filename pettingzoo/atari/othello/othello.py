@@ -1,7 +1,7 @@
 """
 # Othello
 
-```{figure} atari_othello.gif 
+```{figure} atari_othello.gif
 :width: 140px
 :name: othello
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 
 The classic board game of long term strategy.
 
-The goal is to flip over your opponents pieces. You can flip over your opponent's pieces (changing them to your color) by placing a piece in a row or diagonal which traps your opponents pieces between your own. You must capture at least one piece each turn ([othello rules](https://www.mastersofgames.com/rules/reversi-othello-rules.htm)).
+The goal is to flip over your opponents pieces. You can flip over your opponent's pieces (changing them to your color) by placing a piece in a row or diagonal which traps your opponents pieces between your own. You must capture at least one piece each turn
+([othello rules](https://www.mastersofgames.com/rules/reversi-othello-rules.htm)).
 
 Note that it is known that the greedy heuristic of maximizing the number of pieces you have at any given time is a very poor heuristic, making learning more interesting.
 

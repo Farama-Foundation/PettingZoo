@@ -1,7 +1,7 @@
 """
 # Combined Arms
 
-```{figure} magent_combined_arms.gif 
+```{figure} magent_combined_arms.gif
 :width: 140px
 :name: combined_arms
 ```
@@ -27,7 +27,8 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 :name: combined_arms
 ```
 
-A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack farther and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on their own team (they just are not rewarded for doing so). Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
+A large-scale team battle. Here there are two types of agents on each team, ranged units which can attack farther and move faster but have less HP, and melee units which can only attack close units and move more slowly but have more HP. Unlike battle and battlefield, agents can attack units on
+their own team (they just are not rewarded for doing so). Agents slowly regain HP over time, so it is best to kill an opposing agent quickly. Specifically, agents have 10 HP, are damaged 2 HP by each attack, and recover 0.1 HP every turn.
 
 ### Arguments
 

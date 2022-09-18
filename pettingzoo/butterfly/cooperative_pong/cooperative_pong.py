@@ -1,7 +1,7 @@
 """
 # Cooperative Pong
 
-```{figure} butterfly_cooperative_pong.gif 
+```{figure} butterfly_cooperative_pong.gif
 :width: 200px
 :name: cooperative_pong
 ```
@@ -28,7 +28,10 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 :name: cooperative_pong
 ```
 
-Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default. The observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, each agent receives a reward of `max_reward / max_cycles` (default 0.11) at each timestep. Otherwise, each agent receives a reward of `off_screen_penalty` (default -10) and the game ends.
+Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that
+moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default.
+The observation space of each agent is its own half of the screen. There are two possible actions for the agents (_move up/down_). If the ball stays within bounds, each agent receives a reward of `max_reward / max_cycles` (default 0.11) at each timestep. Otherwise, each agent receives a reward of
+`off_screen_penalty` (default -10) and the game ends.
 
 
 ### Manual Control

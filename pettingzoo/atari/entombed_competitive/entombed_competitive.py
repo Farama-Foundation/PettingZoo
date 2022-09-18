@@ -1,7 +1,7 @@
 """
 # Emtombed: Competitive
 
-```{figure} atari_entombed_competitive.gif 
+```{figure} atari_entombed_competitive.gif
 :width: 140px
 :name: entombed_competitive
 ```

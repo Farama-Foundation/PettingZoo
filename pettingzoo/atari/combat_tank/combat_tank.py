@@ -1,7 +1,7 @@
 """
 # Combat: Tank
 
-```{figure} atari_combat_tank.gif 
+```{figure} atari_combat_tank.gif
 :width: 140px
 :name: combat_tank
 ```

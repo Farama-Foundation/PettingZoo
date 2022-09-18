@@ -1,7 +1,7 @@
 """
 # Knights Archers Zombies ('KAZ')
 
-```{figure} butterfly_knights_archers_zombies.gif 
+```{figure} butterfly_knights_archers_zombies.gif
 :width: 200px
 :name: knights_archers_zombies
 ```
@@ -28,7 +28,9 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 :name: knights_archers_zombies
 ```
 
-Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
+Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
+and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all
+agents die (collide with a zombie) or a zombie reaches the bottom screen border. A knight is rewarded 1 point when its mace hits and kills a zombie. An archer is rewarded 1 point when one of their arrows hits and kills a zombie.
 There are two possible observation types for this environment, vectorized and image-based.
 
 #### Vectorized (Default)
@@ -99,7 +101,8 @@ As a result, setting `use_typemask=True` results in the observation being a (N+1
 
 **Transformers** (Experimental)
 
-There is an option to also pass `transformer=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a variable number.
+There is an option to also pass `transformer=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a
+variable number.
 
 #### Image-based
 Pass the argument `vector_state=False` to the environment.

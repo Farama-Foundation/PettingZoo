@@ -1,7 +1,7 @@
 """
 # Flag Capture
 
-```{figure} atari_flag_capture.gif 
+```{figure} atari_flag_capture.gif
 :width: 140px
 :name: flag_capture
 ```

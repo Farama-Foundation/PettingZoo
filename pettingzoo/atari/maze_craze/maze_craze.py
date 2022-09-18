@@ -1,7 +1,7 @@
 """
 # Maze Craze
 
-```{figure} atari_maze_craze.gif 
+```{figure} atari_maze_craze.gif
 :width: 140px
 :name: maze_craze
 ```
@@ -31,7 +31,8 @@ Its a race to leave the maze. There are 3 main versions of the game.
 
 1. **Race**: A basic version of the game. First to leave the maze wins
 2. **Robbers**: There are 2 robbers randomly traversing the maze. If you are captured by the robbers, you lose the game, and receive -1 reward, and will be done. The player that has not been captured will not receive any reward, but they can still exit the maze and win, scoring +1 reward.
-3. **Capture**: Each player have to capture all 3 robbers before you are able to exit the maze. Additionally, you can confuse your opponent (and yourself, if you are not careful!) by creating a block that looks identical to a wall in the maze, but all players can pass through it. You can only create one wall at a time, when you create a new one, the old one disappears.
+3. **Capture**: Each player have to capture all 3 robbers before you are able to exit the maze. Additionally, you can confuse your opponent (and yourself, if you are not careful!) by creating a block that looks identical to a wall in the maze, but all players can pass through it. You can only
+create one wall at a time, when you create a new one, the old one disappears.
 
 The first player to leave the maze scores +1, the other player scores -1 (unless that other player has already been captured in Robbers mode).
 

@@ -1,7 +1,7 @@
 """
 # Warlords
 
-```{figure} atari_warlords.gif 
+```{figure} atari_warlords.gif
 :width: 140px
 :name: warlords
 ```
