@@ -7,16 +7,16 @@ firstpage:
 
 ```{toctree}
 :hidden:
-classic/_chess
-classic/_connect_four
-classic/_gin_rummy
-classic/_go
-classic/_hanabi
-classic/_leduc_holdem
-classic/_rps
-classic/_texas_holdem_no_limit
-classic/_texas_holdem
-classic/_tictactoe
+classic/chess
+classic/connect_four
+classic/gin_rummy
+classic/go
+classic/hanabi
+classic/leduc_holdem
+classic/rps
+classic/texas_holdem_no_limit
+classic/texas_holdem
+classic/tictactoe
 ```
 
 ```{raw} html
