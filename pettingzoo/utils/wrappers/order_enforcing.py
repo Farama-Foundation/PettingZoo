@@ -4,8 +4,7 @@ from .base import BaseWrapper
 
 
 class OrderEnforcingWrapper(BaseWrapper):
-    """
-    check all call orders:
+    """Check all call orders.
 
     * error on getting rewards, terminations, truncations, infos, agent_selection before reset
     * error on calling step, observe before reset
@@ -21,9 +20,9 @@ class OrderEnforcingWrapper(BaseWrapper):
         super().__init__(env)
 
     def __getattr__(self, value):
-        """
-        raises an error message when data is gotten from the env
-        which should only be gotten after reset
+        """Raises an error message when data is gotten from the env.
+
+        Should only be gotten after reset
         """
         if value == "unwrapped":
             return self.env.unwrapped

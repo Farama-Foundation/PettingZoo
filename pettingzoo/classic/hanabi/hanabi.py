@@ -76,7 +76,8 @@ class raw_env(AECEnv, EzPickle):
         observation_type: int = 1,
         random_start_player: bool = False,
     ):
-        """
+        """Initializes the `raw_env` class.
+
         Parameter descriptions :
               - colors: int, Number of colors in [2,5].
               - ranks: int, Number of ranks in [2,5].
@@ -266,13 +267,12 @@ class raw_env(AECEnv, EzPickle):
 
     # ToDo: Fix Return value
     def reset(self, seed=None, return_info=False, options=None):
-        """Resets the environment for a new game and returns observations of current player as List of ints
+        """Resets the environment for a new game and returns observations of current player as List of ints.
 
         Returns:
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
-
         if seed is not None:
             self.seed(seed=seed)
 
@@ -290,7 +290,6 @@ class raw_env(AECEnv, EzPickle):
 
     def _reset_agents(self, player_number: int):
         """Rearrange self.agents as pyhanabi starts a different player after each reset()."""
-
         # Shifts self.agents list as long order starting player is not according to player_number
         while not self.agents[0] == "player_" + str(player_number):
             self.agents = self.agents[1:] + [self.agents[0]]
@@ -361,8 +360,7 @@ class raw_env(AECEnv, EzPickle):
     def _process_latest_observations(
         self, obs: Dict, reward: Optional[float] = 0, done: Optional[bool] = False
     ):
-        """Updates internal state"""
-
+        """Updates internal state."""
         self.latest_observations = obs
         self.rewards = {a: reward for a in self.agents}
         self.terminations = {player_name: done for player_name in self.agents}
@@ -384,9 +382,9 @@ class raw_env(AECEnv, EzPickle):
         }
 
     def render(self, mode="human"):
-        """Supports console print only. Prints player's data.
+        """Prints player's data.
 
-        Example:
+        Supports console print only.
         """
         player_data = self.latest_observations["player_observations"]
         print(

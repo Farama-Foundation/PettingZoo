@@ -4,9 +4,9 @@ from pettingzoo.utils.env import AECEnv
 
 
 class BaseWrapper(AECEnv):
-    """
-    Creates a wrapper around `env` parameter. Extend this class
-    to create a useful wrapper.
+    """Creates a wrapper around `env` parameter.
+
+    Extend this class to create a useful wrapper.
     """
 
     def __init__(self, env):
@@ -110,7 +110,5 @@ class BaseWrapper(AECEnv):
         self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
-        """
-        returns a name which looks like: "max_observation<space_invaders_v1>"
-        """
+        """Returns a name which looks like: "max_observation<space_invaders_v1>"."""
         return f"{type(self).__name__}<{str(self.env)}>"

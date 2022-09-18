@@ -118,7 +118,7 @@ def test_observation_action_spaces(env, agent_0):
                 )
             if np.any(np.equal(env.action_space(agent).high, np.inf)):
                 warnings.warn(
-                    "Agent's maxmimum action space value is infinity. This is probably too high"
+                    "Agent's maximum action space value is infinity. This is probably too high"
                 )
             if np.any(
                 np.equal(env.action_space(agent).low, env.action_space(agent).high)
@@ -148,7 +148,7 @@ def test_observation_action_spaces(env, agent_0):
                 )
             if np.any(np.equal(env.observation_space(agent).high, np.inf)):
                 warnings.warn(
-                    "Agent's maxmimum observation space value is infinity. This is probably too high"
+                    "Agent's maximum observation space value is infinity. This is probably too high"
                 )
             if np.any(
                 np.equal(

@@ -7,7 +7,7 @@ Some code in this repository has been taken from other open source projects
 and was originally released under the MIT or Apache 2.0 licenses, with
 copyright held by another party. We've attributed these authors and they
 retain their copyright to the extent required by law. Everything else
-is owned by Justin Terry. The Secret Code font was also released under 
+is owned by the Farama Foundation. The Secret Code font was also released under 
 the MIT license by Matthew Welch (http://www.squaregear.net/fonts/).
 The MIT and Apache 2.0 licenses are included below.
 

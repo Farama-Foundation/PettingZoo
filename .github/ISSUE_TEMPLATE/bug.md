@@ -4,19 +4,19 @@ about: Submit a bug report
 title: "[Bug Report] Bug title"
 ---
 
-If you are submitting a bug report, please fill in the following details and use the tag [bug].
-
 **Describe the bug**
 A clear and concise description of what the bug is.
 
 **Code example**
-Please try to provide a minimal example to reproduce the bug. Error messages and stack traces are also helpful.
+Bug reports without minimal code examples take 5-10x longer to solve. 
+We'll give you a cookie if you add the stack trace too!
+Save time, add code.
 
 **System Info**
 Describe the characteristic of your environment:
  * Describe how Gym was installed (pip, docker, source, ...)
- * What OS/version of Linux you're using. Note that while we will accept PRs to improve Window's support, we do not officially support it.
- * Python version
+ * Operating system: 
+ * Python version:
 
 **Additional context**
 Add any other context about the problem here.
