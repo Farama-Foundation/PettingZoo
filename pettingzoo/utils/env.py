@@ -147,9 +147,9 @@ class AECEnv:
         return len(self.possible_agents)
 
     def _deads_step_first(self) -> AgentID:
-        """
-        Makes .agent_selection point to first terminated agent. Stores old value of agent_selection
-        so that _was_dead_step can restore the variable after the dead agent steps.
+        """Makes .agent_selection point to first terminated agent.
+
+        Stores old value of agent_selection so that _was_dead_step can restore the variable after the dead agent steps.
         """
         _deads_order = [
             agent
@@ -184,9 +184,7 @@ class AECEnv:
     def last(
         self, observe: bool = True
     ) -> Tuple[Optional[ObsType], float, bool, bool, Dict[str, Any]]:
-        """
-        Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)
-        """
+        """Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""
         agent = self.agent_selection
         assert agent
         observation = self.observe(agent) if observe else None
@@ -199,8 +197,7 @@ class AECEnv:
         )
 
     def _was_dead_step(self, action: None) -> None:
-        """
-        Helper function that performs step() for dead agents.
+        """Helper function that performs step() for dead agents.
 
         Does the following:
 
@@ -325,8 +322,8 @@ class ParallelEnv:
     ) -> Tuple[
         ObsDict, Dict[str, float], Dict[str, bool], Dict[str, bool], Dict[str, dict]
     ]:
-        """
-        Receives a dictionary of actions keyed by the agent name.
+        """ Receives a dictionary of actions keyed by the agent name.
+
         Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary
         and info dictionary, where each dictionary is keyed by the agent.
         """
