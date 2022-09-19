@@ -1,3 +1,4 @@
+# noqa
 """
 # Rock Paper Scissors
 

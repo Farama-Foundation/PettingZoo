@@ -1,3 +1,4 @@
+# noqa
 """
 # Combined Arms
 

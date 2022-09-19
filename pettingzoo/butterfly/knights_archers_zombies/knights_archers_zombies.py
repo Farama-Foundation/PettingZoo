@@ -1,3 +1,4 @@
+# noqa
 """
 # Knights Archers Zombies ('KAZ')
 

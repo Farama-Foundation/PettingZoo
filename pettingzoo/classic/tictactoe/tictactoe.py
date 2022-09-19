@@ -1,3 +1,4 @@
+# noqa
 """
 # Tic Tac Toe
 

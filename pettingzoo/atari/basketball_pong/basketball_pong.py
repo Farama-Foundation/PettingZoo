@@ -1,3 +1,4 @@
+# noqa
 """
 # Basketball Pong
 
@@ -66,6 +67,7 @@ In any given turn, an agent can choose from one of 6 actions.
 * v0: Initial versions release (1.0.0)
 
 """
+
 
 import os
 from glob import glob
