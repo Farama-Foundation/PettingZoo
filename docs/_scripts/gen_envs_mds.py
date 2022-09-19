@@ -34,7 +34,7 @@ def get_docs_from_py(file_path):
 
 if __name__ == "__main__":
     ignore_dirs = ["test", "utils"]
-    envs_dir = os.path.join("..", "..", "pettingzoo")
+    envs_dir = os.path.join(os.path.dirname(__file__), "..", "..", "pettingzoo")
     for env_type in os.listdir(envs_dir):
         env_type_path = os.path.join(envs_dir, env_type)
         if not os.path.isdir(env_type_path) or env_type in ignore_dirs:
