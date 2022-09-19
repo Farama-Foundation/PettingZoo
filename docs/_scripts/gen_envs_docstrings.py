@@ -50,9 +50,7 @@ if __name__ == "__main__":
             continue
         for env_name in os.listdir(dir_path):
             if str(env_name)[-3:] == ".md":
-                with open(
-                    (os.path.join(dir_path, env_name)), encoding="utf-8"
-                ) as file:
+                with open((os.path.join(dir_path, env_name)), encoding="utf-8") as file:
                     python_file_name = get_python_file_name(env_type, env_name[:-3])
                     print(python_file_name)
                     if python_file_name is not None:
