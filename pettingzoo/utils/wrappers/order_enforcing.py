@@ -6,11 +6,11 @@ from .base import BaseWrapper
 class OrderEnforcingWrapper(BaseWrapper):
     """Check all call orders.
 
-    * error on getting rewards, dones, infos, agent_selection before reset
+    * error on getting rewards, terminations, truncations, infos, agent_selection before reset
     * error on calling step, observe before reset
     * error on iterating without stepping or resetting environment.
     * warn on calling close before render or reset
-    * warn on calling step after environment is done
+    * warn on calling step after environment is terminated or truncated
     """
 
     def __init__(self, env):
@@ -42,7 +42,8 @@ class OrderEnforcingWrapper(BaseWrapper):
             )
         elif value in {
             "rewards",
-            "dones",
+            "terminations",
+            "truncations",
             "infos",
             "agent_selection",
             "num_agents",
@@ -66,7 +67,7 @@ class OrderEnforcingWrapper(BaseWrapper):
             EnvLogger.error_step_before_reset()
         elif not self.agents:
             self._has_updated = True
-            EnvLogger.warn_step_after_done()
+            EnvLogger.warn_step_after_terminated_truncated()
             return None
         else:
             self._has_updated = True

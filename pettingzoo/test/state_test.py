@@ -47,8 +47,8 @@ def test_state(env, num_cycles):
     env.reset()
     state_0 = env.state()
     for agent in env.agent_iter(env.num_agents * num_cycles):
-        observation, reward, done, info = env.last(observe=False)
-        if done:
+        observation, reward, terminated, truncated, info = env.last(observe=False)
+        if terminated or truncated:
             action = None
         else:
             action = env.action_space(agent).sample()

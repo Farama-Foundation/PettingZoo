@@ -24,8 +24,8 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             random.randint(0, 1000)
             np.random.normal(size=100)
         for agent in new_env.agent_iter(max_env_iters):
-            obs, rew, done, info = new_env.last()
-            if done:
+            obs, rew, terminated, truncated, info = new_env.last()
+            if terminated or truncated:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = sampler.choice(np.flatnonzero(obs["action_mask"]))
