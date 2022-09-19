@@ -85,7 +85,11 @@ if __name__ == "__main__":
                 else env_dir_path + ".py"
             )
             docs_env_path = os.path.join(
-                "..", "environments", env_type, env_name + ".md"
+                os.path.dirname(__file__),
+                "..",
+                "environments",
+                env_type,
+                env_name + ".md",
             )
             create_docs_md(
                 docs_env_path,
