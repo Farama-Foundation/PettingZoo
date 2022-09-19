@@ -15,7 +15,6 @@ def get_python_file_name(env_type, env_name):
         if env_file == env_name:
             with open(
                 os.path.join(dir_path, env_type, env_file, env_file + ".py"),
-                "r",
                 encoding="utf-8",
             ) as file:
                 if env_name in file.name:
@@ -52,7 +51,7 @@ if __name__ == "__main__":
         for env_name in os.listdir(dir_path):
             if str(env_name)[-3:] == ".md":
                 with open(
-                    (os.path.join(dir_path, env_name)), "r", encoding="utf-8"
+                    (os.path.join(dir_path, env_name)), encoding="utf-8"
                 ) as file:
                     python_file_name = get_python_file_name(env_type, env_name[:-3])
                     print(python_file_name)

@@ -1,5 +1,5 @@
 # noqa
-"""
+r"""
 # Go
 
 ```{figure} classic_go.gif

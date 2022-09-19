@@ -22,14 +22,12 @@ def create_docs_md(file_path, text, frontmatter_options):
 
 def get_docs_from_py(file_path):
     print(file_path)
-    with open(file_path, "r", encoding="utf-8") as fp:
+    with open(file_path, encoding="utf-8") as fp:
         text = fp.read()
-        regex = re.compile(r'"""\s*(\n|.)*?("""\s*\n)')
-        match = regex.match(text)
+        regex = re.compile(r'^r?"""\s*((\n|.)*?)("""\s*\n)', re.MULTILINE)
+        match = regex.search(text)
         if match:
-            g = match.group(0)
-            # remove docstring quotes
-            return text[4 : len(g) - 5]
+            return match.group(1)
         else:
             return ""
 
