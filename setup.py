@@ -80,20 +80,7 @@ setup(
     packages=["pettingzoo"]
     + ["pettingzoo." + pkg for pkg in find_packages("pettingzoo")],
     include_package_data=True,
-    install_requires=["numpy>=1.18.0", "gym>=0.26.0
-
-Files
-Type
-Name
-Latest commit message
-Commit time
-.github
-Update docs website to Sphinx (#780)
-10 hours ago
-docs
-Update links to the new domain (#789)
-3 hours ago
-pettingzoo "],
+    install_requires=["numpy>=1.18.0", "gym>=0.26.0"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
