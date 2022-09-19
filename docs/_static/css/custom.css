@@ -62,7 +62,7 @@ h3 {
     margin-bottom: -18px;
 }
 
-.theme-env-icon-container:has(+ div > h1), 
+.theme-env-icon-container:has(+ div > h1),
 .theme-env-icon-container:has(+ div > h2)  {
     margin-bottom: -24px;
 }
@@ -108,4 +108,13 @@ Envinronments grid
     width: 240px;
     margin: 12px auto;
     display: block;
+}
+
+/*=======================
+Github math render
+========================*/
+@media (prefers-color-scheme: dark) {
+    img[src*="//render.githubusercontent.com/render/math"] {
+        filter: invert(90%);
+    }
 }
