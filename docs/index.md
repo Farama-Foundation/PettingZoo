@@ -14,12 +14,15 @@ content/environment_tests
 content/tutorials
 ```
 
-
 ```{toctree}
 :hidden:
 :caption: API
 
-api/wrappers
+api/core
+api/parallel
+api/pz_wrappers
+api/supersuit_wrappers
+api/utils
 ```
 
 ```{toctree}
