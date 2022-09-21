@@ -18,8 +18,8 @@ def bombardment_test(env, cycles=10000):
         for agent in env.agent_iter(
             env.num_agents
         ):  # step through every agent once with observe=True
-            obs, reward, done, info = env.last()
-            if done:
+            obs, reward, termination, truncation, info = env.last()
+            if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = random.choice(np.flatnonzero(obs["action_mask"]))

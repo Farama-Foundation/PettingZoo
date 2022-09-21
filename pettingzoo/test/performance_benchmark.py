@@ -17,8 +17,8 @@ def performance_benchmark(env):
         for agent in env.agent_iter(
             env.num_agents
         ):  # step through every agent once with observe=True
-            obs, reward, done, info = env.last()
-            if done:
+            obs, reward, termination, truncation, info = env.last()
+            if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = random.choice(np.flatnonzero(obs["action_mask"]))
@@ -27,7 +27,7 @@ def performance_benchmark(env):
             env.step(action)
             turn += 1
 
-            if all(env.dones.values()):
+            if all(env.terminations.values()) or all(env.truncations.values()):
                 env.reset()
 
         if time.time() - start > 5:
