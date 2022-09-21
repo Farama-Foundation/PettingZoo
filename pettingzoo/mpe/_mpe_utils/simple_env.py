@@ -257,7 +257,7 @@ class SimpleEnv(AECEnv):
             self.renderOn = True
 
     def render(self, mode="human"):
-        self.enable_render()
+        self.enable_render(mode)
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if mode == "human":
