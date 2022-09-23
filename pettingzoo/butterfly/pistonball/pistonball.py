@@ -62,6 +62,7 @@ class raw_env(AECEnv, EzPickle):
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
+        render_mode=None
     ):
         EzPickle.__init__(
             self,
@@ -74,6 +75,7 @@ class raw_env(AECEnv, EzPickle):
             ball_friction,
             ball_elasticity,
             max_cycles,
+            render_mode
         )
         self.dt = 1.0 / FPS
         self.n_pistons = n_pistons
@@ -136,6 +138,7 @@ class raw_env(AECEnv, EzPickle):
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
 
+        self.render_mode = render_mode
         self.renderOn = False
         self.screen = pygame.Surface((self.screen_width, self.screen_height))
         self.max_cycles = max_cycles
@@ -508,8 +511,12 @@ class raw_env(AECEnv, EzPickle):
         local_reward = 0.5 * (prev_position - curr_position)
         return local_reward
 
-    def render(self, mode="human"):
-        if mode == "human" and not self.renderOn:
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
+        if self.render_mode == "human" and not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
@@ -517,10 +524,11 @@ class raw_env(AECEnv, EzPickle):
         self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array" else None
         )
 
     def step(self, action):

@@ -43,6 +43,7 @@ def env_creator():
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
+        render_mode="rgb_array"
     )
     env = ss.color_reduction_v0(env, mode="B")
     env = ss.dtype_v0(env, "float32")
@@ -85,7 +86,8 @@ for agent in env.agent_iter():
     env.step(action)
     i += 1
     if i % (len(env.possible_agents) + 1) == 0:
-        frame_list.append(Image.fromarray(env.render(mode="rgb_array")))
+        img = Image.fromarray(env.render())
+        frame_list.append(img)
 env.close()
 
 

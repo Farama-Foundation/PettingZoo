@@ -73,6 +73,7 @@ def main():
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
+        render_mode="rgb_array"
     )
     total_reward = 0
     obs_list = []
@@ -88,7 +89,7 @@ def main():
             i += 1
             if i % (len(env.possible_agents) + 1) == 0:
                 obs_list.append(
-                    np.transpose(env.render(mode="rgb_array"), axes=(1, 0, 2))
+                    np.transpose(env.render(), axes=(1, 0, 2))
                 )
 
     env.close()

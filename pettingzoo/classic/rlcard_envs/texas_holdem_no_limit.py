@@ -1,5 +1,6 @@
 import os
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -44,7 +45,7 @@ class raw_env(RLCardBase):
         "render_fps": 1,
     }
 
-    def __init__(self, num_players=2):
+    def __init__(self, num_players=2, render_mode=None):
         super().__init__("no-limit-holdem", num_players, (54,))
         self.observation_spaces = self._convert_to_dict(
             [
@@ -71,7 +72,13 @@ class raw_env(RLCardBase):
             ]
         )
 
-    def render(self, mode="human"):
+        self.render_mode = render_mode
+
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         def calculate_width(self, screen_width, i):
             return int(
                 (
@@ -97,13 +104,13 @@ class raw_env(RLCardBase):
         )
 
         if self.screen is None:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
                 pygame.font.init()
                 self.screen = pygame.Surface((screen_width, screen_height))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.event.get()
 
         # Setup dimensions for card size and setup for colors
@@ -299,11 +306,11 @@ class raw_env(RLCardBase):
                         ),
                     )
 
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2)) if self.render_mode == "rgb_array" else None
         )

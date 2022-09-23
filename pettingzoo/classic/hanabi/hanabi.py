@@ -1,5 +1,6 @@
 from typing import Dict, List, Optional, Union
 
+import gym
 import numpy as np
 from gym import spaces
 from gym.utils import EzPickle
@@ -75,6 +76,7 @@ class raw_env(AECEnv, EzPickle):
         max_life_tokens: int = 3,
         observation_type: int = 1,
         random_start_player: bool = False,
+        render_mode: Optional[str] = None
     ):
         """Initializes the `raw_env` class.
 
@@ -131,6 +133,7 @@ class raw_env(AECEnv, EzPickle):
             max_life_tokens,
             observation_type,
             random_start_player,
+            render_mode
         )
 
         # ToDo: Starts
@@ -190,6 +193,8 @@ class raw_env(AECEnv, EzPickle):
             )
             for player_name in self.agents
         }
+
+        self.render_mode = render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -381,11 +386,15 @@ class raw_env(AECEnv, EzPickle):
             for player_name in self.agents
         }
 
-    def render(self, mode="human"):
+    def render(self):
         """Prints player's data.
 
         Supports console print only.
         """
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         player_data = self.latest_observations["player_observations"]
         print(
             "Active player:",

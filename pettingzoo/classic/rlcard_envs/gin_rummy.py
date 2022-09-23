@@ -1,3 +1,4 @@
+import gym
 import numpy as np
 from gym.utils import EzPickle
 from rlcard.games.gin_rummy.player import GinRummyPlayer
@@ -34,8 +35,9 @@ class raw_env(RLCardBase, EzPickle):
         knock_reward: float = 0.5,
         gin_reward: float = 1.0,
         opponents_hand_visible=False,
+        render_mode=None
     ):
-        EzPickle.__init__(self, knock_reward, gin_reward)
+        EzPickle.__init__(self, knock_reward, gin_reward, render_mode)
         self._opponents_hand_visible = opponents_hand_visible
         num_planes = 5 if self._opponents_hand_visible else 4
         RLCardBase.__init__(self, "gin-rummy", 2, (num_planes, 52))
@@ -43,6 +45,7 @@ class raw_env(RLCardBase, EzPickle):
         self._gin_reward = gin_reward
 
         self.env.game.judge.scorer.get_payoff = self._get_payoff
+        self.render_mode = render_mode
 
     def _get_payoff(self, player: GinRummyPlayer, game) -> float:
         going_out_action = game.round.going_out_action
@@ -79,7 +82,11 @@ class raw_env(RLCardBase, EzPickle):
 
         return {"observation": observation, "action_mask": action_mask}
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         for player in self.possible_agents:
             state = self.env.game.round.players[self._name_to_int(player)].hand
             print(f"\n===== {player}'s Hand =====")

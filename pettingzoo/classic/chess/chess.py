@@ -1,3 +1,5 @@
+import gym
+
 import chess
 import numpy as np
 from gym import spaces
@@ -27,7 +29,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
 
         self.board = chess.Board()
@@ -60,6 +62,8 @@ class raw_env(AECEnv):
         self.agent_selection = None
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
+
+        self.render_mode = render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -146,8 +150,11 @@ class raw_env(AECEnv):
             self._agent_selector.next()
         )  # Give turn to the next agent
 
-    def render(self, mode="human"):
-        print(self.board)
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+        else:
+            print(self.board)
 
     def close(self):
         pass

@@ -1,5 +1,6 @@
 import math
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -160,6 +161,7 @@ class MAWaterWorld:
         local_ratio=1.0,
         speed_features=True,
         max_cycles=500,
+        render_mode=None
     ):
         raise AssertionError(
             "Please do not use Waterworld, at its current state it is incredibly buggy and the soundness of the environment is not guaranteed."
@@ -246,6 +248,7 @@ class MAWaterWorld:
         self.action_space = [agent.action_space for agent in self._pursuers]
         self.observation_space = [agent.observation_space for agent in self._pursuers]
 
+        self.render_mode = render_mode
         self.renderOn = False
         self.pixel_scale = 30 * 25
 
@@ -736,9 +739,13 @@ class MAWaterWorld:
                 self.screen, color, center, self.pixel_scale * self.radius * 3 / 4
             )
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         if not self.renderOn:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.display.init()
                 self.screen = pygame.display.set_mode(
                     (self.pixel_scale, self.pixel_scale)
@@ -756,10 +763,10 @@ class MAWaterWorld:
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
         del observation
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
             np.transpose(new_observation, axes=(1, 0, 2))
-            if mode == "rgb_array"
+            if self.render_mode == "rgb_array"
             else None
         )

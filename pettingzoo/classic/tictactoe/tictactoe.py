@@ -1,4 +1,5 @@
 import numpy as np
+import gym
 from gym import spaces
 
 from pettingzoo import AECEnv
@@ -24,7 +25,7 @@ class raw_env(AECEnv):
         "render_fps": 1,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
         self.board = Board()
 
@@ -51,6 +52,8 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
+
+        self.render_mode = render_mode
 
     # Key
     # ----
@@ -144,7 +147,10 @@ class raw_env(AECEnv):
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
         def getSymbol(input):
             if input == 0:
                 return "-"

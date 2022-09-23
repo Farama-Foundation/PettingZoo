@@ -20,7 +20,7 @@ class raw_env(AECEnv):
 
     metadata = {"render_modes": ["human"], "name": "generated_agents_env_v0"}
 
-    def __init__(self, max_cycles=100):
+    def __init__(self, max_cycles=100, render_mode=None):
         super().__init__()
         self._obs_spaces = {}
         self._act_spaces = {}
@@ -28,6 +28,7 @@ class raw_env(AECEnv):
         self._agent_counters = {}
         self.max_cycles = max_cycles
         self.seed()
+        self.render_mode = render_mode
         for i in range(3):
             self.add_type()
 
@@ -118,8 +119,11 @@ class raw_env(AECEnv):
         self._accumulate_rewards()
         self._deads_step_first()
 
-    def render(self, mode="human"):
-        print(self.agents)
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+        else:
+            print(self.agents)
 
     def close(self):
         pass

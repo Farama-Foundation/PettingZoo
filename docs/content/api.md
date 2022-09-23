@@ -71,7 +71,7 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `seed(seed=None)`: Reseeds the environment. `reset()` must be called after `seed()`, and before `step()`.
 
-`render(mode='human')`: Displays a rendered frame from the environment, if supported. Alternate render modes in the default environments are `'rgb_array'` which returns a numpy array and is supported by all environments outside of classic, and `'ansi'` which returns the strings printed (specific to classic environments).
+`render()`: Returns a rendered frame from the environment using render mode specified at initialization. In the case render mode is`'rgb_array'`, returns a numpy array, while with `'ansi'` returns the strings printed. There is no need to call `render()` with `human` mode.
 
 `close()`: Closes the rendering window.
 
@@ -143,7 +143,7 @@ for step in range(max_cycles):
 
 `agents`, `num_agents`, `possible_agents`, `max_num_agents`, `observation_spaces`, and `action_spaces` attributes are available and are as described above in the main API description.
 
-`render(mode='human')`, `seed(seed=None)`, `close()` are methods as described above in the main API description.
+`render()`, `seed(seed=None)`, `close()` are methods as described above in the main API description.
 
 `step(actions)`: receives a dictionary of actions keyed by the agent name. Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary, where each dictionary is keyed by the agent.
 

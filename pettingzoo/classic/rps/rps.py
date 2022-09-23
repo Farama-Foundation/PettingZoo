@@ -1,5 +1,6 @@
 import os
 
+import gym
 import numpy as np
 import pygame
 from gym.spaces import Discrete
@@ -53,7 +54,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, num_actions=3, max_cycles=15):
+    def __init__(self, num_actions=3, max_cycles=15, render_mode=None):
         self.max_cycles = max_cycles
 
         # number of actions must be odd and greater than 3
@@ -77,6 +78,7 @@ class raw_env(AECEnv):
             agent: Discrete(1 + num_actions) for agent in self.agents
         }
 
+        self.render_mode = render_mode
         self.screen = None
 
         self.reinit()
@@ -104,7 +106,11 @@ class raw_env(AECEnv):
 
         self.num_moves = 0
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         def offset(i, size, offset=0):
             if i == 0:
                 return -(size) - offset
@@ -115,13 +121,13 @@ class raw_env(AECEnv):
         screen_width = int(screen_height * 5 / 14)
 
         if self.screen is None:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
                 pygame.font.init()
                 self.screen = pygame.Surface((screen_width, screen_height))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.event.get()
 
         # Load and all of the necessary images
@@ -296,13 +302,14 @@ class raw_env(AECEnv):
                         ),
                     )
 
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array" else None
         )
 
     def observe(self, agent):

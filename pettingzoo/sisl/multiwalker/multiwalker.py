@@ -70,8 +70,8 @@ class raw_env(AECEnv, EzPickle):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])

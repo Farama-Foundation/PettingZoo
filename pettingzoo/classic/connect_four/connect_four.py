@@ -1,5 +1,6 @@
 import os
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -37,7 +38,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
         # 6 rows x 7 columns
         # blank space = 0
@@ -45,6 +46,7 @@ class raw_env(AECEnv):
         # agent 1 -- 2
         # flat representation in row major order
         self.screen = None
+        self.render_mode = render_mode
 
         self.board = [0] * (6 * 7)
 
@@ -153,16 +155,20 @@ class raw_env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            return
+
         screen_width = 1287
         screen_height = 1118
         if self.screen is None:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
                 self.screen = pygame.Surface((screen_width, screen_height))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.event.get()
 
         # Load and scale all of the necessary images
@@ -204,13 +210,14 @@ class raw_env(AECEnv):
                     ),
                 )
 
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array" else None
         )
 
     def close(self):

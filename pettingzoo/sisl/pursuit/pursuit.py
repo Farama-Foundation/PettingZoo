@@ -67,9 +67,9 @@ class raw_env(AECEnv, EzPickle):
             self.closed = True
             self.env.close()
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.closed:
-            return self.env.render(mode)
+            return self.env.render()
 
     def step(self, action):
         if (

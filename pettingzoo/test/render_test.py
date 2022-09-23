@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-def collect_render_results(env, mode):
+def collect_render_results(env):
     results = []
 
     env.reset()
@@ -18,7 +18,7 @@ def collect_render_results(env, mode):
                 else:
                     action = env.action_space(agent).sample()
                 env.step(action)
-        render_result = env.render(mode=mode)
+        render_result = env.render()
         results.append(render_result)
 
     return results
@@ -31,7 +31,8 @@ def render_test(env_fn, custom_tests={}):
         render_modes is not None
     ), "Environments that support rendering must define render_modes in metadata"
     for mode in render_modes:
-        render_results = collect_render_results(env, mode)
+        env = env_fn(render_mode=mode)
+        render_results = collect_render_results(env)
         for res in render_results:
             if mode in custom_tests.keys():
                 assert custom_tests[mode](res)
@@ -49,4 +50,3 @@ def render_test(env_fn, custom_tests={}):
             if mode == "human":
                 assert res is None
         env.close()
-        env = env_fn()

@@ -306,6 +306,7 @@ class MultiWalkerEnv:
         remove_on_fall=True,
         terrain_length=TERRAIN_LENGTH,
         max_cycles=500,
+        render_mode=None
     ):
         """Initializes the `MultiWalkerEnv` class.
 
@@ -340,6 +341,7 @@ class MultiWalkerEnv:
         self.last_dones = [False for _ in range(self.n_walkers)]
         self.last_obs = [None for _ in range(self.n_walkers)]
         self.max_cycles = max_cycles
+        self.render_mode = render_mode
         self.frames = 0
 
     def get_param_values(self):
@@ -547,7 +549,7 @@ class MultiWalkerEnv:
         o = np.array(o, dtype=np.float32)
         return o
 
-    def render(self, mode="human", close=False):
+    def render(self, close=False):
         if close:
             self.close()
             return
@@ -688,9 +690,9 @@ class MultiWalkerEnv:
 
         self.surf = pygame.transform.flip(self.surf, False, True)
         self.screen.blit(self.surf, (-self.scroll * render_scale - offset, 0))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
-        elif mode == "rgb_array":
+        elif self.render_mode == "rgb_array":
             return np.transpose(
                 np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
             )
