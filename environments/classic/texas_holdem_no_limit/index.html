@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/Classic/TexasHold'emNoLimit.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/classic/texas_holdem_no_limit.png">
             </div>
           <section id="texas-hold-em-no-limit">
 <h1>Texas Hold’em No Limit<a class="headerlink" href="#texas-hold-em-no-limit" title="Permalink to this heading">#</a></h1>
@@ -340,7 +340,8 @@
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">num_players</span></code>: Sets the number of players in the game. Minimum is 2.</p>
-<p>Texas Hold’em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and the loser will get -1. This is an implementation of the standard limited version of Texas Hold’m, sometimes referred to as ‘Limit Texas Hold’em’.</p>
+<p>Texas Hold’em is a poker game involving 2 players and a regular 52 cards deck. At the beginning, both players get two cards. After betting, three community cards are shown and another round follows. At any time, a player could fold and the game will end. The winner will receive +1 as a reward and
+the loser will get -1. This is an implementation of the standard limited version of Texas Hold’m, sometimes referred to as ‘Limit Texas Hold’em’.</p>
 <p>Our implementation wraps <a class="reference external" href="http://rlcard.org/games.html#limit-texas-hold-em">RLCard</a> and you can refer to its documentation for additional details. Please cite their work if you use this game in research.</p>
 </section>
 <section id="observation-space">
@@ -385,7 +386,8 @@
 </div>
 <section id="legal-actions-mask">
 <h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
-<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">

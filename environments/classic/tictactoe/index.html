@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/Classic/TicTacToe.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/classic/tictactoe.png">
             </div>
           <section id="tic-tac-toe">
 <h1>Tic Tac Toe<a class="headerlink" href="#tic-tac-toe" title="Permalink to this heading">#</a></h1>
@@ -336,10 +336,13 @@
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>The main observation is 2 planes of the 3x3 board. For player_1, the first plane represents the placement of Xs, and the second plane shows the placement of Os. The possible values for each cell are 0 or 1; in the first plane, 1 indicates that an X has been placed in that cell, and 0 indicates that X is not in that cell. Similarly, in the second plane, 1 indicates that an O has been placed in that cell, while 0 indicates that an O has not been placed. For player_2, the observation is the same, but Xs and Os swap positions, so Os are encoded in plane 1 and Xs in plane 2. This allows for self-play.</p>
+<p>The main observation is 2 planes of the 3x3 board. For player_1, the first plane represents the placement of Xs, and the second plane shows the placement of Os. The possible values for each cell are 0 or 1; in the first plane, 1 indicates that an X has been placed in that cell, and 0 indicates
+that X is not in that cell. Similarly, in the second plane, 1 indicates that an O has been placed in that cell, while 0 indicates that an O has not been placed. For player_2, the observation is the same, but Xs and Os swap positions, so Os are encoded in plane 1 and Xs in plane 2. This allows for
+self-play.</p>
 <section id="legal-actions-mask">
 <h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
-<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">
@@ -389,15 +392,7 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../magent/">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">MAgent</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
+          
           <a class="prev-page" href="../texas_holdem/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">

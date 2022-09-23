@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/MPE/SimpleSpread.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/mpe/simple_spread.png">
             </div>
           <section id="simple-spread">
 <h1>Simple Spread<a class="headerlink" href="#simple-spread" title="Permalink to this heading">#</a></h1>
@@ -342,7 +342,8 @@
 <a class="reference internal image-reference" href="../../../_images/mpe_simple_spread_aec.svg"><img alt="../../../_images/mpe_simple_spread_aec.svg" src="../../../_images/mpe_simple_spread_aec.svg" width="200px" /></a>
 </figure>
 <p>This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.</p>
-<p>More specifically, all agents are globally rewarded based on how far the closest agent is to each landmark (sum of the minimum distances). Locally, the agents are penalized if they collide with other agents (-1 for each collision). The relative weights of these rewards can be controlled with the <code class="docutils literal notranslate"><span class="pre">local_ratio</span></code> parameter.</p>
+<p>More specifically, all agents are globally rewarded based on how far the closest agent is to each landmark (sum of the minimum distances). Locally, the agents are penalized if they collide with other agents (-1 for each collision). The relative weights of these rewards can be controlled with the
+<code class="docutils literal notranslate"><span class="pre">local_ratio</span></code> parameter.</p>
 <p>Agent observations: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">self_pos,</span> <span class="pre">landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions,</span> <span class="pre">communication]</span></code></p>
 <p>Agent action space: <code class="docutils literal notranslate"><span class="pre">[no_action,</span> <span class="pre">move_left,</span> <span class="pre">move_right,</span> <span class="pre">move_down,</span> <span class="pre">move_up]</span></code></p>
 <section id="arguments">

@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/Classic/ConnectFour.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/classic/connect_four.png">
             </div>
           <section id="connect-four">
 <h1>Connect Four<a class="headerlink" href="#connect-four" title="Permalink to this heading">#</a></h1>
@@ -332,14 +332,17 @@
 <figure class="align-default" id="id2">
 <a class="reference internal image-reference" href="../../../_images/classic_connect_four_aec.svg"><img alt="../../../_images/classic_connect_four_aec.svg" src="../../../_images/classic_connect_four_aec.svg" width="200px" /></a>
 </figure>
-<p>Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.</p>
+<p>Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing
+token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.</p>
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>The main observation space is 2 planes of a 6x7 grid. Each plane represents a specific agent’s tokens, and each location in the grid represents the placement of the corresponding agent’s token. 1 indicates that the agent has a token placed in that cell, and 0 indicates they do not have a token in that cell. A 0 means that either the cell is empty, or the other agent has a token in that cell.</p>
+<p>The main observation space is 2 planes of a 6x7 grid. Each plane represents a specific agent’s tokens, and each location in the grid represents the placement of the corresponding agent’s token. 1 indicates that the agent has a token placed in that cell, and 0 indicates they do not have a token in
+that cell. A 0 means that either the cell is empty, or the other agent has a token in that cell.</p>
 <section id="legal-actions-mask">
 <h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
-<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">

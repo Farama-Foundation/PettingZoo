@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/MPE/SimplePush.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/mpe/simple_push.png">
             </div>
           <section id="simple-push">
 <h1>Simple Push<a class="headerlink" href="#simple-push" title="Permalink to this heading">#</a></h1>
@@ -338,7 +338,8 @@
 <figure class="align-default" id="id2">
 <a class="reference internal image-reference" href="../../../_images/mpe_simple_push_aec.svg"><img alt="../../../_images/mpe_simple_push_aec.svg" src="../../../_images/mpe_simple_push_aec.svg" width="200px" /></a>
 </figure>
-<p>This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to push the good agent away from the landmark.</p>
+<p>This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to
+push the good agent away from the landmark.</p>
 <p>Agent observation space: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">goal_rel_position,</span> <span class="pre">goal_landmark_id,</span> <span class="pre">all_landmark_rel_positions,</span> <span class="pre">landmark_ids,</span> <span class="pre">other_agent_rel_positions]</span></code></p>
 <p>Adversary observation space: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">all_landmark_rel_positions,</span> <span class="pre">other_agent_rel_positions]</span></code></p>
 <p>Agent action space: <code class="docutils literal notranslate"><span class="pre">[no_action,</span> <span class="pre">move_left,</span> <span class="pre">move_right,</span> <span class="pre">move_down,</span> <span class="pre">move_up]</span></code></p>

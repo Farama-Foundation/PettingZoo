@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/Classic/Chess.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/classic/chess.png">
             </div>
           <section id="chess">
 <h1>Chess<a class="headerlink" href="#chess" title="Permalink to this heading">#</a></h1>
@@ -349,14 +349,16 @@
 <li><p>Channel 4: Is black or white</p></li>
 <li><p>Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the <em>n</em> th element in the flattened channel is set if there has been <em>n</em> moves</p></li>
 <li><p>Channel 6: All ones to help neural networks find board edges in padded convolutions</p></li>
-<li><p>Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</p></li>
+<li><p>Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant
+possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</p></li>
 <li><p>Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)</p></li>
 </ul>
 <p>Like AlphaZero, the board is always oriented towards the current agent (the currant agent’s king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.</p>
 <p>Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the <code class="docutils literal notranslate"><span class="pre">frame_stacking</span></code> argument of our wrapper.</p>
 <section id="legal-actions-mask">
 <h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
-<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">
@@ -420,17 +422,7 @@ queen.</p>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Classic</div>
-                
-              </div>
-            </a>
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
