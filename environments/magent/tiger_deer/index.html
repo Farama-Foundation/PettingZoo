@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/MAgent/Tiger-Deer.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/magent/tiger_deer.png">
             </div>
           <section id="tiger-deer">
 <h1>Tiger-Deer<a class="headerlink" href="#tiger-deer" title="Permalink to this heading">#</a></h1>
@@ -338,7 +338,8 @@
 <figure class="align-default" id="id2">
 <a class="reference internal image-reference" href="../../../_images/magent_tiger_deer_aec.svg"><img alt="../../../_images/magent_tiger_deer_aec.svg" src="../../../_images/magent_tiger_deer_aec.svg" width="200px" /></a>
 </figure>
-<p>In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8 health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.</p>
+<p>In tiger-deer, there are a number of tigers who are only rewarded for teaming up to take down the deer (two tigers must attack a deer in the same step to receive reward). If they do not eat the deer, they will slowly lose 0.1 HP each turn until they die. If they do eat the deer they regain 8
+health (they have 10 health to start). At the same time, the deer are trying to avoid getting attacked. Deer start with 5 HP, lose 1 HP when attacked, and regain 0.1 HP each turn. Deer should run from tigers and tigers should form small teams to take down deer.</p>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tiger_deer_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">map_size</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">minimap_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tiger_step_recover</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">deer_attacked</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">extra_features</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/Classic/TexasHold'em.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/classic/texas_holdem.png">
             </div>
           <section id="texas-hold-em">
 <h1>Texas Hold’em<a class="headerlink" href="#texas-hold-em" title="Permalink to this heading">#</a></h1>
@@ -379,7 +379,8 @@
 </div>
 <section id="legal-actions-mask">
 <h4>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h4>
-<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
+<p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.</p>
 </section>
 </section>
 <section id="action-space">

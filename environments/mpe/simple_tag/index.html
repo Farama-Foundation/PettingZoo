@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/MPE/SimpleTag.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/mpe/simple_tag.png">
             </div>
           <section id="simple-tag">
 <h1>Simple Tag<a class="headerlink" href="#simple-tag" title="Permalink to this heading">#</a></h1>
@@ -338,7 +338,8 @@
 <figure class="align-default" id="id2">
 <a class="reference internal image-reference" href="../../../_images/mpe_simple_tag_aec.svg"><img alt="../../../_images/mpe_simple_tag_aec.svg" src="../../../_images/mpe_simple_tag_aec.svg" width="200px" /></a>
 </figure>
-<p>This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By default, there is 1 good agent, 3 adversaries and 2 obstacles.</p>
+<p>This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By
+default, there is 1 good agent, 3 adversaries and 2 obstacles.</p>
 <p>So that good agents don’t run to infinity, they are also penalized for exiting the area by the following function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bound</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
       <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.9</span><span class="p">:</span>

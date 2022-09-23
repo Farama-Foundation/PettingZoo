@@ -283,7 +283,7 @@
         </div>
         <article role="main">
           <div class="theme-env-icon-container">
-              <img class="theme-env-icon" src="../../../_static/img/icons/MPE/SimpleCrypto.png">
+              <img class="theme-env-icon" src="../../../_static/img/icons/mpe/simple_crypto.png">
             </div>
           <section id="simple-crypto">
 <h1>Simple Crypto<a class="headerlink" href="#simple-crypto" title="Permalink to this heading">#</a></h1>
@@ -338,7 +338,8 @@
 <figure class="align-default" id="id2">
 <a class="reference internal image-reference" href="../../../_images/mpe_simple_crypto_aec.svg"><img alt="../../../_images/mpe_simple_crypto_aec.svg" src="../../../_images/mpe_simple_crypto_aec.svg" width="200px" /></a>
 </figure>
-<p>In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams reconstruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode) which they must learn to use to encrypt the message.</p>
+<p>In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams
+reconstruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode) which they must learn to use to encrypt the message.</p>
 <p>Alice observation space: <code class="docutils literal notranslate"><span class="pre">[message,</span> <span class="pre">private_key]</span></code></p>
 <p>Bob observation space: <code class="docutils literal notranslate"><span class="pre">[private_key,</span> <span class="pre">alices_comm]</span></code></p>
 <p>Eve observation space: <code class="docutils literal notranslate"><span class="pre">[alices_comm]</span></code></p>
