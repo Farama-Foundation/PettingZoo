@@ -1,5 +1,5 @@
-import numpy as np
 import gym
+import numpy as np
 from gym import spaces
 
 from pettingzoo import AECEnv
@@ -149,8 +149,11 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
+
         def getSymbol(input):
             if input == 0:
                 return "-"

@@ -29,7 +29,7 @@ class magent_parallel_env(ParallelEnv):
         reward_range,
         minimap_mode,
         extra_features,
-        render_mode=None
+        render_mode=None,
     ):
         self.map_size = map_size
         self.max_cycles = max_cycles
@@ -141,7 +141,9 @@ class magent_parallel_env(ParallelEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if self._renderer is None:

@@ -35,7 +35,7 @@ class raw_env(RLCardBase, EzPickle):
         knock_reward: float = 0.5,
         gin_reward: float = 1.0,
         opponents_hand_visible=False,
-        render_mode=None
+        render_mode=None,
     ):
         EzPickle.__init__(self, knock_reward, gin_reward, render_mode)
         self._opponents_hand_visible = opponents_hand_visible
@@ -84,7 +84,9 @@ class raw_env(RLCardBase, EzPickle):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         for player in self.possible_agents:

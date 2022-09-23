@@ -76,7 +76,7 @@ class raw_env(AECEnv, EzPickle):
         max_life_tokens: int = 3,
         observation_type: int = 1,
         random_start_player: bool = False,
-        render_mode: Optional[str] = None
+        render_mode: Optional[str] = None,
     ):
         """Initializes the `raw_env` class.
 
@@ -133,7 +133,7 @@ class raw_env(AECEnv, EzPickle):
             max_life_tokens,
             observation_type,
             random_start_player,
-            render_mode
+            render_mode,
         )
 
         # ToDo: Starts
@@ -392,7 +392,9 @@ class raw_env(AECEnv, EzPickle):
         Supports console print only.
         """
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         player_data = self.latest_observations["player_observations"]

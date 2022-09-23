@@ -1,6 +1,5 @@
-import gym
-
 import chess
+import gym
 import numpy as np
 from gym import spaces
 
@@ -152,7 +151,9 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
         else:
             print(self.board)
 

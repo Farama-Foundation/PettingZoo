@@ -237,10 +237,14 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
-        assert self.render_mode in self.metadata["render_modes"], f"{self.render_mode} is not a valid render mode"
+        assert (
+            self.render_mode in self.metadata["render_modes"]
+        ), f"{self.render_mode} is not a valid render mode"
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if self.render_mode == "human":

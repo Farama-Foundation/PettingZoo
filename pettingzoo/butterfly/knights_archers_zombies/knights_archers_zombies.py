@@ -75,7 +75,7 @@ class raw_env(AECEnv, EzPickle):
             vector_state,
             use_typemasks,
             transformer,
-            render_mode
+            render_mode,
         )
         # variable state space
         self.transformer = transformer
@@ -612,7 +612,9 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if not self.render_on and self.render_mode == "human":
@@ -624,7 +626,8 @@ class raw_env(AECEnv, EzPickle):
             pygame.display.flip()
         return (
             np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array" else None
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def close(self):

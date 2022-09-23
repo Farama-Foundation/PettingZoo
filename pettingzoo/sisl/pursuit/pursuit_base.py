@@ -30,7 +30,7 @@ class Pursuit:
         catch_reward: float = 5.0,
         urgency_reward: float = -0.1,
         surround: bool = True,
-        render_mode = None,
+        render_mode=None,
         constraint_window: float = 1.0,
     ):
         """In evade pursuit a set of pursuers must 'tag' a set of evaders.
@@ -384,7 +384,9 @@ class Pursuit:
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if not self.renderOn:

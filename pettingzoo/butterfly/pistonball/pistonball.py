@@ -62,7 +62,7 @@ class raw_env(AECEnv, EzPickle):
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
-        render_mode=None
+        render_mode=None,
     ):
         EzPickle.__init__(
             self,
@@ -75,7 +75,7 @@ class raw_env(AECEnv, EzPickle):
             ball_friction,
             ball_elasticity,
             max_cycles,
-            render_mode
+            render_mode,
         )
         self.dt = 1.0 / FPS
         self.n_pistons = n_pistons
@@ -513,7 +513,9 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if self.render_mode == "human" and not self.renderOn:
@@ -528,7 +530,8 @@ class raw_env(AECEnv, EzPickle):
             pygame.display.flip()
         return (
             np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array" else None
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def step(self, action):

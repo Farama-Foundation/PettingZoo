@@ -306,7 +306,7 @@ class MultiWalkerEnv:
         remove_on_fall=True,
         terrain_length=TERRAIN_LENGTH,
         max_cycles=500,
-        render_mode=None
+        render_mode=None,
     ):
         """Initializes the `MultiWalkerEnv` class.
 

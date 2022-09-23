@@ -187,7 +187,9 @@ class CooperativePong:
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if not self.renderOn and self.render_mode == "human":
@@ -199,7 +201,8 @@ class CooperativePong:
             pygame.display.flip()
         return (
             np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array" else None
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def observe(self):

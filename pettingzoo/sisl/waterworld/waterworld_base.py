@@ -161,7 +161,7 @@ class MAWaterWorld:
         local_ratio=1.0,
         speed_features=True,
         max_cycles=500,
-        render_mode=None
+        render_mode=None,
     ):
         raise AssertionError(
             "Please do not use Waterworld, at its current state it is incredibly buggy and the soundness of the environment is not guaranteed."
@@ -741,7 +741,9 @@ class MAWaterWorld:
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         if not self.renderOn:

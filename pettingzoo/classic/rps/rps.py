@@ -108,7 +108,9 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         def offset(i, size, offset=0):
@@ -309,7 +311,8 @@ class raw_env(AECEnv):
 
         return (
             np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array" else None
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def observe(self, agent):

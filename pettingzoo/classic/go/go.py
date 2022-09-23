@@ -42,7 +42,9 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None):
+    def __init__(
+        self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None
+    ):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super().__init__()
@@ -218,7 +220,9 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         screen_width = 1026
@@ -309,7 +313,8 @@ class raw_env(AECEnv):
 
         return (
             np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array" else None
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def close(self):

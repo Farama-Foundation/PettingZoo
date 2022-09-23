@@ -33,8 +33,15 @@ class SimpleEnv(AECEnv):
         "is_parallelizable": True,
         "render_fps": 10,
     }
+
     def __init__(
-        self, scenario, world, max_cycles, render_mode=None, continuous_actions=False, local_ratio=None
+        self,
+        scenario,
+        world,
+        max_cycles,
+        render_mode=None,
+        continuous_actions=False,
+        local_ratio=None,
     ):
         super().__init__()
 
@@ -259,7 +266,9 @@ class SimpleEnv(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         self.enable_render()
@@ -269,7 +278,9 @@ class SimpleEnv(AECEnv):
             self.draw()
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if self.render_mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def draw(self):

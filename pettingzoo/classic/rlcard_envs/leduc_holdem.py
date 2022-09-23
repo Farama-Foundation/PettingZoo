@@ -30,7 +30,9 @@ class raw_env(RLCardBase):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN("You are calling render method without specifying any render mode.")
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
             return
 
         for player in self.possible_agents:
