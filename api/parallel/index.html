@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Core API" href="../../api/core/" /><link rel="prev" title="Testing Environments" href="../environment_tests/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/content/tutorials.html" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="PettingZoo Wrappers" href="../pz_wrappers/" /><link rel="prev" title="Core API" href="../core/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/api/parallel.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>Tutorials - PettingZoo Documentation</title>
+        <title>Parallel API - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -163,19 +163,19 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../environment_creation/">Environment Creation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorials</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../api/core/">Core API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/parallel/">Parallel API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/pz_wrappers/">PettingZoo Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/utils/">Utils</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../core/">Core API</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
 <ul>
@@ -290,26 +290,156 @@
         </div>
         <article role="main">
           
-          <section id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading">#</a></h1>
-<section id="recommended-start">
-<h2>Recommended start<a class="headerlink" href="#recommended-start" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b">Multi-Agent Deep Reinforcement Learning in 13 Lines of Code Using PettingZoo</a></p>
-<p>A very beginner-friendly introduction to learning the Pistonball environment using SuperSuit and Stable Baselines 3.</p>
-</section>
-<section id="other-tutorials">
-<h2>Other tutorials<a class="headerlink" href="#other-tutorials" title="Permalink to this heading">#</a></h2>
-<section id="learning-tic-tac-toe-for-beginners-in-pettingzoo">
-<h3>Learning Tic-Tac-Toe for Beginners in PettingZoo<a class="headerlink" href="#learning-tic-tac-toe-for-beginners-in-pettingzoo" title="Permalink to this heading">#</a></h3>
-<p><a class="reference external" href="https://nbviewer.jupyter.org/github/gsverhoeven/gt_rl_course/blob/master/week_8/marl_tictactoe.ipynb">https://nbviewer.jupyter.org/github/gsverhoeven/gt_rl_course/blob/master/week_8/marl_tictactoe.ipynb</a></p>
-<p><a class="reference external" href="https://nbviewer.jupyter.org/github/gsverhoeven/gt_rl_course/blob/master/week_8/marl_tictactoe_pt2.ipynb">https://nbviewer.jupyter.org/github/gsverhoeven/gt_rl_course/blob/master/week_8/marl_tictactoe_pt2.ipynb</a></p>
-<p>An example-based introduction to the PettingZoo API for beginners, that then shows users how to use tabular Q Learning for self play in the Tic Tac Toe environment.</p>
-</section>
-<section id="using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning">
-<h3>Using PettingZoo with RLlib for Multi-Agent Deep Reinforcement Learning<a class="headerlink" href="#using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning" title="Permalink to this heading">#</a></h3>
-<p><a class="reference external" href="https://towardsdatascience.com/using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning-5ff47c677abd">https://towardsdatascience.com/using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning-5ff47c677abd</a></p>
-<p>A tutorial on learning PettingZoo multi-agent environments with the RLlib reinforcement learning library, intended for those generally new to RLlib but with nontrivial experimence in reinforcement learning</p>
-</section>
+          <section id="parallel-api">
+<h1>Parallel API<a class="headerlink" href="#parallel-api" title="Permalink to this heading">#</a></h1>
+<p>In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via <code class="docutils literal notranslate"><span class="pre">&lt;game&gt;.parallel_env()</span></code>. This API is based around the paradigm of <em>Partially Observable Stochastic Games</em> (POSGs) and the details are similar to <a class="reference external" href="https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical">RLLib’s MultiAgent environment specification</a>, except we allow for different observation and action spaces between the agents.</p>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h2>
+<p>Environments can be interacted with as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v1</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+<span class="n">observations</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">max_cycles</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_cycles</span><span class="p">):</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">policy</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="n">agent</span><span class="p">],</span> <span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.utils.env.</span></span><span class="sig-name descname"><span class="pre">ParallelEnv</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv" title="Permalink to this definition">#</a></dt>
+<dd><p>Parallel environment class.</p>
+<p>It steps every live agent at once. If you are unsure if you
+have implemented a ParallelEnv correctly, try running the <cite>parallel_api_test</cite> in
+the Developer documentation on the website.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.agents">
+<span class="sig-name descname"><span class="pre">agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.agents" title="Permalink to this definition">#</a></dt>
+<dd><p>A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[AgentID]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.num_agents">
+<span class="sig-name descname"><span class="pre">num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.num_agents" title="Permalink to this definition">#</a></dt>
+<dd><p>The length of the agents list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.possible_agents">
+<span class="sig-name descname"><span class="pre">possible_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.possible_agents" title="Permalink to this definition">#</a></dt>
+<dd><p>A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[AgentID]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.max_num_agents">
+<span class="sig-name descname"><span class="pre">max_num_agents</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.max_num_agents" title="Permalink to this definition">#</a></dt>
+<dd><p>The length of the possible_agents list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.observation_spaces">
+<span class="sig-name descname"><span class="pre">observation_spaces</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.observation_spaces" title="Permalink to this definition">#</a></dt>
+<dd><p>A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[AgentID, gym.spaces.Space]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.action_spaces">
+<span class="sig-name descname"><span class="pre">action_spaces</span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.action_spaces" title="Permalink to this definition">#</a></dt>
+<dd><p>A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[AgentID, gym.spaces.Space]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ActionType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.step" title="Permalink to this definition">#</a></dt>
+<dd><p>Receives a dictionary of actions keyed by the agent name.</p>
+<p>Returns the observation dictionary, reward dictionary, terminated dictionary, truncated dictionary
+and info dictionary, where each dictionary is keyed by the agent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.reset" title="Permalink to this definition">#</a></dt>
+<dd><p>Resets the environment.</p>
+<p>And returns a dictionary of observations (keyed by the agent name)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.seed" title="Permalink to this definition">#</a></dt>
+<dd><p>Reseeds the environment (making it deterministic).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'human'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.render" title="Permalink to this definition">#</a></dt>
+<dd><p>Displays a rendered frame from the environment, if supported.</p>
+<p>Alternate render modes in the default environments are <cite>‘rgb_array’</cite>
+which returns a numpy array and is supported by all environments outside
+of classic, and <cite>‘ansi’</cite> which returns the strings printed
+(specific to classic environments).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.close" title="Permalink to this definition">#</a></dt>
+<dd><p>Closes the rendering window.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.state">
+<span class="sig-name descname"><span class="pre">state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.state" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the state.</p>
+<p>State returns a global view of the environment appropriate for
+centralized training decentralized execution methods like QMIX</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Space</span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the observation space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the observation_spaces dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.utils.env.ParallelEnv.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Space</span></span></span><a class="headerlink" href="#pettingzoo.utils.env.ParallelEnv.action_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the action space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the action_spaces dict</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -318,23 +448,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../api/core/">
+          <a class="next-page" href="../pz_wrappers/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Core API</div>
+                <div class="title">PettingZoo Wrappers</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../environment_tests/">
+          <a class="prev-page" href="../core/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Testing Environments</div>
+                <div class="title">Core API</div>
                 
               </div>
             </a>
@@ -370,13 +500,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Tutorials</a><ul>
-<li><a class="reference internal" href="#recommended-start">Recommended start</a></li>
-<li><a class="reference internal" href="#other-tutorials">Other tutorials</a><ul>
-<li><a class="reference internal" href="#learning-tic-tac-toe-for-beginners-in-pettingzoo">Learning Tic-Tac-Toe for Beginners in PettingZoo</a></li>
-<li><a class="reference internal" href="#using-pettingzoo-with-rllib-for-multi-agent-deep-reinforcement-learning">Using PettingZoo with RLlib for Multi-Agent Deep Reinforcement Learning</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Parallel API</a><ul>
+<li><a class="reference internal" href="#example-usage">Example Usage</a></li>
 </ul>
 </li>
 </ul>

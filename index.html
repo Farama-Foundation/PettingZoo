@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex/" /><link rel="search" title="Search" href="search/" /><link rel="next" title="API" href="content/api/" />
+<link rel="index" title="Index" href="genindex/" /><link rel="search" title="Search" href="search/" /><link rel="next" title="Basic Usage" href="content/basic_usage/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/index.html" />
 
     <link rel="shortcut icon" href="_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
@@ -162,13 +162,20 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="content/api/">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/wrappers/">Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/core/">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/parallel/">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
 <ul>
@@ -289,13 +296,14 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
-<br>
+<div class="toctree-wrapper compound">
+</div>
+<section id="pettingzoo-is-a-python-library-for-conducting-research-in-multi-agent-reinforcement-learning">
+<h1>PettingZoo is a Python library for conducting research in multi-agent reinforcement learning<a class="headerlink" href="#pettingzoo-is-a-python-library-for-conducting-research-in-multi-agent-reinforcement-learning" title="Permalink to this heading">#</a></h1>
 <figure class="align-default" id="warlods">
 <a class="reference internal image-reference" href="_images/atari_warlords.gif"><img alt="_images/atari_warlords.gif" src="_images/atari_warlords.gif" style="width: 160px;" /></a>
 </figure>
-<section id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h1>
-<p>Environments can be interacted with in a manner very similar to Gym:</p>
+<p><strong>Environments can be interacted with in a manner very similar to Gym:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
   <span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
   <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>

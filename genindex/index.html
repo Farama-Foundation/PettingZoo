@@ -160,13 +160,20 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../content/api/">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content/environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content/environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../content/wrappers/">Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/core/">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/parallel/">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
 <ul>
@@ -284,8 +291,184 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a></div>
 </section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.action_space">action_space() (pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.action_spaces">action_spaces (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.action_spaces">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv">AECEnv (class in pettingzoo.utils.env)</a>
+</li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.agent_selection">agent_selection (pettingzoo.utils.env.AECEnv attribute)</a>
+</li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.agents">agents (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.agents">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.close">close() (pettingzoo.utils.env.AECEnv method)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.close">(pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.dones">dones (pettingzoo.utils.env.AECEnv attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.infos">infos (pettingzoo.utils.env.AECEnv attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.max_num_agents">max_num_agents (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.max_num_agents">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.num_agents">num_agents (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.num_agents">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.observation_space">observation_space() (pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.observation_spaces">observation_spaces (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.observation_spaces">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.observe">observe() (pettingzoo.utils.env.AECEnv method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv">ParallelEnv (class in pettingzoo.utils.env)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.possible_agents">possible_agents (pettingzoo.utils.env.AECEnv attribute)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.possible_agents">(pettingzoo.utils.env.ParallelEnv attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.render">render() (pettingzoo.utils.env.AECEnv method)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.render">(pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.reset">reset() (pettingzoo.utils.env.AECEnv method)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.reset">(pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        </ul></li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.rewards">rewards (pettingzoo.utils.env.AECEnv attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.seed">seed() (pettingzoo.utils.env.AECEnv method)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.seed">(pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.state">state() (pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        <li><a href="../api/core/#pettingzoo.utils.env.AECEnv.step">step() (pettingzoo.utils.env.AECEnv method)</a>
+
+        <ul>
+          <li><a href="../api/parallel/#pettingzoo.utils.env.ParallelEnv.step">(pettingzoo.utils.env.ParallelEnv method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
 
         </article>
       </div>
