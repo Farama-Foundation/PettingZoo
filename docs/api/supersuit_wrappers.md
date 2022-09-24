@@ -1,8 +1,8 @@
 ---
-title: Wrappers
+title: Supersuit Wrappers
 ---
 
-# Wrappers
+# Supersuit Wrappers
 
 PettingZoo include wrappers via the SuperSuit companion package (`pip install supersuit`). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:
 
@@ -122,7 +122,7 @@ model = PPO('CnnPolicy', env, verbose=3, n_steps=16)
 model.learn(total_timesteps=2000000)
 ```
 
-* `vectorize_aec_env_v0(aec_env, num_envs, num_cpus=0)` creates an AEC Vector env (API documented in source [here](https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py)). `num_cpus=0` indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.  
+* `vectorize_aec_env_v0(aec_env, num_envs, num_cpus=0)` creates an AEC Vector env (API documented in source [here](https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py)). `num_cpus=0` indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.
 
 #### Note on multiprocessing
 Turning on multiprocessing runs each environment in it's own process. Turning this on is typically much slower for fast environments (like card games), but much faster for slow environments (like robotics simulations). Determining which case you are will require testing.

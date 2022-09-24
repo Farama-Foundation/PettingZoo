@@ -6,13 +6,23 @@ lastpage:
 
 ```{toctree}
 :hidden:
-:caption: Basic
+:caption: Introduction
 
-content/api
+content/basic_usage
 content/environment_creation
 content/environment_tests
-content/wrappers
 content/tutorials
+```
+
+```{toctree}
+:hidden:
+:caption: API
+
+api/core
+api/parallel
+api/pz_wrappers
+api/supersuit_wrappers
+api/utils
 ```
 
 ```{toctree}
@@ -37,16 +47,14 @@ Donate <https://farama.org/donations>
 
 ```
 
-<br>
+# PettingZoo is a Python library for conducting research in multi-agent reinforcement learning
 
 ```{figure} environments/atari/atari_warlords.gif
     :width: 160px
     :name: warlods
 ```
 
-## Usage
-
-Environments can be interacted with in a manner very similar to Gym:
+**Environments can be interacted with in a manner very similar to Gym:**
 
 ```python
   from pettingzoo.butterfly import knights_archers_zombies_v10
