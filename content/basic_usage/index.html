@@ -3,11 +3,11 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Environment Creation" href="../environment_creation/" /><link rel="prev" title="Usage" href="../../" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/content/api.html" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Environment Creation" href="../environment_creation/" /><link rel="prev" title="PettingZoo is a Python library for conducting research in multi-agent reinforcement learning" href="../../" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/content/basic_usage.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>API - PettingZoo Documentation</title>
+        <title>Basic Usage - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -162,13 +162,20 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Basic</span></p>
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../wrappers/">Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/core/">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/parallel/">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
 <ul>
@@ -283,8 +290,8 @@
         </div>
         <article role="main">
           
-          <section id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h1>
+          <section id="basic-usage">
+<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">#</a></h1>
 <section id="initializing-environments">
 <h2>Initializing Environments<a class="headerlink" href="#initializing-environments" title="Permalink to this heading">#</a></h2>
 <p>Using environments in PettingZoo is very similar to using them in OpenAI’s Gym. You initialize an environment via:</p>
@@ -372,110 +379,6 @@
 </pre></div>
 </div>
 </section>
-<section id="parallel-api">
-<h2>Parallel API<a class="headerlink" href="#parallel-api" title="Permalink to this heading">#</a></h2>
-<p>In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via <code class="docutils literal notranslate"><span class="pre">&lt;game&gt;.parallel_env()</span></code>. This API is based around the paradigm of <em>Partially Observable Stochastic Games</em> (POSGs) and the details are similar to <a class="reference external" href="https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical">RLLib’s MultiAgent environment specification</a>, except we allow for different observation and action spaces between the agents.</p>
-<section id="example-usage">
-<h3>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h3>
-<p>Environments can be interacted with as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v1</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
-<span class="n">observations</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="n">max_cycles</span> <span class="o">=</span> <span class="mi">500</span>
-<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_cycles</span><span class="p">):</span>
-    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">policy</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="n">agent</span><span class="p">],</span> <span class="n">agent</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="full-api">
-<h3>Full API<a class="headerlink" href="#full-api" title="Permalink to this heading">#</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">agents</span></code>, <code class="docutils literal notranslate"><span class="pre">num_agents</span></code>, <code class="docutils literal notranslate"><span class="pre">possible_agents</span></code>, <code class="docutils literal notranslate"><span class="pre">max_num_agents</span></code>, <code class="docutils literal notranslate"><span class="pre">observation_spaces</span></code>, and <code class="docutils literal notranslate"><span class="pre">action_spaces</span></code> attributes are available and are as described above in the main API description.</p>
-<p><code class="docutils literal notranslate"><span class="pre">render(mode='human')</span></code>, <code class="docutils literal notranslate"><span class="pre">seed(seed=None)</span></code>, <code class="docutils literal notranslate"><span class="pre">close()</span></code> are methods as described above in the main API description.</p>
-<p><code class="docutils literal notranslate"><span class="pre">step(actions)</span></code>: receives a dictionary of actions keyed by the agent name. Returns the observation dictionary, reward dictionary, done dictionary, and info dictionary, where each dictionary is keyed by the agent.</p>
-<p><code class="docutils literal notranslate"><span class="pre">reset()</span></code>: resets the environment and returns a dictionary of observations (keyed by the agent name)</p>
-</section>
-</section>
-<section id="supersuit">
-<h2>SuperSuit<a class="headerlink" href="#supersuit" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit">SuperSuit</a> contains nice wrappers to do common preprocessing actions, like frame stacking or changing RGB observations to greyscale. It also supports Gym environments, in addition to PettingZoo.</p>
-</section>
-<section id="utils">
-<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this heading">#</a></h2>
-<p>PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.</p>
-<section id="average-total-reward-util">
-<h3>Average Total Reward Util<a class="headerlink" href="#average-total-reward-util" title="Permalink to this heading">#</a></h3>
-<p>The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.</p>
-<p>This value is important for establishing the simplest possible baseline: the random policy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">average_total_reward</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">average_total_reward</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">max_episodes</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">10000000000</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Where <code class="docutils literal notranslate"><span class="pre">max_episodes</span></code> and <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> both limit the total number of evaluations (when the first is hit evaluation stops)</p>
-</section>
-<section id="manual-control">
-<h3>Manual Control<a class="headerlink" href="#manual-control" title="Permalink to this heading">#</a></h3>
-<p>Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="n">knights_archers_zombies_v10</span>
-<span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">manual_control</span><span class="p">(</span><span class="o">&lt;</span><span class="n">environment</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Environments say if they support this functionality in their documentation, and what the specific controls are.</p>
-</section>
-<section id="random-demo">
-<h3>Random Demo<a class="headerlink" href="#random-demo" title="Permalink to this heading">#</a></h3>
-<p>You can also easily get a quick impression of them by watching a random policy control all the actions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">random_demo</span>
-<span class="n">random_demo</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="playing-alongside-trained-policies">
-<h3>Playing Alongside Trained Policies<a class="headerlink" href="#playing-alongside-trained-policies" title="Permalink to this heading">#</a></h3>
-<p>Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.
-Some games support this via:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-<span class="n">manual_policy</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">ManualPolicy</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
-    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">manual_policy</span><span class="o">.</span><span class="n">agent</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">manual_policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
-        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">ManualPolicy</span></code> accepts several default arguments:</p>
-<p><code class="docutils literal notranslate"><span class="pre">agent_id</span></code>: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use <code class="docutils literal notranslate"><span class="pre">manual_policy.availabla_agents</span></code> to query what agents are available and what are their indices.</p>
-<p><code class="docutils literal notranslate"><span class="pre">show_obs</span></code>: Is a boolean which shows the observation from the currently selected agent, if available.</p>
-</section>
-<section id="observation-saving">
-<h3>Observation Saving<a class="headerlink" href="#observation-saving" title="Permalink to this heading">#</a></h3>
-<p>If the agents in a game make observations that are images then the observations can be saved to an image file. This function takes in the environment, along with a specified agent. If no <code class="docutils literal notranslate"><span class="pre">agent</span></code> is specified, then the current selected agent for the environment is chosen. If <code class="docutils literal notranslate"><span class="pre">all_agents</span></code> is passed in as <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the observations of all agents in the environment is saved. By default, the images are saved to the current working directory in a folder matching the environment name. The saved image will match the name of the observing agent. If <code class="docutils literal notranslate"><span class="pre">save_dir</span></code> is passed in, a new folder is created where images will be saved to. This function can be called during training/evaluation if desired, which is why environments have to be reset before it can be used.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">save_observation</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="n">save_observation</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">all_agents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
-</pre></div>
-</div>
-</section>
-</section>
 </section>
 
         </article>
@@ -535,7 +438,7 @@ Some games support this via:</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#">Basic Usage</a><ul>
 <li><a class="reference internal" href="#initializing-environments">Initializing Environments</a></li>
 <li><a class="reference internal" href="#interacting-with-environments">Interacting With Environments</a></li>
 <li><a class="reference internal" href="#additional-environment-api">Additional Environment API</a><ul>
@@ -550,20 +453,6 @@ Some games support this via:</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#raw-environments">Raw Environments</a></li>
-<li><a class="reference internal" href="#parallel-api">Parallel API</a><ul>
-<li><a class="reference internal" href="#example-usage">Example Usage</a></li>
-<li><a class="reference internal" href="#full-api">Full API</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#supersuit">SuperSuit</a></li>
-<li><a class="reference internal" href="#utils">Utils</a><ul>
-<li><a class="reference internal" href="#average-total-reward-util">Average Total Reward Util</a></li>
-<li><a class="reference internal" href="#manual-control">Manual Control</a></li>
-<li><a class="reference internal" href="#random-demo">Random Demo</a></li>
-<li><a class="reference internal" href="#playing-alongside-trained-policies">Playing Alongside Trained Policies</a></li>
-<li><a class="reference internal" href="#observation-saving">Observation Saving</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
