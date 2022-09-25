@@ -198,6 +198,9 @@ class raw_env(AECEnv):
         )
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def reset(self, seed=None, return_info=False, options=None):
         self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)

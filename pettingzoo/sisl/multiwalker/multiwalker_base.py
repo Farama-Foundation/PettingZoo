@@ -525,6 +525,9 @@ class MultiWalkerEnv:
             self.last_dones = done
             self.frames = self.frames + 1
 
+        if self.render_mode == "human":
+            self.render()
+
     def get_last_rewards(self):
         return dict(
             zip(

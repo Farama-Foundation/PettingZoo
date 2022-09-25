@@ -285,4 +285,7 @@ class magent_parallel_env(ParallelEnv):
             for agent in self.agents
             if not (terminations[agent] or truncations[agent])
         ]
+
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos

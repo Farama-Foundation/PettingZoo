@@ -150,6 +150,9 @@ class raw_env(AECEnv):
             self._agent_selector.next()
         )  # Give turn to the next agent
 
+        if self.render_mode == "human":
+            self.render()
+
     def render(self):
         if self.render_mode is None:
             gym.logger.WARN(

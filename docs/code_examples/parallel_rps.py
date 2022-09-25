@@ -166,4 +166,6 @@ class parallel_env(ParallelEnv):
         if env_truncation:
             self.agents = []
 
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos

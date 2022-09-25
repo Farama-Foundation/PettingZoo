@@ -684,6 +684,8 @@ class MAWaterWorld:
 
             self.frames += 1
 
+        if self.render_mode == "human":
+            self.render()
         return self.observe(agent_id)
 
     def observe(self, agent):

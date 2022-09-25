@@ -233,6 +233,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not terminations[agent]]
+
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos
 
     def render(self):

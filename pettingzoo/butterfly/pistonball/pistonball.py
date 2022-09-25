@@ -597,5 +597,8 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
 
 # Game art created by J K Terry

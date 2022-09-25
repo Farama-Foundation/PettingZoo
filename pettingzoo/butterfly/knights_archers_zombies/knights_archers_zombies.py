@@ -587,6 +587,9 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
         self._deads_step_first()
 
+        if self.render_mode == "human":
+            self.render()
+
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
         # self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))

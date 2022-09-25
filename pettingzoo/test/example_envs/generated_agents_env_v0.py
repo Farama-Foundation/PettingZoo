@@ -118,6 +118,8 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
         self._deads_step_first()
+        if self.render_mode == "human":
+            self.render()
 
     def render(self):
         if self.render_mode is None:

@@ -140,6 +140,9 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def reset(self, seed=None, return_info=False, options=None):
         # reset environment
         self.board = [0] * (6 * 7)

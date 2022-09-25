@@ -276,6 +276,9 @@ class Pursuit:
             self.local_ratio * local_val + (1 - self.local_ratio) * global_val
         )
 
+        if self.render_mode == "human":
+            self.render()
+
     def draw_model_state(self):
         # -1 is building pixel flag
         x_len, y_len = self.model_state[0].shape

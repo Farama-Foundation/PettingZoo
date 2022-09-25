@@ -212,3 +212,6 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         # Adds .rewards to ._cumulative_rewards
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()

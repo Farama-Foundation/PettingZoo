@@ -108,6 +108,9 @@ class parallel_env(ParallelEnv):
             for agent in self.agents
             if not (all_truncations[agent] or all_terminations[agent])
         ]
+
+        if self.render_mode == "human":
+            self.render()
         return all_observes, all_rewards, all_terminations, all_truncations, all_infos
 
     def render(self):
