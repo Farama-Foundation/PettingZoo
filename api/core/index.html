@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Parallel API" href="../parallel/" /><link rel="prev" title="Tutorials" href="../../content/tutorials/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/api/core.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
         <title>Core API - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -138,7 +138,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -283,7 +283,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -505,8 +505,45 @@ or any other resources that should be released.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Core API</a><ul>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv"><code class="docutils literal notranslate"><span class="pre">AECEnv</span></code></a><ul>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.agents"><code class="docutils literal notranslate"><span class="pre">AECEnv.agents</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.num_agents"><code class="docutils literal notranslate"><span class="pre">AECEnv.num_agents</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.possible_agents"><code class="docutils literal notranslate"><span class="pre">AECEnv.possible_agents</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.max_num_agents"><code class="docutils literal notranslate"><span class="pre">AECEnv.max_num_agents</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.agent_selection"><code class="docutils literal notranslate"><span class="pre">AECEnv.agent_selection</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.dones"><code class="docutils literal notranslate"><span class="pre">AECEnv.dones</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.rewards"><code class="docutils literal notranslate"><span class="pre">AECEnv.rewards</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.infos"><code class="docutils literal notranslate"><span class="pre">AECEnv.infos</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.observation_spaces"><code class="docutils literal notranslate"><span class="pre">AECEnv.observation_spaces</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.action_spaces"><code class="docutils literal notranslate"><span class="pre">AECEnv.action_spaces</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.step"><code class="docutils literal notranslate"><span class="pre">AECEnv.step()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.reset"><code class="docutils literal notranslate"><span class="pre">AECEnv.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.observe"><code class="docutils literal notranslate"><span class="pre">AECEnv.observe()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.render"><code class="docutils literal notranslate"><span class="pre">AECEnv.render()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.seed"><code class="docutils literal notranslate"><span class="pre">AECEnv.seed()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv.close"><code class="docutils literal notranslate"><span class="pre">AECEnv.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -516,6 +553,7 @@ or any other resources that should be released.</p>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     </body>
 </html>
