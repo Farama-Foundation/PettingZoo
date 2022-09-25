@@ -50,7 +50,7 @@ Donate <https://farama.org/donations>
 # PettingZoo is a Python library for conducting research in multi-agent reinforcement learning
 
 ```{figure} environments/atari/atari_warlords.gif
-    :width: 160px
+    :width: 230px
     :name: warlods
 ```
 
