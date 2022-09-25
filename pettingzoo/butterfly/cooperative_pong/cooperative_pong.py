@@ -292,6 +292,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.seed()
 
+        self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)

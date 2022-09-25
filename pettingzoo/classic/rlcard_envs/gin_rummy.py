@@ -13,8 +13,13 @@ from .rlcard_base import RLCardBase
 
 
 def env(**kwargs):
-    env = raw_env(**kwargs)
-    env = wrappers.CaptureStdoutWrapper(env)
+    render_mode = kwargs.get("render_mode")
+    if render_mode == "ansi":
+        kwargs["render_mode"] = "human"
+        env = raw_env(**kwargs)
+        env = wrappers.CaptureStdoutWrapper(env)
+    else:
+        env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)

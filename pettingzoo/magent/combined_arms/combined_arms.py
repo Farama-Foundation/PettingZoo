@@ -24,12 +24,13 @@ def parallel_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    render_mode=None,
     **reward_args
 ):
     env_reward_args = dict(**default_reward_args)
     env_reward_args.update(reward_args)
     return _parallel_env(
-        map_size, minimap_mode, env_reward_args, max_cycles, extra_features
+        map_size, minimap_mode, env_reward_args, max_cycles, extra_features, render_mode
     )
 
 
@@ -38,10 +39,18 @@ def raw_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    render_mode=None,
     **reward_args
 ):
     return parallel_to_aec_wrapper(
-        parallel_env(map_size, max_cycles, minimap_mode, extra_features, **reward_args)
+        parallel_env(
+            map_size,
+            max_cycles,
+            minimap_mode,
+            extra_features,
+            render_mode=render_mode,
+            **reward_args
+        )
     )
 
 
@@ -233,7 +242,15 @@ class _parallel_env(magent_parallel_env, EzPickle):
         "render_fps": 5,
     }
 
-    def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
+    def __init__(
+        self,
+        map_size,
+        minimap_mode,
+        reward_args,
+        max_cycles,
+        extra_features,
+        render_mode=None,
+    ):
         EzPickle.__init__(
             self, map_size, minimap_mode, reward_args, max_cycles, extra_features
         )
@@ -254,6 +271,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
             reward_range,
             minimap_mode,
             extra_features,
+            render_mode,
         )
 
     def generate_map(self):

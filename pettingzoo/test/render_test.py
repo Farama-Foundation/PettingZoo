@@ -25,7 +25,7 @@ def collect_render_results(env):
 
 
 def render_test(env_fn, custom_tests={}):
-    env = env_fn()
+    env = env_fn(render_mode="human")
     render_modes = env.metadata.get("render_modes")[:]
     assert (
         render_modes is not None

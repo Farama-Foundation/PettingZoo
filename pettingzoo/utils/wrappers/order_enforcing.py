@@ -26,6 +26,8 @@ class OrderEnforcingWrapper(BaseWrapper):
         """
         if value == "unwrapped":
             return self.env.unwrapped
+        elif value == "render_mode":
+            return self.env.render_mode
         elif value == "possible_agents":
             EnvLogger.error_possible_agents_attribute_missing("possible_agents")
         elif value == "observation_spaces":

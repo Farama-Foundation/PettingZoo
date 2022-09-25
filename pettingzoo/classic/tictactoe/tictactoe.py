@@ -8,9 +8,10 @@ from pettingzoo.utils import agent_selector, wrappers
 from .board import Board
 
 
-def env():
-    env = raw_env()
-    env = wrappers.CaptureStdoutWrapper(env)
+def env(render_mode=None):
+    env = raw_env(render_mode=render_mode if render_mode != "ansi" else "human")
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)

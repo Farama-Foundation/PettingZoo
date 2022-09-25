@@ -190,6 +190,8 @@ class parallel_to_aec_wrapper(AECEnv):
         self.metadata = {**parallel_env.metadata}
         self.metadata["is_parallelizable"] = True
 
+        self.render_mode = self.env.render_mode
+
         try:
             self.possible_agents = parallel_env.possible_agents
         except AttributeError:

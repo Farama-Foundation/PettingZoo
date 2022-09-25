@@ -34,8 +34,14 @@ class HanabiScorePenalty:
 
 
 def env(**kwargs):
-    env = r_env = raw_env(**kwargs)
-    env = wrappers.CaptureStdoutWrapper(env)
+    render_mode = kwargs.get("render_mode")
+    if render_mode == "ansi":
+        kwargs["render_mode"] = "human"
+        env = r_env = raw_env(**kwargs)
+        env = wrappers.CaptureStdoutWrapper(env)
+    else:
+        env = r_env = raw_env(**kwargs)
+
     env = wrappers.TerminateIllegalWrapper(
         env, illegal_reward=HanabiScorePenalty(r_env)
     )

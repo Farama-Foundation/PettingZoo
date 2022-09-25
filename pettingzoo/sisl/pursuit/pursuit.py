@@ -33,6 +33,7 @@ class raw_env(AECEnv, EzPickle):
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
+        self.render_mode = kwargs.get("render_mode")
         pygame.init()
         self.agents = ["pursuer_" + str(a) for a in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]

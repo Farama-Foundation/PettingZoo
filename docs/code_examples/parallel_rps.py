@@ -25,15 +25,16 @@ REWARD_MAP = {
 }
 
 
-def env():
+def env(render_mode=None):
     """
     The env function often wraps the environment in wrappers by default.
     You can find full documentation for these methods
     elsewhere in the developer documentation.
     """
-    env = raw_env()
+    env = raw_env(render_mode=render_mode if render_mode != "ansi" else "human")
     # This wrapper is only for environments which print results to the terminal
-    env = wrappers.CaptureStdoutWrapper(env)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
@@ -42,12 +43,12 @@ def env():
     return env
 
 
-def raw_env():
+def raw_env(render_mode=None):
     """
     To support the AEC API, the raw_env() function just uses the from_parallel
     function to convert from a ParallelEnv to an AEC env
     """
-    env = parallel_env()
+    env = parallel_env(render_mode=render_mode)
     env = parallel_to_aec(env)
     return env
 

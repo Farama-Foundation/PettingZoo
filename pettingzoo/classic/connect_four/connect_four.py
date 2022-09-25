@@ -22,8 +22,8 @@ def get_image(path):
     return sfc
 
 
-def env():
-    env = raw_env()
+def env(render_mode=None):
+    env = raw_env(render_mode=render_mode)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
