@@ -52,7 +52,7 @@ env.reset()
 manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
 for agent in env.agent_iter():
-    observation, reward, done, info = env.last()
+    observation, reward, termination, truncation, info = env.last()
 
     if agent == manual_policy.agent:
         action = manual_policy(observation, agent)
@@ -64,7 +64,7 @@ for agent in env.agent_iter():
     env.render()
     time.sleep(0.05)
 
-    if done:
+    if termination or truncation:
         env.reset()
 ```
 

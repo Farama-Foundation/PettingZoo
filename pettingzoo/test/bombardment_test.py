@@ -10,7 +10,7 @@ def bombardment_test(env, cycles=10000):
     print("Starting bombardment test")
 
     env.reset()
-    prev_observe, _, _, _ = env.last()
+    prev_observe, *_ = env.last()
     observation_0 = copy(prev_observe)
     for i in range(cycles):
         if i == cycles / 2:
@@ -32,5 +32,5 @@ def bombardment_test(env, cycles=10000):
             test_observation(prev_observe, observation_0)
             prev_observe = next_observe
         env.reset()
-        prev_observe, _, _, _ = env.last()
+        prev_observe, *_ = env.last()
     print("Passed bombardment test")

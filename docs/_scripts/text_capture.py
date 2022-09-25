@@ -24,12 +24,12 @@ for name, module in all_environments.items():
     for step in range(25):
         # for agent in env.agent_iter:  # step through every agent once with observe=True
         agent = env.agent_selection
-        if env.dones[agent]:
+        if env.terminations[agent] or env.truncations[agent]:
             env.reset()
         agent = env.agent_selection
 
-        obs, rew, done, info = env.last()
-        if done:
+        obs, rew, termination, truncation, info = env.last()
+        if termination or truncation:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
             action = random.choice(np.flatnonzero(obs["action_mask"]))

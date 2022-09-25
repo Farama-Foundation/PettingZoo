@@ -13,7 +13,6 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
     """
     total_reward = 0
     total_steps = 0
-    done = False
     num_episodes = 0
 
     for episode in range(max_episodes):
@@ -22,10 +21,10 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
 
         env.reset()
         for agent in env.agent_iter():
-            obs, reward, done, _ = env.last(observe=False)
+            obs, reward, termination, truncation, _ = env.last(observe=False)
             total_reward += reward
             total_steps += 1
-            if done:
+            if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = random.choice(np.flatnonzero(obs["action_mask"]))

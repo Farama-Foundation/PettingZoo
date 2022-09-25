@@ -62,7 +62,7 @@ if __name__ == "__main__":
     for agent in env.agent_iter():
         clock.tick(env.metadata["render_fps"])
 
-        observation, reward, done, info = env.last()
+        observation, reward, termination, truncation, info = env.last()
 
         if agent == manual_policy.agent:
             action = manual_policy(observation, agent)
@@ -77,5 +77,5 @@ if __name__ == "__main__":
 
         env.render()
 
-        if done:
+        if termination or truncation:
             env.reset()
