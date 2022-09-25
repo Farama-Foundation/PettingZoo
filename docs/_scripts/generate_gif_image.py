@@ -18,8 +18,8 @@ def generate_data(nameline, module):
         for agent in env.agent_iter(
             env.num_agents
         ):  # step through every agent once with observe=True
-            obs, rew, done, info = env.last()
-            if done:
+            obs, rew, termination, truncation, info = env.last()
+            if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = random.choice(np.flatnonzero(obs["action_mask"]))
@@ -27,7 +27,7 @@ def generate_data(nameline, module):
                 action = env.action_spaces[agent].sample()
             env.step(action)
 
-        if env.dones[agent]:
+        if env.terminations[agent] or env.truncations[agent]:
             env.reset()
 
         ndarray = env.render(mode="rgb_array")

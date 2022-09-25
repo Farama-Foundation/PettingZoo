@@ -73,9 +73,9 @@ i = 0
 env.reset()
 
 for agent in env.agent_iter():
-    observation, reward, done, info = env.last()
+    observation, reward, termination, truncation, info = env.last()
     reward_sum += reward
-    if done:
+    if termination or truncation:
         action = None
     else:
         action, _, _ = PPOagent.get_policy("policy_0").compute_single_action(
