@@ -16,6 +16,7 @@
 
 # -- Project information -----------------------------------------------------
 from typing import Any, Dict
+
 import pettingzoo
 
 project = "PettingZoo"
@@ -77,5 +78,4 @@ html_context["github_version"] = "master"
 html_context["slug"] = "pettingzoo"
 
 html_static_path = ["_static"]
-html_css_files = [
-]
+html_css_files = []
