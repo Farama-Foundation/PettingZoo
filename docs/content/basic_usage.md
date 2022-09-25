@@ -26,7 +26,7 @@ Environments can be interacted with using a similar interface to Gym:
 ``` python
 env.reset()
 for agent in env.agent_iter():
-    observation, reward, done, info = env.last()
+    observation, reward, termination, truncation, info = env.last()
     action = policy(observation, agent)
     env.step(action)
 ```

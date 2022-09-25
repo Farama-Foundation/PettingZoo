@@ -81,8 +81,8 @@ def main():
     for i in range(NUM_RESETS):
         env.reset()
         for agent in env.agent_iter():
-            obs, rew, done, info = env.last()
-            act = policy(obs) if not done else None
+            obs, rew, termination, truncation, info = env.last()
+            act = policy(obs) if not (termination or truncation) else None
             env.step(act)
             total_reward += rew
             i += 1

@@ -391,10 +391,10 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     assert env.num_agents > 0, "An environment should have a positive number of agents"
 
     env.reset()
-    observation_0, _, _, _, _ = env.last()
+    observation_0, *_ = env.last()
     test_observation(observation_0, observation_0)
 
-    non_observe, _, _, _, _ = env.last(observe=False)
+    non_observe, *_ = env.last(observe=False)
     assert non_observe is None, "last must return a None when observe=False"
 
     progress_report("Finished test_observation")
