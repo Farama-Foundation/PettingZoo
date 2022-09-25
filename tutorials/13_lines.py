@@ -52,7 +52,11 @@ def main():
     env.reset()
     for agent in env.agent_iter():
         obs, reward, termination, truncation, info = env.last()
-        act = model.predict(obs, deterministic=True)[0] if not (termination or truncation) else None
+        act = (
+            model.predict(obs, deterministic=True)[0]
+            if not (termination or truncation)
+            else None
+        )
         env.step(act)
         env.render()
 
