@@ -67,10 +67,10 @@ i = 0
 env.reset()
 
 for agent in env.agent_iter():
-    observation, reward, done, info = env.last()
+    observation, reward, termination, truncation, info = env.last()
     obs = observation["observation"]
     reward_sums[agent] += reward
-    if done:
+    if termination or truncation:
         action = None
     else:
         print(DQNAgent.get_policy(agent))
