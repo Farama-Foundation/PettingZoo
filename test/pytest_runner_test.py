@@ -34,7 +34,7 @@ def test_module(name, env_module):
         max_cycles_test(env_module)
 
     if ("butterfly/" in name) or ("mpe/" in name) or ("magent/" in name):
-        state_test(_env, env_module.parallel_env())
+        state_test(env_module.env(), env_module.parallel_env())
 
     # recreated_env = pickle.loads(pickle.dumps(_env))
     # recreated_env.seed(42)
