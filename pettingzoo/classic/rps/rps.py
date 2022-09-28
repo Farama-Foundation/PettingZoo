@@ -239,15 +239,14 @@ class raw_env(AECEnv):
         screen_height = 350
         screen_width = int(screen_height * 5 / 14)
 
-        if self.screen is None:
-            if self.render_mode == "human":
+        if self.render_mode == "human":
+            if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            else:
-                pygame.font.init()
-                self.screen = pygame.Surface((screen_width, screen_height))
-        if self.render_mode == "human":
             pygame.event.get()
+        elif self.screen is None:
+            pygame.font.init()
+            self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and all of the necessary images
         paper = get_image(os.path.join("img", "Paper.png"))

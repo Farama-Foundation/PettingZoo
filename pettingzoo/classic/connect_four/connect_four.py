@@ -231,14 +231,13 @@ class raw_env(AECEnv):
 
         screen_width = 1287
         screen_height = 1118
-        if self.screen is None:
-            if self.render_mode == "human":
+        if self.render_mode == "human":
+            if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            else:
-                self.screen = pygame.Surface((screen_width, screen_height))
-        if self.render_mode == "human":
             pygame.event.get()
+        elif self.screen is None:
+            self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and scale all of the necessary images
         tile_size = (screen_width * (91 / 99)) / 7

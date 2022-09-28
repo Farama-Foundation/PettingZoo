@@ -200,15 +200,15 @@ class raw_env(RLCardBase):
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
 
-        if self.screen is None:
-            if self.render_mode == "human":
+        if self.render_mode == "human":
+            if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            else:
-                pygame.font.init()
-                self.screen = pygame.Surface((screen_width, screen_height))
-        if self.render_mode == "human":
             pygame.event.get()
+        elif self.screen is None:
+            pygame.font.init()
+            self.screen = pygame.Surface((screen_width, screen_height))
+
 
         # Setup dimensions for card size and setup for colors
         tile_size = screen_height * 2 / 10
