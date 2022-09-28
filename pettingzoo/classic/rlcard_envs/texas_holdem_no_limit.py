@@ -209,7 +209,6 @@ class raw_env(RLCardBase):
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))
 
-
         # Setup dimensions for card size and setup for colors
         tile_size = screen_height * 2 / 10
 
