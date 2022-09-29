@@ -84,7 +84,8 @@ from .board import Board
 
 
 def env(render_mode=None):
-    env = raw_env(render_mode=render_mode if render_mode != "ansi" else "human")
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
     if render_mode == "ansi":
         env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)

@@ -31,7 +31,8 @@ def env(render_mode=None):
     You can find full documentation for these methods
     elsewhere in the developer documentation.
     """
-    env = raw_env(render_mode=render_mode if render_mode != "ansi" else "human")
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
     # This wrapper is only for environments which print results to the terminal
     if render_mode == "ansi":
         env = wrappers.CaptureStdoutWrapper(env)
