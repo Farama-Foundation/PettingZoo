@@ -200,13 +200,13 @@ def env(**kwargs):
     render_mode = kwargs.get("render_mode")
     if render_mode == "ansi":
         kwargs["render_mode"] = "human"
-        env = r_env = raw_env(**kwargs)
+        env = raw_env(**kwargs)
         env = wrappers.CaptureStdoutWrapper(env)
     else:
-        env = r_env = raw_env(**kwargs)
+        env = raw_env(**kwargs)
 
     env = wrappers.TerminateIllegalWrapper(
-        env, illegal_reward=HanabiScorePenalty(r_env)
+        env, illegal_reward=HanabiScorePenalty(env)
     )
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
