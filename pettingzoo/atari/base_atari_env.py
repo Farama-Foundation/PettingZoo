@@ -271,7 +271,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             self._screen.blit(myImage, (0, 0))
 
             pygame.display.flip()
-        else:  # self.render_mode == "rgb_array":
+        elif self.render_mode == "rgb_array":
             return image
 
     def close(self):
