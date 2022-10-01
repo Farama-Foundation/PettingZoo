@@ -2,14 +2,14 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Environment Creation" href="../environment_creation/" /><link rel="prev" title="PettingZoo is a Python library for conducting research in multi-agent reinforcement learning" href="../../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/content/basic_usage.html" />
 
-    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
+    <link rel="shortcut icon" href="../../_static/favicon.png"/><meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
         <title>Basic Usage - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
     
@@ -337,7 +337,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">rewards</span></code>: A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. <code class="docutils literal notranslate"><span class="pre">last()</span></code> does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like:</p>
 <p><code class="docutils literal notranslate"><span class="pre">{0:[first</span> <span class="pre">agent's</span> <span class="pre">reward],</span> <span class="pre">1:[second</span> <span class="pre">agent's</span> <span class="pre">reward]</span> <span class="pre">...</span> <span class="pre">n-1:[nth</span> <span class="pre">agent's</span> <span class="pre">reward]}</span></code></p>
 <p><code class="docutils literal notranslate"><span class="pre">seed(seed=None)</span></code>: Reseeds the environment. <code class="docutils literal notranslate"><span class="pre">reset()</span></code> must be called after <code class="docutils literal notranslate"><span class="pre">seed()</span></code>, and before <code class="docutils literal notranslate"><span class="pre">step()</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">render(mode='human')</span></code>: Displays a rendered frame from the environment, if supported. Alternate render modes in the default environments are <code class="docutils literal notranslate"><span class="pre">'rgb_array'</span></code> which returns a numpy array and is supported by all environments outside of classic, and <code class="docutils literal notranslate"><span class="pre">'ansi'</span></code> which returns the strings printed (specific to classic environments).</p>
+<p><code class="docutils literal notranslate"><span class="pre">render()</span></code>: Returns a rendered frame from the environment using render mode specified at initialization. In the case render mode is<code class="docutils literal notranslate"><span class="pre">'rgb_array'</span></code>, returns a numpy array, while with <code class="docutils literal notranslate"><span class="pre">'ansi'</span></code> returns the strings printed. There is no need to call <code class="docutils literal notranslate"><span class="pre">render()</span></code> with <code class="docutils literal notranslate"><span class="pre">human</span></code> mode.</p>
 <p><code class="docutils literal notranslate"><span class="pre">close()</span></code>: Closes the rendering window.</p>
 <section id="optional-api-components">
 <h3>Optional API Components<a class="headerlink" href="#optional-api-components" title="Permalink to this heading">#</a></h3>
