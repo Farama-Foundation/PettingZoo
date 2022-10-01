@@ -205,9 +205,7 @@ def env(**kwargs):
     else:
         env = raw_env(**kwargs)
 
-    env = wrappers.TerminateIllegalWrapper(
-        env, illegal_reward=HanabiScorePenalty(env)
-    )
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
