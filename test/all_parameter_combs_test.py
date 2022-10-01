@@ -253,7 +253,7 @@ def test_module(name, env_module, kwargs):
     if "atari/" not in name:
         seed_test(lambda: env_module.env(**kwargs), 50)
 
-    render_test(lambda: env_module.env(**kwargs))
+    render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
     if hasattr(env_module, "parallel_env"):
         par_env = env_module.parallel_env(**kwargs)
     try:

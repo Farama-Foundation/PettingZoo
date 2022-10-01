@@ -147,6 +147,7 @@ class CooperativePong:
         bounce_randomness=False,
         max_reward=100,
         off_screen_penalty=-10,
+        render_mode=None,
         render_ratio=2,
         kernel_window_length=2,
     ):
@@ -184,6 +185,7 @@ class CooperativePong:
             low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8
         )
 
+        self.render_mode = render_mode
         self.renderOn = False
 
         # set speed
@@ -258,16 +260,24 @@ class CooperativePong:
         self.renderOn = True
         self.draw()
 
-    def render(self, mode="human"):
-        if not self.renderOn and mode == "human":
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        if not self.renderOn and self.render_mode == "human":
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def observe(self):
@@ -357,6 +367,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.seed()
 
+        self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -410,8 +421,8 @@ class raw_env(AECEnv, EzPickle):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def step(self, action):
         if (

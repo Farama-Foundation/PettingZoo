@@ -1,6 +1,7 @@
 from collections import defaultdict
 from typing import Optional
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -29,6 +30,7 @@ class Pursuit:
         catch_reward: float = 5.0,
         urgency_reward: float = -0.1,
         surround: bool = True,
+        render_mode=None,
         constraint_window: float = 1.0,
     ):
         """In evade pursuit a set of pursuers must 'tag' a set of evaders.
@@ -142,6 +144,7 @@ class Pursuit:
 
         self.surround = surround
 
+        self.render_mode = render_mode
         self.constraint_window = constraint_window
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
@@ -273,6 +276,9 @@ class Pursuit:
             self.local_ratio * local_val + (1 - self.local_ratio) * global_val
         )
 
+        if self.render_mode == "human":
+            self.render()
+
     def draw_model_state(self):
         # -1 is building pixel flag
         x_len, y_len = self.model_state[0].shape
@@ -379,9 +385,15 @@ class Pursuit:
 
             self.screen.blit(text, (pos_x, pos_y - self.pixel_scale // 2))
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         if not self.renderOn:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.display.init()
                 self.screen = pygame.display.set_mode(
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)
@@ -403,11 +415,11 @@ class Pursuit:
         observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
         del observation
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
             np.transpose(new_observation, axes=(1, 0, 2))
-            if mode == "rgb_array"
+            if self.render_mode == "rgb_array"
             else None
         )
 

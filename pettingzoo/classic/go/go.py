@@ -112,7 +112,9 @@ For example, you would use action `4` to place a stone on the board at the (0,3)
 """
 
 import os
+from typing import Optional
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -153,7 +155,9 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, board_size: int = 19, komi: float = 7.5):
+    def __init__(
+        self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None
+    ):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super().__init__()
@@ -193,6 +197,8 @@ class raw_env(AECEnv):
         self._agent_selector = agent_selector(self.agents)
 
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
+
+        self.render_mode = render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -305,6 +311,9 @@ class raw_env(AECEnv):
         )
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def reset(self, seed=None, return_info=False, options=None):
         self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)
@@ -325,17 +334,23 @@ class raw_env(AECEnv):
         self._last_obs = self.observe(self.agents[0])
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         screen_width = 1026
         screen_height = 1026
 
         if self.screen is None:
-            if mode == "human":
+            if self.render_mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
             else:
                 self.screen = pygame.Surface((screen_width, screen_height))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.event.get()
 
         size = go_base.N
@@ -407,13 +422,15 @@ class raw_env(AECEnv):
                         ((i * (tile_size) + offset), int(j) * (tile_size) + offset),
                     )
 
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def close(self):

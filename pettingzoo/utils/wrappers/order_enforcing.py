@@ -26,6 +26,8 @@ class OrderEnforcingWrapper(BaseWrapper):
         """
         if value == "unwrapped":
             return self.env.unwrapped
+        elif value == "render_mode":
+            return self.env.render_mode
         elif value == "possible_agents":
             EnvLogger.error_possible_agents_attribute_missing("possible_agents")
         elif value == "observation_spaces":
@@ -55,12 +57,11 @@ class OrderEnforcingWrapper(BaseWrapper):
                 f"'{type(self).__name__}' object has no attribute '{value}'"
             )
 
-    def render(self, mode="human"):
+    def render(self):
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
-        assert mode in self.metadata["render_modes"]
         self._has_rendered = True
-        return super().render(mode)
+        return super().render()
 
     def step(self, action):
         if not self._has_reset:

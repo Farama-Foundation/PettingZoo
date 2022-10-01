@@ -40,8 +40,8 @@ class BaseParallelWraper(ParallelEnv):
         self.agents = self.env.agents
         return res
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def close(self):
         return self.env.close()

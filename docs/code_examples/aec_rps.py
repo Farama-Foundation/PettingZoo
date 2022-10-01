@@ -1,5 +1,6 @@
 import functools
 
+import gym
 import numpy as np
 from gym.spaces import Discrete
 
@@ -25,15 +26,17 @@ REWARD_MAP = {
 }
 
 
-def env():
+def env(render_mode=None):
     """
     The env function often wraps the environment in wrappers by default.
     You can find full documentation for these methods
     elsewhere in the developer documentation.
     """
-    env = raw_env()
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
     # This wrapper is only for environments which print results to the terminal
-    env = wrappers.CaptureStdoutWrapper(env)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
@@ -52,7 +55,7 @@ class raw_env(AECEnv):
 
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         """
         The init method takes in environment arguments and
          should define the following attributes:
@@ -71,6 +74,7 @@ class raw_env(AECEnv):
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
+        self.render_mode = render_mode
 
     # this cache ensures that same space object is returned for the same agent
     # allows action space seeding to work as expected
@@ -83,11 +87,17 @@ class raw_env(AECEnv):
     def action_space(self, agent):
         return Discrete(3)
 
-    def render(self, mode="human"):
+    def render(self):
         """
         Renders the environment. In human mode, it can print to terminal, open
         up a graphical window, or open up some other display that a human can see and understand.
         """
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         if len(self.agents) == 2:
             string = "Current state: Agent1: {} , Agent2: {}".format(
                 MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
@@ -203,3 +213,6 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         # Adds .rewards to ._cumulative_rewards
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()

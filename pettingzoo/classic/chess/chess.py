@@ -89,6 +89,7 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 """
 
 import chess
+import gym
 import numpy as np
 from gym import spaces
 
@@ -99,9 +100,11 @@ from pettingzoo.utils.agent_selector import agent_selector
 from . import chess_utils
 
 
-def env():
-    env = raw_env()
-    env = wrappers.CaptureStdoutWrapper(env)
+def env(render_mode=None):
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -117,7 +120,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
 
         self.board = chess.Board()
@@ -150,6 +153,8 @@ class raw_env(AECEnv):
         self.agent_selection = None
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
+
+        self.render_mode = render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -236,8 +241,16 @@ class raw_env(AECEnv):
             self._agent_selector.next()
         )  # Give turn to the next agent
 
-    def render(self, mode="human"):
-        print(self.board)
+        if self.render_mode == "human":
+            self.render()
+
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+        else:
+            print(self.board)
 
     def close(self):
         pass

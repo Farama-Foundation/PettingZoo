@@ -86,10 +86,11 @@ class AECEnv:
         """
         raise NotImplementedError
 
-    def render(self, mode: str = "human") -> None | np.ndarray | str:
-        """Displays a rendered frame from the environment, if supported.
+    def render(self) -> None | np.ndarray | str | list:
+        """Renders the environment as specified by self.render_mode.
 
-        Alternate render modes in the default environments are `'rgb_array'`
+        Render mode can be `human` to display a window.
+        Other render modes in the default environments are `'rgb_array'`
         which returns a numpy array and is supported by all environments outside of classic,
         and `'ansi'` which returns the strings printed (specific to classic environments).
         """
@@ -329,7 +330,7 @@ class ParallelEnv:
         """
         raise NotImplementedError
 
-    def render(self, mode="human") -> None | np.ndarray | str:
+    def render(self) -> None | np.ndarray | str | List:
         """Displays a rendered frame from the environment, if supported.
 
         Alternate render modes in the default environments are `'rgb_array'`

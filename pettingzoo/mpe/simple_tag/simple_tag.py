@@ -84,6 +84,7 @@ class raw_env(SimpleEnv, EzPickle):
         num_obstacles=2,
         max_cycles=25,
         continuous_actions=False,
+        render_mode=None,
     ):
         EzPickle.__init__(
             self,
@@ -92,10 +93,17 @@ class raw_env(SimpleEnv, EzPickle):
             num_obstacles,
             max_cycles,
             continuous_actions,
+            render_mode,
         )
         scenario = Scenario()
         world = scenario.make_world(num_good, num_adversaries, num_obstacles)
-        super().__init__(scenario, world, max_cycles, continuous_actions)
+        super().__init__(
+            scenario=scenario,
+            world=world,
+            render_mode=render_mode,
+            max_cycles=max_cycles,
+            continuous_actions=continuous_actions,
+        )
         self.metadata["name"] = "simple_tag_v2"
 
 

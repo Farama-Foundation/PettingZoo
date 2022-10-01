@@ -118,6 +118,7 @@ class raw_env(AECEnv, EzPickle):
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
         self.env = _env(*args, **kwargs)
+        self.render_mode = kwargs.get("render_mode")
         pygame.init()
         self.agents = ["pursuer_" + str(a) for a in range(self.env.num_agents)]
         self.possible_agents = self.agents[:]
@@ -152,9 +153,9 @@ class raw_env(AECEnv, EzPickle):
             self.closed = True
             self.env.close()
 
-    def render(self, mode="human"):
+    def render(self):
         if not self.closed:
-            return self.env.render(mode)
+            return self.env.render()
 
     def step(self, action):
         if (

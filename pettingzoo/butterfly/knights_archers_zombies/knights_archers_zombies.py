@@ -184,6 +184,7 @@ import os
 import sys
 from itertools import repeat
 
+import gym
 import numpy as np
 import pygame
 import pygame.gfxdraw
@@ -239,6 +240,7 @@ class raw_env(AECEnv, EzPickle):
         vector_state=True,
         use_typemasks=False,
         transformer=False,
+        render_mode=None,
     ):
         EzPickle.__init__(
             self,
@@ -255,6 +257,7 @@ class raw_env(AECEnv, EzPickle):
             vector_state,
             use_typemasks,
             transformer,
+            render_mode,
         )
         # variable state space
         self.transformer = transformer
@@ -273,6 +276,7 @@ class raw_env(AECEnv, EzPickle):
         self.frames = 0
         self.closed = False
         self.has_reset = False
+        self.render_mode = render_mode
         self.render_on = False
 
         # Game Constants
@@ -765,6 +769,9 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
         self._deads_step_first()
 
+        if self.render_mode == "human":
+            self.render()
+
     def enable_render(self):
         self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])
         # self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
@@ -788,16 +795,24 @@ class raw_env(AECEnv, EzPickle):
         self.archer_list.draw(self.WINDOW)
         self.knight_list.draw(self.WINDOW)
 
-    def render(self, mode="human"):
-        if not self.render_on and mode == "human":
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        if not self.render_on and self.render_mode == "human":
             # sets self.render_on to true and initializes display
             self.enable_render()
 
         observation = np.array(pygame.surfarray.pixels3d(self.WINDOW))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def close(self):
