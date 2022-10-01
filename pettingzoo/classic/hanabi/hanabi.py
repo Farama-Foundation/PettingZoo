@@ -163,6 +163,7 @@ If an illegal action is taken, the game terminates and the one player that took 
 
 from typing import Dict, List, Optional, Union
 
+import gym
 import numpy as np
 from gym import spaces
 from gym.utils import EzPickle
@@ -196,11 +197,15 @@ class HanabiScorePenalty:
 
 
 def env(**kwargs):
-    env = r_env = raw_env(**kwargs)
-    env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.TerminateIllegalWrapper(
-        env, illegal_reward=HanabiScorePenalty(r_env)
-    )
+    render_mode = kwargs.get("render_mode")
+    if render_mode == "ansi":
+        kwargs["render_mode"] = "human"
+        env = raw_env(**kwargs)
+        env = wrappers.CaptureStdoutWrapper(env)
+    else:
+        env = raw_env(**kwargs)
+
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=HanabiScorePenalty(env))
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
     return env
@@ -238,6 +243,7 @@ class raw_env(AECEnv, EzPickle):
         max_life_tokens: int = 3,
         observation_type: int = 1,
         random_start_player: bool = False,
+        render_mode: Optional[str] = None,
     ):
         """Initializes the `raw_env` class.
 
@@ -294,6 +300,7 @@ class raw_env(AECEnv, EzPickle):
             max_life_tokens,
             observation_type,
             random_start_player,
+            render_mode,
         )
 
         # ToDo: Starts
@@ -353,6 +360,8 @@ class raw_env(AECEnv, EzPickle):
             )
             for player_name in self.agents
         }
+
+        self.render_mode = render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -544,11 +553,17 @@ class raw_env(AECEnv, EzPickle):
             for player_name in self.agents
         }
 
-    def render(self, mode="human"):
+    def render(self):
         """Prints player's data.
 
         Supports console print only.
         """
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         player_data = self.latest_observations["player_observations"]
         print(
             "Active player:",

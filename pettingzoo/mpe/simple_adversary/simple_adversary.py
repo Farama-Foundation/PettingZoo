@@ -67,16 +67,17 @@ from .._mpe_utils.simple_env import SimpleEnv, make_env
 
 
 class raw_env(SimpleEnv, EzPickle):
-    def __init__(self, N=2, max_cycles=25, continuous_actions=False):
-        EzPickle.__init__(
-            self,
-            N,
-            max_cycles,
-            continuous_actions,
-        )
+    def __init__(self, N=2, max_cycles=25, continuous_actions=False, render_mode=None):
+        EzPickle.__init__(self, N, max_cycles, continuous_actions, render_mode)
         scenario = Scenario()
         world = scenario.make_world(N)
-        super().__init__(scenario, world, max_cycles, continuous_actions)
+        super().__init__(
+            scenario=scenario,
+            world=world,
+            render_mode=render_mode,
+            max_cycles=max_cycles,
+            continuous_actions=continuous_actions,
+        )
         self.metadata["name"] = "simple_adversary_v2"
 
 

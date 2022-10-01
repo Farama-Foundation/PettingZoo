@@ -1,3 +1,4 @@
+import gym
 import numpy as np
 from gym.spaces import Box, Discrete
 from gym.utils import seeding
@@ -28,6 +29,7 @@ class magent_parallel_env(ParallelEnv):
         reward_range,
         minimap_mode,
         extra_features,
+        render_mode=None,
     ):
         self.map_size = map_size
         self.max_cycles = max_cycles
@@ -93,6 +95,7 @@ class magent_parallel_env(ParallelEnv):
         walls = self.env._get_walls_info()
         wall_x, wall_y = zip(*walls)
         self.base_state[wall_x, wall_y, 0] = 1
+        self.render_mode = render_mode
         self._renderer = None
         self.frames = 0
 
@@ -136,13 +139,19 @@ class magent_parallel_env(ParallelEnv):
 
         return (self.map_size, self.map_size, state_depth)
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         if self._renderer is None:
-            self._renderer = Renderer(self.env, self.map_size, mode)
+            self._renderer = Renderer(self.env, self.map_size, self.render_mode)
         assert (
-            mode == self._renderer.mode
+            self.render_mode == self._renderer.mode
         ), "mode must be consistent across render calls"
-        return self._renderer.render(mode)
+        return self._renderer.render(self.render_mode)
 
     def close(self):
         if self._renderer is not None:
@@ -276,4 +285,7 @@ class magent_parallel_env(ParallelEnv):
             for agent in self.agents
             if not (terminations[agent] or truncations[agent])
         ]
+
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos

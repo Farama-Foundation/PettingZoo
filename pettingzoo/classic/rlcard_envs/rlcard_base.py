@@ -135,7 +135,7 @@ class RLCardBase(AECEnv):
         self.next_legal_moves = list(sorted(obs["legal_actions"]))
         self._last_obs = obs["obs"]
 
-    def render(self, mode="human"):
+    def render(self):
         raise NotImplementedError()
 
     def close(self):

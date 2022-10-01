@@ -11,7 +11,7 @@ from PIL import Image
 def generate_data(nameline, module):
     dir = f"frames/{nameline}/"
     os.mkdir(dir)
-    env = module.env()
+    env = module.env(render_mode="rgb_array")
     # env = gin_rummy_v0.env()
     env.reset()
     for step in range(100):
@@ -30,7 +30,7 @@ def generate_data(nameline, module):
         if env.terminations[agent] or env.truncations[agent]:
             env.reset()
 
-        ndarray = env.render(mode="rgb_array")
+        ndarray = env.render()
         # tot_size = max(ndarray.shape)
         # target_size = 500
         # ratio = target_size / tot_size

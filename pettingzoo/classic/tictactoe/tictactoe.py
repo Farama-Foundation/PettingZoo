@@ -73,6 +73,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 
 """
 
+import gym
 import numpy as np
 from gym import spaces
 
@@ -82,9 +83,11 @@ from pettingzoo.utils import agent_selector, wrappers
 from .board import Board
 
 
-def env():
-    env = raw_env()
-    env = wrappers.CaptureStdoutWrapper(env)
+def env(render_mode=None):
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -99,7 +102,7 @@ class raw_env(AECEnv):
         "render_fps": 1,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
         self.board = Board()
 
@@ -126,6 +129,8 @@ class raw_env(AECEnv):
 
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
+
+        self.render_mode = render_mode
 
     # Key
     # ----
@@ -203,6 +208,8 @@ class raw_env(AECEnv):
         self.agent_selection = next_agent
 
         self._accumulate_rewards()
+        if self.render_mode == "human":
+            self.render()
 
     def reset(self, seed=None, return_info=False, options=None):
         # reset environment
@@ -219,7 +226,13 @@ class raw_env(AECEnv):
         self._agent_selector.reset()
         self.agent_selection = self._agent_selector.reset()
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         def getSymbol(input):
             if input == 0:
                 return "-"

@@ -112,12 +112,13 @@ def parallel_env(
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
     extra_features=False,
+    render_mode=None,
     **env_args
 ):
     env_env_args = dict(**default_env_args)
     env_env_args.update(env_args)
     return _parallel_env(
-        map_size, minimap_mode, env_env_args, max_cycles, extra_features
+        map_size, minimap_mode, env_env_args, max_cycles, extra_features, render_mode
     )
 
 
@@ -197,9 +198,23 @@ class _parallel_env(magent_parallel_env, EzPickle):
         "render_fps": 5,
     }
 
-    def __init__(self, map_size, minimap_mode, reward_args, max_cycles, extra_features):
+    def __init__(
+        self,
+        map_size,
+        minimap_mode,
+        reward_args,
+        max_cycles,
+        extra_features,
+        render_mode=None,
+    ):
         EzPickle.__init__(
-            self, map_size, minimap_mode, reward_args, max_cycles, extra_features
+            self,
+            map_size,
+            minimap_mode,
+            reward_args,
+            max_cycles,
+            extra_features,
+            render_mode,
         )
         assert map_size >= 10, "size of map must be at least 10"
         env = magent.GridWorld(
@@ -223,6 +238,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
             reward_range,
             minimap_mode,
             extra_features,
+            render_mode,
         )
 
     def generate_map(self):

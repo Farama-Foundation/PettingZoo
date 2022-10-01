@@ -39,6 +39,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         full_action_space=False,
         env_name=None,
         max_cycles=100000,
+        render_mode=None,
         auto_rom_install_path=None,
     ):
         """Initializes the `ParallelAtariEnv` class.
@@ -56,6 +57,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             full_action_space,
             env_name,
             max_cycles,
+            render_mode,
             auto_rom_install_path,
         )
 
@@ -75,6 +77,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             "name": env_name,
             "render_fps": 60,
         }
+        self.render_mode = render_mode
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -230,12 +233,24 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not terminations[agent]]
+
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        assert (
+            self.render_mode in self.metadata["render_modes"]
+        ), f"{self.render_mode} is not a valid render mode"
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
-        if mode == "human":
+        if self.render_mode == "human":
             import pygame
 
             zoom_factor = 4
@@ -256,10 +271,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             self._screen.blit(myImage, (0, 0))
 
             pygame.display.flip()
-        elif mode == "rgb_array":
+        elif self.render_mode == "rgb_array":
             return image
-        else:
-            raise ValueError("bad value for render mode")
 
     def close(self):
         if self._screen is not None:

@@ -78,15 +78,17 @@ adversary to goal. Adversary is rewarded for its distance to the goal.
 
 
 class raw_env(SimpleEnv, EzPickle):
-    def __init__(self, max_cycles=25, continuous_actions=False):
-        EzPickle.__init__(
-            self,
-            max_cycles,
-            continuous_actions,
-        )
+    def __init__(self, max_cycles=25, continuous_actions=False, render_mode=None):
+        EzPickle.__init__(self, max_cycles, continuous_actions, render_mode)
         scenario = Scenario()
         world = scenario.make_world()
-        super().__init__(scenario, world, max_cycles, continuous_actions)
+        super().__init__(
+            scenario=scenario,
+            world=world,
+            render_mode=render_mode,
+            max_cycles=max_cycles,
+            continuous_actions=continuous_actions,
+        )
         self.metadata["name"] = "simple_crypto_v2"
 
 

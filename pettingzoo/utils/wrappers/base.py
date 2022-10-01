@@ -39,6 +39,12 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
+    def __getattr__(self, name):
+        """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
+        if name.startswith("_"):
+            raise AttributeError(f"accessing private attribute '{name}' is prohibited")
+        return getattr(self.env, name)
+
     @property
     def observation_spaces(self):
         warnings.warn(
@@ -78,8 +84,8 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def reset(self, seed=None, return_info=False, options=None):
         self.env.reset(seed=seed, options=options)

@@ -1,5 +1,6 @@
 import os
 
+import gym
 import numpy as np
 import pygame
 from gym import spaces
@@ -27,11 +28,24 @@ def make_env(raw_env):
 
 
 class SimpleEnv(AECEnv):
+    metadata = {
+        "render_modes": ["human", "rgb_array"],
+        "is_parallelizable": True,
+        "render_fps": 10,
+    }
+
     def __init__(
-        self, scenario, world, max_cycles, continuous_actions=False, local_ratio=None
+        self,
+        scenario,
+        world,
+        max_cycles,
+        render_mode=None,
+        continuous_actions=False,
+        local_ratio=None,
     ):
         super().__init__()
 
+        self.render_mode = render_mode
         pygame.init()
         self.viewer = None
         self.width = 700
@@ -46,12 +60,6 @@ class SimpleEnv(AECEnv):
 
         self.renderOn = False
         self.seed()
-
-        self.metadata = {
-            "render_modes": ["human", "rgb_array"],
-            "is_parallelizable": True,
-            "render_fps": 10,
-        }
 
         self.max_cycles = max_cycles
         self.scenario = scenario
@@ -251,20 +259,31 @@ class SimpleEnv(AECEnv):
         self._cumulative_rewards[cur_agent] = 0
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def enable_render(self, mode="human"):
         if not self.renderOn and mode == "human":
             self.screen = pygame.display.set_mode(self.screen.get_size())
             self.renderOn = True
 
-    def render(self, mode="human"):
-        self.enable_render(mode)
+    def render(self):
+        if self.render_mode is None:
+            gym.logger.WARN(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        self.enable_render(self.render_mode)
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if mode == "human":
+        if self.render_mode == "human":
             self.draw()
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def draw(self):

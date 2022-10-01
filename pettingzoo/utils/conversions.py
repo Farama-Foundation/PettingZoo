@@ -173,8 +173,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
         self.agents = self.aec_env.agents
         return observations, rewards, terminations, truncations, infos
 
-    def render(self, mode="human"):
-        return self.aec_env.render(mode)
+    def render(self):
+        return self.aec_env.render()
 
     def state(self):
         return self.aec_env.state()
@@ -189,6 +189,8 @@ class parallel_to_aec_wrapper(AECEnv):
 
         self.metadata = {**parallel_env.metadata}
         self.metadata["is_parallelizable"] = True
+
+        self.render_mode = self.env.render_mode
 
         try:
             self.possible_agents = parallel_env.possible_agents
@@ -321,8 +323,8 @@ class parallel_to_aec_wrapper(AECEnv):
             self.infos[agent],
         )
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def close(self):
         self.env.close()
@@ -426,8 +428,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
         self.agents = self.aec_env.agents
         return observations, rewards, terminations, truncations, infos
 
-    def render(self, mode="human"):
-        return self.aec_env.render(mode)
+    def render(self):
+        return self.aec_env.render()
 
     def state(self):
         return self.aec_env.state()

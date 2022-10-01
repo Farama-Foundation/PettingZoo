@@ -83,6 +83,7 @@ class DiscreteAgent(Agent):
         tpos += self.motion_range[a]
         x = tpos[0]
         y = tpos[1]
+
         # check bounds
         if not self.inbounds(x, y):
             return cpos
