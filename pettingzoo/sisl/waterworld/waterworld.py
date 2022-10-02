@@ -210,8 +210,8 @@ class raw_env(AECEnv):
         if self.has_reset:
             self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def step(self, action):
         if (

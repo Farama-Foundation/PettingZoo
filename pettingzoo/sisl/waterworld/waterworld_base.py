@@ -15,7 +15,7 @@ FPS = 15
 class WaterworldBase:
     def __init__(
         self,
-        n_pursuers=5,
+        n_pursuers=2,
         n_evaders=5,
         n_poisons=10,
         n_obstacles=1,
@@ -26,6 +26,7 @@ class WaterworldBase:
         obstacle_radius=0.1,
         obstacle_coord=[(0.5, 0.5)],
         pursuer_max_accel=0.01,
+        pursuer_speed=0.1,
         evader_speed=0.1,
         poison_speed=0.1,
         poison_reward=-1.0,
@@ -51,6 +52,7 @@ class WaterworldBase:
         │sensor_range: length of sensor dendrite on all pursuing archea (agents)                               │
         │radius: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius                 │
         │obstacle_radius: radius of obstacle object                                                            │
+        │pursuer_speed: pursuing archea speed                                                                  │
         │evader_speed: evading archea speed                                                                    │
         │poison_speed: poison archea speed                                                                     │
         │obstacle_coord: list of coordinate of obstacle object. Can be set to `None` to use a random location  │
@@ -80,6 +82,7 @@ class WaterworldBase:
         self.obstacle_radius = obstacle_radius
         self.sensor_range = sensor_range
 
+        self.pursuer_speed = pursuer_speed * self.pixel_scale
         self.evader_speed = evader_speed * self.pixel_scale
         self.poison_speed = poison_speed * self.pixel_scale
         self.speed_features = speed_features
@@ -140,6 +143,7 @@ class WaterworldBase:
                     x,
                     y,
                     self.pursuer_max_accel,
+                    self.pursuer_speed,
                     radius=self.base_radius,
                     collision_type=i + 1,
                     n_sensors=self.n_sensors,
@@ -399,13 +403,21 @@ class WaterworldBase:
     def step(self, action, agent_id, is_last):
         action = np.asarray(action)
         action = action.reshape(2)
-        speed = np.linalg.norm(action)
-        if speed > self.pursuer_max_accel:
+        thrust = np.linalg.norm(action)
+        if thrust > self.pursuer_max_accel:
             # Limit added thrust to self.pursuer_max_accel
-            action = action / speed * self.pursuer_max_accel
+            action = action * (self.pursuer_max_accel / thrust)
 
         p = self.pursuers[agent_id]
-        _velocity = p.body.velocity + action * self.pixel_scale
+
+        # Clip pursuer speed
+        _velocity = np.clip(
+            p.body.velocity + action * self.pixel_scale,
+            -self.pursuer_speed,
+            self.pursuer_speed,
+        )
+
+        # Set pursuer speed
         p.reset_velocity(_velocity[0], _velocity[1])
 
         # Penalize large thrusts
@@ -475,7 +487,7 @@ class WaterworldBase:
 
             for obstacle in self.obstacles:
                 obstacle_distance, _ = pursuer.get_sensor_reading(
-                    obstacle.body.position, obstacle.radius, obstacle.body.velocity
+                    obstacle.body.position, obstacle.radius, obstacle.body.velocity, 0.0
                 )
                 obstacle_distances.append(obstacle_distance)
 
@@ -487,7 +499,10 @@ class WaterworldBase:
 
             for evader in self.evaders:
                 evader_distance, evader_velocity = pursuer.get_sensor_reading(
-                    evader.body.position, evader.radius, evader.body.velocity
+                    evader.body.position,
+                    evader.radius,
+                    evader.body.velocity,
+                    self.evader_speed,
                 )
                 evader_distances.append(evader_distance)
                 evader_velocities.append(evader_velocity)
@@ -496,12 +511,17 @@ class WaterworldBase:
                 evader_sensor_distance_vals,
                 evader_sensor_velocity_vals,
             ) = self.get_sensor_readings(
-                evader_distances, pursuer.sensor_range, velocites=evader_velocities
+                evader_distances,
+                pursuer.sensor_range,
+                velocites=evader_velocities,
             )
 
             for poison in self.poisons:
                 poison_distance, poison_velocity = pursuer.get_sensor_reading(
-                    poison.body.position, poison.radius, poison.body.velocity
+                    poison.body.position,
+                    poison.radius,
+                    poison.body.velocity,
+                    self.poison_speed,
                 )
                 poison_distances.append(poison_distance)
                 poison_velocities.append(poison_velocity)
@@ -510,7 +530,9 @@ class WaterworldBase:
                 poison_sensor_distance_vals,
                 poison_sensor_velocity_vals,
             ) = self.get_sensor_readings(
-                poison_distances, pursuer.sensor_range, velocites=poison_velocities
+                poison_distances,
+                pursuer.sensor_range,
+                velocites=poison_velocities,
             )
 
             for j, _pursuer in enumerate(self.pursuers):
@@ -519,7 +541,10 @@ class WaterworldBase:
                     continue
 
                 _pursuer_distance, _pursuer_velocity = pursuer.get_sensor_reading(
-                    _pursuer.body.position, _pursuer.radius, _pursuer.body.velocity
+                    _pursuer.body.position,
+                    _pursuer.radius,
+                    _pursuer.body.velocity,
+                    self.pursuer_speed,
                 )
                 _pursuer_distances.append(_pursuer_distance)
                 _pursuer_velocities.append(_pursuer_velocity)
@@ -528,7 +553,9 @@ class WaterworldBase:
                 _pursuer_sensor_distance_vals,
                 _pursuer_sensor_velocity_vals,
             ) = self.get_sensor_readings(
-                _pursuer_distances, pursuer.sensor_range, velocites=_pursuer_velocities
+                _pursuer_distances,
+                pursuer.sensor_range,
+                velocites=_pursuer_velocities,
             )
 
             # concatenate all observations
@@ -575,7 +602,7 @@ class WaterworldBase:
         min_idx = np.argmin(distance_vals, axis=1)
 
         # Normalize sensor readings
-        sensor_distance_vals = np.amin(distance_vals, axis=1) / sensor_range
+        sensor_distance_vals = np.amin(distance_vals, axis=1)
 
         if velocites is not None:
             velocity_vals = np.concatenate(velocites, axis=1)
@@ -661,7 +688,7 @@ class WaterworldBase:
         """
         return False
 
-    def render(self, mode="human"):
+    def render(self):
         if self.render_mode is None:
             gym.logger.WARN(
                 "You are calling render method without specifying any render mode."

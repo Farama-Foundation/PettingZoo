@@ -1,3 +1,5 @@
+from pdb import set_trace
+
 import numpy as np
 from gym.spaces import Box
 
@@ -33,6 +35,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             EnvLogger.warn_action_out_of_bound(
                 action=action, action_space=space, backup_policy="clipping to space"
             )
+            # set_trace()
             action = np.clip(action, space.low, space.high)
 
         super().step(action)
