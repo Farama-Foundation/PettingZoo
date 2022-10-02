@@ -180,6 +180,8 @@ class raw_env(AECEnv):
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.has_reset = False
 
+        self.render_mode = self.env.render_mode
+
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
