@@ -188,14 +188,11 @@ class WaterworldBase:
         """This function converts coordinates in pymunk into pygame coordinates.
 
         The coordinate system in pygame is:
-
                  (0, 0) +-------+ (WINDOWSIZE, 0)           + ──── → x
                         |       |                           │
                         |       |                           │
         (0, WINDOWSIZE) +-------+ (WINDOWSIZE, WINDOWSIZE)  ↓ y
-
         The coordinate system in pymunk is:
-
         (0, WINDOWSIZE) +-------+ (WINDOWSIZE, WINDOWSIZE)  ↑ y
                         |       |                           │
                         |       |                           │
@@ -245,7 +242,6 @@ class WaterworldBase:
         """Create bounding boxes around the window so that the moving object will not escape the view window.
 
         The four bounding boxes are aligned in the following way:
-
         (-100, WINDOWSIZE + 100) ┌────┬────────────────────────────┬────┐ (WINDOWSIZE + 100, WINDOWSIZE + 100)
                                  │xxxx│////////////////////////////│xxxx│
                                  ├────┼────────────────────────────┼────┤
@@ -255,7 +251,6 @@ class WaterworldBase:
                                  ├────┼────────────────────────────┼────┤
                                  │xxxx│////////////////////////////│xxxx│
                     (-100, -100) └────┴────────────────────────────┴────┘ (WINDOWSIZE + 100, -100)
-
         where "x" represents overlapped regions.
         """
         # Bounding dox edges
