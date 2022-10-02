@@ -144,7 +144,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .waterworld_base import FPS
-from .waterworld_base import MAWaterWorld as _env
+from .waterworld_base import WaterworldBase as _env
 
 
 def env(**kwargs):
@@ -174,6 +174,7 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
+
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
@@ -209,8 +210,8 @@ class raw_env(AECEnv):
         if self.has_reset:
             self.env.close()
 
-    def render(self):
-        return self.env.render()
+    def render(self, mode="human"):
+        return self.env.render(mode)
 
     def step(self, action):
         if (
@@ -219,8 +220,8 @@ class raw_env(AECEnv):
         ):
             self._was_dead_step(action)
             return
-        agent = self.agent_selection
 
+        agent = self.agent_selection
         is_last = self._agent_selector.is_last()
         self.env.step(action, self.agent_name_mapping[agent], is_last)
 
@@ -234,6 +235,7 @@ class raw_env(AECEnv):
             self.truncations = dict(zip(self.agents, [True for _ in self.agents]))
         else:
             self.terminations = dict(zip(self.agents, self.env.last_dones))
+
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
