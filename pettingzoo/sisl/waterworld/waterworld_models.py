@@ -178,8 +178,8 @@ class Pursuers(MovingObject):
         pygame.draw.circle(display, self.color, self.center, self.radius)
 
     def get_sensor_barrier_readings(self):
-        """
-        Get the distance to the barrier.
+        """Get the distance to the barrier.
+
         See https://github.com/BolunDai0216/WaterworldRevamp for
         a detailed explanation.
         """
@@ -223,10 +223,7 @@ class Pursuers(MovingObject):
     def get_sensor_reading(
         self, object_coord, object_radius, object_velocity, object_max_velocity
     ):
-        """
-        Get distance and velocity to another
-        object (Obstacle, Pursuer, Evader, Poison).
-        """
+        """Get distance and velocity to another object (Obstacle, Pursuer, Evader, Poison)."""
         # Get location and velocity of pursuer
         self.center = self.body.position
         _velocity = self.body.velocity

@@ -39,31 +39,28 @@ class WaterworldBase:
         render_mode=None,
         FPS=FPS,
     ):
-        """
-        ╭──────────────────────────────────────────────────────────────────────────────────────────────────────╮
-        │Input keyword arguments                                                                               │
-        ├──────────────────────────────────────────────────────────────────────────────────────────────────────┤
-        │n_pursuers: number of pursuing archea (agents)                                                        │
-        │n_evaders: number of evader archea (food)                                                             │
-        │n_poisons: number of poison archea                                                                    │
-        │n_obstacles: number of obstacles                                                                      │
-        │n_coop: number of pursuing archea (agents) that must be touching food at the same time to consume it  │
-        │n_sensors: number of sensors on each of the pursuing archea (agents)                                  │
-        │sensor_range: length of sensor dendrite on all pursuing archea (agents)                               │
-        │radius: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius                 │
-        │obstacle_radius: radius of obstacle object                                                            │
-        │pursuer_speed: pursuing archea speed                                                                  │
-        │evader_speed: evading archea speed                                                                    │
-        │poison_speed: poison archea speed                                                                     │
-        │obstacle_coord: list of coordinate of obstacle object. Can be set to `None` to use a random location  │
-        │speed_features: toggles whether pursuing archea (agent) sensors detect speed of other archea          │
-        │pursuer_max_accel: pursuer archea maximum acceleration (maximum action size)                          │
-        │thrust_penalty: scaling factor for the negative reward used to penalize large actions                 │
-        │local_ratio: proportion of reward allocated locally vs distributed globally among all agents          │
-        │food_reward: reward for pursuers consuming an evading archea                                          │
-        │poison_reward: reward for pursuer consuming a poison object (typically negative)                      │
-        │encounter_reward: reward for a pursuer colliding with an evading archea                               │
-        ╰──────────────────────────────────────────────────────────────────────────────────────────────────────╯
+        """Input keyword arguments.
+
+        n_pursuers: number of pursuing archea (agents)
+        n_evaders: number of evader archea (food)
+        n_poisons: number of poison archea
+        n_obstacles: number of obstacles
+        n_coop: number of pursuing archea (agents) that must be touching food at the same time to consume it
+        n_sensors: number of sensors on each of the pursuing archea (agents)
+        sensor_range: length of sensor dendrite on all pursuing archea (agents)
+        radius: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius
+        obstacle_radius: radius of obstacle object
+        pursuer_speed: pursuing archea speed
+        evader_speed: evading archea speed
+        poison_speed: poison archea speed
+        obstacle_coord: list of coordinate of obstacle object. Can be set to `None` to use a random location
+        speed_features: toggles whether pursuing archea (agent) sensors detect speed of other archea
+        pursuer_max_accel: pursuer archea maximum acceleration (maximum action size)
+        thrust_penalty: scaling factor for the negative reward used to penalize large actions
+        local_ratio: proportion of reward allocated locally vs distributed globally among all agents
+        food_reward: reward for pursuers consuming an evading archea
+        poison_reward: reward for pursuer consuming a poison object (typically negative)
+        encounter_reward: reward for a pursuer colliding with an evading archea
         """
         self.pixel_scale = 30 * 25
         self.clock = pygame.time.Clock()
@@ -128,9 +125,7 @@ class WaterworldBase:
         return [seed]
 
     def add_obj(self):
-        """
-        Create all moving object instances.
-        """
+        """Create all moving object instances."""
         self.pursuers = []
         self.evaders = []
         self.poisons = []
@@ -190,8 +185,7 @@ class WaterworldBase:
             pygame.quit()
 
     def convert_coordinates(self, value, option="position"):
-        """
-        This function converts coordinates in pymunk into pygame coordinates.
+        """This function converts coordinates in pymunk into pygame coordinates.
 
         The coordinate system in pygame is:
 
@@ -215,9 +209,7 @@ class WaterworldBase:
             return value[0], -value[1]
 
     def _generate_coord(self, radius):
-        """
-        Generates a random coordinate for an object with given
-        radius such that it does not collide with an obstacle.
+        """Generates a random coordinate for an object with given radius such that it does not collide with an obstacle.
 
         radius: radius of the object
         """
@@ -236,17 +228,13 @@ class WaterworldBase:
         return coord
 
     def _generate_speed(self, speed):
-        """
-        Generates random speed (vx, vy) with vx, vy ∈ [-speed, speed].
-        """
+        """Generates random speed (vx, vy) with vx, vy ∈ [-speed, speed]."""
         _speed = (self.np_random.random(2) - 0.5) * 2 * speed
 
         return _speed[0], _speed[1]
 
     def add(self):
-        """
-        Add all moving objects to PyMunk space.
-        """
+        """Add all moving objects to PyMunk space."""
         self.space = pymunk.Space()
 
         for obj_list in [self.pursuers, self.evaders, self.poisons, self.obstacles]:
@@ -254,10 +242,9 @@ class WaterworldBase:
                 obj.add(self.space)
 
     def add_bounding_box(self):
-        """
-        Create bounding boxes around the window so that the moving object will
-        not escape the view window. The four bounding boxes are aligned in the
-        following way:
+        """Create bounding boxes around the window so that the moving object will not escape the view window.
+
+        The four bounding boxes are aligned in the following way:
 
         (-100, WINDOWSIZE + 100) ┌────┬────────────────────────────┬────┐ (WINDOWSIZE + 100, WINDOWSIZE + 100)
                                  │xxxx│////////////////////////////│xxxx│
@@ -289,9 +276,7 @@ class WaterworldBase:
             self.space.add(self.barriers[-1])
 
     def draw(self):
-        """
-        Draw all moving objects and obstacles in PyGame.
-        """
+        """Draw all moving objects and obstacles in PyGame."""
         for obj_list in [self.pursuers, self.evaders, self.poisons, self.obstacles]:
             for obj in obj_list:
                 obj.draw(self.display, self.convert_coordinates)
@@ -592,7 +577,8 @@ class WaterworldBase:
         return observe_list
 
     def get_sensor_readings(self, positions, sensor_range, velocites=None):
-        """
+        """Get readings from sensors.
+
         positions: position readings for all objects by all sensors
         velocites: velocity readings for all objects by all sensors
         """
@@ -615,8 +601,7 @@ class WaterworldBase:
         return sensor_distance_vals
 
     def pursuer_poison_begin_callback(self, arbiter, space, data):
-        """
-        Called when a collision between a pursuer and a poison occurs.
+        """Called when a collision between a pursuer and a poison occurs.
 
         The poison indicator of the pursuer becomes 1, the pursuer gets
         a penalty for this step.
@@ -636,8 +621,7 @@ class WaterworldBase:
         return False
 
     def pursuer_evader_begin_callback(self, arbiter, space, data):
-        """
-        Called when a collision between a pursuer and an evader occurs.
+        """Called when a collision between a pursuer and an evader occurs.
 
         The counter of the evader increases by 1, if the counter reaches
         n_coop, then, the pursuer catches the evader and gets a reward.
@@ -657,8 +641,7 @@ class WaterworldBase:
         return False
 
     def pursuer_evader_separate_callback(self, arbiter, space, data):
-        """
-        Called when a collision between a pursuer and a poison ends.
+        """Called when a collision between a pursuer and a poison ends.
 
         If at this moment there are greater or equal than n_coop pursuers
         that collides with this evader, the evader's position gets reset
@@ -683,9 +666,7 @@ class WaterworldBase:
             evader_shape.reset_velocity(vx, vy)
 
     def return_false_begin_callback(self, arbiter, space, data):
-        """
-        Callback function that simply returns False.
-        """
+        """Callback function that simply returns False."""
         return False
 
     def render(self):
