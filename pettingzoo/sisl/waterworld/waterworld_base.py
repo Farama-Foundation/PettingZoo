@@ -211,7 +211,6 @@ class WaterworldBase:
                         |       |                           │
                  (0, 0) +-------+ (WINDOWSIZE, 0)           + ──── → x
         """
-
         if option == "position":
             return int(value[0]), self.pixel_scale - int(value[1])
 
