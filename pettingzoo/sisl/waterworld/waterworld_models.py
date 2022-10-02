@@ -61,11 +61,9 @@ class MovingObject:
 
 
 class Evaders(MovingObject):
-    def __init__(self, x, y, radius=0.03, collision_type=2, max_speed=100):
+    def __init__(self, x, y, vx, vy, radius=0.03, collision_type=2, max_speed=100):
         super().__init__(x, y, radius=radius)
 
-        vx = max_speed * random.uniform(-1, 1)
-        vy = max_speed * random.uniform(-1, 1)
         self.body.velocity = vx, vy
 
         self.color = (238, 116, 106)
@@ -75,11 +73,11 @@ class Evaders(MovingObject):
 
 
 class Poisons(MovingObject):
-    def __init__(self, x, y, radius=0.015 * 3 / 4, collision_type=3, max_speed=100):
+    def __init__(
+        self, x, y, vx, vy, radius=0.015 * 3 / 4, collision_type=3, max_speed=100
+    ):
         super().__init__(x, y, radius=radius)
 
-        vx = max_speed * random.uniform(-1, 1)
-        vy = max_speed * random.uniform(-1, 1)
         self.body.velocity = vx, vy
 
         self.color = (145, 250, 116)
@@ -109,6 +107,7 @@ class Pursuers(MovingObject):
         self.sensor_range = sensor_range * self.pixel_scale
         self.max_accel = max_accel
         self.max_speed = pursuer_speed
+        self.body.velocity = 0.0, 0.0
 
         self.shape.food_indicator = 0  # 1 if food caught at this step, 0 otherwise
         self.shape.food_touched_indicator = (
@@ -138,7 +137,7 @@ class Pursuers(MovingObject):
     @property
     def observation_space(self):
         return spaces.Box(
-            low=np.float32(-np.sqrt(2)),
+            low=np.float32(-2 * np.sqrt(2)),
             high=np.float32(2 * np.sqrt(2)),
             shape=(self.obs_dim,),
             dtype=np.float32,
@@ -210,10 +209,10 @@ class Pursuers(MovingObject):
         # Convert to 2d array of size (n_sensors, 1)
         sensor_values = np.expand_dims(minimum_ratios, 0)
 
-        # Set values beyond sensor range to infinity
+        # Set values beyond sensor range to 1.0
         does_sense = minimum_ratios < (1.0 - 1e-4)
         does_sense = np.expand_dims(does_sense, 0)
-        sensor_values[np.logical_not(does_sense)] = np.inf
+        sensor_values[np.logical_not(does_sense)] = 1.0
 
         # Convert -0 to 0
         sensor_values[sensor_values == -0] = 0

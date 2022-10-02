@@ -143,15 +143,22 @@ class WaterworldBase:
                     collision_type=i + 1,
                     n_sensors=self.n_sensors,
                     sensor_range=self.sensor_range,
+                    speed_features=self.speed_features,
                 )
             )
 
         for i in range(self.n_evaders):
             x, y = self._generate_coord(2 * self.base_radius)
+            vx, vy = (
+                (2 * self.np_random.random(1) - 1) * self.evader_speed,
+                (2 * self.np_random.random(1) - 1) * self.evader_speed,
+            )
             self.evaders.append(
                 Evaders(
                     x,
                     y,
+                    vx,
+                    vy,
                     radius=2 * self.base_radius,
                     collision_type=i + 1000,
                     max_speed=self.evader_speed,
@@ -160,10 +167,16 @@ class WaterworldBase:
 
         for i in range(self.n_poisons):
             x, y = self._generate_coord(0.75 * self.base_radius)
+            vx, vy = (
+                (2 * self.np_random.random(1) - 1) * self.poison_speed,
+                (2 * self.np_random.random(1) - 1) * self.poison_speed,
+            )
             self.poisons.append(
                 Poisons(
                     x,
                     y,
+                    vx,
+                    vy,
                     radius=0.75 * self.base_radius,
                     collision_type=i + 2000,
                     max_speed=self.poison_speed,
@@ -345,6 +358,7 @@ class WaterworldBase:
                     self.handlers[-1].begin = self.return_false_begin_callback
 
     def reset(self):
+        self.add_obj()
         self.frames = 0
 
         # Initialize obstacles positions

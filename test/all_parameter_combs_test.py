@@ -236,7 +236,7 @@ parameterized_envs = [
     ["sisl/waterworld_v3", waterworld_v3, dict(n_pursuers=3, n_evaders=6)],
     ["sisl/waterworld_v3", waterworld_v3, dict(n_coop=1)],
     ["sisl/waterworld_v3", waterworld_v3, dict(n_coop=1)],
-    ["sisl/waterworld_v3", waterworld_v3, dict(n_poison=4)],
+    ["sisl/waterworld_v3", waterworld_v3, dict(n_poisons=4)],
     ["sisl/waterworld_v3", waterworld_v3, dict(n_sensors=4)],
     ["sisl/waterworld_v3", waterworld_v3, dict(local_ratio=0.5)],
     ["sisl/waterworld_v3", waterworld_v3, dict(speed_features=False)],
