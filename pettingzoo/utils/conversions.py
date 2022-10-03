@@ -192,7 +192,7 @@ class parallel_to_aec_wrapper(AECEnv):
 
         try:
             self.render_mode = self.env.render_mode
-        except:
+        except AttributeError:
             warnings.warn(
                 f"The base environment `{parallel_env}` does not have a `render_mode` defined."
             )
