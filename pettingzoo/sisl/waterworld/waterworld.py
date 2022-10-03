@@ -133,7 +133,7 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `max_cycles`: After max_cycles steps all agents will return done
 
-* v4: Major refactor (2.0.0)
+* v4: Major refactor (1.22.0)
 * v3: Refactor and major bug fixes (1.5.0)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
@@ -163,7 +163,7 @@ class raw_env(AECEnv):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "waterworld_v3",
+        "name": "waterworld_v4",
         "is_parallelizable": True,
         "render_fps": FPS,
     }
