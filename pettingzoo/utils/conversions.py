@@ -190,7 +190,12 @@ class parallel_to_aec_wrapper(AECEnv):
         self.metadata = {**parallel_env.metadata}
         self.metadata["is_parallelizable"] = True
 
-        self.render_mode = self.env.render_mode
+        try:
+            self.render_mode = self.env.render_mode
+        except AttributeError:
+            warnings.warn(
+                f"The base environment `{parallel_env}` does not have a `render_mode` defined."
+            )
 
         try:
             self.possible_agents = parallel_env.possible_agents
