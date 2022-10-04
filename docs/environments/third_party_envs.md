@@ -7,6 +7,8 @@ lastpage:
 
 # Third-Party Environments
 
+*These environments are not maintained by Farama Foundation and, as such, may rely on older versions of PettingZoo.*
+
 ## BomberManAI
 [https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
 
