@@ -13,7 +13,7 @@ A very beginner-friendly introduction to learning the [INSERT WHATEVER ENV] envi
 ## Other tutorials
 
 ### Learning Tic-Tac-Toe Using Tianshou and PyTorch
-[https://github.com/WillDudley/Tianshou-MARL-Examples](https://github.com/WillDudley/Tianshou-MARL-Examples)
+TBD
 
 A few commented Python scripts of increasing difficulty to provide a smooth introduction to using [Tianshou](https://github.com/thu-ml/tianshou) to train deep RL agents to play Tic-Tac-Toe. 
 
