@@ -375,7 +375,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.sisl</span> <span class="pre">import</span> <span class="pre">waterworld_v3</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.sisl</span> <span class="pre">import</span> <span class="pre">waterworld_v4</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -439,35 +439,35 @@ environment for the observation space. These values represent the distances and 
 <tbody>
 <tr class="row-even"><td class="text-center"><p>0 to n_sensors</p></td>
 <td><p>Obstacle distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>n_sensors to (2 * n_sensors)</p></td>
 <td><p>Barrier distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>(2 * n_sensors) to (3 * n_sensors)</p></td>
 <td><p>Food distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>(3 * n_sensors) to (4 * n_sensors)</p></td>
 <td><p>Food speed for each sensor</p></td>
-<td class="text-center"><p>[-√2, 2*√2]</p></td>
+<td class="text-center"><p>[-2<em>√2, 2</em>√2]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>(4 * n_sensors) to (5 * n_sensors)</p></td>
 <td><p>Poison distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>(5 * n_sensors) to (6 * n_sensors)</p></td>
 <td><p>Poison speed for each sensor</p></td>
-<td class="text-center"><p>[-√2, 2*√2]</p></td>
+<td class="text-center"><p>[-2<em>√2, 2</em>√2]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>(6 * n_sensors) to (7 * n_sensors)</p></td>
 <td><p>Pursuer distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>(7 * n_sensors) to (8 * n_sensors)</p></td>
 <td><p>Pursuer speed for each sensor</p></td>
-<td class="text-center"><p>[-√2, 2*√2]</p></td>
+<td class="text-center"><p>[-2<em>√2, 2</em>√2]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>8 * n_sensors</p></td>
 <td><p>Indicates whether agent collided with food</p></td>
@@ -492,23 +492,23 @@ environment for the observation space. These values represent the distances and 
 <tbody>
 <tr class="row-even"><td class="text-center"><p>0 - n_sensors</p></td>
 <td><p>Obstacle distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>n_sensors - (2 * n_sensors)</p></td>
 <td><p>Barrier distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>(2 * n_sensors) - (3 * n_sensors)</p></td>
 <td><p>Food distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>(3 * n_sensors) - (4 * n_sensors)</p></td>
 <td><p>Poison distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>(4 * n_sensors) - (5 * n_sensors)</p></td>
 <td><p>Pursuer distance for each sensor</p></td>
-<td class="text-center"><p>[0, √2]</p></td>
+<td class="text-center"><p>[0, 1]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>(5 * n_sensors)</p></td>
 <td><p>Indicates whether agent collided with food</p></td>
@@ -536,7 +536,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 </section>
 <section id="arguments">
 <h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">waterworld_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">n_pursuers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_poison</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_coop</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_sensors</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">waterworld_v4</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">n_pursuers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_evaders</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_poisons</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_coop</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_sensors</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="n">sensor_range</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="mf">0.015</span><span class="p">,</span> <span class="n">obstacle_radius</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
 <span class="n">obstacle_coord</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">pursuer_max_accel</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">evader_speed</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
 <span class="n">poison_speed</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">poison_reward</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">food_reward</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">encounter_reward</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
@@ -545,7 +545,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">n_pursuers</span></code>: number of pursuing archea (agents)</p>
 <p><code class="docutils literal notranslate"><span class="pre">n_evaders</span></code>: number of food objects</p>
-<p><code class="docutils literal notranslate"><span class="pre">n_poison</span></code>: number of poison objects</p>
+<p><code class="docutils literal notranslate"><span class="pre">n_poisons</span></code>: number of poison objects</p>
 <p><code class="docutils literal notranslate"><span class="pre">n_coop</span></code>: number of pursuing archea (agents) that must be touching food at the same time to consume it</p>
 <p><code class="docutils literal notranslate"><span class="pre">n_sensors</span></code>: number of sensors on all pursuing archea (agents)</p>
 <p><code class="docutils literal notranslate"><span class="pre">sensor_range</span></code>: length of sensor dendrite on all pursuing archea (agents)</p>
@@ -553,6 +553,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 <p><code class="docutils literal notranslate"><span class="pre">obstacle_radius</span></code>: radius of obstacle object</p>
 <p><code class="docutils literal notranslate"><span class="pre">obstacle_coord</span></code>: coordinate of obstacle object. Can be set to <code class="docutils literal notranslate"><span class="pre">None</span></code> to use a random location</p>
 <p><code class="docutils literal notranslate"><span class="pre">pursuer_max_accel</span></code>: pursuer archea maximum acceleration (maximum action size)</p>
+<p><code class="docutils literal notranslate"><span class="pre">pursuer_speed</span></code>: pursuer (agent) maximum speed</p>
 <p><code class="docutils literal notranslate"><span class="pre">evader_speed</span></code>: food speed</p>
 <p><code class="docutils literal notranslate"><span class="pre">poison_speed</span></code>: poison speed</p>
 <p><code class="docutils literal notranslate"><span class="pre">poison_reward</span></code>: reward for pursuer consuming a poison object (typically negative)</p>
@@ -563,6 +564,7 @@ averaged over the number of agents (global rewards) are scaled by <code class="d
 <p><code class="docutils literal notranslate"><span class="pre">speed_features</span></code>: toggles whether pursuing archea (agent) sensors detect speed of other objects and archea</p>
 <p><code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>: After max_cycles steps all agents will return done</p>
 <ul class="simple">
+<li><p>v4: Major refactor (1.22.0)</p></li>
 <li><p>v3: Refactor and major bug fixes (1.5.0)</p></li>
 <li><p>v2: Misc bug fixes (1.4.0)</p></li>
 <li><p>v1: Various fixes and environment argument changes (1.3.1)</p></li>
