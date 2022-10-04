@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.sisl import waterworld_v3`            |
+| Import               | `from pettingzoo.sisl import waterworld_v4`            |
 |----------------------|--------------------------------------------------------|
 | Actions              | Continuous                                             |
 | Parallel API         | Yes                                                    |
@@ -47,14 +47,14 @@ This table enumerates the observation space with `speed_features = True`:
 
 |        Index: [start, end)         | Description                                  |   Values    |
 | :--------------------------------: | -------------------------------------------- | :---------: |
-|           0 to n_sensors           | Obstacle distance for each sensor            |   [0, √2]   |
-|    n_sensors to (2 * n_sensors)    | Barrier distance for each sensor             |   [0, √2]   |
-| (2 * n_sensors) to (3 * n_sensors) | Food distance for each sensor                |   [0, √2]   |
-| (3 * n_sensors) to (4 * n_sensors) | Food speed for each sensor                   | [-√2, 2*√2] |
-| (4 * n_sensors) to (5 * n_sensors) | Poison distance for each sensor              |   [0, √2]   |
-| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-√2, 2*√2] |
-| (6 * n_sensors) to (7 * n_sensors) | Pursuer distance for each sensor             |   [0, √2]   |
-| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-√2, 2*√2] |
+|           0 to n_sensors           | Obstacle distance for each sensor            |   [0, 1]   |
+|    n_sensors to (2 * n_sensors)    | Barrier distance for each sensor             |   [0, 1]   |
+| (2 * n_sensors) to (3 * n_sensors) | Food distance for each sensor                |   [0, 1]   |
+| (3 * n_sensors) to (4 * n_sensors) | Food speed for each sensor                   | [-2*√2, 2*√2] |
+| (4 * n_sensors) to (5 * n_sensors) | Poison distance for each sensor              |   [0, 1]   |
+| (5 * n_sensors) to (6 * n_sensors) | Poison speed for each sensor                 | [-2*√2, 2*√2] |
+| (6 * n_sensors) to (7 * n_sensors) | Pursuer distance for each sensor             |   [0, 1]   |
+| (7 * n_sensors) to (8 * n_sensors) | Pursuer speed for each sensor                | [-2*√2, 2*√2] |
 |           8 * n_sensors            | Indicates whether agent collided with food   |   {0, 1}    |
 |        (8 * n_sensors) + 1         | Indicates whether agent collided with poison |   {0, 1}    |
 
@@ -62,11 +62,11 @@ This table enumerates the observation space with `speed_features = False`:
 
 |        Index: [start, end)        | Description                                  | Values  |
 | :-------------------------------: | -------------------------------------------- | :-----: |
-|           0 - n_sensors           | Obstacle distance for each sensor            | [0, √2] |
-|    n_sensors - (2 * n_sensors)    | Barrier distance for each sensor             | [0, √2] |
-| (2 * n_sensors) - (3 * n_sensors) | Food distance for each sensor                | [0, √2] |
-| (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, √2] |
-| (4 * n_sensors) - (5 * n_sensors) | Pursuer distance for each sensor             | [0, √2] |
+|           0 - n_sensors           | Obstacle distance for each sensor            | [0, 1] |
+|    n_sensors - (2 * n_sensors)    | Barrier distance for each sensor             | [0, 1] |
+| (2 * n_sensors) - (3 * n_sensors) | Food distance for each sensor                | [0, 1] |
+| (3 * n_sensors) - (4 * n_sensors) | Poison distance for each sensor              | [0, 1] |
+| (4 * n_sensors) - (5 * n_sensors) | Pursuer distance for each sensor             | [0, 1] |
 |          (5 * n_sensors)          | Indicates whether agent collided with food   | {0, 1}  |
 |        (5 * n_sensors) + 1        | Indicates whether agent collided with poison | {0, 1}  |
 
@@ -86,7 +86,7 @@ averaged over the number of agents (global rewards) are scaled by `(1 - local_ra
 ### Arguments
 
 ``` python
-waterworld_v3.env(n_pursuers=5, n_evaders=5, n_poison=10, n_coop=2, n_sensors=20,
+waterworld_v4.env(n_pursuers=5, n_evaders=5, n_poisons=10, n_coop=2, n_sensors=20,
 sensor_range=0.2,radius=0.015, obstacle_radius=0.2,
 obstacle_coord=(0.5, 0.5), pursuer_max_accel=0.01, evader_speed=0.01,
 poison_speed=0.01, poison_reward=-1.0, food_reward=10.0, encounter_reward=0.01,
@@ -97,7 +97,7 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `n_evaders`: number of food objects
 
-`n_poison`: number of poison objects
+`n_poisons`: number of poison objects
 
 `n_coop`: number of pursuing archea (agents) that must be touching food at the same time to consume it
 
@@ -112,6 +112,8 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 `obstacle_coord`: coordinate of obstacle object. Can be set to `None` to use a random location
 
 `pursuer_max_accel`: pursuer archea maximum acceleration (maximum action size)
+
+`pursuer_speed`: pursuer (agent) maximum speed
 
 `evader_speed`: food speed
 
@@ -131,7 +133,7 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 
 `max_cycles`: After max_cycles steps all agents will return done
 
-
+* v4: Major refactor (1.22.0)
 * v3: Refactor and major bug fixes (1.5.0)
 * v2: Misc bug fixes (1.4.0)
 * v1: Various fixes and environment argument changes (1.3.1)
@@ -144,7 +146,7 @@ from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
 from .waterworld_base import FPS
-from .waterworld_base import MAWaterWorld as _env
+from .waterworld_base import WaterworldBase as _env
 
 
 def env(**kwargs):
@@ -161,7 +163,7 @@ class raw_env(AECEnv):
 
     metadata = {
         "render_modes": ["human", "rgb_array"],
-        "name": "waterworld_v3",
+        "name": "waterworld_v4",
         "is_parallelizable": True,
         "render_fps": FPS,
     }
@@ -174,10 +176,13 @@ class raw_env(AECEnv):
         self.possible_agents = self.agents[:]
         self.agent_name_mapping = dict(zip(self.agents, list(range(self.num_agents))))
         self._agent_selector = agent_selector(self.agents)
+
         # spaces
         self.action_spaces = dict(zip(self.agents, self.env.action_space))
         self.observation_spaces = dict(zip(self.agents, self.env.observation_space))
         self.has_reset = False
+
+        self.render_mode = self.env.render_mode
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -219,8 +224,8 @@ class raw_env(AECEnv):
         ):
             self._was_dead_step(action)
             return
-        agent = self.agent_selection
 
+        agent = self.agent_selection
         is_last = self._agent_selector.is_last()
         self.env.step(action, self.agent_name_mapping[agent], is_last)
 
@@ -234,6 +239,7 @@ class raw_env(AECEnv):
             self.truncations = dict(zip(self.agents, [True for _ in self.agents]))
         else:
             self.terminations = dict(zip(self.agents, self.env.last_dones))
+
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
