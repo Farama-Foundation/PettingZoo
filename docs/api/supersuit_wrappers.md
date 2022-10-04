@@ -77,103 +77,172 @@ Supersuit includes the following wrappers:
 
 * `concat_vec_envs_v0(vec_env, num_vec_envs, num_cpus=0, base_class='gym')` takes in an `vec_env` which is vector environment (should not have multithreading enabled). Creates a new vector environment with `num_vec_envs` copies of that vector environment concatenated together and runs them on `num_cpus` cpus as balanced as possible between cpus. `num_cpus=0` or `num_cpus=1` means to create 0 new threads, i.e. run the process in an efficient single threaded manner. A use case for this function is given below. If the base class of the resulting vector environment matters as it does for stable baselines, you can use the `base_class` parameter to switch between `"gym"` base class and `"stable_baselines3"`'s base class. Note that both have identical functionality.
 
-### Parallel Environment Vectorization
+[//]: # (### Parallel Environment Vectorization)
 
-Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of "environments":
+[//]: # ()
+[//]: # (Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of "environments":)
 
-``` python
-agent_1
-agent_2
-agent_3
-...
-```
+[//]: # ()
+[//]: # (``` python)
 
-Where each agent's observation, reward, done, and info will be that environment's data.
+[//]: # (agent_1)
 
-The following function performs this conversion.
+[//]: # (agent_2)
 
-* `pettingzoo_env_to_vec_env_v0(env)`: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gym vector environment where each "environment" in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper). This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines's A2C out of box (example below).
+[//]: # (agent_3)
 
-You can also use the `concat_vec_envs_v0` functionality to train on several vector environments in parallel, forming a vector which looks like
+[//]: # (...)
 
-``` python
-env_1_agent_1
-env_1_agent_2
-env_1_agent_3
-env_2_agent_1
-env_2_agent_2
-env_2_agent_3
-...
-```
+[//]: # (```)
 
-So you can for example train 4 copies of pettingzoo's pistonball environment in parallel with some code like:
+[//]: # ()
+[//]: # (Where each agent's observation, reward, done, and info will be that environment's data.)
 
-``` python
-from stable_baselines3 import PPO
-from pettingzoo.butterfly import pistonball_v6
-import supersuit as ss
-env = pistonball_v6.parallel_env()
-env = ss.color_reduction_v0(env, mode='B')
-env = ss.resize_v1(env, x_size=84, y_size=84)
-env = ss.frame_stack_v1(env, 3)
-env = ss.pettingzoo_env_to_vec_env_v0(env)
-env = ss.concat_vec_envs_v0(env, 8, num_cpus=4, base_class='stable_baselines3')
-model = PPO('CnnPolicy', env, verbose=3, n_steps=16)
-model.learn(total_timesteps=2000000)
-```
+[//]: # ()
+[//]: # (The following function performs this conversion.)
 
-* `vectorize_aec_env_v0(aec_env, num_envs, num_cpus=0)` creates an AEC Vector env (API documented in source [here](https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py)). `num_cpus=0` indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.
+[//]: # ()
+[//]: # (* `pettingzoo_env_to_vec_env_v0&#40;env&#41;`: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gym vector environment where each "environment" in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper&#41;. This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines's A2C out of box &#40;example below&#41;.)
 
-#### Note on multiprocessing
-Turning on multiprocessing runs each environment in it's own process. Turning this on is typically much slower for fast environments (like card games), but much faster for slow environments (like robotics simulations). Determining which case you are will require testing.
+[//]: # ()
+[//]: # (You can also use the `concat_vec_envs_v0` functionality to train on several vector environments in parallel, forming a vector which looks like)
 
-On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.
+[//]: # ()
+[//]: # (``` python)
 
-``` python
-import multiprocessing
-multiprocessing.set_start_method("fork")
-```
+[//]: # (env_1_agent_1)
 
-## Lambda Functions
+[//]: # (env_1_agent_2)
 
-If none of the included in micro-wrappers are suitable for your needs, you can use a lambda function (or submit a PR).
+[//]: # (env_1_agent_3)
 
-* `action_lambda_v1(env, change_action_fn, change_space_fn)` allows you to define arbitrary changes to the actions via `change_action_fn(action, space) : action` and to the action spaces with `change_space_fn(action_space) : action_space`. Remember that you are transforming the actions received by the wrapper to the actions expected by the base environment. In multi-agent environments only, the lambda functions can optionally accept an extra `agent` parameter, which lets you know the agent name of the action/action space, e.g. `change_action_fn(action, space, agent) : action`.
+[//]: # (env_2_agent_1)
 
-* `observation_lambda_v0(env, observation_fn, observation_space_fn)` allows you to define arbitrary changes to the via `observation_fn(observation, obs_space) : observation`, and `observation_space_fn(obs_space) : obs_space`. For Box-Box transformations the space transformation will be inferred from `change_observation_fn` if `change_obs_space_fn=None` by passing the `high` and `low` bounds through the `observation_space_fn`. In multi-agent environments only, the lambda functions can optionally accept an `agent` parameter, which lets you know the agent name of the observation/observation space, e.g. `observation_fn(observation, obs_space, agent) : observation`.
+[//]: # (env_2_agent_2)
 
-* `reward_lambda_v0(env, change_reward_fn)` allows you to make arbitrary changes to rewards by passing in a `change_reward_fn(reward) : reward` function. For Gym environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.
+[//]: # (env_2_agent_3)
 
-### Lambda Function Examples
+[//]: # (...)
 
-Adding noise to a Box observation looks like:
+[//]: # (```)
 
-``` python
-env = observation_lambda_v0(env, lambda x : x + np.random.normal(size=x.shape))
-```
+[//]: # ()
+[//]: # (So you can for example train 4 copies of pettingzoo's pistonball environment in parallel with some code like:)
 
-Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:
+[//]: # ()
+[//]: # (``` python)
 
-``` python
-env = observation_lambda_v0(env,
-    lambda x : x + np.random.normal(size=x.shape),
-    lambda obs_space : gym.spaces.Box(obs_space.low-5,obs_space.high+5))
-```
+[//]: # (from stable_baselines3 import PPO)
 
-Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:
+[//]: # (from pettingzoo.butterfly import pistonball_v6)
 
-``` python
-def one_hot(x,n):
-    v = np.zeros(n)
-    v[x] = 1
-    return v
+[//]: # (import supersuit as ss)
 
-env = action_lambda_v1(env,
-    lambda action, act_space : one_hot(action, act_space.shape[0]),
-    lambda act_space : gym.spaces.Discrete(act_space.shape[0]))
-```
+[//]: # (env = pistonball_v6.parallel_env&#40;&#41;)
 
-Note that many of the supersuit wrappers are implemented with a lambda wrapper behind the scenes. See [here](https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/generic_wrappers/basic_wrappers.py) for some examples.
+[//]: # (env = ss.color_reduction_v0&#40;env, mode='B'&#41;)
+
+[//]: # (env = ss.resize_v1&#40;env, x_size=84, y_size=84&#41;)
+
+[//]: # (env = ss.frame_stack_v1&#40;env, 3&#41;)
+
+[//]: # (env = ss.pettingzoo_env_to_vec_env_v0&#40;env&#41;)
+
+[//]: # (env = ss.concat_vec_envs_v0&#40;env, 8, num_cpus=4, base_class='stable_baselines3'&#41;)
+
+[//]: # (model = PPO&#40;'CnnPolicy', env, verbose=3, n_steps=16&#41;)
+
+[//]: # (model.learn&#40;total_timesteps=2000000&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (* `vectorize_aec_env_v0&#40;aec_env, num_envs, num_cpus=0&#41;` creates an AEC Vector env &#40;API documented in source [here]&#40;https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py&#41;&#41;. `num_cpus=0` indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.)
+
+[//]: # ()
+[//]: # (#### Note on multiprocessing)
+
+[//]: # (Turning on multiprocessing runs each environment in it's own process. Turning this on is typically much slower for fast environments &#40;like card games&#41;, but much faster for slow environments &#40;like robotics simulations&#41;. Determining which case you are will require testing.)
+
+[//]: # ()
+[//]: # (On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.)
+
+[//]: # ()
+[//]: # (``` python)
+
+[//]: # (import multiprocessing)
+
+[//]: # (multiprocessing.set_start_method&#40;"fork"&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (## Lambda Functions)
+
+[//]: # ()
+[//]: # (If none of the included in micro-wrappers are suitable for your needs, you can use a lambda function &#40;or submit a PR&#41;.)
+
+[//]: # ()
+[//]: # (* `action_lambda_v1&#40;env, change_action_fn, change_space_fn&#41;` allows you to define arbitrary changes to the actions via `change_action_fn&#40;action, space&#41; : action` and to the action spaces with `change_space_fn&#40;action_space&#41; : action_space`. Remember that you are transforming the actions received by the wrapper to the actions expected by the base environment. In multi-agent environments only, the lambda functions can optionally accept an extra `agent` parameter, which lets you know the agent name of the action/action space, e.g. `change_action_fn&#40;action, space, agent&#41; : action`.)
+
+[//]: # ()
+[//]: # (* `observation_lambda_v0&#40;env, observation_fn, observation_space_fn&#41;` allows you to define arbitrary changes to the via `observation_fn&#40;observation, obs_space&#41; : observation`, and `observation_space_fn&#40;obs_space&#41; : obs_space`. For Box-Box transformations the space transformation will be inferred from `change_observation_fn` if `change_obs_space_fn=None` by passing the `high` and `low` bounds through the `observation_space_fn`. In multi-agent environments only, the lambda functions can optionally accept an `agent` parameter, which lets you know the agent name of the observation/observation space, e.g. `observation_fn&#40;observation, obs_space, agent&#41; : observation`.)
+
+[//]: # ()
+[//]: # (* `reward_lambda_v0&#40;env, change_reward_fn&#41;` allows you to make arbitrary changes to rewards by passing in a `change_reward_fn&#40;reward&#41; : reward` function. For Gym environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.)
+
+[//]: # ()
+[//]: # (### Lambda Function Examples)
+
+[//]: # ()
+[//]: # (Adding noise to a Box observation looks like:)
+
+[//]: # ()
+[//]: # (``` python)
+
+[//]: # (env = observation_lambda_v0&#40;env, lambda x : x + np.random.normal&#40;size=x.shape&#41;&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:)
+
+[//]: # ()
+[//]: # (``` python)
+
+[//]: # (env = observation_lambda_v0&#40;env,)
+
+[//]: # (    lambda x : x + np.random.normal&#40;size=x.shape&#41;,)
+
+[//]: # (    lambda obs_space : gym.spaces.Box&#40;obs_space.low-5,obs_space.high+5&#41;&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:)
+
+[//]: # ()
+[//]: # (``` python)
+
+[//]: # (def one_hot&#40;x,n&#41;:)
+
+[//]: # (    v = np.zeros&#40;n&#41;)
+
+[//]: # (    v[x] = 1)
+
+[//]: # (    return v)
+
+[//]: # ()
+[//]: # (env = action_lambda_v1&#40;env,)
+
+[//]: # (    lambda action, act_space : one_hot&#40;action, act_space.shape[0]&#41;,)
+
+[//]: # (    lambda act_space : gym.spaces.Discrete&#40;act_space.shape[0]&#41;&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Note that many of the supersuit wrappers are implemented with a lambda wrapper behind the scenes. See [here]&#40;https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/generic_wrappers/basic_wrappers.py&#41; for some examples.)
 
 ## Citation
 
