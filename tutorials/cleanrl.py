@@ -4,9 +4,9 @@ This code is exceedingly basic, with no logging or weights saving.
 The intention was for users to have a (relatively clean) ~200 line file to refer to when they want to design their own learning algorithm.
 
 Dependencies:
-- SuperSuit==3.6.0
-- torch==1.12.1
 - pettingzoo==1.22.0
+- supersuit==3.6.0
+- torch==1.12.1
 """
 
 import numpy as np
