@@ -1,3 +1,15 @@
+"""Basic code which shows what it's like to run PPO on the Pistonball env using the parallel API, this code is inspired by CleanRL.
+
+This code is exceedingly basic, with no logging or weights saving.
+The intention was for users to have a (relatively clean) ~200 line file to refer to when they want to design their own learning algorithm.
+
+Dependencies:
+- SuperSuit==3.6.0
+- numpy==1.23.2
+- torch==1.12.1
+- pettinzoo==1.22.0
+"""
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -252,15 +264,16 @@ if __name__ == "__main__":
 
     agent.eval()
 
-    # render 5 episodes out
-    for episode in range(1):
-        obs = batchify_obs(env.reset(seed=None), device)
-        terms = [False]
-        truncs = [False]
-        while not any(terms) and not any(truncs):
-            actions, logprobs, _, values = agent.get_action_and_value(obs)
-            obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
-            obs = batchify_obs(obs, device)
-            terms = [terms[a] for a in terms]
-            truncs = [truncs[a] for a in truncs]
+    with torch.no_grad():
+        # render 5 episodes out
+        for episode in range(1):
+            obs = batchify_obs(env.reset(seed=None), device)
+            terms = [False]
+            truncs = [False]
+            while not any(terms) and not any(truncs):
+                actions, logprobs, _, values = agent.get_action_and_value(obs)
+                obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
+                obs = batchify_obs(obs, device)
+                terms = [terms[a] for a in terms]
+                truncs = [truncs[a] for a in truncs]
 
