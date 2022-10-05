@@ -14,6 +14,7 @@ lastpage:
 
 
 ## Environments using older versions of PettingZoo
+*The following environments use a now-depreciated API design for PettingZoo, so may be more difficult to use.*
 
 ### Sumo-RL 
 [https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
