@@ -33,15 +33,6 @@ PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation.
 Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
 
 
-### CookingZoo 
-[https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
-
-Fork of the game *Too Many Cooks*.
-
-
 ### Racecar Gym 
 [https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
 
@@ -49,6 +40,15 @@ Fork of the game *Too Many Cooks*.
 [![GitHub stars](https://img.shields.io/github/stars/axelbr/racecar_gym)]()
 
 A multi-agent racing environment.
+
+
+### CookingZoo 
+[https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
+
+Fork of the game *Too Many Cooks*.
 
 
 ### BomberManAI 
