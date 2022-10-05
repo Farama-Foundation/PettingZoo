@@ -15,92 +15,130 @@ lastpage:
 PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
 
 
-## StarCraft Multi-Agent Challenge ??
-[https://github.com/oxwhirl/smac](https://github.com/oxwhirl/smac)
-
-Collection of widely used StarCraft2 based cooperative environments.
-
-
-## Hearthstone Battlegrounds Simulator (not vc, will break)
-[https://github.com/JDBumgardner/stone_ground_hearth_battles](https://github.com/JDBumgardner/stone_ground_hearth_battles)
-
-PettingZoo environment wrapper for Blizzard's Hearthstone game.
-
-
-## Fanorona AEC 1.8.1
+## Fanorona AEC 
+Uses PettingZoo v1.8.1
 [https://github.com/AbhijeetKrishnan/fanorona-aec](https://github.com/AbhijeetKrishnan/fanorona-aec)
 
 Implementation of the Fanorona board game
 
 
-## Longroad Envs (not vc, will break)
-[https://github.com/grzPat/longroad-envs](https://github.com/grzPat/longroad-envs)
-
-Multi-Agent traffic control environments.
-
-
-## PZ Dilemma (not vc, will break)
-[https://github.com/arjun-prakash/pz_dilemma](https://github.com/arjun-prakash/pz_dilemma)
-
-Collection of prisoner's dilemma games as PettingZoo environments
-
-## Ants (just an env, pre term/trunc style)
-[https://github.com/chorsch/ants](https://github.com/chorsch/ants)
-
-Simplified simulation of an ant colony
-
-## Generalized Rock Paper Scissors (old fork)
-[https://github.com/afozk95/PettingZoo/tree/add_generalized_rps](https://github.com/afozk95/PettingZoo/tree/add_generalized_rps)
-
-More general n-players form of the Rock Paper Scissors environments in PettingZoo
-
-## PZ Risk (no deps)
-[https://github.com/mahi97/pz_risk](https://github.com/mahi97/pz_risk)
-
-Implementation of the Risk board game as a PettingZoo environment
-
-## Sumo-RL 1.20.1
+## Sumo-RL 
+Uses PettingZoo v1.20.1
 [https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
 
 PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 
-## Sequential Social Delima Games (will break)
-[https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197](https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197)
 
-Set of two environments with numerous multi-agent equilibria popular with researchers
-
-## Neural MMO 1.15.0
+## Neural MMO 
+Uses PettingZoo v1.15.0
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
 Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
 
-## CookingZoo 1.11.2
+
+## CookingZoo 
+Uses PettingZoo v1.11.2
 [https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
 
 Maintained fork of too many cooks game with PettingZoo API support
 
-## SNIM (deleted)
-[https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py](https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py)
 
-PettingZoo based supply chain management environment
-
-## CityLearn (not vc, unreachable)
-
-[https://github.com/apigott/CityLearn](https://github.com/apigott/CityLearn)
-
-PettingZoo environments for city grid power management, based on the CityLearn simulator.
-
-## Racecar Gym 1.18.1
+## Racecar Gym 
+Uses PettingZoo v1.18.1
 [https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
 
 Multi-Agent racing environment that supports the PettingZoo API.
 
-## Mu Torere (1.14.0)
+
+## Mu Torere
+Uses PettingZoo v1.14.0
 [https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
 
 PettingZoo based implementation of the Mū tōrere board game from New Zealand
 
-## skyjo_rl (1.14.0)
+
+## skyjo_rl
+Uses PettingZoo v1.14.0
 [https://github.com/michaelfeil/skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
 
 PettingZoo based implementation of the SkyJo board game
+
+
+[//]: # (## StarCraft Multi-Agent Challenge &#40;high priority fix&#41;)
+
+[//]: # ([https://github.com/oxwhirl/smac]&#40;https://github.com/oxwhirl/smac&#41;)
+
+[//]: # ()
+[//]: # (Collection of widely used StarCraft2 based cooperative environments.)
+
+
+[//]: # ()
+[//]: # (## Hearthstone Battlegrounds Simulator &#40;not vc, will break&#41;)
+
+[//]: # ([https://github.com/JDBumgardner/stone_ground_hearth_battles]&#40;https://github.com/JDBumgardner/stone_ground_hearth_battles&#41;)
+
+[//]: # ()
+[//]: # (PettingZoo environment wrapper for Blizzard's Hearthstone game.)
+
+[//]: # ()
+[//]: # (## Longroad Envs &#40;not vc, will break&#41;)
+
+[//]: # ([https://github.com/grzPat/longroad-envs]&#40;https://github.com/grzPat/longroad-envs&#41;)
+
+[//]: # ()
+[//]: # (Multi-Agent traffic control environments.)
+
+[//]: # ()
+[//]: # ()
+[//]: # (## PZ Dilemma &#40;not vc, will break&#41;)
+
+[//]: # ([https://github.com/arjun-prakash/pz_dilemma]&#40;https://github.com/arjun-prakash/pz_dilemma&#41;)
+
+[//]: # ()
+[//]: # (Collection of prisoner's dilemma games as PettingZoo environments)
+
+[//]: # ()
+[//]: # (## Ants &#40;just an env, pre term/trunc style&#41;)
+
+[//]: # ([https://github.com/chorsch/ants]&#40;https://github.com/chorsch/ants&#41;)
+
+[//]: # ()
+[//]: # (Simplified simulation of an ant colony)
+
+[//]: # ()
+[//]: # (## Generalized Rock Paper Scissors &#40;old fork&#41;)
+
+[//]: # ([https://github.com/afozk95/PettingZoo/tree/add_generalized_rps]&#40;https://github.com/afozk95/PettingZoo/tree/add_generalized_rps&#41;)
+
+[//]: # ()
+[//]: # (More general n-players form of the Rock Paper Scissors environments in PettingZoo)
+
+[//]: # ()
+[//]: # (## PZ Risk &#40;no deps&#41;)
+
+[//]: # ([https://github.com/mahi97/pz_risk]&#40;https://github.com/mahi97/pz_risk&#41;)
+
+[//]: # ()
+[//]: # (Implementation of the Risk board game as a PettingZoo environment)
+
+[//]: # (## Sequential Social Delima Games &#40;will break&#41;)
+
+[//]: # ([https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197]&#40;https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197&#41;)
+
+[//]: # ()
+[//]: # (Set of two environments with numerous multi-agent equilibria popular with researchers)
+
+[//]: # (## SNIM &#40;deleted&#41;)
+
+[//]: # ([https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py]&#40;https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py&#41;)
+
+[//]: # ()
+[//]: # (PettingZoo based supply chain management environment)
+
+[//]: # ()
+[//]: # (## CityLearn &#40;not vc, unreachable&#41;)
+
+[//]: # ()
+[//]: # ([https://github.com/apigott/CityLearn]&#40;https://github.com/apigott/CityLearn&#41;)
+[//]: # ()
+[//]: # (PettingZoo environments for city grid power management, based on the CityLearn simulator.)
