@@ -14,10 +14,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from supersuit import color_reduction_v0, frame_stack_v1, resize_v1
 from torch.distributions.categorical import Categorical
 
 from pettingzoo.butterfly import pistonball_v6
-from supersuit import color_reduction_v0, resize_v1, frame_stack_v1
 
 
 class Agent(nn.Module):
@@ -212,7 +212,9 @@ if __name__ == "__main__":
 
                 # normalize advantaegs
                 advantages = b_advantages[batch_index]
-                advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+                advantages = (advantages - advantages.mean()) / (
+                    advantages.std() + 1e-8
+                )
 
                 # Policy loss
                 pg_loss1 = -b_advantages[batch_index] * ratio
@@ -276,4 +278,3 @@ if __name__ == "__main__":
                 obs = batchify_obs(obs, device)
                 terms = [terms[a] for a in terms]
                 truncs = [truncs[a] for a in truncs]
-
