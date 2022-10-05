@@ -5,7 +5,6 @@ The intention was for users to have a (relatively clean) ~200 line file to refer
 
 Dependencies:
 - SuperSuit==3.6.0
-- numpy==1.23.2
 - torch==1.12.1
 - pettingzoo==1.22.0
 """
@@ -100,7 +99,7 @@ if __name__ == "__main__":
     stack_size = 4
     frame_size = (64, 64)
     max_cycles = 125
-    total_episodes = 2
+    total_episodes = 150
 
     """ ENV SETUP """
     env = pistonball_v6.parallel_env(
