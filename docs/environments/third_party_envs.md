@@ -10,57 +10,73 @@ lastpage:
 *These environments are not maintained by Farama Foundation and, as such, may rely on older versions of PettingZoo.*
 
 ## BomberManAI 
-Uses PettingZoo v1.16.0
 [https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.16.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
 
 PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
 
 
 ## Fanorona AEC 
-Uses PettingZoo v1.8.1
 [https://github.com/AbhijeetKrishnan/fanorona-aec](https://github.com/AbhijeetKrishnan/fanorona-aec)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
 
 Implementation of the Fanorona board game
 
 
 ## Sumo-RL 
-Uses PettingZoo v1.20.1
 [https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.20.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/LucasAlegre/sumo-rl)]()
 
 PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 
 
 ## Neural MMO 
-Uses PettingZoo v1.15.0
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.15.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/jsuarez5341/neural-mmo)]()
 
 Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
 
 
 ## CookingZoo 
-Uses PettingZoo v1.11.2
 [https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
 
 Maintained fork of too many cooks game with PettingZoo API support
 
 
 ## Racecar Gym 
-Uses PettingZoo v1.18.1
 [https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/axelbr/racecar_gym)]()
 
 Multi-Agent racing environment that supports the PettingZoo API.
 
 
 ## Mu Torere
-Uses PettingZoo v1.14.0
 [https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
 
 PettingZoo based implementation of the Mū tōrere board game from New Zealand
 
 
 ## skyjo_rl
-Uses PettingZoo v1.14.0
 [https://github.com/michaelfeil/skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/michaelfeil/skyjo_rl)]()
 
 PettingZoo based implementation of the SkyJo board game
 
