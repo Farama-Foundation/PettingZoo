@@ -9,7 +9,8 @@ lastpage:
 
 *These environments are not maintained by Farama Foundation and, as such, may rely on older versions of PettingZoo.*
 
-## BomberManAI 1.16.0
+## BomberManAI 
+Uses PettingZoo v1.16.0
 [https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
 
 PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
