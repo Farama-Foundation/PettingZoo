@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.distributions.categorical import Categorical
 
-from pettingzoo.butterfly import cooperative_pong_v5
+from pettingzoo.butterfly import pistonball_v6
 from supersuit import color_reduction_v0, resize_v1, frame_stack_v1
 
 
@@ -23,7 +23,7 @@ class Agent(nn.Module):
             nn.MaxPool2d(2),
             nn.ReLU(),
             nn.Flatten(),
-            self.layer_init(nn.Linear(128 * 4 * 4, 512)),
+            self.layer_init(nn.Linear(128 * 8 * 8, 512)),
             nn.ReLU(),
         )
         self.actor = self.layer_init(nn.Linear(512, num_actions), std=0.01)
@@ -49,7 +49,7 @@ class Agent(nn.Module):
 def batchify_obs(obs, device):
     """Converts PZ style observations to batch of torch arrays"""
     # convert to list of np arrays
-    obs = np.stack([obs[a] for a in env.possible_agents], axis=0)
+    obs = np.stack([obs[a] for a in obs], axis=0)
     # transpose to be (batch, channel, height, width)
     obs = obs.transpose(0, -1, 1, 2)
     # convert to torch
@@ -61,7 +61,7 @@ def batchify_obs(obs, device):
 def batchify(x, device):
     """Converts PZ style returns to batch of torch arrays"""
     # convert to list of np arrays
-    x = np.stack([x[a] for a in env.possible_agents], axis=0)
+    x = np.stack([x[a] for a in x], axis=0)
     # convert to torch
     x = torch.tensor(x).to(device)
 
@@ -81,9 +81,9 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     """ ENV SETUP """
-    env = cooperative_pong_v5.parallel_env()
+    env = pistonball_v6.parallel_env(render_mode="rgb_array", continuous=False)
     env = color_reduction_v0(env)
-    env = resize_v1(env, 32, 32)
+    env = resize_v1(env, 64, 64)
     env = frame_stack_v1(env, stack_size=4)
     num_agents = len(env.possible_agents)
     num_actions = env.action_space(env.possible_agents[0]).n
@@ -101,10 +101,10 @@ if __name__ == "__main__":
     batch_size = 32
 
     """ ALGO LOGIC: EPISODE STORAGE"""
-    num_steps = 900
+    num_steps = 125
     end_step = 0
     total_episodic_return = 0
-    rb_obs = torch.zeros((num_steps, num_agents, 4, 32, 32)).to(device)
+    rb_obs = torch.zeros((num_steps, num_agents, 4, 64, 64)).to(device)
     rb_actions = torch.zeros((num_steps, num_agents)).to(device)
     rb_logprobs = torch.zeros((num_steps, num_agents)).to(device)
     rb_rewards = torch.zeros((num_steps, num_agents)).to(device)
@@ -113,48 +113,55 @@ if __name__ == "__main__":
 
     """ TRAINING LOGIC """
     # train for n number of episodes
-    for episode in range(1, 1000):
+    for episode in range(2):
 
-        # collect observations and convert to batch of torch tensors
-        next_obs = batchify_obs(env.reset(seed=None), device)
-        # get next dones and convert to batch of torch tensors
-        next_dones = torch.zeros(num_agents).to(device)
-        # reset the episodic return
-        total_episodic_return = 0
+        # collect an episode
+        with torch.no_grad():
 
-        # each episode has num_steps
-        for step in range(0, num_steps):
-            # store the observation and done
-            rb_obs[step] = next_obs
-            rb_terms[step] = next_dones
+            # collect observations and convert to batch of torch tensors
+            next_obs = env.reset(seed=None)
+            # reset the episodic return
+            total_episodic_return = 0
 
-            # ALGO LOGIC: action logic
-            with torch.no_grad():
-                actions, logprobs, _, values = agent.get_action_and_value(next_obs)
-                rb_values[step] = values.flatten()
+            # each episode has num_steps
+            for step in range(0, num_steps):
+
+                # rollover the observation
+                obs = batchify_obs(next_obs, device)
+
+                # get action from the agent
+                actions, logprobs, _, values = agent.get_action_and_value(obs)
+
+                # execute the environment and log data
+                next_obs, rewards, terms, truncs, infos = env.step(
+                    unbatchify(actions, env)
+                )
+
+                # add to episode storage
+                rb_obs[step] = obs
+                rb_rewards[step] = batchify(rewards, device)
+                rb_terms[step] = batchify(terms, device)
                 rb_actions[step] = actions
                 rb_logprobs[step] = logprobs
+                rb_values[step] = values.flatten()
 
-            # execute the environment and log data
-            next_obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
-            next_obs = batchify_obs(next_obs, device)
-            rewards = batchify(rewards, device)
-            terms = batchify(terms, device)
-            truncs = batchify(truncs, device)
-            rb_rewards[step] = rewards
-            total_episodic_return += rewards.cpu().numpy()
+                # compute episodic return
+                total_episodic_return += rb_rewards[step].cpu().numpy()
 
-            # if we reach termination or truncation, end
-            if any(terms) or any(truncs):
-                end_step = step
-                break
+                # if we reach termination or truncation, end
+                if any([terms[a] for a in terms]) or any([truncs[a] for a in truncs]):
+                    end_step = step
+                    break
 
         # bootstrap value if not done
         with torch.no_grad():
             rb_advantages = torch.zeros_like(rb_rewards).to(device)
-            for t in reversed(range(end_step + 1)):
-                next_V = rb_values[t]
-                delta = rb_rewards[t] + gamma * rb_values[t + 1] - rb_values[t]
+            for t in reversed(range(end_step)):
+                delta = (
+                    rb_rewards[t]
+                    + gamma * rb_values[t + 1] * rb_terms[t + 1]
+                    - rb_values[t]
+                )
                 rb_advantages[t] = delta + gamma * gamma * rb_advantages[t + 1]
             rb_returns = rb_advantages + rb_values
 
@@ -170,12 +177,14 @@ if __name__ == "__main__":
         b_index = np.arange(len(b_obs))
         clip_fracs = []
         for repeat in range(3):
+            # shuffle the indices we use to access the data
             np.random.shuffle(b_index)
             for start in range(0, len(b_obs), batch_size):
+                # select the indices we want to train on
                 end = start + batch_size
                 batch_index = b_index[start:end]
 
-                _, newlogprob, entropy, newvalue = agent.get_action_and_value(
+                _, newlogprob, entropy, value = agent.get_action_and_value(
                     b_obs[batch_index], b_actions.long()[batch_index]
                 )
                 logratio = newlogprob - b_logprobs[batch_index]
@@ -189,6 +198,10 @@ if __name__ == "__main__":
                         ((ratio - 1.0).abs() > clip_coef).float().mean().item()
                     ]
 
+                # normalize advantaegs
+                advantages = b_advantages[batch_index]
+                advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+
                 # Policy loss
                 pg_loss1 = -b_advantages[batch_index] * ratio
                 pg_loss2 = -b_advantages[batch_index] * torch.clamp(
@@ -197,9 +210,10 @@ if __name__ == "__main__":
                 pg_loss = torch.max(pg_loss1, pg_loss2).mean()
 
                 # Value loss
-                v_loss_unclipped = (newvalue - b_returns[batch_index]) ** 2
+                value = value.flatten()
+                v_loss_unclipped = (value - b_returns[batch_index]) ** 2
                 v_clipped = b_values[batch_index] + torch.clamp(
-                    newvalue - b_values[batch_index],
+                    value - b_values[batch_index],
                     -clip_coef,
                     clip_coef,
                 )
@@ -229,3 +243,24 @@ if __name__ == "__main__":
         print(f"Clip Fraction: {np.mean(clip_fracs)}")
         print(f"Explained Variance: {explained_var.item()}")
         print("\n-------------------------------------------\n")
+
+    """ RENDER THE POLICY """
+    env = pistonball_v6.parallel_env(render_mode="human", continuous=False)
+    env = color_reduction_v0(env)
+    env = resize_v1(env, 64, 64)
+    env = frame_stack_v1(env, stack_size=4)
+
+    agent.eval()
+
+    # render 5 episodes out
+    for episode in range(1):
+        obs = batchify_obs(env.reset(seed=None), device)
+        terms = [False]
+        truncs = [False]
+        while not any(terms) and not any(truncs):
+            actions, logprobs, _, values = agent.get_action_and_value(obs)
+            obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
+            obs = batchify_obs(obs, device)
+            terms = [terms[a] for a in terms]
+            truncs = [truncs[a] for a in truncs]
+
