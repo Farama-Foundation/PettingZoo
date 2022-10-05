@@ -7,7 +7,7 @@ Dependencies:
 - SuperSuit==3.6.0
 - numpy==1.23.2
 - torch==1.12.1
-- pettinzoo==1.22.0
+- pettingzoo==1.22.0
 """
 
 import numpy as np
@@ -59,7 +59,7 @@ class Agent(nn.Module):
 
 
 def batchify_obs(obs, device):
-    """Converts PZ style observations to batch of torch arrays"""
+    """Converts PZ style observations to batch of torch arrays."""
     # convert to list of np arrays
     obs = np.stack([obs[a] for a in obs], axis=0)
     # transpose to be (batch, channel, height, width)
@@ -71,7 +71,7 @@ def batchify_obs(obs, device):
 
 
 def batchify(x, device):
-    """Converts PZ style returns to batch of torch arrays"""
+    """Converts PZ style returns to batch of torch arrays."""
     # convert to list of np arrays
     x = np.stack([x[a] for a in x], axis=0)
     # convert to torch
@@ -81,7 +81,7 @@ def batchify(x, device):
 
 
 def unbatchify(x, env):
-    """Converts np array to PZ style arguments"""
+    """Converts np array to PZ style arguments."""
     x = x.cpu().numpy()
     x = {a: x[i] for i, a in enumerate(env.possible_agents)}
 
@@ -90,13 +90,25 @@ def unbatchify(x, env):
 
 if __name__ == "__main__":
 
+    """ALGO PARAMS"""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    ent_coef = 0.1
+    vf_coef = 0.1
+    clip_coef = 0.1
+    gamma = 0.99
+    batch_size = 32
+    stack_size = 4
+    frame_size = (64, 64)
+    max_cycles = 125
+    total_episodes = 2
 
     """ ENV SETUP """
-    env = pistonball_v6.parallel_env(render_mode="rgb_array", continuous=False)
+    env = pistonball_v6.parallel_env(
+        render_mode="rgb_array", continuous=False, max_cycles=max_cycles
+    )
     env = color_reduction_v0(env)
-    env = resize_v1(env, 64, 64)
-    env = frame_stack_v1(env, stack_size=4)
+    env = resize_v1(env, frame_size[0], frame_size[1])
+    env = frame_stack_v1(env, stack_size=stack_size)
     num_agents = len(env.possible_agents)
     num_actions = env.action_space(env.possible_agents[0]).n
     observation_size = env.observation_space((env.possible_agents[0])).shape
@@ -105,27 +117,19 @@ if __name__ == "__main__":
     agent = Agent(num_actions=num_actions).to(device)
     optimizer = optim.Adam(agent.parameters(), lr=0.001, eps=1e-5)
 
-    """ ALGO PARAMS """
-    ent_coef = 0.1
-    vf_coef = 0.1
-    clip_coef = 0.1
-    gamma = 0.99
-    batch_size = 32
-
     """ ALGO LOGIC: EPISODE STORAGE"""
-    num_steps = 125
     end_step = 0
     total_episodic_return = 0
-    rb_obs = torch.zeros((num_steps, num_agents, 4, 64, 64)).to(device)
-    rb_actions = torch.zeros((num_steps, num_agents)).to(device)
-    rb_logprobs = torch.zeros((num_steps, num_agents)).to(device)
-    rb_rewards = torch.zeros((num_steps, num_agents)).to(device)
-    rb_terms = torch.zeros((num_steps, num_agents)).to(device)
-    rb_values = torch.zeros((num_steps, num_agents)).to(device)
+    rb_obs = torch.zeros((max_cycles, num_agents, stack_size, *frame_size)).to(device)
+    rb_actions = torch.zeros((max_cycles, num_agents)).to(device)
+    rb_logprobs = torch.zeros((max_cycles, num_agents)).to(device)
+    rb_rewards = torch.zeros((max_cycles, num_agents)).to(device)
+    rb_terms = torch.zeros((max_cycles, num_agents)).to(device)
+    rb_values = torch.zeros((max_cycles, num_agents)).to(device)
 
     """ TRAINING LOGIC """
     # train for n number of episodes
-    for episode in range(2):
+    for episode in range(total_episodes):
 
         # collect an episode
         with torch.no_grad():
@@ -136,7 +140,7 @@ if __name__ == "__main__":
             total_episodic_return = 0
 
             # each episode has num_steps
-            for step in range(0, num_steps):
+            for step in range(0, max_cycles):
 
                 # rollover the observation
                 obs = batchify_obs(next_obs, device)
@@ -177,7 +181,7 @@ if __name__ == "__main__":
                 rb_advantages[t] = delta + gamma * gamma * rb_advantages[t + 1]
             rb_returns = rb_advantages + rb_values
 
-        # convert our episodes to individual transitions
+        # convert our episodes to batch of individual transitions
         b_obs = torch.flatten(rb_obs[:end_step], start_dim=0, end_dim=1)
         b_logprobs = torch.flatten(rb_logprobs[:end_step], start_dim=0, end_dim=1)
         b_actions = torch.flatten(rb_actions[:end_step], start_dim=0, end_dim=1)
@@ -268,7 +272,7 @@ if __name__ == "__main__":
 
     with torch.no_grad():
         # render 5 episodes out
-        for episode in range(1):
+        for episode in range(5):
             obs = batchify_obs(env.reset(seed=None), device)
             terms = [False]
             truncs = [False]
