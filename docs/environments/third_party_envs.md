@@ -7,36 +7,24 @@ lastpage:
 
 # Third-Party Environments
 
-*These environments are not maintained by Farama Foundation and, as such, may rely on older versions of PettingZoo.*
+*These environments are not maintained by Farama Foundation and, as such, cannot be guaranteed to function as intended.*
 
-## BomberManAI 
-[https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.16.0-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
-
-PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.
+## Environments using the latest versions of PettingZoo
+*Due to a very recent major release of PettingZoo, there are currently no contributed third-party environments. If you'd like to contribute one, please reach out on [Discord](https://discord.gg/nHg2JRN489).*
 
 
-## Fanorona AEC 
-[https://github.com/AbhijeetKrishnan/fanorona-aec](https://github.com/AbhijeetKrishnan/fanorona-aec)
+## Environments using older versions of PettingZoo
 
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
-
-Implementation of the Fanorona board game
-
-
-## Sumo-RL 
+### Sumo-RL 
 [https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.20.1-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/LucasAlegre/sumo-rl)]()
 
-PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
+PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation.
 
 
-## Neural MMO 
+### Neural MMO 
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.15.0-blue)]()
@@ -45,40 +33,58 @@ PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation
 Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems
 
 
-## CookingZoo 
+### CookingZoo 
 [https://github.com/DavidRother/gym-cooking](https://github.com/DavidRother/gym-cooking)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
 
-Maintained fork of too many cooks game with PettingZoo API support
+Fork of the game *Too Many Cooks*.
 
 
-## Racecar Gym 
+### Racecar Gym 
 [https://github.com/axelbr/racecar_gym](https://github.com/axelbr/racecar_gym)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.1-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/axelbr/racecar_gym)]()
 
-Multi-Agent racing environment that supports the PettingZoo API.
+A multi-agent racing environment.
 
 
-## Mu Torere
-[https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
+### BomberManAI 
+[https://github.com/NaIwo/BomberManAI](https://github.com/NaIwo/BomberManAI)
 
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.16.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
 
-PettingZoo based implementation of the Mū tōrere board game from New Zealand
+Environment with a simplified version of the video game *BomberMan*.
 
 
-## skyjo_rl
+### Fanorona AEC 
+[https://github.com/AbhijeetKrishnan/fanorona-aec](https://github.com/AbhijeetKrishnan/fanorona-aec)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
+
+Implementation of the board game *Fanorona*.
+
+
+### skyjo_rl
 [https://github.com/michaelfeil/skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/michaelfeil/skyjo_rl)]()
 
-PettingZoo based implementation of the SkyJo board game
+Implementation of the board game *SkyJo*.
+
+
+### Mu Torere
+[https://github.com/Aroksak/MuTorere](https://github.com/Aroksak/MuTorere)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
+
+Implementation of the board game *Mū tōrere* from New Zealand.
 
 
 [//]: # (## StarCraft Multi-Agent Challenge &#40;high priority fix&#41;)
