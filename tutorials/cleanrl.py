@@ -99,7 +99,7 @@ if __name__ == "__main__":
     stack_size = 4
     frame_size = (64, 64)
     max_cycles = 125
-    total_episodes = 150
+    total_episodes = 500
 
     """ ENV SETUP """
     env = pistonball_v6.parallel_env(
@@ -261,23 +261,23 @@ if __name__ == "__main__":
         print(f"Explained Variance: {explained_var.item()}")
         print("\n-------------------------------------------\n")
 
-    """ RENDER THE POLICY """
-    env = pistonball_v6.parallel_env(render_mode="human", continuous=False)
-    env = color_reduction_v0(env)
-    env = resize_v1(env, 64, 64)
-    env = frame_stack_v1(env, stack_size=4)
+    # """ RENDER THE POLICY """
+    # env = pistonball_v6.parallel_env(render_mode="human", continuous=False)
+    # env = color_reduction_v0(env)
+    # env = resize_v1(env, 64, 64)
+    # env = frame_stack_v1(env, stack_size=4)
 
-    agent.eval()
+    # agent.eval()
 
-    with torch.no_grad():
-        # render 5 episodes out
-        for episode in range(5):
-            obs = batchify_obs(env.reset(seed=None), device)
-            terms = [False]
-            truncs = [False]
-            while not any(terms) and not any(truncs):
-                actions, logprobs, _, values = agent.get_action_and_value(obs)
-                obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
-                obs = batchify_obs(obs, device)
-                terms = [terms[a] for a in terms]
-                truncs = [truncs[a] for a in truncs]
+    # with torch.no_grad():
+    #     # render 5 episodes out
+    #     for episode in range(5):
+    #         obs = batchify_obs(env.reset(seed=None), device)
+    #         terms = [False]
+    #         truncs = [False]
+    #         while not any(terms) and not any(truncs):
+    #             actions, logprobs, _, values = agent.get_action_and_value(obs)
+    #             obs, rewards, terms, truncs, infos = env.step(unbatchify(actions, env))
+    #             obs = batchify_obs(obs, device)
+    #             terms = [terms[a] for a in terms]
+    #             truncs = [truncs[a] for a in truncs]
