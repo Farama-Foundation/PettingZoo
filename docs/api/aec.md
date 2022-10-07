@@ -1,4 +1,4 @@
-# Core API
+# AEC Env API
 
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.env

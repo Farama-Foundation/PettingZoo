@@ -29,7 +29,7 @@ tutorials/rllib/pistonball
 :hidden:
 :caption: API
 
-api/core
+api/aec
 api/parallel
 api/pz_wrappers
 api/supersuit_wrappers
