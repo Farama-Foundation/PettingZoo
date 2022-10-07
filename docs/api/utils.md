@@ -17,62 +17,98 @@ average_total_reward(env, max_episodes=100, max_steps=10000000000)
 
 Where `max_episodes` and `max_steps` both limit the total number of evaluations (when the first is hit evaluation stops)
 
-### Manual Control
+[//]: # (### Manual Control)
 
-Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:
+[//]: # ()
+[//]: # (Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:)
 
-``` python
-from pettingzoo.butterfly knights_archers_zombies_v10
-knights_archers_zombies_v10.manual_control(<environment parameters>)
-```
+[//]: # ()
+[//]: # (``` python)
 
-Environments say if they support this functionality in their documentation, and what the specific controls are.
+[//]: # (from pettingzoo.butterfly knights_archers_zombies_v10)
 
-### Random Demo
+[//]: # (knights_archers_zombies_v10.manual_control&#40;<environment parameters>&#41;)
 
-You can also easily get a quick impression of them by watching a random policy control all the actions:
+[//]: # (```)
 
-``` python
-from pettingzoo.utils import random_demo
-random_demo(env, render=True, episodes=1)
-```
+[//]: # ()
+[//]: # (Environments say if they support this functionality in their documentation, and what the specific controls are.)
 
-### Playing Alongside Trained Policies
+[//]: # ()
+[//]: # (### Random Demo)
 
-Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.
-Some games support this via:
+[//]: # ()
+[//]: # (You can also easily get a quick impression of them by watching a random policy control all the actions:)
 
-``` python
-import time
-from pettingzoo.butterfly import knights_archers_zombies_v10
+[//]: # ()
+[//]: # (``` python)
 
-env = knights_archers_zombies_v10.env()
-env.reset()
+[//]: # (from pettingzoo.utils import random_demo)
 
-manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
+[//]: # (random_demo&#40;env, render=True, episodes=1&#41;)
 
-for agent in env.agent_iter():
-    observation, reward, termination, truncation, info = env.last()
+[//]: # (```)
 
-    if agent == manual_policy.agent:
-        action = manual_policy(observation, agent)
-    else:
-        action = policy(observation, agent)
+[//]: # ()
+[//]: # (### Playing Alongside Trained Policies)
 
-    env.step(action)
+[//]: # ()
+[//]: # (Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.)
 
-    env.render()
-    time.sleep(0.05)
+[//]: # (Some games support this via:)
 
-    if termination or truncation:
-        env.reset()
-```
+[//]: # ()
+[//]: # (``` python)
 
-`ManualPolicy` accepts several default arguments:
+[//]: # (import time)
 
-`agent_id`: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use `manual_policy.availabla_agents` to query what agents are available and what are their indices.
+[//]: # (from pettingzoo.butterfly import knights_archers_zombies_v10)
 
-`show_obs`: Is a boolean which shows the observation from the currently selected agent, if available.
+[//]: # ()
+[//]: # (env = knights_archers_zombies_v10.env&#40;&#41;)
+
+[//]: # (env.reset&#40;&#41;)
+
+[//]: # ()
+[//]: # (manual_policy = knights_archers_zombies_v10.ManualPolicy&#40;env&#41;)
+
+[//]: # ()
+[//]: # (for agent in env.agent_iter&#40;&#41;:)
+
+[//]: # (    observation, reward, termination, truncation, info = env.last&#40;&#41;)
+
+[//]: # ()
+[//]: # (    if agent == manual_policy.agent:)
+
+[//]: # (        action = manual_policy&#40;observation, agent&#41;)
+
+[//]: # (    else:)
+
+[//]: # (        action = policy&#40;observation, agent&#41;)
+
+[//]: # ()
+[//]: # (    env.step&#40;action&#41;)
+
+[//]: # ()
+[//]: # (    env.render&#40;&#41;)
+
+[//]: # (    time.sleep&#40;0.05&#41;)
+
+[//]: # ()
+[//]: # (    if termination or truncation:)
+
+[//]: # (        env.reset&#40;&#41;)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (`ManualPolicy` accepts several default arguments:)
+
+[//]: # ()
+[//]: # (`agent_id`: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use `manual_policy.availabla_agents` to query what agents are available and what are their indices.)
+
+[//]: # ()
+[//]: # (`show_obs`: Is a boolean which shows the observation from the currently selected agent, if available.)
 
 ### Observation Saving
 
