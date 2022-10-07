@@ -1,4 +1,4 @@
-from gym.spaces import Discrete
+from gymnasium.spaces import Discrete
 
 from .base import BaseWrapper
 

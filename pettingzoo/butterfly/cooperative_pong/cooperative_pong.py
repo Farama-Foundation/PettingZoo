@@ -73,10 +73,10 @@ right_paddle_speed=12, cake_paddle=True, max_cycles=900, bounce_randomness=False
 
 """
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
-from gym.utils import EzPickle, seeding
+from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -169,19 +169,21 @@ class CooperativePong:
         self.off_screen_penalty = off_screen_penalty
 
         # define action and observation spaces
-        self.action_space = [gym.spaces.Discrete(3) for _ in range(self.num_agents)]
+        self.action_space = [
+            gymnasium.spaces.Discrete(3) for _ in range(self.num_agents)
+        ]
         original_shape = original_obs_shape(
             self.s_width, self.s_height, kernel_window_length=kernel_window_length
         )
         original_color_shape = (original_shape[0], original_shape[1], 3)
         self.observation_space = [
-            gym.spaces.Box(
+            gymnasium.spaces.Box(
                 low=0, high=255, shape=(original_color_shape), dtype=np.uint8
             )
             for _ in range(self.num_agents)
         ]
         # define the global space of the environment or state
-        self.state_space = gym.spaces.Box(
+        self.state_space = gymnasium.spaces.Box(
             low=0, high=255, shape=((self.s_height, self.s_width, 3)), dtype=np.uint8
         )
 
@@ -262,7 +264,7 @@ class CooperativePong:
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return

@@ -12,8 +12,8 @@ from Box2D.b2 import (
     polygonShape,
     revoluteJointDef,
 )
-from gym import spaces
-from gym.utils import seeding
+from gymnasium import spaces
+from gymnasium.utils import seeding
 from pygame import gfxdraw
 
 from .._utils import Agent

@@ -1,22 +1,22 @@
 import warnings
 
-import gym
+import gymnasium
 import numpy as np
 
 
 def test_state_space(env):
     assert isinstance(
-        env.state_space, gym.spaces.Space
-    ), "State space for each environment must extend gym.spaces.Space"
+        env.state_space, gymnasium.spaces.Space
+    ), "State space for each environment must extend gymnasium.spaces.Space"
     if not (
-        isinstance(env.state_space, gym.spaces.Box)
-        or isinstance(env.state_space, gym.spaces.Discrete)
+        isinstance(env.state_space, gymnasium.spaces.Box)
+        or isinstance(env.state_space, gymnasium.spaces.Discrete)
     ):
         warnings.warn(
-            "State space for each environment probably should be gym.spaces.box or gym.spaces.discrete"
+            "State space for each environment probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
         )
 
-    if isinstance(env.state_space, gym.spaces.Box):
+    if isinstance(env.state_space, gymnasium.spaces.Box):
         if np.any(np.equal(env.state_space.low, -np.inf)):
             warnings.warn(
                 "Environment's minimum state space value is -infinity. This is probably too low."
@@ -100,8 +100,8 @@ def test_parallel_env(parallel_env):
     parallel_env.reset()
 
     assert isinstance(
-        parallel_env.state_space, gym.spaces.Space
-    ), "State space for each parallel environment must extend gym.spaces.Space"
+        parallel_env.state_space, gymnasium.spaces.Space
+    ), "State space for each parallel environment must extend gymnasium.spaces.Space"
 
     state_0 = parallel_env.state()
     assert parallel_env.state_space.contains(

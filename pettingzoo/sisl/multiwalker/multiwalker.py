@@ -125,7 +125,7 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 """
 
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers

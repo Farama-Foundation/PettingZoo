@@ -3,7 +3,7 @@ import re
 import warnings
 from collections import defaultdict
 
-import gym
+import gymnasium
 import numpy as np
 
 import pettingzoo
@@ -63,11 +63,11 @@ def test_observation(observation, observation_0):
 def test_observation_action_spaces(env, agent_0):
     for agent in env.agents:
         assert isinstance(
-            env.observation_space(agent), gym.spaces.Space
-        ), "Observation space for each agent must extend gym.spaces.Space"
+            env.observation_space(agent), gymnasium.spaces.Space
+        ), "Observation space for each agent must extend gymnasium.spaces.Space"
         assert isinstance(
-            env.action_space(agent), gym.spaces.Space
-        ), "Agent space for each agent must extend gym.spaces.Space"
+            env.action_space(agent), gymnasium.spaces.Space
+        ), "Agent space for each agent must extend gymnasium.spaces.Space"
         assert env.observation_space(agent) is env.observation_space(
             agent
         ), "observation_space should return the exact same space object (not a copy) for an agent. Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None)"
@@ -75,18 +75,18 @@ def test_observation_action_spaces(env, agent_0):
             agent
         ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None)"
         if not (
-            isinstance(env.observation_space(agent), gym.spaces.Box)
-            or isinstance(env.observation_space(agent), gym.spaces.Discrete)
+            isinstance(env.observation_space(agent), gymnasium.spaces.Box)
+            or isinstance(env.observation_space(agent), gymnasium.spaces.Discrete)
         ):
             warnings.warn(
-                "Observation space for each agent probably should be gym.spaces.box or gym.spaces.discrete"
+                "Observation space for each agent probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
             )
         if not (
-            isinstance(env.action_space(agent), gym.spaces.Box)
-            or isinstance(env.action_space(agent), gym.spaces.Discrete)
+            isinstance(env.action_space(agent), gymnasium.spaces.Box)
+            or isinstance(env.action_space(agent), gymnasium.spaces.Discrete)
         ):
             warnings.warn(
-                "Action space for each agent probably should be gym.spaces.box or gym.spaces.discrete"
+                "Action space for each agent probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
             )
         if (not isinstance(agent, str)) and agent != "env":
             warnings.warn(
@@ -111,7 +111,7 @@ def test_observation_action_spaces(env, agent_0):
         if env.action_space(agent) != env.action_space(agent):
             warnings.warn("Agents have different action space sizes")
 
-        if isinstance(env.action_space(agent), gym.spaces.Box):
+        if isinstance(env.action_space(agent), gymnasium.spaces.Box):
             if np.any(np.equal(env.action_space(agent).low, -np.inf)):
                 warnings.warn(
                     "Agent's minimum action space value is -infinity. This is probably too low."
@@ -141,7 +141,7 @@ def test_observation_action_spaces(env, agent_0):
                     False
                 ), "Agent's action_space.high and action_space have different shapes"
 
-        if isinstance(env.observation_space(agent), gym.spaces.Box):
+        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
             if np.any(np.equal(env.observation_space(agent).low, -np.inf)):
                 warnings.warn(
                     "Agent's minimum observation space value is -infinity. This is probably too low."
@@ -293,7 +293,7 @@ def play_test(env, observation_0, num_cycles):
         if not env.agents:
             break
 
-        if isinstance(env.observation_space(agent), gym.spaces.Box):
+        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
             assert env.observation_space(agent).dtype == prev_observe.dtype
         assert env.observation_space(agent).contains(
             prev_observe
@@ -345,7 +345,7 @@ def test_action_flexibility(env):
     env.reset()
     agent = env.agent_selection
     action_space = env.action_space(agent)
-    if isinstance(action_space, gym.spaces.Discrete):
+    if isinstance(action_space, gymnasium.spaces.Discrete):
         obs, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
@@ -356,7 +356,7 @@ def test_action_flexibility(env):
         env.step(action)
         env.reset()
         env.step(np.int32(action))
-    elif isinstance(action_space, gym.spaces.Box):
+    elif isinstance(action_space, gymnasium.spaces.Box):
         env.step(np.zeros_like(action_space.low))
         env.reset()
         env.step(np.zeros_like(action_space.low))
