@@ -1,3 +1,12 @@
+"""Uses Ray's RLLib to view trained agents playing Pistonball.
+
+Author: Rohan (https://github.com/Rohan138)
+
+Dependencies:
+- ray[rllib]=2
+- pettingzoo==1.22.0
+"""
+
 import argparse
 import os
 from pathlib import Path
@@ -6,13 +15,13 @@ import pickle5 as pickle
 import ray
 import supersuit as ss
 from PIL import Image
-from ray.rllib.agents.ppo import PPOTrainer
+from ray.rllib.algorithms.ppo import PPO
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
-from rllib_pistonball import CNNModelV2
 
 from pettingzoo.butterfly import pistonball_v6
+from tutorials.Ray.rllib_pistonball import CNNModelV2
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
@@ -64,7 +73,7 @@ with open(params_path, "rb") as f:
     del config["num_gpus"]
 
 ray.init(num_cpus=8, num_gpus=1)
-PPOagent = PPOTrainer(env=env_name, config=config)
+PPOagent = PPO(env=env_name, config=config)
 PPOagent.restore(checkpoint_path)
 
 
