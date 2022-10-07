@@ -1,5 +1,7 @@
 """This is a minimal example of using Tianshou with MARL to train agents.
 
+Author: Will (https://github.com/WillDudley)
+
 Python version used: 3.8.10
 
 Requirements:

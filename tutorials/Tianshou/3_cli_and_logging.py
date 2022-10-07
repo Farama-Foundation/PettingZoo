@@ -1,5 +1,7 @@
 """This is a full example of using Tianshou with MARL to train agents, complete with argument parsing (CLI) and logging.
 
+Author: Will (https://github.com/WillDudley)
+
 Python version used: 3.8.10
 
 Requirements:
