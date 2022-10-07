@@ -230,7 +230,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/holdem/">RLLib 2: RL for Simple Poker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/pistonball/">RLLib 2: RL for Pistonball</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -368,8 +376,8 @@
           <section id="utils">
 <h1>Utils<a class="headerlink" href="#utils" title="Permalink to this heading">#</a></h1>
 <p>PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.</p>
-<section id="average-total-reward-util">
-<h2>Average Total Reward Util<a class="headerlink" href="#average-total-reward-util" title="Permalink to this heading">#</a></h2>
+<section id="average-total-reward">
+<h2>Average Total Reward<a class="headerlink" href="#average-total-reward" title="Permalink to this heading">#</a></h2>
 <p>The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.</p>
 <p>This value is important for establishing the simplest possible baseline: the random policy.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">average_total_reward</span>
@@ -379,56 +387,6 @@
 </pre></div>
 </div>
 <p>Where <code class="docutils literal notranslate"><span class="pre">max_episodes</span></code> and <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> both limit the total number of evaluations (when the first is hit evaluation stops)</p>
-</section>
-<section id="manual-control">
-<h2>Manual Control<a class="headerlink" href="#manual-control" title="Permalink to this heading">#</a></h2>
-<p>Often, you want to be able to play before trying to learn it to get a better feel for it. Some of our games directly support this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="n">knights_archers_zombies_v10</span>
-<span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">manual_control</span><span class="p">(</span><span class="o">&lt;</span><span class="n">environment</span> <span class="n">parameters</span><span class="o">&gt;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Environments say if they support this functionality in their documentation, and what the specific controls are.</p>
-</section>
-<section id="random-demo">
-<h2>Random Demo<a class="headerlink" href="#random-demo" title="Permalink to this heading">#</a></h2>
-<p>You can also easily get a quick impression of them by watching a random policy control all the actions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">random_demo</span>
-<span class="n">random_demo</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="playing-alongside-trained-policies">
-<h2>Playing Alongside Trained Policies<a class="headerlink" href="#playing-alongside-trained-policies" title="Permalink to this heading">#</a></h2>
-<p>Sometimes, you may want to control a singular agent and let the other agents be controlled by trained policies.
-Some games support this via:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-<span class="n">manual_policy</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">ManualPolicy</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
-    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">manual_policy</span><span class="o">.</span><span class="n">agent</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">manual_policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
-        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">ManualPolicy</span></code> accepts several default arguments:</p>
-<p><code class="docutils literal notranslate"><span class="pre">agent_id</span></code>: Accepts an integer for the agent in the environment that will be controlled via the keyboard. Use <code class="docutils literal notranslate"><span class="pre">manual_policy.availabla_agents</span></code> to query what agents are available and what are their indices.</p>
-<p><code class="docutils literal notranslate"><span class="pre">show_obs</span></code>: Is a boolean which shows the observation from the currently selected agent, if available.</p>
 </section>
 <section id="observation-saving">
 <h2>Observation Saving<a class="headerlink" href="#observation-saving" title="Permalink to this heading">#</a></h2>
@@ -505,10 +463,7 @@ Some games support this via:</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Utils</a><ul>
-<li><a class="reference internal" href="#average-total-reward-util">Average Total Reward Util</a></li>
-<li><a class="reference internal" href="#manual-control">Manual Control</a></li>
-<li><a class="reference internal" href="#random-demo">Random Demo</a></li>
-<li><a class="reference internal" href="#playing-alongside-trained-policies">Playing Alongside Trained Policies</a></li>
+<li><a class="reference internal" href="#average-total-reward">Average Total Reward</a></li>
 <li><a class="reference internal" href="#observation-saving">Observation Saving</a></li>
 </ul>
 </li>

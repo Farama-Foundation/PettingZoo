@@ -230,7 +230,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/holdem/">RLLib 2: RL for Simple Poker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/pistonball/">RLLib 2: RL for Pistonball</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -415,97 +423,6 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">pad_observations_v0(env)</span></code> pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.</p></li>
 </ul>
 </section>
-<section id="environment-vectorization">
-<h2>Environment Vectorization<a class="headerlink" href="#environment-vectorization" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">concat_vec_envs_v0(vec_env,</span> <span class="pre">num_vec_envs,</span> <span class="pre">num_cpus=0,</span> <span class="pre">base_class='gym')</span></code> takes in an <code class="docutils literal notranslate"><span class="pre">vec_env</span></code> which is vector environment (should not have multithreading enabled). Creates a new vector environment with <code class="docutils literal notranslate"><span class="pre">num_vec_envs</span></code> copies of that vector environment concatenated together and runs them on <code class="docutils literal notranslate"><span class="pre">num_cpus</span></code> cpus as balanced as possible between cpus. <code class="docutils literal notranslate"><span class="pre">num_cpus=0</span></code> or <code class="docutils literal notranslate"><span class="pre">num_cpus=1</span></code> means to create 0 new threads, i.e. run the process in an efficient single threaded manner. A use case for this function is given below. If the base class of the resulting vector environment matters as it does for stable baselines, you can use the <code class="docutils literal notranslate"><span class="pre">base_class</span></code> parameter to switch between <code class="docutils literal notranslate"><span class="pre">&quot;gym&quot;</span></code> base class and <code class="docutils literal notranslate"><span class="pre">&quot;stable_baselines3&quot;</span></code>’s base class. Note that both have identical functionality.</p></li>
-</ul>
-<section id="parallel-environment-vectorization">
-<h3>Parallel Environment Vectorization<a class="headerlink" href="#parallel-environment-vectorization" title="Permalink to this heading">#</a></h3>
-<p>Note that a multi-agent environment has a similar interface to a vector environment. Give each possible agent an index in the vector and the vector of agents can be interpreted as a vector of “environments”:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">agent_1</span>
-<span class="n">agent_2</span>
-<span class="n">agent_3</span>
-<span class="o">...</span>
-</pre></div>
-</div>
-<p>Where each agent’s observation, reward, done, and info will be that environment’s data.</p>
-<p>The following function performs this conversion.</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pettingzoo_env_to_vec_env_v0(env)</span></code>: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gym vector environment where each “environment” in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper). This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines’s A2C out of box (example below).</p></li>
-</ul>
-<p>You can also use the <code class="docutils literal notranslate"><span class="pre">concat_vec_envs_v0</span></code> functionality to train on several vector environments in parallel, forming a vector which looks like</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env_1_agent_1</span>
-<span class="n">env_1_agent_2</span>
-<span class="n">env_1_agent_3</span>
-<span class="n">env_2_agent_1</span>
-<span class="n">env_2_agent_2</span>
-<span class="n">env_2_agent_3</span>
-<span class="o">...</span>
-</pre></div>
-</div>
-<p>So you can for example train 4 copies of pettingzoo’s pistonball environment in parallel with some code like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stable_baselines3</span> <span class="kn">import</span> <span class="n">PPO</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">x_size</span><span class="o">=</span><span class="mi">84</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="mi">84</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">frame_stack_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s1">&#39;stable_baselines3&#39;</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span><span class="s1">&#39;CnnPolicy&#39;</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000000</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">vectorize_aec_env_v0(aec_env,</span> <span class="pre">num_envs,</span> <span class="pre">num_cpus=0)</span></code> creates an AEC Vector env (API documented in source <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/aec_vector/base_aec_vec_env.py">here</a>). <code class="docutils literal notranslate"><span class="pre">num_cpus=0</span></code> indicates that the process will run in a single thread. Values of 1 or more will spawn at most that number of processes.</p></li>
-</ul>
-<section id="note-on-multiprocessing">
-<h4>Note on multiprocessing<a class="headerlink" href="#note-on-multiprocessing" title="Permalink to this heading">#</a></h4>
-<p>Turning on multiprocessing runs each environment in it’s own process. Turning this on is typically much slower for fast environments (like card games), but much faster for slow environments (like robotics simulations). Determining which case you are will require testing.</p>
-<p>On MacOS with python3.8 or higher, you will need to change the default multiprocessing setting to use fork multiprocessing instead of spawn multiprocessing, as shown below, before the multiprocessing environment is created.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
-<span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-</section>
-</section>
-<section id="lambda-functions">
-<h2>Lambda Functions<a class="headerlink" href="#lambda-functions" title="Permalink to this heading">#</a></h2>
-<p>If none of the included in micro-wrappers are suitable for your needs, you can use a lambda function (or submit a PR).</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">action_lambda_v1(env,</span> <span class="pre">change_action_fn,</span> <span class="pre">change_space_fn)</span></code> allows you to define arbitrary changes to the actions via <code class="docutils literal notranslate"><span class="pre">change_action_fn(action,</span> <span class="pre">space)</span> <span class="pre">:</span> <span class="pre">action</span></code> and to the action spaces with <code class="docutils literal notranslate"><span class="pre">change_space_fn(action_space)</span> <span class="pre">:</span> <span class="pre">action_space</span></code>. Remember that you are transforming the actions received by the wrapper to the actions expected by the base environment. In multi-agent environments only, the lambda functions can optionally accept an extra <code class="docutils literal notranslate"><span class="pre">agent</span></code> parameter, which lets you know the agent name of the action/action space, e.g. <code class="docutils literal notranslate"><span class="pre">change_action_fn(action,</span> <span class="pre">space,</span> <span class="pre">agent)</span> <span class="pre">:</span> <span class="pre">action</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">observation_lambda_v0(env,</span> <span class="pre">observation_fn,</span> <span class="pre">observation_space_fn)</span></code> allows you to define arbitrary changes to the via <code class="docutils literal notranslate"><span class="pre">observation_fn(observation,</span> <span class="pre">obs_space)</span> <span class="pre">:</span> <span class="pre">observation</span></code>, and <code class="docutils literal notranslate"><span class="pre">observation_space_fn(obs_space)</span> <span class="pre">:</span> <span class="pre">obs_space</span></code>. For Box-Box transformations the space transformation will be inferred from <code class="docutils literal notranslate"><span class="pre">change_observation_fn</span></code> if <code class="docutils literal notranslate"><span class="pre">change_obs_space_fn=None</span></code> by passing the <code class="docutils literal notranslate"><span class="pre">high</span></code> and <code class="docutils literal notranslate"><span class="pre">low</span></code> bounds through the <code class="docutils literal notranslate"><span class="pre">observation_space_fn</span></code>. In multi-agent environments only, the lambda functions can optionally accept an <code class="docutils literal notranslate"><span class="pre">agent</span></code> parameter, which lets you know the agent name of the observation/observation space, e.g. <code class="docutils literal notranslate"><span class="pre">observation_fn(observation,</span> <span class="pre">obs_space,</span> <span class="pre">agent)</span> <span class="pre">:</span> <span class="pre">observation</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reward_lambda_v0(env,</span> <span class="pre">change_reward_fn)</span></code> allows you to make arbitrary changes to rewards by passing in a <code class="docutils literal notranslate"><span class="pre">change_reward_fn(reward)</span> <span class="pre">:</span> <span class="pre">reward</span></code> function. For Gym environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.</p></li>
-</ul>
-<section id="lambda-function-examples">
-<h3>Lambda Function Examples<a class="headerlink" href="#lambda-function-examples" title="Permalink to this heading">#</a></h3>
-<p>Adding noise to a Box observation looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">observation_lambda_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Adding noise to a box observation and increasing the high and low bounds to accommodate this extra noise looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">observation_lambda_v0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span>
-    <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span>
-    <span class="k">lambda</span> <span class="n">obs_space</span> <span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">obs_space</span><span class="o">.</span><span class="n">low</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="n">obs_space</span><span class="o">.</span><span class="n">high</span><span class="o">+</span><span class="mi">5</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Changing 1d box action space to a Discrete space by mapping the discrete actions to one-hot vectors looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">one_hot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">v</span>
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">action_lambda_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span>
-    <span class="k">lambda</span> <span class="n">action</span><span class="p">,</span> <span class="n">act_space</span> <span class="p">:</span> <span class="n">one_hot</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">act_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-    <span class="k">lambda</span> <span class="n">act_space</span> <span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="n">act_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-</pre></div>
-</div>
-<p>Note that many of the supersuit wrappers are implemented with a lambda wrapper behind the scenes. See <a class="reference external" href="https://github.com/Farama-Foundation/SuperSuit/blob/master/supersuit/generic_wrappers/basic_wrappers.py">here</a> for some examples.</p>
-</section>
-</section>
 <section id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
 <p>If you use this in your research, please cite:</p>
@@ -584,17 +501,6 @@
 <li><a class="reference internal" href="#">Supersuit Wrappers</a><ul>
 <li><a class="reference internal" href="#included-functions">Included Functions</a></li>
 <li><a class="reference internal" href="#included-multi-agent-only-functions">Included Multi-Agent Only Functions</a></li>
-<li><a class="reference internal" href="#environment-vectorization">Environment Vectorization</a><ul>
-<li><a class="reference internal" href="#parallel-environment-vectorization">Parallel Environment Vectorization</a><ul>
-<li><a class="reference internal" href="#note-on-multiprocessing">Note on multiprocessing</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#lambda-functions">Lambda Functions</a><ul>
-<li><a class="reference internal" href="#lambda-function-examples">Lambda Function Examples</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
 </li>

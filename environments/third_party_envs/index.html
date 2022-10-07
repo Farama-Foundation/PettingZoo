@@ -230,7 +230,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../content/tutorials/">Tutorials</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/holdem/">RLLib 2: RL for Simple Poker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/rllib/pistonball/">RLLib 2: RL for Pistonball</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
@@ -367,95 +375,70 @@
           
           <section id="third-party-environments">
 <h1>Third-Party Environments<a class="headerlink" href="#third-party-environments" title="Permalink to this heading">#</a></h1>
-<section id="bombermanai">
-<h2>BomberManAI<a class="headerlink" href="#bombermanai" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/NaIwo/BomberManAI">https://github.com/NaIwo/BomberManAI</a></p>
-<p>PettingZoo environment with a simplified version of the BomberMan game for experiments in reinforcement learning and evolutionary computation.</p>
+<p><em>These environments are not maintained by Farama Foundation and, as such, cannot be guaranteed to function as intended.</em></p>
+<section id="environments-using-the-latest-versions-of-pettingzoo">
+<h2>Environments using the latest versions of PettingZoo<a class="headerlink" href="#environments-using-the-latest-versions-of-pettingzoo" title="Permalink to this heading">#</a></h2>
+<p><em>Due to a very recent major release of PettingZoo, there are currently no contributed third-party environments. If you’d like to contribute one, please reach out on <a class="reference external" href="https://discord.gg/nHg2JRN489">Discord</a>.</em></p>
 </section>
-<section id="starcraft-multi-agent-challenge">
-<h2>StarCraft Multi-Agent Challenge<a class="headerlink" href="#starcraft-multi-agent-challenge" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/oxwhirl/smac">https://github.com/oxwhirl/smac</a></p>
-<p>Collection of widely used StarCraft2 based cooperative environments.</p>
-</section>
-<section id="hearthstone-battlegrounds-simulator">
-<h2>Hearthstone Battlegrounds Simulator<a class="headerlink" href="#hearthstone-battlegrounds-simulator" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/JDBumgardner/stone_ground_hearth_battles">https://github.com/JDBumgardner/stone_ground_hearth_battles</a></p>
-<p>PettingZoo environment wrapper for Blizzard’s Hearthstone game.</p>
-</section>
-<section id="fanorona-aec">
-<h2>Fanorona AEC<a class="headerlink" href="#fanorona-aec" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/AbhijeetKrishnan/fanorona-aec">https://github.com/AbhijeetKrishnan/fanorona-aec</a></p>
-<p>Implementation of the Fanorona board game</p>
-</section>
-<section id="longroad-envs">
-<h2>Longroad Envs<a class="headerlink" href="#longroad-envs" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/grzPat/longroad-envs">https://github.com/grzPat/longroad-envs</a></p>
-<p>Multi-Agent traffic control environments.</p>
-</section>
-<section id="pz-dilemma">
-<h2>PZ Dilemma<a class="headerlink" href="#pz-dilemma" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/arjun-prakash/pz_dilemma">https://github.com/arjun-prakash/pz_dilemma</a></p>
-<p>Collection of prisoner’s dilemma games as PettingZoo environments</p>
-</section>
-<section id="ants">
-<h2>Ants<a class="headerlink" href="#ants" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/chorsch/ants">https://github.com/chorsch/ants</a></p>
-<p>Simplified simulation of an ant colony</p>
-</section>
-<section id="generalized-rock-paper-scissors">
-<h2>Generalized Rock Paper Scissors<a class="headerlink" href="#generalized-rock-paper-scissors" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/afozk95/PettingZoo/tree/add_generalized_rps">https://github.com/afozk95/PettingZoo/tree/add_generalized_rps</a></p>
-<p>More general n-players form of the Rock Paper Scissors environments in PettingZoo</p>
-</section>
-<section id="pz-risk">
-<h2>PZ Risk<a class="headerlink" href="#pz-risk" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/mahi97/pz_risk">https://github.com/mahi97/pz_risk</a></p>
-<p>Implementation of the Risk board game as a PettingZoo environment</p>
-</section>
+<section id="environments-using-older-versions-of-pettingzoo">
+<h2>Environments using older versions of PettingZoo<a class="headerlink" href="#environments-using-older-versions-of-pettingzoo" title="Permalink to this heading">#</a></h2>
+<p><em>The following environments use a now-depreciated API design for PettingZoo, so may be more difficult to use.</em></p>
 <section id="sumo-rl">
-<h2>Sumo-RL<a class="headerlink" href="#sumo-rl" title="Permalink to this heading">#</a></h2>
+<h3>Sumo-RL<a class="headerlink" href="#sumo-rl" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="https://github.com/LucasAlegre/sumo-rl">https://github.com/LucasAlegre/sumo-rl</a></p>
-<p>PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation</p>
-</section>
-<section id="sequential-social-delima-games">
-<h2>Sequential Social Delima Games<a class="headerlink" href="#sequential-social-delima-games" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197">https://github.com/eugenevinitsky/sequential_social_dilemma_games/pull/197</a></p>
-<p>Set of two environments with numerous multi-agent equilibria popular with researchers</p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.20.1-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/LucasAlegre/sumo-rl" /></span></p>
+<p>PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation.</p>
 </section>
 <section id="neural-mmo">
-<h2>Neural MMO<a class="headerlink" href="#neural-mmo" title="Permalink to this heading">#</a></h2>
+<h3>Neural MMO<a class="headerlink" href="#neural-mmo" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="https://github.com/jsuarez5341/neural-mmo">https://github.com/jsuarez5341/neural-mmo</a></p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.15.0-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jsuarez5341/neural-mmo" /></span></p>
 <p>Massive environment intended to replicate an MMORPG game and hopefully study general intelligence problems</p>
 </section>
-<section id="cookingzoo">
-<h2>CookingZoo<a class="headerlink" href="#cookingzoo" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/DavidRother/gym-cooking">https://github.com/DavidRother/gym-cooking</a></p>
-<p>Maintained fork of too many cooks game with PettingZoo API support</p>
-</section>
-<section id="snim">
-<h2>SNIM<a class="headerlink" href="#snim" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py">https://github.com/qihuazhong/SNIM/blob/main/snim/envs.py</a></p>
-<p>PettingZoo based supply chain management environment</p>
-</section>
-<section id="citylearn">
-<h2>CityLearn<a class="headerlink" href="#citylearn" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/apigott/CityLearn">https://github.com/apigott/CityLearn</a></p>
-<p>PettingZoo environments for city grid power management, based on the CityLearn simulator.</p>
-</section>
 <section id="racecar-gym">
-<h2>Racecar Gym<a class="headerlink" href="#racecar-gym" title="Permalink to this heading">#</a></h2>
+<h3>Racecar Gym<a class="headerlink" href="#racecar-gym" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="https://github.com/axelbr/racecar_gym">https://github.com/axelbr/racecar_gym</a></p>
-<p>Multi-Agent racing environment that supports the PettingZoo API.</p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.18.1-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/axelbr/racecar_gym" /></span></p>
+<p>A multi-agent racing environment.</p>
 </section>
-<section id="mu-torere">
-<h2>Mu Torere<a class="headerlink" href="#mu-torere" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="https://github.com/Aroksak/MuTorere">https://github.com/Aroksak/MuTorere</a></p>
-<p>PettingZoo based implementation of the Mū tōrere board game from New Zealand</p>
+<section id="cookingzoo">
+<h3>CookingZoo<a class="headerlink" href="#cookingzoo" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://github.com/DavidRother/gym-cooking">https://github.com/DavidRother/gym-cooking</a></p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.11.2-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/DavidRother/gym-cooking" /></span></p>
+<p>Fork of the game <em>Too Many Cooks</em>.</p>
+</section>
+<section id="bombermanai">
+<h3>BomberManAI<a class="headerlink" href="#bombermanai" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://github.com/NaIwo/BomberManAI">https://github.com/NaIwo/BomberManAI</a></p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.16.0-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/NaIwo/BomberManAI" /></span></p>
+<p>Environment with a simplified version of the video game <em>BomberMan</em>.</p>
+</section>
+<section id="fanorona-aec">
+<h3>Fanorona AEC<a class="headerlink" href="#fanorona-aec" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://github.com/AbhijeetKrishnan/fanorona-aec">https://github.com/AbhijeetKrishnan/fanorona-aec</a></p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.8.1-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec" /></span></p>
+<p>Implementation of the board game <em>Fanorona</em>.</p>
 </section>
 <section id="skyjo-rl">
-<h2>skyjo_rl<a class="headerlink" href="#skyjo-rl" title="Permalink to this heading">#</a></h2>
+<h3>skyjo_rl<a class="headerlink" href="#skyjo-rl" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="https://github.com/michaelfeil/skyjo_rl">https://github.com/michaelfeil/skyjo_rl</a></p>
-<p>PettingZoo based implementation of the SkyJo board game</p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.14.0-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/michaelfeil/skyjo_rl" /></span></p>
+<p>Implementation of the board game <em>SkyJo</em>.</p>
+</section>
+<section id="mu-torere">
+<h3>Mu Torere<a class="headerlink" href="#mu-torere" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://github.com/Aroksak/MuTorere">https://github.com/Aroksak/MuTorere</a></p>
+<p><span class="xref myst"><img alt="PettingZoo version dependency" src="https://img.shields.io/badge/PettingZoo-v1.14.0-blue" /></span>
+<span class="xref myst"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Aroksak/MuTorere" /></span></p>
+<p>Implementation of the board game <em>Mū tōrere</em> from New Zealand.</p>
+</section>
 </section>
 </section>
 
@@ -503,24 +486,18 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Third-Party Environments</a><ul>
-<li><a class="reference internal" href="#bombermanai">BomberManAI</a></li>
-<li><a class="reference internal" href="#starcraft-multi-agent-challenge">StarCraft Multi-Agent Challenge</a></li>
-<li><a class="reference internal" href="#hearthstone-battlegrounds-simulator">Hearthstone Battlegrounds Simulator</a></li>
-<li><a class="reference internal" href="#fanorona-aec">Fanorona AEC</a></li>
-<li><a class="reference internal" href="#longroad-envs">Longroad Envs</a></li>
-<li><a class="reference internal" href="#pz-dilemma">PZ Dilemma</a></li>
-<li><a class="reference internal" href="#ants">Ants</a></li>
-<li><a class="reference internal" href="#generalized-rock-paper-scissors">Generalized Rock Paper Scissors</a></li>
-<li><a class="reference internal" href="#pz-risk">PZ Risk</a></li>
+<li><a class="reference internal" href="#environments-using-the-latest-versions-of-pettingzoo">Environments using the latest versions of PettingZoo</a></li>
+<li><a class="reference internal" href="#environments-using-older-versions-of-pettingzoo">Environments using older versions of PettingZoo</a><ul>
 <li><a class="reference internal" href="#sumo-rl">Sumo-RL</a></li>
-<li><a class="reference internal" href="#sequential-social-delima-games">Sequential Social Delima Games</a></li>
 <li><a class="reference internal" href="#neural-mmo">Neural MMO</a></li>
-<li><a class="reference internal" href="#cookingzoo">CookingZoo</a></li>
-<li><a class="reference internal" href="#snim">SNIM</a></li>
-<li><a class="reference internal" href="#citylearn">CityLearn</a></li>
 <li><a class="reference internal" href="#racecar-gym">Racecar Gym</a></li>
-<li><a class="reference internal" href="#mu-torere">Mu Torere</a></li>
+<li><a class="reference internal" href="#cookingzoo">CookingZoo</a></li>
+<li><a class="reference internal" href="#bombermanai">BomberManAI</a></li>
+<li><a class="reference internal" href="#fanorona-aec">Fanorona AEC</a></li>
 <li><a class="reference internal" href="#skyjo-rl">skyjo_rl</a></li>
+<li><a class="reference internal" href="#mu-torere">Mu Torere</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
