@@ -2,7 +2,7 @@
     <img src="pettingzoo-text.png" width="500px"/>
 </p>
 
-PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation).
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium]((https://github.com/Farama-Foundation/Gymnasium).
 
 Our website, with comprehensive documentation, is [pettingzoo.farama.org](https://pettingzoo.farama.org)
 
@@ -27,7 +27,7 @@ We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs 
 
 ## Getting started
 
-Get started with PettingZoo by following [the PettingZoo tutorial](https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b), where you'll train multiple agents in the Pistonball environment using PettingZoo, SuperSuit and Stable Baselines 3.
+Get started with PettingZoo by following [the PettingZoo tutorial](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/), where you'll train multiple PPO agents in the Pistonball environment using PettingZoo.
 
 ## API
 
