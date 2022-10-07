@@ -1,3 +1,14 @@
+"""Brief summary.
+
+Explanation of what this does.
+
+Author: Rohan (https://github.com/Rohan138)
+
+Dependencies:
+- ray=2
+- pettingzoo==1.22.0
+"""
+
 import os
 
 from gym.spaces import Box
