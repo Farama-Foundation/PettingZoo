@@ -5,8 +5,8 @@ Author: Will (https://github.com/WillDudley)
 Python version used: 3.8.10
 
 Requirements:
-pettingzoo == 1.21.0
-git+https://github.com/Markus28/tianshou@support_pz
+pettingzoo == 1.22.0
+git+https://github.com/thu-ml/tianshou
 """
 
 import argparse
