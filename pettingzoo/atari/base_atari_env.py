@@ -153,7 +153,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {
-            agent: gymnasium.spaces.Discrete(action_size) for agent in self.possible_agents
+            agent: gymnasium.spaces.Discrete(action_size)
+            for agent in self.possible_agents
         }
         self.observation_spaces = {
             agent: observation_space for agent in self.possible_agents

@@ -169,7 +169,9 @@ class CooperativePong:
         self.off_screen_penalty = off_screen_penalty
 
         # define action and observation spaces
-        self.action_space = [gymnasium.spaces.Discrete(3) for _ in range(self.num_agents)]
+        self.action_space = [
+            gymnasium.spaces.Discrete(3) for _ in range(self.num_agents)
+        ]
         original_shape = original_obs_shape(
             self.s_width, self.s_height, kernel_window_length=kernel_window_length
         )
