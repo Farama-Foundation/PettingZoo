@@ -67,7 +67,7 @@ simple_tag_v2.env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=25,
 """
 
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 

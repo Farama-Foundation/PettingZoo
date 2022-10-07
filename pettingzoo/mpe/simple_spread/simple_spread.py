@@ -57,7 +57,7 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 """
 
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 

@@ -126,7 +126,7 @@ import math
 
 import magent
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo.magent.battle.battle import KILL_REWARD, get_config
 from pettingzoo.magent.magent_env import magent_parallel_env, make_env

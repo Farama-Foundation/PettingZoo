@@ -1,5 +1,5 @@
 import numpy as np
-from gym.spaces import Box
+from gymnasium.spaces import Box
 
 from ..env_logger import EnvLogger
 from .base import BaseWrapper

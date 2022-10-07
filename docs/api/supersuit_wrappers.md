@@ -38,7 +38,7 @@ Supersuit includes the following wrappers:
 
 * `flatten_v0(env)` flattens observations into a 1D array.
 
-* `frame_skip_v0(env, num_frames)` skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gym Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
+* `frame_skip_v0(env, num_frames)` skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
 
 * `delay_observations_v0(env, delay)` Delays observation by `delay` frames. Before `delay` frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.
 
@@ -103,7 +103,7 @@ Supersuit includes the following wrappers:
 [//]: # (The following function performs this conversion.)
 
 [//]: # ()
-[//]: # (* `pettingzoo_env_to_vec_env_v0&#40;env&#41;`: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gym vector environment where each "environment" in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper&#41;. This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines's A2C out of box &#40;example below&#41;.)
+[//]: # (* `pettingzoo_env_to_vec_env_v0&#40;env&#41;`: Takes a PettingZoo ParallelEnv with the following assumptions: no agent death or generation, homogeneous action and observation spaces. Returns a gymnasium vector environment where each "environment" in the vector represents one agent. An arbitrary PettingZoo parallel environment can be enforced to have these assumptions by wrapping it with the pad_action_space, pad_observations, and the black_death wrapper&#41;. This conversion to a vector environment can be used to train appropriate pettingzoo environments with standard single agent RL methods such as stable baselines's A2C out of box &#40;example below&#41;.)
 
 [//]: # ()
 [//]: # (You can also use the `concat_vec_envs_v0` functionality to train on several vector environments in parallel, forming a vector which looks like)
@@ -190,7 +190,7 @@ Supersuit includes the following wrappers:
 [//]: # (* `observation_lambda_v0&#40;env, observation_fn, observation_space_fn&#41;` allows you to define arbitrary changes to the via `observation_fn&#40;observation, obs_space&#41; : observation`, and `observation_space_fn&#40;obs_space&#41; : obs_space`. For Box-Box transformations the space transformation will be inferred from `change_observation_fn` if `change_obs_space_fn=None` by passing the `high` and `low` bounds through the `observation_space_fn`. In multi-agent environments only, the lambda functions can optionally accept an `agent` parameter, which lets you know the agent name of the observation/observation space, e.g. `observation_fn&#40;observation, obs_space, agent&#41; : observation`.)
 
 [//]: # ()
-[//]: # (* `reward_lambda_v0&#40;env, change_reward_fn&#41;` allows you to make arbitrary changes to rewards by passing in a `change_reward_fn&#40;reward&#41; : reward` function. For Gym environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.)
+[//]: # (* `reward_lambda_v0&#40;env, change_reward_fn&#41;` allows you to make arbitrary changes to rewards by passing in a `change_reward_fn&#40;reward&#41; : reward` function. For Gymnasium environments this is called every step to transform the returned reward. For AECEnv, this function is used to change each element in the rewards dictionary every step.)
 
 [//]: # ()
 [//]: # (### Lambda Function Examples)

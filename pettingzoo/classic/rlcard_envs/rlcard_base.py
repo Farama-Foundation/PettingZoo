@@ -1,6 +1,6 @@
 import numpy as np
 import rlcard
-from gym import spaces
+from gymnasium import spaces
 
 from pettingzoo import AECEnv
 

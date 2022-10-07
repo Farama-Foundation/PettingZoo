@@ -64,10 +64,10 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 
 import os
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
-from gym import spaces
+from gymnasium import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -224,7 +224,7 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return

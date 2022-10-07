@@ -89,9 +89,9 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 """
 
 import chess
-import gym
+import gymnasium
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -246,7 +246,7 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
         else:

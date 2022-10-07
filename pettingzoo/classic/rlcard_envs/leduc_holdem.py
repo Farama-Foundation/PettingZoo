@@ -85,7 +85,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 
 """
 
-import gym
+import gymnasium
 from rlcard.utils.utils import print_card
 
 from pettingzoo.utils import wrappers
@@ -122,7 +122,7 @@ class raw_env(RLCardBase):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return

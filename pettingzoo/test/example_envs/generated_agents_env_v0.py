@@ -1,4 +1,4 @@
-import gym
+import gymnasium
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -45,8 +45,8 @@ class raw_env(AECEnv):
         type_id = len(self.types)
         num_actions = self.np_random.integers(3, 10)
         obs_size = self.np_random.integers(10, 50)
-        obs_space = gym.spaces.Box(low=0, high=1, shape=(obs_size,))
-        act_space = gym.spaces.Discrete(num_actions)
+        obs_space = gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,))
+        act_space = gymnasium.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"
         self.types.append(new_type)
         self._obs_spaces[new_type] = obs_space
@@ -83,7 +83,7 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.reset()
 
     def seed(self, seed=None):
-        self.np_random, _ = gym.utils.seeding.np_random(seed)
+        self.np_random, _ = gymnasium.utils.seeding.np_random(seed)
 
     def step(self, action):
         if (
@@ -123,7 +123,7 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
         else:

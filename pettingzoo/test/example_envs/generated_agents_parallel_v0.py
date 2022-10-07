@@ -1,5 +1,5 @@
-import gym
-from gym.utils import seeding
+import gymnasium
+from gymnasium.utils import seeding
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import conversions, wrappers
@@ -49,8 +49,8 @@ class parallel_env(ParallelEnv):
         type_id = len(self.types)
         num_actions = self.np_random.integers(3, 10)
         obs_size = self.np_random.integers(10, 50)
-        obs_space = gym.spaces.Box(low=0, high=1, shape=(obs_size,))
-        act_space = gym.spaces.Discrete(num_actions)
+        obs_space = gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,))
+        act_space = gymnasium.spaces.Discrete(num_actions)
         new_type = f"type{type_id}"
         self.types.append(new_type)
         self._obs_spaces[new_type] = obs_space
@@ -115,7 +115,7 @@ class parallel_env(ParallelEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
         else:

@@ -1,10 +1,10 @@
 import os
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
-from gym import spaces
-from gym.utils import seeding
+from gymnasium import spaces
+from gymnasium.utils import seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.mpe._mpe_utils.core import Agent
@@ -269,7 +269,7 @@ class SimpleEnv(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return
