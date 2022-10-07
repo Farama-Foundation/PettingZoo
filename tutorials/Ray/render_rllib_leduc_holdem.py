@@ -1,13 +1,20 @@
+"""Uses Ray's RLLib to view trained agents playing Leduoc Holdem.
+
+Author: Rohan (https://github.com/Rohan138)
+
+Dependencies:
+- ray[rllib]=2
+- pettingzoo==1.22.0
+"""
+
 import argparse
 import os
-from copy import deepcopy
+import pickle
 from pathlib import Path
 
 import numpy as np
-import pickle5 as pickle
 import ray
-from ray.rllib.agents.dqn import DQNTrainer
-from ray.rllib.agents.registry import get_agent_class
+from ray.rllib.algorithms.dqn import DQN, DQNConfig
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
@@ -43,14 +50,11 @@ def env_creator():
 
 num_cpus = 1
 
-config = deepcopy(get_agent_class(alg_name)._default_config)
+config = DQNConfig().to_dict()
 
 register_env("leduc_holdem", lambda config: PettingZooEnv(env_creator()))
 
 env = env_creator()
-# obs_space = env.observation_space
-# print(obs_space)
-# act_space = test_env.action_space
 
 with open(params_path, "rb") as f:
     config = pickle.load(f)
@@ -59,7 +63,7 @@ with open(params_path, "rb") as f:
     del config["num_gpus"]
 
 ray.init(num_cpus=8, num_gpus=0)
-DQNAgent = DQNTrainer(env="leduc_holdem", config=config)
+DQNAgent = DQN(env="leduc_holdem", config=config)
 DQNAgent.restore(checkpoint_path)
 
 reward_sums = {a: 0 for a in env.possible_agents}

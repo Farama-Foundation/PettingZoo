@@ -11,7 +11,18 @@ lastpage:
 content/basic_usage
 content/environment_creation
 content/environment_tests
-content/tutorials
+```
+
+```{toctree}
+:hidden:
+:caption: Tutorials
+
+tutorials/cleanrl/implementing_PPO
+tutorials/tianshou/beginner
+tutorials/tianshou/intermediate
+tutorials/tianshou/advanced
+tutorials/rllib/holdem
+tutorials/rllib/pistonball
 ```
 
 ```{toctree}

@@ -12,7 +12,7 @@ observations = parallel_env.reset()
 max_cycles = 500
 for step in range(max_cycles):
     actions = {agent: policy(observations[agent], agent) for agent in parallel_env.agents}
-    observations, rewards, dones, infos = parallel_env.step(actions)
+    observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
 ```{eval-rst}

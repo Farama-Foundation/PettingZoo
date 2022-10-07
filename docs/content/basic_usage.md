@@ -55,9 +55,13 @@ PettingZoo models games as *Agent Environment Cycle* (AEC) games, and thus can s
 
 `action_space(agent)` a function that retrieves the action space for a particular agent. This space should never change for a particular agent ID.
 
-`dones`: A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
+`terminations`: A dict of the termination state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
 
-`dones = {0:[first agent's done state], 1:[second agent's done state] ... n-1:[nth agent's done state]}`
+`terminations = {0:[first agent's termination state], 1:[second agent's termination state] ... n-1:[nth agent's termination state]}`
+
+`truncations`: A dict of the truncation state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like:
+
+`truncations = {0:[first agent's truncation state], 1:[second agent's truncation state] ... n-1:[nth agent's truncation state]}`
 
 `infos`: A dict of info for each current agent, keyed by name. Each agent's info is also a dict. Note that agents can be added or removed from this attribute. `last()` accesses this attribute. The returned dict looks like:
 
@@ -95,7 +99,7 @@ While not required by the base API, most downstream wrappers and utilities depen
 
 ### Checking if the entire environment is done
 
-When an agent is done, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done
+When an agent is terminated or truncated, it's removed from `agents`, so when the environments done `agents` will be an empty list. This means `not env.agents` is a simple condition for the environment being done.
 
 ### Unwrapping an environment
 
@@ -107,7 +111,7 @@ base_env = knights_archers_zombies_v10.env().unwrapped
 
 ### Variable Numbers of Agents (Death)
 
-Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `dones` dictionary is set to `True`, it become the next selected agent (or after another agent that is also done), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
+Agents can die and generate during the course of an environment. If an agent dies, then its entry in the `terminated` dictionary is set to `True`, it become the next selected agent (or after another agent that is also terminated or truncated), and the action it takes is required to be `None`. After this vacuous step is taken, the agent will be removed from `agents` and other changeable attributes. Agent generation can just be done with appending it to `agents` and the other changeable attributes (with it already being in the possible agents and action/observation spaces), and transitioning to it at some point with agent_iter.
 
 ### Environment as an Agent
 
