@@ -1,6 +1,6 @@
 import functools
 
-from gym.spaces import Discrete
+from gymnasium.spaces import Discrete
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
@@ -71,7 +71,7 @@ class parallel_env(ParallelEnv):
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.openai.com/docs/#spaces
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)

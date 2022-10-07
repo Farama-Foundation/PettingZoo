@@ -1,4 +1,4 @@
-import gym
+import gymnasium
 import numpy as np
 
 from pettingzoo.utils import save_observation
@@ -7,7 +7,7 @@ from pettingzoo.utils import save_observation
 def check_save_obs(env):
     for agent in env.agents:
         assert isinstance(
-            env.observation_space(agent), gym.spaces.Box
+            env.observation_space(agent), gymnasium.spaces.Box
         ), "Observations must be Box to save observations as image"
         assert np.all(np.equal(env.observation_space(agent).low, 0)) and np.all(
             np.equal(env.observation_space(agent).high, 255)

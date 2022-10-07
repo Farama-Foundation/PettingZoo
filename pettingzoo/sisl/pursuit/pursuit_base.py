@@ -1,11 +1,11 @@
 from collections import defaultdict
 from typing import Optional
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
-from gym import spaces
-from gym.utils import seeding
+from gymnasium import spaces
+from gymnasium.utils import seeding
 
 from .utils import agent_utils, two_d_maps
 from .utils.agent_layer import AgentLayer
@@ -387,7 +387,7 @@ class Pursuit:
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return

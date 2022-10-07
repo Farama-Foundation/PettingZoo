@@ -2,7 +2,7 @@ import os
 from copy import deepcopy
 
 import ray
-from gym.spaces import Box
+from gymnasium.spaces import Box
 from ray import tune
 from ray.rllib.agents.dqn.dqn_torch_model import DQNTorchModel
 from ray.rllib.agents.registry import get_agent_class

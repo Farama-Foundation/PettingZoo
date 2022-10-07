@@ -1,13 +1,13 @@
 import os
 
-import gym.spaces
+import gymnasium.spaces
 import numpy as np
 
 
 def _check_observation_saveable(env, agent):
     obs_space = env.observation_space(agent)
     assert isinstance(
-        obs_space, gym.spaces.Box
+        obs_space, gymnasium.spaces.Box
     ), "Observations must be Box to save observations as image"
     assert np.all(np.equal(obs_space.low, 0)) and np.all(
         np.equal(obs_space.high, 255)
