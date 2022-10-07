@@ -2,7 +2,7 @@
 
 PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.
 
-### Average Total Reward Util
+### Average Total Reward
 
 The average total reward for an environment, as presented in the documentation, is summed over all agents over all steps in the episode, averaged over episodes.
 
