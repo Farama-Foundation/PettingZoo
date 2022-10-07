@@ -9,7 +9,7 @@ Dependencies:
 
 import os
 
-from gym.spaces import Box
+from gymnasium.spaces import Box
 from ray import tune
 from ray.rllib.algorithms.dqn import DQNConfig
 from ray.rllib.algorithms.dqn.dqn_torch_model import DQNTorchModel
