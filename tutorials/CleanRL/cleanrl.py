@@ -113,7 +113,7 @@ if __name__ == "__main__":
     env = frame_stack_v1(env, stack_size=stack_size)
     num_agents = len(env.possible_agents)
     num_actions = env.action_space(env.possible_agents[0]).n
-    observation_size = env.observation_space((env.possible_agents[0])).shape
+    observation_size = env.observation_space(env.possible_agents[0]).shape
 
     """ LEARNER SETUP """
     agent = Agent(num_actions=num_actions).to(device)
