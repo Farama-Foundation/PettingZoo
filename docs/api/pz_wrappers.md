@@ -1,7 +1,6 @@
 # PettingZoo Wrappers
 
 ## Conversion wrappers
-{ref}`header_target`
 
 ### AEC to Parallel
 
