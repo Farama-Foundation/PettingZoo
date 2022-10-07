@@ -1,11 +1,9 @@
-"""Brief summary.
-
-Explanation of what this does.
+"""Uses Ray's RLLib to train agents to play Pistonball.
 
 Author: Rohan (https://github.com/Rohan138)
 
 Dependencies:
-- ray=2
+- ray[rllib]=2
 - pettingzoo==1.22.0
 """
 
