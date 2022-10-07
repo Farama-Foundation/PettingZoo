@@ -25,23 +25,23 @@ class Agent(nn.Module):
         super().__init__()
 
         self.network = nn.Sequential(
-            self.layer_init(nn.Conv2d(4, 32, 3, padding=1)),
+            self._layer_init(nn.Conv2d(4, 32, 3, padding=1)),
             nn.MaxPool2d(2),
             nn.ReLU(),
-            self.layer_init(nn.Conv2d(32, 64, 3, padding=1)),
+            self._layer_init(nn.Conv2d(32, 64, 3, padding=1)),
             nn.MaxPool2d(2),
             nn.ReLU(),
-            self.layer_init(nn.Conv2d(64, 128, 3, padding=1)),
+            self._layer_init(nn.Conv2d(64, 128, 3, padding=1)),
             nn.MaxPool2d(2),
             nn.ReLU(),
             nn.Flatten(),
-            self.layer_init(nn.Linear(128 * 8 * 8, 512)),
+            self._layer_init(nn.Linear(128 * 8 * 8, 512)),
             nn.ReLU(),
         )
-        self.actor = self.layer_init(nn.Linear(512, num_actions), std=0.01)
-        self.critic = self.layer_init(nn.Linear(512, 1))
+        self.actor = self._layer_init(nn.Linear(512, num_actions), std=0.01)
+        self.critic = self._layer_init(nn.Linear(512, 1))
 
-    def layer_init(self, layer, std=np.sqrt(2), bias_const=0.0):
+    def _layer_init(self, layer, std=np.sqrt(2), bias_const=0.0):
         torch.nn.init.orthogonal_(layer.weight, std)
         torch.nn.init.constant_(layer.bias, bias_const)
         return layer
