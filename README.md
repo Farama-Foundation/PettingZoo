@@ -33,14 +33,14 @@ Get started with PettingZoo by following [the PettingZoo tutorial](https://petti
 
 PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/pdf/2009.14471.pdf), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
 
-Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
+Using environments in PettingZoo is very similar to Gymnasium, i.e. you initialize an environment via:
 
 ```python
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
 ```
 
-Environments can be interacted with in a manner very similar to Gym:
+Environments can be interacted with in a manner very similar to Gymnasium:
 
 ```python
 env.reset()
