@@ -3,6 +3,8 @@ from .base import BaseWrapper
 
 
 class CaptureStdoutWrapper(BaseWrapper):
+    """Takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead."""
+
     def __init__(self, env):
         assert (
             env.render_mode == "human"

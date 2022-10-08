@@ -4,10 +4,7 @@ from .base import BaseWrapper
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):
-    """This wrapper crashes for out of bounds actions.
-
-    Should be used for Discrete spaces
-    """
+    """Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces."""
 
     def __init__(self, env):
         super().__init__(env)
