@@ -6,7 +6,7 @@ from pettingzoo.utils.env import AECEnv
 class BaseWrapper(AECEnv):
     """Creates a wrapper around `env` parameter.
 
-    Extend this class to create a useful wrapper.
+    All AECEnv wrappers should inherit from this base class
     """
 
     def __init__(self, env):

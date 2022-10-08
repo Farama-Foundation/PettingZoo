@@ -5,7 +5,7 @@ title: API
 
 ## Initializing Environments
 
-Using environments in PettingZoo is very similar to using them in OpenAI's Gym. You initialize an environment via:
+Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via:
 
 ``` python
 from pettingzoo.butterfly import pistonball_v6
