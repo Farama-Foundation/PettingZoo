@@ -34,6 +34,8 @@ class AECEnv:
     # All agents that may appear in the environment
     possible_agents: List[AgentID]
     agents: List[AgentID]  # Agents active at any given time
+    num_agents: int
+    max_num_agents: int
 
     observation_spaces: Dict[
         AgentID, gym.spaces.Space
@@ -107,7 +109,7 @@ class AECEnv:
             )
         )
 
-    def close(self):
+    def close(self) -> None:
         """
         Closes the rendering window, subprocesses, network connections, or any other resources
         that should be released.
@@ -286,6 +288,8 @@ class ParallelEnv:
 
     agents: List[AgentID]
     possible_agents: List[AgentID]
+    num_agents: int
+    max_num_agents: int
 
     def reset(
         self,
@@ -326,7 +330,7 @@ class ParallelEnv:
         """
         raise NotImplementedError
 
-    def close(self):
+    def close(self) -> None:
         """
         Closes the rendering window.
         """
