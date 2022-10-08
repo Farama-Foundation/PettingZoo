@@ -5,79 +5,89 @@
 
 .. autoclass:: AECEnv
 
-    .. py:attribute:: agents
+```
 
-        A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
+## Attributes
 
-        :type: list[AgentID]
 
-    .. py:attribute:: num_agents
+```{eval-rst}
 
-        The length of the agents list.
+.. autoattribute:: AECEnv.agents
 
-        :type: int
+    A list of the names of all current agents, typically integers. These may be changed as an environment progresses (i.e. agents can be added or removed).
 
-    .. py:attribute:: possible_agents
+    :type: List[AgentID]
 
-        A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
+.. autoattribute:: AECEnv.num_agents
 
-        :type: list[AgentID]
+    The length of the agents list.
 
-    .. py:attribute:: max_num_agents
+    :type: int
 
-        The length of the possible_agents list.
+.. autoattribute:: AECEnv.possible_agents
 
-        :type: int
+    A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
 
-    .. py:attribute:: agent_selection
+    :type: List[AgentID]
 
-        An attribute of the environment corresponding to the currently selected agent that an action can be taken for.
+.. autoattribute:: AECEnv.max_num_agents
 
-        :type: AgentID
+    The length of the possible_agents list.
 
-    .. py:attribute:: dones
+    :type: int
 
-        A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like::
+.. autoattribute:: AECEnv.agent_selection
 
-        dones = {0:[first agent done state], 1:[second agent done state] ... n-1:[nth agent done state]}
+    An attribute of the environment corresponding to the currently selected agent that an action can be taken for.
 
-        :type: Dict[AgentID, bool]
+    :type: AgentID
 
-    .. py:attribute:: rewards
+.. autoattribute:: AECEnv.dones
 
-        A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like::
+    A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like::
 
-        {0:[first agent reward], 1:[second agent reward] ... n-1:[nth agent reward]}
+    dones = {0:[first agent done state], 1:[second agent done state] ... n-1:[nth agent done state]}
 
-        :type: Dict[AgentID, float]
+    :type: Dict[AgentID, bool]
 
-    .. py:attribute:: infos
+.. autoattribute:: AECEnv.rewards
 
-        A dict of info for each current agent, keyed by name. Each agent's info is also a dict. Note that agents can be added or removed from this attribute. `last()` accesses this attribute. The returned dict looks like::
+    A dict of the rewards of every current agent at the time called, keyed by name. Rewards the instantaneous reward generated after the last step. Note that agents can be added or removed from this attribute. `last()` does not directly access this attribute, rather the returned reward is stored in an internal variable. The rewards structure looks like::
 
-        infos = {0:[first agent info], 1:[second agent info] ... n-1:[nth agent info]}
+    {0:[first agent reward], 1:[second agent reward] ... n-1:[nth agent reward]}
 
-        :type: Dict[AgentID, Dict[str, Any]]
+    :type: Dict[AgentID, float]
 
-    .. py:attribute:: observation_spaces
+.. autoattribute:: AECEnv.infos
 
-        A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+    A dict of info for each current agent, keyed by name. Each agent's info is also a dict. Note that agents can be added or removed from this attribute. `last()` accesses this attribute. The returned dict looks like::
 
-        :type: Dict[AgentID, gymnasium.spaces.Space]
+    infos = {0:[first agent info], 1:[second agent info] ... n-1:[nth agent info]}
 
-    .. py:attribute:: action_spaces
+    :type: Dict[AgentID, Dict[str, Any]]
 
-        A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+.. autoattribute:: AECEnv.observation_spaces
 
-        :type: Dict[AgentID, gymnasium.spaces.Space]
+    A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
-    .. automethod:: step
-    .. automethod:: reset
-    .. automethod:: observe
-    .. automethod:: render
-    .. automethod:: seed
-    .. automethod:: close
+    :type: Dict[AgentID, gymnasium.spaces.Space]
 
+.. autoattribute:: AECEnv.action_spaces
+
+    A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
+
+    :type: Dict[AgentID, gymnasium.spaces.Space]
+```
+
+## Methods
+
+```{eval-rst}
+.. automethod:: AECEnv.step
+.. automethod:: AECEnv.reset
+.. automethod:: AECEnv.observe
+.. automethod:: AECEnv.render
+.. automethod:: AECEnv.seed
+.. automethod:: AECEnv.close
 
 ```
 
