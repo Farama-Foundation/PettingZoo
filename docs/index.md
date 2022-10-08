@@ -65,7 +65,7 @@ Donate <https://farama.org/donations>
     :name: warlods
 ```
 
-**Environments can be interacted with in a manner very similar to Gym:**
+**Environments can be interacted with in a manner very similar to Gymnasium:**
 
 ```python
   from pettingzoo.butterfly import knights_archers_zombies_v10

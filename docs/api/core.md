@@ -63,13 +63,13 @@
 
         A dict of the observation spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
-        :type: Dict[AgentID, gym.spaces.Space]
+        :type: Dict[AgentID, gymnasium.spaces.Space]
 
     .. py:attribute:: action_spaces
 
         A dict of the action spaces of every agent, keyed by name. This cannot be changed through play or resetting.
 
-        :type: Dict[AgentID, gym.spaces.Space]
+        :type: Dict[AgentID, gymnasium.spaces.Space]
 
     .. automethod:: step
     .. automethod:: reset

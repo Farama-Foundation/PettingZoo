@@ -7,7 +7,7 @@ title: Supersuit Wrappers
 PettingZoo include wrappers via the SuperSuit companion package (`pip install supersuit`). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:
 
 ``` python
-import gym
+import gymnasium as gym
 from supersuit import color_reduction_v0, frame_stack_v1
 
 env = gym.make('SpaceInvaders-v0')
