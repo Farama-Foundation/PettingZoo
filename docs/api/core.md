@@ -1,5 +1,7 @@
 # Core API
 
+## AECEnv
+
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.env
 
@@ -7,7 +9,7 @@
 
 ```
 
-## Attributes
+### Attributes
 
 
 ```{eval-rst}
@@ -22,8 +24,6 @@
 
     The length of the agents list.
 
-    :type: int
-
 .. autoattribute:: AECEnv.possible_agents
 
     A list of all possible_agents the environment could generate. Equivalent to the list of agents in the observation and action spaces. This cannot be changed through play or resetting.
@@ -33,8 +33,6 @@
 .. autoattribute:: AECEnv.max_num_agents
 
     The length of the possible_agents list.
-
-    :type: int
 
 .. autoattribute:: AECEnv.agent_selection
 
@@ -79,7 +77,7 @@
     :type: Dict[AgentID, gymnasium.spaces.Space]
 ```
 
-## Methods
+### Methods
 
 ```{eval-rst}
 .. automethod:: AECEnv.step
