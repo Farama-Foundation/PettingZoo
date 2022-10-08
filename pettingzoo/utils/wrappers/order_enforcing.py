@@ -4,7 +4,7 @@ from .base import BaseWrapper
 
 
 class OrderEnforcingWrapper(BaseWrapper):
-    """Check all call orders.
+    """Checks if function calls or attribute access are in a disallowed order.
 
     * error on getting rewards, terminations, truncations, infos, agent_selection before reset
     * error on calling step, observe before reset
