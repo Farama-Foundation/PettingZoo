@@ -140,7 +140,7 @@ class parallel_env(ParallelEnv):
         # If a user passes in actions with no agents, then just return empty observations, etc.
         if not actions:
             self.agents = []
-            return {}, {}, {}, {}
+            return {}, {}, {}, {}, {}
 
         # rewards for all agents are placed in the rewards dictionary to be returned
         rewards = {}
