@@ -10,7 +10,7 @@
         <title>Supersuit Wrappers - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=5791a8d218e5c4d0608b4fadc34fbc8cea77e3da" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=c2d5e51f39e130612d57e150aebc94239a19910f" />
     
     
 
@@ -41,7 +41,7 @@
     <header class="farama-header">
       <div class="farama-header__container">
         <div class="farama-header__left">
-          <a href="https://farama.org/">
+          <a href="../../">
               <img class="farama-header__logo only-light" src="../../_static/img/PettingZoo.svg" alt="Light Logo"/>
               <img class="farama-header__logo only-dark" src="../../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
             <h1 class="farama-header__title">PettingZoo Documentation</h1>
@@ -348,8 +348,8 @@
         </a>
         <div class="content-icon-container">
           
-  
-  <div class="edit-this-page">
+    
+    <div class="edit-this-page">
   <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/api/supersuit_wrappers.md" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -376,7 +376,7 @@
           <section id="supersuit-wrappers">
 <h1>Supersuit Wrappers<a class="headerlink" href="#supersuit-wrappers" title="Permalink to this heading">#</a></h1>
 <p>PettingZoo include wrappers via the SuperSuit companion package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">supersuit</span></code>). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
 <span class="kn">from</span> <span class="nn">supersuit</span> <span class="kn">import</span> <span class="n">color_reduction_v0</span><span class="p">,</span> <span class="n">frame_stack_v1</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;SpaceInvaders-v0&#39;</span><span class="p">)</span>
@@ -394,34 +394,135 @@
 <section id="included-functions">
 <h2>Included Functions<a class="headerlink" href="#included-functions" title="Permalink to this heading">#</a></h2>
 <p>Supersuit includes the following wrappers:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">clip_reward_v0(env,</span> <span class="pre">lower_bound=-1,</span> <span class="pre">upper_bound=1)</span></code> clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">clip_actions_v0(env)</span></code> clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">color_reduction_v0(env,</span> <span class="pre">mode='full')</span></code> simplifies color information in graphical ((x,y,3) shaped) environments. <code class="docutils literal notranslate"><span class="pre">mode='full'</span></code> fully greyscales of the observation. This can be computationally intensive. Arguments of ‘R’, ‘G’ or ‘B’ just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dtype_v0(env,</span> <span class="pre">dtype)</span></code> recasts your observation as a certain dtype. Many graphical games return <code class="docutils literal notranslate"><span class="pre">uint8</span></code> observations, while neural networks generally want <code class="docutils literal notranslate"><span class="pre">float16</span></code> or <code class="docutils literal notranslate"><span class="pre">float32</span></code>. <code class="docutils literal notranslate"><span class="pre">dtype</span></code> can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">flatten_v0(env)</span></code> flattens observations into a 1D array.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">frame_skip_v0(env,</span> <span class="pre">num_frames)</span></code> skips <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari’s frameskip parameter, <code class="docutils literal notranslate"><span class="pre">num_frames</span></code> can also be a tuple <code class="docutils literal notranslate"><span class="pre">(min_skip,</span> <span class="pre">max_skip)</span></code>, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">delay_observations_v0(env,</span> <span class="pre">delay)</span></code> Delays observation by <code class="docutils literal notranslate"><span class="pre">delay</span></code> frames. Before <code class="docutils literal notranslate"><span class="pre">delay</span></code> frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">sticky_actions_v0(env,</span> <span class="pre">repeat_action_probability)</span></code> assigns a probability of an old action “sticking” to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">frame_stack_v1(env,</span> <span class="pre">num_frames=4)</span></code> stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don’t yet exist are filled with 0s. <code class="docutils literal notranslate"><span class="pre">num_frames=1</span></code> is analogous to not using this function.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">max_observation_v0(env,</span> <span class="pre">memory)</span></code> the resulting observation becomes the max over <code class="docutils literal notranslate"><span class="pre">memory</span></code> number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing <code class="docutils literal notranslate"><span class="pre">memory=2</span></code> and then a  <code class="docutils literal notranslate"><span class="pre">frame_skip</span></code> of 4.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">normalize_obs_v0(env,</span> <span class="pre">env_min=0,</span> <span class="pre">env_max=1)</span></code> linearly scales observations to the range <code class="docutils literal notranslate"><span class="pre">env_min</span></code> (default 0) to <code class="docutils literal notranslate"><span class="pre">env_max</span></code> (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reshape_v0(env,</span> <span class="pre">shape)</span></code> reshapes observations into given shape.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">resize_v1(env,</span> <span class="pre">x_size,</span> <span class="pre">y_size,</span> <span class="pre">linear_interp=False)</span></code> Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting <code class="docutils literal notranslate"><span class="pre">linear_interp=True</span></code> (it’s faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nan_noop_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the <code class="docutils literal notranslate"><span class="pre">step(action,</span> <span class="pre">no_op_action)</span></code> function.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nan_zeros_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nan_random_v0(env)</span></code> If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">scale_actions_v0(env,</span> <span class="pre">scale)</span></code> Scales the high and low bounds of the action space by the <code class="docutils literal notranslate"><span class="pre">scale</span></code> argument in <strong>init</strong>(). Additionally, scales any actions by the same value when step() is called.</p></li>
-</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="clip_reward_v0">
+<span class="sig-name descname"><span class="pre">clip_reward_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_reward_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="clip_actions_v0">
+<span class="sig-name descname"><span class="pre">clip_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clip_actions_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="color_reduction_v0">
+<span class="sig-name descname"><span class="pre">color_reduction_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#color_reduction_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Simplifies color information in graphical ((x,y,3) shaped) environments. <cite>mode=’full’</cite> fully greyscales of the observation. This can be computationally intensive. Arguments of ‘R’, ‘G’ or ‘B’ just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dtype_v0">
+<span class="sig-name descname"><span class="pre">dtype_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dtype_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Recasts your observation as a certain dtype. Many graphical games return <cite>uint8</cite> observations, while neural networks generally want <cite>float16</cite> or <cite>float32</cite>. <cite>dtype</cite> can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flatten_v0">
+<span class="sig-name descname"><span class="pre">flatten_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flatten_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>flattens observations into a 1D array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="frame_skip_v0">
+<span class="sig-name descname"><span class="pre">frame_skip_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_skip_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Skips <cite>num_frames</cite> number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari’s frameskip parameter, <cite>num_frames</cite> can also be a tuple <cite>(min_skip, max_skip)</cite>, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="delay_observations_v0">
+<span class="sig-name descname"><span class="pre">delay_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#delay_observations_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Delays observation by <cite>delay</cite> frames. Before <cite>delay</cite> frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sticky_actions_v0">
+<span class="sig-name descname"><span class="pre">sticky_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_action_probability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sticky_actions_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Assigns a probability of an old action “sticking” to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by <em>“Machado et al. (2018), “Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents”</em></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="frame_stack_v1">
+<span class="sig-name descname"><span class="pre">frame_stack_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#frame_stack_v1" title="Permalink to this definition">#</a></dt>
+<dd><p>Stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don’t yet exist are filled with 0s. <cite>num_frames=1</cite> is analogous to not using this function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="max_observation_v0">
+<span class="sig-name descname"><span class="pre">max_observation_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#max_observation_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>The resulting observation becomes the max over <cite>memory</cite> number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing <cite>memory=2</cite> and then a  <cite>frame_skip</cite> of 4.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="normalize_obs_v0">
+<span class="sig-name descname"><span class="pre">normalize_obs_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#normalize_obs_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Linearly scales observations to the range <cite>env_min</cite> (default 0) to <cite>env_max</cite> (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reshape_v0">
+<span class="sig-name descname"><span class="pre">reshape_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#reshape_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Reshapes observations into given shape.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="resize_v1">
+<span class="sig-name descname"><span class="pre">resize_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resize_v1" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting <cite>linear_interp=True</cite> (it’s faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nan_noop_v0">
+<span class="sig-name descname"><span class="pre">nan_noop_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_noop_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the <cite>step(action, no_op_action)</cite> function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nan_zeros_v0">
+<span class="sig-name descname"><span class="pre">nan_zeros_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_zeros_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nan_random_v0">
+<span class="sig-name descname"><span class="pre">nan_random_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nan_random_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scale_actions_v0">
+<span class="sig-name descname"><span class="pre">scale_actions_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scale_actions_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Scales the high and low bounds of the action space by the <cite>scale</cite> argument in __init__(). Additionally, scales any actions by the same value when step() is called.</p>
+</dd></dl>
+
 </section>
 <section id="included-multi-agent-only-functions">
 <h2>Included Multi-Agent Only Functions<a class="headerlink" href="#included-multi-agent-only-functions" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">agent_indicator_v0(env,</span> <span class="pre">type_only=False)</span></code> Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <code class="docutils literal notranslate"><span class="pre">type_only</span></code> parameter to parse the name of the agent as <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;_&lt;n&gt;</span></code> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the <a class="reference external" href="https://pettingzoo.farama.org/environments/magent/battle">MAgent battle environment</a> the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">black_death_v2(env)</span></code> Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name “black death” does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pad_action_space_v0(env)</span></code> pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pad_observations_v0(env)</span></code> pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.</p></li>
-</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="agent_indicator_v0">
+<span class="sig-name descname"><span class="pre">agent_indicator_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#agent_indicator_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <cite>type_only</cite> parameter to parse the name of the agent as <cite>&lt;type&gt;_&lt;n&gt;</cite> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the [MAgent battle environment](<a class="reference external" href="https://pettingzoo.farama.org/environments/magent/battle">https://pettingzoo.farama.org/environments/magent/battle</a>) the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="black_death_v2">
+<span class="sig-name descname"><span class="pre">black_death_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#black_death_v2" title="Permalink to this definition">#</a></dt>
+<dd><p>Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name “black death” does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pad_action_space_v0">
+<span class="sig-name descname"><span class="pre">pad_action_space_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_action_space_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pad_observations_v0">
+<span class="sig-name descname"><span class="pre">pad_observations_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pad_observations_v0" title="Permalink to this definition">#</a></dt>
+<dd><p>Pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in <em>Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning</em>. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.</p>
+</dd></dl>
+
 </section>
 <section id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
@@ -499,8 +600,33 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Supersuit Wrappers</a><ul>
-<li><a class="reference internal" href="#included-functions">Included Functions</a></li>
-<li><a class="reference internal" href="#included-multi-agent-only-functions">Included Multi-Agent Only Functions</a></li>
+<li><a class="reference internal" href="#included-functions">Included Functions</a><ul>
+<li><a class="reference internal" href="#clip_reward_v0"><code class="docutils literal notranslate"><span class="pre">clip_reward_v0()</span></code></a></li>
+<li><a class="reference internal" href="#clip_actions_v0"><code class="docutils literal notranslate"><span class="pre">clip_actions_v0()</span></code></a></li>
+<li><a class="reference internal" href="#color_reduction_v0"><code class="docutils literal notranslate"><span class="pre">color_reduction_v0()</span></code></a></li>
+<li><a class="reference internal" href="#dtype_v0"><code class="docutils literal notranslate"><span class="pre">dtype_v0()</span></code></a></li>
+<li><a class="reference internal" href="#flatten_v0"><code class="docutils literal notranslate"><span class="pre">flatten_v0()</span></code></a></li>
+<li><a class="reference internal" href="#frame_skip_v0"><code class="docutils literal notranslate"><span class="pre">frame_skip_v0()</span></code></a></li>
+<li><a class="reference internal" href="#delay_observations_v0"><code class="docutils literal notranslate"><span class="pre">delay_observations_v0()</span></code></a></li>
+<li><a class="reference internal" href="#sticky_actions_v0"><code class="docutils literal notranslate"><span class="pre">sticky_actions_v0()</span></code></a></li>
+<li><a class="reference internal" href="#frame_stack_v1"><code class="docutils literal notranslate"><span class="pre">frame_stack_v1()</span></code></a></li>
+<li><a class="reference internal" href="#max_observation_v0"><code class="docutils literal notranslate"><span class="pre">max_observation_v0()</span></code></a></li>
+<li><a class="reference internal" href="#normalize_obs_v0"><code class="docutils literal notranslate"><span class="pre">normalize_obs_v0()</span></code></a></li>
+<li><a class="reference internal" href="#reshape_v0"><code class="docutils literal notranslate"><span class="pre">reshape_v0()</span></code></a></li>
+<li><a class="reference internal" href="#resize_v1"><code class="docutils literal notranslate"><span class="pre">resize_v1()</span></code></a></li>
+<li><a class="reference internal" href="#nan_noop_v0"><code class="docutils literal notranslate"><span class="pre">nan_noop_v0()</span></code></a></li>
+<li><a class="reference internal" href="#nan_zeros_v0"><code class="docutils literal notranslate"><span class="pre">nan_zeros_v0()</span></code></a></li>
+<li><a class="reference internal" href="#nan_random_v0"><code class="docutils literal notranslate"><span class="pre">nan_random_v0()</span></code></a></li>
+<li><a class="reference internal" href="#scale_actions_v0"><code class="docutils literal notranslate"><span class="pre">scale_actions_v0()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#included-multi-agent-only-functions">Included Multi-Agent Only Functions</a><ul>
+<li><a class="reference internal" href="#agent_indicator_v0"><code class="docutils literal notranslate"><span class="pre">agent_indicator_v0()</span></code></a></li>
+<li><a class="reference internal" href="#black_death_v2"><code class="docutils literal notranslate"><span class="pre">black_death_v2()</span></code></a></li>
+<li><a class="reference internal" href="#pad_action_space_v0"><code class="docutils literal notranslate"><span class="pre">pad_action_space_v0()</span></code></a></li>
+<li><a class="reference internal" href="#pad_observations_v0"><code class="docutils literal notranslate"><span class="pre">pad_observations_v0()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
 </li>
