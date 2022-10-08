@@ -28,50 +28,96 @@ env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 
 Supersuit includes the following wrappers:
 
-* `clip_reward_v0(env, lower_bound=-1, upper_bound=1)` clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.
 
-* `clip_actions_v0(env)` clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.
+```{eval-rst}
+.. py:function:: clip_reward_v0(env, lower_bound=-1, upper_bound=1)
 
-* `color_reduction_v0(env, mode='full')` simplifies color information in graphical ((x,y,3) shaped) environments. `mode='full'` fully greyscales of the observation. This can be computationally intensive. Arguments of 'R', 'G' or 'B' just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.
+  Clips rewards to between lower_bound and upper_bound. This is a popular way of handling rewards with significant variance of magnitude, especially in Atari environments.
 
-* `dtype_v0(env, dtype)` recasts your observation as a certain dtype. Many graphical games return `uint8` observations, while neural networks generally want `float16` or `float32`. `dtype` can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).
+.. py:function:: clip_actions_v0(env)
 
-* `flatten_v0(env)` flattens observations into a 1D array.
+  Clips Box actions to be within the high and low bounds of the action space. This is a standard transformation applied to environments with continuous action spaces to keep the action passed to the environment within the specified bounds.
 
-* `frame_skip_v0(env, num_frames)` skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
+.. py:function:: color_reduction_v0(env, mode='full')
 
-* `delay_observations_v0(env, delay)` Delays observation by `delay` frames. Before `delay` frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.
+  Simplifies color information in graphical ((x,y,3) shaped) environments. `mode='full'` fully greyscales of the observation. This can be computationally intensive. Arguments of 'R', 'G' or 'B' just take the corresponding R, G or B color channel from observation. This is much faster and is generally sufficient.
 
-* `sticky_actions_v0(env, repeat_action_probability)` assigns a probability of an old action "sticking" to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
+.. py:function:: dtype_v0(env, dtype)
 
-* `frame_stack_v1(env, num_frames=4)` stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don't yet exist are filled with 0s. `num_frames=1` is analogous to not using this function.
+  Recasts your observation as a certain dtype. Many graphical games return `uint8` observations, while neural networks generally want `float16` or `float32`. `dtype` can be anything NumPy would except as a dtype argument (e.g. np.dtype classes or strings).
 
-* `max_observation_v0(env, memory)` the resulting observation becomes the max over `memory` number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing `memory=2` and then a  `frame_skip` of 4.
+.. py:function:: flatten_v0(env)
 
-* `normalize_obs_v0(env, env_min=0, env_max=1)` linearly scales observations to the range `env_min` (default 0) to `env_max` (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.
+  flattens observations into a 1D array.
 
-* `reshape_v0(env, shape)` reshapes observations into given shape.
+.. py:function:: frame_skip_v0(env, num_frames)
 
-* `resize_v1(env, x_size, y_size, linear_interp=False)` Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting `linear_interp=True` (it's faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.
+  Skips `num_frames` number of frames by reapplying old actions over and over. Observations skipped over are ignored. Rewards skipped over are accumulated. Like Gymnasium Atari's frameskip parameter, `num_frames` can also be a tuple `(min_skip, max_skip)`, which indicates a range of possible skip lengths which are randomly chosen from (in single agent environments only).
 
-* `nan_noop_v0(env)` If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the `step(action, no_op_action)` function.
+.. py:function:: delay_observations_v0(env, delay)
 
-* `nan_zeros_v0(env)` If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.
+  Delays observation by `delay` frames. Before `delay` frames have been executed, the observation is all zeros. Along with frame_skip, this is the preferred way to implement reaction time for high FPS games.
 
-* `nan_random_v0(env)` If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.
+.. py:function:: sticky_actions_v0(env, repeat_action_probability)
 
-* `scale_actions_v0(env, scale)` Scales the high and low bounds of the action space by the `scale` argument in __init__(). Additionally, scales any actions by the same value when step() is called.
+  Assigns a probability of an old action "sticking" to the environment and not updating as requested. This is to prevent agents from learning predefined action patterns in highly deterministic games like Atari. Note that the stickiness is cumulative, so an action has a repeat_action_probability^2 chance of an action sticking for two turns in a row, etc. This is the recommended way of adding randomness to Atari by *"Machado et al. (2018), "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open Problems for General Agents"*
 
+.. py:function:: frame_stack_v1(env, num_frames=4)
 
+  Stacks the most recent frames. For vector games observed via plain vectors (1D arrays), the output is just concatenated to a longer 1D array. 2D or 3D arrays are stacked to be taller 3D arrays. At the start of the game, frames that don't yet exist are filled with 0s. `num_frames=1` is analogous to not using this function.
+
+.. py:function:: max_observation_v0(env, memory)
+
+  The resulting observation becomes the max over `memory` number of prior frames. This is important for Atari environments, as many games have elements that are intermitently flashed on the instead of being constant, due to the peculiarities of the console and CRT TVs. The OpenAI baselines MaxAndSkip Atari wrapper is equivalent to doing `memory=2` and then a  `frame_skip` of 4.
+
+.. py:function:: normalize_obs_v0(env, env_min=0, env_max=1)
+
+  Linearly scales observations to the range `env_min` (default 0) to `env_max` (default 1), given the known minimum and maximum observation values defined in the observation space. Only works on Box observations with float32 or float64 dtypes and finite bounds. If you wish to normalize another type, you can first apply the dtype wrapper to convert your type to float32 or float64.
+
+.. py:function:: reshape_v0(env, shape)
+
+  Reshapes observations into given shape.
+
+.. py:function:: resize_v1(env, x_size, y_size, linear_interp=False)
+
+  Performs interpolation to up-size or down-size observation image using area interpolation by default. Linear interpolation is also available by setting `linear_interp=True` (it's faster and better for up-sizing). This wrapper is only available for 2D or 3D observations, and only makes sense if the observation is an image.
+
+.. py:function:: nan_noop_v0(env)
+
+  If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a no operation action in its place. The noop action is accepted as an argument in the `step(action, no_op_action)` function.
+
+.. py:function:: nan_zeros_v0(env)
+
+  If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a zeros action in its place.
+
+.. py:function:: nan_random_v0(env)
+
+  If an action is a NaN value for a step, the following wrapper will trigger a warning and perform a random action in its place. The random action will be retrieved from the action mask.
+
+.. py:function:: scale_actions_v0(env, scale)
+
+  Scales the high and low bounds of the action space by the `scale` argument in __init__(). Additionally, scales any actions by the same value when step() is called.
+
+```
 ## Included Multi-Agent Only Functions
 
-* `agent_indicator_v0(env, type_only=False)` Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to *n* additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it's acting on. Set the `type_only` parameter to parse the name of the agent as `<type>_<n>` and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the [MAgent battle environment](https://pettingzoo.farama.org/environments/magent/battle) the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in *Cooperative Multi-Agent Control Using Deep Reinforcement Learning.*
+```{eval-rst}
+.. py:function:: agent_indicator_v0(env, type_only=False)
 
-* `black_death_v2(env)` Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name "black death" does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.
+  Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to *n* additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it's acting on. Set the `type_only` parameter to parse the name of the agent as `<type>_<n>` and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the [MAgent battle environment](https://pettingzoo.farama.org/environments/magent/battle) the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in *Cooperative Multi-Agent Control Using Deep Reinforcement Learning.*
 
-* `pad_action_space_v0(env)` pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning*.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.
+.. py:function:: black_death_v2(env)
 
-* `pad_observations_v0(env)` pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning*. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.
+  Instead of removing dead actions, observations and rewards are 0 and actions are ignored. This can simplify handling agent death mechanics. The name "black death" does not come from the plague, but from the fact that you see a black image (an image filled with zeros) when you die.
+
+.. py:function:: pad_action_space_v0(env)
+
+  Pads the action spaces of all agents to be be the same as the biggest, per the algorithm posed in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning*.  This enables MARL methods that require homogeneous action spaces for all agents to work with environments with heterogeneous action spaces. Discrete actions inside the padded region will be set to zero, and Box actions will be cropped down to the original space.
+
+.. py:function:: pad_observations_v0(env)
+
+  Pads observations to be of the shape of the largest observation of any agent with 0s, per the algorithm posed in *Parameter Sharing is Surprisingly Useful for Deep Reinforcement Learning*. This enables MARL methods that require homogeneous observations from all agents to work in environments with heterogeneous observations. This currently supports Discrete and Box observation spaces.
+```
 
 [//]: # (## Environment Vectorization)
 
