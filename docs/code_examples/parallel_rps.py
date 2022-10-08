@@ -75,7 +75,7 @@ class parallel_env(ParallelEnv):
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # gymnasium spaces are defined and documented here: https://gymnasium.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)
