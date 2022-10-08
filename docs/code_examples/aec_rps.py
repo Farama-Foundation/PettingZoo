@@ -69,7 +69,7 @@ class raw_env(AECEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
 
-        # gymnasium spaces are defined and documented here: https://gymnasium.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
@@ -80,7 +80,7 @@ class raw_env(AECEnv):
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # gymnasium spaces are defined and documented here: https://gymnasium.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)
