@@ -22,7 +22,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | Observation Values   | (-inf,inf)                                              |
 | State Shape          | (14,)                                                   |
 | State Values         | (-inf,inf)                                              |
-| Average Total Reward | -80.9                                                   |
 
 ```{figure} ../../_static/img/aec/mpe_simple_speaker_listener_aec.svg
 :width: 200px
