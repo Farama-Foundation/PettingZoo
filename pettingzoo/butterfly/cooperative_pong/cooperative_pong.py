@@ -22,7 +22,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | Observation Values   | [0, 255]                                               |
 | State Shape          | (560, 960, 3)                                          |
 | State Values         | (0, 255)                                               |
-| Average Total Reward | -92.9                                                  |
 
 ```{figure} ../../_static/img/aec/butterfly_cooperative_pong_aec.svg
 :width: 200px

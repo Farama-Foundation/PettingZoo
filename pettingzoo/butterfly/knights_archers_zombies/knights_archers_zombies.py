@@ -22,7 +22,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | Observation Values   | (0, 255)                                                       |
 | State Shape          | (720, 1280, 3)                                                 |
 | State Values         | (0, 255)                                                       |
-| Average Total Reward | 2.95                                                           |
 
 ```{figure} ../../_static/img/aec/butterfly_knights_archers_zombies_aec.svg
 :width: 200px

@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Action Values        | Discrete(20)                               |
 | Observation Shape    | (658,)                                     |
 | Observation Values   | [0,1]                                      |
-| Average Total Reward | 0.0                                        |
 
 ```{figure} ../../_static/img/aec/classic_hanabi_aec.svg
 :width: 200px

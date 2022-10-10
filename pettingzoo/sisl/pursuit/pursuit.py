@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | Discrete(5)                                            |
 | Observation Shape    | (7, 7, 3)                                              |
 | Observation Values   | [0, 30]                                                |
-| Average Total Reward | 30.3                                                   |
 
 ```{figure} ../../_static/img/aec/sisl_pursuit_aec.svg
 :width: 200px

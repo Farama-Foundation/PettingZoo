@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | [-0.01, 0.01]                                          |
 | Observation Shape    | (242,)                                                 |
 | Observation Values   | [-√2, 2*√2]                                            |
-| Average Total Reward | -68.3                                                  |
 
 ```{figure} ../../_static/img/aec/sisl_waterworld_aec.svg
 :width: 200px

@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | (-1, 1)                                        |
 | Observation Shape    | (31,)                                          |
 | Observation Values   | [-inf,inf]                                     |
-| Average Total Reward | -300.86                                        |
 
 ```{figure} ../../_static/img/aec/sisl_multiwalker_aec.svg
 :width: 200px
