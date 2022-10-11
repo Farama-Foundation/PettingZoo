@@ -6,7 +6,7 @@ PettingZoo is a Python library for conducting research in multi-agent reinforcem
 
 Our website, with comprehensive documentation, is [pettingzoo.farama.org](https://pettingzoo.farama.org)
 
-PettingZoo also has a discord server for development purposes that you can join here: https://discord.gg/jfERDCSw
+PettingZoo also has a discord server for development purposes that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
 
 ## Environments and Installation
 
