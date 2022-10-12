@@ -2,7 +2,7 @@ import os
 
 
 def test_print():
-    dir_names = ["butterfly", "sisl", "magent", "mpe", "atari"]
+    dir_names = ["butterfly", "sisl", "mpe", "atari"]
 
     for name in dir_names:
         root_dir = os.path.join("pettingzoo", name)

@@ -35,7 +35,6 @@ extras = {
         "hanabi_learning_environment==0.0.4",
     ],
     "butterfly": ["pygame==2.1.0", "pymunk==6.2.0"],
-    "magent": ["magent==0.2.4"],
     "mpe": ["pygame==2.1.0"],
     "sisl": ["pygame==2.1.0", "box2d-py==2.3.5", "scipy>=1.4.1"],
     "other": ["pillow>=8.0.1"],
@@ -57,7 +56,6 @@ extras["all"] = (
     extras["atari"]
     + extras["classic"]
     + extras["butterfly"]
-    + extras["magent"]
     + extras["mpe"]
     + extras["sisl"]
     + extras["other"]
