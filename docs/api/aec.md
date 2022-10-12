@@ -1,6 +1,4 @@
-# Core API
-
-## AECEnv
+# AECEnv API
 
 ```{eval-rst}
 .. currentmodule:: pettingzoo.utils.env
@@ -9,7 +7,7 @@
 
 ```
 
-### Attributes
+## Attributes
 
 
 ```{eval-rst}
@@ -40,13 +38,9 @@
 
     :type: AgentID
 
-.. autoattribute:: AECEnv.dones
+.. autoattribute:: AECEnv.terminations
 
-    A dict of the done state of every current agent at the time called, keyed by name. `last()` accesses this attribute. Note that agents can be added or removed from this dict. The returned dict looks like::
-
-    dones = {0:[first agent done state], 1:[second agent done state] ... n-1:[nth agent done state]}
-
-    :type: Dict[AgentID, bool]
+.. autoattribute:: AECEnv.truncations
 
 .. autoattribute:: AECEnv.rewards
 
@@ -60,7 +54,7 @@
 
     A dict of info for each current agent, keyed by name. Each agent's info is also a dict. Note that agents can be added or removed from this attribute. `last()` accesses this attribute. The returned dict looks like::
 
-    infos = {0:[first agent info], 1:[second agent info] ... n-1:[nth agent info]}
+        infos = {0:[first agent info], 1:[second agent info] ... n-1:[nth agent info]}
 
     :type: Dict[AgentID, Dict[str, Any]]
 
@@ -77,7 +71,7 @@
     :type: Dict[AgentID, gymnasium.spaces.Space]
 ```
 
-### Methods
+## Methods
 
 ```{eval-rst}
 .. automethod:: AECEnv.step
