@@ -296,16 +296,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../environments/classic/tictactoe/">Tic Tac Toe</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/magent/">MAgent</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/adversarial_pursuit/">Adversarial Pursuit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/battle/">Battle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/battlefield/">Battlefield</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/combined_arms/">Combined Arms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/gather/">Gather</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../environments/magent/tiger_deer/">Tiger-Deer</a></li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple/">Simple</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_adversary/">Simple Adversary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_crypto/">Simple Crypto</a></li>
@@ -316,7 +307,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../environments/mpe/simple_world_comm/">Simple World Comm</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environments/sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/multiwalker/">Multiwalker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/pursuit/">Pursuit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../environments/sisl/waterworld/">Waterworld</a></li>
@@ -502,7 +493,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="agent_indicator_v0">
 <span class="sig-name descname"><span class="pre">agent_indicator_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#agent_indicator_v0" title="Permalink to this definition">#</a></dt>
-<dd><p>Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <cite>type_only</cite> parameter to parse the name of the agent as <cite>&lt;type&gt;_&lt;n&gt;</cite> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This would, for example give all agents on the red team in the [MAgent battle environment](<a class="reference external" href="https://pettingzoo.farama.org/environments/magent/battle">https://pettingzoo.farama.org/environments/magent/battle</a>) the same agent indicator. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p>
+<dd><p>Adds an indicator of the agent ID to the observation, only supports discrete and 1D, 2D, and 3D box. For 1d spaces, the agent ID is converted to a 1-hot vector and appended to the observation (increasing the size of the observation space as necessary). 2d and 3d spaces are treated as images (with channels last) and the ID is converted to <em>n</em> additional channels with the channel that represents the ID as all 1s and the other channel as all 0s (a sort of one hot encoding). This allows MADRL methods like parameter sharing to learn policies for heterogeneous agents since the policy can tell what agent it’s acting on. Set the <cite>type_only</cite> parameter to parse the name of the agent as <cite>&lt;type&gt;_&lt;n&gt;</cite> and have the appended 1-hot vector only identify the type, rather than the specific agent name. This is useful for games where there are many agents in an environment but few types of agents. Agent indication for MADRL was first introduced in <em>Cooperative Multi-Agent Control Using Deep Reinforcement Learning.</em></p>
 </dd></dl>
 
 <dl class="py function">
