@@ -7,7 +7,7 @@
 :name: waterworld
 ```
 
-This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
 | Import               | `from pettingzoo.sisl import waterworld_v4`            |
 |----------------------|--------------------------------------------------------|
