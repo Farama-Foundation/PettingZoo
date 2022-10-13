@@ -43,7 +43,6 @@ api/utils
 environments/atari
 environments/butterfly
 environments/classic
-environments/magent
 environments/mpe
 environments/sisl
 environments/third_party_envs
