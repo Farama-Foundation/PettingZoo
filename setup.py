@@ -67,7 +67,7 @@ setup(
     name="PettingZoo",
     version=get_version(),
     author="Farama Foundation",
-    author_email="jkterry@farama.org",
+    author_email="contact@farama.org",
     description="Gymnasium for multi-agent reinforcement learning",
     url="https://github.com/Farama-Foundation/PettingZoo",
     license_files=("LICENSE.txt",),
