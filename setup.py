@@ -69,7 +69,7 @@ setup(
     author="Farama Foundation",
     author_email="contact@farama.org",
     description="Gymnasium for multi-agent reinforcement learning",
-    url="https://github.com/Farama-Foundation/PettingZoo",
+    url="https://pettingzoo.farama.org/",
     license_files=("LICENSE.txt",),
     long_description=long_description,
     long_description_content_type="text/markdown",
