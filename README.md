@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="pettingzoo-text.png" width="500px"/>
+    <img src="https://raw.githubusercontent.com/Farama-Foundation/PettingZoo/master/pettingzoo-text.png" width="500px"/>
 </p>
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
