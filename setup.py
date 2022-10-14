@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 
 
 def get_description():
+    """Gets the description from the readme."""
     with open("README.md") as fh:
         long_description = ""
         header_count = 0
@@ -65,11 +66,12 @@ extras["all"] = (
     + extras["tests"]
 )
 
+version = get_version()
 header_count, long_description = get_description()
 
 setup(
     name="PettingZoo",
-    version=get_version(),
+    version=version,
     author="Farama Foundation",
     author_email="contact@farama.org",
     description="Gymnasium for multi-agent reinforcement learning",
