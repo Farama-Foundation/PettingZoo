@@ -4,9 +4,7 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
 
-Our website, with comprehensive documentation, is [pettingzoo.farama.org](https://pettingzoo.farama.org)
-
-PettingZoo also has a discord server for development purposes that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
+The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
 
 ## Environments and Installation
 
