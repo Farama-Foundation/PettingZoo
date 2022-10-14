@@ -22,7 +22,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | Observation Values   | (-inf,inf)                                    |
 | State Shape          | (54,)                                         |
 | State Values         | (-inf,inf)                                    |
-| Average Total Reward | -115.6                                        |
 
 ```{figure} ../../_static/img/aec/mpe_simple_spread_aec.svg
 :width: 200px
@@ -57,7 +56,7 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 """
 
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 

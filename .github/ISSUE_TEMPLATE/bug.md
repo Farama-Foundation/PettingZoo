@@ -14,7 +14,7 @@ Save time, add code.
 
 **System Info**
 Describe the characteristic of your environment:
- * Describe how Gym was installed (pip, docker, source, ...)
+ * Describe how Gymnasium was installed (pip, docker, source, ...)
  * Operating system: 
  * Python version:
 

@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 import pymunk
-from gym import spaces
+from gymnasium import spaces
 
 
 class Obstacle:

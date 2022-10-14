@@ -1,7 +1,7 @@
 import functools
 
-import gym
-from gym.spaces import Discrete
+import gymnasium
+from gymnasium.spaces import Discrete
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
@@ -75,7 +75,7 @@ class parallel_env(ParallelEnv):
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)
@@ -88,7 +88,7 @@ class parallel_env(ParallelEnv):
         up a graphical window, or open up some other display that a human can see and understand.
         """
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return
@@ -140,7 +140,7 @@ class parallel_env(ParallelEnv):
         # If a user passes in actions with no agents, then just return empty observations, etc.
         if not actions:
             self.agents = []
-            return {}, {}, {}, {}
+            return {}, {}, {}, {}, {}
 
         # rewards for all agents are placed in the rewards dictionary to be returned
         rewards = {}

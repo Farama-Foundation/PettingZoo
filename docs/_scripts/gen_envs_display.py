@@ -44,14 +44,6 @@ all_envs = {
         "texas_holdem",
         "tictactoe",
     ],
-    "magent": [
-        "adversarial_pursuit",
-        "battle",
-        "battlefield",
-        "combined_arms",
-        "gather",
-        "tiger_deer",
-    ],
     "mpe": [
         "simple_adversary",
         "simple_crypto",

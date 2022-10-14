@@ -7,7 +7,7 @@
 :name: pursuit
 ```
 
-This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
 | Import               | `from pettingzoo.sisl import pursuit_v4`               |
 |----------------------|--------------------------------------------------------|
@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | Discrete(5)                                            |
 | Observation Shape    | (7, 7, 3)                                              |
 | Observation Values   | [0, 30]                                                |
-| Average Total Reward | 30.3                                                   |
 
 ```{figure} ../../_static/img/aec/sisl_pursuit_aec.svg
 :width: 200px
@@ -85,7 +84,7 @@ catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 
 import numpy as np
 import pygame
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers

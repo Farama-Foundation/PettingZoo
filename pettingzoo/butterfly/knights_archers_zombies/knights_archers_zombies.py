@@ -22,7 +22,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | Observation Values   | (0, 255)                                                       |
 | State Shape          | (720, 1280, 3)                                                 |
 | State Values         | (0, 255)                                                       |
-| Average Total Reward | 2.95                                                           |
 
 ```{figure} ../../_static/img/aec/butterfly_knights_archers_zombies_aec.svg
 :width: 200px
@@ -184,12 +183,12 @@ import os
 import sys
 from itertools import repeat
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
 import pygame.gfxdraw
-from gym.spaces import Box, Discrete
-from gym.utils import EzPickle, seeding
+from gymnasium.spaces import Box, Discrete
+from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -797,7 +796,7 @@ class raw_env(AECEnv, EzPickle):
 
     def render(self):
         if self.render_mode is None:
-            gym.logger.WARN(
+            gymnasium.logger.WARN(
                 "You are calling render method without specifying any render mode."
             )
             return

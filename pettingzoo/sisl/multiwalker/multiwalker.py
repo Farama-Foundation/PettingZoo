@@ -7,7 +7,7 @@
 :name: multiwalker
 ```
 
-This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
 | Import               | `from pettingzoo.sisl import multiwalker_v9`   |
 |----------------------|------------------------------------------------|
@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | (-1, 1)                                        |
 | Observation Shape    | (31,)                                          |
 | Observation Values   | [-inf,inf]                                     |
-| Average Total Reward | -300.86                                        |
 
 ```{figure} ../../_static/img/aec/sisl_multiwalker_aec.svg
 :width: 200px
@@ -125,7 +124,7 @@ terminate_on_fall=True, remove_on_fall=True, terrain_legth=200, max_cycles=500)
 """
 
 import numpy as np
-from gym.utils import EzPickle
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers

@@ -11,14 +11,25 @@ lastpage:
 content/basic_usage
 content/environment_creation
 content/environment_tests
-content/tutorials
+```
+
+```{toctree}
+:hidden:
+:caption: Tutorials
+
+tutorials/cleanrl/implementing_PPO
+tutorials/tianshou/beginner
+tutorials/tianshou/intermediate
+tutorials/tianshou/advanced
+tutorials/rllib/holdem
+tutorials/rllib/pistonball
 ```
 
 ```{toctree}
 :hidden:
 :caption: API
 
-api/core
+api/aec
 api/parallel
 api/pz_wrappers
 api/supersuit_wrappers
@@ -32,7 +43,6 @@ api/utils
 environments/atari
 environments/butterfly
 environments/classic
-environments/magent
 environments/mpe
 environments/sisl
 environments/third_party_envs
@@ -54,7 +64,7 @@ Donate <https://farama.org/donations>
     :name: warlods
 ```
 
-**Environments can be interacted with in a manner very similar to Gym:**
+**Environments can be interacted with in a manner very similar to Gymnasium:**
 
 ```python
   from pettingzoo.butterfly import knights_archers_zombies_v10

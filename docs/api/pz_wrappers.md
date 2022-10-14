@@ -1,7 +1,6 @@
 # PettingZoo Wrappers
 
 ## Conversion wrappers
-{ref}`header_target`
 
 ### AEC to Parallel
 
@@ -34,12 +33,17 @@ env = from_parallel(env)
 
 We wanted our pettingzoo environments to be both easy to use and easy to implement. To combine these, we have a set of simple wrappers which provide input validation and other convenient reusable logic.
 
-* `BaseWrapper`: All AECEnv wrappers should inherit from this base class
-* `TerminateIllegalWrapper`: Handles illegal move logic for classic games
-* `CaptureStdoutWrapper`: Takes an environment which prints to terminal, and gives it an `ansi` render mode where it captures the terminal output and returns it as a string instead.
-* `AssertOutOfBoundsWrapper`: Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces.
-* `ClipOutOfBoundsWrapper`: Clips the input action to fit in the continuous action space (emitting a warning if it does so). Applied to continuous environments in pettingzoo.
-* `OrderEnforcingWrapper`: Gives a sensible error message if function calls or attribute access are in a disallowed order, for example if step() is called before reset(), or the .dones attribute is accessed before reset(), or if seed() is called and then step() is used before reset() is called again (reset must be called after seed()). Applied to all PettingZoo environments.
+```{eval-rst}
+.. currentmodule:: pettingzoo.utils.wrappers
+
+.. autoclass:: BaseWrapper
+.. autoclass:: TerminateIllegalWrapper
+.. autoclass:: CaptureStdoutWrapper
+.. autoclass:: AssertOutOfBoundsWrapper
+.. autoclass:: ClipOutOfBoundsWrapper
+.. autoclass:: OrderEnforcingWrapper
+
+```
 
 You can apply these wrappers to your environment in a similar manner to the below example:
 

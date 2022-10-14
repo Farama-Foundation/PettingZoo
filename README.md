@@ -2,22 +2,21 @@
     <img src="pettingzoo-text.png" width="500px"/>
 </p>
 
-PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gym](https://github.com/openai/gym).
+PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
 
-Our website, with comprehensive documentation, is [pettingzoo.farama.org](https://pettingzoo.farama.org)
+The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
 
-PettingZoo also has a discord server for development purposes that you can join here: https://discord.gg/nHg2JRN489
-
-## Environments and Installation
+## Environments
 
 PettingZoo includes the following families of environments:
 
 * [Atari](https://pettingzoo.farama.org/environments/atari/): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
 * [Butterfly](https://pettingzoo.farama.org/environments/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
 * [Classic](https://pettingzoo.farama.org/environments/classic): Classical games including card games, board games, etc.
-* [MAgent](https://pettingzoo.farama.org/environments/magent): Configurable environments with massive numbers of particle agents, originally from https://github.com/geek-ai/MAgent
 * [MPE](https://pettingzoo.farama.org/environments/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
 * [SISL](https://pettingzoo.farama.org/environments/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+
+## Installation
 
 To install the pettingzoo base library, use `pip install pettingzoo`
 
@@ -27,20 +26,20 @@ We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs 
 
 ## Getting started
 
-Get started with PettingZoo by following [the PettingZoo tutorial](https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b), where you'll train multiple agents in the Pistonball environment using PettingZoo, SuperSuit and Stable Baselines 3.
+Get started with PettingZoo by following [the PettingZoo tutorial](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/), where you'll train multiple PPO agents in the Pistonball environment using PettingZoo.
 
 ## API
 
 PettingZoo model environments as [*Agent Environment Cycle* (AEC) games](https://arxiv.org/pdf/2009.14471.pdf), in order to be able to cleanly support all types of multi-agent RL environments under one API and to minimize the potential for certain classes of common bugs.
 
-Using environments in PettingZoo is very similar to Gym, i.e. you initialize an environment via:
+Using environments in PettingZoo is very similar to Gymnasium, i.e. you initialize an environment via:
 
 ```python
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
 ```
 
-Environments can be interacted with in a manner very similar to Gym:
+Environments can be interacted with in a manner very similar to Gymnasium:
 
 ```python
 env.reset()
@@ -58,7 +57,7 @@ In certain environments, it's a valid to assume that agents take their actions a
 
 ## SuperSuit
 
-SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gym environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/Farama-Foundation/SuperSuit
+SuperSuit is a library that includes all commonly used wrappers in RL (frame stacking, observation, normalization, etc.) for PettingZoo and Gymnasium environments with a nice API. We developed it in lieu of wrappers built into PettingZoo. https://github.com/Farama-Foundation/SuperSuit
 
 ## Environment Versioning
 

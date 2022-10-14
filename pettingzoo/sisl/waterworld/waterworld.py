@@ -7,7 +7,7 @@
 :name: waterworld
 ```
 
-This environment is part of the <a href='..'>MAgent environments</a>. Please read that page first for general information.
+This environment is part of the <a href='..'>SISL environments</a>. Please read that page first for general information.
 
 | Import               | `from pettingzoo.sisl import waterworld_v4`            |
 |----------------------|--------------------------------------------------------|
@@ -20,7 +20,6 @@ This environment is part of the <a href='..'>MAgent environments</a>. Please rea
 | Action Values        | [-0.01, 0.01]                                          |
 | Observation Shape    | (242,)                                                 |
 | Observation Values   | [-√2, 2*√2]                                            |
-| Average Total Reward | -68.3                                                  |
 
 ```{figure} ../../_static/img/aec/sisl_waterworld_aec.svg
 :width: 200px

@@ -67,7 +67,7 @@ html_favicon = "_static/img/favicon.png"
 html_theme_options = {
     "light_logo": "img/PettingZoo.svg",
     "dark_logo": "img/PettingZoo_White.svg",
-    "gtag": "",
+    "gtag": "G-Q4EGMJ3R24",
 }
 html_context: Dict[str, Any] = {}
 html_context["conf_py_path"] = "/docs/"
