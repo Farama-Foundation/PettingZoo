@@ -6,6 +6,16 @@ PettingZoo is a Python library for conducting research in multi-agent reinforcem
 
 The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
 
+## Environments
+
+PettingZoo includes the following families of environments:
+
+* [Atari](https://pettingzoo.farama.org/environments/atari/): Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
+* [Butterfly](https://pettingzoo.farama.org/environments/butterfly): Cooperative graphical games developed by us, requiring a high degree of coordination
+* [Classic](https://pettingzoo.farama.org/environments/classic): Classical games including card games, board games, etc.
+* [MPE](https://pettingzoo.farama.org/environments/mpe): A set of simple nongraphical communication tasks, originally from https://github.com/openai/multiagent-particle-envs
+* [SISL](https://pettingzoo.farama.org/environments/sisl): 3 cooperative environments, originally from https://github.com/sisl/MADRL
+
 ## Installation
 
 To install the pettingzoo base library, use `pip install pettingzoo`
