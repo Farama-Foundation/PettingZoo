@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 ---
-name: Python tests
+name: Tutorial tests
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-        tutorial: ['CleanRL', 'Ray', 'Tianshou']
+        tutorial: ['CleanRL', 'Tianshou']
     steps:
       - uses: actions/checkout@v3
       # - uses: openrndr/setup-opengl@v1.1
