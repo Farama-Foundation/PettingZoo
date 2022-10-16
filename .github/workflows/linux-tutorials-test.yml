@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  linux-test:
+  tutorial-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,7 +21,6 @@ jobs:
         tutorial: ['CleanRL', 'Tianshou']
     steps:
       - uses: actions/checkout@v3
-      # - uses: openrndr/setup-opengl@v1.1
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
@@ -31,4 +30,5 @@ jobs:
           cd tutorials
           cd ${{ matrix.tutorial }}
           pip install -r requirements.txt
+      - name: Run tutorial
           for f in *.py; do python "$f"; done
