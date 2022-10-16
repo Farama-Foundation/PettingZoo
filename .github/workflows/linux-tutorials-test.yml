@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  tutorial-test:
+  linux-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
