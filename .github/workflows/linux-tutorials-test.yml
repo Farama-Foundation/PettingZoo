@@ -28,7 +28,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies and run tutorials
         run: |
+          sudo apt-get install python-opengl xvfb
           cd tutorials
           cd ${{ matrix.tutorial }}
           pip install -r requirements.txt
-          for f in *.py; do python "$f"; done
+          for f in *.py; do xvfb-run -s "-screen 0 1024x768x24" python "$f"; done
