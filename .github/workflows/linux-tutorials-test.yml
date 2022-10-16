@@ -31,4 +31,5 @@ jobs:
           cd ${{ matrix.tutorial }}
           pip install -r requirements.txt
       - name: Run tutorial
+        run: |
           for f in *.py; do python "$f"; done
