@@ -1,0 +1,4 @@
+SuperSuit==3.6.0
+numpy==1.23.2
+torch==1.12.1
+pettingzoo==1.22.0
