@@ -33,5 +33,5 @@ jobs:
           cd ${{ matrix.tutorial }}
           pip install -r requirements.txt
           pip uninstall -y pettingzoo
-          pip install ..
+          pip install ../..
           for f in *.py; do xvfb-run -s "-screen 0 1024x768x24" python "$f"; done
