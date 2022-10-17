@@ -49,11 +49,11 @@ for agent in env.agent_iter():
     env.step(action)
 ```
 
-For the complete API documentation, please see https://pettingzoo.farama.org/content/api/
+For the complete API documentation, please see https://pettingzoo.farama.org/api/aec/
 
 ### Parallel API
 
-In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://pettingzoo.farama.org/content/api/#parallel-api
+In certain environments, it's a valid to assume that agents take their actions at the same time. For these games, we offer a secondary API to allow for parallel actions, documented at https://pettingzoo.farama.org/api/parallel/
 
 ## SuperSuit
 
