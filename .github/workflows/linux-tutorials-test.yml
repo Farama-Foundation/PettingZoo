@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-        tutorial: ['CleanRL', 'Ray', 'Tianshou']
+        tutorial: ['CleanRL']
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -32,4 +32,6 @@ jobs:
           cd tutorials
           cd ${{ matrix.tutorial }}
           pip install -r requirements.txt
+          pip uninstall pettingzoo
+          pip install ..
           for f in *.py; do xvfb-run -s "-screen 0 1024x768x24" python "$f"; done
