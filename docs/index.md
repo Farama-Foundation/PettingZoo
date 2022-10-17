@@ -15,18 +15,6 @@ content/environment_tests
 
 ```{toctree}
 :hidden:
-:caption: Tutorials
-
-tutorials/cleanrl/implementing_PPO
-tutorials/tianshou/beginner
-tutorials/tianshou/intermediate
-tutorials/tianshou/advanced
-tutorials/rllib/holdem
-tutorials/rllib/pistonball
-```
-
-```{toctree}
-:hidden:
 :caption: API
 
 api/aec
@@ -46,6 +34,18 @@ environments/classic
 environments/mpe
 environments/sisl
 environments/third_party_envs
+```
+
+```{toctree}
+:hidden:
+:caption: Tutorials
+
+tutorials/cleanrl/implementing_PPO
+tutorials/tianshou/beginner
+tutorials/tianshou/intermediate
+tutorials/tianshou/advanced
+tutorials/rllib/holdem
+tutorials/rllib/pistonball
 ```
 
 ```{toctree}
