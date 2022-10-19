@@ -3,6 +3,8 @@
 Author: Rohan (https://github.com/Rohan138)
 """
 
+raise NotImplementedError("There are currently bugs in this tutorial, we will fix them soon.")
+
 import os
 
 import supersuit as ss
