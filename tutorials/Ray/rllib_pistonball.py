@@ -3,8 +3,6 @@
 Author: Rohan (https://github.com/Rohan138)
 """
 
-raise NotImplementedError("There are currently bugs in this tutorial, we will fix them soon.")
-
 import os
 
 import supersuit as ss
@@ -17,6 +15,10 @@ from ray.tune.registry import register_env
 from torch import nn
 
 from pettingzoo.butterfly import pistonball_v6
+
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
 
 
 class CNNModelV2(TorchModelV2, nn.Module):

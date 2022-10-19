@@ -3,8 +3,6 @@
 Author: Rohan (https://github.com/Rohan138)
 """
 
-raise NotImplementedError("There are currently bugs in this tutorial, we will fix them soon.")
-
 import os
 
 from gymnasium.spaces import Box
@@ -19,6 +17,10 @@ from ray.rllib.utils.torch_utils import FLOAT_MAX
 from ray.tune.registry import register_env
 
 from pettingzoo.classic import leduc_holdem_v4
+
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
 
 torch, nn = try_import_torch()
 

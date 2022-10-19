@@ -3,8 +3,6 @@
 Author: Rohan (https://github.com/Rohan138)
 """
 
-raise NotImplementedError("There are currently bugs in this tutorial, we will fix them soon.")
-
 import argparse
 import os
 from pathlib import Path
@@ -20,6 +18,10 @@ from ray.tune.registry import register_env
 
 from pettingzoo.butterfly import pistonball_v6
 from tutorials.Ray.rllib_pistonball import CNNModelV2
+
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
