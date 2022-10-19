@@ -15,13 +15,6 @@ content/environment_tests
 
 ```{toctree}
 :hidden:
-:caption: Tutorials
-
-tutorials/cleanrl/implementing_PPO
-```
-
-```{toctree}
-:hidden:
 :caption: API
 
 api/aec
@@ -41,6 +34,13 @@ environments/classic
 environments/mpe
 environments/sisl
 environments/third_party_envs
+```
+
+```{toctree}
+:hidden:
+:caption: Tutorials
+
+tutorials/cleanrl/implementing_PPO
 ```
 
 ```{toctree}
