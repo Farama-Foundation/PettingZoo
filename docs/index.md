@@ -18,9 +18,6 @@ content/environment_tests
 :caption: Tutorials
 
 tutorials/cleanrl/implementing_PPO
-tutorials/tianshou/beginner
-tutorials/tianshou/intermediate
-tutorials/tianshou/advanced
 ```
 
 ```{toctree}
