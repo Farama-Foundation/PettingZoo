@@ -1,4 +1,4 @@
-"""Setups up the PettingZoo module."""
+"""Sets up the PettingZoo module."""
 
 from setuptools import find_packages, setup
 
