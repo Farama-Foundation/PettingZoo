@@ -18,6 +18,10 @@ from ray.tune.registry import register_env
 
 from pettingzoo.classic import leduc_holdem_v4
 
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
+
 torch, nn = try_import_torch()
 
 

@@ -18,6 +18,10 @@ from rllib_leduc_holdem import TorchMaskedActions
 
 from pettingzoo.classic import leduc_holdem_v4
 
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
+
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(
