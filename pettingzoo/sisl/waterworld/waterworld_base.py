@@ -123,8 +123,8 @@ class WaterworldBase:
             obs_dim = 5 * self.n_sensors + 2
 
         obs_space = spaces.Box(
-            low=np.float32(-2 * np.sqrt(2)),
-            high=np.float32(2 * np.sqrt(2)),
+            low=np.float32(-np.sqrt(2)),
+            high=np.float32(np.sqrt(2)),
             shape=(obs_dim,),
             dtype=np.float32,
         )
