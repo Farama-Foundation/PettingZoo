@@ -99,9 +99,9 @@ If there is no entity there, the whole typemask (as well as the whole state vect
 
 As a result, setting `use_typemask=True` results in the observation being a (N+1)x11 vector.
 
-**Transformers** (Experimental)
+**Graph Space** (Experimental)
 
-There is an option to also pass `transformer=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a
+There is an option to also pass `graph_space=True` as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is **still experimental** as the state and observation size are no longer constant. In particular, `N` is now a
 variable number.
 
 #### Image-based
@@ -135,7 +135,7 @@ knights_archers_zombies_v10.env(
   max_cycles=900,
   vector_state=True,
   use_typemasks=False,
-  transformer=False,
+  graph_space=False,
 ```
 
 `spawn_rate`:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.
@@ -160,7 +160,7 @@ knights_archers_zombies_v10.env(
 
 `use_typemasks`: only relevant when `vector_state=True` is set, adds typemasks to the vectors.
 
-`transformer`: **experimental**, only relevant when `vector_state=True` is set, removes non-existent entities in the vector state.
+`graph_space`: **experimental**, only relevant when `vector_state=True` is set, removes non-existent entities in the vector state.
 
 
 ### Version History
@@ -187,7 +187,7 @@ import gymnasium
 import numpy as np
 import pygame
 import pygame.gfxdraw
-from gymnasium.spaces import Box, Discrete
+from gymnasium.spaces import Box, Discrete, Graph, GraphInstance
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
@@ -238,7 +238,7 @@ class raw_env(AECEnv, EzPickle):
         max_cycles=900,
         vector_state=True,
         use_typemasks=False,
-        transformer=False,
+        graph_space=False,
         render_mode=None,
     ):
         EzPickle.__init__(
@@ -255,11 +255,19 @@ class raw_env(AECEnv, EzPickle):
             max_cycles,
             vector_state,
             use_typemasks,
-            transformer,
+            graph_space,
             render_mode,
         )
         # variable state space
-        self.transformer = transformer
+        self.graph_space = graph_space
+        if self.graph_space:
+            assert (
+                vector_state
+            ), "vector_state must be True if graph_space is True."
+
+            assert (
+                use_typemasks
+            ), "use_typemasks should be True if graph_space is True"
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
@@ -267,7 +275,7 @@ class raw_env(AECEnv, EzPickle):
         self.num_tracked = (
             num_archers + num_knights + max_zombies + num_knights + max_arrows
         )
-        self.use_typemasks = True if transformer else use_typemasks
+        self.use_typemasks = True if graph_space else use_typemasks
         self.typemask_width = 6
         self.vector_width = 4 + self.typemask_width if use_typemasks else 4
 
@@ -318,15 +326,23 @@ class raw_env(AECEnv, EzPickle):
         low = 0 if not self.vector_state else -1.0
         high = 255 if not self.vector_state else 1.0
         dtype = np.uint8 if not self.vector_state else np.float64
-        self.observation_spaces = dict(
-            zip(
-                self.agents,
-                [
-                    Box(low=low, high=high, shape=shape, dtype=dtype)
-                    for _ in enumerate(self.agents)
-                ],
+        if not self.graph_space:
+            obs_space = Box(low=low, high=high, shape=shape, dtype=dtype)
+            self.observation_spaces = dict(
+                zip(
+                    self.agents,
+                    [obs_space for _ in enumerate(self.agents)],
+                )
             )
-        )
+        else:
+            box_space = Box(low=low, high=high, shape=[shape[-1]], dtype=dtype)
+            obs_space = Graph(node_space=box_space, edge_space=None)
+            self.observation_spaces = dict(
+                zip(
+                    self.agents,
+                    [obs_space for _ in enumerate(self.agents)],
+                )
+            )
 
         self.action_spaces = dict(
             zip(self.agents, [Discrete(6) for _ in enumerate(self.agents)])
@@ -570,6 +586,10 @@ class raw_env(AECEnv, EzPickle):
 
             # prepend agent state to the observation
             state = np.concatenate([agent_state, state], axis=0)
+            if self.graph_space:
+                # remove pure zero rows if using graph space
+                state = state[~np.all(state == 0, axis=-1)]
+                state = GraphInstance(nodes=state, edges=None, edge_links=None)
 
             return state
 
@@ -603,8 +623,7 @@ class raw_env(AECEnv, EzPickle):
                 vector = np.concatenate((typemask, agent.vector_state), axis=0)
                 state.append(vector)
             else:
-                if not self.transformer:
-                    state.append(np.zeros(self.vector_width))
+                state.append(np.zeros(self.vector_width))
 
         # handle swords
         for agent in self.agent_list:
@@ -618,13 +637,12 @@ class raw_env(AECEnv, EzPickle):
                     state.append(vector)
 
         # handle empty swords
-        if not self.transformer:
-            state.extend(
-                repeat(
-                    np.zeros(self.vector_width),
-                    self.num_knights - self.num_active_swords,
-                )
+        state.extend(
+            repeat(
+                np.zeros(self.vector_width),
+                self.num_knights - self.num_active_swords,
             )
+        )
 
         # handle arrows
         for agent in self.agent_list:
@@ -638,13 +656,12 @@ class raw_env(AECEnv, EzPickle):
                     state.append(vector)
 
         # handle empty arrows
-        if not self.transformer:
-            state.extend(
-                repeat(
-                    np.zeros(self.vector_width),
-                    self.max_arrows - self.num_active_arrows,
-                )
+        state.extend(
+            repeat(
+                np.zeros(self.vector_width),
+                self.max_arrows - self.num_active_arrows,
             )
+        )
 
         # handle zombies
         for zombie in self.zombie_list:
@@ -656,13 +673,12 @@ class raw_env(AECEnv, EzPickle):
             state.append(vector)
 
         # handle empty zombies
-        if not self.transformer:
-            state.extend(
-                repeat(
-                    np.zeros(self.vector_width),
-                    self.max_zombies - len(self.zombie_list),
-                )
+        state.extend(
+            repeat(
+                np.zeros(self.vector_width),
+                self.max_zombies - len(self.zombie_list),
             )
+        )
 
         return np.stack(state, axis=0)
 

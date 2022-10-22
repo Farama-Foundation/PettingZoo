@@ -55,6 +55,8 @@ def test_state(env, num_cycles):
 
         env.step(action)
         new_state = env.state()
+        print(new_state)
+        print(env.state_space)
         assert env.state_space.contains(
             new_state
         ), "Environment's state is outside of it's state space"
