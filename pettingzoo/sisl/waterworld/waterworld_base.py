@@ -129,8 +129,8 @@ class WaterworldBase:
         )
 
         act_space = spaces.Box(
-            low=np.float32(-self.pursuer_max_accel),
-            high=np.float32(self.pursuer_max_accel),
+            low=np.float32(-1.0),
+            high=np.float32(1.0),
             shape=(2,),
             dtype=np.float32,
         )
@@ -412,7 +412,7 @@ class WaterworldBase:
         return obs_list[0]
 
     def step(self, action, agent_id, is_last):
-        action = np.asarray(action)
+        action = np.asarray(action) * self.pursuer_max_accel
         action = action.reshape(2)
         thrust = np.linalg.norm(action)
         if thrust > self.pursuer_max_accel:
