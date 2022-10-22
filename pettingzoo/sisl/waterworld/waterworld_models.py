@@ -136,8 +136,8 @@ class Pursuers(MovingObject):
     @property
     def observation_space(self):
         return spaces.Box(
-            low=np.float32(-4 * np.sqrt(2)),
-            high=np.float32(4 * np.sqrt(2)),
+            low=np.float32(-2 * np.sqrt(2)),
+            high=np.float32(2 * np.sqrt(2)),
             shape=(self.obs_dim,),
             dtype=np.float32,
         )

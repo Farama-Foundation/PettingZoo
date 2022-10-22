@@ -116,14 +116,15 @@ class WaterworldBase:
         self.seed()
 
     def get_spaces(self):
+        """Define the action and observation spaces for all of the agents."""
         if self.speed_features:
             obs_dim = 8 * self.n_sensors + 2
         else:
             obs_dim = 5 * self.n_sensors + 2
 
         obs_space = spaces.Box(
-            low=np.float32(-4 * np.sqrt(2)),
-            high=np.float32(4 * np.sqrt(2)),
+            low=np.float32(-2 * np.sqrt(2)),
+            high=np.float32(2 * np.sqrt(2)),
             shape=(obs_dim,),
             dtype=np.float32,
         )
