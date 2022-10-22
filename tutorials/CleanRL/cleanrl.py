@@ -4,12 +4,6 @@ This code is exceedingly basic, with no logging or weights saving.
 The intention was for users to have a (relatively clean) ~200 line file to refer to when they want to design their own learning algorithm.
 
 Author: Jet (https://github.com/jjshoots)
-
-Dependencies:
-- SuperSuit==3.6.0
-- numpy==1.23.2
-- torch==1.12.1
-- pettingzoo==1.22.0
 """
 
 import numpy as np

@@ -1,0 +1,8 @@
+# not confirmed
+
+pickle5==0.0.11
+Pillow==9.2.0
+torch==1.12.1
+SuperSuit==3.6.0
+ray[rllib]==2
+pettingzoo==1.22.0

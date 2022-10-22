@@ -1,10 +1,6 @@
 """Uses Ray's RLLib to view trained agents playing Leduoc Holdem.
 
 Author: Rohan (https://github.com/Rohan138)
-
-Dependencies:
-- ray[rllib]=2
-- pettingzoo==1.22.0
 """
 
 import argparse
@@ -21,6 +17,10 @@ from ray.tune.registry import register_env
 from rllib_leduc_holdem import TorchMaskedActions
 
 from pettingzoo.classic import leduc_holdem_v4
+
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
 
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
