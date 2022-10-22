@@ -4,6 +4,7 @@ import gymnasium
 import numpy as np
 import pygame
 import pymunk
+from gymnasium import spaces
 from gymnasium.utils import seeding
 from scipy.spatial import distance as ssd
 
@@ -110,15 +111,32 @@ class WaterworldBase:
         self.render_mode = render_mode
         self.renderOn = False
         self.frames = 0
-
-        self.seed()
-        self.add_obj()
-
         self.num_agents = self.n_pursuers
-        self.observation_space = [
-            pursuer.observation_space for pursuer in self.pursuers
-        ]
-        self.action_space = [pursuer.action_space for pursuer in self.pursuers]
+        self.get_spaces()
+        self.seed()
+
+    def get_spaces(self):
+        if self.speed_features:
+            obs_dim = 8 * self.n_sensors + 2
+        else:
+            obs_dim = 5 * self.n_sensors + 2
+
+        obs_space = spaces.Box(
+            low=np.float32(-4 * np.sqrt(2)),
+            high=np.float32(4 * np.sqrt(2)),
+            shape=(obs_dim,),
+            dtype=np.float32,
+        )
+
+        act_space = spaces.Box(
+            low=np.float32(-self.pursuer_max_accel),
+            high=np.float32(self.pursuer_max_accel),
+            shape=(2,),
+            dtype=np.float32,
+        )
+
+        self.observation_space = [obs_space for i in range(self.n_pursuers)]
+        self.action_space = [act_space for i in range(self.n_pursuers)]
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
