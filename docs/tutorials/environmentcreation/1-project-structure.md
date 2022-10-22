@@ -12,7 +12,7 @@ We will be creating a parallel environment, meaning that each agent acts simulta
 
 Before thinking about the environment logic, we should understand the structure of environment repositories.
 
-## File structure
+## Tree structure
 Environment repositories are usually laid out using the following structure:
 
     Custom-Environment
@@ -28,7 +28,7 @@ Environment repositories are usually laid out using the following structure:
 - `/README.md` is a file used to describe your environment.
 - `/requirements.txt` is a file used to keep track of your environment dependencies. At the very least, `pettingzoo` should be in there. **Please version control all your dependencies via `==`**.
 
-## Advanced: Additional (optional) files
+### Advanced: Additional (optional) files
 The above file structure is minimal. A more deployment-ready environment would include 
 - `/docs/` for documentation, 
 - `/setup.py` for packaging, 
@@ -36,3 +36,6 @@ The above file structure is minimal. A more deployment-ready environment would i
 - Github actions for continuous integration of environment tests. 
 
 Implementing these are outside the scope of this tutorial.
+
+## Skeleton code
+The entirety of your environment logic is stored within `/custom-environment/env`
