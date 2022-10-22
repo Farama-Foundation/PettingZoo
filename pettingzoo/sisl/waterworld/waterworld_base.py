@@ -310,24 +310,22 @@ class WaterworldBase:
     def add_handlers(self):
         # Collision handlers for pursuers v.s. evaders & poisons
         for pursuer in self.pursuers:
-            for obj_list in [self.evaders, self.poisons]:
-                for obj in obj_list:
-                    self.handlers.append(
-                        self.space.add_collision_handler(
-                            pursuer.shape.collision_type, obj.shape.collision_type
-                        )
+            for obj in self.evaders:
+                self.handlers.append(
+                    self.space.add_collision_handler(
+                        pursuer.shape.collision_type, obj.shape.collision_type
                     )
+                )
+                self.handlers[-1].begin = self.pursuer_evader_begin_callback
+                self.handlers[-1].separate = self.pursuer_evader_separate_callback
 
-        # Collision callback functions for pursuers v.s. evaders & poisons
-        for i in range(self.n_pursuers):
-            for j in range(self.n_evaders):
-                idx = i * (self.n_evaders + self.n_poisons) + j
-                self.handlers[idx].begin = self.pursuer_evader_begin_callback
-                self.handlers[idx].separate = self.pursuer_evader_separate_callback
-
-            for k in range(self.n_poisons):
-                idx = i * (self.n_evaders + self.n_poisons) + self.n_evaders + k
-                self.handlers[idx].begin = self.pursuer_poison_begin_callback
+            for obj in self.poisons:
+                self.handlers.append(
+                    self.space.add_collision_handler(
+                        pursuer.shape.collision_type, obj.shape.collision_type
+                    )
+                )
+                self.handlers[-1].begin = self.pursuer_poison_begin_callback
 
         # Collision handlers for poisons v.s. evaders
         for poison in self.poisons:
@@ -570,6 +568,16 @@ class WaterworldBase:
                 velocites=_pursuer_velocities,
             )
 
+            if pursuer.shape.food_indicator >= 1:
+                food_obs = 1
+            else:
+                food_obs = 0
+
+            if pursuer.shape.poison_indicator >= 1:
+                poison_obs = 1
+            else:
+                poison_obs = 0
+
             # concatenate all observations
             if self.speed_features:
                 pursuer_observation = np.concatenate(
@@ -582,8 +590,8 @@ class WaterworldBase:
                         poison_sensor_velocity_vals,
                         _pursuer_sensor_distance_vals,
                         _pursuer_sensor_velocity_vals,
-                        np.array([pursuer.shape.food_indicator]),
-                        np.array([pursuer.shape.poison_indicator]),
+                        np.array([food_obs]),
+                        np.array([poison_obs]),
                     ]
                 )
             else:
@@ -594,8 +602,8 @@ class WaterworldBase:
                         evader_sensor_distance_vals,
                         poison_sensor_distance_vals,
                         _pursuer_sensor_distance_vals,
-                        np.array([pursuer.shape.food_indicator]),
-                        np.array([pursuer.shape.poison_indicator]),
+                        np.array([food_obs]),
+                        np.array([poison_obs]),
                     ]
                 )
 

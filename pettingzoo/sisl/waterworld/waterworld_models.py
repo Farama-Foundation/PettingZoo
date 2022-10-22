@@ -248,6 +248,11 @@ class Pursuers(MovingObject):
             self._sensors @ relative_speed / (object_max_velocity + self.max_speed)
         )
 
+        # if np.any(sensor_velocities < -2 * np.sqrt(2)) or np.any(
+        #     sensor_velocities > 2 * np.sqrt(2)
+        # ):
+        #     set_trace()
+
         # Check for valid detection criterions
         wrong_direction_idx = sensor_distances < 0
         out_of_range_idx = sensor_distances - object_radius > self.sensor_range
