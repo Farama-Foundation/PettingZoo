@@ -45,7 +45,6 @@ tutorials/environmentcreation/1-project-structure
 tutorials/environmentcreation/2-environment-logic
 tutorials/environmentcreation/3-action-masking
 tutorials/environmentcreation/4-testing-your-environment
-tutorials/environmentcreation/5-using-your-environment
 ```
 
 ```{toctree}
