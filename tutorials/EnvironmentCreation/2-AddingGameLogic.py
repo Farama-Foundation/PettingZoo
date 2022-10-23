@@ -1,9 +1,8 @@
+import functools
+import random
 from copy import copy
 
-import functools
-
 import numpy as np
-import random
 from gymnasium.spaces import Discrete, MultiDiscrete
 
 from pettingzoo.utils.env import ParallelEnv
@@ -33,9 +32,14 @@ class CustomEnvironment(ParallelEnv):
         self.escape_x = random.randint(2, 5)
         self.escape_y = random.randint(2, 5)
 
-        observations = {a: (self.prisoner_x + 7 * self.prisoner_y,
-                            self.guard_x + 7 * self.guard_y,
-                            self.escape_x + 7 * self.escape_y) for a in self.agents}
+        observations = {
+            a: (
+                self.prisoner_x + 7 * self.prisoner_y,
+                self.guard_x + 7 * self.guard_y,
+                self.escape_x + 7 * self.escape_y,
+            )
+            for a in self.agents
+        }
         return observations
 
     def step(self, actions):
@@ -80,9 +84,14 @@ class CustomEnvironment(ParallelEnv):
         self.timestep += 1
 
         # Get observations
-        observations = {a: (self.prisoner_x + 7 * self.prisoner_y,
-                            self.guard_x + 7 * self.guard_y,
-                            self.escape_x + 7 * self.escape_y) for a in self.agents}
+        observations = {
+            a: (
+                self.prisoner_x + 7 * self.prisoner_y,
+                self.guard_x + 7 * self.guard_y,
+                self.escape_x + 7 * self.escape_y,
+            )
+            for a in self.agents
+        }
 
         # Get dummy infos (not used in this example)
         infos = {a: {} for a in self.agents}

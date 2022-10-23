@@ -1,9 +1,8 @@
+import functools
+import random
 from copy import copy
 
-import functools
-
 import numpy as np
-import random
 from gymnasium.spaces import Discrete, MultiDiscrete
 
 from pettingzoo.utils.env import ParallelEnv
@@ -33,13 +32,15 @@ class CustomEnvironment(ParallelEnv):
         self.escape_x = random.randint(2, 5)
         self.escape_y = random.randint(2, 5)
 
-        observation = (self.prisoner_x + 7 * self.prisoner_y,
-                            self.guard_x + 7 * self.guard_y,
-                            self.escape_x + 7 * self.escape_y)
-        observations = {'prisoner': {"observation": observation,
-                                     "action_mask": [0, 1, 1, 0]},
-                        'guard': {"observation": observation,
-                                  "action_mask": [1, 0, 0, 1]}}
+        observation = (
+            self.prisoner_x + 7 * self.prisoner_y,
+            self.guard_x + 7 * self.guard_y,
+            self.escape_x + 7 * self.escape_y,
+        )
+        observations = {
+            "prisoner": {"observation": observation, "action_mask": [0, 1, 1, 0]},
+            "guard": {"observation": observation, "action_mask": [1, 0, 0, 1]},
+        }
         return observations
 
     def step(self, actions):
@@ -117,13 +118,18 @@ class CustomEnvironment(ParallelEnv):
         self.timestep += 1
 
         # Get observations
-        observation = (self.prisoner_x + 7 * self.prisoner_y,
-                            self.guard_x + 7 * self.guard_y,
-                            self.escape_x + 7 * self.escape_y)
-        observations = {'prisoner': {"observation": observation,
-                                        "action_mask": prisoner_action_mask},
-                        'guard': {"observation": observation,
-                                    "action_mask": guard_action_mask}}
+        observation = (
+            self.prisoner_x + 7 * self.prisoner_y,
+            self.guard_x + 7 * self.guard_y,
+            self.escape_x + 7 * self.escape_y,
+        )
+        observations = {
+            "prisoner": {
+                "observation": observation,
+                "action_mask": prisoner_action_mask,
+            },
+            "guard": {"observation": observation, "action_mask": guard_action_mask},
+        }
 
         # Get dummy infos (not used in this example)
         infos = {"prisoner": {}, "guard": {}}
@@ -145,7 +151,8 @@ class CustomEnvironment(ParallelEnv):
     def action_space(self, agent):
         return Discrete(4)
 
-from pettingzoo.test import parallel_api_test
+
+from pettingzoo.test import parallel_api_test  # noqa: E402
 
 if __name__ == "__main__":
     parallel_api_test(CustomEnvironment(), num_cycles=1_000_000)
