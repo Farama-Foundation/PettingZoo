@@ -1,3 +1,4 @@
+import os
 import sys
 
 all_envs = {
@@ -111,8 +112,8 @@ if __name__ == "__main__":
 
     for key in all_envs.keys():
         env_list = all_envs[key]
-        envs_path = f"../environments/{key}"
+        envs_path = os.path.join(os.path.dirname(__file__), "..", "environments", key)
         page = generate_page(key, env_list)
-        fp = open(f"{envs_path}/list.html", "w+", encoding="utf-8")
+        fp = open(os.path.join(envs_path, "list.html"), "w+", encoding="utf-8")
         fp.write(page)
         fp.close()
