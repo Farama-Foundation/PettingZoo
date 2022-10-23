@@ -261,13 +261,9 @@ class raw_env(AECEnv, EzPickle):
         # variable state space
         self.graph_space = graph_space
         if self.graph_space:
-            assert (
-                vector_state
-            ), "vector_state must be True if graph_space is True."
+            assert vector_state, "vector_state must be True if graph_space is True."
 
-            assert (
-                use_typemasks
-            ), "use_typemasks should be True if graph_space is True"
+            assert use_typemasks, "use_typemasks should be True if graph_space is True"
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
