@@ -81,6 +81,15 @@ class CustomEnvironment(ParallelEnv):
         elif self.guard_y == 6:
             guard_action_mask[3] = 0
 
+        if self.guard_x - 1 == self.escape_x:
+            guard_action_mask[0] = 0
+        elif self.guard_x + 1 == self.escape_x:
+            guard_action_mask[1] = 0
+        if self.guard_y - 1 == self.escape_y:
+            guard_action_mask[2] = 0
+        elif self.guard_y + 1 == self.escape_y:
+            guard_action_mask[3] = 0
+
         # Check termination conditions
         terminations = {a: False for a in self.agents}
         rewards = {a: 0 for a in self.agents}
