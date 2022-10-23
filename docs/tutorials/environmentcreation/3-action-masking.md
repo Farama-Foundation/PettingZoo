@@ -10,10 +10,11 @@ In many environments, it is natural for some actions to be invalid at certain ti
 
 Action masking is a more natural way of handling invalid actions than having an action have no effect, which was how we handled bumping into walls in the previous tutorial.
 
-## Environment Logic
+## Code
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/3-AddingActionMasking.py
+.. literalinclude:: ../../../tutorials/EnvironmentCreation/3-ActionMasking.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
+   :lines: -137
 ```

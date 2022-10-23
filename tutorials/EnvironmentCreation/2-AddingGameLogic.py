@@ -1,3 +1,7 @@
+from copy import copy
+
+import functools
+
 import numpy as np
 import random
 from gymnasium.spaces import Discrete, MultiDiscrete
@@ -14,9 +18,10 @@ class CustomEnvironment(ParallelEnv):
         self.prisoner_y = None
         self.prisoner_x = None
         self.timestep = None
+        self.possible_agents = ["prisoner", "guard"]
 
-    def reset(self):
-        self.agents = ["prisoner", "guard"]
+    def reset(self, seed=None, return_info=False, options=None):
+        self.agents = copy(self.possible_agents)
         self.timestep = 0
 
         self.prisoner_x = 0
@@ -91,8 +96,10 @@ class CustomEnvironment(ParallelEnv):
         grid[self.escape_y, self.escape_x] = "E"
         print(f"{grid} \n")
 
+    @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         return MultiDiscrete([7 * 7 - 1] * 3)
 
+    @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(4)

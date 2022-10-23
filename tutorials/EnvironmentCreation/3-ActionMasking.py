@@ -1,3 +1,7 @@
+from copy import copy
+
+import functools
+
 import numpy as np
 import random
 from gymnasium.spaces import Discrete, MultiDiscrete
@@ -14,9 +18,10 @@ class CustomEnvironment(ParallelEnv):
         self.prisoner_y = None
         self.prisoner_x = None
         self.timestep = None
+        self.possible_agents = ["prisoner", "guard"]
 
-    def reset(self):
-        self.agents = ["prisoner", "guard"]
+    def reset(self, seed=None, return_info=False, options=None):
+        self.agents = copy(self.possible_agents)
         self.timestep = 0
 
         self.prisoner_x = 0
@@ -96,16 +101,19 @@ class CustomEnvironment(ParallelEnv):
         if self.prisoner_x == self.guard_x and self.prisoner_y == self.guard_y:
             rewards = {"prisoner": -1, "guard": 1}
             terminations = {a: True for a in self.agents}
+            self.agents = []
 
         elif self.prisoner_x == self.escape_x and self.prisoner_y == self.escape_y:
             rewards = {"prisoner": 1, "guard": -1}
             terminations = {a: True for a in self.agents}
+            self.agents = []
 
         # Check truncation conditions (overwrites termination conditions)
-        truncations = {a: False for a in self.agents}
+        truncations = {"prisoner": False, "guard": False}
         if self.timestep > 100:
             rewards = {"prisoner": 0, "guard": 0}
             truncations = {"prisoner": True, "guard": True}
+            self.agents = []
         self.timestep += 1
 
         # Get observations
@@ -118,7 +126,7 @@ class CustomEnvironment(ParallelEnv):
                                     "action_mask": guard_action_mask}}
 
         # Get dummy infos (not used in this example)
-        infos = {a: {} for a in self.agents}
+        infos = {"prisoner": {}, "guard": {}}
 
         return observations, rewards, terminations, truncations, infos
 
@@ -129,8 +137,15 @@ class CustomEnvironment(ParallelEnv):
         grid[self.escape_y, self.escape_x] = "E"
         print(f"{grid} \n")
 
+    @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         return MultiDiscrete([7 * 7 - 1] * 3)
 
+    @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(4)
+
+from pettingzoo.test import parallel_api_test
+
+if __name__ == "__main__":
+    parallel_api_test(CustomEnvironment(), num_cycles=1_000_000)
