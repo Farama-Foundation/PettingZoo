@@ -6,7 +6,7 @@ title: "Creating Environments: Repository Structure"
 
 ## Introduction
 
-Welcome to the first of six short tutorials, guiding you through the process of creating your own PettingZoo environment, from conception to deployment.
+Welcome to the first of five short tutorials, guiding you through the process of creating your own PettingZoo environment, from conception to deployment.
 
 We will be creating a parallel environment, meaning that each agent acts simultaneously.
 
