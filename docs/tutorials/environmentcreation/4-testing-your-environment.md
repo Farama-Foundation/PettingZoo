@@ -15,5 +15,5 @@ Now that our environment is complete, we can test it to make sure it works as in
 .. literalinclude:: ../../../tutorials/EnvironmentCreation/3-ActionMasking.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
-   :lines: 138-
+   :lines: 148-
 ```

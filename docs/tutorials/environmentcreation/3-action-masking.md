@@ -16,5 +16,5 @@ Action masking is a more natural way of handling invalid actions than having an 
 .. literalinclude:: ../../../tutorials/EnvironmentCreation/3-ActionMasking.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
-   :lines: -137
+   :lines: -147
 ```
