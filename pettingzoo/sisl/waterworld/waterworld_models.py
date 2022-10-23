@@ -64,10 +64,11 @@ class Evaders(MovingObject):
 
         self.body.velocity = vx, vy
 
-        self.color = (238, 116, 106)
+        self.color = (145, 250, 116)
         self.shape.collision_type = collision_type
         self.shape.counter = 0
         self.shape.max_speed = max_speed
+        self.shape.density = 0.01
 
 
 class Poisons(MovingObject):
@@ -78,7 +79,7 @@ class Poisons(MovingObject):
 
         self.body.velocity = vx, vy
 
-        self.color = (145, 250, 116)
+        self.color = (238, 116, 106)
         self.shape.collision_type = collision_type
         self.shape.max_speed = max_speed
 
@@ -246,6 +247,11 @@ class Pursuers(MovingObject):
         sensor_velocities = (
             self._sensors @ relative_speed / (object_max_velocity + self.max_speed)
         )
+
+        # if np.any(sensor_velocities < -2 * np.sqrt(2)) or np.any(
+        #     sensor_velocities > 2 * np.sqrt(2)
+        # ):
+        #     set_trace()
 
         # Check for valid detection criterions
         wrong_direction_idx = sensor_distances < 0

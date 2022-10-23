@@ -16,6 +16,10 @@ from torch import nn
 
 from pettingzoo.butterfly import pistonball_v6
 
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
+
 
 class CNNModelV2(TorchModelV2, nn.Module):
     def __init__(self, obs_space, act_space, num_outputs, *args, **kwargs):
