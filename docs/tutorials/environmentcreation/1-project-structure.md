@@ -39,3 +39,9 @@ Implementing these are outside the scope of this tutorial.
 
 ## Skeleton code
 The entirety of your environment logic is stored within `/custom-environment/env`
+
+```{eval-rst}
+.. literalinclude:: ../../../tutorials/EnvironmentCreation/1-SkeletonCreation.py
+   :language: python
+   :caption: /custom-environment/env/custom_environment.py
+```
