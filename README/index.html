@@ -7,10 +7,13 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/search.html" /><meta name="twitter:card" content="summary_large_image"><link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="#" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/search.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/README.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/README.html" />
 
-    <link rel="shortcut icon" href="../_static/favicon.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.15.dev1"/><title>Search - PettingZoo Documentation</title><link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.15.dev1"/>
+        <title>PettingZoo docs - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
     
@@ -331,7 +334,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -340,7 +343,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><form class="sidebar-search-container" method="get" action="#" role="search">
+      <div class="sidebar-sticky"><form class="sidebar-search-container" method="get" action="../search/" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -454,7 +457,18 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+    
+    <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/README.md" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -462,24 +476,46 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="pettingzoo-docs">
+<h1>PettingZoo docs<a class="headerlink" href="#pettingzoo-docs" title="Permalink to this heading">#</a></h1>
+<p>This folder contains the documentation for <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">PettingZoo</a>.</p>
+<section id="instructions-for-editing-content">
+<h2>Instructions for editing content<a class="headerlink" href="#instructions-for-editing-content" title="Permalink to this heading">#</a></h2>
+<p>Our documentation is written in Markdown (more precisely, MyST - Markedly Structured Text) and built using <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>.
+All content present in the documentation website can be found in this directory except for the environments.</p>
+<section id="editing-an-environment-page">
+<h3>Editing an environment page<a class="headerlink" href="#editing-an-environment-page" title="Permalink to this heading">#</a></h3>
+<p>Environemnts’ documentation can be found at the top of the file python file where the environment is declared, for example, the documentation for the chess environment can be at <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py">/pettingzoo/classic/chess/chess.py</a></p>
+<p>To generate the environments pages you need to execute the <code class="docutils literal notranslate"><span class="pre">_scripts/gen_envs_mds.py</span></code> script.</p>
+</section>
+</section>
+<section id="build-the-documentation">
+<h2>Build the Documentation<a class="headerlink" href="#build-the-documentation" title="Permalink to this heading">#</a></h2>
+<p>Install the required packages and PettingZoo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<span class="n">cd</span> <span class="n">docs</span><span class="o">/</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>To build the documentation once:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
+<span class="n">make</span> <span class="n">dirhtml</span> <span class="n">_build</span>
+</pre></div>
+</div>
+<p>To rebuild the documentation automatically every time a change is made:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
+<span class="n">sphinx</span><span class="o">-</span><span class="n">autobuild</span> <span class="o">-</span><span class="n">b</span> <span class="n">dirhtml</span> <span class="o">.</span> <span class="n">_build</span>
+</pre></div>
+</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -513,8 +549,31 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">PettingZoo docs</a><ul>
+<li><a class="reference internal" href="#instructions-for-editing-content">Instructions for editing content</a><ul>
+<li><a class="reference internal" href="#editing-an-environment-page">Editing an environment page</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#build-the-documentation">Build the Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -584,8 +643,5 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/scripts/furo.js"></script>
     
-<script src="../_static/searchtools.js"></script>
-<script src="../_static/language_data.js"></script>
-    
-<script src="../searchindex.js"></script></body>
+    </body>
 </html>
