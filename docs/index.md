@@ -52,7 +52,7 @@ tutorials/environmentcreation/4-testing-your-environment
 :caption: Development
 
 Github <https://github.com/Farama-Foundation/PettingZoo>
-Donate <https://farama.org/donations>
+Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/>
 
 ```
 
