@@ -21,7 +21,7 @@ right_paddle_speed=25, is_cake_paddle=True, max_cycles=900, bounce_randomness=Fa
 
 ## Interacting With Environments
 
-Environments can be interacted with using a similar interface to Gym:
+Environments can be interacted with using a similar interface to Gymnasium:
 
 ``` python
 env.reset()
