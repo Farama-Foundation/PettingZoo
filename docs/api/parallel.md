@@ -7,11 +7,11 @@ In addition to the main API, we have a secondary parallel API for environments w
 Environments can be interacted with as follows:
 
 ``` python
-parallel_env = pistonball_v1.parallel_env()
+parallel_env = pistonball_v6.parallel_env()
 observations = parallel_env.reset()
 max_cycles = 500
 for step in range(max_cycles):
-    actions = {agent: policy(observations[agent], agent) for agent in parallel_env.agents}
+    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
 ```
 
