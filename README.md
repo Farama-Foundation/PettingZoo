@@ -45,7 +45,7 @@ Environments can be interacted with in a manner very similar to Gymnasium:
 env.reset()
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    action = env.action_space(agent).sample()  # this is where you would insert your policy
+    action = None if termination or truncation else env.action_space(agent).sample()  # this is where you would insert your policy
     env.step(action)
 ```
 
