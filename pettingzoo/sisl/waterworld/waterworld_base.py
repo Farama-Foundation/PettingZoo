@@ -251,7 +251,7 @@ class WaterworldBase:
                 ssd.cdist(coord[None, :], np.array([[x, y]]))
                 <= radius * 2 + obstacle.radius
             ):
-                coord = self.np_random.random(2)
+                coord = self.np_random.random(2) * self.pixel_scale
 
         return coord
 
