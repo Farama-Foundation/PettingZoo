@@ -20,7 +20,7 @@ from typing import Any, Dict
 import pettingzoo
 
 project = "PettingZoo"
-copyright = "2022"
+copyright = "2022 Farama Foundation"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
