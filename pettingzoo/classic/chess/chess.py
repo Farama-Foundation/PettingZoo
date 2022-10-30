@@ -169,23 +169,25 @@ class raw_env(AECEnv):
             self.clock = pygame.time.Clock()
             self.cell_size = (self.BOARD_SIZE[0] / 8, self.BOARD_SIZE[1] / 8)
 
-            bg_name = path.join(path.dirname(__file__), f"img/chessboard.png")
-            self.bg_image = pygame.transform.scale(pygame.image.load(bg_name), self.BOARD_SIZE)
+            bg_name = path.join(path.dirname(__file__), "img/chessboard.png")
+            self.bg_image = pygame.transform.scale(
+                pygame.image.load(bg_name), self.BOARD_SIZE
+            )
 
             def load_piece(file_name):
                 img_path = path.join(path.dirname(__file__), f"img/{file_name}.png")
-                return pygame.transform.scale(pygame.image.load(img_path), self.cell_size)
+                return pygame.transform.scale(
+                    pygame.image.load(img_path), self.cell_size
+                )
 
             self.piece_images = {
-                'pawn': [load_piece('pawn_white'), load_piece('pawn_black')],
-                'knight': [load_piece('knight_white'), load_piece('knight_black')],
-                'bishop': [load_piece('bishop_white'), load_piece('bishop_black')],
-                'rook': [load_piece('rook_white'), load_piece('rook_black')],
-                'queen': [load_piece('queen_white'), load_piece('queen_black')],
-                'king': [load_piece('king_white'), load_piece('king_black')],
+                "pawn": [load_piece("pawn_white"), load_piece("pawn_black")],
+                "knight": [load_piece("knight_white"), load_piece("knight_black")],
+                "bishop": [load_piece("bishop_white"), load_piece("bishop_black")],
+                "rook": [load_piece("rook_white"), load_piece("rook_black")],
+                "queen": [load_piece("queen_white"), load_piece("queen_black")],
+                "king": [load_piece("king_white"), load_piece("king_black")],
             }
-
-
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
