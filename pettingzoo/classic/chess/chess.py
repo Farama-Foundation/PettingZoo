@@ -87,11 +87,13 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 * v0: Initial versions release (1.0.0)
 
 """
+from os import path
 
 import chess
 import gymnasium
 import numpy as np
 from gymnasium import spaces
+from gymnasium.error import DependencyNotInstalled
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -101,10 +103,7 @@ from . import chess_utils
 
 
 def env(render_mode=None):
-    internal_render_mode = render_mode if render_mode != "ansi" else "human"
-    env = raw_env(render_mode=internal_render_mode)
-    if render_mode == "ansi":
-        env = wrappers.CaptureStdoutWrapper(env)
+    env = raw_env(render_mode=render_mode)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -114,7 +113,7 @@ def env(render_mode=None):
 class raw_env(AECEnv):
 
     metadata = {
-        "render_modes": ["human"],
+        "render_modes": ["human", "ansi", "rgb_array"],
         "name": "chess_v5",
         "is_parallelizable": False,
         "render_fps": 2,
@@ -154,7 +153,39 @@ class raw_env(AECEnv):
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
 
+        assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
+
+        if self.render_mode in {"human", "rgb_array"}:
+            try:
+                import pygame
+            except ImportError:
+                raise DependencyNotInstalled(
+                    f"pygame is needed for {self.render_mode} rendering, run with `pip install pettingzoo[classic]`"
+                )
+
+            self.BOARD_SIZE = (400, 400)
+            self.window_surface = None
+            self.clock = pygame.time.Clock()
+            self.cell_size = (self.BOARD_SIZE[0] / 8, self.BOARD_SIZE[1] / 8)
+
+            bg_name = path.join(path.dirname(__file__), f"img/chessboard.png")
+            self.bg_image = pygame.transform.scale(pygame.image.load(bg_name), self.BOARD_SIZE)
+
+            def load_piece(file_name):
+                img_path = path.join(path.dirname(__file__), f"img/{file_name}.png")
+                return pygame.transform.scale(pygame.image.load(img_path), self.cell_size)
+
+            self.piece_images = {
+                'pawn': [load_piece('pawn_white'), load_piece('pawn_black')],
+                'knight': [load_piece('knight_white'), load_piece('knight_black')],
+                'bishop': [load_piece('bishop_white'), load_piece('bishop_black')],
+                'rook': [load_piece('rook_white'), load_piece('rook_black')],
+                'queen': [load_piece('queen_white'), load_piece('queen_black')],
+                'king': [load_piece('king_white'), load_piece('king_black')],
+            }
+
+
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -194,6 +225,9 @@ class raw_env(AECEnv):
         self.infos = {name: {} for name in self.agents}
 
         self.board_history = np.zeros((8, 8, 104), dtype=bool)
+
+        if self.render_mode == "human":
+            self.render()
 
     def set_game_result(self, result_val):
         for i, name in enumerate(self.agents):
@@ -246,11 +280,51 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
+        elif self.render_mode == "ansi":
+            return str(self.board)
+        elif self.render_mode in {"human", "rgb_array"}:
+            return self._render_gui()
         else:
-            print(self.board)
+            raise ValueError(
+                f"{self.render_mode} is not a valid render mode. Available modes are: {self.metadata['render_modes']}"
+            )
+
+    def _render_gui(self):
+        try:
+            import pygame
+        except ImportError:
+            raise DependencyNotInstalled(
+                "pygame is not installed, run `pip install pettingzoo[classic]`"
+            )
+
+        if self.window_surface is None:
+            pygame.init()
+
+            if self.render_mode == "human":
+                pygame.display.init()
+                pygame.display.set_caption("Chess")
+                self.window_surface = pygame.display.set_mode(self.BOARD_SIZE)
+            elif self.render_mode == "rgb_array":
+                self.window_surface = pygame.Surface(self.BOARD_SIZE)
+
+        self.window_surface.blit(self.bg_image, (0, 0))
+        for square, piece in self.board.piece_map().items():
+            pos = (square % 8 * self.cell_size[0], square // 8 * self.cell_size[1])
+            piece_name = chess.piece_name(piece.piece_type)
+            piece_img = self.piece_images[piece_name][piece.color]
+            self.window_surface.blit(piece_img, pos)
+
+        if self.render_mode == "human":
+            pygame.event.pump()
+            pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
+        elif self.render_mode == "rgb_array":
+            return np.transpose(
+                np.array(pygame.surfarray.pixels3d(self.window_surface)), axes=(1, 0, 2)
+            )
 
     def close(self):
         pass
