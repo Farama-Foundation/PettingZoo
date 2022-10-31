@@ -269,7 +269,7 @@ class SimpleEnv(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return

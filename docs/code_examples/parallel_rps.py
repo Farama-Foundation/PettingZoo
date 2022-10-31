@@ -88,7 +88,7 @@ class parallel_env(ParallelEnv):
         up a graphical window, or open up some other display that a human can see and understand.
         """
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return
