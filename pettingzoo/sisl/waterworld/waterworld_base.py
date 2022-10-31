@@ -446,6 +446,9 @@ class WaterworldBase:
         if is_last:
             self.space.step(1 / self.FPS)
 
+            obs_list = self.observe_list()
+            self.last_obs = obs_list
+
             for id in range(self.n_pursuers):
                 p = self.pursuers[agent_id]
 
@@ -457,13 +460,9 @@ class WaterworldBase:
                 )
 
                 p.shape.food_indicator = 0
-                p.shape.food_touched_indicator = 0
                 p.shape.poison_indicator = 0
 
             rewards = np.array(self.behavior_rewards) + np.array(self.control_rewards)
-
-            obs_list = self.observe_list()
-            self.last_obs = obs_list
 
             local_reward = rewards
             global_reward = local_reward.mean()
@@ -545,30 +544,36 @@ class WaterworldBase:
                 velocites=poison_velocities,
             )
 
-            for j, _pursuer in enumerate(self.pursuers):
-                # Get sensor readings only for other pursuers
-                if i == j:
-                    continue
+            # When there is only one pursuer the sensors will not sense
+            # another pursuer
+            if self.n_pursuers > 1:
+                for j, _pursuer in enumerate(self.pursuers):
+                    # Get sensor readings only for other pursuers
+                    if i == j:
+                        continue
 
-                _pursuer_distance, _pursuer_velocity = pursuer.get_sensor_reading(
-                    _pursuer.body.position,
-                    _pursuer.radius,
-                    _pursuer.body.velocity,
-                    self.pursuer_speed,
+                    _pursuer_distance, _pursuer_velocity = pursuer.get_sensor_reading(
+                        _pursuer.body.position,
+                        _pursuer.radius,
+                        _pursuer.body.velocity,
+                        self.pursuer_speed,
+                    )
+                    _pursuer_distances.append(_pursuer_distance)
+                    _pursuer_velocities.append(_pursuer_velocity)
+
+                (
+                    _pursuer_sensor_distance_vals,
+                    _pursuer_sensor_velocity_vals,
+                ) = self.get_sensor_readings(
+                    _pursuer_distances,
+                    pursuer.sensor_range,
+                    velocites=_pursuer_velocities,
                 )
-                _pursuer_distances.append(_pursuer_distance)
-                _pursuer_velocities.append(_pursuer_velocity)
+            else:
+                _pursuer_sensor_distance_vals = np.zeros(self.n_sensors)
+                _pursuer_sensor_velocity_vals = np.zeros(self.n_sensors)
 
-            (
-                _pursuer_sensor_distance_vals,
-                _pursuer_sensor_velocity_vals,
-            ) = self.get_sensor_readings(
-                _pursuer_distances,
-                pursuer.sensor_range,
-                velocites=_pursuer_velocities,
-            )
-
-            if pursuer.shape.food_indicator >= 1:
+            if pursuer.shape.food_touched_indicator >= 1:
                 food_obs = 1
             else:
                 food_obs = 0
@@ -667,7 +672,7 @@ class WaterworldBase:
         evader_shape.counter += 1
 
         # Indicate that food is touched by pursuer
-        pursuer_shape.food_touched_indicator = 1
+        pursuer_shape.food_touched_indicator += 1
 
         if evader_shape.counter >= self.n_coop:
             # For giving reward to pursuer
@@ -699,6 +704,8 @@ class WaterworldBase:
 
             evader_shape.reset_position(x, y)
             evader_shape.reset_velocity(vx, vy)
+
+        pursuer_shape.food_touched_indicator -= 1
 
     def return_false_begin_callback(self, arbiter, space, data):
         """Callback function that simply returns False."""
