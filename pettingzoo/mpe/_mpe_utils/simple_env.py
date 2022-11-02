@@ -238,7 +238,7 @@ class SimpleEnv(AECEnv):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            self._was_dead_step(action)
+            self._was_dead_step()
             return
         cur_agent = self.agent_selection
         current_idx = self._index_map[self.agent_selection]
