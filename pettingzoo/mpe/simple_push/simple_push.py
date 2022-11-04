@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (27,)                                       |
 | State Values       | (-inf,inf)                                  |
 
-```{figure} ../../_static/img/aec/mpe_simple_push_aec.svg
-:width: 200px
-:name: simple_push
-```
 
 This environment has 1 good agent, 1 adversary, and 1 landmark. The good agent is rewarded based on the distance to the landmark. The adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark (the difference of the distances). Thus the adversary must learn to
 push the good agent away from the landmark.

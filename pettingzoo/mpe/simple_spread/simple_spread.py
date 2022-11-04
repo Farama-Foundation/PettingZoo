@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape          | (54,)                                         |
 | State Values         | (-inf,inf)                                    |
 
-```{figure} ../../_static/img/aec/mpe_simple_spread_aec.svg
-:width: 200px
-:name: simple_spread
-```
 
 This environment has N agents, N landmarks (default N=3). At a high level, agents must learn to cover all the landmarks while avoiding collisions.
 

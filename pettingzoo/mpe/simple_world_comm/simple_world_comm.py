@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (192,)                                                                              |
 | State Values       | (-inf,inf)                                                                          |
 
-```{figure} ../../_static/img/aec/mpe_simple_world_comm_aec.svg
-:width: 200px
-:name: simple_world_comm
-```
 
 This environment is similar to simple_tag, except there is food (small blue balls) that the good agents are rewarded for being near, there are 'forests' that hide agents inside from being seen, and there is a 'leader adversary' that can see the agents at all times and can communicate with the
 other adversaries to help coordinate the chase. By default, there are 2 good agents, 3 adversaries, 1 obstacles, 2 foods, and 2 forests.

@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | State Shape          | (720, 1280, 3)                                                 |
 | State Values         | (0, 255)                                                       |
 
-```{figure} ../../_static/img/aec/butterfly_knights_archers_zombies_aec.svg
-:width: 200px
-:name: knights_archers_zombies
-```
 
 Zombies walk from the top border of the screen down to the bottom border in unpredictable paths. The agents you control are knights and archers (default 2 knights and 2 archers) that are initially positioned at the bottom border of the screen. Each agent can rotate clockwise or counter-clockwise
 and move forward or backward. Each agent can also attack to kill zombies. When a knight attacks, it swings a mace in an arc in front of its current heading direction. When an archer attacks, it fires an arrow in a straight line in the direction of the archer's heading. The game ends when all

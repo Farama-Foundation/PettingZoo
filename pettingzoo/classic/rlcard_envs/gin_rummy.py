@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (5, 52)                                       |
 | Observation Values | [0,1]                                         |
 
-```{figure} ../../_static/img/aec/classic_gin_rummy_aec.svg
-:width: 200px
-:name: gin_rummy
-```
 
 Gin Rummy is a 2-player card game with a 52 card deck. The objective is to combine 3 or more cards of the same rank or in a sequence of the same suit.
 
