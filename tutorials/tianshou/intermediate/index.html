@@ -8,7 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/tianshou/intermediate.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou: CLI and Logging" href="../advanced/" /><link rel="prev" title="Tianshou: Basic API Usage" href="../beginner/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/tianshou/intermediate.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.15.dev1"/>
@@ -431,8 +431,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tianshou: Training Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -488,8 +491,9 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo==1.22.0
-git+https://github.com/thu-ml/tianshou
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.1
+packaging==21.3
+git+https://github.com/WillDudley/tianshou.git
 </pre></div>
 </div>
 </section>
@@ -537,7 +541,8 @@ git+https://github.com/thu-ml/tianshou
     <span class="k">if</span> <span class="n">agent_learn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># model</span>
         <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span>
-            <span class="n">state_shape</span><span class="o">=</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">observation_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+            <span class="n">state_shape</span><span class="o">=</span><span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+            <span class="ow">or</span> <span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
             <span class="n">action_shape</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
             <span class="n">hidden_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
             <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
@@ -642,8 +647,26 @@ git+https://github.com/thu-ml/tianshou
       <footer>
         
         <div class="related-pages">
-          
-            
+          <a class="next-page" href="../advanced/">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Tianshou: CLI and Logging</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+            <a class="prev-page" href="../beginner/">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Tianshou: Basic API Usage</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
