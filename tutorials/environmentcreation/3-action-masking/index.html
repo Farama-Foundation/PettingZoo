@@ -7,12 +7,12 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/tianshou/intermediate.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou: CLI and Logging" href="../advanced/" /><link rel="prev" title="Tianshou: Basic API Usage" href="../beginner/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/tianshou/intermediate.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="(WIP) Creating Environments: Testing Your Environment" href="../4-testing-your-environment/" /><link rel="prev" title="(WIP) Creating Environments: Environment Logic" href="../2-environment-logic/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.15.dev1"/>
-        <title>Tianshou: Training Agents - PettingZoo Documentation</title>
+        <title>(WIP) Creating Environments: Action Masking - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
@@ -433,13 +433,13 @@
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/">Tianshou: Basic API Usage</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tianshou: Training Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../advanced/">Tianshou: CLI and Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/1-project-structure/">(WIP) Creating Environments: Repository Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">(WIP) Creating Environments: Environment Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/3-action-masking/">(WIP) Creating Environments: Action Masking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">(WIP) Creating Environments: Testing Your Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1-project-structure/">(WIP) Creating Environments: Repository Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2-environment-logic/">(WIP) Creating Environments: Environment Logic</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">(WIP) Creating Environments: Action Masking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4-testing-your-environment/">(WIP) Creating Environments: Testing Your Environment</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -467,7 +467,7 @@
           
     
     <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/tianshou/intermediate.md" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/environmentcreation/3-action-masking.md" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -490,158 +490,166 @@
         </div>
         <article role="main">
           
-          <section id="tianshou-training-agents">
-<h1>Tianshou: Training Agents<a class="headerlink" href="#tianshou-training-agents" title="Permalink to this heading">#</a></h1>
-<section id="environment-setup">
-<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
-<p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.1
-packaging==21.3
-git+https://github.com/WillDudley/tianshou.git
-</pre></div>
-</div>
+          <section id="wip-creating-environments-action-masking">
+<h1>(WIP) Creating Environments: Action Masking<a class="headerlink" href="#wip-creating-environments-action-masking" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>In many environments, it is natural for some actions to be invalid at certain times. For example, in a game of chess, it is impossible to move a pawn forward if it is already at the front of the board. In PettingZoo, we can use action masking to prevent invalid actions from being taken.</p>
+<p>Action masking is a more natural way of handling invalid actions than having an action have no effect, which was how we handled bumping into walls in the previous tutorial.</p>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
-<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;This is a minimal example of using Tianshou with MARL to train agents.</span>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">/custom-environment/env/custom_environment.py</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 
-<span class="sd">Author: Will (https://github.com/WillDudley)</span>
-
-<span class="sd">Python version used: 3.8.10</span>
-
-<span class="sd">Requirements:</span>
-<span class="sd">pettingzoo == 1.22.0</span>
-<span class="sd">git+https://github.com/thu-ml/tianshou</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
-
-<span class="kn">import</span> <span class="nn">gym</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Collector</span><span class="p">,</span> <span class="n">VectorReplayBuffer</span>
-<span class="kn">from</span> <span class="nn">tianshou.env</span> <span class="kn">import</span> <span class="n">DummyVectorEnv</span>
-<span class="kn">from</span> <span class="nn">tianshou.env.pettingzoo_env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">tianshou.policy</span> <span class="kn">import</span> <span class="n">BasePolicy</span><span class="p">,</span> <span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">MultiAgentPolicyManager</span><span class="p">,</span> <span class="n">RandomPolicy</span>
-<span class="kn">from</span> <span class="nn">tianshou.trainer</span> <span class="kn">import</span> <span class="n">offpolicy_trainer</span>
-<span class="kn">from</span> <span class="nn">tianshou.utils.net.common</span> <span class="kn">import</span> <span class="n">Net</span>
+<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">MultiDiscrete</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ParallelEnv</span>
 
 
-<span class="k">def</span> <span class="nf">_get_agents</span><span class="p">(</span>
-    <span class="n">agent_learn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">agent_opponent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">optim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">_get_env</span><span class="p">()</span>
-    <span class="n">observation_space</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span>
-        <span class="k">else</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span>
-    <span class="p">)</span>
-    <span class="k">if</span> <span class="n">agent_learn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># model</span>
-        <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span>
-            <span class="n">state_shape</span><span class="o">=</span><span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-            <span class="ow">or</span> <span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-            <span class="n">action_shape</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-            <span class="n">hidden_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
-            <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">optim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-        <span class="n">agent_learn</span> <span class="o">=</span> <span class="n">DQNPolicy</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="n">net</span><span class="p">,</span>
-            <span class="n">optim</span><span class="o">=</span><span class="n">optim</span><span class="p">,</span>
-            <span class="n">discount_factor</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
-            <span class="n">estimation_step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">target_update_freq</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span>
+<span class="k">class</span> <span class="nc">CustomEnvironment</span><span class="p">(</span><span class="n">ParallelEnv</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prisoner&quot;</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">=</span> <span class="mi">7</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">observation</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]},</span>
+            <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]},</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">observations</span>
 
-    <span class="k">if</span> <span class="n">agent_opponent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">agent_opponent</span> <span class="o">=</span> <span class="n">RandomPolicy</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
+        <span class="c1"># Execute actions</span>
+        <span class="n">prisoner_action</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="s2">&quot;prisoner&quot;</span><span class="p">]</span>
+        <span class="n">guard_action</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="s2">&quot;guard&quot;</span><span class="p">]</span>
 
-    <span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">agent_opponent</span><span class="p">,</span> <span class="n">agent_learn</span><span class="p">]</span>
-    <span class="n">policy</span> <span class="o">=</span> <span class="n">MultiAgentPolicyManager</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">policy</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span>
+        <span class="k">if</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">prisoner_action</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">+=</span> <span class="mi">1</span>
 
+        <span class="k">if</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">guard_action</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="k">def</span> <span class="nf">_get_env</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;This function is needed to provide callables for DummyVectorEnv.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">())</span>
+        <span class="c1"># Generate action masks</span>
+        <span class="n">prisoner_action_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">prisoner_action_mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Block left movement</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">prisoner_action_mask</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Block right movement</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">prisoner_action_mask</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Block down movement</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">prisoner_action_mask</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Block up movement</span>
 
+        <span class="n">guard_action_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">:</span>
+            <span class="n">guard_action_mask</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="c1"># ======== Step 1: Environment setup =========</span>
-    <span class="n">train_envs</span> <span class="o">=</span> <span class="n">DummyVectorEnv</span><span class="p">([</span><span class="n">_get_env</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
-    <span class="n">test_envs</span> <span class="o">=</span> <span class="n">DummyVectorEnv</span><span class="p">([</span><span class="n">_get_env</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
+        <span class="c1"># Check termination conditions</span>
+        <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">:</span>
+            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># seed</span>
-    <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">train_envs</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">test_envs</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">:</span>
+            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+            <span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># ======== Step 2: Agent setup =========</span>
-    <span class="n">policy</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">agents</span> <span class="o">=</span> <span class="n">_get_agents</span><span class="p">()</span>
+        <span class="c1"># Check truncation conditions (overwrites termination conditions)</span>
+        <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="n">truncations</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestep</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="c1"># ======== Step 3: Collector setup =========</span>
-    <span class="n">train_collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span>
-        <span class="n">policy</span><span class="p">,</span>
-        <span class="n">train_envs</span><span class="p">,</span>
-        <span class="n">VectorReplayBuffer</span><span class="p">(</span><span class="mi">20_000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_envs</span><span class="p">)),</span>
-        <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">test_collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">test_envs</span><span class="p">,</span> <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="c1"># policy.set_eps(1)</span>
-    <span class="n">train_collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_step</span><span class="o">=</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># batch size * training_num</span>
+        <span class="c1"># Get observations</span>
+        <span class="n">observation</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span>
+                <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">prisoner_action_mask</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">guard_action_mask</span><span class="p">},</span>
+        <span class="p">}</span>
 
-    <span class="c1"># ======== Step 4: Callback functions setup =========</span>
-    <span class="k">def</span> <span class="nf">save_best_fn</span><span class="p">(</span><span class="n">policy</span><span class="p">):</span>
-        <span class="n">model_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;rps&quot;</span><span class="p">,</span> <span class="s2">&quot;dqn&quot;</span><span class="p">,</span> <span class="s2">&quot;policy.pth&quot;</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;rps&quot;</span><span class="p">,</span> <span class="s2">&quot;dqn&quot;</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">model_save_path</span><span class="p">)</span>
+        <span class="c1"># Get dummy infos (not used in this example)</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="p">{}}</span>
 
-    <span class="k">def</span> <span class="nf">stop_fn</span><span class="p">(</span><span class="n">mean_rewards</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">mean_rewards</span> <span class="o">&gt;=</span> <span class="mf">0.6</span>
+        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span>
 
-    <span class="k">def</span> <span class="nf">train_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
-        <span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prisoner_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prisoner_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;P&quot;</span>
+        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">guard_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guard_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
+        <span class="n">grid</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">grid</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">test_fn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">env_step</span><span class="p">):</span>
-        <span class="n">policy</span><span class="o">.</span><span class="n">policies</span><span class="p">[</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">set_eps</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">reward_metric</span><span class="p">(</span><span class="n">rews</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">rews</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># ======== Step 5: Run the trainer =========</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">offpolicy_trainer</span><span class="p">(</span>
-        <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span>
-        <span class="n">train_collector</span><span class="o">=</span><span class="n">train_collector</span><span class="p">,</span>
-        <span class="n">test_collector</span><span class="o">=</span><span class="n">test_collector</span><span class="p">,</span>
-        <span class="n">max_epoch</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-        <span class="n">step_per_epoch</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">step_per_collect</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-        <span class="n">episode_per_test</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-        <span class="n">train_fn</span><span class="o">=</span><span class="n">train_fn</span><span class="p">,</span>
-        <span class="n">test_fn</span><span class="o">=</span><span class="n">test_fn</span><span class="p">,</span>
-        <span class="n">stop_fn</span><span class="o">=</span><span class="n">stop_fn</span><span class="p">,</span>
-        <span class="n">save_best_fn</span><span class="o">=</span><span class="n">save_best_fn</span><span class="p">,</span>
-        <span class="n">update_per_step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-        <span class="n">test_in_train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">reward_metric</span><span class="o">=</span><span class="n">reward_metric</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># return result, policy.policies[agents[1]]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==========Result==========</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(the trained policy can be accessed via policy.policies[agents[1]])&quot;</span><span class="p">)</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
 </pre></div>
+</div>
 </div>
 </section>
 </section>
@@ -651,23 +659,23 @@ git+https://github.com/WillDudley/tianshou.git
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../advanced/">
+          <a class="next-page" href="../4-testing-your-environment/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Tianshou: CLI and Logging</div>
+                <div class="title">(WIP) Creating Environments: Testing Your Environment</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-            <a class="prev-page" href="../beginner/">
+            <a class="prev-page" href="../2-environment-logic/">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Tianshou: Basic API Usage</div>
+                <div class="title">(WIP) Creating Environments: Environment Logic</div>
                 
               </div>
             </a>
@@ -708,8 +716,8 @@ git+https://github.com/WillDudley/tianshou.git
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Tianshou: Training Agents</a><ul>
-<li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
+<li><a class="reference internal" href="#">(WIP) Creating Environments: Action Masking</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#code">Code</a></li>
 </ul>
 </li>
