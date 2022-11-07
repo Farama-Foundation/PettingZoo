@@ -44,6 +44,10 @@ tutorials/cleanrl/implementing_PPO
 tutorials/tianshou/beginner
 tutorials/tianshou/intermediate
 tutorials/tianshou/advanced
+tutorials/environmentcreation/1-project-structure
+tutorials/environmentcreation/2-environment-logic
+tutorials/environmentcreation/3-action-masking
+tutorials/environmentcreation/4-testing-your-environment
 ```
 
 ```{toctree}
