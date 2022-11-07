@@ -4,7 +4,7 @@
 
 PettingZoo is a Python library for conducting research in multi-agent reinforcement learning, akin to a multi-agent version of [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
 
-The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: [https://discord.gg/jfERDCSw](https://discord.gg/nhvKkYa6qX)
+The documentation website is at [pettingzoo.farama.org](https://pettingzoo.farama.org) and we have a public discord server (which we also use to coordinate development work) that you can join here: https://discord.gg/nhvKkYa6qX
 
 ## Environments
 
@@ -45,7 +45,7 @@ Environments can be interacted with in a manner very similar to Gymnasium:
 env.reset()
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    action = policy(observation)
+    action = None if termination or truncation else env.action_space(agent).sample()  # this is where you would insert your policy
     env.step(action)
 ```
 
