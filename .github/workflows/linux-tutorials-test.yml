@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
-        tutorial: ['CleanRL']
+        tutorial: ['CleanRL', 'Tianshou']
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -33,4 +33,4 @@ jobs:
           pip install -r requirements.txt
           pip uninstall -y pettingzoo
           pip install -e ../..
-          for f in *.py; do xvfb-run -s "-screen 0 1024x768x24" python "$f"; done
+          for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done

@@ -1,2 +1,3 @@
-pettingzoo==1.22.0
-git+https://github.com/thu-ml/tianshou
+pettingzoo[classic]==1.22.1
+packaging==21.3
+git+https://github.com/WillDudley/tianshou.git

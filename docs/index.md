@@ -41,6 +41,9 @@ environments/third_party_envs
 :caption: Tutorials
 
 tutorials/cleanrl/implementing_PPO
+tutorials/tianshou/beginner
+tutorials/tianshou/intermediate
+tutorials/tianshou/advanced
 ```
 
 ```{toctree}
