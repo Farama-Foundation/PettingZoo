@@ -653,8 +653,8 @@ git+https://github.com/WillDudley/tianshou.git
     <span class="k">return</span> <span class="n">policy</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span>
 
 
-<span class="k">def</span> <span class="nf">get_env</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">())</span>
+<span class="k">def</span> <span class="nf">get_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">train_agent</span><span class="p">(</span>
@@ -747,7 +747,7 @@ git+https://github.com/WillDudley/tianshou.git
     <span class="n">agent_learn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">agent_opponent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BasePolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">get_env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">DummyVectorEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">get_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)])</span>
     <span class="n">policy</span><span class="p">,</span> <span class="n">optim</span><span class="p">,</span> <span class="n">agents</span> <span class="o">=</span> <span class="n">get_agents</span><span class="p">(</span>
         <span class="n">args</span><span class="p">,</span> <span class="n">agent_learn</span><span class="o">=</span><span class="n">agent_learn</span><span class="p">,</span> <span class="n">agent_opponent</span><span class="o">=</span><span class="n">agent_opponent</span>
     <span class="p">)</span>
@@ -763,7 +763,7 @@ git+https://github.com/WillDudley/tianshou.git
     <span class="c1"># train the agent and watch its performance in a match!</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
     <span class="n">result</span><span class="p">,</span> <span class="n">agent</span> <span class="o">=</span> <span class="n">train_agent</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-    <span class="c1"># watch(args, agent)</span>
+    <span class="n">watch</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

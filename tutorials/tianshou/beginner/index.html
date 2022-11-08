@@ -523,10 +523,10 @@ git+https://github.com/WillDudley/tianshou.git
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Step 1: Load the PettingZoo environment</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 
     <span class="c1"># Step 2: Wrap the environment for Tianshou interfacing</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">())</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
     <span class="c1"># Step 3: Define policies for each agent</span>
     <span class="n">policies</span> <span class="o">=</span> <span class="n">MultiAgentPolicyManager</span><span class="p">([</span><span class="n">RandomPolicy</span><span class="p">(),</span> <span class="n">RandomPolicy</span><span class="p">()],</span> <span class="n">env</span><span class="p">)</span>
