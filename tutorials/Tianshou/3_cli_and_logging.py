@@ -147,8 +147,8 @@ def get_agents(
     return policy, optim, env.agents
 
 
-def get_env():
-    return PettingZooEnv(tictactoe_v3.env())
+def get_env(render_mode=None):
+    return PettingZooEnv(tictactoe_v3.env(render_mode=render_mode))
 
 
 def train_agent(
@@ -241,7 +241,7 @@ def watch(
     agent_learn: Optional[BasePolicy] = None,
     agent_opponent: Optional[BasePolicy] = None,
 ) -> None:
-    env = get_env()
+    env = DummyVectorEnv([lambda: get_env(render_mode="human")])
     policy, optim, agents = get_agents(
         args, agent_learn=agent_learn, agent_opponent=agent_opponent
     )
@@ -257,4 +257,4 @@ if __name__ == "__main__":
     # train the agent and watch its performance in a match!
     args = get_args()
     result, agent = train_agent(args)
-    # watch(args, agent)
+    watch(args, agent)
