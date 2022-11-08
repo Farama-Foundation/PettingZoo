@@ -17,10 +17,10 @@ from pettingzoo.classic import rps_v2
 
 if __name__ == "__main__":
     # Step 1: Load the PettingZoo environment
-    env = rps_v2.env()
+    env = rps_v2.env(render_mode="human")
 
     # Step 2: Wrap the environment for Tianshou interfacing
-    env = PettingZooEnv(rps_v2.env())
+    env = PettingZooEnv(env)
 
     # Step 3: Define policies for each agent
     policies = MultiAgentPolicyManager([RandomPolicy(), RandomPolicy()], env)
