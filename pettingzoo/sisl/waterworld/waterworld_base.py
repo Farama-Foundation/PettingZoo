@@ -450,7 +450,7 @@ class WaterworldBase:
             self.last_obs = obs_list
 
             for id in range(self.n_pursuers):
-                p = self.pursuers[agent_id]
+                p = self.pursuers[id]
 
                 # reward for food caught, encountered and poison
                 self.behavior_rewards[id] = (
