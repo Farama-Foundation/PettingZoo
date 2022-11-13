@@ -15,7 +15,7 @@
         <title>Cooperative Pong - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=6c89d1fed8c0da673903e697f5f21f9b7ad9154d" />
     
     
 
@@ -531,9 +531,6 @@
 </tbody>
 </table>
 </div>
-<figure class="align-default" id="id2">
-<a class="reference internal image-reference" href="../../../_images/butterfly_cooperative_pong_aec.svg"><img alt="../../../_images/butterfly_cooperative_pong_aec.svg" src="../../../_images/butterfly_cooperative_pong_aec.svg" width="200px" /></a>
-</figure>
 <p>Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that
 moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default.
 The observation space of each agent is its own half of the screen. There are two possible actions for the agents (<em>move up/down</em>). If the ball stays within bounds, each agent receives a reward of <code class="docutils literal notranslate"><span class="pre">max_reward</span> <span class="pre">/</span> <span class="pre">max_cycles</span></code> (default 0.11) at each timestep. Otherwise, each agent receives a reward of

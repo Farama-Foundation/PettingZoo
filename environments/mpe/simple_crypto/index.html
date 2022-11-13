@@ -15,7 +15,7 @@
         <title>Simple Crypto - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=6c89d1fed8c0da673903e697f5f21f9b7ad9154d" />
     
     
 
@@ -531,9 +531,6 @@
 </tbody>
 </table>
 </div>
-<figure class="align-default" id="id2">
-<a class="reference internal image-reference" href="../../../_images/mpe_simple_crypto_aec.svg"><img alt="../../../_images/mpe_simple_crypto_aec.svg" src="../../../_images/mpe_simple_crypto_aec.svg" width="200px" /></a>
-</figure>
 <p>In this environment, there are 2 good agents (Alice and Bob) and 1 adversary (Eve). Alice must sent a private 1 bit message to Bob over a public channel. Alice and Bob are rewarded +2 if Bob reconstructs the message, but are rewarded -2 if Eve reconstruct the message (that adds to 0 if both teams
 reconstruct the bit). Eve is rewarded -2 based if it cannot reconstruct the signal, zero if it can. Alice and Bob have a private key (randomly generated at beginning of each episode) which they must learn to use to encrypt the message.</p>
 <p>Alice observation space: <code class="docutils literal notranslate"><span class="pre">[message,</span> <span class="pre">private_key]</span></code></p>
