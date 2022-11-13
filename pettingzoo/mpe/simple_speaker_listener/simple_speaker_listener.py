@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape          | (14,)                                                   |
 | State Values         | (-inf,inf)                                              |
 
-```{figure} ../../_static/img/aec/mpe_simple_speaker_listener_aec.svg
-:width: 200px
-:name: simple_speaker_listener
-```
 
 This environment is similar to simple_reference, except that one agent is the 'speaker' (gray) and can speak but cannot move, while the other agent is the listener (cannot speak, but must navigate to correct landmark).
 

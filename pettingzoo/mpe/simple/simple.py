@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (4,)                                   |
 | State Values       | (-inf,inf)                             |
 
-```{figure} ../../_static/img/aec/mpe_simple_aec.svg
-:width: 200px
-:name: simple
-```
 
 In this environment a single agent sees a landmark position and is rewarded based on how close it gets to the landmark (Euclidean distance). This is not a multiagent environment, and is primarily intended for debugging purposes.
 

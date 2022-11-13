@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>SISL environments</a>. Please read 
 | Observation Shape    | (31,)                                          |
 | Observation Values   | [-inf,inf]                                     |
 
-```{figure} ../../_static/img/aec/sisl_multiwalker_aec.svg
-:width: 200px
-:name: multiwalker
-```
 
 In this environment, bipedal robots attempt to carry a package placed on top of them towards the right. By default, the number of robots is set to 3.
 

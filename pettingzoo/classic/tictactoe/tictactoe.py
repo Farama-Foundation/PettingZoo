@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (3, 3, 2)                                     |
 | Observation Values | [0,1]                                         |
 
-```{figure} ../../_static/img/aec/classic_tictactoe_aec.svg
-:width: 200px
-:name: tictactoe
-```
 
 Tic-tac-toe is a simple turn based strategy game where 2 players, X and O, take turns marking spaces on a 3 x 3 grid. The first player to place 3 of their marks in a horizontal, vertical, or diagonal line is the winner.
 

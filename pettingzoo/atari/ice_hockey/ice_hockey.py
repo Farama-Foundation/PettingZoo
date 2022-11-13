@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Shape    | (210, 160, 3)                                |
 | Observation Values   | (0,255)                                      |
 
-```{figure} ../../_static/img/aec/atari_ice_hockey_aec.svg
-:width: 200px
-:name: ice_hockey
-```
 
 Competitive game of control and timing.
 

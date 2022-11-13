@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | State Shape          | (560, 960, 3)                                          |
 | State Values         | (0, 255)                                               |
 
-```{figure} ../../_static/img/aec/butterfly_cooperative_pong_aec.svg
-:width: 200px
-:name: cooperative_pong
-```
 
 Cooperative pong is a game of simple pong, where the objective is to keep the ball in play for the longest time. The game is over when the ball goes out of bounds from either the left or right edge of the screen. There are two agents (paddles), one that moves along the left edge and the other that
 moves along the right edge of the screen. All collisions of the ball are elastic. The ball always starts moving in a random direction from the center of the screen with each reset. To make learning a little more challenging, the right paddle is tiered cake-shaped by default.

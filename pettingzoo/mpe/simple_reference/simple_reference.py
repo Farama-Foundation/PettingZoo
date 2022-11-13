@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (28,)                                            |
 | State Values       | (-inf,inf)                                       |
 
-```{figure} ../../_static/img/aec/mpe_simple_reference_aec.svg
-:width: 200px
-:name: simple_reference
-```
 
 This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.
 

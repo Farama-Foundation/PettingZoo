@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>butterfly environments</a>. Please 
 | State Shape          | (560, 880, 3)                                        |
 | State Values         | (0, 255)                                             |
 
-```{figure} ../../_static/img/aec/butterfly_pistonball_aec.svg
-:width: 200px
-:name: pistonball
-```
 
 This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent's observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every
 piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor
