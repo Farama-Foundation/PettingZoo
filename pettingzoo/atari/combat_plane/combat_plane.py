@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Shape  | (256, 160, 3)                                |
 | Observation Values | (0,255)                                      |
 
-```{figure} ../../_static/img/aec/atari_combat_plane_aec.svg
-:width: 200px
-:name: combat_plane
-```
 
 *Combat*'s plane mode is an adversarial game where timing,
 positioning, and keeping track of your opponent's complex

@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Shape    | (210, 160, 3)                                            |
 | Observation Values   | (0,255)                                                  |
 
-```{figure} ../../_static/img/aec/atari_quadrapong_aec.svg
-:width: 200px
-:name: quadrapong
-```
 
 Four player team battle.
 

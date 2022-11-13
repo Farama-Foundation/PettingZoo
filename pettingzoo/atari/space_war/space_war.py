@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Shape    | (250, 160, 3)                               |
 | Observation Values   | (0,255)                                     |
 
-```{figure} ../../_static/img/aec/atari_space_war_aec.svg
-:width: 200px
-:name: space_war
-```
 
 *Space war* is an competitive game where prediction and positioning are key.
 

@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | Discrete(4)                             |
 | Observation Values | Discrete(4)                             |
 
-```{figure} ../../_static/img/aec/classic_rps_aec.svg
-:width: 200px
-:name: rps
-```
 
 Rock, Paper, Scissors is a 2-player hand game where each player chooses either rock, paper or scissors and reveals their choices simultaneously. If both players make the same choice, then it is a draw. However, if their choices are different, the winner is determined as follows: rock beats
 scissors, scissors beat paper, and paper beats rock.

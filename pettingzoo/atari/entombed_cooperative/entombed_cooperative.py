@@ -22,10 +22,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Values   | (0,255)                                                |
 | Average Total Reward | 6.23                                                   |
 
-```{figure} ../../_static/img/aec/atari_entombed_cooperative_aec.svg
-:width: 200px
-:name: entombed_cooperative
-```
 
 Entombed's cooperative version is an exploration game
 where you need to work with your teammate to make it

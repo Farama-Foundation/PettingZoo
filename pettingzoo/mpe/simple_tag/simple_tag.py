@@ -23,10 +23,6 @@ This environment is part of the <a href='..'>MPE environments</a>. Please read t
 | State Shape        | (62,)                                                      |
 | State Values       | (-inf,inf)                                                 |
 
-```{figure} ../../_static/img/aec/mpe_simple_tag_aec.svg
-:width: 200px
-:name: simple_tag
-```
 
 This is a predator-prey environment. Good agents (green) are faster and receive a negative reward for being hit by adversaries (red) (-10 for each collision). Adversaries are slower and are rewarded for hitting good agents (+10 for each collision). Obstacles (large black circles) block the way. By
 default, there is 1 good agent, 3 adversaries and 2 obstacles.

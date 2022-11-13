@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>SISL environments</a>. Please read 
 | Observation Shape    | (242,)                                                 |
 | Observation Values   | [-√2, 2*√2]                                            |
 
-```{figure} ../../_static/img/aec/sisl_waterworld_aec.svg
-:width: 200px
-:name: waterworld
-```
 
 Waterworld is a simulation of archea navigating and trying to survive in their environment. These archea, called pursuers attempt to consume food while avoiding poison. The agents in waterworld are the pursuers, while food and poison belong to the environment. Poison has a radius which is 0.75
 times the size of the pursuer radius, while food has a radius 2 times the size of the pursuer radius. Depending on the input parameters, multiple pursuers may need to work together to consume food, creating a dynamic that is both cooperative and competitive. Similarly, rewards can be distributed

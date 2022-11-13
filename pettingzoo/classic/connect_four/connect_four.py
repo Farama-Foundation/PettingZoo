@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (6, 7, 2)                                        |
 | Observation Values | [0,1]                                            |
 
-```{figure} ../../_static/img/aec/classic_connect_four_aec.svg
-:width: 200px
-:name: connect_four
-```
 
 Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing
 token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.

@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (8,8,20)                           |
 | Observation Values | [0,1]                              |
 
-```{figure} ../../_static/img/aec/classic_chess_aec.svg
-:width: 200px
-:name: chess
-```
 
 Chess is one of the oldest studied games in AI. Our implementation of the observation and action spaces for chess are what the AlphaZero method uses, with two small changes.
 
