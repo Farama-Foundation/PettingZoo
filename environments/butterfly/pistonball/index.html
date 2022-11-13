@@ -15,7 +15,7 @@
         <title>Pistonball - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=6c89d1fed8c0da673903e697f5f21f9b7ad9154d" />
     
     
 
@@ -531,9 +531,6 @@
 </tbody>
 </table>
 </div>
-<figure class="align-default" id="id2">
-<a class="reference internal image-reference" href="../../../_images/butterfly_pistonball_aec.svg"><img alt="../../../_images/butterfly_pistonball_aec.svg" src="../../../_images/butterfly_pistonball_aec.svg" width="200px" /></a>
-</figure>
 <p>This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent’s observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every
 piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor
 of 4, so that in both the discrete and continuous action space, the action 1 will move a piston 4 pixels up, and -1 will move pistons 4 pixels down.</p>

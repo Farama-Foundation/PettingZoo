@@ -15,7 +15,7 @@
         <title>Simple Reference - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=a614025deca43086db03c234d5a3a2047a0241ae" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=6c89d1fed8c0da673903e697f5f21f9b7ad9154d" />
     
     
 
@@ -531,9 +531,6 @@
 </tbody>
 </table>
 </div>
-<figure class="align-default" id="id2">
-<a class="reference internal image-reference" href="../../../_images/mpe_simple_reference_aec.svg"><img alt="../../../_images/mpe_simple_reference_aec.svg" src="../../../_images/mpe_simple_reference_aec.svg" width="200px" /></a>
-</figure>
 <p>This environment has 2 agents and 3 landmarks of different colors. Each agent wants to get closer to their target landmark, which is known only by the other agents. Both agents are simultaneous speakers and listeners.</p>
 <p>Locally, the agents are rewarded by their distance to their target landmark. Globally, all agents are rewarded by the average distance of all the agents to their respective landmarks. The relative weight of these rewards is controlled by the <code class="docutils literal notranslate"><span class="pre">local_ratio</span></code> parameter.</p>
 <p>Agent observation space: <code class="docutils literal notranslate"><span class="pre">[self_vel,</span> <span class="pre">all_landmark_rel_positions,</span> <span class="pre">landmark_ids,</span> <span class="pre">goal_id,</span> <span class="pre">communication]</span></code></p>
