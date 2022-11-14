@@ -10,6 +10,7 @@ repos:
       - id: codespell
         args:
           - --skip=*.css,*.js,*.map,*.scss,*svg
+          - --ignore-words-list=magent
   - repo: https://gitlab.com/PyCQA/flake8
     rev: 5.0.4
     hooks:
