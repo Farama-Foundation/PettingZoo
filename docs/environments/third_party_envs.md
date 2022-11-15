@@ -10,20 +10,20 @@ lastpage:
 *These environments are not maintained by Farama Foundation and, as such, cannot be guaranteed to function as intended.*
 
 ## Environments using the latest versions of PettingZoo
-*Due to a very recent major release of PettingZoo, there are currently no contributed third-party environments. If you'd like to contribute one, please reach out on [Discord](https://discord.gg/nHg2JRN489).*
-
-
-## Environments using older versions of PettingZoo
-*The following environments use a now-depreciated API design for PettingZoo, so may be more difficult to use.*
+*Due to a very recent major release of PettingZoo, there are currently few contributed third-party environments. If you'd like to contribute one, please reach out on [Discord](https://discord.gg/nHg2JRN489).*
 
 ### Sumo-RL 
 [https://github.com/LucasAlegre/sumo-rl](https://github.com/LucasAlegre/sumo-rl)
 
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.20.1-blue)]()
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.2-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/LucasAlegre/sumo-rl)]()
 
-PettingZoo (and Gym) wrappers for the widely used SUMO traffic simulation.
+PettingZoo (and Gymnasium) wrappers for the widely used SUMO traffic simulation.
 
+___
+
+## Environments using older versions of PettingZoo
+*The following environments use a now-depreciated API design for PettingZoo, so may be more difficult to use.*
 
 ### Neural MMO 
 [https://github.com/jsuarez5341/neural-mmo](https://github.com/jsuarez5341/neural-mmo)
@@ -86,6 +86,8 @@ Implementation of the board game *SkyJo*.
 [![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
 
 Implementation of the board game *Mū tōrere* from New Zealand.
+
+___
 
 
 [//]: # (## StarCraft Multi-Agent Challenge &#40;high priority fix&#41;)
