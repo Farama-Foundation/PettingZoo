@@ -43,10 +43,17 @@ class Agent(nn.Module):
         return layer
 
     def get_value(self, x):
-        return self.critic(self.network(x / 255.0))
+        #return self.critic(self.network(x / 255.0))\
+        x = x.clone()
+        x[:, :, :, [0, 1, 2, 3]] /= 255.0
+        return self.critic(self.network(x.permute((0, 3, 1, 2))))
 
     def get_action_and_value(self, x, action=None):
-        hidden = self.network(x / 255.0)
+        #hidden = self.network(x / 255.0)
+        #logits = self.actor(hidden)
+        x = x.clone()
+        x[:, :, :, [0, 1, 2, 3]] /= 255.0
+        hidden = self.network(x.permute((0, 3, 1, 2)))
         logits = self.actor(hidden)
         probs = Categorical(logits=logits)
         if action is None:
@@ -96,7 +103,7 @@ if __name__ == "__main__":
     stack_size = 4
     frame_size = (64, 64)
     max_cycles = 125
-    total_episodes = 2
+    total_episodes = 1000
 
     """ ENV SETUP """
     env = pistonball_v6.parallel_env(
