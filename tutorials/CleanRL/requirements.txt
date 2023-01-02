@@ -1,4 +1,4 @@
-SuperSuit==3.7.0
+SuperSuit==3.7.1
 torch==1.13.1
 pettingzoo==1.22.3
 pygame==2.1.3.dev8
