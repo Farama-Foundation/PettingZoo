@@ -1,0 +1,3 @@
+pettingzoo[classic]==1.22.1
+packaging==21.3
+git+https://github.com/WillDudley/tianshou.git

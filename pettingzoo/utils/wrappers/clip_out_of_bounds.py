@@ -1,12 +1,15 @@
 import numpy as np
-from gym.spaces import Box
+from gymnasium.spaces import Box
 
 from ..env_logger import EnvLogger
 from .base import BaseWrapper
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):
-    """This wrapper crops out of bounds actions for Box spaces."""
+    """Clips the input action to fit in the continuous action space (emitting a warning if it does so).
+
+    Applied to continuous environments in pettingzoo.
+    """
 
     def __init__(self, env):
         super().__init__(env)

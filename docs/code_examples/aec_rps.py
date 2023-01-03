@@ -1,7 +1,8 @@
 import functools
 
+import gymnasium
 import numpy as np
-from gym.spaces import Discrete
+from gymnasium.spaces import Discrete
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -25,15 +26,17 @@ REWARD_MAP = {
 }
 
 
-def env():
+def env(render_mode=None):
     """
     The env function often wraps the environment in wrappers by default.
     You can find full documentation for these methods
     elsewhere in the developer documentation.
     """
-    env = raw_env()
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
     # This wrapper is only for environments which print results to the terminal
-    env = wrappers.CaptureStdoutWrapper(env)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
@@ -44,7 +47,7 @@ def env():
 
 class raw_env(AECEnv):
     """
-    The metadata holds environment constants. From gym, we inherit the "render_modes",
+    The metadata holds environment constants. From gymnasium, we inherit the "render_modes",
     metadata which specifies which modes can be put into the render() method.
     At least human mode should be supported.
     The "name" metadata allows the environment to be pretty printed.
@@ -52,7 +55,7 @@ class raw_env(AECEnv):
 
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         """
         The init method takes in environment arguments and
          should define the following attributes:
@@ -66,28 +69,35 @@ class raw_env(AECEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
 
-        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
+        self.render_mode = render_mode
 
     # this cache ensures that same space object is returned for the same agent
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(3)
 
-    def render(self, mode="human"):
+    def render(self):
         """
         Renders the environment. In human mode, it can print to terminal, open
         up a graphical window, or open up some other display that a human can see and understand.
         """
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         if len(self.agents) == 2:
             string = "Current state: Agent1: {} , Agent2: {}".format(
                 MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
@@ -121,7 +131,6 @@ class raw_env(AECEnv):
         - _cumulative_rewards
         - terminations
         - truncations
-        - dones
         - infos
         - agent_selection
         And must set up the environment so that render(), step(), and observe()
@@ -203,3 +212,6 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         # Adds .rewards to ._cumulative_rewards
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()

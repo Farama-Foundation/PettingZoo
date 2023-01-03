@@ -8,20 +8,26 @@ jobs:
   docs:
     name: Generate Website
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-python@v4
         with:
-            python-version: '3.9' 
+            python-version: '3.9'
 
       - name: Install dependencies
         run: pip install -r docs/requirements.txt
-      
+
       - name: Install PettingZoo
         run: pip install .
-      
+
+      - name: Generate environment docs
+        run: python docs/_scripts/gen_envs_mds.py
+
+      - name: Generate environments display
+        run: python docs/_scripts/gen_envs_display.py
+
       - name: Build
         run: sphinx-build -b dirhtml -v docs _build
 
@@ -38,3 +44,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _build
+          target-folder: main
+          clean: false

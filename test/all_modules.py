@@ -40,14 +40,6 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
-from pettingzoo.magent import (
-    adversarial_pursuit_v4,
-    battle_v4,
-    battlefield_v5,
-    combined_arms_v6,
-    gather_v5,
-    tiger_deer_v4,
-)
 from pettingzoo.mpe import (
     simple_adversary_v2,
     simple_crypto_v2,
@@ -59,11 +51,9 @@ from pettingzoo.mpe import (
     simple_v2,
     simple_world_comm_v2,
 )
+from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 
-# from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v3
-from pettingzoo.sisl import multiwalker_v9, pursuit_v4
-
-all_prefixes = ["atari", "classic", "butterfly", "magent", "mpe", "sisl"]
+all_prefixes = ["atari", "classic", "butterfly", "mpe", "sisl"]
 
 manual_environments = {
     "butterfly/knights_archers_zombies",
@@ -109,12 +99,6 @@ all_environments = {
     "butterfly/knights_archers_zombies_v10": knights_archers_zombies_v10,
     "butterfly/pistonball_v6": pistonball_v6,
     "butterfly/cooperative_pong_v5": cooperative_pong_v5,
-    "magent/adversarial_pursuit_v4": adversarial_pursuit_v4,
-    "magent/battle_v4": battle_v4,
-    "magent/battlefield_v5": battlefield_v5,
-    "magent/combined_arms_v6": combined_arms_v6,
-    "magent/gather_v5": gather_v5,
-    "magent/tiger_deer_v4": tiger_deer_v4,
     "mpe/simple_adversary_v2": simple_adversary_v2,
     "mpe/simple_crypto_v2": simple_crypto_v2,
     "mpe/simple_push_v2": simple_push_v2,
@@ -125,6 +109,6 @@ all_environments = {
     "mpe/simple_world_comm_v2": simple_world_comm_v2,
     "mpe/simple_v2": simple_v2,
     "sisl/multiwalker_v9": multiwalker_v9,
-    # "sisl/waterworld_v3": waterworld_v3,
+    "sisl/waterworld_v4": waterworld_v4,
     "sisl/pursuit_v4": pursuit_v4,
 }

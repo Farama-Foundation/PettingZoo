@@ -1,10 +1,10 @@
 from pathlib import Path
 
-import gym
+import gymnasium
 import multi_agent_ale_py
 import numpy as np
-from gym import spaces
-from gym.utils import EzPickle, seeding
+from gymnasium import spaces
+from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import (  # noqa: F401
@@ -39,6 +39,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         full_action_space=False,
         env_name=None,
         max_cycles=100000,
+        render_mode=None,
         auto_rom_install_path=None,
     ):
         """Initializes the `ParallelAtariEnv` class.
@@ -56,6 +57,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             full_action_space,
             env_name,
             max_cycles,
+            render_mode,
             auto_rom_install_path,
         )
 
@@ -75,6 +77,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             "name": env_name,
             "render_fps": 60,
         }
+        self.render_mode = render_mode
 
         multi_agent_ale_py.ALEInterface.setLoggerMode("error")
         self.ale = multi_agent_ale_py.ALEInterface()
@@ -129,7 +132,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.action_mapping = action_mapping
 
         if obs_type == "ram":
-            observation_space = gym.spaces.Box(
+            observation_space = gymnasium.spaces.Box(
                 low=0, high=255, dtype=np.uint8, shape=(128,)
             )
         else:
@@ -150,7 +153,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.possible_agents = self.agents[:]
 
         self.action_spaces = {
-            agent: gym.spaces.Discrete(action_size) for agent in self.possible_agents
+            agent: gymnasium.spaces.Discrete(action_size)
+            for agent in self.possible_agents
         }
         self.observation_spaces = {
             agent: observation_space for agent in self.possible_agents
@@ -230,12 +234,24 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
         infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         self.agents = [agent for agent in self.agents if not terminations[agent]]
+
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        assert (
+            self.render_mode in self.metadata["render_modes"]
+        ), f"{self.render_mode} is not a valid render mode"
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
-        if mode == "human":
+        if self.render_mode == "human":
             import pygame
 
             zoom_factor = 4
@@ -256,10 +272,8 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
             self._screen.blit(myImage, (0, 0))
 
             pygame.display.flip()
-        elif mode == "rgb_array":
+        elif self.render_mode == "rgb_array":
             return image
-        else:
-            raise ValueError("bad value for render mode")
 
     def close(self):
         if self._screen is not None:

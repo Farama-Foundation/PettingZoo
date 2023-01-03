@@ -11,15 +11,15 @@ from PIL import Image
 def generate_data(nameline, module):
     dir = f"frames/{nameline}/"
     os.mkdir(dir)
-    env = module.env()
+    env = module.env(render_mode="rgb_array")
     # env = gin_rummy_v0.env()
     env.reset()
     for step in range(100):
         for agent in env.agent_iter(
             env.num_agents
         ):  # step through every agent once with observe=True
-            obs, rew, done, info = env.last()
-            if done:
+            obs, rew, termination, truncation, info = env.last()
+            if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
                 action = random.choice(np.flatnonzero(obs["action_mask"]))
@@ -27,10 +27,10 @@ def generate_data(nameline, module):
                 action = env.action_spaces[agent].sample()
             env.step(action)
 
-        if env.dones[agent]:
+        if env.terminations[agent] or env.truncations[agent]:
             env.reset()
 
-        ndarray = env.render(mode="rgb_array")
+        ndarray = env.render()
         # tot_size = max(ndarray.shape)
         # target_size = 500
         # ratio = target_size / tot_size

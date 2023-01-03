@@ -9,14 +9,14 @@ repos:
     hooks:
       - id: codespell
         args:
-          - --ignore-words-list=magent
           - --skip=*.css,*.js,*.map,*.scss,*svg
-  - repo: https://gitlab.com/PyCQA/flake8
+          - --ignore-words-list=magent
+  - repo: https://github.com/PyCQA/flake8
     rev: 5.0.4
     hooks:
       - id: flake8
         args:
-          - '--per-file-ignores=*/__init__.py:F401 test/all_parameter_combs_test.py:F405'
+          - '--per-file-ignores=*/__init__.py:F401 test/all_parameter_combs_test.py:F405 pettingzoo/classic/go/go.py:W605'
           - --extend-ignore=E203
           - --max-complexity=205
           - --max-line-length=300

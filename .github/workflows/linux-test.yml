@@ -9,12 +9,15 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
 jobs:
   linux-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
     steps:
       - uses: actions/checkout@v3
       # - uses: openrndr/setup-opengl@v1.1
@@ -24,7 +27,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          sudo apt-get install python-opengl xvfb
+          sudo apt-get install python3-opengl xvfb
           pip install -e .[all]
           AutoROM -v
       - name: Source distribution test

@@ -127,33 +127,6 @@ parameterized_envs = [
     ["classic/hanabi_v4", hanabi_v4, dict(observation_type=1)],
     ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=False)],
     ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=True)],
-    ["magent/tiger_deer_v4", tiger_deer_v4, dict(minimap_mode=True)],
-    ["magent/battle_v4", battle_v4, dict(minimap_mode=False)],
-    [
-        "magent/battlefield_v5",
-        battlefield_v5,
-        dict(minimap_mode=False, extra_features=False),
-    ],
-    [
-        "magent/battlefield_v5",
-        battlefield_v5,
-        dict(minimap_mode=False, extra_features=True),
-    ],
-    [
-        "magent/battlefield_v5",
-        battlefield_v5,
-        dict(minimap_mode=True, extra_features=False),
-    ],
-    [
-        "magent/battlefield_v5",
-        battlefield_v5,
-        dict(minimap_mode=True, extra_features=True),
-    ],
-    ["magent/adversarial_pursuit_v4", adversarial_pursuit_v4, dict(map_size=15)],
-    ["magent/battle_v4", battle_v4, dict(map_size=15)],
-    ["magent/battlefield_v5", battlefield_v5, dict(map_size=46)],
-    ["magent/combined_arms_v6", combined_arms_v6, dict(map_size=16)],
-    ["magent/tiger_deer_v4", tiger_deer_v4, dict(map_size=15)],
     ["mpe/simple_adversary_v2", simple_adversary_v2, dict(N=4)],
     ["mpe/simple_reference_v2", simple_reference_v2, dict(local_ratio=0.2)],
     ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5)],
@@ -234,13 +207,13 @@ parameterized_envs = [
     ["sisl/pursuit_v4", pursuit_v4, dict(obs_range=15)],
     ["sisl/pursuit_v4", pursuit_v4, dict(n_catch=3)],
     ["sisl/pursuit_v4", pursuit_v4, dict(freeze_evaders=True)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(n_pursuers=3, n_evaders=6)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(n_coop=1)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(n_coop=1)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(n_poison=4)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(n_sensors=4)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(local_ratio=0.5)],
-    # ["sisl/waterworld_v3", waterworld_v3, dict(speed_features=False)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(n_pursuers=3, n_evaders=6)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(n_coop=1)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(n_coop=1)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(n_poisons=4)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(n_sensors=4)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(local_ratio=0.5)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(speed_features=False)],
 ]
 
 
@@ -253,7 +226,7 @@ def test_module(name, env_module, kwargs):
     if "atari/" not in name:
         seed_test(lambda: env_module.env(**kwargs), 50)
 
-    render_test(lambda: env_module.env(**kwargs))
+    render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
     if hasattr(env_module, "parallel_env"):
         par_env = env_module.parallel_env(**kwargs)
     try:

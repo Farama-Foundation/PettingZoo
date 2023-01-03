@@ -95,7 +95,7 @@ def parallel_api_test(par_env, num_cycles=1000):
                 }
                 if not par_env.agents and has_finished != set(par_env.possible_agents):
                     warnings.warn(
-                        "No agents present but not all possible_agents are done"
+                        "No agents present but not all possible_agents are terminated or truncated"
                     )
             elif not par_env.agents:
                 warnings.warn("No agents present")
@@ -115,7 +115,9 @@ def parallel_api_test(par_env, num_cycles=1000):
                 if d:
                     live_agents.remove(agent)
 
-            assert set(par_env.agents) == live_agents
+            assert (
+                set(par_env.agents) == live_agents
+            ), f"{par_env.agents} != {live_agents}"
 
             if len(live_agents) == 0:
                 break

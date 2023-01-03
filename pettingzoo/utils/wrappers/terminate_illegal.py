@@ -5,8 +5,8 @@ from .base import BaseWrapper
 class TerminateIllegalWrapper(BaseWrapper):
     """This wrapper terminates the game with the current player losing in case of illegal values.
 
-    Parameters:
-        - illegal_reward: number that is the value of the player making an illegal move.
+    Args:
+        illegal_reward: number that is the value of the player making an illegal move.
     """
 
     def __init__(self, env, illegal_reward):

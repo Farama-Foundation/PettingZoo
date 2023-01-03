@@ -1,1 +1,2 @@
-_site
+environments/**/*.md
+environments/**/list.html

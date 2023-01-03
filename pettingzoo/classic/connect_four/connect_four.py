@@ -1,8 +1,69 @@
+# noqa
+"""
+# Connect Four
+
+```{figure} classic_connect_four.gif
+:width: 140px
+:name: connect_four
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic import connect_four_v3` |
+|--------------------|--------------------------------------------------|
+| Actions            | Discrete                                         |
+| Parallel API       | Yes                                              |
+| Manual Control     | No                                               |
+| Agents             | `agents= ['player_0', 'player_1']`               |
+| Agents             | 2                                                |
+| Action Shape       | (1,)                                             |
+| Action Values      | Discrete(7)                                      |
+| Observation Shape  | (6, 7, 2)                                        |
+| Observation Values | [0,1]                                            |
+
+
+Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing
+token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.
+
+### Observation Space
+
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+
+The main observation space is 2 planes of a 6x7 grid. Each plane represents a specific agent's tokens, and each location in the grid represents the placement of the corresponding agent's token. 1 indicates that the agent has a token placed in that cell, and 0 indicates they do not have a token in
+that cell. A 0 means that either the cell is empty, or the other agent has a token in that cell.
+
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+
+### Action Space
+
+The action space is the set of integers from 0 to 6 (inclusive), where the action represents which column a token should be dropped in.
+
+### Rewards
+
+If an agent successfully connects four of their tokens, they will be rewarded 1 point. At the same time, the opponent agent will be awarded -1 points. If the game ends in a draw, both players are rewarded 0.
+
+
+### Version History
+
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v0: Initial versions release (1.0.0)
+
+"""
+
 import os
 
+import gymnasium
 import numpy as np
 import pygame
-from gym import spaces
+from gymnasium import spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -21,8 +82,8 @@ def get_image(path):
     return sfc
 
 
-def env():
-    env = raw_env()
+def env(render_mode=None):
+    env = raw_env(render_mode=render_mode)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -37,7 +98,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         super().__init__()
         # 6 rows x 7 columns
         # blank space = 0
@@ -45,6 +106,7 @@ class raw_env(AECEnv):
         # agent 1 -- 2
         # flat representation in row major order
         self.screen = None
+        self.render_mode = render_mode
 
         self.board = [0] * (6 * 7)
 
@@ -138,6 +200,9 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def reset(self, seed=None, return_info=False, options=None):
         # reset environment
         self.board = [0] * (6 * 7)
@@ -153,17 +218,22 @@ class raw_env(AECEnv):
 
         self.agent_selection = self._agent_selector.reset()
 
-    def render(self, mode="human"):
+    def render(self):
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         screen_width = 1287
         screen_height = 1118
-        if self.screen is None:
-            if mode == "human":
+        if self.render_mode == "human":
+            if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            else:
-                self.screen = pygame.Surface((screen_width, screen_height))
-        if mode == "human":
             pygame.event.get()
+        elif self.screen is None:
+            self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and scale all of the necessary images
         tile_size = (screen_width * (91 / 99)) / 7
@@ -204,13 +274,15 @@ class raw_env(AECEnv):
                     ),
                 )
 
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.update()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def close(self):

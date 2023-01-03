@@ -1,5 +1,5 @@
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 from ..._utils import Agent
 
@@ -83,6 +83,7 @@ class DiscreteAgent(Agent):
         tpos += self.motion_range[a]
         x = tpos[0]
         y = tpos[1]
+
         # check bounds
         if not self.inbounds(x, y):
             return cpos

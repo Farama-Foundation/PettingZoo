@@ -1,6 +1,7 @@
 import functools
 
-from gym.spaces import Discrete
+import gymnasium
+from gymnasium.spaces import Discrete
 
 from pettingzoo import ParallelEnv
 from pettingzoo.utils import parallel_to_aec, wrappers
@@ -24,15 +25,17 @@ REWARD_MAP = {
 }
 
 
-def env():
+def env(render_mode=None):
     """
     The env function often wraps the environment in wrappers by default.
     You can find full documentation for these methods
     elsewhere in the developer documentation.
     """
-    env = raw_env()
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
     # This wrapper is only for environments which print results to the terminal
-    env = wrappers.CaptureStdoutWrapper(env)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
     # this wrapper helps error handling for discrete action spaces
     env = wrappers.AssertOutOfBoundsWrapper(env)
     # Provides a wide vareity of helpful user errors
@@ -41,12 +44,12 @@ def env():
     return env
 
 
-def raw_env():
+def raw_env(render_mode=None):
     """
     To support the AEC API, the raw_env() function just uses the from_parallel
     function to convert from a ParallelEnv to an AEC env
     """
-    env = parallel_env()
+    env = parallel_env(render_mode=render_mode)
     env = parallel_to_aec(env)
     return env
 
@@ -54,7 +57,7 @@ def raw_env():
 class parallel_env(ParallelEnv):
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
-    def __init__(self):
+    def __init__(self, render_mode=None):
         """
         The init method takes in environment arguments and should define the following attributes:
         - possible_agents
@@ -66,23 +69,30 @@ class parallel_env(ParallelEnv):
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
+        self.render_mode = render_mode
 
     # this cache ensures that same space object is returned for the same agent
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
-        # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
+        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(3)
 
-    def render(self, mode="human"):
+    def render(self):
         """
         Renders the environment. In human mode, it can print to terminal, open
         up a graphical window, or open up some other display that a human can see and understand.
         """
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
         if len(self.agents) == 2:
             string = "Current state: Agent1: {} , Agent2: {}".format(
                 MOVES[self.state[self.agents[0]]], MOVES[self.state[self.agents[1]]]
@@ -130,7 +140,7 @@ class parallel_env(ParallelEnv):
         # If a user passes in actions with no agents, then just return empty observations, etc.
         if not actions:
             self.agents = []
-            return {}, {}, {}, {}
+            return {}, {}, {}, {}, {}
 
         # rewards for all agents are placed in the rewards dictionary to be returned
         rewards = {}
@@ -157,4 +167,6 @@ class parallel_env(ParallelEnv):
         if env_truncation:
             self.agents = []
 
+        if self.render_mode == "human":
+            self.render()
         return observations, rewards, terminations, truncations, infos

@@ -6,7 +6,7 @@ from pettingzoo.utils.env import AECEnv
 class BaseWrapper(AECEnv):
     """Creates a wrapper around `env` parameter.
 
-    Extend this class to create a useful wrapper.
+    All AECEnv wrappers should inherit from this base class
     """
 
     def __init__(self, env):
@@ -38,6 +38,12 @@ class BaseWrapper(AECEnv):
             self.state_space = self.env.state_space
         except AttributeError:
             pass
+
+    def __getattr__(self, name):
+        """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
+        if name.startswith("_"):
+            raise AttributeError(f"accessing private attribute '{name}' is prohibited")
+        return getattr(self.env, name)
 
     @property
     def observation_spaces(self):
@@ -78,8 +84,8 @@ class BaseWrapper(AECEnv):
     def close(self):
         self.env.close()
 
-    def render(self, mode="human"):
-        return self.env.render(mode)
+    def render(self):
+        return self.env.render()
 
     def reset(self, seed=None, return_info=False, options=None):
         self.env.reset(seed=seed, options=options)

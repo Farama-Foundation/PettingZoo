@@ -123,7 +123,6 @@ exclude = [
     "pettingzoo/atari/",
     "pettingzoo/butterfly/",
     "pettingzoo/classic/",
-    "pettingzoo/magent/",
     "pettingzoo/mpe/",
     "pettingzoo/sisl/",
     "pettingzoo/test/",

@@ -1,11 +1,91 @@
+# noqa
+"""
+# Pistonball
+
+```{figure} butterfly_pistonball.gif
+:width: 200px
+:name: pistonball
+```
+
+This environment is part of the <a href='..'>butterfly environments</a>. Please read that page first for general information.
+
+| Import               | `from pettingzoo.butterfly import pistonball_v6`     |
+|----------------------|------------------------------------------------------|
+| Actions              | Either                                               |
+| Parallel API         | Yes                                                  |
+| Manual Control       | Yes                                                  |
+| Agents               | `agents= ['piston_0', 'piston_1', ..., 'piston_19']` |
+| Agents               | 20                                                   |
+| Action Shape         | (1,)                                                 |
+| Action Values        | [-1, 1]                                              |
+| Observation Shape    | (457, 120, 3)                                        |
+| Observation Values   | (0, 255)                                             |
+| State Shape          | (560, 880, 3)                                        |
+| State Values         | (0, 255)                                             |
+
+
+This is a simple physics based cooperative game where the goal is to move the ball to the left wall of the game border by activating the vertically moving pistons. Each piston agent's observation is an RGB image of the two pistons (or the wall) next to the agent and the space above them. Every
+piston can be acted on in any given time. The action space in discrete mode is 0 to move down, 1 to stay still, and 2 to move up. In continuous mode, the value in the range [-1, 1] is proportional to the amount that the pistons are raised or lowered by. Continuous actions are scaled by a factor
+of 4, so that in both the discrete and continuous action space, the action 1 will move a piston 4 pixels up, and -1 will move pistons 4 pixels down.
+
+Accordingly, pistons must learn highly coordinated emergent behavior to achieve an optimal policy for the environment. Each agent gets a reward that is a combination of how much the ball moved left overall and how much the ball moved left if it was close to the piston (i.e. movement the piston
+contributed to). A piston is considered close to the ball if it is directly below any part of the ball. Balancing the ratio between these local and global rewards appears to be critical to learning this environment, and as such is an environment parameter. The local reward applied is 0.5 times
+the change in the ball's x-position. Additionally, the global reward is change in x-position divided by the starting position, times 100, plus the `time_penalty` (default -0.1). For each piston, the reward is `local_ratio` * local_reward + (1-`local_ratio`) * global_reward. The local reward is
+applied to pistons surrounding the ball while the global reward is provided to all pistons.
+
+Pistonball uses the chipmunk physics engine, and are thus the physics are about as realistic as in the game Angry Birds.
+
+Keys *a* and *d* control which piston is selected to move (initially the rightmost piston is selected) and keys *w* and *s* move the piston in the vertical direction.
+
+
+### Arguments
+
+
+``` python
+pistonball_v6.env(n_pistons=20, time_penalty=-0.1, continuous=True,
+random_drop=True, random_rotate=True, ball_mass=0.75, ball_friction=0.3,
+ball_elasticity=1.5, max_cycles=125)
+```
+
+`n_pistons`: The number of pistons (agents) in the environment.
+
+`time_penalty`: Amount of reward added to each piston each time step. Higher values mean higher weight towards getting the ball across the screen to terminate the game.
+
+`continuous`:  If true, piston action is a real value between -1 and 1 which is added to the piston height. If False, then action is a discrete value to move a unit up or down.
+
+`random_drop`:  If True, ball will initially spawn in a random x value. If False, ball will always spawn at x=800
+
+`random_rotate`:  If True, ball will spawn with a random angular momentum
+
+`ball_mass`:  Sets the mass of the ball physics object
+
+`ball_friction`:  Sets the friction of the ball physics object
+
+`ball_elasticity`:  Sets the elasticity of the ball physics object
+
+`max_cycles`:  after max_cycles steps all agents will return done
+
+
+### Version History
+
+* v6: Fix ball bouncing off of left wall.
+* v5: Ball moving into the left column due to physics engine imprecision no longer gives additional reward
+* v4: Changed default arguments for `max_cycles` and `continuous`, bumped PyMunk version (1.6.0)
+* v3: Refactor, added number of pistons argument, minor visual changes (1.5.0)
+* v2: Misc fixes, bumped PyGame and PyMunk version (1.4.0)
+* v1: Fix to continuous mode (1.0.1)
+* v0: Initial versions release (1.0.0)
+
+"""
+
 import math
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
 import pymunk
 import pymunk.pygame_util
-from gym.utils import EzPickle, seeding
+from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -62,6 +142,7 @@ class raw_env(AECEnv, EzPickle):
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
+        render_mode=None,
     ):
         EzPickle.__init__(
             self,
@@ -74,6 +155,7 @@ class raw_env(AECEnv, EzPickle):
             ball_friction,
             ball_elasticity,
             max_cycles,
+            render_mode,
         )
         self.dt = 1.0 / FPS
         self.n_pistons = n_pistons
@@ -104,7 +186,7 @@ class raw_env(AECEnv, EzPickle):
             zip(
                 self.agents,
                 [
-                    gym.spaces.Box(
+                    gymnasium.spaces.Box(
                         low=0,
                         high=255,
                         shape=(obs_height, self.piston_width * 3, 3),
@@ -119,14 +201,14 @@ class raw_env(AECEnv, EzPickle):
             self.action_spaces = dict(
                 zip(
                     self.agents,
-                    [gym.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons,
+                    [gymnasium.spaces.Box(low=-1, high=1, shape=(1,))] * self.n_pistons,
                 )
             )
         else:
             self.action_spaces = dict(
-                zip(self.agents, [gym.spaces.Discrete(3)] * self.n_pistons)
+                zip(self.agents, [gymnasium.spaces.Discrete(3)] * self.n_pistons)
             )
-        self.state_space = gym.spaces.Box(
+        self.state_space = gymnasium.spaces.Box(
             low=0,
             high=255,
             shape=(self.screen_height, self.screen_width, 3),
@@ -136,6 +218,7 @@ class raw_env(AECEnv, EzPickle):
         pygame.init()
         pymunk.pygame_util.positive_y_is_up = False
 
+        self.render_mode = render_mode
         self.renderOn = False
         self.screen = pygame.Surface((self.screen_width, self.screen_height))
         self.max_cycles = max_cycles
@@ -508,8 +591,14 @@ class raw_env(AECEnv, EzPickle):
         local_reward = 0.5 * (prev_position - curr_position)
         return local_reward
 
-    def render(self, mode="human"):
-        if mode == "human" and not self.renderOn:
+    def render(self):
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        if self.render_mode == "human" and not self.renderOn:
             # sets self.renderOn to true and initializes display
             self.enable_render()
 
@@ -517,10 +606,12 @@ class raw_env(AECEnv, EzPickle):
         self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if mode == "human":
+        if self.render_mode == "human":
             pygame.display.flip()
         return (
-            np.transpose(observation, axes=(1, 0, 2)) if mode == "rgb_array" else None
+            np.transpose(observation, axes=(1, 0, 2))
+            if self.render_mode == "rgb_array"
+            else None
         )
 
     def step(self, action):
@@ -585,6 +676,9 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._cumulative_rewards[agent] = 0
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()
 
 
 # Game art created by J K Terry

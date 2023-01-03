@@ -1,5 +1,5 @@
 import pytest
-from gym import spaces
+from gymnasium import spaces
 
 from pettingzoo.utils import conversions, wrappers
 
@@ -32,7 +32,7 @@ def discrete_observation(env, agents):
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_unwrapped(name, env_module):
 
-    env = env_module.env()
+    env = env_module.env(render_mode="human")
     base_env = env.unwrapped
 
     env.reset()
