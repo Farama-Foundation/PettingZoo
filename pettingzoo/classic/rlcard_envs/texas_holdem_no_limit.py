@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (54,)                                                     |
 | Observation Values | [0, 100]                                                  |
 
-```{figure} ../../_static/img/aec/classic_texas_holdem_no_limit_aec.svg
-:width: 200px
-:name: texas_holdem_no_limit
-```
 
 Texas Hold'em No Limit is a variation of Texas Hold'em where there is no limit on the amount of each raise or the number of raises.
 
@@ -171,7 +167,7 @@ class raw_env(RLCardBase):
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return

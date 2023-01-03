@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>Atari environments</a>. Please read
 | Observation Shape    | (210, 160, 3)                                 |
 | Observation Values   | (0,255)                                       |
 
-```{figure} ../../_static/img/aec/atari_wizard_of_wor_aec.svg
-:width: 200px
-:name: wizard_of_wor
-```
 
 Battling both against NPCs and the other player. Careful timing,
 and control is essential, as well as awareness of your opponent.

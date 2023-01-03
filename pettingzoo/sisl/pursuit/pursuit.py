@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>SISL environments</a>. Please read 
 | Observation Shape    | (7, 7, 3)                                              |
 | Observation Values   | [0, 30]                                                |
 
-```{figure} ../../_static/img/aec/sisl_pursuit_aec.svg
-:width: 200px
-:name: pursuit
-```
 
 By default 30 blue evader agents and 8 red pursuer agents are placed in a 16 x 16 grid with an obstacle, shown in white, in the center. The evaders move randomly, and the pursuers are controlled. Every time the pursuers fully surround an evader each of the surrounding agents receives a reward of 5
 and the evader is removed from the environment. Pursuers also receive a reward of 0.01 every time they touch an evader. The pursuers have a discrete action space of up, down, left, right and stay. Each pursuer observes a 7 x 7 grid centered around itself, depicted by the orange boxes surrounding

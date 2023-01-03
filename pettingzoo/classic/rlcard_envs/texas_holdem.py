@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (72,)                                            |
 | Observation Values | [0, 1]                                           |
 
-```{figure} ../../_static/img/aec/classic_texas_holdem_aec.svg
-:width: 200px
-:name: texas_holdem
-```
 
 ## Arguments
 
@@ -133,7 +129,7 @@ class raw_env(RLCardBase):
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return

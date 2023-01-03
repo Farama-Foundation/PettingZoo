@@ -12,7 +12,7 @@ An environment can be converted from an AEC environment to a parallel environmen
 Most parallel environments in PettingZoo only allocate rewards at the end of a cycle. In these environments, the reward scheme of the AEC API an the parallel API is equivalent.  If an AEC environment does allocate rewards within a cycle, then the rewards will be allocated at different timesteps in the AEC environment an the Parallel environment. In particular, the AEC environment will allocate all rewards from one time the agent steps to the next time, while the Parallel environment will allocate all rewards from when the first agent stepped to the last agent stepped.
 
 ``` python
-from pettingzoo.utils import to_parallel
+from pettingzoo.utils.conversions import to_parallel
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
 env = to_parallel(env)

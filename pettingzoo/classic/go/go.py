@@ -21,10 +21,6 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Observation Shape  | (19, 19, 3)                            |
 | Observation Values | [0, 1]                                 |
 
-```{figure} ../../_static/img/aec/classic_go_aec.svg
-:width: 200px
-:name: go
-```
 
 Go is a board game with 2 players, black and white. The black player starts by placing a black stone at an empty board intersection. The white player follows by placing a stone of their own, aiming to either surround more territory than their opponent or capture the opponent's stones. The game
 ends if both players sequentially decide to pass.
@@ -336,7 +332,7 @@ class raw_env(AECEnv):
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return

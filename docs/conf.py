@@ -20,7 +20,7 @@ from typing import Any, Dict
 import pettingzoo
 
 project = "PettingZoo"
-copyright = "2022"
+copyright = "2022 Farama Foundation"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
@@ -68,6 +68,7 @@ html_theme_options = {
     "light_logo": "img/PettingZoo.svg",
     "dark_logo": "img/PettingZoo_White.svg",
     "gtag": "G-Q4EGMJ3R24",
+    "versioning": True,
 }
 html_context: Dict[str, Any] = {}
 html_context["conf_py_path"] = "/docs/"

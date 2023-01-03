@@ -4,6 +4,7 @@ import gymnasium
 import numpy as np
 import pygame
 import pymunk
+from gymnasium import spaces
 from gymnasium.utils import seeding
 from scipy.spatial import distance as ssd
 
@@ -25,8 +26,8 @@ class WaterworldBase:
         radius=0.015,
         obstacle_radius=0.1,
         obstacle_coord=[(0.5, 0.5)],
-        pursuer_max_accel=0.01,
-        pursuer_speed=0.1,
+        pursuer_max_accel=0.02,
+        pursuer_speed=0.2,
         evader_speed=0.1,
         poison_speed=0.1,
         poison_reward=-1.0,
@@ -110,15 +111,33 @@ class WaterworldBase:
         self.render_mode = render_mode
         self.renderOn = False
         self.frames = 0
-
-        self.seed()
-        self.add_obj()
-
         self.num_agents = self.n_pursuers
-        self.observation_space = [
-            pursuer.observation_space for pursuer in self.pursuers
-        ]
-        self.action_space = [pursuer.action_space for pursuer in self.pursuers]
+        self.get_spaces()
+        self.seed()
+
+    def get_spaces(self):
+        """Define the action and observation spaces for all of the agents."""
+        if self.speed_features:
+            obs_dim = 8 * self.n_sensors + 2
+        else:
+            obs_dim = 5 * self.n_sensors + 2
+
+        obs_space = spaces.Box(
+            low=np.float32(-np.sqrt(2)),
+            high=np.float32(np.sqrt(2)),
+            shape=(obs_dim,),
+            dtype=np.float32,
+        )
+
+        act_space = spaces.Box(
+            low=np.float32(-1.0),
+            high=np.float32(1.0),
+            shape=(2,),
+            dtype=np.float32,
+        )
+
+        self.observation_space = [obs_space for i in range(self.n_pursuers)]
+        self.action_space = [act_space for i in range(self.n_pursuers)]
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -232,7 +251,7 @@ class WaterworldBase:
                 ssd.cdist(coord[None, :], np.array([[x, y]]))
                 <= radius * 2 + obstacle.radius
             ):
-                coord = self.np_random.random(2)
+                coord = self.np_random.random(2) * self.pixel_scale
 
         return coord
 
@@ -291,24 +310,22 @@ class WaterworldBase:
     def add_handlers(self):
         # Collision handlers for pursuers v.s. evaders & poisons
         for pursuer in self.pursuers:
-            for obj_list in [self.evaders, self.poisons]:
-                for obj in obj_list:
-                    self.handlers.append(
-                        self.space.add_collision_handler(
-                            pursuer.shape.collision_type, obj.shape.collision_type
-                        )
+            for obj in self.evaders:
+                self.handlers.append(
+                    self.space.add_collision_handler(
+                        pursuer.shape.collision_type, obj.shape.collision_type
                     )
+                )
+                self.handlers[-1].begin = self.pursuer_evader_begin_callback
+                self.handlers[-1].separate = self.pursuer_evader_separate_callback
 
-        # Collision callback functions for pursuers v.s. evaders & poisons
-        for i in range(self.n_pursuers):
-            for j in range(self.n_evaders):
-                idx = i * (self.n_evaders + self.n_poisons) + j
-                self.handlers[idx].begin = self.pursuer_evader_begin_callback
-                self.handlers[idx].separate = self.pursuer_evader_separate_callback
-
-            for k in range(self.n_poisons):
-                idx = i * (self.n_evaders + self.n_poisons) + self.n_evaders + k
-                self.handlers[idx].begin = self.pursuer_poison_begin_callback
+            for obj in self.poisons:
+                self.handlers.append(
+                    self.space.add_collision_handler(
+                        pursuer.shape.collision_type, obj.shape.collision_type
+                    )
+                )
+                self.handlers[-1].begin = self.pursuer_poison_begin_callback
 
         # Collision handlers for poisons v.s. evaders
         for poison in self.poisons:
@@ -394,7 +411,7 @@ class WaterworldBase:
         return obs_list[0]
 
     def step(self, action, agent_id, is_last):
-        action = np.asarray(action)
+        action = np.asarray(action) * self.pursuer_max_accel
         action = action.reshape(2)
         thrust = np.linalg.norm(action)
         if thrust > self.pursuer_max_accel:
@@ -429,8 +446,11 @@ class WaterworldBase:
         if is_last:
             self.space.step(1 / self.FPS)
 
+            obs_list = self.observe_list()
+            self.last_obs = obs_list
+
             for id in range(self.n_pursuers):
-                p = self.pursuers[agent_id]
+                p = self.pursuers[id]
 
                 # reward for food caught, encountered and poison
                 self.behavior_rewards[id] = (
@@ -440,13 +460,9 @@ class WaterworldBase:
                 )
 
                 p.shape.food_indicator = 0
-                p.shape.food_touched_indicator = 0
                 p.shape.poison_indicator = 0
 
             rewards = np.array(self.behavior_rewards) + np.array(self.control_rewards)
-
-            obs_list = self.observe_list()
-            self.last_obs = obs_list
 
             local_reward = rewards
             global_reward = local_reward.mean()
@@ -528,28 +544,44 @@ class WaterworldBase:
                 velocites=poison_velocities,
             )
 
-            for j, _pursuer in enumerate(self.pursuers):
-                # Get sensor readings only for other pursuers
-                if i == j:
-                    continue
+            # When there is only one pursuer the sensors will not sense
+            # another pursuer
+            if self.n_pursuers > 1:
+                for j, _pursuer in enumerate(self.pursuers):
+                    # Get sensor readings only for other pursuers
+                    if i == j:
+                        continue
 
-                _pursuer_distance, _pursuer_velocity = pursuer.get_sensor_reading(
-                    _pursuer.body.position,
-                    _pursuer.radius,
-                    _pursuer.body.velocity,
-                    self.pursuer_speed,
+                    _pursuer_distance, _pursuer_velocity = pursuer.get_sensor_reading(
+                        _pursuer.body.position,
+                        _pursuer.radius,
+                        _pursuer.body.velocity,
+                        self.pursuer_speed,
+                    )
+                    _pursuer_distances.append(_pursuer_distance)
+                    _pursuer_velocities.append(_pursuer_velocity)
+
+                (
+                    _pursuer_sensor_distance_vals,
+                    _pursuer_sensor_velocity_vals,
+                ) = self.get_sensor_readings(
+                    _pursuer_distances,
+                    pursuer.sensor_range,
+                    velocites=_pursuer_velocities,
                 )
-                _pursuer_distances.append(_pursuer_distance)
-                _pursuer_velocities.append(_pursuer_velocity)
+            else:
+                _pursuer_sensor_distance_vals = np.zeros(self.n_sensors)
+                _pursuer_sensor_velocity_vals = np.zeros(self.n_sensors)
 
-            (
-                _pursuer_sensor_distance_vals,
-                _pursuer_sensor_velocity_vals,
-            ) = self.get_sensor_readings(
-                _pursuer_distances,
-                pursuer.sensor_range,
-                velocites=_pursuer_velocities,
-            )
+            if pursuer.shape.food_touched_indicator >= 1:
+                food_obs = 1
+            else:
+                food_obs = 0
+
+            if pursuer.shape.poison_indicator >= 1:
+                poison_obs = 1
+            else:
+                poison_obs = 0
 
             # concatenate all observations
             if self.speed_features:
@@ -563,8 +595,8 @@ class WaterworldBase:
                         poison_sensor_velocity_vals,
                         _pursuer_sensor_distance_vals,
                         _pursuer_sensor_velocity_vals,
-                        np.array([pursuer.shape.food_indicator]),
-                        np.array([pursuer.shape.poison_indicator]),
+                        np.array([food_obs]),
+                        np.array([poison_obs]),
                     ]
                 )
             else:
@@ -575,8 +607,8 @@ class WaterworldBase:
                         evader_sensor_distance_vals,
                         poison_sensor_distance_vals,
                         _pursuer_sensor_distance_vals,
-                        np.array([pursuer.shape.food_indicator]),
-                        np.array([pursuer.shape.poison_indicator]),
+                        np.array([food_obs]),
+                        np.array([poison_obs]),
                     ]
                 )
 
@@ -640,7 +672,7 @@ class WaterworldBase:
         evader_shape.counter += 1
 
         # Indicate that food is touched by pursuer
-        pursuer_shape.food_touched_indicator = 1
+        pursuer_shape.food_touched_indicator += 1
 
         if evader_shape.counter >= self.n_coop:
             # For giving reward to pursuer
@@ -673,13 +705,15 @@ class WaterworldBase:
             evader_shape.reset_position(x, y)
             evader_shape.reset_velocity(vx, vy)
 
+        pursuer_shape.food_touched_indicator -= 1
+
     def return_false_begin_callback(self, arbiter, space, data):
         """Callback function that simply returns False."""
         return False
 
     def render(self):
         if self.render_mode is None:
-            gymnasium.logger.WARN(
+            gymnasium.logger.warn(
                 "You are calling render method without specifying any render mode."
             )
             return
