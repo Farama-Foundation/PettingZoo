@@ -26,8 +26,8 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy >=1.21.0",
-    "gymnasium>0.26.0",
+    "numpy>=1.21.0",
+    "gymnasium>=0.26.0",
 ]
 dynamic = ["version"]
 
@@ -47,11 +47,7 @@ other = ["pillow>=8.0.1"]
 tests = [
     "pynput",
     "pytest",
-    "codespell",
-    "flake8",
-    "isort",
     "AutoROM",
-    "bandit",
     "pytest",
     "pytest-cov",
     "pre-commit",
@@ -68,11 +64,7 @@ all = [
     "pillow>=8.0.1",
     "pynput",
     "pytest",
-    "codespell",
-    "flake8",
-    "isort",
     "AutoROM",
-    "bandit",
     "pytest",
     "pytest-cov",
     "pre-commit",
