@@ -19,7 +19,7 @@ def random_demo(env, render=True, episodes=1):
             if termination or truncation:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
-                action = random.choice(np.flatnonzero(obs["action_mask"]))
+                action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
             else:
                 action = env.action_space(agent).sample()
             env.step(action)
