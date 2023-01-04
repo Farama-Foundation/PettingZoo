@@ -29,6 +29,7 @@ jobs:
       - name: Install dependencies and run tutorials
         run: |
           sudo apt-get install python3-opengl xvfb
+          sudo apt install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libportmidi-dev libfreetype6-dev
           cd tutorials/${{ matrix.tutorial }}
           pip install -r requirements.txt
           pip uninstall -y pettingzoo
