@@ -62,12 +62,6 @@ all = [
     "box2d-py==2.3.5",
     "scipy>=1.4.1",
     "pillow>=8.0.1",
-    "pynput",
-    "pytest",
-    "AutoROM",
-    "pytest",
-    "pytest-cov",
-    "pre-commit",
 ]
 
 [project.urls]
