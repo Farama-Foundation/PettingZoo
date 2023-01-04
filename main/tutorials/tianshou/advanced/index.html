@@ -15,7 +15,7 @@
         <title>Tianshou: CLI and Logging - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=91b9f2a71a58ed2481980f1e5725e16457fde93d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=24b18ece81cb9ff18679a2945b9c89ba44829d18" />
     
     
 
@@ -370,7 +370,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.3
 packaging==21.3
 git+https://github.com/WillDudley/tianshou.git
 </pre></div>
@@ -631,7 +631,7 @@ git+https://github.com/WillDudley/tianshou.git
     <span class="n">collector</span> <span class="o">=</span> <span class="n">Collector</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">exploration_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">n_episode</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">render</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">render</span><span class="p">)</span>
     <span class="n">rews</span><span class="p">,</span> <span class="n">lens</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;rews&quot;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;lens&quot;</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final reward: </span><span class="si">{</span><span class="n">rews</span><span class="p">[:,</span> <span class="n">args</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">, length: </span><span class="si">{</span><span class="n">lens</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final reward: </span><span class="si">{</span><span class="n">rews</span><span class="p">[:,</span><span class="w"> </span><span class="n">args</span><span class="o">.</span><span class="n">agent_id</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">, length: </span><span class="si">{</span><span class="n">lens</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

@@ -15,7 +15,7 @@
         <title>Tianshou: Training Agents - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=91b9f2a71a58ed2481980f1e5725e16457fde93d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=24b18ece81cb9ff18679a2945b9c89ba44829d18" />
     
     
 
@@ -370,7 +370,7 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.3
 packaging==21.3
 git+https://github.com/WillDudley/tianshou.git
 </pre></div>
@@ -445,7 +445,7 @@ git+https://github.com/WillDudley/tianshou.git
 
 
 <span class="k">def</span> <span class="nf">_get_env</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;This function is needed to provide callables for DummyVectorEnv.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function is needed to provide callables for DummyVectorEnv.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">())</span>
 
 
