@@ -15,9 +15,9 @@ from ray.rllib.algorithms.ppo import PPO
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
+from tutorials.Ray.rllib_pistonball import CNNModelV2
 
 from pettingzoo.butterfly import pistonball_v6
-from tutorials.Ray.rllib_pistonball import CNNModelV2
 
 raise NotImplementedError(
     "There are currently bugs in this tutorial, we will fix them soon."
