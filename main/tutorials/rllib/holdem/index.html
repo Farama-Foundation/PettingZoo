@@ -15,7 +15,7 @@
         <title>RLLib 2: RL for Simple Poker - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=91b9f2a71a58ed2481980f1e5725e16457fde93d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=24b18ece81cb9ff18679a2945b9c89ba44829d18" />
     
     
 
@@ -377,7 +377,7 @@ Pillow==9.3.0
 torch==1.13.1
 SuperSuit==3.6.0
 ray[rllib]==2
-pettingzoo==1.22.0
+pettingzoo==1.22.3
 </pre></div>
 </div>
 </section>
@@ -414,7 +414,7 @@ pettingzoo==1.22.0
 
 
 <span class="k">class</span> <span class="nc">TorchMaskedActions</span><span class="p">(</span><span class="n">DQNTorchModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">,</span> <span class="n">model_config</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">DQNTorchModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>

@@ -15,7 +15,7 @@
         <title>CleanRL: Implementing PPO - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=91b9f2a71a58ed2481980f1e5725e16457fde93d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=24b18ece81cb9ff18679a2945b9c89ba44829d18" />
     
     
 
@@ -372,7 +372,7 @@
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SuperSuit==3.6.0
 torch==1.13.1
-pettingzoo==1.22.0
+pettingzoo==1.22.3
 </pre></div>
 </div>
 </section>
@@ -436,7 +436,7 @@ pettingzoo==1.22.0
 
 
 <span class="k">def</span> <span class="nf">batchify_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts PZ style observations to batch of torch arrays.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts PZ style observations to batch of torch arrays.&quot;&quot;&quot;</span>
     <span class="c1"># convert to list of np arrays</span>
     <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">obs</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># transpose to be (batch, channel, height, width)</span>
@@ -448,7 +448,7 @@ pettingzoo==1.22.0
 
 
 <span class="k">def</span> <span class="nf">batchify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts PZ style returns to batch of torch arrays.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts PZ style returns to batch of torch arrays.&quot;&quot;&quot;</span>
     <span class="c1"># convert to list of np arrays</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># convert to torch</span>
@@ -458,7 +458,7 @@ pettingzoo==1.22.0
 
 
 <span class="k">def</span> <span class="nf">unbatchify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Converts np array to PZ style arguments.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts np array to PZ style arguments.&quot;&quot;&quot;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)}</span>
 
@@ -467,7 +467,7 @@ pettingzoo==1.22.0
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    <span class="sd">&quot;&quot;&quot;ALGO PARAMS&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ALGO PARAMS&quot;&quot;&quot;</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
     <span class="n">ent_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">vf_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -479,7 +479,7 @@ pettingzoo==1.22.0
     <span class="n">max_cycles</span> <span class="o">=</span> <span class="mi">125</span>
     <span class="n">total_episodes</span> <span class="o">=</span> <span class="mi">2</span>
 
-    <span class="sd">&quot;&quot;&quot; ENV SETUP &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ENV SETUP &quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span>
         <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;rgb_array&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="n">max_cycles</span>
     <span class="p">)</span>
@@ -490,11 +490,11 @@ pettingzoo==1.22.0
     <span class="n">num_actions</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">n</span>
     <span class="n">observation_size</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span>
 
-    <span class="sd">&quot;&quot;&quot; LEARNER SETUP &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; LEARNER SETUP &quot;&quot;&quot;</span>
     <span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">num_actions</span><span class="o">=</span><span class="n">num_actions</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
 
-    <span class="sd">&quot;&quot;&quot; ALGO LOGIC: EPISODE STORAGE&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; ALGO LOGIC: EPISODE STORAGE&quot;&quot;&quot;</span>
     <span class="n">end_step</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">total_episodic_return</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">rb_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">,</span> <span class="n">stack_size</span><span class="p">,</span> <span class="o">*</span><span class="n">frame_size</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
@@ -504,7 +504,7 @@ pettingzoo==1.22.0
     <span class="n">rb_terms</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">rb_values</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">max_cycles</span><span class="p">,</span> <span class="n">num_agents</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
-    <span class="sd">&quot;&quot;&quot; TRAINING LOGIC &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; TRAINING LOGIC &quot;&quot;&quot;</span>
     <span class="c1"># train for n number of episodes</span>
     <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total_episodes</span><span class="p">):</span>
 
@@ -639,7 +639,7 @@ pettingzoo==1.22.0
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Explained Variance: </span><span class="si">{</span><span class="n">explained_var</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">-------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="sd">&quot;&quot;&quot; RENDER THE POLICY &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; RENDER THE POLICY &quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">continuous</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">color_reduction_v0</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">resize_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
