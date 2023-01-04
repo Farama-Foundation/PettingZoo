@@ -245,7 +245,7 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         elif isinstance(prev_observe, dict) and "action_mask" in prev_observe:
-            action = random.choice(np.flatnonzero(prev_observe["action_mask"]))
+            action = random.choice(np.flatnonzero(prev_observe["action_mask"]).tolist())
         else:
             action = env.action_space(agent).sample()
 
@@ -319,7 +319,7 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
-            action = random.choice(np.flatnonzero(obs["action_mask"]))
+            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
         else:
             action = env.action_space(agent).sample()
         assert isinstance(terminated, bool), "terminated from last is not True or False"
@@ -350,7 +350,7 @@ def test_action_flexibility(env):
         if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
-            action = random.choice(np.flatnonzero(obs["action_mask"]))
+            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
         else:
             action = 0
         env.step(action)

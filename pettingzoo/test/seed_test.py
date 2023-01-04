@@ -28,7 +28,7 @@ def calc_hash(new_env, rand_issue, max_env_iters):
             if terminated or truncated:
                 action = None
             elif isinstance(obs, dict) and "action_mask" in obs:
-                action = sampler.choice(np.flatnonzero(obs["action_mask"]))
+                action = sampler.choice(np.flatnonzero(obs["action_mask"]).tolist())
             else:
                 action = new_env.action_space(agent).sample()
             new_env.step(action)
