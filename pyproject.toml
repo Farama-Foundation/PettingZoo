@@ -73,6 +73,9 @@ Documentation = "https://pettingzoo.farama.org"
 [tool.setuptools]
 include-package-data = true
 
+[tool.setuptools.packages.find]
+include = ["pettingzoo", "pettingzoo.*"]
+
 # Linters and Test tools #######################################################
 
 [tool.black]
