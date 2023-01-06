@@ -5,4 +5,3 @@ Pillow==9.3.0
 torch==1.13.1
 SuperSuit==3.6.0
 ray[rllib]==2
-pettingzoo==1.22.3

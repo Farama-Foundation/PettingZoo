@@ -32,4 +32,5 @@ jobs:
           sudo apt-get install python3-opengl xvfb
           pip install -e .
           cd tutorials/${{ matrix.tutorial }}
+          pip install -r requirements.txt
           for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
