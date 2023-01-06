@@ -30,8 +30,6 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get upgrade -y
           sudo apt-get install python3-opengl xvfb
+          pip install -e .
           cd tutorials/${{ matrix.tutorial }}
-          pip install -r requirements.txt
-          pip uninstall -y pettingzoo
-          pip install -e ../..
           for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
