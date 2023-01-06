@@ -31,6 +31,10 @@ jobs:
           sudo apt-get update && sudo apt-get upgrade -y
           sudo apt-get install python3-opengl xvfb
           pip install -e .
+          # temporary
+          pip3 uninstall pygame -y
+          pip3 install pygame==2.1.3.dev8
+          # temporary
           cd tutorials/${{ matrix.tutorial }}
           pip install -r requirements.txt
           for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
