@@ -27,8 +27,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          sudo apt update && sudo apt upgrade -y
-          sudo apt install python3-opengl xvfb
+          sudo apt-get update && sudo apt-get upgrade -y
+          sudo apt-get install python3-opengl xvfb
           pip install -e .[all]
           pip install -e .[tests]
           AutoROM -v
