@@ -1,0 +1,315 @@
+# noqa
+"""
+# Gobblet
+
+```{figure} classic_tictactoe.gif # TODO: gif of gobblet?
+:width: 140px
+:name: Gobblet
+```
+
+This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
+
+| Import             | `from pettingzoo.classic.chess_v5` |
+|--------------------|------------------------------------|
+| Actions            | Discrete                           |
+| Parallel API       | Yes                                |
+| Manual Control     | No                                 |
+| Agents             | `agents= ['player_0', 'player_1']` |
+| Agents             | 2                                  |
+| Action Shape       | Discrete(53)                       |
+| Action Values      | Discrete(53)                       |
+| Observation Shape  | (3,3,15)                           |
+| Observation Values | [0,1]                              |
+
+
+Gobblet is a simple turn based strategy game based on tic-tac-toe, where 2 players, white and black, take turns placing pieces on a 3 x 3 grid.
+They can choose from three sizes of pieces: small, medium and large. Each player has two pieces of each size, making six total.
+Players can either place a piece in an empty space, "gobble" an opponent's piece with a larger piece, or move an already placed piece either to an empty space or to gobble an opponent's piece.
+The first player to place 3 of their pieces in a horizontal, vertical, or diagonal line is the winner.
+
+### Observation Space
+
+The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
+
+Inspired by AlphaZero's observation space for Chess, the main observation space is a 3x3 image representing the board. It has channels representing:
+
+* Channel 0: Is black or white
+* Channels 1 - 12: One channel for each piece type and player combination. For example, channels 1-2 represent white small pieces, 3-4 white medium, and 5-6 white large pieces.
+An index of this channel is set to 1 if a white piece is in the corresponding spot on the game board, otherwise it is set to 0.
+* Channel 13: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
+* Channel 14: All ones to help neural networks find board edges in padded convolutions
+* Channel 15: represents whether a position has been seen before (whether a position is a 2-fold repetition)
+# TODO: do we need channels 0 and 13-15
+
+Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
+
+Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the `frame_stacking` argument of our wrapper.
+
+#### Legal Actions Mask
+
+The legal moves available to the current agent are found in the `action_mask` element of the dictionary observation. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not. The `action_mask` will be all zeros for any agent except the one
+whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+
+### Action Space
+
+Actions range from 0 - 53, representing possible positions on the board to place each piece. We count moving already placed pieces the same as placing them regularly.
+Actions 0-8 represent positions on the board to place the first small piece.
+Actions 9-17 represent positions on the board to place the second small piece.
+Actions 18-26 represent positions on the board to place the first medium piece.
+Actions 27-35 represent positions on the board to place the second medium piece.
+Actions 36-44 represent positions on the board to place the first large piece.
+Actions 45-53 represent positions on the board to place the second large piece.
+
+The cells in the board are indexed as follows:
+
+ ```
+0 | 3 | 6
+_________
+
+1 | 4 | 7
+_________
+
+2 | 5 | 8
+ ```
+
+To determine the position from an action, we take the number modulo 9, resulting in a number 0-8
+To determine the piece from an action i, we use floor division by 9 (i +1 // 9), resulting in a number 0-5, where 1-2 represent small pieces, 3-4 represent medium pieces, and 5-6 represent large pieces.
+
+### Rewards
+
+### Rewards
+
+| Winner | Loser |
+| :----: | :---: |
+| +1     | -1    |
+
+If the game ends in a draw, both players will receive a reward of 0.
+
+### Version History
+
+* v3: Fixed bug in arbitrary calls to observe() (1.8.0)
+* v2: Legal action mask in observation replaced illegal move list in infos (1.5.0)
+* v1: Bumped version of all environments due to adoption of new agent iteration scheme where all agents are iterated over after they are done (1.4.0)
+* v0: Initial versions release (1.0.0)
+
+"""
+
+import gymnasium
+import numpy as np
+from gymnasium import spaces
+
+from pettingzoo import AECEnv
+from pettingzoo.utils import agent_selector, wrappers
+
+from board import Board
+
+
+def env(render_mode=None):
+    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    env = raw_env(render_mode=internal_render_mode)
+    if render_mode == "ansi":
+        env = wrappers.CaptureStdoutWrapper(env)
+    env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+    return env
+
+
+class raw_env(AECEnv):
+    metadata = {
+        "render_modes": ["human"],
+        "name": "tictactoe_v3",
+        "is_parallelizable": False,
+        "render_fps": 1,
+    }
+
+    def __init__(self, render_mode=None):
+        super().__init__()
+        self.board = Board()
+
+        self.agents = [f"player_{i}" for i in range(2)]
+        self.possible_agents = self.agents[:]
+
+        self.action_spaces = {i: spaces.Discrete(54) for i in self.agents}
+        self.observation_spaces = {
+            i: spaces.Dict(
+                {
+                    "observation": spaces.Box(
+                        low=0, high=1, shape=(3, 3, 15), dtype=np.int8
+                    ),
+                    "action_mask": spaces.Box(low=0, high=1, shape=(54,), dtype=np.int8),
+                }
+            )
+            for i in self.agents
+        }
+
+        self.rewards = {i: 0 for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
+        self.infos = {i: {"legal_moves": list(range(0, 9))} for i in self.agents}
+
+        self._agent_selector = agent_selector(self.agents)
+        self.agent_selection = self._agent_selector.reset()
+
+        self.render_mode = render_mode
+
+    # Key
+    # ----
+    # blank space = 0
+    # agent 0 = 1
+    # agent 1 = 2
+    # An observation is list of lists, where each list represents a row
+    #
+    # [[0,0,2]
+    #  [1,2,1]
+    #  [2,1,0]]
+    def observe(self, agent): #TODO adapt this to gobblet
+        board_vals = np.array(self.board.squares).reshape(3, 3)
+        cur_player = self.possible_agents.index(agent)
+        opp_player = (cur_player + 1) % 2
+
+        cur_p_board = np.equal(board_vals, cur_player + 1)
+        opp_p_board = np.equal(board_vals, opp_player + 1)
+
+        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        legal_moves = self._legal_moves() if agent == self.agent_selection else []
+
+        action_mask = np.zeros(54, "int8")
+        for i in legal_moves:
+            action_mask[i] = 1
+
+        return {"observation": observation, "action_mask": action_mask}
+
+    def observation_space(self, agent):
+        return self.observation_spaces[agent]
+
+    def action_space(self, agent):
+        return self.action_spaces[agent]
+
+    def _legal_moves(self):
+        legal_moves = []
+
+        open_indices = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0] # [27,]
+        occupied_indices = [i for i in range(len(self.board.squares)) if self.board.squares[i] != 0] # [27,]
+        uncovered_pieces_indices = [i for i in occupied_indices if self.board.check_covered()[i] == 0] # [27,]
+
+        board = self.board.squares.reshape(3, 9)
+        open_squares = [i for i in range(9) if board[:, i] == 0] # [9,]
+
+        for j in range(1, 7): # Loop through all six pieces (1,2,3,4,5,6) to see if they can be moved/placed
+            # First, check that this piece is not covered (if so, we can't move it)
+            # Find the place where this number is found (if any), then check that that index is not in the 'covered pieces' list
+            index = np.where(self.board.squares == j)[0] # Returns array containing the index for this piece, or empty array if it hasn't been placed
+            covered_indices = self.board.check_covered()
+            if any(index):  # If this piece has been placed
+                if covered_indices[index] == 1: # Check if this piece has been covered
+                    continue # If it has been covered, skip this piece (continue to the next value of j)
+
+            # This piece j can either be placed, or moved to a new place on the board
+            for i in range(9): # Loop through all 9 squares on the board
+                current_level = (j - 1) // 2 # [0, 0, 1, 1, 2, 2] for values of j
+                if not any(board[current_level] == j): # Check that this number does not occur anywhere on the appropriate level
+                    # This piece has not been placed!
+                    # We can therefore place it in any open square
+                    if position in open_squares:
+                        legal_moves.append(position + 9 * (j - 1)) # Add a legal action for moving this piece j to the open square
+                        # Offset by 9 for second small piece, 18 for first medium, 27 for second medium, etc.
+
+                    # OR we can place it anywhere there is a piece smaller than it (either our own piece, or opponent's)
+                    for index in occupied_indices:
+                        piece = self.board.squares[index] # Get the number of the piece (1,2,3,4,5,6 or -1,-2,-3,-4,-5,-6)
+                        position = index % 9 # Number 0-8
+                        if j > abs(piece): # If our piece is larger than the one which is already placed (opponent's or ours)
+                            # Then add an action for placing our piece in its corresponding position, covering the other piece
+                            legal_moves.append(position + 9 * (j - 1)) # Add a legal action for moving this piece to cover the smaller piece
+
+    # is a value from 0 to 8 indicating position to move on 3x3 board
+    def step(self, action):
+        position = action % 9
+        piece = action // 9 #TODO is this needed? my own code i added earlier
+        if (
+            self.terminations[self.agent_selection]
+            or self.truncations[self.agent_selection]
+        ):
+            return self._was_dead_step(action)
+        # check if input action is a valid move (0 == empty spot)
+        assert self.board.squares[action] == 0, "played illegal move"
+        # play turn
+        self.board.play_turn(self.agents.index(self.agent_selection), action)
+
+        # update infos
+        # list of valid actions (indexes in board)
+        # next_agent = self.agents[(self.agents.index(self.agent_selection) + 1) % len(self.agents)]
+        next_agent = self._agent_selector.next()
+
+        if self.board.check_game_over():
+            winner = self.board.check_for_winner()
+            if winner == 0: # NOTE: don't think ties are possible in gobblet
+                # tie
+                pass
+            elif winner == 1:
+                # agent 0 won
+                self.rewards[self.agents[0]] += 1
+                self.rewards[self.agents[1]] -= 1
+            else:
+                # agent 1 won
+                self.rewards[self.agents[1]] += 1
+                self.rewards[self.agents[0]] -= 1
+
+            # once either play wins or there is a draw, game over, both players are done
+            self.terminations = {i: True for i in self.agents}
+
+        # Switch selection to next agents
+        self._cumulative_rewards[self.agent_selection] = 0
+        self.agent_selection = next_agent
+
+        self._accumulate_rewards()
+        if self.render_mode == "human":
+            self.render()
+
+    def reset(self, seed=None, return_info=False, options=None):
+        # reset environment
+        self.board = Board()
+
+        self.agents = self.possible_agents[:]
+        self.rewards = {i: 0 for i in self.agents}
+        self._cumulative_rewards = {i: 0 for i in self.agents}
+        self.terminations = {i: False for i in self.agents}
+        self.truncations = {i: False for i in self.agents}
+        self.infos = {i: {} for i in self.agents}
+        # selects the first agent
+        self._agent_selector.reinit(self.agents)
+        self._agent_selector.reset()
+        self.agent_selection = self._agent_selector.reset()
+
+    def render(self):
+        if self.render_mode is None:
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode."
+            )
+            return
+
+        def getSymbol(input):
+            if input == 0:
+                return "-"
+            elif input == 1:
+                return "X"
+            else:
+                return "O"
+
+        board = list(map(getSymbol, self.board.squares))
+
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
+        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+        print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
+        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+
+    def close(self):
+        pass
