@@ -15,7 +15,7 @@
         <title>Multiwalker - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=3cf7b839e8c50b5f3a39bb99d90baa7b845de926" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=24b18ece81cb9ff18679a2945b9c89ba44829d18" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=b332e145f118bbc5b181998bee244c1e810e1f8b" />
     
     
 
@@ -555,16 +555,18 @@ observations have normally distributed signal noise controlled by <code class="d
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../pursuit/">
+          
+            <a class="prev-page" href="../">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
-                  <span>Next</span>
+                  <span>Previous</span>
                 </div>
-                <div class="title">Pursuit</div>
+                
+                <div class="title">SISL</div>
+                
               </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-            
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -623,11 +625,11 @@ observations have normally distributed signal noise controlled by <code class="d
         const menuBtn = document.querySelector(".farama-header-menu__btn");
         const menuContainer = document.querySelector(".farama-header-menu-container");
         if (document.querySelector(".farama-header-menu").classList.contains("active")) {
-          menuBtn.ariaExpanded = "false";
-          menuContainer.ariaHidden = "true";
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuContainer.setAttribute("aria-hidden", "true");
         } else {
-          menuBtn.ariaExpanded = "true";
-          menuContainer.ariaHidden = "false";
+          menuBtn.setAttribute("aria-expanded", "true");
+          menuContainer.setAttribute("aria-hidden", "false");
         }
         document.querySelector(".farama-header-menu").classList.toggle("active");
       }
@@ -797,7 +799,7 @@ observations have normally distributed signal noise controlled by <code class="d
         githubUser: 'Farama-Foundation',
         githubRepo: 'PettingZoo',
       };
-      fetch('/_static/versioning/versioning_menu.html').then(response => {
+      fetch('/main/_static/versioning/versioning_menu.html').then(response => {
         if (response.status === 200) {
             response.text().then(text => {
                 const container = document.createElement("div");
