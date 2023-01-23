@@ -24,7 +24,6 @@ classifiers = [
     'Intended Audience :: Science/Research',
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ]
-
 dependencies = [
     "numpy>=1.21.0",
     "gymnasium>=0.26.0",
