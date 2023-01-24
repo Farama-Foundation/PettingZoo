@@ -73,7 +73,8 @@ _________
  ```
 
 To determine the position from an action, we take the number modulo 9, resulting in a number 0-8
-To determine the piece from an action i, we use floor division by 9 (i +1 // 9), resulting in a number 0-5, where 1-2 represent small pieces, 3-4 represent medium pieces, and 5-6 represent large pieces.
+To determine the piece from an action i, we use floor division by 9 (i // 9), resulting in a number 0-5, where 1-2 represent small pieces, 3-4 represent medium pieces, and 5-6 represent large pieces.
+To determine the size of a given piece p (1-6), we use floor division by 2 (p + 1 // 2) resulting in a number 1-3
 
 ### Rewards
 
