@@ -39,7 +39,7 @@ An index of this channel is set to 1 if a white piece is in the corresponding sp
 * Channel 13: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
 * Channel 14: All ones to help neural networks find board edges in padded convolutions
 * Channel 15: represents whether a position has been seen before (whether a position is a 2-fold repetition)
-# TODO: do we need channels 0 and 13-15
+# TODO: do we need channels 0 and 13-15? Testing without at first
 
 Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
 
@@ -106,8 +106,7 @@ from board import Board
 
 
 def env(render_mode=None):
-    internal_render_mode = render_mode if render_mode != "ansi" else render_mode
-    env = raw_env(render_mode=internal_render_mode)
+    env = raw_env(render_mode=render_mode)
     if render_mode == "ansi":
         env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
@@ -136,7 +135,7 @@ class raw_env(AECEnv):
             i: spaces.Dict(
                 {
                     "observation": spaces.Box(
-                        low=0, high=1, shape=(3, 3, 15), dtype=np.int8
+                        low=0, high=1, shape=(3, 3, 12), dtype=np.int8
                     ),
                     "action_mask": spaces.Box(low=0, high=1, shape=(54,), dtype=np.int8),
                 }
@@ -165,15 +164,23 @@ class raw_env(AECEnv):
     #  [1,2,1]
     #  [2,1,0]]
     def observe(self, agent): #TODO: test this
-        board_vals = self.board.squares.reshape(3, 3, 3)
-        if agent == "player_0":
-            cur_p_board = np.greater(board_vals, 0)
-            opp_p_board = np.less(board_vals, 0)
-        else:
-            cur_p_board = np.less(board_vals, 0)
-            opp_p_board = np.greater(board_vals, 0)
+        board = self.board.squares.reshape(3, 3, 3)
+        if agent == "player_1":
+            board_vals = board * -1 # Swap the signs if the current agent is player_1 rather than player_0
 
-        observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
+        # Chess way of representing observations: specific channel for each color piece (e.g., two for each white small piece)
+        layers = []
+        for i in range(1, 7):
+            layers.append(board[(i - 1) // 2] == i) # 3x3 array with an entry of 1 for squares with each white piece (1, ..., 6)
+
+        for i in range(1, 7):
+            layers.append(board[(i - 1) // 2] == -i)  # 3x3 array with an entry of 1 for squares with each black piece (-1, ..., -6)
+        observation = np.stack(layers, axis=2).astype(np.int8)
+        # Tic-tac-toe way of representing observations: just show the raw board for current player and opponent player
+        # cur_p_board = np.greater(board, 0)
+        # opp_p_board = np.less(board, 0)
+        # observation = np.stack([cur_p_board, opp_p_board], axis=3).astype(np.int8)
+        #
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
 
         action_mask = np.zeros(54, "int8")
@@ -280,7 +287,8 @@ class raw_env(AECEnv):
 
             print(" " * 7 + "|" + " " * 7 + "|" + " " * 7)
             print(f"  {board[2]}   " + "|" + f"   {board[5]}  " + "|" + f"   {board[8]}  ")
-            print("_" * 7 + "|" + "_" * 7 + "|" + "_" * 7)
+            print(" " * 7 + "|" + " " * 7 + "|" + " " * 7)
+            print()
 
         if self.render_mode == "human_full":
             board = list(map(getSymbol, self.board.squares))
@@ -308,7 +316,8 @@ class raw_env(AECEnv):
             bot3 = f"  {board[18+2]}   " + "|" + f"   {board[18+5]}  " + "|" + f"   {board[18+8]}  "
             print(top + "  " + top + "  " + top)
             print(bot1 + "  " + bot2 + "  " + bot3)
-            print(bottom + "  " + bottom + "  " + bottom)
+            print(top + "  " + top + "  " + top)
+            print()
 
     def close(self):
         pass

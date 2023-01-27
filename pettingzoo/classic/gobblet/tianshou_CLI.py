@@ -1,17 +1,4 @@
-from pettingzoo.classic import gobblet_v1
-
-env = gobblet_v1.env(render_mode="human_full")
-env.reset()
-for agent in env.agent_iter():
-    observation, reward, termination, truncation, info = env.last()
-    action = None if termination or truncation else env.action_space(agent).sample()  # this is where you would insert your policy
-    if not termination and not truncation:
-        pos = action % 9; piece = (action // 9) + 1
-        print(f"AGENT: {agent}, ACTION: {action}, POSITION: {pos}, PIECE: {piece}")
-
-    env.step(action)
-
-
+# Modified from tutorial code
 """Modified code from Tianshou MARL training example:
 
 This is a full example of using Tianshou with MARL to train agents, complete with argument parsing (CLI) and logging.
@@ -268,9 +255,26 @@ def watch(
     rews, lens = result["rews"], result["lens"]
     print(f"Final reward: {rews[:, args.agent_id - 1].mean()}, length: {lens.mean()}")
 
+# Allows the user to input moves and play vs the learned agent
+def play(
+    args: argparse.Namespace = get_args(),
+    agent_learn: Optional[BasePolicy] = None,
+    agent_opponent: Optional[BasePolicy] = None,
+) -> None:
+    env = DummyVectorEnv([lambda: get_env(render_mode="human")])
+    policy, optim, agents = get_agents(
+        args, agent_learn=agent_learn, agent_opponent=agent_opponent
+    )
+    policy.eval()
+    policy.policies[agents[args.agent_id - 1]].set_eps(args.eps_test)
+    collector = Collector(policy, env, exploration_noise=True)
+    result = collector.collect(n_episode=1, render=args.render)
+    rews, lens = result["rews"], result["lens"]
+    print(f"Final reward: {rews[:, args.agent_id - 1].mean()}, length: {lens.mean()}")
 
 if __name__ == "__main__":
     # train the agent and watch its performance in a match!
     args = get_args()
     result, agent = train_agent(args)
     watch(args, agent)
+    play(args, agent)
