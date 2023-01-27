@@ -106,7 +106,7 @@ from board import Board
 
 
 def env(render_mode=None):
-    internal_render_mode = render_mode if render_mode != "ansi" else "human"
+    internal_render_mode = render_mode if render_mode != "ansi" else render_mode
     env = raw_env(render_mode=internal_render_mode)
     if render_mode == "ansi":
         env = wrappers.CaptureStdoutWrapper(env)
@@ -118,8 +118,8 @@ def env(render_mode=None):
 
 class raw_env(AECEnv):
     metadata = {
-        "render_modes": ["human"],
-        "name": "tictactoe_v3",
+        "render_modes": ["human", "human_full"],
+        "name": "gobblet_v1",
         "is_parallelizable": False,
         "render_fps": 1,
     }
@@ -164,13 +164,14 @@ class raw_env(AECEnv):
     # [[0,0,2]
     #  [1,2,1]
     #  [2,1,0]]
-    def observe(self, agent): #TODO adapt this to gobblet
-        board_vals = np.array(self.board.squares).reshape(3, 3)
-        cur_player = self.possible_agents.index(agent)
-        opp_player = (cur_player + 1) % 2
-
-        cur_p_board = np.equal(board_vals, cur_player + 1)
-        opp_p_board = np.equal(board_vals, opp_player + 1)
+    def observe(self, agent): #TODO: test this
+        board_vals = self.board.squares.reshape(3, 3, 3)
+        if agent == "player_0":
+            cur_p_board = np.greater(board_vals, 0)
+            opp_p_board = np.less(board_vals, 0)
+        else:
+            cur_p_board = np.less(board_vals, 0)
+            opp_p_board = np.greater(board_vals, 0)
 
         observation = np.stack([cur_p_board, opp_p_board], axis=2).astype(np.int8)
         legal_moves = self._legal_moves() if agent == self.agent_selection else []
@@ -189,52 +190,20 @@ class raw_env(AECEnv):
 
     def _legal_moves(self):
         legal_moves = []
-
-        open_indices = [i for i in range(len(self.board.squares)) if self.board.squares[i] == 0] # [27,]
-        occupied_indices = [i for i in range(len(self.board.squares)) if self.board.squares[i] != 0] # [27,]
-        uncovered_pieces_indices = [i for i in occupied_indices if self.board.check_covered()[i] == 0] # [27,]
-
-        board = self.board.squares.reshape(3, 9)
-        open_squares = [i for i in range(9) if board[:, i] == 0] # [9,]
-
-        for j in range(1, 7): # Loop through all six pieces (1,2,3,4,5,6) to see if they can be moved/placed
-            # First, check that this piece is not covered (if so, we can't move it)
-            # Find the place where this number is found (if any), then check that that index is not in the 'covered pieces' list
-            index = np.where(self.board.squares == j)[0] # Returns array containing the index for this piece, or empty array if it hasn't been placed
-            covered_indices = self.board.check_covered()
-            if any(index):  # If this piece has been placed
-                if covered_indices[index] == 1: # Check if this piece has been covered
-                    continue # If it has been covered, skip this piece (continue to the next value of j)
-
-            # This piece j can either be placed, or moved to a new place on the board
-            for i in range(9): # Loop through all 9 squares on the board
-                current_level = (j - 1) // 2 # [0, 0, 1, 1, 2, 2] for values of j
-                if not any(board[current_level] == j): # Check that this number does not occur anywhere on the appropriate level
-                    # This piece has not been placed!
-                    # We can therefore place it in any open square
-                    if position in open_squares:
-                        legal_moves.append(position + 9 * (j - 1)) # Add a legal action for moving this piece j to the open square
-                        # Offset by 9 for second small piece, 18 for first medium, 27 for second medium, etc.
-
-                    # OR we can place it anywhere there is a piece smaller than it (either our own piece, or opponent's)
-                    for index in occupied_indices:
-                        piece = self.board.squares[index] # Get the number of the piece (1,2,3,4,5,6 or -1,-2,-3,-4,-5,-6)
-                        position = index % 9 # Number 0-8
-                        if j > abs(piece): # If our piece is larger than the one which is already placed (opponent's or ours)
-                            # Then add an action for placing our piece in its corresponding position, covering the other piece
-                            legal_moves.append(position + 9 * (j - 1)) # Add a legal action for moving this piece to cover the smaller piece
+        for action in range(54):
+            if self.board.is_legal(action):
+                legal_moves.append(action)
+        return legal_moves
 
     # is a value from 0 to 8 indicating position to move on 3x3 board
     def step(self, action):
-        position = action % 9
-        piece = action // 9 #TODO is this needed? my own code i added earlier
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
         # check if input action is a valid move (0 == empty spot)
-        assert self.board.squares[action] == 0, "played illegal move"
+        assert self.board.is_legal(action), "played illegal move"
         # play turn
         self.board.play_turn(self.agents.index(self.agent_selection), action)
 
@@ -265,7 +234,7 @@ class raw_env(AECEnv):
         self.agent_selection = next_agent
 
         self._accumulate_rewards()
-        if self.render_mode == "human":
+        if self.render_mode == "human" or "human_full":
             self.render()
 
     def reset(self, seed=None, return_info=False, options=None):
@@ -292,25 +261,54 @@ class raw_env(AECEnv):
 
         def getSymbol(input):
             if input == 0:
-                return "-"
-            elif input == 1:
-                return "X"
+                return "- "
+            if input > 0:
+                return "+{}".format(int(input))
             else:
-                return "O"
+                return "{}".format(int(input))
 
-        board = list(map(getSymbol, self.board.squares))
 
-        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[0]}  " + "|" + f"  {board[3]}  " + "|" + f"  {board[6]}  ")
-        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+        if self.render_mode == "human":
+            board = list(map(getSymbol, self.board.get_flatboard()))
+            print(" " * 7 + "|" + " " * 7 + "|" + " " * 7)
+            print(f"  {board[0]}   " + "|" + f"   {board[3]}  " + "|" + f"   {board[6]}  ")
+            print("_" * 7 + "|" + "_" * 7 + "|" + "_" * 7)
 
-        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[1]}  " + "|" + f"  {board[4]}  " + "|" + f"  {board[7]}  ")
-        print("_" * 5 + "|" + "_" * 5 + "|" + "_" * 5)
+            print(" " * 7 + "|" + " " * 7 + "|" + " " * 7)
+            print(f"  {board[1]}   " + "|" + f"   {board[4]}  " + "|" + f"   {board[7]}  ")
+            print("_" * 7 + "|" + "_" * 7 + "|" + "_" * 7)
 
-        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
-        print(f"  {board[2]}  " + "|" + f"  {board[5]}  " + "|" + f"  {board[8]}  ")
-        print(" " * 5 + "|" + " " * 5 + "|" + " " * 5)
+            print(" " * 7 + "|" + " " * 7 + "|" + " " * 7)
+            print(f"  {board[2]}   " + "|" + f"   {board[5]}  " + "|" + f"   {board[8]}  ")
+            print("_" * 7 + "|" + "_" * 7 + "|" + "_" * 7)
+
+        if self.render_mode == "human_full":
+            board = list(map(getSymbol, self.board.squares))
+            print(" " * 9 + "SMALL" + " " * 9 + "  " +
+                  " " * 10 + "MED" + " " * 10 + "  " +
+                  " " * 9 + "LARGE" + " " * 9 + "  ")
+            top= " " * 7 + "|" + " " * 7 + "|" + " " * 7
+            bottom = "_" * 7 + "|" + "_" * 7 + "|" + "_" * 7
+            top1= f"  {board[0]}   " + "|" + f"   {board[3]}  " + "|" + f"   {board[6]}  "
+            top2 = f"  {board[9]}   " + "|" + f"   {board[12]}  " + "|" + f"   {board[15]}  "
+            top3 = f"  {board[18]}   " + "|" + f"   {board[21]}  " + "|" + f"   {board[24]}  "
+            print(top + "  " + top + "  " + top)
+            print(top1 + "  " + top2 + "  " + top3)
+            print(bottom + "  " + bottom + "  " + bottom)
+
+            mid1 = f"  {board[1]}   " + "|" + f"   {board[4]}  " + "|" + f"   {board[7]}  "
+            mid2 = f"  {board[10]}   " + "|" + f"   {board[13]}  " + "|" + f"   {board[16]}  "
+            mid3 = f"  {board[19]}   " + "|" + f"   {board[22]}  " + "|" + f"   {board[25]}  "
+            print(top + "  " + top + "  " + top)
+            print(mid1 + "  " + mid2 + "  " + mid3)
+            print(bottom + "  " + bottom + "  " + bottom)
+
+            bot1 = f"  {board[2]}   " + "|" + f"   {board[5]}  " + "|" + f"   {board[8]}  "
+            bot2 = f"  {board[9+2]}   " + "|" + f"   {board[9+5]}  " + "|" + f"   {board[9+8]}  "
+            bot3 = f"  {board[18+2]}   " + "|" + f"   {board[18+5]}  " + "|" + f"   {board[18+8]}  "
+            print(top + "  " + top + "  " + top)
+            print(bot1 + "  " + bot2 + "  " + bot3)
+            print(bottom + "  " + bottom + "  " + bottom)
 
     def close(self):
         pass

@@ -75,8 +75,6 @@ class Board:
 
         board = self.squares.reshape(3, 9)
 
-        # First, check that the position is open (if there is another piece covering that spot on the flatboard
-
         # Check if this piece has been placed (if the piece number occurs anywhere on the level of that piece size)
         # If this piece has not been placed yet, check that it
         if any(board[piece_size-1] == piece):
@@ -87,10 +85,10 @@ class Board:
                 current_loc = current_loc[0] # Current location [0-27]
             # If this piece is currently covered, moving it is not a legal action
             if self.check_covered()[current_loc] == 1:
-                print("--ERROR-- CURRENT LOCATION COVERED: ", current_loc)
+                # print("--ERROR-- CURRENT LOCATION COVERED: ", current_loc)
                 return False
 
-        # If it has
+        # If this piece has been placed
         # Check if the spot on the flat 3x3 board is open (we can definitely place in that case)
         flatboard = self.get_flatboard()
         if flatboard[pos] == 0:
@@ -101,13 +99,12 @@ class Board:
             if piece_size > existing_piece_size:
                 return True # This piece can be gobbled
             else:
-                print("--ERROR-- CURRENT PIECE CANNOT BE GOBBLED")
-                print("existing piece number: ", existing_piece_number)
-                print("existing piece size: ", existing_piece_size)
-                print("piece size: ", piece_size)
-                print("position attempted: ", pos)
-                print("index attempted: ", index)
-
+                # print("--ERROR-- CURRENT PIECE CANNOT BE GOBBLED")
+                # print("existing piece number: ", existing_piece_number)
+                # print("existing piece size: ", existing_piece_size)
+                # print("piece size: ", piece_size)
+                # print("position attempted: ", pos)
+                # print("index attempted: ", index)
                 return False
 
     # Update the board with an agent's move
@@ -183,7 +180,7 @@ class Board:
         return winner
 
     def check_game_over(self):
-        winner = self.board.check_for_winner()
+        winner = self.check_for_winner()
         if winner in [1, -1]:
             return True
         else:
