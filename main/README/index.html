@@ -380,27 +380,26 @@
             <section id="pettingzoo-docs">
 <h1>PettingZoo docs<a class="headerlink" href="#pettingzoo-docs" title="Permalink to this heading">#</a></h1>
 <p>This folder contains the documentation for <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">PettingZoo</a>.</p>
-<section id="instructions-for-editing-content">
-<h2>Instructions for editing content<a class="headerlink" href="#instructions-for-editing-content" title="Permalink to this heading">#</a></h2>
-<p>Our documentation is written in Markdown (more precisely, MyST - Markedly Structured Text) and built using <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>.
-All content present in the documentation website can be found in this directory except for the environments.</p>
+<p>For more information about how to contribute to the documentation go to our <a class="reference external" href="https://github.com/Farama-Foundation/Celshast/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 <section id="editing-an-environment-page">
-<h3>Editing an environment page<a class="headerlink" href="#editing-an-environment-page" title="Permalink to this heading">#</a></h3>
+<h2>Editing an environment page<a class="headerlink" href="#editing-an-environment-page" title="Permalink to this heading">#</a></h2>
 <p>Environemnts’ documentation can be found at the top of the file python file where the environment is declared, for example, the documentation for the chess environment can be at <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py">/pettingzoo/classic/chess/chess.py</a></p>
-<p>To generate the environments pages you need to execute the <code class="docutils literal notranslate"><span class="pre">_scripts/gen_envs_mds.py</span></code> script.</p>
-</section>
+<p>To generate the environments pages you need to execute the <code class="docutils literal notranslate"><span class="pre">docs/_scripts/gen_envs_mds.py</span></code> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
+<span class="n">python</span> <span class="n">_scripts</span><span class="o">/</span><span class="n">gen_envs_mds</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
 </section>
 <section id="build-the-documentation">
 <h2>Build the Documentation<a class="headerlink" href="#build-the-documentation" title="Permalink to this heading">#</a></h2>
 <p>Install the required packages and PettingZoo:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
-<span class="n">cd</span> <span class="n">docs</span><span class="o">/</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">docs</span><span class="o">/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 <p>To build the documentation once:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
-<span class="n">make</span> <span class="n">dirhtml</span> <span class="n">_build</span>
+<span class="n">make</span> <span class="n">dirhtml</span>
 </pre></div>
 </div>
 <p>To rebuild the documentation automatically every time a change is made:</p>
@@ -459,10 +458,7 @@ All content present in the documentation website can be found in this directory 
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">PettingZoo docs</a><ul>
-<li><a class="reference internal" href="#instructions-for-editing-content">Instructions for editing content</a><ul>
 <li><a class="reference internal" href="#editing-an-environment-page">Editing an environment page</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#build-the-documentation">Build the Documentation</a></li>
 </ul>
 </li>
