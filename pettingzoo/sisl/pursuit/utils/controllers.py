@@ -14,7 +14,6 @@ class PursuitPolicy(abc.ABC):
 
 
 class RandomPolicy(PursuitPolicy):
-
     # constructor
     def __init__(self, n_actions, rng):
         self.rng = rng

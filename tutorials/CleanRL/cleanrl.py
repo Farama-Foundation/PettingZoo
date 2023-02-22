@@ -85,7 +85,6 @@ def unbatchify(x, env):
 
 
 if __name__ == "__main__":
-
     """ALGO PARAMS"""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ent_coef = 0.1
@@ -126,10 +125,8 @@ if __name__ == "__main__":
     """ TRAINING LOGIC """
     # train for n number of episodes
     for episode in range(total_episodes):
-
         # collect an episode
         with torch.no_grad():
-
             # collect observations and convert to batch of torch tensors
             next_obs = env.reset(seed=None)
             # reset the episodic return
@@ -137,7 +134,6 @@ if __name__ == "__main__":
 
             # each episode has num_steps
             for step in range(0, max_cycles):
-
                 # rollover the observation
                 obs = batchify_obs(next_obs, device)
 
