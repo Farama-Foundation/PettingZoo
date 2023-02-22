@@ -143,7 +143,6 @@ def env(**kwargs):
 
 
 class raw_env(AECEnv):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "go_v5",

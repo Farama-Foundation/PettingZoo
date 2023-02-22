@@ -8,7 +8,6 @@ from pettingzoo.utils import AECEnv, ParallelEnv
 # DSP is far more benign (and should probably be the default in SDL anyways)
 
 if sys.platform.startswith("linux"):
-
     os.environ["SDL_AUDIODRIVER"] = "dsp"
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"

@@ -138,7 +138,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase, EzPickle):
-
     metadata = {
         "render_modes": ["human"],
         "name": "gin_rummy_v4",

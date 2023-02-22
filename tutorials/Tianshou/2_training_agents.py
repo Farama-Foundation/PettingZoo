@@ -69,7 +69,6 @@ def _get_env():
 
 
 if __name__ == "__main__":
-
     # ======== Step 1: Environment setup =========
     train_envs = DummyVectorEnv([_get_env for _ in range(10)])
     test_envs = DummyVectorEnv([_get_env for _ in range(10)])

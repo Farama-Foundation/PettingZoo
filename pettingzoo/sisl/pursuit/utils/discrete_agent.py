@@ -9,7 +9,6 @@ from ..._utils import Agent
 
 
 class DiscreteAgent(Agent):
-
     # constructor
     def __init__(
         self,

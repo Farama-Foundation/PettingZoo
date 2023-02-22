@@ -104,7 +104,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase):
-
     metadata = {
         "render_modes": ["human"],
         "name": "leduc_holdem_v4",

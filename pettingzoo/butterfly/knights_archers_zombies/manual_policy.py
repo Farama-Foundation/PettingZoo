@@ -3,7 +3,6 @@ import pygame
 
 class ManualPolicy:
     def __init__(self, env, agent_id: int = 0, show_obs: bool = False):
-
         self.env = env
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]

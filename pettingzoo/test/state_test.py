@@ -96,7 +96,6 @@ def test_state(env, num_cycles):
 
 
 def test_parallel_env(parallel_env):
-
     parallel_env.reset()
 
     assert isinstance(

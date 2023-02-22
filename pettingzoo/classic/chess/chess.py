@@ -107,7 +107,6 @@ def env(render_mode=None):
 
 
 class raw_env(AECEnv):
-
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
         "name": "chess_v5",

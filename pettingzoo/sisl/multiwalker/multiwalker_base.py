@@ -214,7 +214,6 @@ class BipedalWalker(Agent):
         self.lidar = [LidarCallback() for _ in range(10)]
 
     def apply_action(self, action):
-
         self.joints[0].motorSpeed = float(SPEED_HIP * np.sign(action[0]))
         self.joints[0].maxMotorTorque = float(
             MOTORS_TORQUE * np.clip(np.abs(action[0]), 0, 1)
@@ -288,7 +287,6 @@ class BipedalWalker(Agent):
 
 
 class MultiWalkerEnv:
-
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": FPS}
 
     hardcore = False
