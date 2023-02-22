@@ -451,7 +451,6 @@ class raw_env(AECEnv):
 
         # collect reward if it is the last agent to act
         if self._agent_selector.is_last():
-
             # same action => 0 reward each agent
             if self.state[self.agents[0]] == self.state[self.agents[1]]:
                 rewards = (0, 0)
