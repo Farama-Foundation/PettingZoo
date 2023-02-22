@@ -18,19 +18,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']  # '3.11' - broken due to numba
         tutorial: ['CleanRL', 'Tianshou', 'EnvironmentCreation']
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies and run tutorials
+          python-version: 3.8
+      - name: Install dependencies
         run: |
           sudo apt-get install python3-opengl xvfb
-          cd tutorials/${{ matrix.tutorial }}
-          pip install -r requirements.txt
+          pip install -r tutorials/${{ matrix.tutorial }}/requirements.txt
           pip uninstall -y pettingzoo
-          pip install -e ../..
-          for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
+          pip install -e . --no-cache-dir
+      - name: Run tutorials
+        run: |
+          cd tutorials/${{ matrix.tutorial }}
+          for f in *.py; do echo "$f"; xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done

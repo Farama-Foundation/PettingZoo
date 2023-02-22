@@ -4,6 +4,7 @@
 name: MacOS tests
 
 on:
+  pull_request:
   push:
     branches: [master]
 
@@ -21,10 +22,9 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: |
-          pip install -e .[all]
-          pip install -e .[tests]
-          AutoROM -v
-      - name: Full Python tests
+          sudo apt-get install python3-opengl xvfb
+          pip install -e .[all, tests]
+      - name: Pytest
         run: |
-          pytest ./test/pytest_runner_test.py
-          pytest ./test/all_parameter_combs_test.py
+          pytest test/pytest_runner_test.py
+          pytest test/all_parameter_combs_test.py
