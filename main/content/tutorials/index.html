@@ -468,7 +468,6 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ALGO PARAMS&quot;&quot;&quot;</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
     <span class="n">ent_coef</span> <span class="o">=</span> <span class="mf">0.1</span>
@@ -509,10 +508,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; TRAINING LOGIC &quot;&quot;&quot;</span>
     <span class="c1"># train for n number of episodes</span>
     <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total_episodes</span><span class="p">):</span>
-
         <span class="c1"># collect an episode</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-
             <span class="c1"># collect observations and convert to batch of torch tensors</span>
             <span class="n">next_obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="c1"># reset the episodic return</span>
@@ -520,7 +517,6 @@
 
             <span class="c1"># each episode has num_steps</span>
             <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_cycles</span><span class="p">):</span>
-
                 <span class="c1"># rollover the observation</span>
                 <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">next_obs</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
 
