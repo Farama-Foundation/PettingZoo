@@ -69,7 +69,6 @@ def env_creator(args):
 
 
 if __name__ == "__main__":
-
     env_name = "pistonball_v6"
 
     register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))

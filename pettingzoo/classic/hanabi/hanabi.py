@@ -379,7 +379,6 @@ class raw_env(AECEnv, EzPickle):
         observation_type,
         random_start_player,
     ):
-
         if not (2 <= colors <= 5):
             raise ValueError(
                 f"Config parameter {colors} is out of bounds. See description in hanabi.py."

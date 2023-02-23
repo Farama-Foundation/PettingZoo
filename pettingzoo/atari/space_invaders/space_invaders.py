@@ -87,7 +87,7 @@ def raw_env(
     zigzaging_bombs=False,
     fast_bomb=False,
     invisible_invaders=False,
-    **kwargs
+    **kwargs,
 ):
     mode = 33 + (
         moving_shields * 1

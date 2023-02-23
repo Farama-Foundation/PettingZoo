@@ -155,7 +155,6 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "waterworld_v4",
