@@ -211,7 +211,6 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "knights_archers_zombies_v10",
@@ -711,7 +710,6 @@ class raw_env(AECEnv, EzPickle):
 
         # Do these things once per cycle
         if self._agent_selector.is_last():
-
             # Update the weapons
             self.update_weapons()
 

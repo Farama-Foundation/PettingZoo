@@ -347,7 +347,7 @@ class Pursuit:
             x, y = self.pursuer_layer.get_position(i)
             agent_positions[(x, y)] += 1
 
-        for (x, y) in evader_positions:
+        for x, y in evader_positions:
             (pos_x, pos_y) = (
                 self.pixel_scale * x + self.pixel_scale // 2,
                 self.pixel_scale * y + self.pixel_scale // 2,
@@ -366,7 +366,7 @@ class Pursuit:
 
             self.screen.blit(text, (pos_x, pos_y))
 
-        for (x, y) in agent_positions:
+        for x, y in agent_positions:
             (pos_x, pos_y) = (
                 self.pixel_scale * x + self.pixel_scale // 2,
                 self.pixel_scale * y + self.pixel_scale // 2,
