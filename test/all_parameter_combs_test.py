@@ -68,7 +68,7 @@ parameterized_envs = [
     [
         "butterfly/knights_archers_zombies_v10",
         knights_archers_zombies_v10,
-        dict(graph_space=True, use_typemasks=True),
+        dict(sequence_space=True, use_typemasks=True),
     ],
     [
         "butterfly/knights_archers_zombies_v10",
