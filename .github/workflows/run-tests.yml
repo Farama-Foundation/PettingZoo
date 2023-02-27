@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install python3-opengl xvfb
-          pip install -e .[all, tests] --no-cache-dir
+          pip install -e .[all,tests] --no-cache-dir
       - name: Run Pytest
         run: |
           xvfb-run -s "-screen 0 1024x768x24" pytest test/*
@@ -38,7 +38,7 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: |
-          pip install -e .[all, tests] --no-cache-dir
+          pip install -e .[all,tests] --no-cache-dir
       - name: Pytest
         run: |
           pytest test/pytest_runner_test.py
