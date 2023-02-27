@@ -1,13 +1,9 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# This workflow will install Python dependencies, run run-tests.yml and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 ---
-name: Python tests
+name: Python run-tests.yml
 
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+on: [pull_request, push]
 
 permissions:
   contents: read
@@ -17,10 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
     steps:
       - uses: actions/checkout@v3
-      # - uses: openrndr/setup-opengl@v1.1
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
@@ -32,7 +27,19 @@ jobs:
       - name: Run Pytest
         run: |
           xvfb-run -s "-screen 0 1024x768x24" pytest test/*
-      - name: Source distribution test
+
+  macos-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - name: Install dependencies
         run: |
-          python setup.py sdist
-          pip install dist/*.tar.gz
+          pip install -e .[all, tests] --no-cache-dir
+      - name: Pytest
+        run: |
+          pytest test/pytest_runner_test.py
+          pytest test/all_parameter_combs_test.py
