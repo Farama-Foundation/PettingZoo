@@ -258,7 +258,9 @@ class raw_env(AECEnv, EzPickle):
         if self.sequence_space:
             assert vector_state, "vector_state must be True if sequence_space is True."
 
-            assert use_typemasks, "use_typemasks should be True if sequence_space is True"
+            assert (
+                use_typemasks
+            ), "use_typemasks should be True if sequence_space is True"
 
         # whether we want RGB state or vector state
         self.vector_state = vector_state
