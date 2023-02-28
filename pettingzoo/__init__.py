@@ -16,6 +16,7 @@ __version__ = "1.22.3"
 
 try:
     import sys
+
     from farama_notifications import notifications
 
     if "pettingzoo" in notifications and __version__ in notifications["pettingzoo"]:
