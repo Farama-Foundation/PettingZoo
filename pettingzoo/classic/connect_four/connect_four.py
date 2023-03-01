@@ -291,8 +291,10 @@ class raw_env(AECEnv):
                 self.screen.blit(
                     preview_chips[agent],
                     (
-                        (self.preview[agent] % 7) * (tile_size) + (tile_size * (6 / 13)),
-                        int(self.preview[agent] / 7) * (tile_size) + (tile_size * (6 / 13)),
+                        (self.preview[agent] % 7) * (tile_size)
+                        + (tile_size * (6 / 13)),
+                        int(self.preview[agent] / 7) * (tile_size)
+                        + (tile_size * (6 / 13)),
                     ),
                 )
 
