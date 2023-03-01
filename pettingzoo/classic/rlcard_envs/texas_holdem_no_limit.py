@@ -128,7 +128,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_no_limit_v6",

@@ -21,7 +21,6 @@ def get_type(agent):
 
 
 class parallel_env(ParallelEnv):
-
     metadata = {"render_modes": ["human"], "name": "generated_agents_parallel_v0"}
 
     def __init__(self, max_cycles=100, render_mode=None):
