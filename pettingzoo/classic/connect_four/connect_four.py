@@ -76,7 +76,7 @@ def get_image(path):
     import pygame
 
     cwd = os_path.dirname(__file__)
-    image = pygame.image.load(cwd + "/" + path)
+    image = pygame.image.load(os.path.join(cwd, path))
     sfc = pygame.Surface(image.get_size(), flags=pygame.SRCALPHA)
     sfc.blit(image, (0, 0))
     return sfc
@@ -112,6 +112,7 @@ class raw_env(AECEnv):
 
         self.agents = ["player_0", "player_1"]
         self.possible_agents = self.agents[:]
+        self.preview = {self.agents[0]: -1, self.agents[1]: -1}
 
         self.action_spaces = {i: spaces.Discrete(7) for i in self.agents}
         self.observation_spaces = {
@@ -248,6 +249,18 @@ class raw_env(AECEnv):
             black_chip, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
         )
 
+        preview_black = get_image(os.path.join("img", "C4BlackPreviewPiece.png"))
+        preview_black = pygame.transform.scale(
+            preview_black, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
+        )
+
+        preview_red = get_image(os.path.join("img", "C4RedPreviewPiece.png"))
+        preview_red = pygame.transform.scale(
+            preview_red, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
+        )
+
+        preview_chips = {self.agents[0]: preview_red, self.agents[1]: preview_black}
+
         board_img = get_image(os.path.join("img", "Connect4Board.png"))
         board_img = pygame.transform.scale(
             board_img, ((int(screen_width)), int(screen_height))
@@ -271,6 +284,15 @@ class raw_env(AECEnv):
                     (
                         (i % 7) * (tile_size) + (tile_size * (6 / 13)),
                         int(i / 7) * (tile_size) + (tile_size * (6 / 13)),
+                    ),
+                )
+        for agent in self.agents:
+            if self.preview[agent] != -1:
+                self.screen.blit(
+                    preview_chips[agent],
+                    (
+                        (self.preview[agent] % 7) * (tile_size) + (tile_size * (6 / 13)),
+                        int(self.preview[agent] / 7) * (tile_size) + (tile_size * (6 / 13)),
                     ),
                 )
 
