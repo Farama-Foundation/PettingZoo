@@ -5,7 +5,8 @@ Author: Rohan (https://github.com/Rohan138)
 
 import os
 
-from gymnasium.spaces import Box
+import ray
+from gymnasium.spaces import Box, Discrete
 from ray import tune
 from ray.rllib.algorithms.dqn import DQNConfig
 from ray.rllib.algorithms.dqn.dqn_torch_model import DQNTorchModel
@@ -18,17 +19,21 @@ from ray.tune.registry import register_env
 
 from pettingzoo.classic import leduc_holdem_v4
 
-raise NotImplementedError(
-    "There are currently bugs in this tutorial, we will fix them soon."
-)
-
 torch, nn = try_import_torch()
 
 
 class TorchMaskedActions(DQNTorchModel):
     """PyTorch version of above ParametricActionsModel."""
 
-    def __init__(self, obs_space, action_space, num_outputs, model_config, name, **kw):
+    def __init__(
+        self,
+        obs_space: Box,
+        action_space: Discrete,
+        num_outputs,
+        model_config,
+        name,
+        **kw,
+    ):
         DQNTorchModel.__init__(
             self, obs_space, action_space, num_outputs, model_config, name, **kw
         )
@@ -64,6 +69,8 @@ class TorchMaskedActions(DQNTorchModel):
 
 
 if __name__ == "__main__":
+    ray.init()
+
     alg_name = "DQN"
     ModelCatalog.register_custom_model("pa_model", TorchMaskedActions)
     # function that outputs the environment you wish to register.
@@ -72,7 +79,8 @@ if __name__ == "__main__":
         env = leduc_holdem_v4.env()
         return env
 
-    register_env("leduc_holdem", lambda config: PettingZooEnv(env_creator()))
+    env_name = "leduc_holdem_v4"
+    register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
     test_env = PettingZooEnv(env_creator())
     obs_space = test_env.observation_space
@@ -81,8 +89,8 @@ if __name__ == "__main__":
 
     config = (
         DQNConfig()
-        .environment(env="leduc_holdem")
-        .rollouts(num_rollout_workers=1, rollout_fragment_length=30, horizon=200)
+        .environment(env=env_name)
+        .rollouts(num_rollout_workers=1, rollout_fragment_length=30)
         .training(
             train_batch_size=200,
             hiddens=[],
@@ -94,10 +102,12 @@ if __name__ == "__main__":
                 "player_0": (None, obs_space, act_space, {}),
                 "player_1": (None, obs_space, act_space, {}),
             },
-            policy_mapping_fn=lambda agent_id: agent_id,
+            policy_mapping_fn=(lambda agent_id, *args, **kwargs: agent_id),
         )
         .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
-        .debugging(log_level="DEBUG")
+        .debugging(
+            log_level="DEBUG"
+        )  # TODO: change to ERROR to match pistonball example
         .framework(framework="torch")
         .exploration(
             exploration_config={
