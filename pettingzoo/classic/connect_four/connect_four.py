@@ -203,7 +203,7 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.render()
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         # reset environment
         self.board = [0] * (6 * 7)
 

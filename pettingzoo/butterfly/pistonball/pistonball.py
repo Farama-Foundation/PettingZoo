@@ -391,7 +391,7 @@ class raw_env(AECEnv, EzPickle):
             cap(piston.position[1] - v * self.pixels_per_position),
         )
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed)
         self.space = pymunk.Space(threaded=False)

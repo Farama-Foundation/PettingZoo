@@ -372,7 +372,7 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
         warnings.warn(missing_attr_warning.format(name="possible_agents"))
 
     # checks that reset takes arguments called seed and options
-    env.reset(seed=0, return_info=True, options={"options": 1})
+    env.reset(seed=0, options={"options": 1})
 
     assert isinstance(
         env, pettingzoo.AECEnv

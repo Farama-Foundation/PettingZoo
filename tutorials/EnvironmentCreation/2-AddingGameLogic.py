@@ -19,7 +19,7 @@ class CustomEnvironment(ParallelEnv):
         self.timestep = None
         self.possible_agents = ["prisoner", "guard"]
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.agents = copy(self.possible_agents)
         self.timestep = 0
 

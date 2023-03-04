@@ -432,7 +432,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         """Resets the environment for a new game and returns observations of current player as List of ints.
 
         Returns:
