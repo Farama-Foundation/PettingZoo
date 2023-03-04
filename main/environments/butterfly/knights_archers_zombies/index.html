@@ -490,8 +490,8 @@ Note that for positions, [0, 0] is the top left corner of the image. Down is pos
 </div>
 <p>If there is no entity there, the whole typemask (as well as the whole state vector) will be 0.</p>
 <p>As a result, setting <code class="docutils literal notranslate"><span class="pre">use_typemask=True</span></code> results in the observation being a (N+1)x11 vector.</p>
-<p><strong>Transformers</strong> (Experimental)</p>
-<p>There is an option to also pass <code class="docutils literal notranslate"><span class="pre">transformer=True</span></code> as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is <strong>still experimental</strong> as the state and observation size are no longer constant. In particular, <code class="docutils literal notranslate"><span class="pre">N</span></code> is now a
+<p><strong>Sequence Space</strong> (Experimental)</p>
+<p>There is an option to also pass <code class="docutils literal notranslate"><span class="pre">sequence_space=True</span></code> as a kwarg to the environment. This just removes all non-existent entities from the observation and state vectors. Note that this is <strong>still experimental</strong> as the state and observation size are no longer constant. In particular, <code class="docutils literal notranslate"><span class="pre">N</span></code> is now a
 variable number.</p>
 </section>
 <section id="image-based">
@@ -521,7 +521,7 @@ Press ‘M’ key to spawn a new knight.</p>
   <span class="n">max_cycles</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span>
   <span class="n">vector_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
   <span class="n">use_typemasks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-  <span class="n">transformer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+  <span class="n">sequence_space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">spawn_rate</span></code>:  how many cycles before a new zombie is spawned. A lower number means zombies are spawned at a higher rate.</p>
@@ -535,7 +535,7 @@ Press ‘M’ key to spawn a new knight.</p>
 <p><code class="docutils literal notranslate"><span class="pre">line_death</span></code>:  if set to False, agents do not die when they touch the top or bottom border. If True, agents die as soon as they touch the top or bottom border.</p>
 <p><code class="docutils literal notranslate"><span class="pre">vector_state</span></code>: whether to use vectorized state, if set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, an image-based observation will be provided instead.</p>
 <p><code class="docutils literal notranslate"><span class="pre">use_typemasks</span></code>: only relevant when <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> is set, adds typemasks to the vectors.</p>
-<p><code class="docutils literal notranslate"><span class="pre">transformer</span></code>: <strong>experimental</strong>, only relevant when <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> is set, removes non-existent entities in the vector state.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sequence_space</span></code>: <strong>experimental</strong>, only relevant when <code class="docutils literal notranslate"><span class="pre">vector_state=True</span></code> is set, removes non-existent entities in the vector state.</p>
 </section>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Permalink to this heading">#</a></h2>
