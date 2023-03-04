@@ -26,7 +26,7 @@ class WaterworldBase:
         radius=0.015,
         obstacle_radius=0.1,
         obstacle_coord=[(0.5, 0.5)],
-        pursuer_max_accel=0.02,
+        pursuer_max_accel=0.5,
         pursuer_speed=0.2,
         evader_speed=0.1,
         poison_speed=0.1,
