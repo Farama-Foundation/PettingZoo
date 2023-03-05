@@ -164,8 +164,7 @@ class Scenario(BaseScenario):
         rew = 0
         if agent.collide:
             for a in world.agents:
-                if self.is_collision(a, agent):
-                    rew -= 1
+                rew -= 1.0 * (self.is_collision(a, agent) and a != agent)
         return rew
 
     def global_reward(self, world):
