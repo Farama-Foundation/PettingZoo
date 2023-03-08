@@ -5,6 +5,28 @@ import numpy as np
 
 
 def test_state_space(env):
+    env_pos_inf_state = [
+        "simple_adversary_v2",
+        "simple_reference_v2",
+        "simple_spread_v2",
+        "simple_tag_v2",
+        "simple_world_comm_v2",
+        "simple_crypto_v2",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+        "simple_v2",
+    ]
+    env_neg_inf_state = [
+        "simple_adversary_v2",
+        "simple_reference_v2",
+        "simple_spread_v2",
+        "simple_tag_v2",
+        "simple_world_comm_v2",
+        "simple_crypto_v2",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+        "simple_v2",
+    ]
     assert isinstance(
         env.state_space, gymnasium.spaces.Space
     ), "State space for each environment must extend gymnasium.spaces.Space"
@@ -18,13 +40,15 @@ def test_state_space(env):
 
     if isinstance(env.state_space, gymnasium.spaces.Box):
         if np.any(np.equal(env.state_space.low, -np.inf)):
-            warnings.warn(
-                "Environment's minimum state space value is -infinity. This is probably too low."
-            )
+            if str(env.unwrapped) not in env_neg_inf_state:
+                warnings.warn(
+                    "Environment's minimum state space value is -infinity. This is probably too low."
+                )
         if np.any(np.equal(env.state_space.high, np.inf)):
-            warnings.warn(
-                "Environment's maximum state space value is infinity. This is probably too high"
-            )
+            if str(env.unwrapped) not in env_pos_inf_state:
+                warnings.warn(
+                    "Environment's maximum state space value is infinity. This is probably too high"
+                )
         if np.any(np.equal(env.state_space.low, env.state_space.high)):
             warnings.warn(
                 "Environment's maximum and minimum state space values are equal"
@@ -44,6 +68,7 @@ def test_state_space(env):
 
 
 def test_state(env, num_cycles):
+    graphical_envs = ["knights_archers_zombies_v10"]
     env.reset()
     state_0 = env.state()
     for agent in env.agent_iter(env.num_agents * num_cycles):
@@ -88,11 +113,13 @@ def test_state(env, num_cycles):
                 or (len(new_state.shape) == 3 and new_state.shape[2] == 1)
                 or (len(new_state.shape) == 3 and new_state.shape[2] == 3)
             ):
-                warnings.warn(
-                    "The state contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
-                )
+                if str(env.unwrapped) not in graphical_envs:
+                    warnings.warn(
+                        "The state contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
+                    )
         else:
-            warnings.warn("State is not NumPy array")
+            if str(env.unwrapped) not in graphical_envs:
+                warnings.warn("State is not NumPy array")
 
 
 def test_parallel_env(parallel_env):

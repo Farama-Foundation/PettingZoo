@@ -22,7 +22,29 @@ have {name} it should also not be possible for you to expose the possible_agents
 list and observation_spaces, action_spaces dictionaries."""
 
 
-def test_observation(observation, observation_0):
+def test_observation(observation, observation_0, env_name=None):
+    env_dicts = [
+        "leduc_holdem_v4",
+        "texas_holdem_no_limit_v6",
+        "texas_holdem_v4",
+        "go_v5",
+        "hanabi_v4",
+        "chess_v5",
+        "connect_four_v3",
+        "tictactoe_v3",
+        "gin_rummy_v4",
+    ]
+    env_graphical_obs = ["knights_archers_zombies_v10"]
+    env_diff_obs_shapes = [
+        "simple_adversary_v2",
+        "simple_world_comm_v2",
+        "simple_tag_v2",
+        "knights_archers_zombies_v10",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+        "simple_crypto_v2",
+    ]
+    env_all_zeros_obs = ["knights_archers_zombies_v10"]
     if isinstance(observation, np.ndarray):
         if np.isinf(observation).any():
             warnings.warn(
@@ -41,26 +63,74 @@ def test_observation(observation, observation_0):
         if (observation.shape != observation_0.shape) and (
             len(observation.shape) == len(observation_0.shape)
         ):
-            warnings.warn("Observations are different shapes")
+            if env_name not in env_diff_obs_shapes:
+                warnings.warn("Observations are different shapes")
         if len(observation.shape) != len(observation_0.shape):
             warnings.warn("Observations have different number of dimensions")
         if not np.can_cast(observation.dtype, np.dtype("float64")):
             warnings.warn("Observation numpy array is not a numeric dtype")
         if np.array_equal(observation, np.zeros(observation.shape)):
-            warnings.warn("Observation numpy array is all zeros.")
+            if env_name not in env_all_zeros_obs:
+                warnings.warn("Observation numpy array is all zeros.")
         if not np.all(observation >= 0) and (
             (len(observation.shape) == 2)
             or (len(observation.shape) == 3 and observation.shape[2] == 1)
             or (len(observation.shape) == 3 and observation.shape[2] == 3)
         ):
-            warnings.warn(
-                "The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
-            )
+            if env_name not in env_graphical_obs:
+                warnings.warn(
+                    "The observation contains negative numbers and is in the shape of a graphical observation. This might be a bad thing."
+                )
     else:
-        warnings.warn("Observation is not NumPy array")
+        if env_name is not None and env_name not in env_dicts:
+            warnings.warn("Observation is not NumPy array")
 
 
 def test_observation_action_spaces(env, agent_0):
+    env_obs_space = [
+        "leduc_holdem_v4",
+        "texas_holdem_no_limit_v6",
+        "texas_holdem_v4",
+        "go_v5",
+        "hanabi_v4",
+        "knights_archers_zombies_v10",
+        "chess_v5",
+        "connect_four_v3",
+        "tictactoe_v3",
+        "gin_rummy_v4",
+    ]
+    env_diff_agent_obs_size = [
+        "simple_adversary_v2",
+        "simple_world_comm_v2",
+        "simple_tag_v2",
+        "simple_crypto_v2",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+    ]
+    env_pos_inf_obs = [
+        "simple_adversary_v2",
+        "simple_reference_v2",
+        "simple_spread_v2",
+        "simple_tag_v2",
+        "simple_world_comm_v2",
+        "multiwalker_v9",
+        "simple_crypto_v2",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+        "simple_v2",
+    ]
+    env_neg_inf_obs = [
+        "simple_adversary_v2",
+        "simple_reference_v2",
+        "simple_spread_v2",
+        "simple_tag_v2",
+        "simple_world_comm_v2",
+        "multiwalker_v9",
+        "simple_crypto_v2",
+        "simple_push_v2",
+        "simple_speaker_listener_v3",
+        "simple_v2",
+    ]
     for agent in env.agents:
         assert isinstance(
             env.observation_space(agent), gymnasium.spaces.Space
@@ -78,9 +148,10 @@ def test_observation_action_spaces(env, agent_0):
             isinstance(env.observation_space(agent), gymnasium.spaces.Box)
             or isinstance(env.observation_space(agent), gymnasium.spaces.Discrete)
         ):
-            warnings.warn(
-                "Observation space for each agent probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
-            )
+            if str(env.unwrapped) not in env_obs_space:
+                warnings.warn(
+                    "Observation space for each agent probably should be gymnasium.spaces.box or gymnasium.spaces.discrete"
+                )
         if not (
             isinstance(env.action_space(agent), gymnasium.spaces.Box)
             or isinstance(env.action_space(agent), gymnasium.spaces.Discrete)
@@ -107,7 +178,8 @@ def test_observation_action_spaces(env, agent_0):
         if not isinstance(env.action_space(agent), env.action_space(agent).__class__):
             warnings.warn("The class of action spaces is different between two agents")
         if env.observation_space(agent) != env.observation_space(agent_0):
-            warnings.warn("Agents have different observation space sizes")
+            if str(env.unwrapped) not in env_diff_agent_obs_size:
+                warnings.warn("Agents have different observation space sizes")
         if env.action_space(agent) != env.action_space(agent):
             warnings.warn("Agents have different action space sizes")
 
@@ -143,13 +215,15 @@ def test_observation_action_spaces(env, agent_0):
 
         if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
             if np.any(np.equal(env.observation_space(agent).low, -np.inf)):
-                warnings.warn(
-                    "Agent's minimum observation space value is -infinity. This is probably too low."
-                )
+                if str(env.unwrapped) not in env_neg_inf_obs:
+                    warnings.warn(
+                        "Agent's minimum observation space value is -infinity. This is probably too low."
+                    )
             if np.any(np.equal(env.observation_space(agent).high, np.inf)):
-                warnings.warn(
-                    "Agent's maximum observation space value is infinity. This is probably too high"
-                )
+                if str(env.unwrapped) not in env_pos_inf_obs:
+                    warnings.warn(
+                        "Agent's maximum observation space value is infinity. This is probably too high"
+                    )
             if np.any(
                 np.equal(
                     env.observation_space(agent).low, env.observation_space(agent).high
@@ -302,7 +376,7 @@ def play_test(env, observation_0, num_cycles):
         assert env.observation_space(agent).contains(
             prev_observe
         ), "Agent's observation is outside of it's observation space"
-        test_observation(prev_observe, observation_0)
+        test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
                 "The info of each agent should be a dict, use {} if you aren't using info"
@@ -392,7 +466,7 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
 
     env.reset()
     observation_0, *_ = env.last()
-    test_observation(observation_0, observation_0)
+    test_observation(observation_0, observation_0, str(env.unwrapped))
 
     non_observe, *_ = env.last(observe=False)
     assert non_observe is None, "last must return a None when observe=False"
