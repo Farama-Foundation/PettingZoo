@@ -309,7 +309,7 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.render()
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)
 
