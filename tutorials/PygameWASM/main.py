@@ -35,7 +35,7 @@ async def main():
             await asyncio.sleep(0)  # Very important, and keep it 0
 
         print("Terminated") if termination else print("Truncated")
-        print("Rewards: ", reward)
+        print(f"Reward ({agent}): {reward}")
 
     await asyncio.sleep(0)  # Very important, and keep it 0
 
