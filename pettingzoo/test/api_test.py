@@ -89,7 +89,6 @@ env_neg_inf_obs = [
 
 
 def test_observation(observation, observation_0, env_name=None):
-
     if not isinstance(observation, np.ndarray) or (
         env_name is not None and env_name not in env_obs_dicts
     ):

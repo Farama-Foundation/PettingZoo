@@ -28,7 +28,6 @@ env_neg_inf_state = [
 
 
 def test_state_space(env):
-
     assert isinstance(
         env.state_space, gymnasium.spaces.Space
     ), "State space for each environment must extend gymnasium.spaces.Space"
