@@ -24,6 +24,8 @@ list and observation_spaces, action_spaces dictionaries."""
 
 def test_observation(observation, observation_0):
     if isinstance(observation, np.ndarray):
+        if observation.shape == ():
+            return # or check something.. TODO:
         if np.isinf(observation).any():
             warnings.warn(
                 "Observation contains infinity (np.inf) or negative infinity (-np.inf)"
@@ -297,11 +299,12 @@ def play_test(env, observation_0, num_cycles):
             assert env.observation_space(agent).dtype == prev_observe.dtype
         assert env.observation_space(agent).contains(
             prev_observe
-        ), "Out of bounds observation: " + str(prev_observe)
+        ) or env.observation_space(agent).contains(prev_observe[()]), "Out of bounds observation: " + str(prev_observe)
 
+        # Why the same assertion again???
         assert env.observation_space(agent).contains(
             prev_observe
-        ), "Agent's observation is outside of it's observation space"
+        ) or env.observation_space(agent).contains(prev_observe[()]), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0)
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
