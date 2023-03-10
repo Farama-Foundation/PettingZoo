@@ -283,7 +283,6 @@ class SimpleEnv(AECEnv):
         elif self.render_mode == "human":
             pygame.display.flip()
             return
-        
 
     def draw(self):
         # clear screen
