@@ -16,11 +16,14 @@ butterfly/pistonball
     :file: butterfly/list.html
 ```
 
-All butterfly environments were created by us using PyGame with visual Atari spaces. In Prison, all agents are completely independent (i.e. no coordination is possible, each agent is in it's own cell). It is intended as a debugging tool.
+Butterfly environments are challenging scenarios created by Farama, using Pygame with visual Atari spaces. 
 
-All other environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.
+All environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.
 
-All environments are highly configurable via arguments specified in each environment's documentation.
+Environments are highly configurable via arguments specified in their respective documentation:
+[Cooperative Pong](https://pettingzoo.farama.org/environments/butterfly/cooperative_pong/),
+[Knights Archers Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/),
+[Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/).
 
 ### Installation 
 The unique dependencies for this set of environments can be installed via:
