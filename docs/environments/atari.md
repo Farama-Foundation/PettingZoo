@@ -60,8 +60,12 @@ env = space_invaders_v2.env(render_mode="human")
 env.reset()
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    action = None if termination or truncation else env.action_space(agent).sample()  # this is where you would insert your policy
+    if termination or truncation:
+        action = None
+    else:
+        env.action_space(agent).sample()  # this is where you would insert your policy
     env.step(action)
+env.close()
 ```
 
 ### Games Overview

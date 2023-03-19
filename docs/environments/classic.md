@@ -49,6 +49,7 @@ for agent in env.agent_iter():
     else:
         action = env.action_space(agent).sample(observation["action_mask"])  # this is where you would insert your policy
     env.step(action)
+env.close()
 ```
 
 The classic environments have a few differences from others in this library:

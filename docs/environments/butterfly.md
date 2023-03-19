@@ -39,11 +39,11 @@ To launch a [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pi
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.parallel_env(render_mode="human")
 
-env.reset()
+observations = env.reset()
 while env.agents:
-    actions = {agent: env.action_space(agent).sample() for agent in env.possible_agents}
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}  # this is where you would insert your policy
     observations, rewards, terminations, truncations, infos = env.step(actions)
-    env.step(actions)
+env.close()
 ```
 
 To launch a [Knights Archers Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py), controls are WASD and space):

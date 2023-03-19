@@ -41,6 +41,7 @@ for agent in env.agent_iter():
     else:
         action = env.action_space(agent).sample()
     env.step(action)
+env.close()
 ```
 
 Please note that we've made major bug fixes to all environments included. As such, we discourage directly comparing results on these environments to those in the original paper.
