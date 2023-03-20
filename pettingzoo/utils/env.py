@@ -66,7 +66,6 @@ class AECEnv:
     def reset(
         self,
         seed: Optional[int] = None,
-        return_info: bool = False,
         options: Optional[dict] = None,
     ) -> None:
         """Resets the environment to a starting state."""
@@ -303,7 +302,6 @@ class ParallelEnv:
     def reset(
         self,
         seed: Optional[int] = None,
-        return_info: bool = False,
         options: Optional[dict] = None,
     ) -> ObsDict:
         """Resets the environment.
