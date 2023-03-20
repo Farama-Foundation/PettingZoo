@@ -2,8 +2,13 @@
 title: "RLlib"
 ---
 
-# RLlib
+## RLlib Tutorial
 
+[PPO for Pistonball (Parallel)](/tutorials/rllib/pistonball/)
+
+[DQN for Simple Poker](/tutorials/rllib/holdem/)
+
+#  RLlib Overview
 
 ```{figure} https://docs.ray.io/en/latest/_images/rllib-stack.svg
     :alt: RLlib stack
@@ -17,16 +22,16 @@ See the [documentation](https://docs.ray.io/en/latest/rllib/index.html) for more
  * [PettingZoo Env](https://docs.ray.io/en/latest/rllib/rllib-env.html#pettingzoo-multi-agent-environments)
  * [Implemented Algorithms](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html)
 
-
-## RLlib official examples using PettingZoo:
+## Official examples using PettingZoo:
 
 ### Training:
  * [simple multi-agent: rock-paper-scissors](https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py)
- * [multi-agent parameter sharing: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_parameter_sharing.py) (#TODO: test)
+ * [multi-agent parameter sharing: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_parameter_sharing.py)
  * [multi-agent independent learning: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_independent_learning.py)
- * [multi-agent leela chess zero](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/examples/multi-agent-leela-chess-zero.py) (#TODO test)
- * [multi-agent leela chess zero test](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/algorithms/leela_chess_zero/tests/test_leela_chess_zero.py)
- * [PR: connect four self-play with pettingzoo](https://github.com/ray-project/ray/pull/33481)
+ * [multi-agent leela chess zero](https://github.com/ray-project/ray/blob/master/rllib/examples/multi-agent-leela-chess-zero.py) 
+ * [PR: connect four self-play with pettingzoo](https://github.com/ray-project/ray/pull/33481) 
+
+[//]: # (TODO: test waterworld, leela chess zero, add PR to pettingzoo if it isn't merged)
 
 ### Environments
  * [connect four](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/examples/env/pettingzoo_connect4.py)
