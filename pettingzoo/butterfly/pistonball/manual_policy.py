@@ -51,11 +51,10 @@ class ManualPolicy:
 if __name__ == "__main__":
     from pettingzoo.butterfly import pistonball_v6
 
-    clock = pygame.time.Clock()
-
-    env = pistonball_v6.env()
+    env = pistonball_v6.env(render_mode="human")
     env.reset()
 
+    clock = pygame.time.Clock()
     manual_policy = pistonball_v6.ManualPolicy(env)
 
     for agent in env.agent_iter():
@@ -73,8 +72,6 @@ if __name__ == "__main__":
             1,
         )
         env.step(action)
-
-        env.render()
 
         if termination or truncation:
             env.reset()
