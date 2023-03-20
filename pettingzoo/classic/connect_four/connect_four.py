@@ -259,7 +259,10 @@ class raw_env(AECEnv):
             preview_red, (int(tile_size * (9 / 13)), int(tile_size * (9 / 13)))
         )
 
-        preview_chips = {self.agents[0]: preview_red, self.agents[1]: preview_black}
+        preview_chips = {
+            self.possible_agents[0]: preview_red,
+            self.possible_agents[1]: preview_black,
+        }
 
         board_img = get_image(os.path.join("img", "Connect4Board.png"))
         board_img = pygame.transform.scale(
