@@ -143,7 +143,7 @@ class SimpleEnv(AECEnv):
         )
         return np.concatenate(states, axis=None)
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.scenario.reset_world(self.world, self.np_random)
@@ -276,15 +276,13 @@ class SimpleEnv(AECEnv):
 
         self.enable_render(self.render_mode)
 
-        observation = np.array(pygame.surfarray.pixels3d(self.screen))
-        if self.render_mode == "human":
-            self.draw()
+        self.draw()
+        if self.render_mode == "rgb_array":
+            observation = np.array(pygame.surfarray.pixels3d(self.screen))
+            return np.transpose(observation, axes=(1, 0, 2))
+        elif self.render_mode == "human":
             pygame.display.flip()
-        return (
-            np.transpose(observation, axes=(1, 0, 2))
-            if self.render_mode == "rgb_array"
-            else None
-        )
+            return
 
     def draw(self):
         # clear screen
