@@ -7,12 +7,12 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/content/environment_tests.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="AEC API" href="../../api/aec/" /><link rel="prev" title="Environment Creation" href="../environment_creation/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/content/environment_tests.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/api/shimmy_wrappers.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="Utils" href="../utils/" /><link rel="prev" title="Supersuit Wrappers" href="../supersuit_wrappers/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/api/shimmy_wrappers.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07.dev1 -->
-        <title>Testing Environments - PettingZoo Documentation</title>
+        <title>Shimmy Compatibility Wrappers - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=721f65a87c37740baa8d605b09db5bec3a2987a8" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=b0c92cd440df7c18a0306b0433406327ff2c572f" />
@@ -223,19 +223,19 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../environment_creation/">Environment Creation</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Testing Environments</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../api/aec/">AEC API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/parallel/">Parallel API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/pz_wrappers/">PettingZoo Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/shimmy_wrappers/">Shimmy Compatibility Wrappers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/utils/">Utils</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../aec/">AEC API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parallel/">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Shimmy Compatibility Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
 <ul>
@@ -367,101 +367,81 @@
           </div>
           <article role="main">
             
-            <section id="testing-environments">
-<h1>Testing Environments<a class="headerlink" href="#testing-environments" title="Permalink to this heading">#</a></h1>
-<p>PettingZoo has a number of compliance tests for environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.</p>
-<section id="api-test">
-<h2>API Test<a class="headerlink" href="#api-test" title="Permalink to this heading">#</a></h2>
-<p>PettingZoo’s API has a number of features and requirements. To make sure your environment is consistent with the API, we have the api_test. Below is an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">api_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">verbose_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>As you can tell, you simply pass an environment to the test. The test will assert or give some other error on an API issue, and will return normally if it passes.</p>
-<p>The optional arguments are:</p>
+            <section id="shimmy-compatibility-wrappers">
+<h1>Shimmy Compatibility Wrappers<a class="headerlink" href="#shimmy-compatibility-wrappers" title="Permalink to this heading">#</a></h1>
+<p>The <a class="reference external" href="https://shimmy.farama.org/">Shimmy</a> package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">shimmy</span></code>) allows commonly used external reinforcement learning environments to be used with PettingZoo and Gymnasium.</p>
+<section id="supported-multi-agent-environments">
+<h2>Supported multi-agent environments:<a class="headerlink" href="#supported-multi-agent-environments" title="Permalink to this heading">#</a></h2>
+<section id="openspiel">
+<h3><a class="reference external" href="https://shimmy.farama.org/contents/open_spiel/">OpenSpiel</a><a class="headerlink" href="#openspiel" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>: runs the environment for that many cycles and checks that the output is consistent with the API.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">verbose_progress</span></code>: Prints out messages to indicate partial completion of the test. Useful for debugging environments.</p></li>
+<li><p>70+ implementations of various board games</p></li>
 </ul>
 </section>
-<section id="parallel-api-test">
-<h2>Parallel API Test<a class="headerlink" href="#parallel-api-test" title="Permalink to this heading">#</a></h2>
-<p>This is an analogous version of the API test, but for parallel environments. You can use this test like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">parallel_api_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
-<span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="deepmind-control-soccer">
+<h3><a class="reference external" href="https://shimmy.farama.org/contents/dm_multi/">DeepMind Control Soccer</a><a class="headerlink" href="#deepmind-control-soccer" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Multi-agent robotics environment where teams of agents compete in soccer.</p></li>
+</ul>
 </section>
-<section id="seed-test">
-<h2>Seed Test<a class="headerlink" href="#seed-test" title="Permalink to this heading">#</a></h2>
-<p>To have a properly reproducible environment that utilizes randomness, you need to be able to make it deterministic during evaluation by setting a seed for the random number generator that defines the random behavior. The seed test checks that calling the <code class="docutils literal notranslate"><span class="pre">seed()</span></code> method with a constant actually makes the environment deterministic.</p>
-<p>The seed test takes in a function that creates a pettingzoo environment. For example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">seed_test</span><span class="p">,</span> <span class="n">parallel_seed_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env_fn</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span>
-<span class="n">seed_test</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_kept_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<section id="deepmind-melting-pot">
+<h3><a class="reference external" href="https://github.com/deepmind/meltingpot">DeepMind Melting Pot</a><a class="headerlink" href="#deepmind-melting-pot" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Suite of test scenarios for multi-agent reinforcement learning</p></li>
+<li><p>Assesses generalization to novel social situations:</p>
+<ul>
+<li><p>familiar and unfamiliar individuals</p></li>
+<li><p>social interactions: cooperation, competition, deception, reciprocation, trust, stubbornness</p></li>
+</ul>
+</li>
+<li><p>50+ substrates and 250+ test scenarios</p></li>
+</ul>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<p>To load a DeepMind Control multi-agent soccer game:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">DmControlMultiAgentCompatibilityV0</span>
+<span class="kn">from</span> <span class="nn">dm_control.locomotion</span> <span class="kn">import</span> <span class="n">soccer</span> <span class="k">as</span> <span class="n">dm_soccer</span>
 
-<span class="c1"># or for parallel environments</span>
-<span class="n">parallel_env_fn</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span>
-<span class="n">parallel_seed_test</span><span class="p">(</span><span class="n">parallel_env_fn</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_kept_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">dm_soccer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">team_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">DmControlMultiAgentCompatibilityV0</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+
+<span class="n">observations</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>  <span class="c1"># this is where you would insert your policy</span>
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Internally, there are two separate tests.</p>
-<ol class="arabic simple">
-<li><p>Do two separate environments give the same result after the environment is seeded?</p></li>
-<li><p>Does a single environment give the same result after seed() then reset() is called?</p></li>
-</ol>
-<p>The first optional argument, <code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>, indicates how long the environment will be run to check for determinism. Some environments only fail the test long after initialization.</p>
-<p>The second optional argument, <code class="docutils literal notranslate"><span class="pre">test_kept_state</span></code> allows the user to disable the second test. Some physics based environments fail this test due to barely detectable differences due to caches, etc, which are not important enough to matter.</p>
-<section id="max-cycles-test">
-<h3>Max Cycles Test<a class="headerlink" href="#max-cycles-test" title="Permalink to this heading">#</a></h3>
-<p>The max cycles test tests that the <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code> environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code> argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>. An example test usage looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">max_cycles_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">max_cycles_test</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<p>To load an OpenSpiel game of <a class="reference external" href="https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon">backgammon</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">OpenspielCompatibilityV0</span>
+<span class="kn">import</span> <span class="nn">pyspiel</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">pyspiel</span><span class="o">.</span><span class="n">load_game</span><span class="p">(</span><span class="s2">&quot;backgammon&quot;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">OpenspielCompatibilityV0</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>  <span class="c1"># this is where you would insert your policy</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-</section>
-<section id="render-test">
-<h2>Render Test<a class="headerlink" href="#render-test" title="Permalink to this heading">#</a></h2>
-<p>The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports <code class="docutils literal notranslate"><span class="pre">'human'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ansi'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'rgb_array'</span></code> modes).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">render_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">render_test</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The render test method takes in an optional argument <code class="docutils literal notranslate"><span class="pre">custom_tests</span></code> that allows for additional tests in non-standard modes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">custom_tests</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;svg&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">render_result</span><span class="p">:</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">render_result</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
+<p>If you use this in your research, please cite:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@software</span><span class="p">{</span><span class="n">shimmy2022github</span><span class="p">,</span>
+  <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">Jordan</span> <span class="n">Terry</span><span class="p">,</span> <span class="n">Mark</span> <span class="n">Towers</span><span class="p">,</span> <span class="n">Jun</span> <span class="n">Jet</span> <span class="n">Tai</span><span class="p">},</span>
+  <span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">Shimmy</span><span class="p">:</span> <span class="n">Gymnasium</span> <span class="ow">and</span> <span class="n">Pettingzoo</span> <span class="n">Wrappers</span> <span class="k">for</span> <span class="n">Commonly</span> <span class="n">Used</span> <span class="n">Environments</span><span class="p">},</span>
+  <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Farama</span><span class="o">-</span><span class="n">Foundation</span><span class="o">/</span><span class="n">Shimmy</span><span class="p">},</span>
+  <span class="n">version</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.2.0</span><span class="p">},</span>
+  <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2022</span><span class="p">},</span>
 <span class="p">}</span>
-<span class="n">render_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">custom_tests</span><span class="o">=</span><span class="n">custom_tests</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="performance-benchmark-test">
-<h2>Performance Benchmark Test<a class="headerlink" href="#performance-benchmark-test" title="Permalink to this heading">#</a></h2>
-<p>To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">performance_benchmark</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">performance_benchmark</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="save-observation-test">
-<h2>Save Observation Test<a class="headerlink" href="#save-observation-test" title="Permalink to this heading">#</a></h2>
-<p>The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">test_save_obs</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">test_save_obs</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -472,18 +452,18 @@
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../../api/aec/">
+            <a class="next-page" href="../utils/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">AEC API</div>
+                <div class="title">Utils</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../environment_creation/">
+            <a class="prev-page" href="../supersuit_wrappers/">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -492,7 +472,7 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Environment Creation</div>
+                <div class="title">Supersuit Wrappers</div>
                 
               </div>
             </a>
@@ -536,16 +516,15 @@
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">Testing Environments</a><ul>
-<li><a class="reference internal" href="#api-test">API Test</a></li>
-<li><a class="reference internal" href="#parallel-api-test">Parallel API Test</a></li>
-<li><a class="reference internal" href="#seed-test">Seed Test</a><ul>
-<li><a class="reference internal" href="#max-cycles-test">Max Cycles Test</a></li>
+<li><a class="reference internal" href="#">Shimmy Compatibility Wrappers</a><ul>
+<li><a class="reference internal" href="#supported-multi-agent-environments">Supported multi-agent environments:</a><ul>
+<li><a class="reference internal" href="#openspiel">OpenSpiel</a></li>
+<li><a class="reference internal" href="#deepmind-control-soccer">DeepMind Control Soccer</a></li>
+<li><a class="reference internal" href="#deepmind-melting-pot">DeepMind Melting Pot</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#render-test">Render Test</a></li>
-<li><a class="reference internal" href="#performance-benchmark-test">Performance Benchmark Test</a></li>
-<li><a class="reference internal" href="#save-observation-test">Save Observation Test</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#citation">Citation</a></li>
 </ul>
 </li>
 </ul>

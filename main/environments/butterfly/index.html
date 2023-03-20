@@ -203,7 +203,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -234,6 +234,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api/parallel/">Parallel API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/pz_wrappers/">PettingZoo Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/shimmy_wrappers/">Shimmy Compatibility Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
@@ -357,7 +358,7 @@
                 </svg>
               </button>
             </div>
-            <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <label class="toc-overlay-icon toc-content-icon" for="__toc">
               <div class="visually-hidden">Toggle table of contents sidebar</div>
               <i class="icon"><svg>
                   <use href="#svg-toc"></use>
@@ -416,13 +417,55 @@
     </body>
 </html>
     
+<p>Butterfly environments are challenging scenarios created by Farama, using Pygame with visual Atari spaces.</p>
+<p>All environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.</p>
+<p>Environments are highly configurable via arguments specified in their respective documentation:
+<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/cooperative_pong/">Cooperative Pong</a>,
+<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights Archers Zombies</a>,
+<a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Pistonball</a>.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
 <p>The unique dependencies for this set of environments can be installed via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pettingzoo<span class="o">[</span>butterfly<span class="o">]</span>
 </pre></div>
 </div>
-<p>All butterfly environments were created by us using PyGame with visual Atari spaces. In Prison, all agents are completely independent (i.e. no coordination is possible, each agent is in it’s own cell). It is intended as a debugging tool.</p>
-<p>All other environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.</p>
-<p>All environments are highly configurable via arguments specified in each environment’s documentation.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<p>To launch a <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Pistonball</a> environment with agents taking random actions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+
+<span class="n">observations</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>  <span class="c1"># this is where you would insert your policy</span>
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To launch a <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights Archers Zombies</a> environment with interactive user input (see <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py">manual_policy.py</a>, controls are WASD and space):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">knights_archers_zombies_v10</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+<span class="n">manual_policy</span> <span class="o">=</span> <span class="n">knights_archers_zombies_v10</span><span class="o">.</span><span class="n">ManualPolicy</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+    <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
+
+    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">manual_policy</span><span class="o">.</span><span class="n">agent</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">manual_policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
           </article>
@@ -470,8 +513,28 @@
           
         </footer>
       </div>
-      <aside class="toc-drawer no-toc">
+      <aside class="toc-drawer">
         
+        
+        <div class="toc-sticky toc-scroll">
+          <div class="toc-title-container">
+            <span class="toc-title">
+              On this page
+            </span>
+          </div>
+          <div class="toc-tree-container">
+            <div class="toc-tree">
+              <ul>
+<li><a class="reference internal" href="#">Butterfly</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </div>
+        </div>
         
         
       </aside>

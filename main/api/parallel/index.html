@@ -234,6 +234,7 @@
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Parallel API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pz_wrappers/">PettingZoo Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shimmy_wrappers/">Shimmy Compatibility Wrappers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/">Utils</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Environments</span></p>
@@ -371,8 +372,9 @@
 <p>In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via <code class="docutils literal notranslate"><span class="pre">&lt;game&gt;.parallel_env()</span></code>. This API is based around the paradigm of <em>Partially Observable Stochastic Games</em> (POSGs) and the details are similar to <a class="reference external" href="https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical">RLLib’s MultiAgent environment specification</a>, except we allow for different observation and action spaces between the agents.</p>
 <section id="example-usage">
 <h2>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h2>
-<p>Environments can be interacted with as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
+<p>Parallel environments can be interacted with as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
+<span class="n">parallel_env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
 <span class="n">observations</span> <span class="o">=</span> <span class="n">parallel_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
