@@ -1,8 +1,8 @@
 ---
-title: "RLLib 2: RL for Simple Poker"
+title: "RLlib: DQN for Simple Poker (AEC)"
 ---
 
-# RLLib 2: RL for Simple Poker
+# RLlib: DQN for Simple Poker (AEC)
 
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.
@@ -12,7 +12,7 @@ To follow this tutorial, you will need to install the dependencies shown below. 
 ```
 
 ## Code
-The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLLib 2. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
+The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLLib. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
 
 ### Training the RL agent
 
