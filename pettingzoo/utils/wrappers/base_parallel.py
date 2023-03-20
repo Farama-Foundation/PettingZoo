@@ -5,7 +5,7 @@ from gymnasium.utils import seeding
 from ..env import ParallelEnv
 
 
-class BaseParallelWraper(ParallelEnv):
+class BaseParallelWrapper(ParallelEnv):
     def __init__(self, env):
         self.env = env
 
