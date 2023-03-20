@@ -238,5 +238,8 @@ class raw_env(AECEnv):
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
