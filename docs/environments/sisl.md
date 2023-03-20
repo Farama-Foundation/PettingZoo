@@ -16,13 +16,33 @@ sisl/waterworld
     :file: sisl/list.html
 ```
 
+The SISL environments are a set of three cooperative multi-agent benchmark environments, created at SISL (Stanford Intelligent Systems Laboratory)) and released as part of "Cooperative multi-agent control using deep reinforcement learning." The code was originally released at: https://github.com/sisl/MADRL
+
+### Installation
+
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
 pip install pettingzoo[sisl]
 ````
 
-The SISL environments are a set of three cooperative multi-agent benchmark environments, created at SISL (Stanford Intelligent Systems Laboratory)) and released as part of "Cooperative multi-agent control using deep reinforcement learning." The code was originally released at: https://github.com/sisl/MADRL
+### Usage
+To launch a [Waterworld](https://pettingzoo.farama.org/environments/sisl/waterworld/) environment with agents taking random actions:
+
+```python
+from pettingzoo.sisl import waterworld_v4
+env = waterworld_v4.env(render_mode='human')
+
+env.reset()
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    if termination or truncation:
+        action = None
+    else:
+        action = env.action_space(agent).sample()
+    env.step(action)
+env.close()
+```
 
 Please note that we've made major bug fixes to all environments included. As such, we discourage directly comparing results on these environments to those in the original paper.
 

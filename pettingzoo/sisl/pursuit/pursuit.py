@@ -175,6 +175,9 @@ class raw_env(AECEnv, EzPickle):
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
 
+        if self.render_mode == "human":
+            self.render()
+
     def observe(self, agent):
         o = self.env.safely_observe(self.agent_name_mapping[agent])
         return np.swapaxes(o, 2, 0)

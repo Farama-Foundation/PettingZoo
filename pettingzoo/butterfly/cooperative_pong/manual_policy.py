@@ -50,11 +50,10 @@ class ManualPolicy:
 if __name__ == "__main__":
     from pettingzoo.butterfly import cooperative_pong_v5
 
-    clock = pygame.time.Clock()
-
-    env = cooperative_pong_v5.env()
+    env = cooperative_pong_v5.env(render_mode="human")
     env.reset()
 
+    clock = pygame.time.Clock()
     manual_policy = cooperative_pong_v5.ManualPolicy(env)
 
     for agent in env.agent_iter():
@@ -68,8 +67,6 @@ if __name__ == "__main__":
             action = env.action_space(agent).sample()
 
         env.step(action)
-
-        env.render()
 
         if termination or truncation:
             env.reset()

@@ -4,9 +4,10 @@ In addition to the main API, we have a secondary parallel API for environments w
 
 ## Example Usage
 
-Environments can be interacted with as follows:
+Parallel environments can be interacted with as follows:
 
 ``` python
+from pettingzoo.butterfly import pistonball_v6
 parallel_env = pistonball_v6.parallel_env()
 observations = parallel_env.reset()
 
