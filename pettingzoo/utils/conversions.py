@@ -39,7 +39,7 @@ def aec_wrapper_fn(par_env_fn):
 
     def aec_fn(**kwargs):
         par_env = par_env_fn(**kwargs)
-        aec_env = pettingzoo.utils.parallel_to_aec(par_env)
+        aec_env = parallel_to_aec(par_env)
         return aec_env
 
     return aec_fn

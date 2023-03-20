@@ -238,3 +238,6 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
         self._deads_step_first()
         self.steps += 1
+
+        if self.render_mode == "human":
+            self.render()
