@@ -84,7 +84,6 @@ if __name__ == "__main__":
 
     test_env = PettingZooEnv(env_creator())
     obs_space = test_env.observation_space
-    print(obs_space)
     act_space = test_env.action_space
 
     config = (
