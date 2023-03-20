@@ -372,9 +372,11 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SuperSuit==3.6.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SuperSuit==3.7.2
 torch==1.13.1
-pettingzoo==1.22.3
+pettingzoo[butterfly]==1.22.4
+# remove this line when SuperSuit has been updated to 3.7.3
+tinyscaler==1.2.5
 </pre></div>
 </div>
 </section>
