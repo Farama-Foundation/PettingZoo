@@ -14,7 +14,7 @@ These tutorials guide you through training and rendering PettingZoo environments
 
 ```{figure} https://docs.ray.io/en/latest/_images/rllib-stack.svg
     :alt: RLlib stack
-    :width: 70%
+    :width: 60%
 ```
 
 [RLlib](https://github.com/ray-project/ray/tree/master/rllib) is an industry-grade open-source reinforcement learning library.
@@ -39,6 +39,12 @@ See the [documentation](https://docs.ray.io/en/latest/rllib/index.html) for more
  * [connect four](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/examples/env/pettingzoo_connect4.py)
  * [chess](https://github.com/ray-project/ray/blob/293fe2cb182b15499672c9cf50f79c8a9857dfb4/rllib/examples/env/pettingzoo_chess.py)
 
+## Architecture
+
+```{figure} https://docs.ray.io/en/latest/_images/rllib-stack.svg
+    :alt: RLlib stack
+    :width: 80%
+```
 
 ```{toctree}
 :hidden:
