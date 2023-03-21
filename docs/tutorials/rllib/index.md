@@ -2,13 +2,15 @@
 title: "RLlib"
 ---
 
-## RLlib Tutorial
+# RLlib Tutorial
 
-[PPO for Pistonball (Parallel)](/tutorials/rllib/pistonball/)
+These tutorials guide you through training and rendering PettingZoo environments using RLlib.
 
-[DQN for Simple Poker](/tutorials/rllib/holdem/)
+### [PPO for Pistonball (Parallel)](/tutorials/rllib/pistonball/)
 
-#  RLlib Overview
+### [DQN for Simple Poker (AEC)](/tutorials/rllib/holdem/)
+
+##  RLlib Overview
 
 ```{figure} https://docs.ray.io/en/latest/_images/rllib-stack.svg
     :alt: RLlib stack
