@@ -26,7 +26,7 @@ class WaterworldBase:
         radius=0.015,
         obstacle_radius=0.1,
         obstacle_coord=[(0.5, 0.5)],
-        pursuer_max_accel=0.02,
+        pursuer_max_accel=0.5,
         pursuer_speed=0.2,
         evader_speed=0.1,
         poison_speed=0.1,
@@ -42,26 +42,26 @@ class WaterworldBase:
     ):
         """Input keyword arguments.
 
-        n_pursuers: number of pursuing archea (agents)
-        n_evaders: number of evader archea (food)
-        n_poisons: number of poison archea
+        n_pursuers: number of agents
+        n_evaders: number of food particles present
+        n_poisons: number of poisons present
         n_obstacles: number of obstacles
-        n_coop: number of pursuing archea (agents) that must be touching food at the same time to consume it
-        n_sensors: number of sensors on each of the pursuing archea (agents)
-        sensor_range: length of sensor dendrite on all pursuing archea (agents)
-        radius: archea base radius. Pursuer: radius, evader: 2 x radius, poison: 3/4 x radius
-        obstacle_radius: radius of obstacle object
-        pursuer_speed: pursuing archea speed
-        evader_speed: evading archea speed
-        poison_speed: poison archea speed
-        obstacle_coord: list of coordinate of obstacle object. Can be set to `None` to use a random location
-        speed_features: toggles whether pursuing archea (agent) sensors detect speed of other archea
-        pursuer_max_accel: pursuer archea maximum acceleration (maximum action size)
-        thrust_penalty: scaling factor for the negative reward used to penalize large actions
+        n_coop: number of agents required to capture a food particle
+        n_sensors: number of sensors on each agent
+        sensor_range: range of the sensor
+        radius: radius of the agent
+        obstacle_radius: radius of the obstacle
+        obstacle_coord: coordinates of the obstacles, this is an [n_obstacles, 2] array with values >0, <1
+        pursuer_max_accel: maximum acceleration of the agents
+        pursuer_speed: maximum speed of the agents
+        evader_speed: maximum speed of the food particles
+        poison_speed: maximum speed of the poison particles
+        poison_reward: reward (or penalty) for getting a poison particle
+        food_reward: reward for getting a food particle
+        encounter_reward: reward for being in the presence of food
+        thrust_penalty: scaling factor for the negative reard used to penalize large actions
         local_ratio: proportion of reward allocated locally vs distributed globally among all agents
-        food_reward: reward for pursuers consuming an evading archea
-        poison_reward: reward for pursuer consuming a poison object (typically negative)
-        encounter_reward: reward for a pursuer colliding with an evading archea
+        speed_features: whether to include entity speed in the state space
         """
         self.pixel_scale = 30 * 25
         self.clock = pygame.time.Clock()

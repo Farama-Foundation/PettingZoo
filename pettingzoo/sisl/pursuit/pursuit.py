@@ -128,7 +128,7 @@ class raw_env(AECEnv, EzPickle):
     def seed(self, seed=None):
         self.env.seed(seed)
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.steps = 0
@@ -174,6 +174,9 @@ class raw_env(AECEnv, EzPickle):
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()
 
     def observe(self, agent):
         o = self.env.safely_observe(self.agent_name_mapping[agent])

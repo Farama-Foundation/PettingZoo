@@ -115,6 +115,12 @@ class raw_env(RLCardBase):
         super().__init__("leduc-holdem", num_players, (36,))
         self.render_mode = render_mode
 
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
+
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(

@@ -197,6 +197,12 @@ class raw_env(RLCardBase, EzPickle):
 
         return {"observation": observation, "action_mask": action_mask}
 
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
+
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(

@@ -12,4 +12,14 @@ if sys.platform.startswith("linux"):
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
-__version__ = "1.22.3"
+__version__ = "1.22.4"
+
+try:
+    import sys
+
+    from farama_notifications import notifications
+
+    if "pettingzoo" in notifications and __version__ in notifications["pettingzoo"]:
+        print(notifications["pettingzoo"][__version__], file=sys.stderr)
+except Exception:  # nosec
+    pass

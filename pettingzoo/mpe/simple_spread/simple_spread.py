@@ -164,8 +164,7 @@ class Scenario(BaseScenario):
         rew = 0
         if agent.collide:
             for a in world.agents:
-                if self.is_collision(a, agent):
-                    rew -= 1
+                rew -= 1.0 * (self.is_collision(a, agent) and a != agent)
         return rew
 
     def global_reward(self, world):
@@ -183,10 +182,6 @@ class Scenario(BaseScenario):
         entity_pos = []
         for entity in world.landmarks:  # world.entities:
             entity_pos.append(entity.state.p_pos - agent.state.p_pos)
-        # entity colors
-        entity_color = []
-        for entity in world.landmarks:  # world.entities:
-            entity_color.append(entity.color)
         # communication of all other agents
         comm = []
         other_pos = []
