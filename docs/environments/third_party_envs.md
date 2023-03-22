@@ -18,7 +18,24 @@ lastpage:
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.2-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/LucasAlegre/sumo-rl)]()
 
-PettingZoo (and Gymnasium) wrappers for the widely used SUMO traffic simulation.
+PettingZoo (and Gymnasium) wrappers for the widely used [SUMO](https://github.com/eclipse/sumo) traffic simulation. 
+
+### Gobblet-RL
+[https://github.com/elliottower/gobblet-rl](https://github.com/elliottower/gobblet-rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/elliottower/gobblet-rl)]()
+
+Interactive PettingZoo implementation of the [Gobblet](https://en.wikipedia.org/wiki/Gobblet) board game.
+
+### Cathedral-RL
+[https://github.com/elliottower/cathedral-rl](https://github.com/elliottower/cathedral-rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/elliottower/cathedral-rl)]()
+
+Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.org/wiki/Cathedral_(board_game)) board game.
+
 
 ___
 

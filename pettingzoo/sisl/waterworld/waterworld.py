@@ -190,7 +190,7 @@ class raw_env(AECEnv):
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
         self.has_reset = True
@@ -237,6 +237,9 @@ class raw_env(AECEnv):
         self._cumulative_rewards[self.agent_selection] = 0
         self.agent_selection = self._agent_selector.next()
         self._accumulate_rewards()
+
+        if self.render_mode == "human":
+            self.render()
 
     def observe(self, agent):
         return self.env.observe(self.agent_name_mapping[agent])
