@@ -21,6 +21,7 @@ api/aec
 api/parallel
 api/pz_wrappers
 api/supersuit_wrappers
+api/shimmy_wrappers
 api/utils
 ```
 
@@ -40,14 +41,10 @@ environments/third_party_envs
 :hidden:
 :caption: Tutorials
 
-tutorials/cleanrl/implementing_PPO
-tutorials/tianshou/beginner
-tutorials/tianshou/intermediate
-tutorials/tianshou/advanced
-tutorials/environmentcreation/1-project-structure
-tutorials/environmentcreation/2-environment-logic
-tutorials/environmentcreation/3-action-masking
-tutorials/environmentcreation/4-testing-your-environment
+tutorials/environmentcreation/index
+tutorials/cleanrl/index
+tutorials/tianshou/index
+tutorials/rllib/index
 ```
 
 ```{toctree}
