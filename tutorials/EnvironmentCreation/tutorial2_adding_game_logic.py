@@ -9,6 +9,10 @@ from pettingzoo.utils.env import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
+    metadata = {
+        "name": "custom_environment_v0",
+    }
+
     def __init__(self):
         self.escape_y = None
         self.escape_x = None
@@ -19,7 +23,7 @@ class CustomEnvironment(ParallelEnv):
         self.timestep = None
         self.possible_agents = ["prisoner", "guard"]
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.agents = copy(self.possible_agents)
         self.timestep = 0
 
@@ -81,6 +85,7 @@ class CustomEnvironment(ParallelEnv):
         if self.timestep > 100:
             rewards = {"prisoner": 0, "guard": 0}
             truncations = {"prisoner": True, "guard": True}
+            self.agents = []
         self.timestep += 1
 
         # Get observations

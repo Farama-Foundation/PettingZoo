@@ -9,6 +9,10 @@ from pettingzoo.utils.env import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
+    metadata = {
+        "name": "custom_environment_v0",
+    }
+
     def __init__(self):
         self.escape_y = None
         self.escape_x = None
@@ -19,7 +23,7 @@ class CustomEnvironment(ParallelEnv):
         self.timestep = None
         self.possible_agents = ["prisoner", "guard"]
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.agents = copy(self.possible_agents)
         self.timestep = 0
 
@@ -150,9 +154,3 @@ class CustomEnvironment(ParallelEnv):
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(4)
-
-
-from pettingzoo.test import parallel_api_test  # noqa: E402
-
-if __name__ == "__main__":
-    parallel_api_test(CustomEnvironment(), num_cycles=1_000_000)

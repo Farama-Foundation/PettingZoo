@@ -2,10 +2,14 @@ from pettingzoo.utils.env import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
+    metadata = {
+        "name": "custom_environment_v0",
+    }
+
     def __init__(self):
         pass
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         pass
 
     def step(self, actions):
