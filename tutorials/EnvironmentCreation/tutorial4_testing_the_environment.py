@@ -1,5 +1,4 @@
-# from tutorial3_action_masking import CustomEnvironment  # relative import (not recommended)
-from tutorials.EnvironmentCreation.tutorial3_action_masking import CustomEnvironment
+from tutorial3_action_masking import CustomEnvironment
 
 from pettingzoo.test import parallel_api_test
 
