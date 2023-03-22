@@ -5,7 +5,7 @@ from gymnasium.utils import seeding
 from ..env import ParallelEnv
 
 
-class BaseParallelWraper(ParallelEnv):
+class BaseParallelWrapper(ParallelEnv):
     def __init__(self, env):
         self.env = env
 
@@ -21,19 +21,12 @@ class BaseParallelWraper(ParallelEnv):
         except AttributeError:
             pass
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.np_random, _ = seeding.np_random(seed)
 
-        if not return_info:
-            res = self.env.reset(seed=seed, options=options)
-            self.agents = self.env.agents
-            return res
-        else:
-            res, info = self.env.reset(
-                seed=seed, return_info=return_info, options=options
-            )
-            self.agents = self.env.agents
-            return res, info
+        res = self.env.reset(seed=seed, options=options)
+        self.agents = self.env.agents
+        return res
 
     def step(self, actions):
         res = self.env.step(actions)

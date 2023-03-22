@@ -434,7 +434,7 @@ class raw_env(AECEnv):
     def close(self):
         pass
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.reinit()
 
     def step(self, action):
