@@ -1,12 +1,12 @@
 ---
-title: "(WIP) Creating Environments: Repository Structure"
+title: "Tutorial: Repository Structure"
 ---
 
-# (WIP) Creating Environments: Repository Structure
+# Tutorial: Repository Structure
 
 ## Introduction
 
-Welcome to the first of five short tutorials, guiding you through the process of creating your own PettingZoo environment, from conception to deployment.
+Welcome to the first of four short tutorials, guiding you through the process of creating your own PettingZoo environment, from conception to deployment.
 
 We will be creating a parallel environment, meaning that each agent acts simultaneously.
 
@@ -41,7 +41,7 @@ Implementing these are outside the scope of this tutorial.
 The entirety of your environment logic is stored within `/custom-environment/env`
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/1-SkeletonCreation.py
+.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial1_skeleton_creation.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
 ```

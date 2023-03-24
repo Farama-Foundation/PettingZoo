@@ -2,6 +2,10 @@ from pettingzoo.utils.env import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
+    metadata = {
+        "name": "custom_environment_v0",
+    }
+
     def __init__(self):
         pass
 
