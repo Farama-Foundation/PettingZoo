@@ -9,6 +9,10 @@ from pettingzoo.utils.env import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):
+    metadata = {
+        "name": "custom_environment_v0",
+    }
+
     def __init__(self):
         self.escape_y = None
         self.escape_x = None
@@ -32,14 +36,13 @@ class CustomEnvironment(ParallelEnv):
         self.escape_x = random.randint(2, 5)
         self.escape_y = random.randint(2, 5)
 
-        observation = (
-            self.prisoner_x + 7 * self.prisoner_y,
-            self.guard_x + 7 * self.guard_y,
-            self.escape_x + 7 * self.escape_y,
-        )
         observations = {
-            "prisoner": {"observation": observation, "action_mask": [0, 1, 1, 0]},
-            "guard": {"observation": observation, "action_mask": [1, 0, 0, 1]},
+            a: (
+                self.prisoner_x + 7 * self.prisoner_y,
+                self.guard_x + 7 * self.guard_y,
+                self.escape_x + 7 * self.escape_y,
+            )
+            for a in self.agents
         }
         return observations
 
@@ -66,51 +69,19 @@ class CustomEnvironment(ParallelEnv):
         elif guard_action == 3 and self.guard_y < 6:
             self.guard_y += 1
 
-        # Generate action masks
-        prisoner_action_mask = np.ones(4)
-        if self.prisoner_x == 0:
-            prisoner_action_mask[0] = 0  # Block left movement
-        elif self.prisoner_x == 6:
-            prisoner_action_mask[1] = 0  # Block right movement
-        if self.prisoner_y == 0:
-            prisoner_action_mask[2] = 0  # Block down movement
-        elif self.prisoner_y == 6:
-            prisoner_action_mask[3] = 0  # Block up movement
-
-        guard_action_mask = np.ones(4)
-        if self.guard_x == 0:
-            guard_action_mask[0] = 0
-        elif self.guard_x == 6:
-            guard_action_mask[1] = 0
-        if self.guard_y == 0:
-            guard_action_mask[2] = 0
-        elif self.guard_y == 6:
-            guard_action_mask[3] = 0
-
-        if self.guard_x - 1 == self.escape_x:
-            guard_action_mask[0] = 0
-        elif self.guard_x + 1 == self.escape_x:
-            guard_action_mask[1] = 0
-        if self.guard_y - 1 == self.escape_y:
-            guard_action_mask[2] = 0
-        elif self.guard_y + 1 == self.escape_y:
-            guard_action_mask[3] = 0
-
         # Check termination conditions
         terminations = {a: False for a in self.agents}
         rewards = {a: 0 for a in self.agents}
         if self.prisoner_x == self.guard_x and self.prisoner_y == self.guard_y:
             rewards = {"prisoner": -1, "guard": 1}
             terminations = {a: True for a in self.agents}
-            self.agents = []
 
         elif self.prisoner_x == self.escape_x and self.prisoner_y == self.escape_y:
             rewards = {"prisoner": 1, "guard": -1}
             terminations = {a: True for a in self.agents}
-            self.agents = []
 
         # Check truncation conditions (overwrites termination conditions)
-        truncations = {"prisoner": False, "guard": False}
+        truncations = {a: False for a in self.agents}
         if self.timestep > 100:
             rewards = {"prisoner": 0, "guard": 0}
             truncations = {"prisoner": True, "guard": True}
@@ -118,21 +89,17 @@ class CustomEnvironment(ParallelEnv):
         self.timestep += 1
 
         # Get observations
-        observation = (
-            self.prisoner_x + 7 * self.prisoner_y,
-            self.guard_x + 7 * self.guard_y,
-            self.escape_x + 7 * self.escape_y,
-        )
         observations = {
-            "prisoner": {
-                "observation": observation,
-                "action_mask": prisoner_action_mask,
-            },
-            "guard": {"observation": observation, "action_mask": guard_action_mask},
+            a: (
+                self.prisoner_x + 7 * self.prisoner_y,
+                self.guard_x + 7 * self.guard_y,
+                self.escape_x + 7 * self.escape_y,
+            )
+            for a in self.agents
         }
 
         # Get dummy infos (not used in this example)
-        infos = {"prisoner": {}, "guard": {}}
+        infos = {a: {} for a in self.agents}
 
         return observations, rewards, terminations, truncations, infos
 
@@ -150,9 +117,3 @@ class CustomEnvironment(ParallelEnv):
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(4)
-
-
-from pettingzoo.test import parallel_api_test  # noqa: E402
-
-if __name__ == "__main__":
-    parallel_api_test(CustomEnvironment(), num_cycles=1_000_000)

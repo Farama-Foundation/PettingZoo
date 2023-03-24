@@ -1,8 +1,8 @@
 ---
-title: "(WIP) Creating Environments: Environment Logic"
+title: "Tutorial: Environment Logic"
 ---
 
-# (WIP) Creating Environments: Environment Logic
+# Tutorial: Environment Logic
 
 ## Introduction
 
@@ -17,7 +17,7 @@ For this tutorial, we will be creating a two-player game consisting of a prisone
 ## Code
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/2-AddingGameLogic.py
+.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial2_adding_game_logic.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
 ```
