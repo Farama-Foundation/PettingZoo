@@ -8,11 +8,11 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="prev" title="RLlib: PPO for Pistonball" href="../pistonball/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07.dev1 -->
-        <title>RLLib 2: RL for Simple Poker - PettingZoo Documentation</title>
+        <title>RLlib: DQN for Simple Poker - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=721f65a87c37740baa8d605b09db5bec3a2987a8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=b0c92cd440df7c18a0306b0433406327ff2c572f" />
@@ -305,15 +305,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RLlib: DQN for Simple Poker</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -367,8 +381,10 @@
           </div>
           <article role="main">
             
-            <section id="rllib-2-rl-for-simple-poker">
-<h1>RLLib 2: RL for Simple Poker<a class="headerlink" href="#rllib-2-rl-for-simple-poker" title="Permalink to this heading">#</a></h1>
+            <section id="rllib-dqn-for-simple-poker">
+<h1>RLlib: DQN for Simple Poker<a class="headerlink" href="#rllib-dqn-for-simple-poker" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train a <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#deep-q-networks-dqn-rainbow-parametric-dqn">Deep Q-Network</a> (DQN) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/classic/leduc_holdem/">Leduc Hold’em</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
+<p>After training, run the provided code to watch your trained agent play vs itself. See the <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html">documentation</a> for more information.</p>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
@@ -385,7 +401,7 @@ pettingzoo==1.22.4
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
-<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLLib 2. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
+<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLLib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-the-rl-agent">
 <h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLLib to train agents to play Leduc Holdem.</span>
@@ -665,7 +681,7 @@ pettingzoo==1.22.4
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">RLLib 2: RL for Simple Poker</a><ul>
+<li><a class="reference internal" href="#">RLlib: DQN for Simple Poker</a><ul>
 <li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
 <li><a class="reference internal" href="#code">Code</a><ul>
 <li><a class="reference internal" href="#training-the-rl-agent">Training the RL agent</a></li>

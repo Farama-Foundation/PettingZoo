@@ -8,7 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou: Basic API Usage" href="../../tianshou/beginner/" /><link rel="prev" title="Third-Party Environments" href="../../../environments/third_party_envs/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tianshou Tutorial" href="../../tianshou/" /><link rel="prev" title="CleanRL Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07.dev1 -->
@@ -306,14 +306,28 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">CleanRL: Implementing PPO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">CleanRL Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">CleanRL: Implementing PPO</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../rllib/">RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -369,6 +383,7 @@
             
             <section id="cleanrl-implementing-ppo">
 <h1>CleanRL: Implementing PPO<a class="headerlink" href="#cleanrl-implementing-ppo" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train a <a class="reference external" href="https://docs.cleanrl.dev/rl-algorithms/ppo/">PPO</a> model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/pistonball/">Pistonball</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">parallel</a>).</p>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
@@ -669,18 +684,18 @@ tinyscaler==1.2.5
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../../tianshou/beginner/">
+            <a class="next-page" href="../../tianshou/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Tianshou: Basic API Usage</div>
+                <div class="title">Tianshou Tutorial</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../../../environments/third_party_envs/">
+            <a class="prev-page" href="../">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -689,7 +704,7 @@ tinyscaler==1.2.5
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Third-Party Environments</div>
+                <div class="title">CleanRL Tutorial</div>
                 
               </div>
             </a>
