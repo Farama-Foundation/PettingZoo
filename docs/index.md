@@ -21,6 +21,7 @@ api/aec
 api/parallel
 api/pz_wrappers
 api/supersuit_wrappers
+api/shimmy_wrappers
 api/utils
 ```
 
