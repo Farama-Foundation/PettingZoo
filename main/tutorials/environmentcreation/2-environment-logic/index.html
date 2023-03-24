@@ -8,11 +8,11 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="(WIP) Creating Environments: Action Masking" href="../3-action-masking/" /><link rel="prev" title="(WIP) Creating Environments: Repository Structure" href="../1-project-structure/" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Tutorial: Action Masking" href="../3-action-masking/" /><link rel="prev" title="Tutorial: Repository Structure" href="../1-project-structure/" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/environmentcreation/2-environment-logic.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07.dev1 -->
-        <title>(WIP) Creating Environments: Environment Logic - PettingZoo Documentation</title>
+        <title>Tutorial: Environment Logic - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=721f65a87c37740baa8d605b09db5bec3a2987a8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=b0c92cd440df7c18a0306b0433406327ff2c572f" />
@@ -310,10 +310,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tianshou/intermediate/">Tianshou: Training Agents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../1-project-structure/">(WIP) Creating Environments: Repository Structure</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">(WIP) Creating Environments: Environment Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../3-action-masking/">(WIP) Creating Environments: Action Masking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../4-testing-your-environment/">(WIP) Creating Environments: Testing Your Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorial: Environment Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul>
@@ -367,8 +367,8 @@
           </div>
           <article role="main">
             
-            <section id="wip-creating-environments-environment-logic">
-<h1>(WIP) Creating Environments: Environment Logic<a class="headerlink" href="#wip-creating-environments-environment-logic" title="Permalink to this heading">#</a></h1>
+            <section id="tutorial-environment-logic">
+<h1>Tutorial: Environment Logic<a class="headerlink" href="#tutorial-environment-logic" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>Now that we have a basic understanding of the structure of environment repositories, we can start thinking about the fun part - environment logic!</p>
@@ -395,6 +395,10 @@
 
 
 <span class="k">class</span> <span class="nc">CustomEnvironment</span><span class="p">(</span><span class="n">ParallelEnv</span><span class="p">):</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;custom_environment_v0&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_y</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">escape_x</span> <span class="o">=</span> <span class="kc">None</span>
@@ -515,7 +519,7 @@
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">(WIP) Creating Environments: Action Masking</div>
+                <div class="title">Tutorial: Action Masking</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
@@ -530,7 +534,7 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">(WIP) Creating Environments: Repository Structure</div>
+                <div class="title">Tutorial: Repository Structure</div>
                 
               </div>
             </a>
@@ -574,7 +578,7 @@
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">(WIP) Creating Environments: Environment Logic</a><ul>
+<li><a class="reference internal" href="#">Tutorial: Environment Logic</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#code">Code</a></li>
 </ul>
