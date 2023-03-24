@@ -4,6 +4,10 @@ title: "Tianshou: Basic API Usage"
 
 # Tianshou: Basic API Usage
 
+This tutorial is a simple example of how to use [Tianshou](https://github.com/thu-ml/tianshou) with a PettingZoo environment. 
+
+It demonstrates a game betwenen two [random policy](https://tianshou.readthedocs.io/en/master/_modules/tianshou/policy/random.html) agents in the [rock-paper-scissors](https://pettingzoo.farama.org/environments/classic/rps/) environment.
+
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.
 ```{eval-rst}
