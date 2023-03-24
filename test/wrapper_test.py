@@ -1,5 +1,7 @@
+from test.all_modules import all_environments
 from typing import Any, Dict, List, Optional
 
+import pytest
 from gymnasium import Space, spaces
 
 from pettingzoo import AECEnv
@@ -81,8 +83,11 @@ class TestEnvWrapper(BaseWrapper):
         pass
 
 
-# The env works
-print(TestEnv().last())
+def test_wrapped():
+    assert TestEnv().last() == TestEnvWrapper(TestEnv()).last()
 
-# The wrapper has an error
-print(TestEnvWrapper(TestEnv()).last())
+
+@pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
+def test_all_envs_wrapped(name, env_module):
+    _env = env_module.env(render_mode="human")
+    assert _env.last() == TestEnvWrapper(_env).last()
