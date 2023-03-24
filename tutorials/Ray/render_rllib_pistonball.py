@@ -45,7 +45,7 @@ def env_creator():
         ball_friction=0.3,
         ball_elasticity=1.5,
         max_cycles=125,
-        render_mode="RGB_array",
+        render_mode="rgb_array",
     )
     env = ss.color_reduction_v0(env, mode="B")
     env = ss.dtype_v0(env, "float32")
