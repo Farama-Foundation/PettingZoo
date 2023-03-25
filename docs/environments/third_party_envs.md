@@ -57,7 +57,7 @@ ___
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.19.0-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/jsuarez5341/neural-mmo)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/jsuarez5341/neural-mmo)
+[![GitHub last commit](https://img.shields.io/github/last-commit/jsuarez5341/neural-mmo)]()
 
 
 Massively multiagent environment, inspired by Massively Multiplayer Online (MMO) role-playing games.
@@ -67,7 +67,7 @@ Massively multiagent environment, inspired by Massively Multiplayer Online (MMO)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.13.1-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/eugenevinitsky/sequential_social_dilemma_games)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/eugenevinitsky/sequential_social_dilemma_games)
+[![GitHub last commit](https://img.shields.io/github/last-commit/eugenevinitsky/sequential_social_dilemma_games)]()
 
 An open-source implementation of DeepMind's Sequential Social Dilemma (SSD) multi-agent game-theoretic environments [[1]](https://arxiv.org/abs/1702.03037).
 * Note: DeepMind's recently released [Meltingpot](https://github.com/deepmind/meltingpot) includes these scenarios and many more, and can be used with PettingZoo via a [Shimmy](http://shimmy.farama.org/) conversion wrapper.
@@ -76,7 +76,7 @@ An open-source implementation of DeepMind's Sequential Social Dilemma (SSD) mult
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.12.0-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/Kaggle/kaggle-environments)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/Kaggle/kaggle-environments)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Kaggle/kaggle-environments)]()
 
 Environments for [Kaggle](https://www.kaggle.com/) machine learning challenges.
 
@@ -84,7 +84,7 @@ Environments for [Kaggle](https://www.kaggle.com/) machine learning challenges.
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.1-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/AIRI-Institute/pogema)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/AIRI-Institute/pogema)
+[![GitHub last commit](https://img.shields.io/github/last-commit/AIRI-Institute/pogema)]()
 
 [Partially-Observable Grid Environment for Multiple Agents](https://github.com/AIRI-Institute/pogema) (POGEMA) is a grid-based environment that was specifically designed to be flexible, tunable and scalable.
 
@@ -92,74 +92,20 @@ Environments for [Kaggle](https://www.kaggle.com/) machine learning challenges.
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.1-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/axelbr/racecar_gym)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/axelbr/racecar_gym)
+[![GitHub last commit](https://img.shields.io/github/last-commit/axelbr/racecar_gym)]()
 
+A multi-agent racing environment. 
 
-A multi-agent racing environment. TODO: ADD DESCRIPTION
-
-
-### [CookingZoo](https://github.com/DavidRother/gym-cooking)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)
-
-
-Fork of the game *Too Many Cooks*. TODO: ADD DESCRIPTION
-
-
-### [BomberManAI](https://github.com/NaIwo/BomberManAI)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.16.0-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/NaIwo/BomberManAI)
-
-
-Environment with a simplified version of the video game *BomberMan*. TODO: ADD DESCRIPTION
-
-
-### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/AbhijeetKrishnan/fanorona-aec)
-
-Implementation of the board game *Fanorona*. TODO: ADD DESCRIPTION
-
-
-### [skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/michaelfeil/skyjo_rl)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/michaelfeil/skyjo_rl)
-
-Implementation of the board game *SkyJo*. TODO: ADD DESCRIPTION
-
-
-### [Mu Torere](https://github.com/Aroksak/MuTorere)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/DaBultz/pz-battlesnake)
-
-Implementation of the board game *Mū tōrere* from New Zealand. TODO: ADD DESCRIPTION
-
-
-### [pz-battlesnake](https://github.com/DaBultz/pz-battlesnake)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.19.0-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/DaBultz/pz-battlesnake)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/DaBultz/pz-battlesnake)
-
-PettingZoo environment for online multi-player game [Battlesnake](https://play.battlesnake.com/).
-
+[//]: # (TODO: ADD DESCRIPTION)
 
 ### [cogment-verse](https://github.com/cogment/cogment-verse)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.0-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/cogment/cogment-verse)]()
-![GitHub last commit](https://img.shields.io/github/last-commit/cogment/cogment-verse)
+[![GitHub last commit](https://img.shields.io/github/last-commit/cogment/cogment-verse)]()
 
 Library of Environments, Human Actor UIs and Agent implementation for Human In the Loop Learning & Reinforcement Learning.
+
 
 ### [stone_ground_hearth_battles](https://github.com/JDBumgardner/stone_ground_hearth_battles)
 
@@ -168,6 +114,70 @@ Library of Environments, Human Actor UIs and Agent implementation for Human In t
 ![GitHub last commit](https://img.shields.io/github/last-commit/JDBumgardner/stone_ground_hearth_battles)
 
 Simulator and environments for [Blizzard](https://www.blizzard.com/en-us/)'s popular card game [Hearthstone Grounds](https://hearthstone.blizzard.com/en-us/battlegrounds/), including bots and human-interaction.
+
+
+### [CookingZoo](https://github.com/DavidRother/gym-cooking)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)]()
+
+Fork of the game *Too Many Cooks*. 
+
+[//]: # (TODO: ADD DESCRIPTION)
+
+### [pz-battlesnake](https://github.com/DaBultz/pz-battlesnake)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.19.0-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/DaBultz/pz-battlesnake)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/DaBultz/pz-battlesnake)]()
+
+PettingZoo environment for online multi-player game [Battlesnake](https://play.battlesnake.com/).
+
+
+### [BomberManAI](https://github.com/NaIwo/BomberManAI)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.16.0-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/NaIwo/BomberManAI)]()
+
+Environment with a simplified version of the video game *BomberMan*. 
+
+[//]: # (TODO: ADD DESCRIPTION)
+
+
+### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.8.1-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/AbhijeetKrishnan/fanorona-aec)]()
+
+Implementation of the board game *Fanorona*. 
+
+[//]: # (TODO: ADD DESCRIPTION)
+
+
+### [skyjo_rl](https://github.com/michaelfeil/skyjo_rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/michaelfeil/skyjo_rl)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/michaelfeil/skyjo_rl)]()
+
+Implementation of the board game *SkyJo*. 
+
+[//]: # (TODO: ADD DESCRIPTION)
+
+
+### [Mu Torere](https://github.com/Aroksak/MuTorere)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.14.0-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/DaBultz/pz-battlesnake)]()
+
+Implementation of the board game *Mū tōrere* from New Zealand. 
+
+[//]: # (TODO: ADD DESCRIPTION)
+
+
 
 ___
 
