@@ -104,20 +104,6 @@ class BaseWrapper(AECEnv):
     def observe(self, agent):
         return self.env.observe(agent)
 
-    # def last(self, observe: bool = True):
-    #     print(self._cumulative_rewards)
-    #     return self.env.last(observe=observe)
-    # agent = self.agent_selection
-    # assert agent
-    # observation = self.observe(agent) if observe else None
-    # return (
-    #     observation,
-    #     self.env._cumulative_rewards[agent],
-    #     self.terminations[agent],
-    #     self.truncations[agent],
-    #     self.infos[agent],
-    # )
-
     def state(self):
         return self.env.state()
 

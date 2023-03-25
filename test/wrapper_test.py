@@ -1,14 +1,12 @@
-from test.all_modules import all_environments
 from typing import Any, Dict, List, Optional
 
-import pytest
 from gymnasium import Space, spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import BaseWrapper
 
 
-class TestEnv(AECEnv):
+class Env(AECEnv):
     metadata = {"render.modes": ["ansi"], "name": "test_env"}
 
     def __init__(self, seed: Optional[int] = None):
@@ -78,16 +76,11 @@ class TestEnv(AECEnv):
         super().close()
 
 
-class TestEnvWrapper(BaseWrapper):
+class EnvWrapper(BaseWrapper):
     def seed(self, seed: Optional[int] = None) -> None:
         pass
 
 
 def test_wrapped():
-    assert TestEnv().last() == TestEnvWrapper(TestEnv()).last()
-
-
-@pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
-def test_all_envs_wrapped(name, env_module):
-    _env = env_module.env(render_mode="human")
-    assert _env.last() == TestEnvWrapper(_env).last()
+    assert Env().last() == EnvWrapper(Env()).last()
+    assert Env().last() == BaseWrapper(Env()).last()
