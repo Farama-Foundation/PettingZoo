@@ -169,7 +169,7 @@ class raw_env(AECEnv, EzPickle):
     }
 
     def __init__(self, num_actions=3, max_cycles=15, render_mode=None):
-        EzPickle.__init__(num_actions, max_cycles, render_mode)
+        EzPickle.__init__(self, num_actions, max_cycles, render_mode)
         self.max_cycles = max_cycles
 
         # number of actions must be odd and greater than 3

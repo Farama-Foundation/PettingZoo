@@ -100,7 +100,7 @@ class raw_env(AECEnv, EzPickle):
     }
 
     def __init__(self, render_mode=None):
-        EzPickle.__init__(render_mode)
+        EzPickle.__init__(self, render_mode)
         super().__init__()
         self.board = Board()
 

@@ -154,7 +154,7 @@ class raw_env(AECEnv, EzPickle):
     def __init__(
         self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None
     ):
-        EzPickle.__init__(board_size, komi, render_mode)
+        EzPickle.__init__(self, board_size, komi, render_mode)
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super().__init__()

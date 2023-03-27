@@ -113,7 +113,7 @@ class raw_env(RLCardBase, EzPickle):
     }
 
     def __init__(self, num_players=2, render_mode=None):
-        EzPickle.__init__(num_players, render_mode)
+        EzPickle.__init__(self, num_players, render_mode)
         super().__init__("leduc-holdem", num_players, (36,))
         self.render_mode = render_mode
 

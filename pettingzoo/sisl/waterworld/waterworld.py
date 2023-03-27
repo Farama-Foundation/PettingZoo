@@ -165,7 +165,7 @@ class raw_env(AECEnv, EzPickle):
     }
 
     def __init__(self, *args, **kwargs):
-        EzPickle.__init__(*args, **kwargs)
+        EzPickle.__init__(self, *args, **kwargs)
         super().__init__()
         self.env = _env(*args, **kwargs)
 
