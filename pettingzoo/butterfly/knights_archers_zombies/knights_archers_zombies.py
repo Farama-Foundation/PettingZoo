@@ -329,7 +329,7 @@ class raw_env(AECEnv, EzPickle):
             )
         else:
             box_space = Box(low=low, high=high, shape=[shape[-1]], dtype=dtype)
-            obs_space = Sequence(space=box_space)
+            obs_space = Sequence(space=box_space, stack=True)
             self.observation_spaces = dict(
                 zip(
                     self.agents,
