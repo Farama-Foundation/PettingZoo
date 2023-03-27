@@ -117,6 +117,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium.spaces import Discrete
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -153,7 +154,7 @@ def env(**kwargs):
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     """Two-player environment for rock paper scissors.
 
     Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
@@ -168,6 +169,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, num_actions=3, max_cycles=15, render_mode=None):
+        EzPickle.__init__(num_actions, max_cycles, render_mode)
         self.max_cycles = max_cycles
 
         # number of actions must be odd and greater than 3

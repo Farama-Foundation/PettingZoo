@@ -1,12 +1,14 @@
 import numpy as np
 import rlcard
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 
 
-class RLCardBase(AECEnv):
+class RLCardBase(AECEnv, EzPickle):
     def __init__(self, name, num_players, obs_shape):
+        EzPickle.__init__(name, num_players, obs_shape)
         super().__init__()
         self.name = name
         self.num_players = num_players

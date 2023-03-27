@@ -72,6 +72,7 @@ If the game ends in a draw, both players will receive a reward of 0.
 import gymnasium
 import numpy as np
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -90,7 +91,7 @@ def env(render_mode=None):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human"],
         "name": "tictactoe_v3",
@@ -99,6 +100,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, render_mode=None):
+        EzPickle.__init__(render_mode)
         super().__init__()
         self.board = Board()
 

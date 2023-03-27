@@ -43,6 +43,7 @@ simple_v2.env(max_cycles=25, continuous_actions=False)
 """
 
 import numpy as np
+from gymnasium.utils import EzPickle
 
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
@@ -51,8 +52,9 @@ from .._mpe_utils.scenario import BaseScenario
 from .._mpe_utils.simple_env import SimpleEnv, make_env
 
 
-class raw_env(SimpleEnv):
+class raw_env(SimpleEnv, EzPickle):
     def __init__(self, max_cycles=25, continuous_actions=False, render_mode=None):
+        EzPickle.__init__(max_cycles, continuous_actions, render_mode)
         scenario = Scenario()
         world = scenario.make_world()
         super().__init__(

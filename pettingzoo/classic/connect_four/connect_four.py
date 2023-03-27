@@ -64,6 +64,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -90,7 +91,7 @@ def env(render_mode=None):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "connect_four_v3",
@@ -99,6 +100,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, render_mode=None):
+        EzPickle.__init__(render_mode)
         super().__init__()
         # 6 rows x 7 columns
         # blank space = 0

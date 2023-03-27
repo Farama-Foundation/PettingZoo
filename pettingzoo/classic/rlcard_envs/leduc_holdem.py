@@ -82,6 +82,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 """
 
 import gymnasium
+from gymnasium.utils import EzPickle
 from rlcard.utils.utils import print_card
 
 from pettingzoo.utils import wrappers
@@ -103,7 +104,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human"],
         "name": "leduc_holdem_v4",
@@ -112,6 +113,7 @@ class raw_env(RLCardBase):
     }
 
     def __init__(self, num_players=2, render_mode=None):
+        EzPickle.__init__(num_players, render_mode)
         super().__init__("leduc-holdem", num_players, (36,))
         self.render_mode = render_mode
 

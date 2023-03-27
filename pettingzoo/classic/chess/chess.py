@@ -90,6 +90,7 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 from gymnasium.error import DependencyNotInstalled
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -106,7 +107,7 @@ def env(render_mode=None):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
         "name": "chess_v5",
@@ -115,6 +116,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, render_mode=None):
+        EzPickle.__init__(render_mode)
         super().__init__()
 
         self.board = chess.Board()

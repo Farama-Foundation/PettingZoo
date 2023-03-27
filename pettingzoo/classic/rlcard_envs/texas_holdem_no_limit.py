@@ -95,6 +95,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo.utils import wrappers
 
@@ -127,7 +128,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_no_limit_v6",
@@ -136,6 +137,7 @@ class raw_env(RLCardBase):
     }
 
     def __init__(self, num_players=2, render_mode=None):
+        EzPickle.__init__(num_players, render_mode)
         super().__init__("no-limit-holdem", num_players, (54,))
         self.observation_spaces = self._convert_to_dict(
             [
