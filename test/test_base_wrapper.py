@@ -110,7 +110,7 @@ def test_wrapped(env_name):
 
 
 @pytest.mark.parametrize("env_name", [go_v5, chess_v5])
-def test_wrapped_play(env_name, play_rounds):
+def test_wrapped_play(env_name, play_rounds=5):
     env = env_name.env()
     env.reset()
     wrapped_env = BaseWrapper(env)
@@ -122,6 +122,6 @@ def test_wrapped_play(env_name, play_rounds):
             action = env.action_space(env.agent_selection).sample(
                 observation["action_mask"])  # this is where you would insert your policy
         env.step(action)
-        check_equal(env.last(), wrapped_env.last())
+        assert check_equal(env.last(), wrapped_env.last())
 
     env.close()
