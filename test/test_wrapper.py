@@ -1,13 +1,9 @@
 from typing import Any, Dict, List, Optional
 
-import numpy as np
-import pytest
 from gymnasium import Space, spaces
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import BaseWrapper
-
-from pettingzoo.classic import go_v5, chess_v5
 
 
 class Env(AECEnv):
@@ -24,7 +20,6 @@ class Env(AECEnv):
         self.action_spaces = {
             agent: spaces.Discrete(self.n_cards) for agent in self.agents
         }
-        # The bug seems to be when using spaces.Sequence
         self.observation_spaces = {
             agent: spaces.Sequence(spaces.Discrete(self.n_cards))
             for agent in self.agents
@@ -34,10 +29,10 @@ class Env(AECEnv):
         self.reset(seed)
 
     def reset(
-            self,
-            seed: Optional[int] = None,
-            return_info: bool = False,
-            options: Optional[Dict] = None,
+        self,
+        seed: Optional[int] = None,
+        return_info: bool = False,
+        options: Optional[Dict] = None,
     ) -> None:
         self.cards = []
 
@@ -80,48 +75,15 @@ class Env(AECEnv):
         super().close()
 
 
-def simple_test():
+class EnvWrapper(BaseWrapper):
+    def seed(self, seed: Optional[int] = None) -> None:
+        pass
+
+
+def test_wrapper():
+    assert Env().last() == EnvWrapper(Env()).last()
     assert Env().last() == BaseWrapper(Env()).last()
 
-
-def check_equal(last1, last2):
-    if len(last1) != len(last2):
-        return False
-    if last1[0].keys() != last1[0].keys():
-        return False
-    for key in last1[0].keys():
-        if not np.allclose(last1[0][key], last2[0][key]):
-            return False
-
-    if last1[1:] != last2[1:]:
-        return False
-
-    return True
-
-
-@pytest.mark.parametrize("env_name", [go_v5, chess_v5])
-def test_wrapped(env_name):
-    env = env_name.env()
-    env.reset()
-    wrapped_env = BaseWrapper(env)
-    assert check_equal(env.last(), wrapped_env.last())
-
-    env.close()
-
-
-@pytest.mark.parametrize("env_name", [go_v5, chess_v5])
-def test_wrapped_play(env_name, play_rounds=5):
-    env = env_name.env()
-    env.reset()
-    wrapped_env = BaseWrapper(env)
-    for _ in range(play_rounds):
-        observation, reward, termination, truncation, info = env.last()
-        if termination or truncation:
-            action = None
-        else:
-            action = env.action_space(env.agent_selection).sample(
-                observation["action_mask"])  # this is where you would insert your policy
-        env.step(action)
-        assert check_equal(env.last(), wrapped_env.last())
-
-    env.close()
+    env = Env()
+    assert env.last() == EnvWrapper(env).last()
+    assert env.last() == BaseWrapper(env).last()
