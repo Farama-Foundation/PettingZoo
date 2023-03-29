@@ -179,9 +179,7 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         self.frame = 0
 
         obs = self._observe()
-        infos = {
-            agent: {} for agent in self.possible_agents if agent in self.agents
-        }
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
         return {agent: obs for agent in self.agents}, infos
 
     def observation_space(self, agent):
