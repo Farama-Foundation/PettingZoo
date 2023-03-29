@@ -71,7 +71,7 @@ class parallel_env(ParallelEnv):
         self.num_steps = 0
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
-        return {agent: self.observe(agent) for agent in self.agents}
+        return {a: self.observe(a) for a in self.agents}, {a: {} for a in self.agents}
 
     def seed(self, seed=None):
         self.np_random, _ = seeding.np_random(seed)
