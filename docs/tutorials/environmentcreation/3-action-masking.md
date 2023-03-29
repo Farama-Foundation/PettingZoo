@@ -1,8 +1,8 @@
 ---
-title: "(WIP) Creating Environments: Action Masking"
+title: "Tutorial: Action Masking"
 ---
 
-# (WIP) Creating Environments: Action Masking
+# Tutorial: Action Masking
 
 ## Introduction
 
@@ -13,8 +13,7 @@ Action masking is a more natural way of handling invalid actions than having an 
 ## Code
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/EnvironmentCreation/3-ActionMasking.py
+.. literalinclude:: ../../../tutorials/EnvironmentCreation/tutorial3_action_masking.py
    :language: python
    :caption: /custom-environment/env/custom_environment.py
-   :lines: -147
 ```
