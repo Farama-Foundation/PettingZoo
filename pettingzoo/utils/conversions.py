@@ -154,7 +154,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         rewards = defaultdict(int)
@@ -419,7 +420,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = {**self.aec_env.infos}
+        return observations, infos
 
     def step(self, actions):
         if not self.agents:
