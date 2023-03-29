@@ -1,3 +1,4 @@
+import pickle
 import random
 import re
 import warnings
@@ -5,6 +6,7 @@ from collections import defaultdict
 
 import gymnasium
 import numpy as np
+from gymnasium.utils.env_checker import data_equivalence
 
 import pettingzoo
 from pettingzoo.utils.conversions import (
@@ -451,6 +453,21 @@ def test_action_flexibility(env):
         env.step(np.zeros_like(action_space.low))
 
 
+def test_pickle_env(env):
+    env.reset()
+    agent = env.agent_selection
+    try:
+        pickled_env = pickle.loads(pickle.dumps(env))
+        data_equivalence(env.reset(), pickled_env.reset())
+        action = env.action_space(agent).sample()
+        data_equivalence(env.step(action), pickled_env.step(action))
+        env.close()
+        pickled_env.close()
+
+    except AssertionError as ae:
+        print("did not save the observations: ", ae)
+
+
 def api_test(env, num_cycles=1000, verbose_progress=False):
     def progress_report(msg):
         if verbose_progress:
@@ -516,6 +533,10 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     test_action_flexibility(env)
 
     progress_report("Finished test_rewards_terminations_truncations")
+
+    test_pickle_env(env)
+
+    progress_report("Finished environment pickle/EzPickle test")
 
     # checks unwrapped attribute
     assert not isinstance(env.unwrapped, aec_to_parallel_wrapper)
