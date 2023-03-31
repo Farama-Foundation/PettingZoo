@@ -73,6 +73,10 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
     </a>
 </h3>
 
+
+| <div align="center"><a href="https://github.com/elliottower/"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/elliot.jpg"></a><h3>Elliot Tower</h3><h5>PettingZoo Project Manager</span></div> | <div align="center"><a href="https://github.com/jjshoots"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/jet.jpg"></a><h3>Jet Tai</h3><h5>PettingZoo Contributor</span></div> |
+| - | - |
+
 ## Citation
 
 To cite this project in publication, please use
