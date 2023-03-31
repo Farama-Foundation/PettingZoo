@@ -66,13 +66,12 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 ## Development Team
 <h1 style="text-align: center;width: 60%">
     <a href="https://github.com/elliottower/">
-        <img src="docs/_static/img/people/elliot.png" height="300px" alt="Elliot Tower">
+        <img src="docs/_static/img/people/elliot.png" height="300" alt="Elliot Tower">
     </a>
     <a href="https://github.com/jjshoots">
-        <img src="docs/_static/img/people/jet.png" height="300px" alt="Jet Tai">
+        <img src="docs/_static/img/people/jet.png" height="300" alt="Jet Tai">
     </a>
 </h1>
-
 
 ## Citation
 
