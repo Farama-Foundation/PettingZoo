@@ -39,7 +39,7 @@ def parallel_api_test(par_env, num_cycles=1000):
 
     MAX_RESETS = 2
     for _ in range(MAX_RESETS):
-        obs = par_env.reset()
+        obs, infos = par_env.reset()
         assert isinstance(obs, dict)
         assert set(obs.keys()) == (set(par_env.agents))
         terminated = {agent: False for agent in par_env.agents}

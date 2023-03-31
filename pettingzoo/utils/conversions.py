@@ -154,7 +154,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         rewards = defaultdict(int)
@@ -264,7 +265,7 @@ class parallel_to_aec_wrapper(AECEnv):
         return self.env.action_space(agent)
 
     def reset(self, seed=None, options=None):
-        self._observations = self.env.reset(seed=seed, options=options)
+        self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions: ActionDict = {agent: None for agent in self.agents}
@@ -272,7 +273,6 @@ class parallel_to_aec_wrapper(AECEnv):
         self.agent_selection = self._agent_selector.reset()
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.new_agents = []
@@ -419,7 +419,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         if not self.agents:

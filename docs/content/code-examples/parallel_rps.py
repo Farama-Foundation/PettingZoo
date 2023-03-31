@@ -110,8 +110,9 @@ class parallel_env(ParallelEnv):
         self.agents = self.possible_agents[:]
         self.num_moves = 0
         observations = {agent: NONE for agent in self.agents}
+        infos = {agent: {} for agent in self.agents}
 
-        return observations
+        return observations, infos
 
     def step(self, actions):
         """

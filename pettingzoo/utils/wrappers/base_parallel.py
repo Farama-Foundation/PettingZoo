@@ -24,9 +24,9 @@ class BaseParallelWrapper(ParallelEnv):
     def reset(self, seed=None, options=None):
         self.np_random, _ = seeding.np_random(seed)
 
-        res = self.env.reset(seed=seed, options=options)
+        res, info = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents
-        return res
+        return res, info
 
     def step(self, actions):
         res = self.env.step(actions)
