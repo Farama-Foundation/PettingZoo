@@ -73,6 +73,7 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
     </a>
 </h1>
 
+
 ## Citation
 
 To cite this project in publication, please use
