@@ -65,9 +65,11 @@ PettingZoo keeps strict versioning for reproducibility reasons. All environments
 
 ## Development Team
 
-<img src="docs/_static/img/people/elliot.png" width="240">
-
-<img src="docs/_static/img/people/jet.png" width="240">
+<h1 style="text-align: center;width: 80%">
+    <img src="docs/_static/img/people/elliot.png" width="45%">
+        &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="docs/_static/img/people/jet.png" width="45%">
+</h1>
 
 ## Citation
 
