@@ -63,23 +63,6 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 
 PettingZoo keeps strict versioning for reproducibility reasons. All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
 
-## Project Maintainers
-<h3 style="text-align: center;width: 60%">
-    <a href="https://github.com/elliottower/">
-        <img src="docs/_static/img/people/elliot.png" width="240" alt="Elliot Tower">
-    </a>
-    <a href="https://github.com/jjshoots">
-        <img src="docs/_static/img/people/jet.png" width="240" alt="Jet Tai">
-    </a>
-</h3>
-
-
-| <div align="center"><a href="https://github.com/elliottower/"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/elliot.jpg"></a><h3>Elliot Tower</h3><h5>Project Manager</span></div> | <div align="center"><a href="https://github.com/jjshoots"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/jet.jpg"></a><h3>Jet Tai</h3><h5>Contributor</span></div> |
-| - | - |
-
-| <div align="center"><a href="https://github.com/elliottower/"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/elliot.jpg"></a><h3>Elliot Tower</h3><h5>PettingZoo Project Manager</span></div> | <div align="center"><a href="https://github.com/jjshoots"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/jet.jpg"></a><h3>Jet Tai</h3><h5>PettingZoo Contributor</span></div> |
-| - | - |
-
 ## Citation
 
 To cite this project in publication, please use
@@ -94,3 +77,9 @@ To cite this project in publication, please use
   year={2021}
 }
 ```
+
+## Project Maintainers
+| <div align="center"><a href="https://github.com/elliottower/"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/elliot.jpg"></a><h3>Elliot Tower</h3><h5>Project Manager</span></div> |
+| - |
+
+Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
