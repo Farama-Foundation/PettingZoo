@@ -79,7 +79,6 @@ To cite this project in publication, please use
 ```
 
 ## Project Maintainers
-| <div align="center"><a href="https://github.com/elliottower/"><img style="width: 100px; border-radius: 50%" src="https://farama.org/assets/people/elliot.jpg"></a><h3>Elliot Tower</h3><h5>Project Manager</span></div> |
-| - |
+Project Manager: [Elliot Tower](https://github.com/elliottower/)
 
 Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
