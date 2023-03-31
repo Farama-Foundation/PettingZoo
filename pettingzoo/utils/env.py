@@ -303,7 +303,7 @@ class ParallelEnv:
         self,
         seed: Optional[int] = None,
         options: Optional[dict] = None,
-    ) -> ObsDict:
+    ) -> Tuple[ObsDict, Dict[str, dict]]:
         """Resets the environment.
 
         And returns a dictionary of observations (keyed by the agent name)
