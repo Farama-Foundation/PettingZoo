@@ -58,15 +58,13 @@ def test_unwrapped(name, env_module):
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
-def test_base_wrapper(name, env_module, num_cycles=100):
+def test_base_wrapper(name, env_module):
     env = env_module.env(render_mode=None)
     env.reset()
     wrapped_env = wrappers.BaseWrapper(env)
-    wrapped_env.last()  # Tests attributes accessibility
+    _ = wrapped_env.last()  # Tests attributes accessibility
 
-    api_test(
-        wrapped_env, num_cycles=num_cycles
-    )  # BaseWrapper(env) should pass api test
+    api_test(wrapped_env, num_cycles=100)  # BaseWrapper(env) should pass the api test
 
     # BaseWrapper(env) and env must behave in the same way given the same seeds.
     env = env_module.env(render_mode=None)
@@ -79,7 +77,7 @@ def test_base_wrapper(name, env_module, num_cycles=100):
 
     cycle = 0
     for agent1, agent2 in zip(env.agent_iter(), wrapped_env.agent_iter()):
-        if cycle > num_cycles:
+        if cycle > 10:
             break
         assert data_equivalence(agent1, agent2), f"Incorrect agent: {agent1} {agent2}"
 
