@@ -388,14 +388,15 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># not confirmed
-
-pickle5==0.0.11
-Pillow==9.3.0
-torch==1.13.1
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Gymnasium==0.28.1
+numpy==1.23.5
+PettingZoo==1.22.4
+Pillow==9.4.0
+ray[rllib]==3.0.0.dev0
 SuperSuit==3.7.2
-ray[rllib]==2
-pettingzoo==1.22.4
+torch==1.13.1
+tensorflow-probability==0.19.0
+rlcard==1.1.0
 </pre></div>
 </div>
 </section>
@@ -411,7 +412,8 @@ pettingzoo==1.22.4
 
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span>
+<span class="kn">import</span> <span class="nn">ray</span>
+<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span>
 <span class="kn">from</span> <span class="nn">ray</span> <span class="kn">import</span> <span class="n">tune</span>
 <span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn</span> <span class="kn">import</span> <span class="n">DQNConfig</span>
 <span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn.dqn_torch_model</span> <span class="kn">import</span> <span class="n">DQNTorchModel</span>
@@ -424,17 +426,21 @@ pettingzoo==1.22.4
 
 <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
 
-<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-    <span class="s2">&quot;There are currently bugs in this tutorial, we will fix them soon.&quot;</span>
-<span class="p">)</span>
-
 <span class="n">torch</span><span class="p">,</span> <span class="n">nn</span> <span class="o">=</span> <span class="n">try_import_torch</span><span class="p">()</span>
 
 
 <span class="k">class</span> <span class="nc">TorchMaskedActions</span><span class="p">(</span><span class="n">DQNTorchModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">,</span> <span class="n">model_config</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">obs_space</span><span class="p">:</span> <span class="n">Box</span><span class="p">,</span>
+        <span class="n">action_space</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">,</span>
+        <span class="n">num_outputs</span><span class="p">,</span>
+        <span class="n">model_config</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">DQNTorchModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">,</span> <span class="n">model_config</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
         <span class="p">)</span>
@@ -470,6 +476,8 @@ pettingzoo==1.22.4
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
     <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
     <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
     <span class="c1"># function that outputs the environment you wish to register.</span>
@@ -478,17 +486,17 @@ pettingzoo==1.22.4
         <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">env</span>
 
-    <span class="n">register_env</span><span class="p">(</span><span class="s2">&quot;leduc_holdem&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
+    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
+    <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
 
     <span class="n">test_env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">())</span>
     <span class="n">obs_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">observation_space</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">obs_space</span><span class="p">)</span>
     <span class="n">act_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">action_space</span>
 
     <span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">DQNConfig</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="s2">&quot;leduc_holdem&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">rollouts</span><span class="p">(</span><span class="n">num_rollout_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rollout_fragment_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="n">env_name</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">rollouts</span><span class="p">(</span><span class="n">num_rollout_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rollout_fragment_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
         <span class="o">.</span><span class="n">training</span><span class="p">(</span>
             <span class="n">train_batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
             <span class="n">hiddens</span><span class="o">=</span><span class="p">[],</span>
@@ -500,10 +508,12 @@ pettingzoo==1.22.4
                 <span class="s2">&quot;player_0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
                 <span class="s2">&quot;player_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
             <span class="p">},</span>
-            <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">:</span> <span class="n">agent_id</span><span class="p">,</span>
+            <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">agent_id</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
-        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span>
+        <span class="p">)</span>  <span class="c1"># TODO: change to ERROR to match pistonball example</span>
         <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">exploration</span><span class="p">(</span>
             <span class="n">exploration_config</span><span class="o">=</span><span class="p">{</span>
@@ -536,12 +546,10 @@ pettingzoo==1.22.4
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">ray</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn</span> <span class="kn">import</span> <span class="n">DQN</span><span class="p">,</span> <span class="n">DQNConfig</span>
+<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.algorithm</span> <span class="kn">import</span> <span class="n">Algorithm</span>
 <span class="kn">from</span> <span class="nn">ray.rllib.env.wrappers.pettingzoo_env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
 <span class="kn">from</span> <span class="nn">ray.rllib.models</span> <span class="kn">import</span> <span class="n">ModelCatalog</span>
 <span class="kn">from</span> <span class="nn">ray.tune.registry</span> <span class="kn">import</span> <span class="n">register_env</span>
@@ -549,24 +557,19 @@ pettingzoo==1.22.4
 
 <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
 
-<span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-    <span class="s2">&quot;There are currently bugs in this tutorial, we will fix them soon.&quot;</span>
-<span class="p">)</span>
-
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
     <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Render pretrained policy loaded from checkpoint&quot;</span>
 <span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-    <span class="s2">&quot;checkpoint_path&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--checkpoint-path&quot;</span><span class="p">,</span>
     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
 <span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">)</span>
-<span class="n">params_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;params.pkl&quot;</span>
 
 
 <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
@@ -579,23 +582,13 @@ pettingzoo==1.22.4
     <span class="k">return</span> <span class="n">env</span>
 
 
-<span class="n">num_cpus</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="n">config</span> <span class="o">=</span> <span class="n">DQNConfig</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-
-<span class="n">register_env</span><span class="p">(</span><span class="s2">&quot;leduc_holdem&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
-
 <span class="n">env</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">()</span>
+<span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
+<span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">params_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-    <span class="c1"># num_workers not needed since we are not training</span>
-    <span class="k">del</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_workers&quot;</span><span class="p">]</span>
-    <span class="k">del</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_gpus&quot;</span><span class="p">]</span>
 
-<span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">num_cpus</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">num_gpus</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">DQNAgent</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="s2">&quot;leduc_holdem&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-<span class="n">DQNAgent</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
+<span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">DQNAgent</span> <span class="o">=</span> <span class="n">Algorithm</span><span class="o">.</span><span class="n">from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
 
 <span class="n">reward_sums</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
 <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
