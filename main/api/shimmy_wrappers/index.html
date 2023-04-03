@@ -414,7 +414,7 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
-<p>To load a DeepMind Control multi-agent soccer game:</p>
+<p>To load a DeepMind Control <a class="reference external" href="https://github.com/deepmind/dm_control/blob/main/dm_control/locomotion/soccer/README.md">multi-agent soccer game</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">DmControlMultiAgentCompatibilityV0</span>
 <span class="kn">from</span> <span class="nn">dm_control.locomotion</span> <span class="kn">import</span> <span class="n">soccer</span> <span class="k">as</span> <span class="n">dm_soccer</span>
 
@@ -427,6 +427,8 @@
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>For more information, see <a class="reference external" href="https://shimmy.farama.org/contents/dm_multi/">Shimmy DM Control Multi-Agent documentation</a></p>
+<hr class="docutils" />
 <p>To load an OpenSpiel game of <a class="reference external" href="https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon">backgammon</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">OpenspielCompatibilityV0</span>
 <span class="kn">import</span> <span class="nn">pyspiel</span>
@@ -445,6 +447,20 @@
     <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>For more information, see <a class="reference external" href="https://shimmy.farama.org/contents/open_spiel/">Shimmy OpenSpiel documentation</a></p>
+<hr class="docutils" />
+<p>To load a Melting Pot <a class="reference external" href="https://github.com/deepmind/meltingpot/blob/main/docs/substrate_scenario_details.md#prisoners-dilemma-in-the-matrix">prisoner’s dilemma in the matrix</a> substrate:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shimmy</span> <span class="kn">import</span> <span class="n">MeltingPotCompatibilityV0</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">MeltingPotCompatibilityV0</span><span class="p">(</span><span class="n">substrate_name</span><span class="o">=</span><span class="s2">&quot;prisoners_dilemma_in_the_matrix__arena&quot;</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">observations</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+    <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For more information, see <a class="reference external" href="https://shimmy.farama.org/contents/meltingpot/">Shimmy Melting Pot documentation</a></p>
 </section>
 <section id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">#</a></h2>
