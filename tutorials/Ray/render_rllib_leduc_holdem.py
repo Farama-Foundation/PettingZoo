@@ -5,12 +5,10 @@ Author: Rohan (https://github.com/Rohan138)
 
 import argparse
 import os
-import pickle
-from pathlib import Path
 
 import numpy as np
 import ray
-from ray.rllib.algorithms.dqn import DQN, DQNConfig
+from ray.rllib.algorithms.algorithm import Algorithm
 from ray.rllib.env.wrappers.pettingzoo_env import PettingZooEnv
 from ray.rllib.models import ModelCatalog
 from ray.tune.registry import register_env
@@ -18,24 +16,19 @@ from rllib_leduc_holdem import TorchMaskedActions
 
 from pettingzoo.classic import leduc_holdem_v4
 
-raise NotImplementedError(
-    "There are currently bugs in this tutorial, we will fix them soon."
-)
-
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(
     description="Render pretrained policy loaded from checkpoint"
 )
 parser.add_argument(
-    "checkpoint_path",
+    "--checkpoint-path",
     help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
 )
 
 args = parser.parse_args()
 
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
-params_path = Path(checkpoint_path).parent.parent / "params.pkl"
 
 
 alg_name = "DQN"
@@ -48,23 +41,13 @@ def env_creator():
     return env
 
 
-num_cpus = 1
-
-config = DQNConfig().to_dict()
-
-register_env("leduc_holdem", lambda config: PettingZooEnv(env_creator()))
-
 env = env_creator()
+env_name = "leduc_holdem_v4"
+register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
-with open(params_path, "rb") as f:
-    config = pickle.load(f)
-    # num_workers not needed since we are not training
-    del config["num_workers"]
-    del config["num_gpus"]
 
-ray.init(num_cpus=8, num_gpus=0)
-DQNAgent = DQN(env="leduc_holdem", config=config)
-DQNAgent.restore(checkpoint_path)
+ray.init()
+DQNAgent = Algorithm.from_checkpoint(checkpoint_path)
 
 reward_sums = {a: 0 for a in env.possible_agents}
 i = 0

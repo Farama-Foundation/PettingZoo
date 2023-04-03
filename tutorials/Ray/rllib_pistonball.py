@@ -5,6 +5,7 @@ Author: Rohan (https://github.com/Rohan138)
 
 import os
 
+import ray
 import supersuit as ss
 from ray import tune
 from ray.rllib.algorithms.ppo import PPOConfig
@@ -15,10 +16,6 @@ from ray.tune.registry import register_env
 from torch import nn
 
 from pettingzoo.butterfly import pistonball_v6
-
-raise NotImplementedError(
-    "There are currently bugs in this tutorial, we will fix them soon."
-)
 
 
 class CNNModelV2(TorchModelV2, nn.Module):
@@ -63,12 +60,14 @@ def env_creator(args):
     env = ss.color_reduction_v0(env, mode="B")
     env = ss.dtype_v0(env, "float32")
     env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
     env = ss.normalize_obs_v0(env, env_min=0, env_max=1)
+    env = ss.frame_stack_v1(env, 3)
     return env
 
 
 if __name__ == "__main__":
+    ray.init()
+
     env_name = "pistonball_v6"
 
     register_env(env_name, lambda config: ParallelPettingZooEnv(env_creator(config)))
@@ -76,7 +75,8 @@ if __name__ == "__main__":
 
     config = (
         PPOConfig()
-        .rollouts(num_rollout_workers=4, rollout_fragment_length=512)
+        .environment(env=env_name, clip_actions=True)
+        .rollouts(num_rollout_workers=4, rollout_fragment_length=128)
         .training(
             train_batch_size=512,
             lr=2e-5,
@@ -90,7 +90,6 @@ if __name__ == "__main__":
             sgd_minibatch_size=64,
             num_sgd_iter=10,
         )
-        .environment(env=env_name, clip_actions=True)
         .debugging(log_level="ERROR")
         .framework(framework="torch")
         .resources(num_gpus=int(os.environ.get("RLLIB_NUM_GPUS", "0")))
