@@ -63,15 +63,16 @@ def test_base_wrapper(name, env_module, num_cycles=100):
     wrapped_env = wrappers.BaseWrapper(env)
     wrapped_env.last()  # Tests attributes accessibility
 
-    api_test(wrapped_env, num_cycles=num_cycles)  # Wrapped env should pass api test
+    api_test(wrapped_env, num_cycles=num_cycles)  # BaseWrapper(env) should pass api test
 
-    # WrappedEnv and Env must behave in the same way given the same seeds.
+    # BaseWrapper(env) and env must behave in the same way given the same seeds.
     env = env_module.env(render_mode=None)
     wrapped_env = wrappers.BaseWrapper(env_module.env(render_mode=None))
     env.reset(seed=42)
     wrapped_env.reset(seed=42)
-    [env.action_space(agent).seed(42) for agent in env.agents]
-    [wrapped_env.action_space(agent).seed(42) for agent in wrapped_env.agents]
+    for agent in env.agents:
+        env.action_space(agent).seed(42)
+        wrapped_env.action_space(agent).seed(42)
 
     cycle = 0
     for agent1, agent2 in zip(env.agent_iter(), wrapped_env.agent_iter()):
@@ -81,9 +82,6 @@ def test_base_wrapper(name, env_module, num_cycles=100):
 
         obs1, rew1, term1, trunc1, info1 = env.last()
         obs2, rew2, term2, trunc2, info2 = wrapped_env.last()
-
-        if name == "mpe/simple_world_comm_v2":
-            print("Test")
 
         if term1 or term2 or trunc1 or trunc2:
             break
