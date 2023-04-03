@@ -4,6 +4,7 @@ from gymnasium.utils.env_checker import data_equivalence
 
 from pettingzoo.test import api_test
 from pettingzoo.utils import conversions, wrappers
+
 from .all_modules import all_environments
 
 
@@ -63,7 +64,9 @@ def test_base_wrapper(name, env_module, num_cycles=100):
     wrapped_env = wrappers.BaseWrapper(env)
     wrapped_env.last()  # Tests attributes accessibility
 
-    api_test(wrapped_env, num_cycles=num_cycles)  # BaseWrapper(env) should pass api test
+    api_test(
+        wrapped_env, num_cycles=num_cycles
+    )  # BaseWrapper(env) should pass api test
 
     # BaseWrapper(env) and env must behave in the same way given the same seeds.
     env = env_module.env(render_mode=None)
@@ -100,7 +103,9 @@ def test_base_wrapper(name, env_module, num_cycles=100):
             mask = obs1["action_mask"]
 
         action1 = env.action_space(env.agent_selection).sample(mask=mask)
-        action2 = wrapped_env.action_space(wrapped_env.agent_selection).sample(mask=mask)
+        action2 = wrapped_env.action_space(wrapped_env.agent_selection).sample(
+            mask=mask
+        )
 
         assert data_equivalence(
             action1, action2
