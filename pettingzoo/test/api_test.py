@@ -333,8 +333,6 @@ def play_test(env, observation_0, num_cycles):
         else:
             if isinstance(prev_observe, dict) and "action_mask" in prev_observe:
                 mask = prev_observe["action_mask"]
-            elif isinstance(info, dict) and "action_mask" in info:
-                mask = info["action_mask"]
             else:
                 mask = None
             action = env.action_space(agent).sample(mask)
