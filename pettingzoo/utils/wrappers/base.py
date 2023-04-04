@@ -87,10 +87,6 @@ class BaseWrapper(AECEnv):
     def render(self):
         return self.env.render()
 
-    @property
-    def _cumulative_rewards(self):
-        return self.env._cumulative_rewards
-
     def reset(self, seed=None, options=None):
         self.env.reset(seed=seed, options=options)
 
@@ -100,6 +96,7 @@ class BaseWrapper(AECEnv):
         self.truncations = self.env.truncations
         self.infos = self.env.infos
         self.agents = self.env.agents
+        self._cumulative_rewards = self.env._cumulative_rewards
 
     def observe(self, agent):
         return self.env.observe(agent)
@@ -116,6 +113,7 @@ class BaseWrapper(AECEnv):
         self.truncations = self.env.truncations
         self.infos = self.env.infos
         self.agents = self.env.agents
+        self._cumulative_rewards = self.env._cumulative_rewards
 
     def __str__(self):
         """Returns a name which looks like: "max_observation<space_invaders_v1>"."""
