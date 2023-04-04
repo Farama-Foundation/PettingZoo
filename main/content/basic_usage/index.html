@@ -409,7 +409,7 @@
 <p>The commonly used methods are:</p>
 <p><code class="docutils literal notranslate"><span class="pre">agent_iter(max_iter=2**63)</span></code> returns an iterator that yields the current agent of the environment. It terminates when all agents in the environment are done or when <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> (steps have been executed).</p>
 <p><code class="docutils literal notranslate"><span class="pre">last(observe=True)</span></code> returns observation, reward, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If <code class="docutils literal notranslate"><span class="pre">observe</span></code> is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done.</p>
-<p><code class="docutils literal notranslate"><span class="pre">reset()</span></code> resets the environment and sets it up for use when called the first time.</p>
+<p><code class="docutils literal notranslate"><span class="pre">reset()</span></code> resets the environment and sets it up for use when called the first time. This method must be called before any other method.</p>
 <p><code class="docutils literal notranslate"><span class="pre">step(action)</span></code> takes and executes the action of the agent in the environment, automatically switches control to the next agent.</p>
 </section>
 <section id="additional-environment-api">
