@@ -25,6 +25,16 @@ This is a carefully commented version of the PettingZoo rock paper scissors envi
 
 A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. PettingZoo provides [wrappers to convert environments](/api/pz_wrappers) back and forth between the AEC API and the Parallel API and a set of simple [utility wrappers](/api/pz_wrappers) which provide input validation and other convenient reusable logic. PettingZoo also includes [wrappers](/api/supersuit_wrappers) via the SuperSuit companion package (`pip install supersuit`).
 
+```python
+from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.utils import ClipOutOfBoundsWrapper
+
+env = pistonball_v6.env()
+wrapped_env = ClipOutOfBoundsWrapper(env)
+# Wrapped environments must be reset before use
+wrapped_env.reset()
+```
+
 ## Developer Utils
 
 The utils directory contains a few functions which are helpful for debugging environments. These are documented in the API docs.
