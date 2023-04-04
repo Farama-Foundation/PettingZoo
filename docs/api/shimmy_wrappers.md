@@ -23,7 +23,7 @@ The [Shimmy](https://shimmy.farama.org/) package (`pip install shimmy`) allows c
 
 ## Usage
 
-To load a DeepMind Control multi-agent soccer game:
+To load a DeepMind Control [multi-agent soccer game](https://github.com/deepmind/dm_control/blob/main/dm_control/locomotion/soccer/README.md):
 
 ```python
 from shimmy import DmControlMultiAgentCompatibilityV0
@@ -37,6 +37,9 @@ while env.agents:
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}  # this is where you would insert your policy
     observations, rewards, terminations, truncations, infos = env.step(actions)
 ```
+For more information, see [Shimmy DM Control Multi-Agent documentation](https://shimmy.farama.org/contents/dm_multi/)
+
+---
 
 To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon):
 ```python
@@ -56,6 +59,24 @@ for agent in env.agent_iter():
     env.step(action)
     env.render()
 ```
+For more information, see [Shimmy OpenSpiel documentation](https://shimmy.farama.org/contents/open_spiel/)
+
+---
+
+To load a Melting Pot [prisoner's dilemma in the matrix](https://github.com/deepmind/meltingpot/blob/main/docs/substrate_scenario_details.md#prisoners-dilemma-in-the-matrix) substrate:
+
+```python
+from shimmy import MeltingPotCompatibilityV0
+env = MeltingPotCompatibilityV0(substrate_name="prisoners_dilemma_in_the_matrix__arena", render_mode="human")
+observations = env.reset()
+while env.agents:
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+    env.step(actions)
+env.close()
+```
+
+For more information, see [Shimmy Melting Pot documentation](https://shimmy.farama.org/contents/meltingpot/)
 
 ## Citation
 
