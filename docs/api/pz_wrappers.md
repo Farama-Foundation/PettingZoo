@@ -4,7 +4,7 @@
 
 ### AEC to Parallel
 
-An environment can be converted from an AEC environment to a parallel environment with the `to_parallel` wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:
+An environment can be converted from an AEC environment to a parallel environment with the `aec_to_parallel` wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:
 
 1. The environment steps in a cycle, i.e. it steps through every live agent in order.
 2. The environment does not update the observations of the agents except at the end of a cycle.
@@ -15,18 +15,18 @@ Most parallel environments in PettingZoo only allocate rewards at the end of a c
 from pettingzoo.utils.conversions import to_parallel
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.env()
-env = to_parallel(env)
+env = aec_to_parallel(env)
 ```
 
 ### Parallel to AEC
 
-Any parallel environment can be efficiently converted to an AEC environment with the `from_parallel` wrapper.
+Any parallel environment can be efficiently converted to an AEC environment with the `parallel_to_aec` wrapper.
 
 ``` python
 from pettingzoo.utils import from_parallel
 from pettingzoo.butterfly import pistonball_v6
 env = pistonball_v6.parallel_env()
-env = from_parallel(env)
+env = parallel_to_aec(env)
 ```
 
 ## Utility Wrappers
