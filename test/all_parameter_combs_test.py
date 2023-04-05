@@ -229,7 +229,7 @@ def test_module(name, env_module, kwargs):
     api_test(_env)
 
     # some atari environments fail this test
-    if "atari/" not in name and "hanabi" not in name:
+    if name not in ["atari/", "hanabi"]:
         seed_test(lambda: env_module.env(**kwargs), 50)
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))

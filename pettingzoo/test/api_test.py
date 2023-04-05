@@ -328,14 +328,11 @@ def play_test(env, observation_0, num_cycles):
             env.infos[agent], dict
         ), "an environment agent's info must be a dictionary"
         prev_observe, reward, terminated, truncated, info = env.last()
-        if terminated or truncated:
-            action = None
+        if isinstance(prev_observe, dict) and "action_mask" in prev_observe:
+            mask = prev_observe["action_mask"]
         else:
-            if isinstance(prev_observe, dict) and "action_mask" in prev_observe:
-                mask = prev_observe["action_mask"]
-            else:
-                mask = None
-            action = env.action_space(agent).sample(mask)
+            mask = None
+        action = env.action_space(agent).sample(mask)
 
         if agent not in live_agents:
             live_agents.add(agent)
@@ -386,13 +383,12 @@ def play_test(env, observation_0, num_cycles):
         ), "Out of bounds observation: " + str(prev_observe)
 
         if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
-            if isinstance(prev_observe, dict) and "observation" in prev_observe:
-                assert (
+            assert env.observation_space(agent).dtype == prev_observe.dtype
+        elif isinstance(env.observation_space(agent), gymnasium.spaces.Dict):
+            assert (
                     env.observation_space(agent).dtype
                     == prev_observe["observation"].dtype
-                )
-            else:
-                assert env.observation_space(agent).dtype == prev_observe.dtype
+            )
         test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
