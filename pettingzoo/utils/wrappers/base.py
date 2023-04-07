@@ -25,7 +25,6 @@ class BaseWrapper(AECEnv):
         # self.agent_selection = self.env.agent_selection
 
         # self.rewards = self.env.rewards
-        # self.dones = self.env.dones
 
         # we don't want to care one way or the other whether environments have an infos or not before reset
         try:
