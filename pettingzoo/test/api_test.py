@@ -390,7 +390,7 @@ def play_test(env, observation_0, num_cycles):
             assert env.observation_space(agent).dtype == prev_observe.dtype
         elif isinstance(env.observation_space(agent), gymnasium.spaces.Dict):
             assert (
-                env.observation_space(agent).dtype == prev_observe["observation"].dtype
+                env.observation_space(agent)["observation"].dtype == prev_observe["observation"].dtype
             )
         test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
