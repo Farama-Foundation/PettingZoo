@@ -362,7 +362,7 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(self, **kwargs)
         self._kwargs = kwargs
 
-        self.seed()
+        self._seed()
 
         self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
@@ -391,13 +391,13 @@ class raw_env(AECEnv, EzPickle):
     # def convert_to_dict(self, list_of_list):
     #     return dict(zip(self.agents, list_of_list))
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.randomizer, seed = seeding.np_random(seed)
         self.env = CooperativePong(self.randomizer, **self._kwargs)
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._agent_selector.reset()

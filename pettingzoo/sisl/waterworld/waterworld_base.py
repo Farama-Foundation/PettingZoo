@@ -113,7 +113,7 @@ class WaterworldBase:
         self.frames = 0
         self.num_agents = self.n_pursuers
         self.get_spaces()
-        self.seed()
+        self._seed()
 
     def get_spaces(self):
         """Define the action and observation spaces for all of the agents."""
@@ -139,7 +139,7 @@ class WaterworldBase:
         self.observation_space = [obs_space for i in range(self.n_pursuers)]
         self.action_space = [act_space for i in range(self.n_pursuers)]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 

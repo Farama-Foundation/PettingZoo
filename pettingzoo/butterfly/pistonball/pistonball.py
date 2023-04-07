@@ -272,7 +272,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.has_reset = False
         self.closed = False
-        self.seed()
+        self._seed()
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -280,7 +280,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
@@ -393,7 +393,7 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed)
+            self._seed(seed)
         self.space = pymunk.Space(threaded=False)
         self.add_walls()
         # self.space.threads = 2
