@@ -37,7 +37,7 @@ The commonly used methods are:
 
 `last(observe=True)` returns observation, reward, done, and info for the agent currently able to act. The returned reward is the cumulative reward that the agent has received since it last acted. If `observe` is set to False, the observation will not be computed, and None will be returned in its place. Note that a single agent being done does not imply the environment is done.
 
-`reset()` resets the environment and sets it up for use when called the first time. This method must be called before any other method.
+`reset()` resets the environment and sets it up for use when called the first time.
 
 `step(action)` takes and executes the action of the agent in the environment, automatically switches control to the next agent.
 

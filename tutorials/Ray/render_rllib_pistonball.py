@@ -5,7 +5,9 @@ Author: Rohan (https://github.com/Rohan138)
 
 import argparse
 import os
+from pathlib import Path
 
+import pickle5 as pickle
 import ray
 import supersuit as ss
 from PIL import Image
@@ -17,19 +19,24 @@ from tutorials.Ray.rllib_pistonball import CNNModelV2
 
 from pettingzoo.butterfly import pistonball_v6
 
+raise NotImplementedError(
+    "There are currently bugs in this tutorial, we will fix them soon."
+)
+
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 parser = argparse.ArgumentParser(
     description="Render pretrained policy loaded from checkpoint"
 )
 parser.add_argument(
-    "--checkpoint-path",
+    "checkpoint_path",
     help="Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`",
 )
 
 args = parser.parse_args()
 
 checkpoint_path = os.path.expanduser(args.checkpoint_path)
+params_path = Path(checkpoint_path).parent.parent / "params.pkl"
 
 ModelCatalog.register_custom_model("CNNModelV2", CNNModelV2)
 
@@ -59,10 +66,16 @@ env = env_creator()
 env_name = "pistonball_v6"
 register_env(env_name, lambda config: PettingZooEnv(env_creator()))
 
+with open(params_path, "rb") as f:
+    config = pickle.load(f)
+    # num_workers not needed since we are not training
+    del config["num_workers"]
+    del config["num_gpus"]
 
-ray.init()
+ray.init(num_cpus=8, num_gpus=1)
+PPOagent = PPO(env=env_name, config=config)
+PPOagent.restore(checkpoint_path)
 
-PPOagent = PPO.from_checkpoint(checkpoint_path)
 
 reward_sum = 0
 frame_list = []
@@ -75,7 +88,9 @@ for agent in env.agent_iter():
     if termination or truncation:
         action = None
     else:
-        action = PPOagent.compute_single_action(observation)
+        action, _, _ = PPOagent.get_policy("policy_0").compute_single_action(
+            observation
+        )
 
     env.step(action)
     i += 1
