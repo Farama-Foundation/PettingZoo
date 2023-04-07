@@ -30,7 +30,7 @@ class parallel_env(ParallelEnv):
         self.types = []
         self._agent_counters = {}
         self.max_cycles = max_cycles
-        self.seed()
+        self._seed()
         self.render_mode = render_mode
         for i in range(3):
             self.add_type()
@@ -66,14 +66,14 @@ class parallel_env(ParallelEnv):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.agents = []
         self.num_steps = 0
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
         return {a: self.observe(a) for a in self.agents}, {a: {} for a in self.agents}
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, _ = seeding.np_random(seed)
 
     def step(self, actions):
