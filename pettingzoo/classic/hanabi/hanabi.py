@@ -481,8 +481,10 @@ class raw_env(AECEnv, EzPickle):
                 "You are calling render method without specifying any render mode."
             )
             return
-
-        self.hanabi_env.render()
+        try:
+            self.hanabi_env.render()
+        except NotImplementedError:
+            return
 
     def close(self):
         pass
