@@ -328,6 +328,8 @@ def play_test(env, observation_0, num_cycles):
             env.infos[agent], dict
         ), "an environment agent's info must be a dictionary"
         prev_observe, reward, terminated, truncated, info = env.last()
+        if terminated or truncated:
+            action = None
         if isinstance(prev_observe, dict) and "action_mask" in prev_observe:
             mask = prev_observe["action_mask"]
         else:
