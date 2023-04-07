@@ -330,11 +330,13 @@ def play_test(env, observation_0, num_cycles):
         prev_observe, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
-        if isinstance(prev_observe, dict) and "action_mask" in prev_observe:
-            mask = prev_observe["action_mask"]
         else:
-            mask = None
-        action = env.action_space(agent).sample(mask)
+            mask = (
+                prev_observe.get("action_mask")
+                if isinstance(prev_observe, dict)
+                else None
+            )
+            action = env.action_space(agent).sample(mask)
 
         if agent not in live_agents:
             live_agents.add(agent)
@@ -406,10 +408,9 @@ def play_test(env, observation_0, num_cycles):
         obs, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
-        elif isinstance(obs, dict) and "action_mask" in obs:
-            action = env.action_space(agent).sample(obs["action_mask"])
         else:
-            action = env.action_space(agent).sample()
+            mask = obs.get("action_mask") if isinstance(obs, dict) else None
+            action = env.action_space(agent).sample(mask)
         assert isinstance(terminated, bool), "terminated from last is not True or False"
         assert isinstance(truncated, bool), "terminated from last is not True or False"
         assert (
