@@ -1,3 +1,8 @@
+---
+title: AEC
+---
+
+
 # AEC API
 
 By default, PettingZoo models games as [*Agent Environment Cycle*](https://arxiv.org/abs/2009.13051) (AEC) environments. This allows it to support any type of game multi-agent RL can consider.
