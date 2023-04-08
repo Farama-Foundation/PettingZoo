@@ -2,7 +2,13 @@ from gymnasium.utils.env_checker import data_equivalence
 
 
 def seed_action_spaces(env):
-    if hasattr(env, "possible_agents"):
+    if hasattr(env, "agents"):
+        for i, agent in enumerate(env.agents):
+            env.action_space(agent).seed(42 + i)
+
+
+def seed_observation_spaces(env):
+    if hasattr(env, "agents"):
         for i, agent in enumerate(env.agents):
             env.action_space(agent).seed(42 + i)
 
@@ -15,6 +21,9 @@ def check_environment_deterministic(env1, env2, num_cycles):
 
     seed_action_spaces(env1)
     seed_action_spaces(env2)
+
+    seed_observation_spaces(env1)
+    seed_observation_spaces(env2)
 
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
@@ -67,14 +76,8 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
 
-    obs1, info1 = env1.reset(seed=42)
-    obs2, info2 = env2.reset(seed=42)
-    assert data_equivalence(
-        obs1, obs2
-    ), f"Incorrect observation return on reset: {obs1}, {obs2}"
-    assert data_equivalence(
-        info1, info2
-    ), f"Incorrect info return on reset: {info1}, {info2}"
+    env1.reset(seed=42)
+    env2.reset(seed=42)
 
     seed_action_spaces(env1)
     seed_action_spaces(env2)

@@ -67,8 +67,18 @@ class parallel_env(ParallelEnv):
     def reset(self, seed=None, options=None):
         if seed is not None:
             self.seed(seed=seed)
-        self.agents = []
         self.num_steps = 0
+
+        # Reset spaces and types
+        self._obs_spaces = {}
+        self._act_spaces = {}
+        self.types = []
+        self._agent_counters = {}
+        for i in range(3):
+            self.add_type()
+
+        # Add agents
+        self.agents = []
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
         return {agent: self.observe(agent) for agent in self.agents}

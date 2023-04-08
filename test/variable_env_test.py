@@ -4,7 +4,10 @@ from pettingzoo.test.example_envs import (
     generated_agents_parallel_v0,
 )
 from pettingzoo.test.parallel_test import parallel_api_test
-from pettingzoo.test.seed_test import check_environment_deterministic
+from pettingzoo.test.seed_test import (
+    check_environment_deterministic,
+    check_environment_deterministic_parallel,
+)
 from pettingzoo.utils.conversions import aec_to_parallel, parallel_to_aec
 
 
@@ -29,6 +32,15 @@ def test_parallel_generated_agents_conversions():
         aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
     )
     check_environment_deterministic(env1, env2, 500)
+
+
+def test_generated_agents_conversions():
+    parallel_api_test(aec_to_parallel(generated_agents_parallel_v0.env()))
+    api_test(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
+
+    env1 = generated_agents_parallel_v0.parallel_env()
+    env2 = aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
+    check_environment_deterministic_parallel(env1, env2, 500)
 
 
 if __name__ == "__main__":
