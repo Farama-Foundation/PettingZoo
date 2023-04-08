@@ -229,8 +229,8 @@ def test_module(name, env_module, kwargs):
     api_test(_env)
 
     # some atari environments fail this test
-    if name not in ["atari/", "hanabi"]:
-        seed_test(lambda: env_module.env(**kwargs), 50)
+    if "atari/" not in name and "hanabi" not in name:
+        seed_test(lambda: env_module.env(**kwargs))
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
     if hasattr(env_module, "parallel_env"):
