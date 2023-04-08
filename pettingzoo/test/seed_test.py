@@ -7,15 +7,17 @@ def seed_action_spaces(env):
             env.action_space(agent).seed(42 + i)
 
 
-def seed_test(env_constructor):
-    env1 = env_constructor()
-    env2 = env_constructor()
+def check_environment_deterministic(env1, env2, num_cycles):
+    """Check that two AEC environments execute the same way."""
 
     env1.reset(seed=42)
     env2.reset(seed=42)
 
     seed_action_spaces(env1)
     seed_action_spaces(env2)
+
+    iter = 0
+    max_env_iters = num_cycles * len(env1.possible_agents)
 
     for agent1, agent2 in zip(env1.agent_iter(), env2.agent_iter()):
         assert data_equivalence(agent1, agent2), f"Incorrect agent: {agent1} {agent2}"
@@ -42,24 +44,28 @@ def seed_test(env_constructor):
             action1, action2
         ), f"Incorrect actions: {action1} {action2}"
 
-        if termination1 or truncation1:
+        if iter >= max_env_iters or termination1 or truncation1:
             break
 
         env1.step(action1)
         env2.step(action2)
+
+        iter += 1
+
     env1.close()
     env2.close()
 
 
-def parallel_seed_test(parallel_env_fn):
-    env1 = parallel_env_fn()
-    env2 = parallel_env_fn()
-
+def check_environment_deterministic_parallel(env1, env2, num_cycles):
+    """Check that two parallel environments execute the same way."""
     env1.reset(seed=42)
     env2.reset(seed=42)
 
     seed_action_spaces(env1)
     seed_action_spaces(env2)
+
+    iter = 0
+    max_env_iters = num_cycles * len(env1.possible_agents)
 
     obs1, info1 = env1.reset(seed=42)
     obs2, info2 = env2.reset(seed=42)
@@ -83,13 +89,30 @@ def parallel_seed_test(parallel_env_fn):
         obs1, rewards1, terminations1, truncations1, infos1 = env1.step(actions1)
         obs2, rewards2, terminations2, truncations2, infos2 = env2.step(actions2)
 
+        iter += 1
+
         assert data_equivalence(obs1, obs2), "Incorrect observations"
         assert data_equivalence(rewards1, rewards2), "Incorrect values for rewards"
         assert data_equivalence(terminations1, terminations2), "Incorrect terminations."
         assert data_equivalence(truncations1, truncations2), "Incorrect truncations"
         assert data_equivalence(infos1, infos2), "Incorrect infos"
 
-        if terminations1 or truncations1:
+        if iter >= max_env_iters or any(terminations1) or any(truncations1):
             break
+
     env1.close()
     env2.close()
+
+
+def seed_test(env_constructor, num_cycles=10):
+    env1 = env_constructor()
+    env2 = env_constructor()
+
+    check_environment_deterministic(env1, env2, 500)
+
+
+def parallel_seed_test(parallel_env_fn):
+    env1 = parallel_env_fn()
+    env2 = parallel_env_fn()
+
+    check_environment_deterministic_parallel(env1, env2, 500)
