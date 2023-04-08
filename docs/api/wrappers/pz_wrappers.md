@@ -1,3 +1,7 @@
+---
+title: PettingZoo Wrappers
+---
+
 # PettingZoo Wrappers
 
 ## Conversion wrappers
