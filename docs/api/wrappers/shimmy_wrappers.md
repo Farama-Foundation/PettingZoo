@@ -37,9 +37,7 @@ while env.agents:
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}  # this is where you would insert your policy
     observations, rewards, terminations, truncations, infos = env.step(actions)
 ```
-For more information, see [Shimmy DM Control Multi-Agent documentation](https://shimmy.farama.org/contents/dm_multi/)
 
----
 
 To load an OpenSpiel game of [backgammon](https://github.com/deepmind/open_spiel/blob/master/docs/games.md#backgammon):
 ```python
@@ -59,9 +57,7 @@ for agent in env.agent_iter():
     env.step(action)
     env.render()
 ```
-For more information, see [Shimmy OpenSpiel documentation](https://shimmy.farama.org/contents/open_spiel/)
 
----
 
 To load a Melting Pot [prisoner's dilemma in the matrix](https://github.com/deepmind/meltingpot/blob/main/docs/substrate_scenario_details.md#prisoners-dilemma-in-the-matrix) substrate:
 
@@ -76,7 +72,28 @@ while env.agents:
 env.close()
 ```
 
-For more information, see [Shimmy Melting Pot documentation](https://shimmy.farama.org/contents/meltingpot/)
+
+For more information, see [Shimmy documentation](https://shimmy.farama.org).
+
+## Multi-Agent Compatibility Wrappers:
+```{eval-rst}
+.. py:class:: OpenspielCompatibilityV0(game: pyspiel.Game, render_mode: str | None)   
+.. py:class:: MeltingPotCompatibilityV0(env: meltingpot.python.utils.substrates.substrate.Substrate, substrate_name: str | None, max_cycles: int | None, render_mode: str | None)
+.. py:class:: DmControlMultiAgentCompatibilityV0(env: dm_control.composer.Environment, render_mode: str | None = None)
+```
+
+[//]: # (```{eval-rst})
+
+[//]: # (.. currentmodule:: shimmy)
+
+[//]: # ()
+[//]: # (.. autoclass:: DmControlMultiAgentCompatibilityV0)
+
+[//]: # (.. autoclass:: MeltingPotCompatibilityV0)
+
+[//]: # (.. autoclass:: OpenspielCompatibilityV0)
+
+[//]: # (```)
 
 ## Citation
 
