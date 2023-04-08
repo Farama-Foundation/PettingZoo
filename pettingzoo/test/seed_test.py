@@ -3,7 +3,7 @@ from gymnasium.utils.env_checker import data_equivalence
 
 def seed_action_spaces(env):
     if hasattr(env, "possible_agents"):
-        for i, agent in enumerate(env.possible_agents):
+        for i, agent in enumerate(env.agents):
             env.action_space(agent).seed(42 + i)
 
 
@@ -17,7 +17,7 @@ def check_environment_deterministic(env1, env2, num_cycles):
     seed_action_spaces(env2)
 
     iter = 0
-    max_env_iters = num_cycles * len(env1.possible_agents)
+    max_env_iters = num_cycles * len(env1.agents)
 
     for agent1, agent2 in zip(env1.agent_iter(), env2.agent_iter()):
         assert data_equivalence(agent1, agent2), f"Incorrect agent: {agent1} {agent2}"
@@ -65,7 +65,7 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     seed_action_spaces(env2)
 
     iter = 0
-    max_env_iters = num_cycles * len(env1.possible_agents)
+    max_env_iters = num_cycles * len(env1.agents)
 
     obs1, info1 = env1.reset(seed=42)
     obs2, info2 = env2.reset(seed=42)
@@ -76,9 +76,8 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
         info1, info2
     ), f"Incorrect info return on reset: {info1}, {info2}"
 
-    for agent in env1.possible_agents:
-        env1.action_space(agent).seed(42)
-        env2.action_space(agent).seed(42)
+    seed_action_spaces(env1)
+    seed_action_spaces(env2)
 
     while env1.agents:
         actions1 = {agent: env1.action_space(agent).sample() for agent in env1.agents}
