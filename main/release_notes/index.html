@@ -1,0 +1,1078 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="">
+    <meta property="og:title" content="PettingZoo Documentation" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/release_notes/index.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../genindex/" /><link rel="search" title="Search" href="../search/" /><link rel="prev" title="RLlib: DQN for Simple Poker" href="../tutorials/rllib/holdem/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/release_notes/index.html" />
+
+    <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07.dev1 -->
+        <title>Release Notes - PettingZoo Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=721f65a87c37740baa8d605b09db5bec3a2987a8" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=b0c92cd440df7c18a0306b0433406327ff2c572f" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    <header class="farama-header" aria-label="Farama header">
+      <div class="farama-header__container">
+        <div class="farama-header__left--mobile">
+          <label class="nav-overlay-icon" for="__navigation">
+            <div class="visually-hidden">Toggle site navigation sidebar</div>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <defs></defs>
+              <line x1="0.5" y1="4" x2="23.5" y2="4"></line>
+              <line x1="0.232" y1="12" x2="23.5" y2="12"></line>
+              <line x1="0.232" y1="20" x2="23.5" y2="20"></line>
+            </svg>
+            <!-- <svg viewBox="0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <line x1="0.5" y1="4.5" x2="23.5" y2="4.5" style="fill: none; "></line>
+              <line x1="0.5" y1="12" x2="14" y2="12" ></line>
+              <line x1="0.5" y1="19.5" x2="23.5" y2="19.5"></line>
+              <polyline style="stroke-width: 0px;" points="17 7 22 12 17 17"></polyline>
+            </svg> -->
+            <!-- <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:20px">
+              <defs></defs>
+              <rect y="1" width="22" height="22" rx="2" ry="2" style="fill: none;" x="1"></rect>
+              <line x1="8" y1="1" x2="8" y2="23"></line>
+              <polyline style="stroke-linecap: round; fill: none; stroke-linejoin: round;" points="13 7 17 12 13 17"></polyline>
+            </svg> -->
+          </label>
+        </div>
+        <div class="farama-header__left farama-header__center--mobile">
+          <a href="../">
+              <img class="farama-header__logo only-light" src="../_static/img/PettingZoo.svg" alt="Light Logo"/>
+              <img class="farama-header__logo only-dark" src="../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+            <span class="farama-header__title">PettingZoo Documentation</span>
+          </a>
+        </div>
+        <div class="farama-header__right">
+          <div class="farama-header-menu">
+            <button class="farama-header-menu__btn" aria-label="Open Farama Menu" aria-expanded="false" aria-haspopup="true" aria-controls="farama-menu">
+              <img class="farama-black-logo-invert" src="../_static/img/farama-logo-header.svg">
+              <svg viewBox="0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polyline style="stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-width: 2px;" points="1 7 12 18 23 7"></polyline>
+              </svg>
+            </button>
+            <div class="farama-header-menu-container farama-hidden" aria-hidden="true" id="farama-menu">
+              <div class="farama-header-menu__header">
+                <a href="https://farama.org">
+                  <img class="farama-header-menu__logo farama-white-logo-invert" src="../_static/img/farama_solid_white.svg" alt="Farama Foundation logo">
+                  <span>Farama Foundation</span>
+                </a>
+                <div class="farama-header-menu-header__right">
+                  <button id="farama-close-menu">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-close">
+                      <line x1="3" y1="21" x2="21" y2="3"></line>
+                      <line x1="3" y1="3" x2="21" y2="21"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="farama-header-menu__body">
+                <!-- Response from farama.org/api/projects.json -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<div class="page">
+  <!--<header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../"><div class="brand">PettingZoo Documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>-->
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="farama-sidebar__title" href="../">
+      <img class="farama-header__logo only-light" src="../_static/img/PettingZoo.svg" alt="Light Logo"/>
+      <img class="farama-header__logo only-dark" src="../_static/img/PettingZoo_White.svg" alt="Dark Logo"/>
+    <span class="farama-header__title">PettingZoo Documentation</span>
+  </a><form class="sidebar-search-container" method="get" action="../search/" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../content/basic_usage/">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content/environment_tests/">Testing Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/aec/">AEC API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/parallel/">Parallel API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pz_wrappers/">PettingZoo Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/supersuit_wrappers/">Supersuit Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/shimmy_wrappers/">Shimmy Compatibility Wrappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/utils/">Utils</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Environments</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environments/atari/">Atari</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/basketball_pong/">Basketball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/boxing/">Boxing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/combat_plane/">Combat: Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/combat_tank/">Combat: Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/double_dunk/">Double Dunk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/entombed_competitive/">Emtombed: Competitive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/entombed_cooperative/">Emtombed: Cooperative</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/flag_capture/">Flag Capture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/foozpong/">Foozpong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/ice_hockey/">Ice Hockey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/joust/">Joust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/mario_bros/">Mario Bros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/maze_craze/">Maze Craze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/othello/">Othello</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/pong/">Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/quadrapong/">Quadrapong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/space_invaders/">Space Invaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/space_war/">Space War</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/surround/">Surround</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/tennis/">Tennis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/video_checkers/">Video Checkers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/volleyball_pong/">Volleyball Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/warlords/">Warlords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/atari/wizard_of_wor/">Wizard of Wor</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environments/butterfly/">Butterfly</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environments/butterfly/cooperative_pong/">Cooperative Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/butterfly/knights_archers_zombies/">Knights Archers Zombies (‘KAZ’)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/butterfly/pistonball/">Pistonball</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environments/classic/">Classic</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/chess/">Chess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/connect_four/">Connect Four</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/gin_rummy/">Gin Rummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/go/">Go</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/hanabi/">Hanabi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/leduc_holdem/">Leduc Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/rps/">Rock Paper Scissors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/texas_holdem_no_limit/">Texas Hold’em No Limit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/texas_holdem/">Texas Hold’em</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/classic/tictactoe/">Tic Tac Toe</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environments/mpe/">MPE</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple/">Simple</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_adversary/">Simple Adversary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_crypto/">Simple Crypto</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_push/">Simple Push</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_speaker_listener/">Simple Speaker Listener</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_spread/">Simple Spread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_tag/">Simple Tag</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/mpe/simple_world_comm/">Simple World Comm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environments/sisl/">SISL</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environments/sisl/multiwalker/">Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/sisl/pursuit/">Pursuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environments/sisl/waterworld/">Waterworld</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../environments/third_party_envs/">Third-Party Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/rllib/">RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo">Github</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/">Contribute to the Docs</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main-container">
+
+    
+
+    
+
+    <div class="main">
+      <div class="content">
+        <div class="article-container">
+          <a href="#" class="back-to-top muted-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+            </svg>
+            <span>Back to top</span>
+          </a>
+          <div class="content-icon-container"><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/release_notes/index.md" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+              <button class="theme-toggle" title="Toggle color theme">
+                <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+                <svg class="theme-icon-when-auto">
+                  <use href="#svg-sun-half"></use>
+                </svg>
+                <svg class="theme-icon-when-dark">
+                  <use href="#svg-moon"></use>
+                </svg>
+                <svg class="theme-icon-when-light">
+                  <use href="#svg-sun"></use>
+                </svg>
+              </button>
+            </div>
+            <label class="toc-overlay-icon toc-content-icon" for="__toc">
+              <div class="visually-hidden">Toggle table of contents sidebar</div>
+              <i class="icon"><svg>
+                  <use href="#svg-toc"></use>
+                </svg></i>
+            </label>
+          </div>
+          <article role="main">
+            
+            <section id="release-notes">
+<h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this heading">#</a></h1>
+<section id="release-1-22-4">
+<h2>1.22.4<a class="headerlink" href="#release-1-22-4" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2023-03-20 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.4">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.4/">PyPI</a></em></p>
+<h2>This release has been yanked due to breaking API changes. We are working hard to address this in the next release.</h2>
+<h2>What's Changed</h2>
+<h3>Bug Fixes:</h3>
+<ul>
+<li>Fix CI issues by <a href="https://github.com/pseudo-rnd-thoughts">@pseudo-rnd-thoughts</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/886" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/886/hovercard"> #886</a></li>
+<li>Fix pre-commit hooks <a href="https://github.com/jjshoots">@jjshoots</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/835" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/835/hovercard"> #835</a></li>
+<li>Fixing warnings by<a href="https://github.com/reginald-mclean"> @reginald-mclean</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/897" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/897/hovercard"> #897</a></li>
+<li>Fix typo: BaseParallelWraper renamed to BaseParallelWrapper by<a href="https://github.com/mikcnt"> @mikcnt</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/876" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/876/hovercard"> #876</a> and<a href="https://github.com/jjshoots"> @jjshoots</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/908" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/908/hovercard"> #908</a></li>
+<li>Fixed: black screen rendering for MPE env in rgb_array mode by<a href="https://github.com/cibeah"> @cibeah</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/874" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/874/hovercard"> #874</a></li>
+<li>Remove unnecessary lines  in MPE by<a href="https://github.com/sushant1212"> @sushant1212</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/891" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/891/hovercard"> #891</a></li>
+<li>New Features and Improvements</li>
+<li>Replace setup.py with pyproject.toml by<a href="https://github.com/jjshoots"> @jjshoots</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/875" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/875/hovercard"> #875</a></li>
+<li>Remove <code>return_info</code> argument from <code>reset()</code> by<a href="https://github.com/jjshoots"> @jjshoots</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/890" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/890/hovercard"> #890</a></li>
+<li>Breaking change: calling <code>reset(return_info=True)</code> will now throw an error</li>
+<li>Done to match Gymnasium (<a href="https://github.com/Farama-Foundation/Gymnasium/commit/3a8daafce113c6161190c0252c6a3a340cc38fd4">link</a>)</li>
+<li>add aec_wrapper_fn by<a href="https://github.com/Kallinteris-Andreas"> @Kallinteris-Andreas</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/879" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/879/hovercard"> #879</a></li>
+<li>Waterworld increase maximum acceleration by<a href="https://github.com/jjshoots"> @jjshoots</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/882" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/882/hovercard"> #882</a></li>
+<li>Update MPE simple_spread agent reward by<a href="https://github.com/sushant1212"> @sushant1212</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/894" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/894/hovercard"> #894</a></li>
+</ul>
+<h3>Documentation Updates:</h3>
+<ul>
+<li>Add a new CONTRIBUTING.md for documentation by<a href="https://github.com/mgoulao"> @mgoulao</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/883" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/883/hovercard"> #883</a></li>
+<li>Add usage examples for each environment type by<a href="https://github.com/elliottower"> @elliottower</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/906" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/906/hovercard"> #906</a></li>
+<li>Update third_party_envs.md by<a href="https://github.com/elliottower"> @elliottower</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/907" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/907/hovercard"> #907</a></li>
+<li>Add updated favicon to documentation website by<a href="https://github.com/mgoulao"> @mgoulao</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/880" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/880/hovercard"> #880</a></li>
+<li>Fix typo in EnvironmentCreation tutorial by<a href="https://github.com/elliottower"> @elliottower</a> in<a href="https://github.com/Farama-Foundation/PettingZoo/pull/903" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/903/hovercard"> #903</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.3...1.22.4"><tt>1.22.3...1.22.4</tt></a></p></section>
+<section id="release-1-22-3">
+<h2>1.22.3<a class="headerlink" href="#release-1-22-3" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-12-28 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.3">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.3/">PyPI</a></em></p>
+<h2>What's Changed</h2>
+<ul>
+<li>Waterworld_v4: Fixed incorrect pursuer being selected when adding rewards by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/TheMikeste1/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/TheMikeste1">@TheMikeste1</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1444688605" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/855" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/855/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/855">#855</a></li>
+<li>Remove AEC diagrams from environments pages by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1446882820" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/856" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/856/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/856">#856</a></li>
+<li>Add information about MAgent2 standalone package by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dsctt/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dsctt">@dsctt</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1448483691" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/857" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/857/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/857">#857</a></li>
+<li>Switch flake8 from gitlab to github by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/RedTachyon/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/RedTachyon">@RedTachyon</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1448887682" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/858" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/858/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/858">#858</a></li>
+<li>workflow fix by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1506686953" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/867" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/867/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/867">#867</a></li>
+<li>Versioning by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1502785181" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/865" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/865/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/865">#865</a></li>
+<li>Bump pillow from 9.2.0 to 9.3.0 in /tutorials/Ray by <a class="user-mention notranslate" data-hovercard-type="organization" data-hovercard-url="/orgs/dependabot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dependabot">@dependabot</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1449840216" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/859" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/859/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/859">#859</a></li>
+<li><a href="https://github.com/Farama-Foundation/PettingZoo/security/dependabot/3">https://github.com/Farama-Foundation/PettingZoo/security/dependabot/3</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1507034202" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/869" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/869/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/869">#869</a></li>
+<li>wrappers documentation: get <code>to_parallel</code> from utils.conversions by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/AndrewRWilliams/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/AndrewRWilliams">@AndrewRWilliams</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1508554055" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/870" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/870/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/870">#870</a></li>
+<li>support Python 3.11 by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1512280466" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/872" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/872/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/872">#872</a></li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/TheMikeste1/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/TheMikeste1">@TheMikeste1</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1444688605" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/855" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/855/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/855">#855</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="organization" data-hovercard-url="/orgs/dependabot/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dependabot">@dependabot</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1449840216" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/859" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/859/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/859">#859</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/AndrewRWilliams/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/AndrewRWilliams">@AndrewRWilliams</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1508554055" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/870" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/870/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/870">#870</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.2...1.22.3"><tt>1.22.2...1.22.3</tt></a></p></section>
+<section id="release-1-22-2">
+<h2>1.22.2<a class="headerlink" href="#release-1-22-2" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-11-11 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.2/">PyPI</a></em></p>
+<h2>What's Changed</h2>
+<ul>
+<li>Fixing for Issue <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1427988185" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/840" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/840/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/840">#840</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/BolunDai0216/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/BolunDai0216">@BolunDai0216</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1428003098" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/841" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/841/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/841">#841</a></li>
+<li>fix <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1429634641" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/845" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/845/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/845">#845</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1429651650" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/846" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/846/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/846">#846</a></li>
+<li>added GitHub Issue Forms as proposed in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1429498250" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/844" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/844/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/844">#844</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/tobirohrer/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/tobirohrer">@tobirohrer</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1430016325" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/848" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/848/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/848">#848</a></li>
+<li>Changed reward logic in Waterworld by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/BolunDai0216/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/BolunDai0216">@BolunDai0216</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1429072619" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/843" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/843/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/843">#843</a></li>
+<li>ENH: add gui to chess by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/younik/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/younik">@younik</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1428914082" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/842" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/842/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/842">#842</a></li>
+<li>change paradigm of parallel api loops by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1429673454" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/847" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/847/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/847">#847</a></li>
+<li>Remove magent docs artifacts by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dsctt/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dsctt">@dsctt</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1431797393" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/850" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/850/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/850">#850</a></li>
+<li>tianshou tuts fixed by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1437602019" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/852" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/852/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/852">#852</a></li>
+<li>Overhaul env creation guide by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1419922012" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/838" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/838/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/838">#838</a></li>
+<li>Fix: set render_mode in tianshou tutorials (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1439322115" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/853" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/853/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/853">#853</a>) by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/RaffaeleGalliera/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/RaffaeleGalliera">@RaffaeleGalliera</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1439355437" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/854" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/854/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/854">#854</a></li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/tobirohrer/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/tobirohrer">@tobirohrer</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1430016325" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/848" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/848/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/848">#848</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/RaffaeleGalliera/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/RaffaeleGalliera">@RaffaeleGalliera</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1439355437" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/854" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/854/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/854">#854</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.1...1.22.2"><tt>1.22.1...1.22.2</tt></a></p></section>
+<section id="release-1-22-1">
+<h2>1.22.1<a class="headerlink" href="#release-1-22-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-10-25 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.1/">PyPI</a></em></p>
+<h2>What's Changed</h2>
+<ul>
+<li>Docs Update 2 by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1401885095" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/817" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/817/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/817">#817</a></li>
+<li>Remove average total reward from environments pages by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1403399099" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/821" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/821/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/821">#821</a></li>
+<li>Rename core to AEC by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1406248216" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/822" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/822/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/822">#822</a></li>
+<li>Add Google Analytics tag by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1407487918" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/825" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/825/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/825">#825</a></li>
+<li>Remove MAgent content by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dsctt/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dsctt">@dsctt</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1406496286" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/823" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/823/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/823">#823</a></li>
+<li>This updates the setup and other things by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1409206067" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/829" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/829/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/829">#829</a></li>
+<li>Wd/tutorials ci by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1411446966" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/831" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/831/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/831">#831</a></li>
+<li>update logo, favicon, and fix broken links by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1411720331" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/832" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/832/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/832">#832</a></li>
+<li>Wd/tutorials ci by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1414966388" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/833" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/833/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/833">#833</a></li>
+<li>Bug fixes for Issue <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1401955248" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/818" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/818/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/818">#818</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/BolunDai0216/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/BolunDai0216">@BolunDai0216</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1419285343" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/836" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/836/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/836">#836</a></li>
+<li>Update docs by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1419764552" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/837" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/837/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/837">#837</a></li>
+<li>Fix ref to Gymnasium by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/dsctt/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/dsctt">@dsctt</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1421468144" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/839" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/839/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/839">#839</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.22.0...1.22.1"><tt>1.22.0...1.22.1</tt></a></p></section>
+<section id="release-1-22-0">
+<h2>1.22.0<a class="headerlink" href="#release-1-22-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-10-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.22.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.22.0/">PyPI</a></em></p>
+<p>Major API change: <code>done</code> -&gt; <code>termination</code> and <code>truncation</code>, matching Gymnasium's new API.<br>
+The dependency <code>gym</code> has been switched with <code>gymnasium</code>, which is maintained.</p>
+<h2>What's Changed</h2>
+<ul>
+<li>replace 'done' with 'termination, truncation' new logic by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/5cat/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/5cat">@5cat</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1384887346" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/802" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/802/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/802">#802</a></li>
+<li>Update new Render API by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/younik/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/younik">@younik</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1384013984" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/800" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/800/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/800">#800</a></li>
+<li>fix wrapper unwrapped thing by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1394669573" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/808" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/808/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/808">#808</a></li>
+<li>Update Sphinx theme by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1385768361" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/804" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/804/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/804">#804</a></li>
+<li>Update security permissions for GitHub workflows by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/andrewtanJS/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/andrewtanJS">@andrewtanJS</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1395047960" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/809" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/809/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/809">#809</a></li>
+<li>Updated Waterworld by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/BolunDai0216/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/BolunDai0216">@BolunDai0216</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1393755573" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/807" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/807/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/807">#807</a></li>
+<li>Docs API Update by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1396449793" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/810" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/810/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/810">#810</a></li>
+<li>Gymnasium dep by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1401135032" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/814" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/814/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/814">#814</a></li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/5cat/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/5cat">@5cat</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1384887346" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/802" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/802/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/802">#802</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/younik/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/younik">@younik</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1384013984" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/800" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/800/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/800">#800</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.21.0...1.22.0"><tt>1.21.0...1.22.0</tt></a></p></section>
+<section id="release-1-21-0">
+<h2>1.21.0<a class="headerlink" href="#release-1-21-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-09-24 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.21.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.21.0/">PyPI</a></em></p>
+<h2>What's Changed</h2>
+<ol>
+<li>As part of the Gym update to 0.26, the following change has been made:
+<ul>
+<li><code>done</code> -&gt; <code>termination</code> and <code>truncation</code>: The singular <code>done</code> signal has been changed to a <code>termination</code> and <code>truncation</code> signal, where <code>termination</code> dictates that the environment has ended due to meeting certain conditions, and <code>truncation</code> dictates that the environment has ended due to exceeding the time/frame limit.</li>
+</ul>
+</li>
+<li>Butterfly/Prospector, Classic/Mahjong, Classic/Doudizhu, Classic/Backgammon, Classic/Checkers has been pulled.</li>
+<li>Some QOL improvements for development, such as moving pyright to <code>pre-commit</code> and enforcing pydocstyle.</li>
+<li>Massive website upgrade.</li>
+</ol>
+<h2>List of Changes</h2>
+<ul>
+<li>Fix concatvecenvs to work in proper process by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1339019584" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/763" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/763/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/763">#763</a></li>
+<li>Fix RPS render issue by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1352408686" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/776" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/776/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/776">#776</a></li>
+<li>Reduces the number of warnings by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/pseudo-rnd-thoughts/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/pseudo-rnd-thoughts">@pseudo-rnd-thoughts</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1357655430" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/777" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/777/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/777">#777</a></li>
+<li>Pull Prospector by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1361251587" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/779" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/779/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/779">#779</a></li>
+<li>Remove a bunch of envs by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1366094654" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/781" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/781/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/781">#781</a></li>
+<li>Potentially fix 13 lines so it doesn't take &gt;6 hours to run by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1366098270" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/782" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/782/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/782">#782</a></li>
+<li>Move Pyright to <code>pre-commit</code> + add <code>pydocstyle</code> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/kir0ul/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/kir0ul">@kir0ul</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1295188663" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/737" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/737/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/737">#737</a></li>
+<li>Update pre-commit config by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/pseudo-rnd-thoughts/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/pseudo-rnd-thoughts">@pseudo-rnd-thoughts</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376476900" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/787" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/787/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/787">#787</a></li>
+<li>Update docs website to Sphinx by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1361866266" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/780" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/780/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/780">#780</a></li>
+<li>Update links to the new domain by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376717491" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/789" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/789/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/789">#789</a></li>
+<li>Truncation Update by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1342295248" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/767" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/767/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/767">#767</a></li>
+<li>Update Gym version by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376582921" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/788" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/788/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/788">#788</a></li>
+<li>More truncation fixes by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1377654758" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/796" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/796/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/796">#796</a></li>
+<li>Update simple_env.py by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/FilipinoGambino/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/FilipinoGambino">@FilipinoGambino</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1380817157" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/798" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/798/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/798">#798</a></li>
+<li>Docs automation by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1376731258" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/790" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/790/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/790">#790</a></li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/pseudo-rnd-thoughts/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/pseudo-rnd-thoughts">@pseudo-rnd-thoughts</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1357655430" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/777" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/777/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/777">#777</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/mgoulao/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/mgoulao">@mgoulao</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1361866266" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/780" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/780/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/780">#780</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.20.1...1.21.0"><tt>1.20.1...1.21.0</tt></a></p></section>
+<section id="release-1-20-1">
+<h2>1.20.1<a class="headerlink" href="#release-1-20-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-08-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.20.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.20.1/">PyPI</a></em></p>
+<p>Refer to the previous version (1.20.0) for list of changes, this version simply exists due to technical problems with publishing to PyPI.</p></section>
+<section id="release-1-20-0">
+<h2>1.20.0<a class="headerlink" href="#release-1-20-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-08-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.20.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.20.0/">PyPI</a></em></p>
+<h2>What's Changed</h2>
+<ul>
+<li>Black to pass master CI by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1287475134" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/734" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/734/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/734">#734</a></li>
+<li>Refactor Pytest multiple calls to a single call by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/kir0ul/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/kir0ul">@kir0ul</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1276173184" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/731" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/731/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/731">#731</a></li>
+<li>Change MPE rendering to use Pygame instead of pyglet <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1283078011" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/732" data-hovercard-type="issue" data-hovercard-url="/Farama-Foundation/PettingZoo/issues/732/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/issues/732">#732</a>  by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1295552344" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/738" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/738/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/738">#738</a></li>
+<li>Remove pyglet and buggy dependency in Multiwalker by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1302543233" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/739" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/739/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/739">#739</a></li>
+<li>Add EzPickle to MPE by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1314949369" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/741" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/741/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/741">#741</a></li>
+<li>Fix incorrect observation dict key in documentation by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/bkrl/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/bkrl">@bkrl</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1322928496" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/743" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/743/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/743">#743</a></li>
+<li>Temporarily remove waterworld from tests and also disable environment. by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1324889274" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/749" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/749/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/749">#749</a></li>
+<li>Fix broken atari environment path by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/manu-hoffmann/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/manu-hoffmann">@manu-hoffmann</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1324450156" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/747" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/747/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/747">#747</a></li>
+<li>Complete Atari Envs path fix by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/jjshoots/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/jjshoots">@jjshoots</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1326369103" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/750" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/750/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/750">#750</a></li>
+<li>Correct MPE requirements to reflect PR <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1295552344" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/738" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/738/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/738">#738</a> by <a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1324777307" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/748" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/748/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/748">#748</a></li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/WillDudley/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/WillDudley">@WillDudley</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1295552344" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/738" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/738/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/738">#738</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/bkrl/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/bkrl">@bkrl</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1322928496" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/743" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/743/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/743">#743</a></li>
+<li><a class="user-mention notranslate" data-hovercard-type="user" data-hovercard-url="/users/manu-hoffmann/hovercard" data-octo-click="hovercard-link-click" data-octo-dimensions="link_type:self" href="https://github.com/manu-hoffmann">@manu-hoffmann</a> made their first contribution in <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1324450156" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/747" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/747/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/747">#747</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.19.1...1.20.0"><tt>1.19.1...1.20.0</tt></a></p></section>
+<section id="release-1-19-1">
+<h2>1.19.1<a class="headerlink" href="#release-1-19-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-06-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.19.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.19.1/">PyPI</a></em></p>
+<ul>
+<li>Update Gym requirement version</li>
+</ul></section>
+<section id="release-1-19-0">
+<h2>1.19.0<a class="headerlink" href="#release-1-19-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-06-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.19.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.19.0/">PyPI</a></em></p>
+<ul>
+<li>Streamlined all envs to have consistent folder structures</li>
+<li>Added <code>info</code> as output of <code>reset</code> to be consistent with new Gym API</li>
+</ul></section>
+<section id="release-0-18-1">
+<h2>0.18.1: 1.18.1<a class="headerlink" href="#release-0-18-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-04-29 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/0.18.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/0.18.1/">PyPI</a></em></p>
+<ul>
+<li>Massive overhaul to Knight Archers Zombies, version bumped</li>
+<li>Changed Atari games to use minimal observation space by default, all versions bumped</li>
+<li>Large bug fix to all MAgent environments, versions bumped</li>
+<li>MAgent environments now have Windows binaries</li>
+<li>Removed Prison environment</li>
+<li>Multiwalker bug fix, version bumped</li>
+<li>Large number of test fixes</li>
+<li>Removed manual_control with new manual_policy method</li>
+<li>Converted seed method to argument to reset to match new Gym API</li>
+</ul>
+<p>(The PettingZoo 1.18.0 release never existed due to technical issues)</p></section>
+<section id="release-1-17-0">
+<h2>1.17.0<a class="headerlink" href="#release-1-17-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-03-15 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.17.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.17.0/">PyPI</a></em></p>
+<ul>
+<li>Changed metadata naming scheme to match gym. In particular <code>render.modes</code> -&gt; <code>render_modes</code> and <code>video.frames_per_second</code> -&gt; <code>render_fps</code></li>
+<li>Fixed bad pettingzoo import error messages caused by autodeprication logic</li>
+</ul></section>
+<section id="release-1-16-0">
+<h2>1.16.0<a class="headerlink" href="#release-1-16-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-03-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.16.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.16.0/">PyPI</a></em></p>
+<ul>
+<li>KAZ: Code rewrite and numerous fixes, added manual control capabililty</li>
+<li>Supports changes to seeding in gym 0.22.0</li>
+<li>Fixed prison state space, bumped version</li>
+<li>Fixed battlefield state space</li>
+<li>Increased default cycles in api tests (making them catch more errors than before)</li>
+<li>Added turn-based to parallel wrapper</li>
+<li>Moved magent render logic to Magent repo</li>
+</ul></section>
+<section id="release-1-15-0">
+<h2>1.15.0<a class="headerlink" href="#release-1-15-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2022-01-28 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.15.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.15.0/">PyPI</a></em></p>
+<ul>
+<li>Bug fixes to KAZ, pistonball, multiwalker, cooperative pong. Versions bumped.</li>
+<li>Removed logo from gather, version bumped.</li>
+<li>Added FPS attribute to all environments to make rendering easier.</li>
+<li>Multiwalker now uses pygame instead of pyglet for rendering</li>
+<li>Renamed to_parallel and from_parallel to aec_to_parallel and parallel_to_aec</li>
+<li>Added is_parallelizable metadata to ensure that the aec_to_parallel wrapper is not misused</li>
+<li>Fixed the API tests to better support agent generation</li>
+</ul></section>
+<section id="release-1-14-0">
+<h2>1.14.0<a class="headerlink" href="#release-1-14-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-12-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.14.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.14.0/">PyPI</a></em></p>
+<p>-Bug fixes and partial redesign to pursuit environment logic and rendering. Environment is now learnable, version bumped<br>
+-Bug fixes and reward function redesign for cooperative pong environment, version bumped<br>
+-Ball moving into the left column due to physics engine imprecision in pistonball no longer gives additional reward, version bumped<br>
+-PyGame version bumped, no environment version bumps needed<br>
+-Python 3.10 support<br>
+-Fixed parallel API tests to allow environments without possible_agents</p></section>
+<section id="release-1-13-1">
+<h2>1.13.1<a class="headerlink" href="#release-1-13-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-10-19 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.13.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.13.1/">PyPI</a></em></p>
+<ul>
+<li>Fixed unnecessary warnings generated about observation and action spaces</li>
+<li>Upstreamed new rlcard version with new texas holdem no limit implementation, bumped version to v6</li>
+<li>Updated python chess dependency, bumped version to v5</li>
+<li>Dropped support for python 3.6, added official support for 3.9</li>
+<li>Various documentation fixes</li>
+</ul></section>
+<section id="release-1-12-0">
+<h2>1.12.0<a class="headerlink" href="#release-1-12-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-10-08 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.12.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.12.0/">PyPI</a></em></p>
+<ul>
+<li>API changes
+<ul>
+<li>new <code>observation_space(agent)</code>, <code>action_space(agent)</code> methods that retreive the static space for an agent</li>
+<li><code>possible_agents</code>, <code>observation_spaces</code>, <code>action_spaces</code> attributes made optional. Wrappers pass these attributes through if they exist.</li>
+<li>parallel environment's <code>agents</code> list contains agents to take next step, instead of agents that took previous step.</li>
+<li>Generated agents now allowed, agents can be created any time during an episode. Note that agents cannot resurect, once they are done, they cannot be readded to the environment.</li>
+</ul>
+</li>
+<li>Fixed unexpected behavior with close method in pursuit environment</li>
+<li>Removed pygame loading messages</li>
+<li>Fix pillow dependency issue</li>
+<li>Removed local ratio arg from pistonball environment</li>
+<li>Gym 0.21.0 support</li>
+<li>Better code formatting (isort, etc.)</li>
+</ul></section>
+<section id="release-1-11-1">
+<h2>1.11.1<a class="headerlink" href="#release-1-11-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-08-19 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.11.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.11.1/">PyPI</a></em></p>
+<ul>
+<li>Fix scipy and pyglet dependencies for sisl environments</li>
+<li>Fix pistonball rendering (no version bumps)</li>
+<li>Update rlcard to v1.0.4 with a fix for texas hold'em no limit; bump version</li>
+</ul></section>
+<section id="release-1-11-0">
+<h2>1.11.0<a class="headerlink" href="#release-1-11-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-08-02 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.11.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.11.0/">PyPI</a></em></p>
+<p>-Upgraded to RLCard 1.0.3, bumped all versions. Also added support for num_players in RLcard based environments which can have variable numbers of players.<br>
+-Fixed Go and Chess observation spaces, bumped versions<br>
+-Minor Go rendering fix<br>
+-Fix PyGame dependency in classic (used for rendering)<br>
+-Fixed images being loaded into slow PyGame data structures, resulting in substantial speedups in certain Butterfly games (no version bump needed)<br>
+-Fix odd cache problem using RGB rendering in cooperative pong<br>
+-Misc fixes to tests and warning messages</p></section>
+<section id="release-1-10-0">
+<h2>1.10.0<a class="headerlink" href="#release-1-10-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-07-17 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.10.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.10.0/">PyPI</a></em></p>
+<ul>
+<li>Added continuous action support for MPE environments as an argument</li>
+<li>Added pixel art rendering for Texas Hold'em No Limit, Rock Paper Scissors and Go</li>
+<li>Fixed pixel art rendering in Connect Four</li>
+<li>Fixed bug in order of black/white pieces in Go observation space, bumped version</li>
+<li>Changed observation in cooperative pong to include entire screen, bumped version</li>
+</ul></section>
+<section id="release-1-9-0">
+<h2>1.9.0<a class="headerlink" href="#release-1-9-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-06-12 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.9.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.9.0/">PyPI</a></em></p>
+<ul>
+<li>Created no action timer for pong to encourage players to serve (before there was no penalty to stalling the game forever). Bumped version of all pong environments (pong, basketball_pong, volleyball_pong, foozpong, quadrapong)</li>
+<li>Fixed Multiwalker collision bug, bumped version</li>
+<li>Add state method to Magent and MPE</li>
+<li>Merged rock paper scissors and rock paper scissors lizard spock into a single environment that takes the number of actions as an argument, and adds the n_cycles argument to allow for a single game to be sequential. Bumped version</li>
+<li>Removed depricated env_done method</li>
+<li>Fixed order of channels in combined_arms observation</li>
+<li>Added pixel art based RGB rendering to connect four. This will also be added to rock paper scissors, Go and Texas Holdem in upcoming releases</li>
+<li>Moved pettingzoo CI test files outside of the repo</li>
+<li>Changed max cycles test to be more robust under agent death</li>
+</ul></section>
+<section id="release-1-8-2">
+<h2>1.8.2<a class="headerlink" href="#release-1-8-2" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-05-14 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.2/">PyPI</a></em></p>
+<ul>
+<li>fixed multiwalker bug, bumped environment version.</li>
+<li>Added support for custom render modes in render_test</li>
+</ul></section>
+<section id="release-1-8-1">
+<h2>1.8.1<a class="headerlink" href="#release-1-8-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-04-16 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.1/">PyPI</a></em></p>
+<ul>
+<li>Added argument to seed test to disable the seed()-reset() test. Docs updated.</li>
+<li>Minor changes to MAgent rendering</li>
+</ul></section>
+<section id="release-1-8-0">
+<h2>1.8.0<a class="headerlink" href="#release-1-8-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-04-04 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.8.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.8.0/">PyPI</a></em></p>
+<ul>
+<li>Fixed arbitrary calls to observe() in classic games (especially tictactoe and connect 4)</li>
+<li>Fixed documentation for tictactoe and pistonball</li>
+</ul></section>
+<section id="release-1-7-0">
+<h2>1.7.0<a class="headerlink" href="#release-1-7-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-03-27 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.7.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.7.0/">PyPI</a></em></p>
+<ul>
+<li>Fixed MAgent bugs and changed default to non-minimap mode, bumped versions.</li>
+<li>Fix transient installation error.</li>
+</ul></section>
+<section id="release-1-6-1">
+<h2>1.6.1<a class="headerlink" href="#release-1-6-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-03-08 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.6.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.6.1/">PyPI</a></em></p>
+<p>Minor miscellaneous fixes and small feature additions:</p>
+<ul>
+<li>Added .unwrapped</li>
+<li>Minor fix to from_parallel</li>
+<li>removed warning from close()</li>
+<li>fixed random demo</li>
+<li>fixed prison manual control</li>
+</ul></section>
+<section id="release-1-6-0">
+<h2>1.6.0<a class="headerlink" href="#release-1-6-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-02-21 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.6.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.6.0/">PyPI</a></em></p>
+<ul>
+<li>Changed default values of max_cycles in pistonball, prison, prospector</li>
+<li>Changed pistonball default mode to continuous and changed default value for local_ratio</li>
+<li>Refactored externally facing tests and utils</li>
+<li>Bumped pymunk version to 6.0.0 and bumped versions of all environments which depend on pymunk</li>
+<li>Added state() and state_space to API, implemented methods in butterfly environments</li>
+<li>Various small bug fixes in butterfly environments.</li>
+<li>Documentation updates.</li>
+</ul></section>
+<section id="release-1-5-2">
+<h2>1.5.2<a class="headerlink" href="#release-1-5-2" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-01-29 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.2/">PyPI</a></em></p>
+<p>Fix miscellaneous annoying loading messages for butterfly environments. Improvements to save_obs and related functionality. Fixes to KAZ.</p></section>
+<section id="release-1-5-1">
+<h2>1.5.1<a class="headerlink" href="#release-1-5-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-01-13 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.1/">PyPI</a></em></p>
+<p>Fixes MPE rendering dependency, fixes minor left over dependencies on six, fixes issues when pickling Pistonball. No versions were bumped.</p></section>
+<section id="release-1-5-0">
+<h2>1.5.0<a class="headerlink" href="#release-1-5-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2021-01-05 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.5.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.5.0/">PyPI</a></em></p>
+<p>Refactors tests to be generally usable by third party environments. Added average reward calculating util, and made minor improvements to random_demo and save_obs utils. Removed black death argument from KAZ (it's now a wrapper in supersuit). Redid how illegal actions are handled in classic, by making observations dictionaries where one element is the observation and the other is a proper illegal action mask. Pistonball was refactored for readability, to run faster and to allow the number of pistons to be varied via argument. Waterworld was completely refactored with various major fixes. RLCard version was bumped (and includes bug fixes impacting environments). MAgent rendering looks much better now (versions not bumped). Major bug in the observation space of pursuit is fixed. Add Python 3.9 support. Update Gym version. Fixed multiwalker observation space, for good this time, and made large improvements to code quality. Removed NaN wrapper.</p></section>
+<section id="release-1-4-2">
+<h2>1.4.2<a class="headerlink" href="#release-1-4-2" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2020-11-26 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.4.2">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.4.2/">PyPI</a></em></p>
+<p>Pistonball reward and miscellaneous problems. Fixed KAZ observation and rendering issues. Fix Cooperative Pong issues with rendering. Fixed default parameters in Hanabi. Fixed multiwalker rewards, added arguments. Changed combined_arms observation and rewards, tiger_deer rewards. Added more arguments to all MAgent environments.</p></section>
+<section id="release-1-4-0">
+<h2>1.4.0<a class="headerlink" href="#release-1-4-0" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2020-11-07 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.4.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.4.0/">PyPI</a></em></p>
+<p>General: Substantial API upgrades (see <a href="https://www.pettingzoo.ml/api" rel="nofollow">https://www.pettingzoo.ml/api</a>), overhaul of the handling of agent death. In particular, the agents list now only contains live agents (agents which have not been done). Moved significant logic from wrappers to raw environment. Renamed max_frames to max_cycles and made the meaning of this argument consistent across all environments.</p>
+<p>Atari: Fixed entombed_cooperative rewards, add support for custom ROM directory specification</p>
+<p>Butterfly: Bug fixes in all environment, bumped PyGame and PyMunk versions</p>
+<p>Classic: Bumped RLCard version, fixed default observation space for many environments depending on RLCard</p>
+<p>SISL: Bug fixes in all environments</p>
+<p>MAgent: Fixes to observation space of all environments</p>
+<p>Bumped versions of all environments. There hopefully will be no more major API changes after this.</p></section>
+</section>
+
+          </article>
+        </div>
+        <footer>
+          
+          <div class="related-pages">
+            
+            
+          </div>
+          <div class="bottom-of-page">
+            <div class="left-details">
+              <div class="copyright">
+                Copyright &#169; 2023 Farama Foundation
+              </div>
+              <!--
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            -->
+            </div>
+            <div class="right-details">
+              <div class="icons">
+                
+              </div>
+            </div>
+          </div>
+          
+        </footer>
+      </div>
+      <aside class="toc-drawer">
+        
+        
+        <div class="toc-sticky toc-scroll">
+          <div class="toc-title-container">
+            <span class="toc-title">
+              On this page
+            </span>
+          </div>
+          <div class="toc-tree-container">
+            <div class="toc-tree">
+              <ul>
+<li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-22-4">1.22.4</a></li>
+<li><a class="reference internal" href="#release-1-22-3">1.22.3</a></li>
+<li><a class="reference internal" href="#release-1-22-2">1.22.2</a></li>
+<li><a class="reference internal" href="#release-1-22-1">1.22.1</a></li>
+<li><a class="reference internal" href="#release-1-22-0">1.22.0</a></li>
+<li><a class="reference internal" href="#release-1-21-0">1.21.0</a></li>
+<li><a class="reference internal" href="#release-1-20-1">1.20.1</a></li>
+<li><a class="reference internal" href="#release-1-20-0">1.20.0</a></li>
+<li><a class="reference internal" href="#release-1-19-1">1.19.1</a></li>
+<li><a class="reference internal" href="#release-1-19-0">1.19.0</a></li>
+<li><a class="reference internal" href="#release-0-18-1">0.18.1: 1.18.1</a></li>
+<li><a class="reference internal" href="#release-1-17-0">1.17.0</a></li>
+<li><a class="reference internal" href="#release-1-16-0">1.16.0</a></li>
+<li><a class="reference internal" href="#release-1-15-0">1.15.0</a></li>
+<li><a class="reference internal" href="#release-1-14-0">1.14.0</a></li>
+<li><a class="reference internal" href="#release-1-13-1">1.13.1</a></li>
+<li><a class="reference internal" href="#release-1-12-0">1.12.0</a></li>
+<li><a class="reference internal" href="#release-1-11-1">1.11.1</a></li>
+<li><a class="reference internal" href="#release-1-11-0">1.11.0</a></li>
+<li><a class="reference internal" href="#release-1-10-0">1.10.0</a></li>
+<li><a class="reference internal" href="#release-1-9-0">1.9.0</a></li>
+<li><a class="reference internal" href="#release-1-8-2">1.8.2</a></li>
+<li><a class="reference internal" href="#release-1-8-1">1.8.1</a></li>
+<li><a class="reference internal" href="#release-1-8-0">1.8.0</a></li>
+<li><a class="reference internal" href="#release-1-7-0">1.7.0</a></li>
+<li><a class="reference internal" href="#release-1-6-1">1.6.1</a></li>
+<li><a class="reference internal" href="#release-1-6-0">1.6.0</a></li>
+<li><a class="reference internal" href="#release-1-5-2">1.5.2</a></li>
+<li><a class="reference internal" href="#release-1-5-1">1.5.1</a></li>
+<li><a class="reference internal" href="#release-1-5-0">1.5.0</a></li>
+<li><a class="reference internal" href="#release-1-4-2">1.4.2</a></li>
+<li><a class="reference internal" href="#release-1-4-0">1.4.0</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </div>
+        </div>
+        
+        
+      </aside>
+    </div>
+  </div>
+</div>
+    <script>
+      const toggleMenu = () => {
+        const menuBtn = document.querySelector(".farama-header-menu__btn");
+        const menuContainer = document.querySelector(".farama-header-menu-container");
+        if (document.querySelector(".farama-header-menu").classList.contains("active")) {
+          menuBtn.setAttribute("aria-expanded", "false");
+          menuContainer.setAttribute("aria-hidden", "true");
+        } else {
+          menuBtn.setAttribute("aria-expanded", "true");
+          menuContainer.setAttribute("aria-hidden", "false");
+        }
+        document.querySelector(".farama-header-menu").classList.toggle("active");
+      }
+
+      document.querySelector(".farama-header-menu__btn").addEventListener("click", toggleMenu);
+      document.getElementById("farama-close-menu").addEventListener("click", toggleMenu);
+    </script>
+
+    
+    <script>
+          (() => {
+              if (!localStorage.getItem("shownCookieAlert")) {
+                  const boxElem = document.createElement("div");
+                  boxElem.classList.add("cookie-alert");
+                  const containerElem = document.createElement("div");
+                  containerElem.classList.add("cookie-alert__container");
+                  const textElem = document.createElement("p");
+                  textElem.innerHTML = `This page uses <a href="https://analytics.google.com/">
+                                      Google Analytics</a> to collect statistics. You can disable it by blocking
+                                      the JavaScript coming from www.google-analytics.com.`;
+                                      containerElem.appendChild(textElem);
+                  const closeBtn = document.createElement("button");
+                  closeBtn.innerHTML = `<?xml version="1.0" ?><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>`
+                  closeBtn.onclick = () => {
+                      localStorage.setItem("shownCookieAlert", "true");
+                      boxElem.style.display = "none";
+                  }
+                  containerElem.appendChild(closeBtn);
+                  boxElem.appendChild(containerElem);
+                  document.body.appendChild(boxElem);
+              }
+          })()
+      </script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q4EGMJ3R24"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Q4EGMJ3R24');
+      </script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    
+    <script>
+      const createCORSRequest = (method, url) => {
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = 'json';
+
+        if ("withCredentials" in xhr) {
+          xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+          // IE8 & IE9
+          xhr = new XDomainRequest();
+          xhr.open(method, url);
+        } else {
+          // CORS not supported.
+          xhr = null;
+        }
+        return xhr;
+      };
+
+      const url = 'https://farama.org/api/projects.json';
+      const imagesBasepath = "https://farama.org/assets/images"
+      const method = 'GET';
+      let xhr = createCORSRequest(method, url);
+
+      xhr.onload = () => {
+        const jsonResponse = xhr.response;
+        const sections = {
+          "Documentation": [],
+          "Mature Projects": [],
+          "Incubating Projects": [],
+          "Foundation": [
+            {
+              name: "About",
+              link: "https://farama.org/about"
+            },
+            {
+              name: "Standards",
+              link: "https://farama.org/project_standards",
+            },
+            {
+              name: "Donate",
+              link: "https://farama.org/donations"
+            }
+          ]
+        }
+        Object.keys(jsonResponse).forEach(key => {
+          projectJson = jsonResponse[key];
+          if (projectJson.website !== null) {
+            projectJson.link = projectJson.website;
+            sections["Documentation"].push(projectJson)
+          } else if (projectJson.type == "mature") {
+            projectJson.link = projectJson.github;
+            sections["Mature Projects"].push(projectJson)
+          } else {
+            projectJson.link = projectJson.github;
+            sections["Incubating Projects"].push(projectJson)
+          }
+        })
+
+        const menuContainer = document.querySelector(".farama-header-menu__body");
+
+        Object.keys(sections).forEach((key, i) => {
+          projects = sections[key];
+          const sectionElem = Object.assign(
+            document.createElement('div'), {
+              className:'farama-header-menu__section',
+              style: "padding-left: 24px"
+            }
+          )
+          sectionElem.appendChild(Object.assign(document.createElement('span'),
+            {
+              className:'farama-header-menu__section-title' ,
+              innerText: key
+            }
+          ))
+          const ulElem = Object.assign(document.createElement('ul'),
+            {
+              className:'farama-header-menu-list',
+            }
+          )
+          for (let project of projects) {
+            const liElem = document.createElement("li");
+            const aElem = Object.assign(document.createElement("a"),
+              {
+                href: project.link
+              }
+            );
+            liElem.appendChild(aElem);
+            if (key !== "Foundation") {
+              const imgElem = Object.assign(document.createElement("img"),
+                {
+                  src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
+                  alt: `${project.name} logo`,
+                  className: "farama-black-logo-invert"
+                }
+              );
+              aElem.appendChild(imgElem);
+            }
+            aElem.appendChild(document.createTextNode(project.name));
+            ulElem.appendChild(liElem);
+          }
+          sectionElem.appendChild(ulElem);
+          menuContainer.appendChild(sectionElem)
+        });
+      }
+
+      xhr.onerror = function() {
+        console.error("Unable to load projects");
+      };
+
+      xhr.send();
+    </script>
+
+    
+    <script>
+      const versioningConfig = {
+        githubUser: '',
+        githubRepo: '',
+      };
+      fetch('/main/_static/versioning/versioning_menu.html').then(response => {
+        if (response.status === 200) {
+            response.text().then(text => {
+                const container = document.createElement("div");
+                container.innerHTML = text;
+                document.querySelector("body").appendChild(container);
+                // innerHtml doenst evaluate scripts, we need to add them dynamically
+                Array.from(container.querySelectorAll("script")).forEach(oldScript => {
+                    const newScript = document.createElement("script");
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+            });
+        } else {
+            console.warn("Unable to load versioning menu", response);
+        }
+      });
+    </script>
+
+    </body>
+</html>
