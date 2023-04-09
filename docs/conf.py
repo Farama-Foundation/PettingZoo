@@ -15,10 +15,12 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
+import os
+
 import pettingzoo
 
 project = "PettingZoo"
-copyright = "2022 Farama Foundation"
+copyright = "2023 Farama Foundation"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
@@ -35,7 +37,9 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.autodoc",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
     "myst_parser",
+    "sphinx_github_changelog",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -51,6 +55,18 @@ napoleon_use_ivar = True
 napoleon_use_admonition_for_references = True
 # See https://github.com/sphinx-doc/sphinx/issues/9119
 napoleon_custom_sections = [("Returns", "params_style")]
+
+# -- Options for Autodoc -------------------------------------------------
+
+autoclass_content = "both"
+autodoc_preserve_defaults = True
+
+# -- Options for Intersphinx -----------------------------------------------
+
+intersphinx_mapping = {
+    "shimmy": ("https://shimmy.farama.org/", None),
+}
+intersphinx_disabled_reftypes = ["*"]
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -74,3 +90,11 @@ html_theme_options = {
 
 html_static_path = ["_static"]
 html_css_files = []
+
+# -- Options for MyST parser -------------------------------------------------
+
+myst_heading_anchors = 3
+
+# -- Generate Changelog -------------------------------------------------
+
+sphinx_github_changelog_token = os.environ.get("SPHINX_GITHUB_CHANGELOG_TOKEN")
