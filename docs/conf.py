@@ -15,10 +15,12 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
+import os
+
 import pettingzoo
 
 project = "PettingZoo"
-copyright = "2022 Farama Foundation"
+copyright = "2023 Farama Foundation"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
@@ -37,6 +39,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
     "myst_parser",
+    "sphinx_github_changelog",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -91,3 +94,7 @@ html_css_files = []
 # -- Options for MyST parser -------------------------------------------------
 
 myst_heading_anchors = 3
+
+# -- Generate Changelog -------------------------------------------------
+
+sphinx_github_changelog_token = os.environ.get("SPHINX_GITHUB_CHANGELOG_TOKEN")
