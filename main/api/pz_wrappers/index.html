@@ -396,7 +396,7 @@
 <h2>Conversion wrappers<a class="headerlink" href="#conversion-wrappers" title="Permalink to this heading">#</a></h2>
 <section id="aec-to-parallel">
 <h3>AEC to Parallel<a class="headerlink" href="#aec-to-parallel" title="Permalink to this heading">#</a></h3>
-<p>An environment can be converted from an AEC environment to a parallel environment with the <code class="docutils literal notranslate"><span class="pre">to_parallel</span></code> wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:</p>
+<p>An environment can be converted from an AEC environment to a parallel environment with the <code class="docutils literal notranslate"><span class="pre">aec_to_parallel</span></code> wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:</p>
 <ol class="arabic simple">
 <li><p>The environment steps in a cycle, i.e. it steps through every live agent in order.</p></li>
 <li><p>The environment does not update the observations of the agents except at the end of a cycle.</p></li>
@@ -405,17 +405,17 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils.conversions</span> <span class="kn">import</span> <span class="n">to_parallel</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">to_parallel</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">aec_to_parallel</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="parallel-to-aec">
 <h3>Parallel to AEC<a class="headerlink" href="#parallel-to-aec" title="Permalink to this heading">#</a></h3>
-<p>Any parallel environment can be efficiently converted to an AEC environment with the <code class="docutils literal notranslate"><span class="pre">from_parallel</span></code> wrapper.</p>
+<p>Any parallel environment can be efficiently converted to an AEC environment with the <code class="docutils literal notranslate"><span class="pre">parallel_to_aec</span></code> wrapper.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils</span> <span class="kn">import</span> <span class="n">from_parallel</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">from_parallel</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">parallel_to_aec</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
