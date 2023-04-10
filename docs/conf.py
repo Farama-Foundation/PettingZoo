@@ -15,12 +15,12 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
-from typing import Any, Dict
+import os
 
 import pettingzoo
 
 project = "PettingZoo"
-copyright = "2022 Farama Foundation"
+copyright = "2023 Farama Foundation"
 author = "Farama Foundation"
 
 # The full version, including alpha/beta/rc tags
@@ -37,7 +37,9 @@ extensions = [
     "sphinx.ext.doctest",
     "sphinx.ext.autodoc",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
     "myst_parser",
+    "sphinx_github_changelog",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -54,6 +56,18 @@ napoleon_use_admonition_for_references = True
 # See https://github.com/sphinx-doc/sphinx/issues/9119
 napoleon_custom_sections = [("Returns", "params_style")]
 
+# -- Options for Autodoc -------------------------------------------------
+
+autoclass_content = "both"
+autodoc_preserve_defaults = True
+
+# -- Options for Intersphinx -----------------------------------------------
+
+intersphinx_mapping = {
+    "shimmy": ("https://shimmy.farama.org/", None),
+}
+intersphinx_disabled_reftypes = ["*"]
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -69,14 +83,18 @@ html_theme_options = {
     "dark_logo": "img/PettingZoo_White.svg",
     "gtag": "G-Q4EGMJ3R24",
     "versioning": True,
+    "source_repository": "https://github.com/Farama-Foundation/PettingZoo/",
+    "source_branch": "master",
+    "source_directory": "docs/",
 }
-html_context: Dict[str, Any] = {}
-html_context["conf_py_path"] = "/docs/"
-html_context["display_github"] = True
-html_context["github_user"] = "Farama-Foundation"
-html_context["github_repo"] = "PettingZoo"
-html_context["github_version"] = "master"
-html_context["slug"] = "pettingzoo"
 
 html_static_path = ["_static"]
 html_css_files = []
+
+# -- Options for MyST parser -------------------------------------------------
+
+myst_heading_anchors = 3
+
+# -- Generate Changelog -------------------------------------------------
+
+sphinx_github_changelog_token = os.environ.get("SPHINX_GITHUB_CHANGELOG_TOKEN")
