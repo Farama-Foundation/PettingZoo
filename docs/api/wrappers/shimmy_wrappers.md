@@ -95,6 +95,13 @@ For more information, see [Shimmy documentation](https://shimmy.farama.org).
 
 [//]: # (```)
 
+## Multi-Agent Compatibility Wrappers:
+```{eval-rst}
+- :external:py:class:`shimmy.dm_control_multiagent_compatibility.DmControlMultiAgentCompatibilityV0`
+- :external:py:class:`shimmy.openspiel_compatibility.OpenspielCompatibilityV0`
+- :external:py:class:`shimmy.meltingpot_compatibility.MeltingPotCompatibilityV0`
+```
+
 ## Citation
 
 If you use this in your research, please cite:
