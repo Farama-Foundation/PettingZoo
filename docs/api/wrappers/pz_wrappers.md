@@ -20,7 +20,7 @@ PettingZoo includes the following types of wrappers:
    :undoc-members:
 ```
 
-An environment can be converted from an AEC environment to a parallel environment with the `to_parallel` wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:
+An environment can be converted from an AEC environment to a parallel environment with the `aec_to_parallel` wrapper shown below. Note that this wrapper makes the following assumptions about the underlying environment:
 
 1. The environment steps in a cycle, i.e. it steps through every live agent in order.
 2. The environment does not update the observations of the agents except at the end of a cycle.
