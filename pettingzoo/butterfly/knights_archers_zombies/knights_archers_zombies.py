@@ -239,7 +239,7 @@ class raw_env(AECEnv, EzPickle):
         EzPickle.__init__(
             self,
             spawn_rate=spawn_rate,
-            num_arches=num_archers,
+            num_archers=num_archers,
             num_knights=num_knights,
             max_zombies=max_zombies,
             max_arrows=max_arrows,
