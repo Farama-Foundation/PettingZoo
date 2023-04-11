@@ -1,6 +1,11 @@
 from gymnasium.utils.env_checker import data_equivalence
 
 
+def seed_spaces(env):
+    seed_action_spaces(env)
+    seed_observation_spaces(env)
+
+
 def seed_action_spaces(env):
     if hasattr(env, "agents"):
         for i, agent in enumerate(env.agents):
@@ -19,11 +24,8 @@ def check_environment_deterministic(env1, env2, num_cycles):
     env1.reset(seed=42)
     env2.reset(seed=42)
 
-    seed_action_spaces(env1)
-    seed_action_spaces(env2)
-
-    seed_observation_spaces(env1)
-    seed_observation_spaces(env2)
+    seed_spaces(env1)
+    seed_spaces(env2)
 
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
@@ -71,8 +73,8 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     env1.reset(seed=42)
     env2.reset(seed=42)
 
-    seed_action_spaces(env1)
-    seed_action_spaces(env2)
+    seed_spaces(env1)
+    seed_spaces(env2)
 
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
@@ -80,8 +82,8 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     env1.reset(seed=42)
     env2.reset(seed=42)
 
-    seed_action_spaces(env1)
-    seed_action_spaces(env2)
+    seed_spaces(env1)
+    seed_spaces(env2)
 
     while env1.agents:
         actions1 = {agent: env1.action_space(agent).sample() for agent in env1.agents}
