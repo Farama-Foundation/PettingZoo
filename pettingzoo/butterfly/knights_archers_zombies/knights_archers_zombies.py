@@ -244,7 +244,7 @@ class raw_env(AECEnv, EzPickle):
             max_zombies=max_zombies,
             max_arrows=max_arrows,
             killable_knights=killable_knights,
-            killable_arches=killable_archers,
+            killable_archers=killable_archers,
             pad_observation=pad_observation,
             line_death=line_death,
             max_cycles=max_cycles,
