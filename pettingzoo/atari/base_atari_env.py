@@ -49,16 +49,16 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         """
         EzPickle.__init__(
             self,
-            game,
-            num_players,
-            mode_num,
-            seed,
-            obs_type,
-            full_action_space,
-            env_name,
-            max_cycles,
-            render_mode,
-            auto_rom_install_path,
+            game=game,
+            num_players=num_players,
+            mode_num=mode_num,
+            seed=seed,
+            obs_type=obs_type,
+            full_action_space=full_action_space,
+            env_name=env_name,
+            max_cycles=max_cycles,
+            render_mode=render_mode,
+            auto_rom_install_path=auto_rom_install_path,
         )
 
         assert obs_type in (

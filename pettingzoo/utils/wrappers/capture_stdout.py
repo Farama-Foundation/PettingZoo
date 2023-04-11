@@ -1,5 +1,5 @@
-from ..capture_stdout import capture_stdout
-from .base import BaseWrapper
+from pettingzoo.utils.capture_stdout import capture_stdout
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class CaptureStdoutWrapper(BaseWrapper):

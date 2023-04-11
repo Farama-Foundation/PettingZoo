@@ -166,7 +166,7 @@ class raw_env(AECEnv, EzPickle):
 
     def __init__(self, *args, **kwargs):
         EzPickle.__init__(self, *args, **kwargs)
-        super().__init__()
+        AECEnv.__init__(self)
         self.env = _env(*args, **kwargs)
 
         self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]
