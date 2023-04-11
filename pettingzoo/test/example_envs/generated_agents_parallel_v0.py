@@ -81,6 +81,13 @@ class parallel_env(ParallelEnv):
         self.agents = []
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
+
+        # seed observation and action spaces
+        for i, agent in enumerate(self.agents):
+            self.observation_space(agent).seed(seed)
+        for i, agent in enumerate(self.agents):
+            self.action_space(agent).seed(seed)
+
         return {agent: self.observe(agent) for agent in self.agents}
 
     def seed(self, seed=None):

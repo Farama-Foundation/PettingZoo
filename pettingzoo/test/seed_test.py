@@ -16,12 +16,14 @@ def seed_observation_spaces(env):
 def check_environment_deterministic(env1, env2, num_cycles):
     """Check that two AEC environments execute the same way."""
 
-    env1.reset(seed=42)
-    env2.reset(seed=42)
+    env1.reset(seed=0)
+    env2.reset(seed=0)
 
+    # seed action spaces to ensure sampled actions are the same
     seed_action_spaces(env1)
     seed_action_spaces(env2)
 
+    # seed observation spaces to ensure first observation is the same
     seed_observation_spaces(env1)
     seed_observation_spaces(env2)
 
@@ -33,6 +35,9 @@ def check_environment_deterministic(env1, env2, num_cycles):
 
         obs1, reward1, termination1, truncation1, info1 = env1.last()
         obs2, reward2, termination2, truncation2, info2 = env2.last()
+
+        if termination1 or truncation1 or termination2 or truncation2:
+            break
 
         print(
             "Observations correct? ", data_equivalence(obs1, obs2)
@@ -54,13 +59,13 @@ def check_environment_deterministic(env1, env2, num_cycles):
             action1, action2
         ), f"Incorrect actions: {action1} {action2}"
 
-        if iter >= max_env_iters or termination1 or truncation1:
-            break
-
         env1.step(action1)
         env2.step(action2)
 
         iter += 1
+
+        if iter >= max_env_iters:
+            break
 
     env1.close()
     env2.close()
@@ -71,8 +76,13 @@ def check_environment_deterministic_parallel(env1, env2, num_cycles):
     env1.reset(seed=42)
     env2.reset(seed=42)
 
+    # seed action spaces to ensure sampled actions are the same
     seed_action_spaces(env1)
     seed_action_spaces(env2)
+
+    # seed observation spaces to ensure first observation is the same
+    seed_observation_spaces(env1)
+    seed_observation_spaces(env2)
 
     iter = 0
     max_env_iters = num_cycles * len(env1.agents)
