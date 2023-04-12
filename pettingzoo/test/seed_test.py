@@ -16,8 +16,8 @@ def seed_observation_spaces(env):
 def check_environment_deterministic(env1, env2, num_cycles):
     """Check that two AEC environments execute the same way."""
 
-    env1.reset(seed=0)
-    env2.reset(seed=0)
+    env1.reset(seed=42)
+    env2.reset(seed=42)
 
     # seed action spaces to ensure sampled actions are the same
     seed_action_spaces(env1)
