@@ -482,6 +482,8 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
 
     env.reset()
     observation_0, *_ = env.last()
+    
+    # handle dict observation spaces (some environments provide action_mask as well as observation)
     if isinstance(observation_0, dict) and "observation" in observation_0:
         observation_0 = observation_0["observation"]
 
