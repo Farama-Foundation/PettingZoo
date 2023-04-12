@@ -39,10 +39,7 @@ def check_environment_deterministic(env1, env2, num_cycles):
         if termination1 or truncation1 or termination2 or truncation2:
             break
 
-        print(
-            "Observations correct? ", data_equivalence(obs1, obs2)
-        )  # temp testing code because assert fails
-        # assert data_equivalence(obs1, obs2), "Incorrect observation"
+        assert data_equivalence(obs1, obs2), "Incorrect observation"
         assert data_equivalence(reward1, reward2), "Incorrect reward."
         assert data_equivalence(termination1, termination2), "Incorrect termination."
         assert data_equivalence(truncation1, truncation2), "Incorrect truncation."
