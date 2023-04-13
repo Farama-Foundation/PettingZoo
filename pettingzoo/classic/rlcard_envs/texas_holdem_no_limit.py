@@ -151,7 +151,7 @@ class raw_env(RLCardBase):
                                 ),
                                 [100, 100],
                             ),
-                            dtype=np.float32,
+                            dtype=np.float64,
                         ),
                         "action_mask": spaces.Box(
                             low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8

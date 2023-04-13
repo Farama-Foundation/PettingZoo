@@ -1,3 +1,4 @@
+import random
 import re
 import warnings
 from collections import defaultdict
@@ -24,7 +25,7 @@ env_obs_dicts = [
     "texas_holdem_no_limit_v6",
     "texas_holdem_v4",
     "go_v5",
-    "hanabi_v5",
+    "hanabi_v4",
     "chess_v5",
     "connect_four_v3",
     "tictactoe_v3",
@@ -46,7 +47,7 @@ env_obs_space = [
     "texas_holdem_no_limit_v6",
     "texas_holdem_v4",
     "go_v5",
-    "hanabi_v5",
+    "hanabi_v4",
     "knights_archers_zombies_v10",
     "chess_v5",
     "connect_four_v3",
@@ -315,6 +316,8 @@ def play_test(env, observation_0, num_cycles):
     """
     env.reset()
 
+    terminated = {agent: False for agent in env.agents}
+    truncated = {agent: False for agent in env.agents}
     live_agents = set(env.agents[:])
     has_finished = set()
     generated_agents = set()
@@ -330,13 +333,10 @@ def play_test(env, observation_0, num_cycles):
         prev_observe, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
+        elif isinstance(prev_observe, dict) and "action_mask" in prev_observe:
+            action = random.choice(np.flatnonzero(prev_observe["action_mask"]).tolist())
         else:
-            mask = (
-                prev_observe.get("action_mask")
-                if isinstance(prev_observe, dict)
-                else None
-            )
-            action = env.action_space(agent).sample(mask)
+            action = env.action_space(agent).sample()
 
         if agent not in live_agents:
             live_agents.add(agent)
@@ -382,17 +382,15 @@ def play_test(env, observation_0, num_cycles):
         if not env.agents:
             break
 
+        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
+            assert env.observation_space(agent).dtype == prev_observe.dtype
         assert env.observation_space(agent).contains(
             prev_observe
         ), "Out of bounds observation: " + str(prev_observe)
 
-        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
-            assert env.observation_space(agent).dtype == prev_observe.dtype
-        elif isinstance(env.observation_space(agent), gymnasium.spaces.Dict):
-            assert (
-                env.observation_space(agent)["observation"].dtype
-                == prev_observe["observation"].dtype
-            )
+        assert env.observation_space(agent).contains(
+            prev_observe
+        ), "Agent's observation is outside of it's observation space"
         test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
@@ -409,9 +407,10 @@ def play_test(env, observation_0, num_cycles):
         obs, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
+        elif isinstance(obs, dict) and "action_mask" in obs:
+            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
         else:
-            mask = obs.get("action_mask") if isinstance(obs, dict) else None
-            action = env.action_space(agent).sample(mask)
+            action = env.action_space(agent).sample()
         assert isinstance(terminated, bool), "terminated from last is not True or False"
         assert isinstance(truncated, bool), "terminated from last is not True or False"
         assert (
@@ -440,7 +439,7 @@ def test_action_flexibility(env):
         if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
-            action = env.action_space(agent).sample(obs["action_mask"])
+            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
         else:
             action = 0
         env.step(action)
@@ -482,9 +481,6 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
 
     env.reset()
     observation_0, *_ = env.last()
-    if isinstance(observation_0, dict) and "observation" in observation_0:
-        observation_0 = observation_0["observation"]
-
     test_observation(observation_0, observation_0, str(env.unwrapped))
 
     non_observe, *_ = env.last(observe=False)
