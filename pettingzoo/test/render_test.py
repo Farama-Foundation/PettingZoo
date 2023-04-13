@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 
@@ -12,7 +14,7 @@ def collect_render_results(env):
                 if terminated or truncated:
                     action = None
                 elif isinstance(obs, dict) and "action_mask" in obs:
-                    action = env.action_space(agent).sample(obs["action_mask"])
+                    action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
                 else:
                     action = env.action_space(agent).sample()
                 env.step(action)

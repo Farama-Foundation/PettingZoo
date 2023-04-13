@@ -75,24 +75,11 @@ class raw_env(AECEnv):
         self.truncations = {}
         self.infos = {}
         self.num_steps = 0
-
-        self._obs_spaces = {}
-        self._act_spaces = {}
-        self.types = []
-        self._agent_counters = {}
-        for i in range(3):
-            self.add_type()
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
 
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.reset()
-
-        # seed observation and action spaces
-        for i, agent in enumerate(self.agents):
-            self.observation_space(agent).seed(seed)
-        for i, agent in enumerate(self.agents):
-            self.action_space(agent).seed(seed)
 
     def seed(self, seed=None):
         self.np_random, _ = gymnasium.utils.seeding.np_random(seed)

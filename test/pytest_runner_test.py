@@ -25,7 +25,7 @@ def test_module(name, env_module):
     # seed_test(env_module.env, 50)
 
     # some atari environments fail this test
-    if "atari/" not in name and "hanabi" not in name:
+    if "atari/" not in name:
         seed_test(env_module.env, 50)
 
     render_test(env_module.env)
