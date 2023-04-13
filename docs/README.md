@@ -2,7 +2,7 @@
 
 This folder contains the documentation for [PettingZoo](https://github.com/Farama-Foundation/PettingZoo).
 
-For more information about how to contribute to the documentation go to our [CONTRIBUTING.md](https://github.com/Farama-Foundation/Celshast/blob/main/CONTRIBUTING.md)
+For more information about how to contribute to the documentation go to our [CONTRIBUTING.md](https://github.com/Farama-Foundation/PettingZoo/blob/main/CONTRIBUTING.md)
 
 ## Editing an environment page
 
