@@ -128,11 +128,10 @@ parameterized_envs = [
             max_life_tokens=2,
         ),
     ],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type="minimal")],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type="card_knowledge")],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type="seer")],
-    ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=False)],
-    ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=True)],
+    ["classic/hanabi_v4", hanabi_v4, dict(observation_type=0)],
+    ["classic/hanabi_v4", hanabi_v4, dict(observation_type=1)],
+    ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=False)],
+    ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=True)],
     ["mpe/simple_adversary_v2", simple_adversary_v2, dict(N=4)],
     ["mpe/simple_reference_v2", simple_reference_v2, dict(local_ratio=0.2)],
     ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5)],
@@ -217,8 +216,8 @@ parameterized_envs = [
     ["sisl/waterworld_v4", waterworld_v4, dict(n_coop=1)],
     ["sisl/waterworld_v4", waterworld_v4, dict(n_poisons=4)],
     ["sisl/waterworld_v4", waterworld_v4, dict(n_sensors=4)],
-    # ["sisl/waterworld_v4", waterworld_v4, dict(local_ratio=0.5)], # Fails: incorrect reward (timestep 984)
-    # ["sisl/waterworld_v4", waterworld_v4, dict(speed_features=False)], # Fails: incorrect reward (timestep 984)
+    ["sisl/waterworld_v4", waterworld_v4, dict(local_ratio=0.5)],
+    ["sisl/waterworld_v4", waterworld_v4, dict(speed_features=False)],
 ]
 
 
@@ -227,9 +226,9 @@ def test_module(name, env_module, kwargs):
     _env = env_module.env(**kwargs)
     api_test(_env)
 
-    # some Atari environments fail this test, and Hanabi does not support seeding through OpenSpiel.
-    if "atari/" not in name and "hanabi" not in name:
-        seed_test(lambda: env_module.env(**kwargs))
+    # some atari environments fail this test
+    if "atari/" not in name:
+        seed_test(lambda: env_module.env(**kwargs), 50)
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))
     try:
