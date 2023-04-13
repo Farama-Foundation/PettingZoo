@@ -58,7 +58,6 @@ for agent in env.agent_iter():
         action = env.action_space(agent).sample(info["action_mask"])  # this is where you would insert your policy
     env.step(action)
     env.render()
-
 ```
 For more information, see [Shimmy OpenSpiel documentation](https://shimmy.farama.org/contents/open_spiel/)
 
@@ -92,10 +91,10 @@ If you use this in your research, please cite:
 
 ```
 @software{shimmy2022github,
-  author = {{Jun Jet Tai, Mark Towers} and Elliot Tower and Jordan Terry},
+  author = {Jordan Terry, Mark Towers, Jun Jet Tai},
   title = {Shimmy: Gymnasium and Pettingzoo Wrappers for Commonly Used Environments},
   url = {http://github.com/Farama-Foundation/Shimmy},
   version = {0.2.0},
   year = {2022},
-}```
+}
 ```
