@@ -448,7 +448,6 @@ class raw_env(AECEnv, EzPickle):
             or self.truncations[self.agent_selection]
         ):
             return self._was_dead_step(action)
-        action = int(action)  # TODO: test if this is necessary, I think it shouldn't be
 
         if action not in self.legal_moves:
             raise ValueError(
