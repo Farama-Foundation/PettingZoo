@@ -57,14 +57,16 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 
 ```
 
-# PettingZoo is a Python library for conducting research in multi-agent reinforcement learning
+# PettingZoo is a standard API for multi-agent reinforcement learning
 
 ```{figure} environments/atari/atari_warlords.gif
     :width: 230px
     :name: warlods
 ```
 
-**Environments can be interacted with in a manner very similar to Gymnasium:**
+**PettingZoo includes a diverse set of reference environments, and a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.** 
+
+Environments can be interacted with in a manner very similar to [Gymnasium](https://gymnasium.farama.org):
 
 ```python
   from pettingzoo.butterfly import knights_archers_zombies_v10
