@@ -101,9 +101,3 @@ def test_parallel_generated_agents_conversions_aec():
 
     # fails because using parallel_to_aec with this environment can produce nondeterministic behavior
     check_environment_deterministic(env1, env2, 500)
-
-
-if __name__ == "__main__":
-    test_generated_agents_aec()
-    test_generated_agents_parallel()
-    test_parallel_generated_agents_conversions()
