@@ -77,28 +77,8 @@ For more information, see [Shimmy documentation](https://shimmy.farama.org).
 
 ## Multi-Agent Compatibility Wrappers:
 ```{eval-rst}
-.. py:class:: OpenspielCompatibilityV0(game: pyspiel.Game, render_mode: str | None)   
-.. py:class:: MeltingPotCompatibilityV0(env: meltingpot.python.utils.substrates.substrate.Substrate, substrate_name: str | None, max_cycles: int | None, render_mode: str | None)
-.. py:class:: DmControlMultiAgentCompatibilityV0(env: dm_control.composer.Environment, render_mode: str | None = None)
-```
-
-[//]: # (```{eval-rst})
-
-[//]: # (.. currentmodule:: shimmy)
-
-[//]: # ()
-[//]: # (.. autoclass:: DmControlMultiAgentCompatibilityV0)
-
-[//]: # (.. autoclass:: MeltingPotCompatibilityV0)
-
-[//]: # (.. autoclass:: OpenspielCompatibilityV0)
-
-[//]: # (```)
-
-## Multi-Agent Compatibility Wrappers:
-```{eval-rst}
 - :external:py:class:`shimmy.dm_control_multiagent_compatibility.DmControlMultiAgentCompatibilityV0`
-- :external:py:class:`shimmy.openspiel_compatibility.OpenspielCompatibilityV0`
+- :external:py:class:`shimmy.openspiel_compatibility.OpenSpielCompatibilityV0`
 - :external:py:class:`shimmy.meltingpot_compatibility.MeltingPotCompatibilityV0`
 ```
 
@@ -108,10 +88,10 @@ If you use this in your research, please cite:
 
 ```
 @software{shimmy2022github,
-  author = {Jordan Terry, Mark Towers, Jun Jet Tai},
-  title = {Shimmy: Gymnasium and Pettingzoo Wrappers for Commonly Used Environments},
-  url = {http://github.com/Farama-Foundation/Shimmy},
-  version = {0.2.0},
+  author = {{Jun Jet Tai, Mark Towers, Elliot Tower} and Jordan Terry},
+  title = {Shimmy: Gymnasium and PettingZoo Wrappers for Commonly Used Environments},
+  url = {https://github.com/Farama-Foundation/Shimmy},
+  version = {1.0.0},
   year = {2022},
 }
 ```
