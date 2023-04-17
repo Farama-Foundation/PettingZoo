@@ -36,14 +36,14 @@ def check_environment_deterministic(env1, env2, num_cycles):
         obs1, reward1, termination1, truncation1, info1 = env1.last()
         obs2, reward2, termination2, truncation2, info2 = env2.last()
 
-        if termination1 or truncation1 or termination2 or truncation2:
-            break
-
         assert data_equivalence(obs1, obs2), "Incorrect observation"
         assert data_equivalence(reward1, reward2), "Incorrect reward."
         assert data_equivalence(termination1, termination2), "Incorrect termination."
         assert data_equivalence(truncation1, truncation2), "Incorrect truncation."
         assert data_equivalence(info1, info2), "Incorrect info."
+
+        if termination1 or truncation1:
+            break
 
         mask1 = obs1.get("action_mask") if isinstance(obs1, dict) else None
         mask2 = obs2.get("action_mask") if isinstance(obs2, dict) else None
