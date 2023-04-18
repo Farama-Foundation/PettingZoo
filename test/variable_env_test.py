@@ -1,36 +1,40 @@
-from pettingzoo.test.api_test import api_test
+from pettingzoo.test import api_test, parallel_api_test, seed_test
 from pettingzoo.test.example_envs import (
     generated_agents_env_v0,
     generated_agents_parallel_v0,
 )
-from pettingzoo.test.parallel_test import parallel_api_test
-from pettingzoo.test.seed_test import check_environment_deterministic
+from pettingzoo.test.seed_test import (
+    check_environment_deterministic_parallel,
+    parallel_seed_test,
+)
 from pettingzoo.utils.conversions import aec_to_parallel, parallel_to_aec
 
 
 def test_generated_agents_aec():
+    # check that that AEC env passes API test and produces deterministic behavior
     api_test(generated_agents_env_v0.env())
-    # seed_test(generated_agents_env_v0.env)
+    seed_test(generated_agents_env_v0.env)
 
 
 def test_generated_agents_parallel():
+    # check that that parallel env passes API test and produces deterministic behavior
     parallel_api_test(generated_agents_parallel_v0.parallel_env())
-    api_test(generated_agents_parallel_v0.env())
-    # seed_test(generated_agents_parallel_v0.env)
-    # seed_test(generated_agents_parallel_v0.env)
+    parallel_seed_test(generated_agents_parallel_v0.parallel_env)
 
 
-def test_parallel_generated_agents_conversions():
-    parallel_api_test(aec_to_parallel(generated_agents_parallel_v0.env()))
+def test_generated_agents_parallel_to_aec():
+    # check that converting parallel env to aec passes API test and produces deterministic behavior
+    # we don't do this test for aec_to_parallel because generated_agents_env_v0.env() is not parallelizable
     api_test(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
-
-    env1 = parallel_to_aec(generated_agents_parallel_v0.parallel_env())
-    env2 = parallel_to_aec(
-        aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
-    )
-    check_environment_deterministic(env1, env2, 500)
+    seed_test(lambda: parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
 
 
-if __name__ == "__main__":
-    test_generated_agents_aec()
-    test_generated_agents_parallel()
+def test_double_conversion_equals():
+    # tests that double wrapping results in the same environment
+    # we don't do this test for aec_to_parallel because generated_agents_env_v0.env() is not parallelizable
+    env1 = generated_agents_parallel_v0.parallel_env()
+    env2 = aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
+    assert type(env1) == type(
+        env2
+    ), f"Unequal types when double wrapped: {type(env1)} != {type(env2)}"
+    check_environment_deterministic_parallel(env1, env2, 500)

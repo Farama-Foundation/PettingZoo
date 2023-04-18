@@ -30,6 +30,7 @@ class parallel_env(ParallelEnv):
         self.types = []
         self._agent_counters = {}
         self.max_cycles = max_cycles
+        self.rng_seed = None
         self.seed()
         self.render_mode = render_mode
         for i in range(3):
@@ -50,6 +51,8 @@ class parallel_env(ParallelEnv):
         obs_size = self.np_random.integers(10, 50)
         obs_space = gymnasium.spaces.Box(low=0, high=1, shape=(obs_size,))
         act_space = gymnasium.spaces.Discrete(num_actions)
+        obs_space.seed(self.rng_seed)
+        act_space.seed(self.rng_seed)
         new_type = f"type{type_id}"
         self.types.append(new_type)
         self._obs_spaces[new_type] = obs_space
@@ -65,12 +68,31 @@ class parallel_env(ParallelEnv):
         return agent_name
 
     def reset(self, seed=None, options=None):
+        self.rng_seed = seed
+
         if seed is not None:
             self.seed(seed=seed)
-        self.agents = []
         self.num_steps = 0
+
+        # Reset spaces and types
+        self._obs_spaces = {}
+        self._act_spaces = {}
+        self.types = []
+        self._agent_counters = {}
+        for i in range(3):
+            self.add_type()
+
+        # Add agents
+        self.agents = []
         for i in range(5):
             self.add_agent(self.np_random.choice(self.types))
+
+        # seed observation and action spaces
+        for i, agent in enumerate(self.agents):
+            self.observation_space(agent).seed(seed)
+        for i, agent in enumerate(self.agents):
+            self.action_space(agent).seed(seed)
+
         return {agent: self.observe(agent) for agent in self.agents}
 
     def seed(self, seed=None):
