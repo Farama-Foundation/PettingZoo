@@ -4,7 +4,6 @@ from pettingzoo.test.example_envs import (
     generated_agents_parallel_v0,
 )
 from pettingzoo.test.seed_test import (
-    check_environment_deterministic,
     check_environment_deterministic_parallel,
     parallel_seed_test,
 )
@@ -27,9 +26,7 @@ def test_generated_agents_parallel_to_aec():
     # check that converting parallel env to aec passes API test and produces deterministic behavior
     # we don't do this test for aec_to_parallel because generated_agents_env_v0.env() is not parallelizable
     api_test(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
-    seed_test(
-        lambda: parallel_to_aec(generated_agents_parallel_v0.parallel_env())
-    )
+    seed_test(lambda: parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
 
 
 def test_double_conversion_equals():
@@ -37,5 +34,7 @@ def test_double_conversion_equals():
     # we don't do this test for aec_to_parallel because generated_agents_env_v0.env() is not parallelizable
     env1 = generated_agents_parallel_v0.parallel_env()
     env2 = aec_to_parallel(parallel_to_aec(generated_agents_parallel_v0.parallel_env()))
-    assert type(env1) == type(env2), f"Unequal types when double wrapped: {type(env1)} != {type(env2)}"
+    assert type(env1) == type(
+        env2
+    ), f"Unequal types when double wrapped: {type(env1)} != {type(env2)}"
     check_environment_deterministic_parallel(env1, env2, 500)
