@@ -109,6 +109,7 @@ class raw_env(SimpleEnv, EzPickle):
             num_good, num_adversaries, num_obstacles, num_food, num_forests
         )
         SimpleEnv.__init__(
+            self,
             scenario=scenario,
             world=world,
             render_mode=render_mode,

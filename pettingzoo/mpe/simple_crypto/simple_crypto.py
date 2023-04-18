@@ -83,6 +83,7 @@ class raw_env(SimpleEnv, EzPickle):
         scenario = Scenario()
         world = scenario.make_world()
         SimpleEnv.__init__(
+            self,
             scenario=scenario,
             world=world,
             render_mode=render_mode,
