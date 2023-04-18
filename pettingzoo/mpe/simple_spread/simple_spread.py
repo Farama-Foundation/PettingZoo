@@ -82,7 +82,7 @@ class raw_env(SimpleEnv, EzPickle):
         ), "local_ratio is a proportion. Must be between 0 and 1."
         scenario = Scenario()
         world = scenario.make_world(N)
-        super().__init__(
+        SimpleEnv.__init__(
             scenario=scenario,
             world=world,
             render_mode=render_mode,

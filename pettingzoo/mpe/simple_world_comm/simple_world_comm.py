@@ -108,7 +108,7 @@ class raw_env(SimpleEnv, EzPickle):
         world = scenario.make_world(
             num_good, num_adversaries, num_obstacles, num_food, num_forests
         )
-        super().__init__(
+        SimpleEnv.__init__(
             scenario=scenario,
             world=world,
             render_mode=render_mode,
