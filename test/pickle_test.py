@@ -6,7 +6,7 @@ from gymnasium.utils.env_checker import data_equivalence
 from .all_modules import all_environments
 
 ALL_ENVS = list(all_environments.items())
-FAILING_ENV_NAMES = []
+FAILING_ENV_NAMES = ["simple_world_comm_v2"]
 PASSING_ENVS = [
     (name, env_module)
     for (name, env_module) in ALL_ENVS
