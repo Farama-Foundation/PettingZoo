@@ -152,7 +152,12 @@ class raw_env(RLCardBase, EzPickle):
         opponents_hand_visible=False,
         render_mode=None,
     ):
-        EzPickle.__init__(self, knock_reward, gin_reward, render_mode)
+        EzPickle.__init__(
+            self,
+            knock_reward=knock_reward,
+            gin_reward=gin_reward,
+            render_mode=render_mode,
+        )
         self._opponents_hand_visible = opponents_hand_visible
         num_planes = 5 if self._opponents_hand_visible else 4
         RLCardBase.__init__(self, "gin-rummy", 2, (num_planes, 52))

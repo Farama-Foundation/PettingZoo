@@ -145,16 +145,16 @@ class raw_env(AECEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            n_pistons,
-            time_penalty,
-            continuous,
-            random_drop,
-            random_rotate,
-            ball_mass,
-            ball_friction,
-            ball_elasticity,
-            max_cycles,
-            render_mode,
+            n_pistons=n_pistons,
+            time_penalty=time_penalty,
+            continuous=continuous,
+            random_drop=random_drop,
+            random_rotate=random_rotate,
+            ball_mass=ball_mass,
+            ball_friction=ball_friction,
+            ball_elasticity=ball_elasticity,
+            max_cycles=max_cycles,
+            render_mode=render_mode,
         )
         self.dt = 1.0 / FPS
         self.n_pistons = n_pistons

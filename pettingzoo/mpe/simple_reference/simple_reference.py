@@ -56,11 +56,10 @@ simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False
 import numpy as np
 from gymnasium.utils import EzPickle
 
+from pettingzoo.mpe._mpe_utils.core import Agent, Landmark, World
+from pettingzoo.mpe._mpe_utils.scenario import BaseScenario
+from pettingzoo.mpe._mpe_utils.simple_env import SimpleEnv, make_env
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .._mpe_utils.core import Agent, Landmark, World
-from .._mpe_utils.scenario import BaseScenario
-from .._mpe_utils.simple_env import SimpleEnv, make_env
 
 
 class raw_env(SimpleEnv, EzPickle):
@@ -69,17 +68,18 @@ class raw_env(SimpleEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            local_ratio,
-            max_cycles,
-            continuous_actions,
-            render_mode,
+            local_ratio=local_ratio,
+            max_cycles=max_cycles,
+            continuous_actions=continuous_actions,
+            render_mode=render_mode,
         )
         assert (
             0.0 <= local_ratio <= 1.0
         ), "local_ratio is a proportion. Must be between 0 and 1."
         scenario = Scenario()
         world = scenario.make_world()
-        super().__init__(
+        SimpleEnv.__init__(
+            self,
             scenario=scenario,
             world=world,
             render_mode=render_mode,

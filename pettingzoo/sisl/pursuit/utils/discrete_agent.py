@@ -1,7 +1,7 @@
 import numpy as np
 from gymnasium import spaces
 
-from ..._utils import Agent
+from pettingzoo.sisl._utils import Agent
 
 #################################################################
 # Implements the Single 2D Agent Dynamics

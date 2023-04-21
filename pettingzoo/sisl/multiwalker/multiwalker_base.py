@@ -16,7 +16,7 @@ from gymnasium import spaces
 from gymnasium.utils import seeding
 from pygame import gfxdraw
 
-from .._utils import Agent
+from pettingzoo.sisl._utils import Agent
 
 MAX_AGENTS = 40
 

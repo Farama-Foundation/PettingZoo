@@ -2,7 +2,7 @@ import warnings
 
 from gymnasium.utils import seeding
 
-from ..env import ParallelEnv
+from pettingzoo.utils.env import ParallelEnv
 
 
 class BaseParallelWrapper(ParallelEnv):

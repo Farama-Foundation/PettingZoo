@@ -60,7 +60,11 @@ In any given turn, an agent can choose from one of 6 actions. (Fire is dummy act
 import os
 from glob import glob
 
-from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from pettingzoo.atari.base_atari_env import (
+    BaseAtariEnv,
+    base_env_wrapper_fn,
+    parallel_wrapper_fn,
+)
 
 
 def raw_env(**kwargs):

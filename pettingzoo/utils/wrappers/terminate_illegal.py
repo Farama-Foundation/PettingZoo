@@ -1,5 +1,5 @@
-from ..env_logger import EnvLogger
-from .base import BaseWrapper
+from pettingzoo.utils.env_logger import EnvLogger
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class TerminateIllegalWrapper(BaseWrapper):

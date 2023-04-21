@@ -1,6 +1,6 @@
-from ..env import AECIterable, AECIterator
-from ..env_logger import EnvLogger
-from .base import BaseWrapper
+from pettingzoo.utils.env import AECIterable, AECIterator
+from pettingzoo.utils.env_logger import EnvLogger
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class OrderEnforcingWrapper(BaseWrapper):
