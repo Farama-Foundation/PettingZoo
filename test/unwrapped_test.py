@@ -1,9 +1,9 @@
+from test.all_modules import all_environments
+
 import pytest
 from gymnasium import spaces
 
 from pettingzoo.utils import conversions, wrappers
-
-from .all_modules import all_environments
 
 
 def box_action(env, agents):

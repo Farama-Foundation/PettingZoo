@@ -88,14 +88,15 @@ import pymunk.pygame_util
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.butterfly.pistonball.manual_policy import ManualPolicy
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .manual_policy import ManualPolicy  # noqa: F401
 
 _image_library = {}
 
 FPS = 20
+
+__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
 
 
 def get_image(path):
