@@ -3,18 +3,14 @@ import pickle
 import pytest
 from gymnasium.utils.env_checker import data_equivalence
 
+from pettingzoo.test.seed_test import seed_action_spaces, seed_observation_spaces
+
 from .all_modules import all_environments
 
 ALL_ENVS = list(all_environments.items())
-FAILING_ENV_NAMES = []
-PASSING_ENVS = [
-    (name, env_module)
-    for (name, env_module) in ALL_ENVS
-    if name not in FAILING_ENV_NAMES
-]
 
 
-@pytest.mark.parametrize(("name", "env_module"), PASSING_ENVS)
+@pytest.mark.parametrize(("name", "env_module"), ALL_ENVS)
 def test_pickle_env(name, env_module):
     env1 = env_module.env(render_mode=None)
     env2 = pickle.loads(pickle.dumps(env1))
@@ -22,13 +18,10 @@ def test_pickle_env(name, env_module):
     env1.reset(seed=42)
     env2.reset(seed=42)
 
-    agent1 = env1.agents[0]
-    agent2 = env2.agents[0]
-
-    a_space1 = env1.action_space(agent1)
-    a_space1.seed(42)
-    a_space2 = env2.action_space(agent2)
-    a_space2.seed(42)
+    seed_action_spaces(env1)
+    seed_action_spaces(env2)
+    seed_observation_spaces(env1)
+    seed_observation_spaces(env2)
 
     iter = 0
     for agent1, agent2 in zip(env1.agent_iter(), env2.agent_iter()):
@@ -38,9 +31,6 @@ def test_pickle_env(name, env_module):
 
         obs1, rew1, term1, trunc1, info1 = env1.last()
         obs2, rew2, term2, trunc2, info2 = env2.last()
-
-        if name == "mpe/simple_world_comm_v2":
-            print("Test")
 
         if term1 or term2 or trunc1 or trunc2:
             break
@@ -58,8 +48,8 @@ def test_pickle_env(name, env_module):
         if isinstance(obs1, dict) and "action_mask" in obs1:
             mask = obs1["action_mask"]
 
-        action1 = a_space1.sample(mask=mask)
-        action2 = a_space2.sample(mask=mask)
+        action1 = env1.action_space(agent1).sample(mask=mask)
+        action2 = env2.action_space(agent2).sample(mask=mask)
 
         assert data_equivalence(
             action1, action2
