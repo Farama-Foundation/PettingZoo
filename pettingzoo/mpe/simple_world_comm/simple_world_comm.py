@@ -96,14 +96,14 @@ class raw_env(SimpleEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            num_good,
-            num_adversaries,
-            num_obstacles,
-            num_food,
-            max_cycles,
-            num_forests,
-            continuous_actions,
-            render_mode,
+            num_good=num_good,
+            num_adversaries=num_adversaries,
+            num_obstacles=num_obstacles,
+            num_food=num_food,
+            max_cycles=max_cycles,
+            num_forests=num_forests,
+            continuous_actions=continuous_actions,
+            render_mode=render_mode,
         )
         scenario = Scenario()
         world = scenario.make_world(
