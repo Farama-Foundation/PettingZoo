@@ -26,7 +26,10 @@ We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs 
 
 ## Getting started
 
-Get started with PettingZoo by following [the PettingZoo tutorial](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/), where you'll train multiple PPO agents in the Pistonball environment using PettingZoo.
+For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/environmentcreation/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/). 
+For examples of training RL models using PettingZoo see our tutorials:
+* [CleanRL: Implementing PPO](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/):train multiple PPO agents in the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment.
+* [Tianshou: Training Agents](https://pettingzoo.farama.org/tutorials/tianshou/intermediate/): train DQN agents in the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.
 
 ## API
 
