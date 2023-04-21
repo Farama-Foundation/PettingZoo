@@ -1,6 +1,6 @@
 from gymnasium.spaces import Discrete
 
-from .base import BaseWrapper
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):

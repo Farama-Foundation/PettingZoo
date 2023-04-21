@@ -86,7 +86,11 @@ import os
 import warnings
 from glob import glob
 
-from ..base_atari_env import BaseAtariEnv, base_env_wrapper_fn, parallel_wrapper_fn
+from pettingzoo.atari.base_atari_env import (
+    BaseAtariEnv,
+    base_env_wrapper_fn,
+    parallel_wrapper_fn,
+)
 
 
 def raw_env(has_maze=True, is_invisible=False, billiard_hit=True, **kwargs):
