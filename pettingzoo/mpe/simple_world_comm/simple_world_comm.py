@@ -99,6 +99,7 @@ class raw_env(SimpleEnv, EzPickle):
             num_good,
             num_adversaries,
             num_obstacles,
+            num_food,
             max_cycles,
             num_forests,
             continuous_actions,
