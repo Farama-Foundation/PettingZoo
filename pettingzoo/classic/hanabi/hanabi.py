@@ -287,15 +287,15 @@ class raw_env(AECEnv, EzPickle):
         """
         EzPickle.__init__(
             self,
-            colors,
-            ranks,
-            players,
-            hand_size,
-            max_information_tokens,
-            max_life_tokens,
-            observation_type,
-            random_start_player,
-            render_mode,
+            colors=colors,
+            ranks=ranks,
+            players=players,
+            hand_size=hand_size,
+            max_information_tokens=max_information_tokens,
+            max_life_tokens=max_life_tokens,
+            observation_type=observation_type,
+            random_start_player=random_start_player,
+            render_mode=render_mode,
         )
 
         # ToDo: Starts

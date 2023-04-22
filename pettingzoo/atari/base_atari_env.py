@@ -7,11 +7,16 @@ from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.conversions import (  # noqa: F401
-    parallel_to_aec_wrapper,
-    parallel_wrapper_fn,
-)
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
+
+__all__ = [
+    "parallel_wrapper_fn",
+    "parallel_to_aec_wrapper",
+    "base_env_wrapper_fn",
+    "BaseAtariEnv",
+    "ParallelAtariEnv",
+]
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -49,16 +54,16 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         """
         EzPickle.__init__(
             self,
-            game,
-            num_players,
-            mode_num,
-            seed,
-            obs_type,
-            full_action_space,
-            env_name,
-            max_cycles,
-            render_mode,
-            auto_rom_install_path,
+            game=game,
+            num_players=num_players,
+            mode_num=mode_num,
+            seed=seed,
+            obs_type=obs_type,
+            full_action_space=full_action_space,
+            env_name=env_name,
+            max_cycles=max_cycles,
+            render_mode=render_mode,
+            auto_rom_install_path=auto_rom_install_path,
         )
 
         assert obs_type in (
