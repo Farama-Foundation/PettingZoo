@@ -1,6 +1,6 @@
 import numpy as np
 
-from .discrete_agent import DiscreteAgent
+from pettingzoo.sisl.pursuit.utils.discrete_agent import DiscreteAgent
 
 #################################################################
 # Implements utility functions for multi-agent DRL

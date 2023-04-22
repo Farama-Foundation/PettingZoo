@@ -4,8 +4,8 @@ import os
 import numpy as np
 import pygame
 
-from . import constants as const
-from .img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
 
 
 class Player(pygame.sprite.Sprite):

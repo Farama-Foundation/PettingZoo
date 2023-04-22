@@ -1,1 +1,3 @@
-from .pursuit.pursuit import ManualPolicy, env, parallel_env, raw_env  # noqa: F401
+from pettingzoo.sisl.pursuit.pursuit import ManualPolicy, env, parallel_env, raw_env
+
+__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]

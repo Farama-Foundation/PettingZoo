@@ -139,11 +139,10 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
+from pettingzoo.sisl.waterworld.waterworld_base import FPS
+from pettingzoo.sisl.waterworld.waterworld_base import WaterworldBase as _env
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .waterworld_base import FPS
-from .waterworld_base import WaterworldBase as _env
 
 
 def env(**kwargs):

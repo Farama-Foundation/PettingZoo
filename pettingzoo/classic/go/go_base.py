@@ -30,7 +30,7 @@ from collections import namedtuple
 
 import numpy as np
 
-from . import coords
+from pettingzoo.classic.go import coords
 
 N = int(os.environ.get("BOARD_SIZE", 19))
 

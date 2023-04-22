@@ -96,9 +96,8 @@ import numpy as np
 import pygame
 from gymnasium import spaces
 
+from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
-
-from .rlcard_base import RLCardBase
 
 # Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)
 

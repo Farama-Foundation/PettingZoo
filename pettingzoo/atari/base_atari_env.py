@@ -7,11 +7,16 @@ from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.conversions import (  # noqa: F401
-    parallel_to_aec_wrapper,
-    parallel_wrapper_fn,
-)
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
+
+__all__ = [
+    "parallel_wrapper_fn",
+    "parallel_to_aec_wrapper",
+    "base_env_wrapper_fn",
+    "BaseAtariEnv",
+    "ParallelAtariEnv",
+]
 
 
 def base_env_wrapper_fn(raw_env_fn):

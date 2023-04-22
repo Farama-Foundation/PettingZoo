@@ -42,7 +42,7 @@ SGF             'aa'            'sa'            ''
 GTP             'A19'           'T19'           'pass'
 """
 
-from . import go_base
+from pettingzoo.classic.go import go_base
 
 # We provide more than 19 entries here in case of boards larger than 19 x 19.
 _SGF_COLUMNS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

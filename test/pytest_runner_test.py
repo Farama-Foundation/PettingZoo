@@ -1,4 +1,5 @@
 import os
+from test.all_modules import all_environments
 
 import pytest
 
@@ -10,8 +11,6 @@ from pettingzoo.test.render_test import render_test
 from pettingzoo.test.seed_test import check_environment_deterministic, seed_test
 from pettingzoo.test.state_test import state_test
 from pettingzoo.utils import aec_to_parallel, parallel_to_aec
-
-from .all_modules import all_environments
 
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
