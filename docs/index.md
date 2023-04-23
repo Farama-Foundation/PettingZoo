@@ -69,11 +69,16 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 Environments can be interacted with in a manner very similar to [Gymnasium](https://gymnasium.farama.org):
 
 ```python
-  from pettingzoo.butterfly import knights_archers_zombies_v10
-  env = knights_archers_zombies_v10.env()
-  env.reset()
-  for agent in env.agent_iter():
-      observation, reward, termination, truncation, info = env.last()
-      action = policy(observation, agent)
-      env.step(action)
+from pettingzoo.butterfly import knights_archers_zombies_v10
+
+env = knights_archers_zombies_v10.env()
+env.reset()
+
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    action = env.action_space(agent).sample() # this is where you would insert your policy
+    env.step(action) # execute the action in the environment
+env.close()
 ```
+
+For detailed usage information, see [AEC API](https://pettingzoo.farama.org/api/aec/) and [Parallel API](https://pettingzoo.farama.org/api/parallel/).

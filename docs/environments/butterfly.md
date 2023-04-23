@@ -34,38 +34,44 @@ pip install pettingzoo[butterfly]
 
 ### Usage
 
-To launch a [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment with agents taking random actions:
-``` python
+To launch a [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment with random agents:
+```python
 from pettingzoo.butterfly import pistonball_v6
-env = pistonball_v6.parallel_env(render_mode="human")
 
+env = pistonball_v6.parallel_env(render_mode="human")
 observations = env.reset()
+
 while env.agents:
-    actions = {agent: env.action_space(agent).sample() for agent in env.agents}  # this is where you would insert your policy
+    # this is where you would insert your policy
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}  
+    
+    # execute the actions in the environment
     observations, rewards, terminations, truncations, infos = env.step(actions)
 env.close()
 ```
 
-To launch a [Knights Archers Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py), controls are WASD and space):
+To launch a [Knights Archers Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment with interactive user input (see [manual_policy.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/butterfly/knights_archers_zombies/manual_policy.py)):
 ``` python
 import pygame
 from pettingzoo.butterfly import knights_archers_zombies_v10
 
 env = knights_archers_zombies_v10.env(render_mode="human")
-env.reset()
+env.reset(seed=42)
 
 clock = pygame.time.Clock()
 manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
 for agent in env.agent_iter():
     clock.tick(env.metadata["render_fps"])
-
     observation, reward, termination, truncation, info = env.last()
+    
     if agent == manual_policy.agent:
+        # get user input (controls are WASD and space)
         action = manual_policy(observation, agent)
     else:
+        # this is where you would insert your policy (for non-player agents)
         action = env.action_space(agent).sample()
 
-    env.step(action)
+    env.step(action) # execute the action in the environment
 ```
 
