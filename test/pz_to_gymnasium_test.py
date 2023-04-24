@@ -1,6 +1,7 @@
 from pettingzoo.utils.wrappers.pz_to_gymnasium_wrapper import PZ2GymnasiumWrapper
 from pettingzoo.classic import tictactoe_v3
 from gymnasium.utils.env_checker import check_env
+import numpy as np
 
 
 def test_tictactoe():
@@ -9,7 +10,7 @@ def test_tictactoe():
     
     def pick_a_free_square(obs):
         action_mask = obs['action_mask']
-        return action_mask.tolist().index(1)
+        return np.random.choice(action_mask)
 
     other_agents_logic = {
         'player_2': pick_a_free_square
