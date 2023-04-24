@@ -11,12 +11,14 @@ def test_tictactoe():
         action_mask = obs['action_mask']
         return action_mask.tolist().index(1)
 
+    other_agents_logic = {
+        'player_2': pick_a_free_square
+    }
+
     gym_env = PZ2GymnasiumWrapper(
         pz_env=pz_env,
-        act_others={
-            'player_2': pick_a_free_square
-        },
-        take_spaces_from='player_1'
+        the_external_agent='player_1',
+        act_others=lambda agent, observation: other_agents_logic[agent](observation)
     )
 
     check_env(gym_env)

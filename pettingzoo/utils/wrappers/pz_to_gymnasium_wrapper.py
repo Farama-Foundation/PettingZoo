@@ -6,7 +6,7 @@ from pettingzoo import AECEnv
 Action = TypeVar("Action")
 Observation = TypeVar("Observation")
 
-ActOther = Callable[[Observation], Action]
+ActOthers = Callable[[str, Observation], Action]
 
 
 class PZ2GymnasiumWrapper(gymnasium.Env):
@@ -17,24 +17,31 @@ class PZ2GymnasiumWrapper(gymnasium.Env):
   of all other agents.
 
   Note that this class is actually a Gymnasium environment.
-  It is not a PettingZoo wrapper and is neigher a Gymnasium one.
+  It is not a PettingZoo wrapper and is neither a Gymnasium one.
   """
 
   def __init__(
     self,
     pz_env: AECEnv,
-    act_others: Dict[str, ActOther],
-    take_spaces_from: Union[str, None]
+    the_external_agent: str,
+    act_others: ActOthers
   ):
+    """
+    'pz_env' is the PezttingZoo environment to wrap.
+
+    'the_external_agent' is the agent for which the Gymnasium 'step' function is called.
+
+    'act_other' is a callable that accept an agent and a
+    relevant observation and return the action that should be taken on behalf of that agent.
+    It is up to you to decide how to implement this function. Example is provided in a test.
+    """
+
     super().__init__()
     self._pz_env = pz_env
+    self._the_external_agent = the_external_agent
     self._act_others = act_others
-    take_spaces_from = (
-      take_spaces_from
-      or next(iter(act_others)) # just use any of the keys in the _act_others dict.
-    )
-    self.observation_space = self._pz_env.observation_space(take_spaces_from)
-    self.action_space = self._pz_env.action_space(take_spaces_from)
+    self.observation_space = self._pz_env.observation_space(the_external_agent)
+    self.action_space = self._pz_env.action_space(the_external_agent)
 
   def reset(
     self,
@@ -44,33 +51,21 @@ class PZ2GymnasiumWrapper(gymnasium.Env):
     super().reset(seed=seed)
     self._pz_env.reset(seed=seed)
     self._loop_others()
-    agent = self._pz_env.agent_selection
-    observation, info = (
-      self._pz_env.observe(agent),
-      self._pz_env.infos[agent]
-    )
+    observation, _, _, _, info = self._pz_env.last()
     return observation, info
 
   def step(self, action):
     agent = self._pz_env.agent_selection
-    assert agent not in self._act_others, f"expected it to be my turn, got {agent}"
+    assert agent == self._the_external_agent, f"expected it to be my turn, got {agent}"
     self._pz_env.step(action)
     self._loop_others()
-    observation, reward, terminated, truncated, info = (
-      self._pz_env.observe(agent),
-      self._pz_env.rewards[agent],
-      self._pz_env.terminations[agent],
-      self._pz_env.truncations[agent],
-      self._pz_env.infos[agent]
-    )
-    return observation, reward, terminated, truncated, info
+    return self._pz_env.last()
 
   def _loop_others(self):
     agent = self._pz_env.agent_selection
-    while agent in self._act_others:
-      act_current = self._act_others[agent]
+    while agent != self._the_external_agent:
       obs_current = self._pz_env.observe(agent)
-      action_current = act_current(obs_current)
+      action_current = self._act_others(agent, obs_current)
       self._pz_env.step(action_current)
       agent = self._pz_env.agent_selection
 
