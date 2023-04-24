@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional, Protocol, TypeVar, Union
+from typing import Callable, Optional
 import gymnasium
 from gymnasium.core import ActType, ObsType
 from pettingzoo import AECEnv
