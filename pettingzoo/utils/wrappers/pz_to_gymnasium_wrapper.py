@@ -1,12 +1,12 @@
 from typing import Callable, Dict, Optional, Protocol, TypeVar, Union
 import gymnasium
+from gymnasium.core import ActType, ObsType
 from pettingzoo import AECEnv
 
 
-Action = TypeVar("Action")
-Observation = TypeVar("Observation")
-
-ActOthers = Callable[[str, Observation], Action]
+# The first parameter is an agent (it's identification), second parameter is the relevant observation.
+# The callable is expected to return the action that the given agent would like to take.
+ActOthers = Callable[[str, ObsType], ActType]
 
 
 class PZ2GymnasiumWrapper(gymnasium.Env):
@@ -30,10 +30,10 @@ class PZ2GymnasiumWrapper(gymnasium.Env):
     'pz_env' is the PezttingZoo environment to wrap.
 
     'the_external_agent' is the agent for which the Gymnasium 'step' function is called.
+    In other words, this is the agent that would interact with this Gymnasium environment.
 
-    'act_other' is a callable that accept an agent and a
-    relevant observation and return the action that should be taken on behalf of that agent.
-    It is up to you to decide how to implement this function. Example is provided in a test.
+    'act_other' is a callable that accepts an agent and a
+    relevant observation and returns the action that should be taken on behalf of that agent.
     """
 
     super().__init__()
