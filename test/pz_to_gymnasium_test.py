@@ -10,7 +10,8 @@ def test_tictactoe():
     
     def pick_a_free_square(obs):
         action_mask = obs['action_mask']
-        return np.random.choice(action_mask)
+        possible_actions = np.where(action_mask == 1)[0]
+        return np.random.choice(possible_actions)
 
     other_agents_logic = {
         'player_2': pick_a_free_square
