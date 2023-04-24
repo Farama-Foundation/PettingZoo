@@ -4,7 +4,7 @@ from gymnasium.core import ActType, ObsType
 from pettingzoo import AECEnv
 
 
-# The first parameter is an agent (it's identification), second parameter is the relevant observation.
+# The first parameter is an agent (its identification), second parameter is the relevant observation.
 # The callable is expected to return the action that the given agent would like to take.
 ActOthers = Callable[[str, ObsType], ActType]
 
