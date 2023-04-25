@@ -66,7 +66,7 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 
 **PettingZoo includes a diverse set of reference environments, and a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.** 
 
-Environments can be interacted with in a manner very similar to [Gymnasium](https://gymnasium.farama.org):
+Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
 
 ```python
   from pettingzoo.butterfly import knights_archers_zombies_v10
