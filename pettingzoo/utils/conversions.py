@@ -45,8 +45,10 @@ def aec_wrapper_fn(par_env_fn):
 
 
 def aec_to_parallel(aec_env):
-    if isinstance(aec_env, parallel_to_aec_wrapper):
-        return aec_env.env
+    if isinstance(aec_env, OrderEnforcingWrapper) and isinstance(
+        aec_env.env, parallel_to_aec_wrapper
+    ):
+        return aec_env.env.env
     else:
         par_env = aec_to_parallel_wrapper(aec_env)
         return par_env

@@ -1,8 +1,8 @@
 import numpy as np
 from gymnasium.spaces import Box
 
-from ..env_logger import EnvLogger
-from .base import BaseWrapper
+from pettingzoo.utils.env_logger import EnvLogger
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class ClipOutOfBoundsWrapper(BaseWrapper):

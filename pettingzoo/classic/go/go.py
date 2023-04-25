@@ -116,16 +116,13 @@ import pygame
 from gymnasium import spaces
 
 from pettingzoo import AECEnv
+from pettingzoo.classic.go import coords, go_base
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-
-from . import coords, go_base
 
 
 def get_image(path):
     from os import path as os_path
-
-    import pygame
 
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + "/" + path)

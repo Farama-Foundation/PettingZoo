@@ -92,10 +92,9 @@ from gymnasium import spaces
 from gymnasium.error import DependencyNotInstalled
 
 from pettingzoo import AECEnv
+from pettingzoo.classic.chess import chess_utils
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-
-from . import chess_utils
 
 
 def env(render_mode=None):
