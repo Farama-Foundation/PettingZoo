@@ -58,11 +58,10 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 # PettingZoo is a standard API for multi-agent reinforcement learning.
 
 
-<center>
-	<a href="_static/videos/environments-demo.mp4">
-        <video title="PettingZoo environments" autoplay loop muted width="450" src="_static/videos/environments-demo.mp4" type="video/mp4"></video>
-    </a>
-</center>
+```{figure} _static/img/environments-demo.gif
+    :width: 480px
+    :name: PettingZoo environments
+```
 
 **PettingZoo includes a diverse set of reference environments, and a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.** 
 
