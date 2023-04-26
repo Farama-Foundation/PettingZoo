@@ -42,7 +42,7 @@ for agent in env.agent_iter():
     else:
         action = env.action_space(agent).sample() # this is where you would insert your policy
         
-    env.step(action) # execute the action in the environment
+    env.step(action) 
 env.close()
 ```
 

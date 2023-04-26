@@ -52,7 +52,7 @@ for agent in env.agent_iter():
     mask = observation["action_mask"]
     action = env.action_space(agent).sample(mask)  # this is where you would insert your policy
         
-    env.step(action)  # execute the action in the environment
+    env.step(action)  
 env.close()
 ```
 

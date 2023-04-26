@@ -72,6 +72,6 @@ for agent in env.agent_iter():
         # this is where you would insert your policy (for non-player agents)
         action = env.action_space(agent).sample()
 
-    env.step(action) # execute the action in the environment
+    env.step(action) 
 ```
 
