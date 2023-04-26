@@ -4,22 +4,15 @@ title: Supersuit Wrappers
 
 # Supersuit Wrappers
 
-PettingZoo include wrappers via the SuperSuit companion package (`pip install supersuit`). These can be applied to both AECEnv and ParallelEnv environments. Using it to convert space invaders to have a grey scale observation space and stack the last 4 frames looks like:
+The [SuperSuit](https://github.com/Farama-Foundation/SuperSuit) companion package (`pip install supersuit`) includes a collection of pre-processing functions which can applied to both [AEC](/api/aec/) and [Parallel](/api/parallel/) environments. 
+
+To convert [space invaders](https://pettingzoo.farama.org/environments/atari/space_invaders/) to a greyscale observation space and stack the last 4 frames:
 
 ``` python
-import gymnasium as gym
+from pettingzoo.atari import space_invaders_v2
 from supersuit import color_reduction_v0, frame_stack_v1
 
-env = gym.make('SpaceInvaders-v0')
-
-env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
-```
-
-Similarly, using SuperSuit with PettingZoo environments looks like
-
-``` python
-from pettingzoo.butterfly import pistonball_v0
-env = pistonball_v0.env()
+env = space_invaders_v2.env()
 
 env = frame_stack_v1(color_reduction_v0(env, 'full'), 4)
 ```

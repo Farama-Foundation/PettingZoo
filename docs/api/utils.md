@@ -1,3 +1,8 @@
+---
+title: Utils
+---
+
+
 # Utils
 
 PettingZoo has some utilities to help make simple interactions with the environment trivial to implement. Utilities which are designed to help make environments easier to develop are in the developer documentation.
