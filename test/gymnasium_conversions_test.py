@@ -1,5 +1,5 @@
 import pytest
-from pettingzoo.utils.wrappers.pz_to_gymnasium import aec_to_gymnasium, parallel_to_gymnasium
+from pettingzoo.utils.gymnasium_conversions import aec_to_gymnasium, parallel_to_gymnasium
 from pettingzoo.classic import tictactoe_v3
 from pettingzoo.butterfly import pistonball_v6
 from gymnasium.utils.env_checker import check_env
