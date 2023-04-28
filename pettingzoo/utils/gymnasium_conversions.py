@@ -71,6 +71,9 @@ class aec_to_gymnasium(gymnasium.Env):
     def render(self, *args, **kwargs):
         return self._aec_env.render(*args, **kwargs)
 
+    def close(self):
+        return self._aec_env.close()
+
 
 class parallel_to_gymnasium(gymnasium.Env):
     """Makes a Gymnasium environment out of a ParallelEnv.
@@ -137,3 +140,6 @@ class parallel_to_gymnasium(gymnasium.Env):
 
     def render(self, *args, **kwargs):
         return self._parallel_env.render(*args, **kwargs)
+
+    def close(self):
+        return self._parallel_env.close()
