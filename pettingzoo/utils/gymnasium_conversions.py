@@ -69,7 +69,7 @@ class aec_to_gymnasium(gymnasium.Env):
             self._aec_env.step(action_current)
 
     def render(self, *args, **kwargs):
-        self._aec_env.render(*args, **kwargs)
+        return self._aec_env.render(*args, **kwargs)
 
 
 class parallel_to_gymnasium(gymnasium.Env):
@@ -136,4 +136,4 @@ class parallel_to_gymnasium(gymnasium.Env):
         )
 
     def render(self, *args, **kwargs):
-        self._parallel_env.render(*args, **kwargs)
+        return self._parallel_env.render(*args, **kwargs)
