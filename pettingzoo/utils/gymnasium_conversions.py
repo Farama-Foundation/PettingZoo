@@ -3,7 +3,7 @@
 Wrapping PettingZoo environments into the matching Gymnasium environments for specific agent by providing the action for all other agents.
 """
 
-from typing import Callable, Optional
+from typing import Any, Callable, Dict, Optional
 
 import gymnasium
 from gymnasium.core import ActType, ObsType
@@ -69,7 +69,7 @@ class aec_to_gymnasium(gymnasium.Env):
             self._aec_env.step(action_current)
 
     def render(self, *args, **kwargs):
-        self._aec_env.render(*args, **kwargs)
+        return self._aec_env.render(*args, **kwargs)
 
 
 class parallel_to_gymnasium(gymnasium.Env):
@@ -98,7 +98,7 @@ class parallel_to_gymnasium(gymnasium.Env):
         self._act_others = act_others
         self.observation_space = self._parallel_env.observation_space(external_agent)
         self.action_space = self._parallel_env.action_space(external_agent)
-        self._observations = None
+        self._observations: Dict[str, Any]
 
     def reset(
         self,
@@ -110,7 +110,7 @@ class parallel_to_gymnasium(gymnasium.Env):
         return self._observations[self._external_agent], {}
 
     def step(self, action):
-        assert self._observations
+        assert self._observations is not None
         actions = {
             agent: (
                 action
@@ -136,4 +136,4 @@ class parallel_to_gymnasium(gymnasium.Env):
         )
 
     def render(self, *args, **kwargs):
-        self._parallel_env.render(*args, **kwargs)
+        return self._parallel_env.render(*args, **kwargs)
