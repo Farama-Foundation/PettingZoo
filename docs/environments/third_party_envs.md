@@ -43,6 +43,14 @@ A multi-agent racing environment for a miniature, [F1Tenth](https://f1tenth.org/
 
 Using [Google DeepMind](https://www.deepmind.com/)'s [MuZero](https://en.wikipedia.org/wiki/MuZero) algorithm to learn to play [Teamfight Tactics](https://teamfighttactics.leagueoflegends.com/en-us/), an auto chess game made by [Riot games](https://www.riotgames.com/en).
 
+### [CookingZoo](https://github.com/DavidRother/gym-cooking)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-red)]()
+[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)]()
+
+Fork of the game *Too Many Cooks*. 
+
 
 ### [Crazy-RL](https://github.com/ffelten/CrazyRL)
 
@@ -68,15 +76,6 @@ PettingZoo environments for classic game theory problems: [Prisoner's Dilemma](h
 Modernized clone of the [Breakout](https://en.wikipedia.org/wiki/Breakout_(video_game)) arcade game, using [Unity](https://unity.com/) game engine and PettingZoo.
 * Online playable game (using [Unity WebGL](https://docs.unity3d.com/2020.1/Documentation/Manual/webgl-gettingstarted.html) and [Unity ML-Agents](https://unity.com/products/machine-learning-agents)): [link](https://sethcram.weebly.com/breakout-clone.html), [tutorial](https://www.youtube.com/watch?v=zPFU30tbyKs)
 
-
-### [Cathedral-RL](https://github.com/elliottower/cathedral-rl)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
-[![GitHub stars](https://img.shields.io/github/stars/elliottower/cathedral-rl)]()
-
-Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.org/wiki/Cathedral_(board_game)) board game.
-
-
 ### [Gobblet-RL](https://github.com/elliottower/gobblet-rl)
 
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
@@ -84,6 +83,13 @@ Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.or
 
 Interactive PettingZoo implementation of the [Gobblet](https://en.wikipedia.org/wiki/Gobblet) board game.
 * Online game demo (using [Pygame WebAssembly](https://github.com/pygame-web)): [link](https://elliottower.github.io/gobblet-rl/), [tutorial](https://github.com/elliottower/gobblet-rl/blob/main/tutorials/WebAssembly/web_assembly.md)
+
+### [Cathedral-RL](https://github.com/elliottower/cathedral-rl)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/elliottower/cathedral-rl)]()
+
+Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.org/wiki/Cathedral_(board_game)) board game.
 
 
 ___
@@ -144,15 +150,6 @@ Simulator and environments for [Blizzard](https://www.blizzard.com/en-us/)'s pop
 [![GitHub last commit](https://img.shields.io/github/last-commit/cage-challenge/CybORG)]()
 
 A cyber-security research environment for training and development of security human and autonomous agents. 
-
-
-### [CookingZoo](https://github.com/DavidRother/gym-cooking)
-
-[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.11.2-red)]()
-[![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
-[![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)]()
-
-Fork of the game *Too Many Cooks*. 
 
 
 ### [conflict_rez](https://github.com/XuShenLZ/conflict_rez)
