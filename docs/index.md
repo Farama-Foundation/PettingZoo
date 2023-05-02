@@ -4,22 +4,6 @@ firstpage:
 lastpage:
 ---
 
-<style>
-h2 { 
-    padding-top: 0;
-    padding-bottom: 20px;
-    font-size: 28px;
-    margin: 0;
-    overflow: auto;
-}
-img{
-  vertical-align:bottom;
-  padding-bottom: 0;
-  padding-top: 0
- }
-</style>
-
-
 ```{toctree}
 :hidden:
 :caption: Introduction
@@ -69,11 +53,26 @@ Github <https://github.com/Farama-Foundation/PettingZoo>
 release_notes/index
 Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/>
 ```
+<style>
+h2 { 
+    padding-top: 0;
+    padding-bottom: 20px;
+    font-size: 29px;
+    margin: 0;
+    overflow: auto;
+}
+img{
+  vertical-align:bottom;
+  padding-bottom: 0;
+  padding-top: 0
+ }
+</style>
+
 
 <center>
-<img src="../pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
+<img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
 
-<h2>The API standard for multi-agent reinforcement learning, and a diverse collection of reference environments</h2>
+<h2>A standard API for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
 </center>
 
 ```{figure} _static/img/environments-demo.gif
