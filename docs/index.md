@@ -71,7 +71,7 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 ```
 
 <center>
-<img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
+<img src="../pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
 
 <h2>The API standard for multi-agent reinforcement learning, and a diverse collection of reference environments</h2>
 </center>
