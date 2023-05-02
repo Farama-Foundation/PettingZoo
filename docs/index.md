@@ -55,7 +55,7 @@ Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/mas
 ```
 <style>
 h2 { 
-    padding-top: 0;
+    padding-top: 10px;
     padding-bottom: 20px;
     font-size: 29px;
     margin: 0;
@@ -66,13 +66,17 @@ img{
   padding-bottom: 0;
   padding-top: 0
  }
+.logo{
+  padding-left: 9%;
+}
 </style>
 
 
 <center>
-<img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
-
-<h2>A standard API for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
+    <div class="logo">
+        <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
+    </div>
+    <h2>An API standard for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
 </center>
 
 ```{figure} _static/img/environments-demo.gif
