@@ -19,9 +19,7 @@ content/environment_tests
 
 api/aec
 api/parallel
-api/pz_wrappers
-api/supersuit_wrappers
-api/shimmy_wrappers
+api/wrappers
 api/utils
 ```
 
@@ -54,33 +52,47 @@ tutorials/rllib/index
 Github <https://github.com/Farama-Foundation/PettingZoo>
 release_notes/index
 Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/>
-
 ```
-
-# PettingZoo is a standard API for multi-agent reinforcement learning.
+<style>
+h2 { 
+    padding-top: 10px;
+    padding-bottom: 20px;
+    font-size: 29px;
+    margin: 0;
+    overflow: auto;
+}
+.logo{
+  padding-left: 9%;
+  vertical-align:bottom;
+  padding-bottom: 0;
+  padding-top: 10px;
+}
+</style>
 
 
 <center>
-	<a href="_static/videos/environments-demo.mp4">
-        <video title="PettingZoo environments" autoplay loop muted width="450" src="_static/videos/environments-demo.mp4" type="video/mp4"></video>
-    </a>
+    <div class="logo">
+        <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
+    </div>
+    <h2>An API standard for multi-agent reinforcement learning</h2>
 </center>
 
-**PettingZoo includes a diverse set of reference environments, and a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.** 
-
-Environments can be interacted with in a manner very similar to [Gymnasium](https://gymnasium.farama.org):
-
-```python
-from pettingzoo.butterfly import knights_archers_zombies_v10
-
-env = knights_archers_zombies_v10.env()
-env.reset()
-
-for agent in env.agent_iter():
-    observation, reward, termination, truncation, info = env.last()
-    action = env.action_space(agent).sample() # this is where you would insert your policy
-    env.step(action)
-env.close()
+```{figure} _static/img/environments-demo.gif
+    :width: 480px
+    :name: PettingZoo environments
 ```
 
-For detailed usage information, see [AEC API](https://pettingzoo.farama.org/api/aec/) and [Parallel API](https://pettingzoo.farama.org/api/parallel/).
+**PettingZoo is a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.**
+PettingZoo includes a wide variety of reference environments, helpful utilities, and tools for creating your own custom environments.
+
+Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
+
+```python
+  from pettingzoo.butterfly import knights_archers_zombies_v10
+  env = knights_archers_zombies_v10.env(render_mode="human")
+  env.reset(seed=42)
+  for agent in env.agent_iter():
+      observation, reward, termination, truncation, info = env.last()
+      action = policy(observation, agent)
+      env.step(action)
+```
