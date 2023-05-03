@@ -1,3 +1,9 @@
+---
+title: AEC
+---
+
+
+
 # AEC API
 
 By default, PettingZoo models games as [*Agent Environment Cycle*](https://arxiv.org/abs/2009.13051) (AEC) environments. This allows it to support any type of game multi-agent RL can consider.
@@ -48,6 +54,7 @@ for agent in env.agent_iter():
         else:
             mask = None 
         action = env.action_space(agent).sample(mask) # this is where you would insert your policy
+        
     env.step(action) 
 env.close()
 ```
