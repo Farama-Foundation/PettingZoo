@@ -37,7 +37,7 @@ classic = [
     "chess==1.7.0",
     "rlcard==1.0.5",
     "pygame==2.3.0",
-    "shimmy[openspiel]>=0.2.1"
+    "shimmy[openspiel]>=1.0.0"
 ]
 butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
 mpe = ["pygame==2.3.0"]

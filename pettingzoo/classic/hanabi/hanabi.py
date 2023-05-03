@@ -168,7 +168,7 @@ import numpy as np
 import pyspiel
 from gymnasium import spaces
 from gymnasium.utils import EzPickle
-from shimmy.openspiel_compatibility import OpenspielCompatibilityV0
+from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -306,7 +306,7 @@ class raw_env(AECEnv, EzPickle):
             "observation_type": observation_type,
             "random_start_player": random_start_player,
         }
-        self.hanabi_env = OpenspielCompatibilityV0(
+        self.hanabi_env = OpenSpielCompatibilityV0(
             pyspiel.load_game("hanabi", self._config), render_mode=render_mode
         )
 
@@ -414,7 +414,7 @@ class raw_env(AECEnv, EzPickle):
         """
         if seed is not None:
             config = dict(seed=seed, **self._config)
-            self.hanabi_env = OpenspielCompatibilityV0(
+            self.hanabi_env = OpenSpielCompatibilityV0(
                 pyspiel.load_game("hanabi", config), render_mode=self.render_mode
             )
 
