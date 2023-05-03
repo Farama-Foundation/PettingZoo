@@ -15,8 +15,8 @@ while env.agents:
     # this is where you would insert your policy
     actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  
     
-    # execute the actions in the environment
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+env.close()
 ```
 
 ## ParallelEnv
