@@ -44,8 +44,7 @@ observations = env.reset()
 while env.agents:
     # this is where you would insert your policy
     actions = {agent: env.action_space(agent).sample() for agent in env.agents}  
-    
-    # execute the actions in the environment
+
     observations, rewards, terminations, truncations, infos = env.step(actions)
 env.close()
 ```
