@@ -72,5 +72,6 @@ for agent in env.agent_iter():
         action = env.action_space(agent).sample()
 
     env.step(action) 
+env.close()
 ```
 
