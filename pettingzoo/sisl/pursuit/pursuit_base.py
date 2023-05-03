@@ -7,9 +7,13 @@ import pygame
 from gymnasium import spaces
 from gymnasium.utils import seeding
 
-from .utils import agent_utils, two_d_maps
-from .utils.agent_layer import AgentLayer
-from .utils.controllers import PursuitPolicy, RandomPolicy, SingleActionPolicy
+from pettingzoo.sisl.pursuit.utils import agent_utils, two_d_maps
+from pettingzoo.sisl.pursuit.utils.agent_layer import AgentLayer
+from pettingzoo.sisl.pursuit.utils.controllers import (
+    PursuitPolicy,
+    RandomPolicy,
+    SingleActionPolicy,
+)
 
 
 class Pursuit:

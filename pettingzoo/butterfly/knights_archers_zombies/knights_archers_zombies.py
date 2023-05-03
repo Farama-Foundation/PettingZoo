@@ -187,17 +187,19 @@ from gymnasium.spaces import Box, Discrete, Sequence
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.butterfly.knights_archers_zombies.manual_policy import ManualPolicy
+from pettingzoo.butterfly.knights_archers_zombies.src import constants as const
+from pettingzoo.butterfly.knights_archers_zombies.src.img import get_image
+from pettingzoo.butterfly.knights_archers_zombies.src.players import Archer, Knight
+from pettingzoo.butterfly.knights_archers_zombies.src.weapons import Arrow, Sword
+from pettingzoo.butterfly.knights_archers_zombies.src.zombie import Zombie
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .manual_policy import ManualPolicy  # noqa: F401
-from .src import constants as const
-from .src.img import get_image
-from .src.players import Archer, Knight
-from .src.weapons import Arrow, Sword
-from .src.zombie import Zombie
-
 sys.dont_write_bytecode = True
+
+
+__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
 
 
 def env(**kwargs):
@@ -238,20 +240,20 @@ class raw_env(AECEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            spawn_rate,
-            num_archers,
-            num_knights,
-            max_zombies,
-            max_arrows,
-            killable_knights,
-            killable_archers,
-            pad_observation,
-            line_death,
-            max_cycles,
-            vector_state,
-            use_typemasks,
-            sequence_space,
-            render_mode,
+            spawn_rate=spawn_rate,
+            num_archers=num_archers,
+            num_knights=num_knights,
+            max_zombies=max_zombies,
+            max_arrows=max_arrows,
+            killable_knights=killable_knights,
+            killable_archers=killable_archers,
+            pad_observation=pad_observation,
+            line_death=line_death,
+            max_cycles=max_cycles,
+            vector_state=vector_state,
+            use_typemasks=use_typemasks,
+            sequence_space=sequence_space,
+            render_mode=render_mode,
         )
         # variable state space
         self.sequence_space = sequence_space
