@@ -74,7 +74,7 @@ h2 {
     <div class="logo">
         <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
     </div>
-    <h2>An API standard for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
+    <h2>An API standard for multi-agent reinforcement learning</h2>
 </center>
 
 ```{figure} _static/img/environments-demo.gif
@@ -82,7 +82,8 @@ h2 {
     :name: PettingZoo environments
 ```
 
-**PettingZoo is a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.** PettingZoo includes a wide variety of reference environments, and tools for creating your own custom environments. 
+**PettingZoo is a simple, pythonic interface capable of representing general multi-agent reinforcement learning (MARL) problems.**
+PettingZoo includes a wide variety of reference environments, helpful utilities, and tools for creating your own custom environments.
 
 Environments can be interacted with using a similar interface to [Gymnasium](https://gymnasium.farama.org):
 
