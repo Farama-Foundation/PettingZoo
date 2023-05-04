@@ -48,7 +48,8 @@ def save_observation(
         os.makedirs(save_folder, exist_ok=True)
 
         observation = env.observe(a)
-        rescaled = observation.astype(np.uint8)
-        im = Image.fromarray(rescaled)
-        fname = os.path.join(save_folder, str(a) + ".png")
-        im.save(fname)
+        if observation is not None:
+            rescaled = observation.astype(np.uint8)
+            im = Image.fromarray(rescaled)
+            fname = os.path.join(save_folder, str(a) + ".png")
+            im.save(fname)

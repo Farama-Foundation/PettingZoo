@@ -1,4 +1,10 @@
-from pettingzoo.utils.env import AECIterable, AECIterator
+from __future__ import annotations
+
+from typing import Any
+
+import numpy as np
+
+from pettingzoo.utils.env import ActionType, AECEnv, AECIterable, AECIterator, ObsType
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
@@ -13,20 +19,20 @@ class OrderEnforcingWrapper(BaseWrapper):
     * warn on calling step after environment is terminated or truncated
     """
 
-    def __init__(self, env):
+    def __init__(self, env: AECEnv) -> None:
         self._has_reset = False
         self._has_rendered = False
         self._has_updated = False
         super().__init__(env)
 
-    def __getattr__(self, value):
+    def __getattr__(self, value: str) -> Any:
         """Raises an error message when data is gotten from the env.
 
         Should only be gotten after reset
         """
         if value == "unwrapped":
             return self.env.unwrapped
-        elif value == "render_mode":
+        elif value == "render_mode" and hasattr(self.env, "render_mode"):
             return self.env.render_mode
         elif value == "possible_agents":
             EnvLogger.error_possible_agents_attribute_missing("possible_agents")
@@ -57,13 +63,13 @@ class OrderEnforcingWrapper(BaseWrapper):
                 f"'{type(self).__name__}' object has no attribute '{value}'"
             )
 
-    def render(self):
+    def render(self) -> None | np.ndarray | str | list:
         if not self._has_reset:
             EnvLogger.error_render_before_reset()
         self._has_rendered = True
         return super().render()
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         if not self._has_reset:
             EnvLogger.error_step_before_reset()
         elif not self.agents:
@@ -74,27 +80,27 @@ class OrderEnforcingWrapper(BaseWrapper):
             self._has_updated = True
             super().step(action)
 
-    def observe(self, agent):
+    def observe(self, agent: str) -> ObsType | None:
         if not self._has_reset:
             EnvLogger.error_observe_before_reset()
         return super().observe(agent)
 
-    def state(self):
+    def state(self) -> np.ndarray:
         if not self._has_reset:
             EnvLogger.error_state_before_reset()
         return super().state()
 
-    def agent_iter(self, max_iter=2**63):
+    def agent_iter(self, max_iter: int = 2**63) -> AECOrderEnforcingIterable:
         if not self._has_reset:
             EnvLogger.error_agent_iter_before_reset()
         return AECOrderEnforcingIterable(self, max_iter)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         self._has_reset = True
         self._has_updated = True
         super().reset(seed=seed, options=options)
 
-    def __str__(self):
+    def __str__(self) -> str:
         if hasattr(self, "metadata"):
             return (
                 str(self.env)
@@ -106,12 +112,12 @@ class OrderEnforcingWrapper(BaseWrapper):
 
 
 class AECOrderEnforcingIterable(AECIterable):
-    def __iter__(self):
+    def __iter__(self) -> AECOrderEnforcingIterator:
         return AECOrderEnforcingIterator(self.env, self.max_iter)
 
 
 class AECOrderEnforcingIterator(AECIterator):
-    def __next__(self):
+    def __next__(self) -> str:
         agent = super().__next__()
         assert (
             self.env._has_updated

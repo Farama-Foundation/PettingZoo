@@ -1,6 +1,7 @@
 import numpy as np
 from gymnasium.spaces import Box
 
+from pettingzoo.utils.env import AECEnv
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
@@ -11,14 +12,14 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
     Applied to continuous environments in pettingzoo.
     """
 
-    def __init__(self, env):
+    def __init__(self, env: AECEnv) -> None:
         super().__init__(env)
         assert all(
             isinstance(self.action_space(agent), Box)
             for agent in getattr(self, "possible_agents", [])
         ), "should only use ClipOutOfBoundsWrapper for Box spaces"
 
-    def step(self, action):
+    def step(self, action: np.ndarray | None) -> None:
         space = self.action_space(self.agent_selection)
         if not (
             action is None
@@ -40,5 +41,5 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
 
         super().step(action)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.env)

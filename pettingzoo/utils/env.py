@@ -268,17 +268,17 @@ class AECIterable(Iterable):
 
 
 class AECIterator(Iterator):
-    def __init__(self, env, max_iter):
+    def __init__(self, env: AECEnv, max_iter: int) -> None:
         self.env = env
         self.iters_til_term = max_iter
 
-    def __next__(self):
+    def __next__(self) -> str:
         if not self.env.agents or self.iters_til_term <= 0:
             raise StopIteration
         self.iters_til_term -= 1
         return self.env.agent_selection
 
-    def __iter__(self):
+    def __iter__(self) -> AECIterator:
         return self
 
 
