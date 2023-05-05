@@ -33,7 +33,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         if value == "unwrapped":
             return self.env.unwrapped
         elif value == "render_mode" and hasattr(self.env, "render_mode"):
-            return self.env.render_mode
+            return self.env.render_mode  # type: ignore
         elif value == "possible_agents":
             EnvLogger.error_possible_agents_attribute_missing("possible_agents")
         elif value == "observation_spaces":
@@ -119,8 +119,11 @@ class AECOrderEnforcingIterable(AECIterable):
 class AECOrderEnforcingIterator(AECIterator):
     def __next__(self) -> str:
         agent = super().__next__()
+        assert hasattr(
+            self.env, "_has_updated"
+        ), "env must be wrapped by OrderEnforcingWrapper"
         assert (
-            self.env._has_updated
+            self.env._has_updated  # type: ignore
         ), "need to call step() or reset() in a loop over `agent_iter`"
-        self.env._has_updated = False
+        self.env._has_updated = False  # type: ignore
         return agent

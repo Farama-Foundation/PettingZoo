@@ -28,16 +28,16 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
                 or self.truncations[self.agent_selection]
             )
         ) and not space.contains(action):
-            assert (
-                space.shape == action.shape
-            ), f"action should have shape {space.shape}, has shape {action.shape}"
-            if np.isnan(action).any():
+            if action is None or np.isnan(action).any():
                 EnvLogger.error_nan_action()
+            assert (
+                space.shape == action.shape  # type: ignore
+            ), f"action should have shape {space.shape}, has shape {action.shape}"  # type: ignore
 
             EnvLogger.warn_action_out_of_bound(
                 action=action, action_space=space, backup_policy="clipping to space"
             )
-            action = np.clip(action, space.low, space.high)
+            action = np.clip(action, space.low, space.high)  # type: ignore
 
         super().step(action)
 

@@ -21,7 +21,7 @@ class BaseParallelWrapper(ParallelEnv):
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.env.state_space
+            self.state_space = self.env.state_space  # type: ignore
         except AttributeError:
             pass
 

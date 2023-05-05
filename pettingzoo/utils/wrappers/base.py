@@ -41,7 +41,7 @@ class BaseWrapper(AECEnv):
 
         # Not every environment has the .state_space attribute implemented
         if hasattr(self.env, "state_space"):
-            self.state_space = self.env.state_space
+            self.state_space = self.env.state_space  # type: ignore
 
     def __getattr__(self, name: str) -> Any:
         """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
