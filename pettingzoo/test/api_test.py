@@ -410,7 +410,11 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         else:
-            mask = obs.get("action_mask") if isinstance(obs, dict) else env.infos[agent].get("action_mask")
+            mask = (
+                obs.get("action_mask")
+                if isinstance(obs, dict)
+                else env.infos[agent].get("action_mask")
+            )
             action = env.action_space(agent).sample(mask)
         assert isinstance(terminated, bool), "terminated from last is not True or False"
         assert isinstance(truncated, bool), "terminated from last is not True or False"
@@ -440,7 +444,11 @@ def test_action_flexibility(env):
         if terminated or truncated:
             action = None
         else:
-            mask = obs.get("action_mask") if isinstance(obs, dict) else info.get("action_mask")
+            mask = (
+                obs.get("action_mask")
+                if isinstance(obs, dict)
+                else info.get("action_mask")
+            )
             action = env.action_space(agent).sample(mask)
         env.step(action)
         env.reset()
