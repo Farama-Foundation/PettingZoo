@@ -15,7 +15,7 @@
         <title>AEC API - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=721f65a87c37740baa8d605b09db5bec3a2987a8" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=4297ed78bc2370ec4493f1a6639f04addebc5da5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=67ddc8aaa908fff6a8eb5c854d313935a27431d3" />
     
     
 
@@ -396,39 +396,70 @@
             <section id="aec-api">
 <h1>AEC API<a class="headerlink" href="#aec-api" title="Permalink to this heading">#</a></h1>
 <p>By default, PettingZoo models games as <a class="reference external" href="https://arxiv.org/abs/2009.13051"><em>Agent Environment Cycle</em></a> (AEC) environments. This allows it to support any type of game multi-agent RL can consider.</p>
-<section id="example-usage">
-<h2>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading">#</a></h2>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p>AEC environments can be interacted with as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
+
 <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+    
     <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
         <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>  <span class="c1"># this is where you would insert your policy</span>
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>    
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="c1"># this is where you would insert your policy</span>
+    
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> 
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note: for environments with illegal actions in the action space, actions can be sampled according to an action mask as follows:</p>
+<section id="action-masking">
+<h3>Action Masking<a class="headerlink" href="#action-masking" title="Permalink to this heading">#</a></h3>
+<p>AEC environments often include action masks, in order to mark valid/invalid actions for the agent.</p>
+<p>To sample actions using action masking:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">chess_v5</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">chess_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
 
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">chess_v5</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
         <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">])</span>  <span class="c1"># this is where you would insert your policy</span>
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  
+        <span class="c1"># invalid action masking is optional and environment-dependent</span>
+        <span class="k">if</span> <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;action_mask&quot;</span> <span class="ow">in</span> <span class="n">observation</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="kc">None</span> 
+        <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="c1"># this is where you would insert your policy</span>
+        
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> 
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
- 
 </pre></div>
 </div>
+<p>Note: action masking is optional, and can be implemented using either <code class="docutils literal notranslate"><span class="pre">observation</span></code> or <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pettingzoo.farama.org/environments/classic/">PettingZoo Classic</a> environments store action masks in the <code class="docutils literal notranslate"><span class="pre">observation</span></code> dict:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask</span> <span class="pre">=</span> <span class="pre">observation[&quot;action_mask&quot;]</span></code></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://shimmy.farama.org/">Shimmy</a>’s <a class="reference external" href="https://shimmy.farama.org/environments/open_spiel/">OpenSpiel environments</a> stores action masks in the <code class="docutils literal notranslate"><span class="pre">info</span></code> dict:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask</span> <span class="pre">=</span> <span class="pre">info[&quot;action_mask&quot;]</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>To implement action masking in a custom environment, see <a class="reference external" href="https://pettingzoo.farama.org/tutorials/environmentcreation/3-action-masking/">Environment Creation: Action Masking</a></p>
+<p>For more information on action masking, see <a class="reference external" href="https://arxiv.org/abs/2006.14171">A Closer Look at Invalid Action Masking in Policy Gradient Algorithms</a> (Huang, 2022)</p>
+</section>
 </section>
 <section id="aecenv">
 <h2>AECEnv<a class="headerlink" href="#aecenv" title="Permalink to this heading">#</a></h2>
@@ -641,7 +672,14 @@ or any other resources that should be released.</p>
             </div>
             <div class="right-details">
               <div class="icons">
-                
+                <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/"
+                  aria-label="On GitHub">
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+                    </path>
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
@@ -661,7 +699,10 @@ or any other resources that should be released.</p>
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">AEC API</a><ul>
-<li><a class="reference internal" href="#example-usage">Example Usage</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#action-masking">Action Masking</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#aecenv">AECEnv</a><ul>
 <li><a class="reference internal" href="#pettingzoo.utils.env.AECEnv"><code class="docutils literal notranslate"><span class="pre">AECEnv</span></code></a></li>
 </ul>
@@ -761,6 +802,7 @@ or any other resources that should be released.</p>
     <script src="../../_static/scripts/furo.js"></script>
     
     <script>
+      // Create menu with Farama projects by using the API at farama.org/api/projects.json
       const createCORSRequest = (method, url) => {
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
@@ -875,8 +917,8 @@ or any other resources that should be released.</p>
     
     <script>
       const versioningConfig = {
-        githubUser: '',
-        githubRepo: '',
+        githubUser: 'Farama-Foundation',
+        githubRepo: 'PettingZoo',
       };
       fetch('/main/_static/versioning/versioning_menu.html').then(response => {
         if (response.status === 200) {
