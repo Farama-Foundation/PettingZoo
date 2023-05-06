@@ -517,7 +517,6 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     test_rewards_terminations_truncations(env, agent_0)
 
     test_action_flexibility(env)
-    print("escaped")
 
     progress_report("Finished test_rewards_terminations_truncations")
 
