@@ -334,7 +334,7 @@ def play_test(env, observation_0, num_cycles):
             mask = (
                 prev_observe.get("action_mask")
                 if isinstance(prev_observe, dict)
-                else None
+                else env.infos[agent].get("action_mask")
             )
             action = env.action_space(agent).sample(mask)
 
@@ -410,7 +410,7 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         else:
-            mask = obs.get("action_mask") if isinstance(obs, dict) else None
+            mask = obs.get("action_mask") if isinstance(obs, dict) else env.infos[agent].get("action_mask")
             action = env.action_space(agent).sample(mask)
         assert isinstance(terminated, bool), "terminated from last is not True or False"
         assert isinstance(truncated, bool), "terminated from last is not True or False"
@@ -439,10 +439,9 @@ def test_action_flexibility(env):
         obs, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
-        elif isinstance(obs, dict) and "action_mask" in obs:
-            action = env.action_space(agent).sample(obs["action_mask"])
         else:
-            action = 0
+            mask = obs.get("action_mask") if isinstance(obs, dict) else info.get("action_mask")
+            action = env.action_space(agent).sample(mask)
         env.step(action)
         env.reset()
         env.step(np.int32(action))
@@ -518,6 +517,7 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
     test_rewards_terminations_truncations(env, agent_0)
 
     test_action_flexibility(env)
+    print("escaped")
 
     progress_report("Finished test_rewards_terminations_truncations")
 
