@@ -449,7 +449,6 @@ def test_action_flexibility(env):
             action = 0
         env.step(action)
         env.reset()
-        print(action)
         env.step(np.int32(action))
     elif isinstance(action_space, gymnasium.spaces.Box):
         env.step(np.zeros_like(action_space.low))
