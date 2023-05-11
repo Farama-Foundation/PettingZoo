@@ -61,11 +61,16 @@ class parallel_env(ParallelEnv):
         """
         The init method takes in environment arguments and should define the following attributes:
         - possible_agents
-        - action_spaces
-        - observation_spaces
+        - render_mode
+        
+        Note: the action_spaces and observation_spaces attributes are deprecated.
+        Spaces must be defined in the action_space() and observation_space() methods.
+        
         These attributes should not be changed after initialization.
         """
         self.possible_agents = ["player_" + str(r) for r in range(2)]
+        
+        # optional: a mapping between agent name and ID
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
