@@ -84,19 +84,27 @@ if __name__ == "__main__":
                 if "rlcard_envs" not in env_dir_path
                 else env_dir_path + ".py"
             )
-            if "rlcard_envs" not in env_dir_path:
+            if "rlcard_envs" in env_dir_path:
+                docs_text += f"""## API
+```{{eval-rst}}
+.. currentmodule:: pettingzoo.{env_type}.rlcard_envs.{env_name}
+
+.. autoclass:: env
+.. autoclass:: raw_env
+```
+"""
+            elif env_type in ["mpe", "atari"]:
                 docs_text += f"""## API
 ```{{eval-rst}}
 .. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
 
-.. autoclass:: env
 .. autoclass:: raw_env
 ```
 """
             else:
                 docs_text += f"""## API
 ```{{eval-rst}}
-.. currentmodule:: pettingzoo.{env_type}.rlcard_envs.{env_name}
+.. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
 
 .. autoclass:: env
 .. autoclass:: raw_env
