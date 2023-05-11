@@ -395,6 +395,13 @@
             
             <section id="basic-usage">
 <h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">#</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<p>To install the base PettingZoo library: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pettingzoo</span></code>.</p>
+<p>This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).</p>
+<p>To install the dependencies for one family, use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pettingzoo[atari]</span></code>, or use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pettingzoo[all]</span></code> to install all dependencies.</p>
+<p>We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs related to Windows, but do not officially support it.</p>
+</section>
 <section id="initializing-environments">
 <h2>Initializing Environments<a class="headerlink" href="#initializing-environments" title="Permalink to this heading">#</a></h2>
 <p>Using environments in PettingZoo is very similar to using them in Gymnasium. You initialize an environment via:</p>
@@ -556,6 +563,7 @@
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Basic Usage</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#initializing-environments">Initializing Environments</a></li>
 <li><a class="reference internal" href="#interacting-with-environments">Interacting With Environments</a></li>
 <li><a class="reference internal" href="#additional-environment-api">Additional Environment API</a><ul>
