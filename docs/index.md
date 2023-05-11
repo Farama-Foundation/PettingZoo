@@ -87,7 +87,7 @@ h2 {
 </center>
 
 <div class="header-text">
-    <h2>An API standard for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
+    <h2>An API standard for multi-agent reinforcement learning</h2>
 </div>
 
 ```{figure} _static/img/environments-demo.gif
