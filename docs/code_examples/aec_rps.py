@@ -61,19 +61,19 @@ class raw_env(AECEnv):
          should define the following attributes:
         - possible_agents
         - render_mode
-        
+
         Note: the action_spaces and observation_spaces attributes are deprecated.
         Spaces must be defined in the action_space() and observation_space() methods.
-        
+
         These attributes should not be changed after initialization.
         """
         self.possible_agents = ["player_" + str(r) for r in range(2)]
-        
+
         # optional: a mapping between agent name and ID
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
-        
+
         # optional: explicitly define spaces as dicts (deprecated)
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
