@@ -282,7 +282,7 @@ class raw_env(AECEnv, EzPickle):
         self.render_on = False
 
         # Game Constants
-        self.seed()
+        self._seed()
         self.spawn_rate = spawn_rate
         self.max_cycles = max_cycles
         self.pad_observation = pad_observation
@@ -382,7 +382,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     # Spawn Zombies at Random Location at every 100 iterations
@@ -902,7 +902,7 @@ class raw_env(AECEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.has_reset = True
         self.agents = self.possible_agents
         self._agent_selector.reinit(self.agents)

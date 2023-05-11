@@ -44,7 +44,7 @@ class CustomEnvironment(ParallelEnv):
             )
             for a in self.agents
         }
-        return observations
+        return observations, {}
 
     def step(self, actions):
         # Execute actions

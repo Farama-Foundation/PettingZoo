@@ -36,19 +36,23 @@ pip install pettingzoo[classic]
 
 ### Usage
 
-To launch a [Texas Holdem](https://pettingzoo.farama.org/environments/classic/texas_holdem/) environment with agents taking random actions:
+To launch a [Texas Holdem](https://pettingzoo.farama.org/environments/classic/texas_holdem/) environment with random agents:
 ``` python
 from pettingzoo.classic import texas_holdem_v4
-env = texas_holdem_v4.env(render_mode="human")
 
-env.reset()
+env = texas_holdem_v4.env(render_mode="human")
+env.reset(seed=42)
+
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
+    
     if termination or truncation:
-        action = None
-    else:
-        action = env.action_space(agent).sample(observation["action_mask"])  # this is where you would insert your policy
-    env.step(action)
+        break
+    
+    mask = observation["action_mask"]
+    action = env.action_space(agent).sample(mask)  # this is where you would insert your policy
+        
+    env.step(action)  
 env.close()
 ```
 

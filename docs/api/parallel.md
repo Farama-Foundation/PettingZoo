@@ -7,18 +7,21 @@ title: Parallel
 
 In addition to the main API, we have a secondary parallel API for environments where all agents have simultaneous actions and observations. An environment with parallel API support can be created via `<game>.parallel_env()`. This API is based around the paradigm of *Partially Observable Stochastic Games* (POSGs) and the details are similar to [RLLib's MultiAgent environment specification](https://docs.ray.io/en/latest/rllib-env.html#multi-agent-and-hierarchical), except we allow for different observation and action spaces between the agents.
 
-## Example Usage
+## Usage
 
 Parallel environments can be interacted with as follows:
 
 ``` python
 from pettingzoo.butterfly import pistonball_v6
-parallel_env = pistonball_v6.parallel_env()
-observations = parallel_env.reset()
+parallel_env = pistonball_v6.parallel_env(render_mode="human")
+observations = parallel_env.reset(seed=42)
 
 while env.agents:
-    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  # this is where you would insert your policy
+    # this is where you would insert your policy
+    actions = {agent: parallel_env.action_space(agent).sample() for agent in parallel_env.agents}  
+    
     observations, rewards, terminations, truncations, infos = parallel_env.step(actions)
+env.close()
 ```
 
 ## ParallelEnv
