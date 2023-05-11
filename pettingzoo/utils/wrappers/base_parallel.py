@@ -30,9 +30,9 @@ class BaseParallelWrapper(ParallelEnv):
     ) -> dict[str, ObsType]:
         self.np_random, _ = seeding.np_random(seed)
 
-        res = self.env.reset(seed=seed, options=options)
+        res, info = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents
-        return res
+        return res, info
 
     def step(
         self, actions: dict[str, ActionType]

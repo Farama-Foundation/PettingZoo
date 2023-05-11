@@ -186,15 +186,12 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
-        self.env.seed(seed)
-
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self.env._seed(seed=seed)
         self.has_reset = True
         self.env.reset()
         self.agents = self.possible_agents[:]
