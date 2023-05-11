@@ -60,7 +60,7 @@ class raw_env(AECEnv):
         The init method takes in environment arguments and
          should define the following attributes:
         - possible_agents
-        - arender_mode
+        - render_mode
         
         Note: the action_spaces and observation_spaces attributes are deprecated.
         Spaces must be defined in the action_space() and observation_space() methods.
