@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import warnings
+from typing import Any
 
 import gymnasium.spaces
 import numpy as np
@@ -27,7 +28,7 @@ class BaseParallelWrapper(ParallelEnv):
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
-    ) -> dict[str, ObsType]:
+    ) -> tuple[Any, Any]:
         self.np_random, _ = seeding.np_random(seed)
 
         res, info = self.env.reset(seed=seed, options=options)
