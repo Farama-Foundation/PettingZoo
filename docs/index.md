@@ -67,6 +67,16 @@ h2 {
   padding-bottom: 0;
   padding-top: 10px;
 }
+@media (min-width: 455px) {
+    .header-text{
+        text-align: center;
+    }
+}
+@media (max-width: 455px) {
+    .header-text{
+        text-align: left;
+    }
+}
 </style>
 
 
@@ -74,8 +84,11 @@ h2 {
     <div class="logo">
         <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
     </div>
-    <h2>An API standard for multi-agent reinforcement learning</h2>
 </center>
+
+<div class="header-text">
+    <h2>An API standard for multi-agent reinforcement learning with a diverse collection of reference environments</h2>
+</div>
 
 ```{figure} _static/img/environments-demo.gif
     :width: 480px
