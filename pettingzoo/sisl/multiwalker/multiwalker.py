@@ -123,11 +123,10 @@ import numpy as np
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
+from pettingzoo.sisl.multiwalker.multiwalker_base import FPS
+from pettingzoo.sisl.multiwalker.multiwalker_base import MultiWalkerEnv as _env
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .multiwalker_base import FPS
-from .multiwalker_base import MultiWalkerEnv as _env
 
 
 def env(**kwargs):

@@ -136,12 +136,13 @@ thrust_penalty=-0.5, local_ratio=1.0, speed_features=True, max_cycles=500)
 
 """
 
+from gymnasium.utils import EzPickle
+
 from pettingzoo import AECEnv
+from pettingzoo.sisl.waterworld.waterworld_base import FPS
+from pettingzoo.sisl.waterworld.waterworld_base import WaterworldBase as _env
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .waterworld_base import FPS
-from .waterworld_base import WaterworldBase as _env
 
 
 def env(**kwargs):
@@ -154,7 +155,7 @@ def env(**kwargs):
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "waterworld_v4",
@@ -163,7 +164,8 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        EzPickle.__init__(self, *args, **kwargs)
+        AECEnv.__init__(self)
         self.env = _env(*args, **kwargs)
 
         self.agents = ["pursuer_" + str(r) for r in range(self.env.num_agents)]

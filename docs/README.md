@@ -2,11 +2,11 @@
 
 This folder contains the documentation for [PettingZoo](https://github.com/Farama-Foundation/PettingZoo).
 
-For more information about how to contribute to the documentation go to our [CONTRIBUTING.md](https://github.com/Farama-Foundation/Celshast/blob/main/CONTRIBUTING.md)
+For more information about how to contribute to the documentation go to our [CONTRIBUTING.md](https://github.com/Farama-Foundation/PettingZoo/blob/master/CONTRIBUTING.md)
 
 ## Editing an environment page
 
-Environemnts' documentation can be found at the top of the file python file where the environment is declared, for example, the documentation for the chess environment can be at [/pettingzoo/classic/chess/chess.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py)
+Environments' documentation can be found at the top of the file python file where the environment is declared, for example, the documentation for the chess environment can be at [/pettingzoo/classic/chess/chess.py](https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py)
 
 To generate the environments pages you need to execute the `docs/_scripts/gen_envs_mds.py` script:
 

@@ -26,7 +26,10 @@ We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs 
 
 ## Getting started
 
-Get started with PettingZoo by following [the PettingZoo tutorial](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/), where you'll train multiple PPO agents in the Pistonball environment using PettingZoo.
+For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/environmentcreation/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/). 
+For examples of training RL models using PettingZoo see our tutorials:
+* [CleanRL: Implementing PPO](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/):train multiple PPO agents in the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment.
+* [Tianshou: Training Agents](https://pettingzoo.farama.org/tutorials/tianshou/intermediate/): train DQN agents in the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.
 
 ## API
 
@@ -62,6 +65,11 @@ SuperSuit is a library that includes all commonly used wrappers in RL (frame sta
 ## Environment Versioning
 
 PettingZoo keeps strict versioning for reproducibility reasons. All environments end in a suffix like "\_v0".  When changes are made to environments that might impact learning results, the number is increased by one to prevent potential confusion.
+
+## Project Maintainers
+Project Manager: [Elliot Tower](https://github.com/elliottower/)
+
+Maintenance for this project is also contributed by the broader Farama team: [farama.org/team](https://farama.org/team).
 
 ## Citation
 

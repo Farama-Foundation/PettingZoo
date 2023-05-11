@@ -1,7 +1,7 @@
 import chess
 import numpy as np
 
-from . import chess_utils
+from pettingzoo.classic.chess import chess_utils
 
 
 def assert_asserts(x):

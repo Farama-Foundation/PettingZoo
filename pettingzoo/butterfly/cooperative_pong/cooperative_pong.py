@@ -74,16 +74,18 @@ import pygame
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.butterfly.cooperative_pong.ball import Ball
+from pettingzoo.butterfly.cooperative_pong.cake_paddle import CakePaddle
+from pettingzoo.butterfly.cooperative_pong.manual_policy import ManualPolicy
+from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
-from .ball import Ball
-from .cake_paddle import CakePaddle
-from .manual_policy import ManualPolicy  # noqa: F401
-from .paddle import Paddle
-
 FPS = 15
+
+
+__all__ = ["ManualPolicy", "env", "raw_env", "parallel_env"]
 
 
 def deg_to_rad(deg):

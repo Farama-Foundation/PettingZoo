@@ -8,7 +8,12 @@ from gymnasium import spaces
 from gymnasium.utils import seeding
 from scipy.spatial import distance as ssd
 
-from .waterworld_models import Evaders, Obstacle, Poisons, Pursuers
+from pettingzoo.sisl.waterworld.waterworld_models import (
+    Evaders,
+    Obstacle,
+    Poisons,
+    Pursuers,
+)
 
 FPS = 15
 

@@ -1,4 +1,3 @@
-import random
 import re
 import warnings
 from collections import defaultdict
@@ -316,8 +315,6 @@ def play_test(env, observation_0, num_cycles):
     """
     env.reset()
 
-    terminated = {agent: False for agent in env.agents}
-    truncated = {agent: False for agent in env.agents}
     live_agents = set(env.agents[:])
     has_finished = set()
     generated_agents = set()
@@ -334,7 +331,9 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         elif isinstance(prev_observe, dict) and "action_mask" in prev_observe:
-            action = random.choice(np.flatnonzero(prev_observe["action_mask"]).tolist())
+            action = env.action_space(agent).sample(prev_observe["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
             action = env.action_space(agent).sample()
 
@@ -382,15 +381,17 @@ def play_test(env, observation_0, num_cycles):
         if not env.agents:
             break
 
-        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
-            assert env.observation_space(agent).dtype == prev_observe.dtype
         assert env.observation_space(agent).contains(
             prev_observe
         ), "Out of bounds observation: " + str(prev_observe)
 
-        assert env.observation_space(agent).contains(
-            prev_observe
-        ), "Agent's observation is outside of it's observation space"
+        if isinstance(env.observation_space(agent), gymnasium.spaces.Box):
+            assert env.observation_space(agent).dtype == prev_observe.dtype
+        elif isinstance(env.observation_space(agent), gymnasium.spaces.Dict):
+            assert (
+                env.observation_space(agent)["observation"].dtype
+                == prev_observe["observation"].dtype
+            )
         test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
@@ -408,7 +409,9 @@ def play_test(env, observation_0, num_cycles):
         if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
-            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
+            action = env.action_space(agent).sample(obs["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
             action = env.action_space(agent).sample()
         assert isinstance(terminated, bool), "terminated from last is not True or False"
@@ -439,7 +442,9 @@ def test_action_flexibility(env):
         if terminated or truncated:
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
-            action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
+            action = env.action_space(agent).sample(obs["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
             action = 0
         env.step(action)
@@ -481,6 +486,9 @@ def api_test(env, num_cycles=1000, verbose_progress=False):
 
     env.reset()
     observation_0, *_ = env.last()
+    if isinstance(observation_0, dict) and "observation" in observation_0:
+        observation_0 = observation_0["observation"]
+
     test_observation(observation_0, observation_0, str(env.unwrapped))
 
     non_observe, *_ = env.last(observe=False)
