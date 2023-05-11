@@ -59,7 +59,7 @@ class SimpleEnv(AECEnv):
         # Set up the drawing window
 
         self.renderOn = False
-        self.seed()
+        self._seed()
 
         self.max_cycles = max_cycles
         self.scenario = scenario
@@ -126,7 +126,7 @@ class SimpleEnv(AECEnv):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
@@ -145,7 +145,7 @@ class SimpleEnv(AECEnv):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.scenario.reset_world(self.world, self.np_random)
 
         self.agents = self.possible_agents[:]

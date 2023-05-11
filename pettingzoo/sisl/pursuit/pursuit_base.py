@@ -63,7 +63,7 @@ class Pursuit:
         self.y_size = y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
         self.max_cycles = max_cycles
-        self.seed()
+        self._seed()
 
         self.shared_reward = shared_reward
         self.local_ratio = 1.0 - float(self.shared_reward)
@@ -181,7 +181,7 @@ class Pursuit:
     def agents(self):
         return self.pursuers
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
         try:
             policies = [self.evader_controller, self.pursuer_controller]

@@ -330,7 +330,7 @@ class MultiWalkerEnv:
         self.remove_on_fall = remove_on_fall
         self.terrain_length = terrain_length
         self.seed_val = None
-        self.seed()
+        self._seed()
         self.setup()
         self.screen = None
         self.isopen = True
@@ -376,7 +376,7 @@ class MultiWalkerEnv:
     def agents(self):
         return self.walkers
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
         self.seed_val = seed_
         for walker in getattr(self, "walkers", []):

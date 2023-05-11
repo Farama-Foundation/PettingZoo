@@ -364,7 +364,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         config = dict(seed=seed, **self._config)
         self.hanabi_env = HanabiEnv(config=config)
 
@@ -440,7 +440,7 @@ class raw_env(AECEnv, EzPickle):
             current agent (agent_selection).
         """
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
 
         self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment
