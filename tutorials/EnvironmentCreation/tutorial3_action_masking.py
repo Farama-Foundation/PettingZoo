@@ -45,7 +45,7 @@ class CustomEnvironment(ParallelEnv):
             "prisoner": {"observation": observation, "action_mask": [0, 1, 1, 0]},
             "guard": {"observation": observation, "action_mask": [1, 0, 0, 1]},
         }
-        return observations
+        return observations, {}
 
     def step(self, actions):
         # Execute actions

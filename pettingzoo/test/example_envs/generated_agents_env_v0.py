@@ -26,7 +26,7 @@ class raw_env(AECEnv):
         self.types = []
         self._agent_counters = {}
         self.max_cycles = max_cycles
-        self.seed()
+        self._seed()
         self.render_mode = render_mode
         for i in range(3):
             self.add_type()
@@ -67,7 +67,7 @@ class raw_env(AECEnv):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.agents = []
         self.rewards = {}
         self._cumulative_rewards = {}
@@ -94,7 +94,7 @@ class raw_env(AECEnv):
         for i, agent in enumerate(self.agents):
             self.action_space(agent).seed(seed)
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, _ = gymnasium.utils.seeding.np_random(seed)
 
     def step(self, action):
