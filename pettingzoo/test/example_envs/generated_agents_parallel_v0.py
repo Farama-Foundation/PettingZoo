@@ -93,7 +93,9 @@ class parallel_env(ParallelEnv):
         for i, agent in enumerate(self.agents):
             self.action_space(agent).seed(seed)
 
-        return {agent: self.observe(agent) for agent in self.agents}, {agent: {} for agent in self.agents}
+        return {agent: self.observe(agent) for agent in self.agents}, {
+            agent: {} for agent in self.agents
+        }
 
     def _seed(self, seed=None):
         self.np_random, _ = seeding.np_random(seed)
