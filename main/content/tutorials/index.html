@@ -527,7 +527,7 @@
         <span class="c1"># collect an episode</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
             <span class="c1"># collect observations and convert to batch of torch tensors</span>
-            <span class="n">next_obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">next_obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="c1"># reset the episodic return</span>
             <span class="n">total_episodic_return</span> <span class="o">=</span> <span class="mi">0</span>
 

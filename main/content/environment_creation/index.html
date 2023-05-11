@@ -743,8 +743,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_moves</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">observations</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">NONE</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">observations</span>
+        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">infos</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

@@ -452,7 +452,7 @@
             <span class="s2">&quot;prisoner&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]},</span>
             <span class="s2">&quot;guard&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]},</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="n">observations</span>
+        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
         <span class="c1"># Execute actions</span>
