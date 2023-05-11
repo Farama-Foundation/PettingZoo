@@ -76,13 +76,15 @@ class parallel_env(ParallelEnv):
         )
         self.render_mode = render_mode
 
+    # observation space must be defined here
     # this cache ensures that same space object is returned for the same agent
-    # allows action space seeding to work as expected
+    # allows observation and action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
-
+    
+    # action space must be defined here
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(3)
