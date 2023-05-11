@@ -74,21 +74,22 @@ class raw_env(AECEnv):
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
         
-        # optional: helper attributes for action and observation spaces (not used 
+        # optional: explicitly define spaces as dicts (deprecated)
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
         self.render_mode = render_mode
 
-    # action and observation spaces must be defined 
+    # observation space must be defined here
     # this cache ensures that same space object is returned for the same agent
-    # allows action space seeding to work as expected
+    # allows observation and action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
         return Discrete(4)
 
+    # action space must be defined here
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent):
         return Discrete(3)
