@@ -60,22 +60,28 @@ class raw_env(AECEnv):
         The init method takes in environment arguments and
          should define the following attributes:
         - possible_agents
-        - action_spaces
-        - observation_spaces
+        - arender_mode
+        
+        Note: the action_spaces and observation_spaces attributes are deprecated.
+        Spaces must be defined in the action_space() and observation_space() methods.
+        
         These attributes should not be changed after initialization.
         """
         self.possible_agents = ["player_" + str(r) for r in range(2)]
+        
+        # optional: a mapping between agent name and ID
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
-
-        # gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/
+        
+        # optional: helper attributes for action and observation spaces (not used 
         self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         self._observation_spaces = {
             agent: Discrete(4) for agent in self.possible_agents
         }
         self.render_mode = render_mode
 
+    # action and observation spaces must be defined 
     # this cache ensures that same space object is returned for the same agent
     # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
