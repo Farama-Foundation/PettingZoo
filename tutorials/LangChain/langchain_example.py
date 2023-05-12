@@ -1,6 +1,7 @@
-from action_masking_agent import ActionMaskAgent
 from langchain.chat_models import ChatOpenAI
 from pettingzoo_agent import PettingZooAgent
+
+from action_masking_agent import ActionMaskAgent  # isort: skip
 
 
 def main(agents, env):
