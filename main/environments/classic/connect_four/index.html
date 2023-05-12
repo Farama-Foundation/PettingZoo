@@ -460,6 +460,73 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 <li><p>v0: Initial versions release (1.0.0)</p></li>
 </ul>
 </section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.env">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.connect_four.connect_four.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.env" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.connect_four.connect_four.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.action_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the action space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the action_spaces dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.close" title="Permalink to this definition">#</a></dt>
+<dd><p>Closes any resources that should be released.</p>
+<p>Closes the rendering window, subprocesses, network connections,
+or any other resources that should be released.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the observation space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the observation_spaces dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.observe">
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.observe" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the observation an agent currently can make.</p>
+<p><cite>last()</cite> calls this function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.render" title="Permalink to this definition">#</a></dt>
+<dd><p>Renders the environment as specified by self.render_mode.</p>
+<p>Render mode can be <cite>human</cite> to display a window.
+Other render modes in the default environments are <cite>‘rgb_array’</cite>
+which returns a numpy array and is supported by all environments outside of classic,
+and <cite>‘ansi’</cite> which returns the strings printed (specific to classic environments).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.reset" title="Permalink to this definition">#</a></dt>
+<dd><p>Resets the environment to a starting state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.connect_four.connect_four.raw_env.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/connect_four/connect_four/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.connect_four.connect_four.raw_env.step" title="Permalink to this definition">#</a></dt>
+<dd><p>Accepts and executes the action of the current agent_selection in the environment.</p>
+<p>Automatically switches control to the next agent.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
           </article>
@@ -539,6 +606,20 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 <li><a class="reference internal" href="#action-space">Action Space</a></li>
 <li><a class="reference internal" href="#rewards">Rewards</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.env"><code class="docutils literal notranslate"><span class="pre">env</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.action_space"><code class="docutils literal notranslate"><span class="pre">raw_env.action_space()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.close"><code class="docutils literal notranslate"><span class="pre">raw_env.close()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.observation_space"><code class="docutils literal notranslate"><span class="pre">raw_env.observation_space()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.observe"><code class="docutils literal notranslate"><span class="pre">raw_env.observe()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.reset"><code class="docutils literal notranslate"><span class="pre">raw_env.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.connect_four.connect_four.raw_env.step"><code class="docutils literal notranslate"><span class="pre">raw_env.step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
