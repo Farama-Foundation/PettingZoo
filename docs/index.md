@@ -43,6 +43,7 @@ tutorials/environmentcreation/index
 tutorials/cleanrl/index
 tutorials/tianshou/index
 tutorials/rllib/index
+tutorials/langchain/index
 ```
 
 ```{toctree}
