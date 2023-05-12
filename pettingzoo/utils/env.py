@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Iterable, Iterator, TypeVar
+from typing import Any, Iterable, Iterator, TypeVar, Dict
 
 import gymnasium.spaces
 import numpy as np
@@ -10,8 +10,8 @@ ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
 AgentID = str
 
-ObsDict = dict[AgentID, ObsType]
-ActionDict = dict[AgentID, ActionType]
+ObsDict = Dict[AgentID, ObsType]
+ActionDict = Dict[AgentID, ActionType]
 
 
 """
