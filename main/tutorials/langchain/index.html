@@ -7,12 +7,12 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/content/environment_tests.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="AEC API" href="../../api/aec/" /><link rel="prev" title="Environment Creation" href="../environment_creation/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/content/environment_tests.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/langchain/index.html" /><meta name="twitter:card" content="summary_large_image"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex/" /><link rel="search" title="Search" href="../../search/" /><link rel="next" title="LangChain: Creating LLM agents" href="langchain/" /><link rel="prev" title="RLlib: DQN for Simple Poker" href="../rllib/holdem/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/langchain/index.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 6.2.1 and Furo 2022.12.07.dev1 -->
-        <title>Testing Environments - PettingZoo Documentation</title>
+        <title>LangChain Tutorial - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=cfd2cc3354364f303ef4a892d279bfffada5835d" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=6342a809aabeb35cfac296000cfa245808bc1d78" />
@@ -223,10 +223,10 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../basic_usage/">Basic Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../environment_creation/">Environment Creation</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Testing Environments</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../content/basic_usage/">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_creation/">Environment Creation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../content/environment_tests/">Testing Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
@@ -308,31 +308,31 @@
 <li class="toctree-l1"><a class="reference internal" href="../../environments/third_party_envs/">Third-Party Environments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../environmentcreation/">Environment Creation Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../environmentcreation/1-project-structure/">Tutorial: Repository Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environmentcreation/2-environment-logic/">Tutorial: Environment Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environmentcreation/3-action-masking/">Tutorial: Action Masking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../environmentcreation/4-testing-your-environment/">Tutorial: Testing Your Environment</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/tianshou/beginner/">Tianshou: Basic API Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/tianshou/intermediate/">Tianshou: Training Agents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/tianshou/advanced/">Tianshou: CLI and Logging</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tianshou/beginner/">Tianshou: Basic API Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tianshou/intermediate/">Tianshou: Training Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/rllib/">RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../rllib/">RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../tutorials/langchain/langchain/">LangChain: Creating LLM agents</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">LangChain Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="langchain/">LangChain: Creating LLM agents</a></li>
 </ul>
 </li>
 </ul>
@@ -365,8 +365,9 @@
             </svg>
             <span>Back to top</span>
           </a>
-          <div class="content-icon-container"><div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/content/environment_tests.md" title="Edit this page">
+          <div class="content-icon-container">
+      <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/langchain/index.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -397,103 +398,42 @@
           </div>
           <article role="main">
             
-            <section id="testing-environments">
-<h1>Testing Environments<a class="headerlink" href="#testing-environments" title="Permalink to this heading">#</a></h1>
-<p>PettingZoo has a number of compliance tests for environments through. If you are adding a new environment, we encourage you to run these tests on your own environment.</p>
-<section id="api-test">
-<h2>API Test<a class="headerlink" href="#api-test" title="Permalink to this heading">#</a></h2>
-<p>PettingZoo’s API has a number of features and requirements. To make sure your environment is consistent with the API, we have the api_test. Below is an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">api_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">verbose_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>As you can tell, you simply pass an environment to the test. The test will assert or give some other error on an API issue, and will return normally if it passes.</p>
-<p>The optional arguments are:</p>
+            <section id="langchain-tutorial">
+<h1>LangChain Tutorial<a class="headerlink" href="#langchain-tutorial" title="Permalink to this heading">#</a></h1>
+<p>This tutorial provides an example of using LangChain create LLM agents that can interact with PettingZoo environments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>: runs the environment for that many cycles and checks that the output is consistent with the API.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">verbose_progress</span></code>: Prints out messages to indicate partial completion of the test. Useful for debugging environments.</p></li>
+<li><p><a class="reference internal" href="langchain/"><span class="std std-doc">LangChain: Creating LLM Agents</span></a>: <em>Create LLM Agents using LangChain</em></p></li>
 </ul>
+<section id="langchain-overview">
+<h2>LangChain Overview<a class="headerlink" href="#langchain-overview" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/hwchase17/langchain">LangChain</a> is a framework for developing applications powered by language models through composability.</p>
+<p>There are six main areas that LangChain is designed to help with. These are, in increasing order of complexity:</p>
+<section id="llms-and-prompts">
+<h3>📃 LLMs and Prompts:<a class="headerlink" href="#llms-and-prompts" title="Permalink to this heading">#</a></h3>
+<p>This includes prompt management, prompt optimization, a generic interface for all LLMs, and common utilities for working with LLMs.</p>
 </section>
-<section id="parallel-api-test">
-<h2>Parallel API Test<a class="headerlink" href="#parallel-api-test" title="Permalink to this heading">#</a></h2>
-<p>This is an analogous version of the API test, but for parallel environments. You can use this test like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">parallel_api_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">()</span>
-<span class="n">parallel_api_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="chains">
+<h3>🔗 Chains:<a class="headerlink" href="#chains" title="Permalink to this heading">#</a></h3>
+<p>Chains go beyond a single LLM call and involve sequences of calls (whether to an LLM or a different utility). LangChain provides a standard interface for chains, lots of integrations with other tools, and end-to-end chains for common applications.</p>
 </section>
-<section id="seed-test">
-<h2>Seed Test<a class="headerlink" href="#seed-test" title="Permalink to this heading">#</a></h2>
-<p>To have a properly reproducible environment that utilizes randomness, you need to be able to make it deterministic during evaluation by setting a seed for the random number generator that defines the random behavior. The seed test checks that calling the <code class="docutils literal notranslate"><span class="pre">seed()</span></code> method with a constant actually makes the environment deterministic.</p>
-<p>The seed test takes in a function that creates a pettingzoo environment. For example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">seed_test</span><span class="p">,</span> <span class="n">parallel_seed_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env_fn</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span>
-<span class="n">seed_test</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_kept_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># or for parallel environments</span>
-<span class="n">parallel_env_fn</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">parallel_env</span>
-<span class="n">parallel_seed_test</span><span class="p">(</span><span class="n">parallel_env_fn</span><span class="p">,</span> <span class="n">num_cycles</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">test_kept_state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Internally, there are two separate tests.</p>
-<ol class="arabic simple">
-<li><p>Do two separate environments give the same result after the environment is seeded?</p></li>
-<li><p>Does a single environment give the same result after seed() then reset() is called?</p></li>
-</ol>
-<p>The first optional argument, <code class="docutils literal notranslate"><span class="pre">num_cycles</span></code>, indicates how long the environment will be run to check for determinism. Some environments only fail the test long after initialization.</p>
-<p>The second optional argument, <code class="docutils literal notranslate"><span class="pre">test_kept_state</span></code> allows the user to disable the second test. Some physics based environments fail this test due to barely detectable differences due to caches, etc, which are not important enough to matter.</p>
-<section id="max-cycles-test">
-<h3>Max Cycles Test<a class="headerlink" href="#max-cycles-test" title="Permalink to this heading">#</a></h3>
-<p>The max cycles test tests that the <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code> environment argument exists and the resulting environment actually runs for the correct number of cycles. If your environment does not take a <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code> argument, you should not run this test. The reason this test exists is that many off-by-one errors are possible when implementing <code class="docutils literal notranslate"><span class="pre">max_cycles</span></code>. An example test usage looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">max_cycles_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">max_cycles_test</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
+<section id="data-augmented-generation">
+<h3>📚 Data Augmented Generation:<a class="headerlink" href="#data-augmented-generation" title="Permalink to this heading">#</a></h3>
+<p>Data Augmented Generation involves specific types of chains that first interact with an external data source to fetch data for use in the generation step. Examples include summarization of long pieces of text and question/answering over specific data sources.</p>
+</section>
+<section id="agents">
+<h3>🤖 Agents:<a class="headerlink" href="#agents" title="Permalink to this heading">#</a></h3>
+<p>Agents involve an LLM making decisions about which Actions to take, taking that Action, seeing an Observation, and repeating that until done. LangChain provides a standard interface for agents, a selection of agents to choose from, and examples of end-to-end agents.</p>
+</section>
+<section id="memory">
+<h3>🧠 Memory:<a class="headerlink" href="#memory" title="Permalink to this heading">#</a></h3>
+<p>Memory refers to persisting state between calls of a chain/agent. LangChain provides a standard interface for memory, a collection of memory implementations, and examples of chains/agents that use memory.</p>
+</section>
+<section id="evaluation">
+<h3>🧐 Evaluation:<a class="headerlink" href="#evaluation" title="Permalink to this heading">#</a></h3>
+<p>[BETA] Generative models are notoriously hard to evaluate with traditional metrics. One new way of evaluating them is using language models themselves to do the evaluation. LangChain provides some prompts/chains for assisting in this.</p>
+<div class="toctree-wrapper compound">
 </div>
 </section>
-</section>
-<section id="render-test">
-<h2>Render Test<a class="headerlink" href="#render-test" title="Permalink to this heading">#</a></h2>
-<p>The render test checks that rendering 1) does not crash and 2) produces output of the correct type when given a mode (only supports <code class="docutils literal notranslate"><span class="pre">'human'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ansi'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'rgb_array'</span></code> modes).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">render_test</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">render_test</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The render test method takes in an optional argument <code class="docutils literal notranslate"><span class="pre">custom_tests</span></code> that allows for additional tests in non-standard modes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">custom_tests</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;svg&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">render_result</span><span class="p">:</span> <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">render_result</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="n">render_test</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">custom_tests</span><span class="o">=</span><span class="n">custom_tests</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="performance-benchmark-test">
-<h2>Performance Benchmark Test<a class="headerlink" href="#performance-benchmark-test" title="Permalink to this heading">#</a></h2>
-<p>To make sure we do not have performance regressions, we have the performance benchmark test. This test simply prints out the number of steps and cycles that the environment takes in 5 seconds. This test requires manual inspection of its outputs:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">performance_benchmark</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">performance_benchmark</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="save-observation-test">
-<h2>Save Observation Test<a class="headerlink" href="#save-observation-test" title="Permalink to this heading">#</a></h2>
-<p>The save observation test is to visually inspect the observations of games with graphical observations to make sure they are what is intended. We have found that observations are a huge source of bugs in environments, so it is good to manually check them when possible. This test just tries to save the observations of all the agents. If it fails, then it just prints a warning. The output needs to be visually inspected for correctness.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pettingzoo.test</span> <span class="kn">import</span> <span class="n">test_save_obs</span>
-<span class="kn">from</span> <span class="nn">pettingzoo.butterfly</span> <span class="kn">import</span> <span class="n">pistonball_v6</span>
-<span class="n">env</span> <span class="o">=</span> <span class="n">pistonball_v6</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-<span class="n">test_save_obs</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-</pre></div>
-</div>
 </section>
 </section>
 
@@ -502,18 +442,18 @@
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../../api/aec/">
+            <a class="next-page" href="langchain/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">AEC API</div>
+                <div class="title">LangChain: Creating LLM agents</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../environment_creation/">
+            <a class="prev-page" href="../rllib/holdem/">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -522,7 +462,7 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Environment Creation</div>
+                <div class="title">RLlib: DQN for Simple Poker</div>
                 
               </div>
             </a>
@@ -566,16 +506,16 @@
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">Testing Environments</a><ul>
-<li><a class="reference internal" href="#api-test">API Test</a></li>
-<li><a class="reference internal" href="#parallel-api-test">Parallel API Test</a></li>
-<li><a class="reference internal" href="#seed-test">Seed Test</a><ul>
-<li><a class="reference internal" href="#max-cycles-test">Max Cycles Test</a></li>
+<li><a class="reference internal" href="#">LangChain Tutorial</a><ul>
+<li><a class="reference internal" href="#langchain-overview">LangChain Overview</a><ul>
+<li><a class="reference internal" href="#llms-and-prompts">📃 LLMs and Prompts:</a></li>
+<li><a class="reference internal" href="#chains">🔗 Chains:</a></li>
+<li><a class="reference internal" href="#data-augmented-generation">📚 Data Augmented Generation:</a></li>
+<li><a class="reference internal" href="#agents">🤖 Agents:</a></li>
+<li><a class="reference internal" href="#memory">🧠 Memory:</a></li>
+<li><a class="reference internal" href="#evaluation">🧐 Evaluation:</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#render-test">Render Test</a></li>
-<li><a class="reference internal" href="#performance-benchmark-test">Performance Benchmark Test</a></li>
-<li><a class="reference internal" href="#save-observation-test">Save Observation Test</a></li>
 </ul>
 </li>
 </ul>
