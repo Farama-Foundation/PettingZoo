@@ -12,7 +12,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         illegal_reward: number that is the value of the player making an illegal move.
     """
 
-    def __init__(self, env: AECEnv, illegal_reward: float) -> None:
+    def __init__(self, env: AECEnv, illegal_reward: float):
         super().__init__(env)
         self._illegal_value = illegal_reward
         self._prev_obs = None

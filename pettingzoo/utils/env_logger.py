@@ -106,7 +106,7 @@ class EnvWarningHandler(logging.Handler):
         logging.Handler.__init__(self, *args, **kwargs)
         self.mqueue = mqueue
 
-    def emit(self, record: logging.LogRecord) -> None:
+    def emit(self, record: logging.LogRecord):
         m = self.format(record).rstrip("\n")
         self.mqueue.append(m)
         if EnvLogger._output:

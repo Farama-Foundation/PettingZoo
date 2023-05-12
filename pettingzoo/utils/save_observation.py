@@ -8,7 +8,7 @@ import numpy as np
 from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
 
 
-def _check_observation_saveable(env: AECEnv | ParallelEnv, agent: AgentID) -> None:
+def _check_observation_saveable(env: AECEnv | ParallelEnv, agent: AgentID):
     obs_space = env.observation_space(agent)
     assert isinstance(
         obs_space, gymnasium.spaces.Box
@@ -32,7 +32,7 @@ def save_observation(
     agent: AgentID | None = None,
     all_agents: bool = False,
     save_dir: str = os.getcwd(),
-) -> None:
+):
     from PIL import Image
 
     if agent is None:
@@ -47,9 +47,12 @@ def save_observation(
         )
         os.makedirs(save_folder, exist_ok=True)
 
+        # Parallel envs don't have observe method
         observation = env.observe(a)
-        if observation is not None:
-            rescaled = observation.astype(np.uint8)
-            im = Image.fromarray(rescaled)
-            fname = os.path.join(save_folder, str(a) + ".png")
-            im.save(fname)
+        assert (
+            observation is not None
+        ), "Observation must be different than None to save as an image"
+        rescaled = observation.astype(np.uint8)
+        im = Image.fromarray(rescaled)
+        fname = os.path.join(save_folder, str(a) + ".png")
+        im.save(fname)

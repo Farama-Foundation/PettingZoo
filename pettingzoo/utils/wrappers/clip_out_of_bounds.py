@@ -14,7 +14,7 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
     Applied to continuous environments in pettingzoo.
     """
 
-    def __init__(self, env: AECEnv) -> None:
+    def __init__(self, env: AECEnv):
         super().__init__(env)
         assert all(
             isinstance(self.action_space(agent), Box)
@@ -33,13 +33,18 @@ class ClipOutOfBoundsWrapper(BaseWrapper):
             if action is None or np.isnan(action).any():
                 EnvLogger.error_nan_action()
             assert (
-                space.shape == action.shape  # type: ignore
-            ), f"action should have shape {space.shape}, has shape {action.shape}"  # type: ignore
+                space.shape
+                == action.shape  # pyright: ignore[reportOptionalMemberAccess]
+            ), f"action should have shape {space.shape}, has shape {action.shape}"  # pyright: ignore[reportOptionalMemberAccess]
 
             EnvLogger.warn_action_out_of_bound(
                 action=action, action_space=space, backup_policy="clipping to space"
             )
-            action = np.clip(action, space.low, space.high)  # type: ignore
+            action = np.clip(
+                action,  # pyright: ignore[reportGeneralTypeIssues]
+                space.low,  # pyright: ignore[reportGeneralTypeIssues]
+                space.high,  # pyright: ignore[reportGeneralTypeIssues]
+            )
 
         super().step(action)
 

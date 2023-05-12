@@ -9,14 +9,14 @@ from pettingzoo.utils.wrappers.base import BaseWrapper
 class AssertOutOfBoundsWrapper(BaseWrapper):
     """Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces."""
 
-    def __init__(self, env: AECEnv) -> None:
+    def __init__(self, env: AECEnv):
         super().__init__(env)
         assert all(
             isinstance(self.action_space(agent), Discrete)
             for agent in getattr(self, "possible_agents", [])
         ), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
-    def step(self, action: ActionType) -> None:
+    def step(self, action: ActionType):
         assert (
             action is None
             and (

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any
 
 import gymnasium.spaces
 import numpy as np
@@ -11,7 +10,7 @@ from pettingzoo.utils.env import ActionType, ObsType, ParallelEnv
 
 
 class BaseParallelWrapper(ParallelEnv):
-    def __init__(self, env: ParallelEnv) -> None:
+    def __init__(self, env: ParallelEnv):
         self.env = env
 
         self.metadata = env.metadata
@@ -22,13 +21,15 @@ class BaseParallelWrapper(ParallelEnv):
 
         # Not every environment has the .state_space attribute implemented
         try:
-            self.state_space = self.env.state_space  # type: ignore
+            self.state_space = (
+                self.env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+            )
         except AttributeError:
             pass
 
     def reset(
         self, seed: int | None = None, options: dict | None = None
-    ) -> tuple[Any, Any]:
+    ) -> tuple[dict[str, ObsType], dict[str, dict]]:
         self.np_random, _ = seeding.np_random(seed)
 
         res, info = self.env.reset(seed=seed, options=options)

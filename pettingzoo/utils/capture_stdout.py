@@ -14,7 +14,7 @@ class capture_stdout:
         data = var.getvalue()
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.old_stdout = None
 
     def __enter__(self) -> io.StringIO:

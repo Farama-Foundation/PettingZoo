@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any
 
 import gymnasium.spaces
 import numpy as np
@@ -15,7 +14,7 @@ class BaseWrapper(AECEnv):
     All AECEnv wrappers should inherit from this base class
     """
 
-    def __init__(self, env: AECEnv) -> None:
+    def __init__(self, env: AECEnv):
         super().__init__()
         self.env = env
 
@@ -40,10 +39,14 @@ class BaseWrapper(AECEnv):
             pass
 
         # Not every environment has the .state_space attribute implemented
-        if hasattr(self.env, "state_space"):
-            self.state_space = self.env.state_space  # type: ignore
+        try:
+            self.state_space = (
+                self.env.state_space  # pyright: ignore[reportGeneralTypeIssues]
+            )
+        except AttributeError:
+            pass
 
-    def __getattr__(self, name: str) -> Any:
+    def __getattr__(self, name: str):
         """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
         if name.startswith("_"):
             raise AttributeError(f"accessing private attribute '{name}' is prohibited")
@@ -85,13 +88,13 @@ class BaseWrapper(AECEnv):
     def unwrapped(self) -> AECEnv:
         return self.env.unwrapped
 
-    def close(self) -> None:
+    def close(self):
         self.env.close()
 
     def render(self) -> None | np.ndarray | str | list:
         return self.env.render()
 
-    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+    def reset(self, seed: int | None = None, options: dict | None = None):
         self.env.reset(seed=seed, options=options)
 
         self.agent_selection = self.env.agent_selection
@@ -108,7 +111,7 @@ class BaseWrapper(AECEnv):
     def state(self) -> np.ndarray:
         return self.env.state()
 
-    def step(self, action: ActionType) -> None:
+    def step(self, action: ActionType):
         self.env.step(action)
 
         self.agent_selection = self.env.agent_selection

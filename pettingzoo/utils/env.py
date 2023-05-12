@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import warnings
-from typing import Any, Dict, Iterable, Iterator, TypeVar
+from typing import Any, Iterable, Iterator, TypeVar
 
 import gymnasium.spaces
 import numpy as np
@@ -10,8 +10,8 @@ ObsType = TypeVar("ObsType")
 ActionType = TypeVar("ActionType")
 AgentID = str
 
-ObsDict = Dict[AgentID, ObsType]
-ActionDict = Dict[AgentID, ActionType]
+ObsDict = dict[AgentID, ObsType]
+ActionDict = dict[AgentID, ActionType]
 
 
 """
@@ -177,7 +177,7 @@ class AECEnv:
 
     def last(
         self, observe: bool = True
-    ) -> tuple[ObsType | None, float, bool, bool, dict[str, Any]]:
+    ) -> tuple[ObsType | None, float, bool, bool, dict[AgentID, dict[str, Any]]]:
         """Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""
         agent = self.agent_selection
         assert agent
@@ -262,11 +262,11 @@ class AECIterable(Iterable):
 
 
 class AECIterator(Iterator):
-    def __init__(self, env: AECEnv, max_iter: int) -> None:
+    def __init__(self, env: AECEnv, max_iter: int):
         self.env = env
         self.iters_til_term = max_iter
 
-    def __next__(self) -> str:
+    def __next__(self):
         if not self.env.agents or self.iters_til_term <= 0:
             raise StopIteration
         self.iters_til_term -= 1
@@ -297,7 +297,7 @@ class ParallelEnv:
         self,
         seed: int | None = None,
         options: dict | None = None,
-    ) -> ObsDict:
+    ) -> tuple[ObsDict, dict[str, dict]]:
         """Resets the environment.
 
         And returns a dictionary of observations (keyed by the agent name)

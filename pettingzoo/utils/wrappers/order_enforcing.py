@@ -19,7 +19,7 @@ class OrderEnforcingWrapper(BaseWrapper):
     * warn on calling step after environment is terminated or truncated
     """
 
-    def __init__(self, env: AECEnv) -> None:
+    def __init__(self, env: AECEnv):
         self._has_reset = False
         self._has_rendered = False
         self._has_updated = False
@@ -33,7 +33,7 @@ class OrderEnforcingWrapper(BaseWrapper):
         if value == "unwrapped":
             return self.env.unwrapped
         elif value == "render_mode" and hasattr(self.env, "render_mode"):
-            return self.env.render_mode  # type: ignore
+            return self.env.render_mode  # pyright: ignore[reportGeneralTypeIssues]
         elif value == "possible_agents":
             EnvLogger.error_possible_agents_attribute_missing("possible_agents")
         elif value == "observation_spaces":
@@ -123,7 +123,7 @@ class AECOrderEnforcingIterator(AECIterator):
             self.env, "_has_updated"
         ), "env must be wrapped by OrderEnforcingWrapper"
         assert (
-            self.env._has_updated  # type: ignore
+            self.env._has_updated  # pyright: ignore[reportGeneralTypeIssues]
         ), "need to call step() or reset() in a loop over `agent_iter`"
-        self.env._has_updated = False  # type: ignore
+        self.env._has_updated = False  # pyright: ignore[reportGeneralTypeIssues]
         return agent
