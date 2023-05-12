@@ -37,7 +37,7 @@ jobs:
         run: pip install -r docs/requirements.txt
 
       - name: Install PettingZoo
-        run: pip install .
+        run: pip install .[all]
 
       - name: Generate environment docs
         run: python docs/_scripts/gen_envs_mds.py
