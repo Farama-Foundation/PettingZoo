@@ -118,9 +118,8 @@ from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
 from rlcard.utils.utils import print_card
 
+from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
-
-from .rlcard_base import RLCardBase
 
 
 def env(**kwargs):
@@ -138,7 +137,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase, EzPickle):
-
     metadata = {
         "render_modes": ["human"],
         "name": "gin_rummy_v4",
@@ -153,7 +151,12 @@ class raw_env(RLCardBase, EzPickle):
         opponents_hand_visible=False,
         render_mode=None,
     ):
-        EzPickle.__init__(self, knock_reward, gin_reward, render_mode)
+        EzPickle.__init__(
+            self,
+            knock_reward=knock_reward,
+            gin_reward=gin_reward,
+            render_mode=render_mode,
+        )
         self._opponents_hand_visible = opponents_hand_visible
         num_planes = 5 if self._opponents_hand_visible else 4
         RLCardBase.__init__(self, "gin-rummy", 2, (num_planes, 52))
@@ -197,6 +200,12 @@ class raw_env(RLCardBase, EzPickle):
             action_mask[i] = 1
 
         return {"observation": observation, "action_mask": action_mask}
+
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
 
     def render(self):
         if self.render_mode is None:

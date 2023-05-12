@@ -84,6 +84,36 @@ if __name__ == "__main__":
                 if "rlcard_envs" not in env_dir_path
                 else env_dir_path + ".py"
             )
+            if "rlcard_envs" in env_dir_path:
+                docs_text += f"""## API
+```{{eval-rst}}
+.. currentmodule:: pettingzoo.{env_type}.rlcard_envs.{env_name}
+
+.. autoclass:: env
+.. autoclass:: raw_env
+   :members:
+```
+"""
+            elif env_type in ["mpe", "atari"]:
+                docs_text += f"""## API
+```{{eval-rst}}
+.. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
+
+.. autoclass:: raw_env
+   :members:
+   :undoc-members:
+```
+"""
+            else:
+                docs_text += f"""## API
+```{{eval-rst}}
+.. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
+
+.. autoclass:: env
+.. autoclass:: raw_env
+   :members:
+```
+"""
             docs_env_path = os.path.join(
                 os.path.dirname(__file__),
                 "..",

@@ -287,15 +287,15 @@ class raw_env(AECEnv, EzPickle):
         """
         EzPickle.__init__(
             self,
-            colors,
-            ranks,
-            players,
-            hand_size,
-            max_information_tokens,
-            max_life_tokens,
-            observation_type,
-            random_start_player,
-            render_mode,
+            colors=colors,
+            ranks=ranks,
+            players=players,
+            hand_size=hand_size,
+            max_information_tokens=max_information_tokens,
+            max_life_tokens=max_life_tokens,
+            observation_type=observation_type,
+            random_start_player=random_start_player,
+            render_mode=render_mode,
         )
 
         # ToDo: Starts
@@ -364,7 +364,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         config = dict(seed=seed, **self._config)
         self.hanabi_env = HanabiEnv(config=config)
 
@@ -379,7 +379,6 @@ class raw_env(AECEnv, EzPickle):
         observation_type,
         random_start_player,
     ):
-
         if not (2 <= colors <= 5):
             raise ValueError(
                 f"Config parameter {colors} is out of bounds. See description in hanabi.py."
@@ -433,7 +432,7 @@ class raw_env(AECEnv, EzPickle):
         return list(range(0, self.hanabi_env.num_moves()))
 
     # ToDo: Fix Return value
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         """Resets the environment for a new game and returns observations of current player as List of ints.
 
         Returns:
@@ -441,7 +440,7 @@ class raw_env(AECEnv, EzPickle):
             current agent (agent_selection).
         """
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
 
         self.agents = self.possible_agents[:]
         # Reset underlying hanabi reinforcement learning environment

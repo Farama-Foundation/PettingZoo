@@ -1,5 +1,91 @@
-[tool.pyright]
+# Package ######################################################################
 
+[build-system]
+requires = ["setuptools >= 61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pettingzoo"
+description = "Gymnasium for multi-agent reinforcement learning."
+readme = "README.md"
+requires-python = ">= 3.7"
+authors = [{ name = "Farama Foundation", email = "contact@farama.org" }]
+license = { text = "MIT License" }
+keywords = ["Reinforcement Learning", "game", "RL", "AI", "gymnasium"]
+classifiers = [
+    "Development Status :: 4 - Beta",  # change to `5 - Production/Stable` when ready
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Artificial Intelligence',
+]
+dependencies = [
+    "numpy>=1.21.0",
+    "gymnasium>=0.28.0",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+# Update dependencies in `all` if any are added or removed
+atari = ["multi_agent_ale_py==0.1.11", "pygame==2.3.0"]
+classic = [
+    "chess==1.7.0",
+    "rlcard==1.0.5",
+    "pygame==2.3.0",
+    "hanabi_learning_environment==0.0.4",
+]
+butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
+mpe = ["pygame==2.3.0"]
+sisl = ["pygame==2.3.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
+other = ["pillow>=8.0.1"]
+testing = [
+    "pynput",
+    "pytest",
+    "AutoROM",
+    "pytest",
+    "pytest-cov",
+    "pre-commit",
+]
+all = [
+    "multi_agent_ale_py==0.1.11",
+    "pygame==2.3.0",
+    "chess==1.7.0",
+    "rlcard==1.0.5",
+    "hanabi_learning_environment==0.0.4",
+    "pymunk==6.2.0",
+    "box2d-py==2.3.5",
+    "scipy>=1.4.1",
+    "pillow>=8.0.1",
+]
+
+[project.urls]
+Homepage = "https://farama.org"
+Repository = "https://github.com/Farama-Foundation/PettingZoo"
+Documentation = "https://pettingzoo.farama.org"
+"Bug Report" = "https://github.com/Farama-Foundation/PettingZoo/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["pettingzoo", "pettingzoo.*"]
+
+# Linters and Test tools #######################################################
+
+[tool.black]
+safe = true
+
+[tool.isort]
+atomic = true
+profile = "black"
+src_paths = ["pettingzoo", "test"]
+
+[tool.pyright]
 # add any files/directories with type declaration to include
 include = [
     "pettingzoo/",

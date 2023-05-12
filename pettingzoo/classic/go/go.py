@@ -116,16 +116,13 @@ import pygame
 from gymnasium import spaces
 
 from pettingzoo import AECEnv
+from pettingzoo.classic.go import coords, go_base
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-
-from . import coords, go_base
 
 
 def get_image(path):
     from os import path as os_path
-
-    import pygame
 
     cwd = os_path.dirname(__file__)
     image = pygame.image.load(cwd + "/" + path)
@@ -143,7 +140,6 @@ def env(**kwargs):
 
 
 class raw_env(AECEnv):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "go_v5",
@@ -310,7 +306,7 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.render()
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)
 

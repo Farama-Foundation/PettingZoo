@@ -1,5 +1,5 @@
-from ..env_logger import EnvLogger
-from .base import BaseWrapper
+from pettingzoo.utils.env_logger import EnvLogger
+from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class TerminateIllegalWrapper(BaseWrapper):
@@ -14,7 +14,7 @@ class TerminateIllegalWrapper(BaseWrapper):
         self._illegal_value = illegal_reward
         self._prev_obs = None
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self._terminated = False
         self._prev_obs = None
         super().reset(seed=seed, options=options)

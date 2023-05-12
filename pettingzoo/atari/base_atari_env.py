@@ -7,11 +7,16 @@ from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo.utils import wrappers
-from pettingzoo.utils.conversions import (  # noqa: F401
-    parallel_to_aec_wrapper,
-    parallel_wrapper_fn,
-)
+from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
 from pettingzoo.utils.env import ParallelEnv
+
+__all__ = [
+    "parallel_wrapper_fn",
+    "parallel_to_aec_wrapper",
+    "base_env_wrapper_fn",
+    "BaseAtariEnv",
+    "ParallelAtariEnv",
+]
 
 
 def base_env_wrapper_fn(raw_env_fn):
@@ -49,16 +54,16 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         """
         EzPickle.__init__(
             self,
-            game,
-            num_players,
-            mode_num,
-            seed,
-            obs_type,
-            full_action_space,
-            env_name,
-            max_cycles,
-            render_mode,
-            auto_rom_install_path,
+            game=game,
+            num_players=num_players,
+            mode_num=mode_num,
+            seed=seed,
+            obs_type=obs_type,
+            full_action_space=full_action_space,
+            env_name=env_name,
+            max_cycles=max_cycles,
+            render_mode=render_mode,
+            auto_rom_install_path=auto_rom_install_path,
         )
 
         assert obs_type in (
@@ -161,32 +166,26 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
 
         self._screen = None
-        self.seed(seed)
+        self._seed(seed)
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         if seed is None:
             _, seed = seeding.np_random()
         self.ale.setInt(b"random_seed", seed)
         self.ale.loadROM(self.rom_path)
         self.ale.setMode(self.mode)
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.ale.reset_game()
         self.agents = self.possible_agents[:]
         self.terminations = {agent: False for agent in self.possible_agents}
         self.frame = 0
 
         obs = self._observe()
-
-        if not return_info:
-            return {agent: obs for agent in self.agents}
-        else:
-            infos = {
-                agent: {} for agent in self.possible_agents if agent in self.agents
-            }
-            return {agent: obs for agent in self.agents}, infos
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
+        return {agent: obs for agent in self.agents}, infos
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]

@@ -96,9 +96,8 @@ import numpy as np
 import pygame
 from gymnasium import spaces
 
+from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
-
-from .rlcard_base import RLCardBase
 
 # Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)
 
@@ -128,7 +127,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_no_limit_v6",
@@ -152,7 +150,7 @@ class raw_env(RLCardBase):
                                 ),
                                 [100, 100],
                             ),
-                            dtype=np.float64,
+                            dtype=np.float32,
                         ),
                         "action_mask": spaces.Box(
                             low=0, high=1, shape=(self.env.num_actions,), dtype=np.int8
@@ -164,6 +162,12 @@ class raw_env(RLCardBase):
         )
 
         self.render_mode = render_mode
+
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
 
     def render(self):
         if self.render_mode is None:

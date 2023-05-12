@@ -54,11 +54,10 @@ simple_spread_v2.env(N=3, local_ratio=0.5, max_cycles=25, continuous_actions=Fal
 import numpy as np
 from gymnasium.utils import EzPickle
 
+from pettingzoo.mpe._mpe_utils.core import Agent, Landmark, World
+from pettingzoo.mpe._mpe_utils.scenario import BaseScenario
+from pettingzoo.mpe._mpe_utils.simple_env import SimpleEnv, make_env
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .._mpe_utils.core import Agent, Landmark, World
-from .._mpe_utils.scenario import BaseScenario
-from .._mpe_utils.simple_env import SimpleEnv, make_env
 
 
 class raw_env(SimpleEnv, EzPickle):
@@ -71,14 +70,20 @@ class raw_env(SimpleEnv, EzPickle):
         render_mode=None,
     ):
         EzPickle.__init__(
-            self, N, local_ratio, max_cycles, continuous_actions, render_mode
+            self,
+            N=N,
+            local_ratio=local_ratio,
+            max_cycles=max_cycles,
+            continuous_actions=continuous_actions,
+            render_mode=render_mode,
         )
         assert (
             0.0 <= local_ratio <= 1.0
         ), "local_ratio is a proportion. Must be between 0 and 1."
         scenario = Scenario()
         world = scenario.make_world(N)
-        super().__init__(
+        SimpleEnv.__init__(
+            self,
             scenario=scenario,
             world=world,
             render_mode=render_mode,
@@ -164,8 +169,7 @@ class Scenario(BaseScenario):
         rew = 0
         if agent.collide:
             for a in world.agents:
-                if self.is_collision(a, agent):
-                    rew -= 1
+                rew -= 1.0 * (self.is_collision(a, agent) and a != agent)
         return rew
 
     def global_reward(self, world):
@@ -183,10 +187,6 @@ class Scenario(BaseScenario):
         entity_pos = []
         for entity in world.landmarks:  # world.entities:
             entity_pos.append(entity.state.p_pos - agent.state.p_pos)
-        # entity colors
-        entity_color = []
-        for entity in world.landmarks:  # world.entities:
-            entity_color.append(entity.color)
         # communication of all other agents
         comm = []
         other_pos = []

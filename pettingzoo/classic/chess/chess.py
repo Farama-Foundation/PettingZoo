@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic.chess_v5` |
+| Import             | `from pettingzoo.classic import chess_v5` |
 |--------------------|------------------------------------|
 | Actions            | Discrete                           |
 | Parallel API       | Yes                                |
@@ -92,10 +92,9 @@ from gymnasium import spaces
 from gymnasium.error import DependencyNotInstalled
 
 from pettingzoo import AECEnv
+from pettingzoo.classic.chess import chess_utils
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
-
-from . import chess_utils
 
 
 def env(render_mode=None):
@@ -107,7 +106,6 @@ def env(render_mode=None):
 
 
 class raw_env(AECEnv):
-
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
         "name": "chess_v5",
@@ -206,7 +204,7 @@ class raw_env(AECEnv):
 
         return {"observation": observation, "action_mask": action_mask}
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         self.has_reset = True
 
         self.agents = self.possible_agents[:]

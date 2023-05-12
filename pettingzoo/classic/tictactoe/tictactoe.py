@@ -74,9 +74,8 @@ import numpy as np
 from gymnasium import spaces
 
 from pettingzoo import AECEnv
+from pettingzoo.classic.tictactoe.board import Board
 from pettingzoo.utils import agent_selector, wrappers
-
-from .board import Board
 
 
 def env(render_mode=None):
@@ -207,7 +206,7 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.render()
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         # reset environment
         self.board = Board()
 

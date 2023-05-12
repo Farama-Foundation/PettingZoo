@@ -21,15 +21,50 @@ def parallel_wrapper_fn(env_fn):
     return par_fn
 
 
+def aec_wrapper_fn(par_env_fn):
+    """Converts class(pettingzoo.utils.env.ParallelEnv) -> class(pettingzoo.utils.env.AECEnv).
+
+    Args:
+        par_env_fn: The class to be wrapped.
+
+    Example:
+        class my_par_class(pettingzoo.utils.env.ParallelEnv):
+            ...
+
+        my_aec_class = aec_wrapper_fn(my_par_class)
+
+    Note: applies the `OrderEnforcingWrapper` wrapper
+    """
+
+    def aec_fn(**kwargs):
+        par_env = par_env_fn(**kwargs)
+        aec_env = parallel_to_aec(par_env)
+        return aec_env
+
+    return aec_fn
+
+
 def aec_to_parallel(aec_env):
-    if isinstance(aec_env, parallel_to_aec_wrapper):
-        return aec_env.env
+    """Converts an aec environment to a parallel environment.
+
+    In the case of an existing parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original parallel environment.
+    Otherwise, it will apply the `aec_to_parallel_wrapper` to convert the environment.
+    """
+    if isinstance(aec_env, OrderEnforcingWrapper) and isinstance(
+        aec_env.env, parallel_to_aec_wrapper
+    ):
+        return aec_env.env.env
     else:
         par_env = aec_to_parallel_wrapper(aec_env)
         return par_env
 
 
 def parallel_to_aec(par_env):
+    """Converts an aec environment to a parallel environment.
+
+    In the case of an existing aec environment wrapped using a `aec_to_prallel_wrapper`, this function will return the original AEC environment.
+    Otherwise, it will apply the `parallel_to_aec_wrapper` to convert the environment.
+    """
     if isinstance(par_env, aec_to_parallel_wrapper):
         return par_env.aec_env
     else:
@@ -61,6 +96,8 @@ def from_parallel(par_env):
 
 
 class aec_to_parallel_wrapper(ParallelEnv):
+    """Converts an AEC environment into a Parallel environment."""
+
     def __init__(self, aec_env):
         assert aec_env.metadata.get("is_parallelizable", False), (
             "Converting from an AEC environment to a parallel environment "
@@ -122,8 +159,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
     def unwrapped(self):
         return self.aec_env.unwrapped
 
-    def reset(self, seed=None, return_info=False, options=None):
-        self.aec_env.reset(seed=seed, return_info=return_info, options=options)
+    def reset(self, seed=None, options=None):
+        self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)
@@ -131,11 +168,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        if not return_info:
-            return observations
-        else:
-            infos = dict(**self.aec_env.infos)
-            return observations, infos
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         rewards = defaultdict(int)
@@ -184,6 +218,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
 
 
 class parallel_to_aec_wrapper(AECEnv):
+    """Converts a parallel environment into an AEC environment."""
+
     def __init__(self, parallel_env):
         self.env = parallel_env
 
@@ -244,8 +280,8 @@ class parallel_to_aec_wrapper(AECEnv):
     def action_space(self, agent):
         return self.env.action_space(agent)
 
-    def reset(self, seed=None, return_info=False, options=None):
-        self._observations = self.env.reset(seed=seed, options=options)
+    def reset(self, seed=None, options=None):
+        self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions: ActionDict = {agent: None for agent in self.agents}
@@ -253,7 +289,6 @@ class parallel_to_aec_wrapper(AECEnv):
         self.agent_selection = self._agent_selector.reset()
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.new_agents = []
@@ -391,8 +426,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
     def action_space(self, agent):
         return self.aec_env.action_space(agent)
 
-    def reset(self, seed=None, return_info=False, options=None):
-        self.aec_env.reset(seed=seed, return_info=return_info, options=options)
+    def reset(self, seed=None, options=None):
+        self.aec_env.reset(seed=seed, options=options)
         self.agents = self.aec_env.agents[:]
         observations = {
             agent: self.aec_env.observe(agent)
@@ -400,11 +435,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        if not return_info:
-            return observations
-        else:
-            infos = {**self.aec_env.infos}
-            return observations, infos
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         if not self.agents:

@@ -22,6 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -e .[all]
+          pip install -e .[testing]
           AutoROM -v
       - name: Full Python tests
         run: |

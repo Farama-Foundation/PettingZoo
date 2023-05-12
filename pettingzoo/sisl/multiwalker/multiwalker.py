@@ -123,11 +123,10 @@ import numpy as np
 from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
+from pettingzoo.sisl.multiwalker.multiwalker_base import FPS
+from pettingzoo.sisl.multiwalker.multiwalker_base import MultiWalkerEnv as _env
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .multiwalker_base import FPS
-from .multiwalker_base import MultiWalkerEnv as _env
 
 
 def env(**kwargs):
@@ -141,7 +140,6 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "multiwalker_v9",
@@ -168,15 +166,12 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
-        self.env.seed(seed)
-
     def convert_to_dict(self, list_of_list):
         return dict(zip(self.agents, list_of_list))
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self.env._seed(seed=seed)
         self.env.reset()
         self.steps = 0
         self.agents = self.possible_agents[:]
@@ -239,3 +234,6 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
         self._deads_step_first()
         self.steps += 1
+
+        if self.render_mode == "human":
+            self.render()

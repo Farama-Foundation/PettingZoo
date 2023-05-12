@@ -23,13 +23,40 @@ classic/tictactoe
     :file: classic/list.html
 ```
 
+Classic environments represent implementations of popular turn-based human games and are mostly competitive. 
+
+
+### Installation
+
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
 pip install pettingzoo[classic]
 ````
 
-Classic environments represent implementations of popular turn-based human games and are mostly competitive. The classic environments have a few differences from others in this library:
+### Usage
+
+To launch a [Texas Holdem](https://pettingzoo.farama.org/environments/classic/texas_holdem/) environment with random agents:
+``` python
+from pettingzoo.classic import texas_holdem_v4
+
+env = texas_holdem_v4.env(render_mode="human")
+env.reset(seed=42)
+
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    
+    if termination or truncation:
+        break
+    
+    mask = observation["action_mask"]
+    action = env.action_space(agent).sample(mask)  # this is where you would insert your policy
+        
+    env.step(action)  
+env.close()
+```
+
+The classic environments have a few differences from others in this library:
 
 * No classic environments currently take any environment arguments.
 * All classic environments are rendered solely via printing to terminal.

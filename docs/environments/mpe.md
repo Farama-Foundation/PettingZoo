@@ -21,15 +21,37 @@ mpe/simple_world_comm
     :file: mpe/list.html
 ```
 
+Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.
+
+These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-particle-envs) codebase, with several minor fixes, mostly related to making the action space discrete by default, making the rewards consistent and cleaning up the observation space of certain environments.
+
+### Installation
+
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
 pip install pettingzoo[mpe]
 ````
 
-Multi Particle Environments (MPE) are a set of communication oriented environment where particle agents can (sometimes) move, communicate, see each other, push each other around, and interact with fixed landmarks.
+### Usage
+To launch a [Simple Tag](https://pettingzoo.farama.org/environments/mpe/simple_tag/) environment with random agents:
 
-These environments are from [OpenAI's MPE](https://github.com/openai/multiagent-particle-envs) codebase, with several minor fixes, mostly related to making the action space discrete by default, making the rewards consistent and cleaning up the observation space of certain environments.
+```python
+from pettingzoo.mpe import simple_tag_v2
+env = simple_tag_v2.env(render_mode='human')
+
+env.reset()
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    
+    if termination or truncation:
+        action = None
+    else:
+        action = env.action_space(agent).sample() # this is where you would insert your policy
+        
+    env.step(action) 
+env.close()
+```
 
 ### Types of Environments
 

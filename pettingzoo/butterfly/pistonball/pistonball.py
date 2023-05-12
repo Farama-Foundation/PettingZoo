@@ -88,14 +88,15 @@ import pymunk.pygame_util
 from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo import AECEnv
+from pettingzoo.butterfly.pistonball.manual_policy import ManualPolicy
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
-
-from .manual_policy import ManualPolicy  # noqa: F401
 
 _image_library = {}
 
 FPS = 20
+
+__all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
 
 
 def get_image(path):
@@ -122,7 +123,6 @@ parallel_env = parallel_wrapper_fn(env)
 
 
 class raw_env(AECEnv, EzPickle):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "pistonball_v6",
@@ -146,16 +146,16 @@ class raw_env(AECEnv, EzPickle):
     ):
         EzPickle.__init__(
             self,
-            n_pistons,
-            time_penalty,
-            continuous,
-            random_drop,
-            random_rotate,
-            ball_mass,
-            ball_friction,
-            ball_elasticity,
-            max_cycles,
-            render_mode,
+            n_pistons=n_pistons,
+            time_penalty=time_penalty,
+            continuous=continuous,
+            random_drop=random_drop,
+            random_rotate=random_rotate,
+            ball_mass=ball_mass,
+            ball_friction=ball_friction,
+            ball_elasticity=ball_elasticity,
+            max_cycles=max_cycles,
+            render_mode=render_mode,
         )
         self.dt = 1.0 / FPS
         self.n_pistons = n_pistons
@@ -273,7 +273,7 @@ class raw_env(AECEnv, EzPickle):
 
         self.has_reset = False
         self.closed = False
-        self.seed()
+        self._seed()
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -281,7 +281,7 @@ class raw_env(AECEnv, EzPickle):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
 
     def observe(self, agent):
@@ -392,9 +392,9 @@ class raw_env(AECEnv, EzPickle):
             cap(piston.position[1] - v * self.pixels_per_position),
         )
 
-    def reset(self, seed=None, return_info=False, options=None):
+    def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed)
+            self._seed(seed)
         self.space = pymunk.Space(threaded=False)
         self.add_walls()
         # self.space.threads = 2

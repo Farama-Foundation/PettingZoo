@@ -3,14 +3,13 @@ import warnings
 
 import numpy as np
 
+from pettingzoo.test.api_test import missing_attr_warning
 from pettingzoo.utils.conversions import (
     aec_to_parallel_wrapper,
     parallel_to_aec_wrapper,
     turn_based_aec_to_parallel_wrapper,
 )
 from pettingzoo.utils.wrappers import BaseWrapper
-
-from .api_test import missing_attr_warning
 
 
 def sample_action(env, obs, agent):
@@ -39,7 +38,7 @@ def parallel_api_test(par_env, num_cycles=1000):
 
     MAX_RESETS = 2
     for _ in range(MAX_RESETS):
-        obs = par_env.reset()
+        obs, infos = par_env.reset()
         assert isinstance(obs, dict)
         assert set(obs.keys()) == (set(par_env.agents))
         terminated = {agent: False for agent in par_env.agents}

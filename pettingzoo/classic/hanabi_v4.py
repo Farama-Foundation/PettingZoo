@@ -1,1 +1,3 @@
-from .hanabi.hanabi import env, raw_env  # noqa: F401
+from pettingzoo.classic.hanabi.hanabi import env, raw_env
+
+__all__ = ["env", "raw_env"]

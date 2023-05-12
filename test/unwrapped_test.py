@@ -1,9 +1,9 @@
+from test.all_modules import all_environments
+
 import pytest
 from gymnasium import spaces
 
 from pettingzoo.utils import conversions, wrappers
-
-from .all_modules import all_environments
 
 
 def box_action(env, agents):
@@ -31,7 +31,6 @@ def discrete_observation(env, agents):
 
 @pytest.mark.parametrize(("name", "env_module"), list(all_environments.items()))
 def test_unwrapped(name, env_module):
-
     env = env_module.env(render_mode="human")
     base_env = env.unwrapped
 

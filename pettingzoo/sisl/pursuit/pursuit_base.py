@@ -7,9 +7,13 @@ import pygame
 from gymnasium import spaces
 from gymnasium.utils import seeding
 
-from .utils import agent_utils, two_d_maps
-from .utils.agent_layer import AgentLayer
-from .utils.controllers import PursuitPolicy, RandomPolicy, SingleActionPolicy
+from pettingzoo.sisl.pursuit.utils import agent_utils, two_d_maps
+from pettingzoo.sisl.pursuit.utils.agent_layer import AgentLayer
+from pettingzoo.sisl.pursuit.utils.controllers import (
+    PursuitPolicy,
+    RandomPolicy,
+    SingleActionPolicy,
+)
 
 
 class Pursuit:
@@ -59,7 +63,7 @@ class Pursuit:
         self.y_size = y_size
         self.map_matrix = two_d_maps.rectangle_map(self.x_size, self.y_size)
         self.max_cycles = max_cycles
-        self.seed()
+        self._seed()
 
         self.shared_reward = shared_reward
         self.local_ratio = 1.0 - float(self.shared_reward)
@@ -177,7 +181,7 @@ class Pursuit:
     def agents(self):
         return self.pursuers
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, seed_ = seeding.np_random(seed)
         try:
             policies = [self.evader_controller, self.pursuer_controller]
@@ -347,7 +351,7 @@ class Pursuit:
             x, y = self.pursuer_layer.get_position(i)
             agent_positions[(x, y)] += 1
 
-        for (x, y) in evader_positions:
+        for x, y in evader_positions:
             (pos_x, pos_y) = (
                 self.pixel_scale * x + self.pixel_scale // 2,
                 self.pixel_scale * y + self.pixel_scale // 2,
@@ -366,7 +370,7 @@ class Pursuit:
 
             self.screen.blit(text, (pos_x, pos_y))
 
-        for (x, y) in agent_positions:
+        for x, y in agent_positions:
             (pos_x, pos_y) = (
                 self.pixel_scale * x + self.pixel_scale // 2,
                 self.pixel_scale * y + self.pixel_scale // 2,

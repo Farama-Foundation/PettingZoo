@@ -84,9 +84,8 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 import gymnasium
 from rlcard.utils.utils import print_card
 
+from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
-
-from .rlcard_base import RLCardBase
 
 
 def env(**kwargs):
@@ -104,7 +103,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase):
-
     metadata = {
         "render_modes": ["human"],
         "name": "leduc_holdem_v4",
@@ -115,6 +113,12 @@ class raw_env(RLCardBase):
     def __init__(self, num_players=2, render_mode=None):
         super().__init__("leduc-holdem", num_players, (36,))
         self.render_mode = render_mode
+
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
 
     def render(self):
         if self.render_mode is None:

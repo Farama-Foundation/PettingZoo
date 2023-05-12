@@ -3,7 +3,6 @@ import pygame
 
 class ManualPolicy:
     def __init__(self, env, agent_id: int = 0, show_obs: bool = False):
-
         self.env = env
         self.agent_id = agent_id
         self.agent = self.env.agents[self.agent_id]
@@ -54,11 +53,10 @@ class ManualPolicy:
 if __name__ == "__main__":
     from pettingzoo.butterfly import knights_archers_zombies_v10
 
-    clock = pygame.time.Clock()
-
-    env = knights_archers_zombies_v10.env()
+    env = knights_archers_zombies_v10.env(render_mode="human")
     env.reset()
 
+    clock = pygame.time.Clock()
     manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 
     for agent in env.agent_iter():
@@ -72,8 +70,6 @@ if __name__ == "__main__":
             action = env.action_space(agent).sample()
 
         env.step(action)
-
-        env.render()
 
         if termination or truncation:
             env.reset()

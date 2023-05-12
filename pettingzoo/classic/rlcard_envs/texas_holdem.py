@@ -83,9 +83,8 @@ import gymnasium
 import numpy as np
 import pygame
 
+from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
-
-from .rlcard_base import RLCardBase
 
 # Pixel art from Mariia Khmelnytska (https://www.123rf.com/photo_104453049_stock-vector-pixel-art-playing-cards-standart-deck-vector-set.html)
 
@@ -115,7 +114,6 @@ def env(**kwargs):
 
 
 class raw_env(RLCardBase):
-
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_v4",
@@ -126,6 +124,12 @@ class raw_env(RLCardBase):
     def __init__(self, num_players=2, render_mode=None):
         super().__init__("limit-holdem", num_players, (72,))
         self.render_mode = render_mode
+
+    def step(self, action):
+        super().step(action)
+
+        if self.render_mode == "human":
+            self.render()
 
     def render(self):
         if self.render_mode is None:
