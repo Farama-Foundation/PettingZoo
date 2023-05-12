@@ -151,7 +151,6 @@ For more information on action masking, see [A Closer Look at Invalid Action Mas
 .. automethod:: AECEnv.reset
 .. automethod:: AECEnv.observe
 .. automethod:: AECEnv.render
-.. automethod:: AECEnv.seed
 .. automethod:: AECEnv.close
 
 ```
