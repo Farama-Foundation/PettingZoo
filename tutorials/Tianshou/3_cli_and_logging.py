@@ -14,7 +14,7 @@ import os
 from copy import deepcopy
 from typing import Optional, Tuple
 
-import gym
+import gymnasium as gym
 import numpy as np
 import torch
 from tianshou.data import Collector, VectorReplayBuffer
@@ -108,9 +108,7 @@ def get_agents(
         if isinstance(env.observation_space, gym.spaces.Dict)
         else env.observation_space
     )
-    args.state_shape = (
-        observation_space["observation"].shape or observation_space["observation"].n
-    )
+    args.state_shape = observation_space.shape or observation_space.n
     args.action_shape = env.action_space.shape or env.action_space.n
     if agent_learn is None:
         # model
