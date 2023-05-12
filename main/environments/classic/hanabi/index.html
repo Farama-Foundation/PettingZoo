@@ -700,6 +700,135 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <li><p>v0: Initial versions release (1.0.0)</p></li>
 </ul>
 </section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.env">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.hanabi.hanabi.</span></span><span class="sig-name descname"><span class="pre">env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.env" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.hanabi.hanabi.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">players</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hand_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_information_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_life_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_start_player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env" title="Permalink to this definition">#</a></dt>
+<dd><p>This class capsules endpoints provided within deepmind/hanabi-learning-environment/rl_env.py.</p>
+<p>Initializes the <cite>raw_env</cite> class.</p>
+<dl class="simple">
+<dt>Parameter descriptions :</dt><dd><ul class="simple">
+<li><p>colors: int, Number of colors in [2,5].</p></li>
+<li><p>ranks: int, Number of ranks in [2,5].</p></li>
+<li><p>players: int, Number of players in [2,5].</p></li>
+<li><p>hand_size: int, Hand size in [2,5].</p></li>
+<li><p>max_information_tokens: int, Number of information tokens (&gt;=0).</p></li>
+<li><p>max_life_tokens: int, Number of life tokens (&gt;=1).</p></li>
+<li><dl class="simple">
+<dt>observation_type: int.</dt><dd><p>0: Minimal observation.
+1: First-order common knowledge observation.</p>
+</dd>
+</dl>
+</li>
+<li><p>random_start_player: bool, Random start player.</p></li>
+</ul>
+</dd>
+<dt>Common game configurations:</dt><dd><dl class="simple">
+<dt>Hanabi-Full (default)<span class="classifier">{</span></dt><dd><p>“colors”: 5,
+“ranks”: 5,
+“players”: 2,
+“max_information_tokens”: 8,
+“max_life_tokens”: 3,
+“hand_size”: (4 if players &gt;= 4 else 5)
+“observation_type”: 1,
+“hand_size”: 2
+}</p>
+</dd>
+<dt>Hanabi-Small<span class="classifier">{</span></dt><dd><p>“colors”: 2,
+“ranks”: 5,
+“players”: 2,
+“max_information_tokens”: 3
+“hand_size”: 2,
+“max_life_tokens”: 1
+“observation_type”: 1}</p>
+</dd>
+<dt>Hanabi-Very-Small<span class="classifier">{</span></dt><dd><p>“colors”: 1,
+“ranks”: 5,
+“players”: 2,
+“max_information_tokens”: 3
+“hand_size”: 2,
+“max_life_tokens”: 1
+“observation_type”: 1}</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.action_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the action space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the action_spaces dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.close" title="Permalink to this definition">#</a></dt>
+<dd><p>Closes any resources that should be released.</p>
+<p>Closes the rendering window, subprocesses, network connections,
+or any other resources that should be released.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.observation_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>Takes in agent and returns the observation space for that agent.</p>
+<p>MUST return the same value for the same agent name</p>
+<p>Default implementation is to return the observation_spaces dict</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.observe">
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.observe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.observe" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the observation an agent currently can make.</p>
+<p><cite>last()</cite> calls this function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.render" title="Permalink to this definition">#</a></dt>
+<dd><p>Prints player’s data.</p>
+<p>Supports console print only.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.reset" title="Permalink to this definition">#</a></dt>
+<dd><p>Resets the environment for a new game and returns observations of current player as List of ints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observation</strong> – Optional list of integers of length self.observation_vector_dim, describing observations of</p></li>
+<li><p><strong>current agent</strong> (<em>agent_selection</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pettingzoo.classic.hanabi.hanabi.raw_env.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pettingzoo/classic/hanabi/hanabi/#raw_env.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.hanabi.hanabi.raw_env.step" title="Permalink to this definition">#</a></dt>
+<dd><p>Advances the environment by one step. Action must be within self.legal_moves, otherwise throws error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observation</strong> – Optional List of new observations of agent at turn after the action step is performed.</p></li>
+<li><p><strong>By default a list of integers, describing the logic state of the game from the view of the agent.</strong></p></li>
+<li><p><strong>Can be a returned as a descriptive dictionary, if as_vector=False.</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
           </article>
@@ -780,6 +909,20 @@ are to reveal a color or rank in another players hand. The first set of reveal a
 <li><a class="reference internal" href="#action-space">Action Space</a></li>
 <li><a class="reference internal" href="#rewards">Rewards</a></li>
 <li><a class="reference internal" href="#version-history">Version History</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.env"><code class="docutils literal notranslate"><span class="pre">env</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env"><code class="docutils literal notranslate"><span class="pre">raw_env</span></code></a><ul>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.action_space"><code class="docutils literal notranslate"><span class="pre">raw_env.action_space()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.close"><code class="docutils literal notranslate"><span class="pre">raw_env.close()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.observation_space"><code class="docutils literal notranslate"><span class="pre">raw_env.observation_space()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.observe"><code class="docutils literal notranslate"><span class="pre">raw_env.observe()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.render"><code class="docutils literal notranslate"><span class="pre">raw_env.render()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.reset"><code class="docutils literal notranslate"><span class="pre">raw_env.reset()</span></code></a></li>
+<li><a class="reference internal" href="#pettingzoo.classic.hanabi.hanabi.raw_env.step"><code class="docutils literal notranslate"><span class="pre">raw_env.step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
