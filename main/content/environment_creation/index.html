@@ -461,29 +461,38 @@
 <span class="sd">        The init method takes in environment arguments and</span>
 <span class="sd">         should define the following attributes:</span>
 <span class="sd">        - possible_agents</span>
-<span class="sd">        - action_spaces</span>
-<span class="sd">        - observation_spaces</span>
+<span class="sd">        - render_mode</span>
+
+<span class="sd">        Note: as of v1.18.1, the action_spaces and observation_spaces attributes are deprecated.</span>
+<span class="sd">        Spaces should be defined in the action_space() and observation_space() methods.</span>
+<span class="sd">        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.</span>
+
 <span class="sd">        These attributes should not be changed after initialization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+
+        <span class="c1"># optional: a mapping between agent name and ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">))))</span>
         <span class="p">)</span>
 
-        <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
+        <span class="c1"># optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_action_spaces</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_observation_spaces</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">agent</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
 
-    <span class="c1"># this cache ensures that same space object is returned for the same agent</span>
-    <span class="c1"># allows action space seeding to work as expected</span>
+    <span class="c1"># Observation space should be defined here.</span>
+    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
+    <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
+    <span class="c1"># Action space should be defined here.</span>
+    <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -684,23 +693,32 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The init method takes in environment arguments and should define the following attributes:</span>
 <span class="sd">        - possible_agents</span>
-<span class="sd">        - action_spaces</span>
-<span class="sd">        - observation_spaces</span>
+<span class="sd">        - render_mode</span>
+
+<span class="sd">        Note: as of v1.18.1, the action_spaces and observation_spaces attributes are deprecated.</span>
+<span class="sd">        Spaces should be defined in the action_space() and observation_space() methods.</span>
+<span class="sd">        If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.</span>
+
 <span class="sd">        These attributes should not be changed after initialization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;player_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+
+        <span class="c1"># optional: a mapping between agent name and ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">))))</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
 
-    <span class="c1"># this cache ensures that same space object is returned for the same agent</span>
-    <span class="c1"># allows action space seeding to work as expected</span>
+    <span class="c1"># Observation space should be defined here.</span>
+    <span class="c1"># lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent&#39;s space.</span>
+    <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="c1"># gymnasium spaces are defined and documented here: https://gymnasium.farama.org/api/spaces/</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
+    <span class="c1"># Action space should be defined here.</span>
+    <span class="c1"># If your spaces change over time, remove this line (disable caching).</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
