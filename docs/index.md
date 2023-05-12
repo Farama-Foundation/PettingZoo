@@ -54,42 +54,14 @@ Github <https://github.com/Farama-Foundation/PettingZoo>
 release_notes/index
 Contribute to the Docs <https://github.com/Farama-Foundation/PettingZoo/tree/master/docs/>
 ```
-<style>
-h2 { 
-    padding-top: 10px;
-    padding-bottom: 20px;
-    font-size: 29px;
-    margin: 0;
-    overflow: auto;
-}
-.logo{
-  padding-left: 9%;
-  vertical-align:bottom;
-  padding-bottom: 0;
-  padding-top: 10px;
-}
-@media (min-width: 455px) {
-    .header-text{
-        text-align: center;
-    }
-}
-@media (max-width: 455px) {
-    .header-text{
-        text-align: left;
-    }
-}
-</style>
 
+```{project-logo} _static/img/pettingzoo-text.png
+:alt: PettingZoo Logo
+```
 
-<center>
-    <div class="logo">
-        <img src="_static/img/pettingzoo-text.png" width="65%" alt="PettingZoo Logo">
-    </div>
-</center>
-
-<div class="header-text">
-    <h2>An API standard for multi-agent reinforcement learning</h2>
-</div>
+```{project-heading}
+An API standard for multi-agent reinforcement learning.
+```
 
 ```{figure} _static/img/environments-demo.gif
     :width: 480px
