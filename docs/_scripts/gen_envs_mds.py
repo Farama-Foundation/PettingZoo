@@ -91,6 +91,7 @@ if __name__ == "__main__":
 
 .. autoclass:: env
 .. autoclass:: raw_env
+   :members:
 ```
 """
             elif env_type in ["mpe", "atari"]:
@@ -99,6 +100,8 @@ if __name__ == "__main__":
 .. currentmodule:: pettingzoo.{env_type}.{env_name}.{env_name}
 
 .. autoclass:: raw_env
+   :members:
+   :undoc-members:
 ```
 """
             else:
@@ -108,6 +111,7 @@ if __name__ == "__main__":
 
 .. autoclass:: env
 .. autoclass:: raw_env
+   :members:
 ```
 """
             docs_env_path = os.path.join(
