@@ -42,7 +42,7 @@ class TerminateIllegalWrapper(BaseWrapper):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            self._was_dead_step(None)
+            self._was_dead_step(action)  # pyright: ignore[reportGeneralTypeIssues]
         elif (
             not self.terminations[self.agent_selection]
             and not self.truncations[self.agent_selection]
