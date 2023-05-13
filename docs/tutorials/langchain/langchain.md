@@ -534,7 +534,7 @@ The following code should run without any issues. The comments are designed to h
 
 ```{eval-rst}
 
-.. literalinclude:: ../../../tutorials/LangChain/langchain.py
+.. literalinclude:: ../../../tutorials/LangChain/langchain_example.py
    :language: python
 
 ```
