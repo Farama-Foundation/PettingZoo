@@ -406,7 +406,7 @@
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]==1.22.4
 packaging==21.3
-git+https://github.com/WillDudley/tianshou.git
+tianshou==0.5.0
 </pre></div>
 </div>
 </section>
@@ -427,7 +427,7 @@ git+https://github.com/WillDudley/tianshou.git
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">gymnasium</span> <span class="k">as</span> <span class="nn">gym</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">tianshou.data</span> <span class="kn">import</span> <span class="n">Collector</span><span class="p">,</span> <span class="n">VectorReplayBuffer</span>
@@ -454,8 +454,7 @@ git+https://github.com/WillDudley/tianshou.git
     <span class="k">if</span> <span class="n">agent_learn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># model</span>
         <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">(</span>
-            <span class="n">state_shape</span><span class="o">=</span><span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-            <span class="ow">or</span> <span class="n">observation_space</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+            <span class="n">state_shape</span><span class="o">=</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">observation_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
             <span class="n">action_shape</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
             <span class="n">hidden_sizes</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
             <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
