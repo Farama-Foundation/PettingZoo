@@ -4,7 +4,7 @@ title: "LangChain"
 
 # LangChain Tutorial
 
-This tutorial provides an example of using LangChain create LLM agents that can interact with PettingZoo environments:
+This tutorial provides an example of using [LangChain](https://github.com/hwchase17/langchain) create LLM agents that can interact with PettingZoo environments:
 
 * [LangChain: Creating LLM Agents](/tutorials/langchain/langchain.md): _Create LLM Agents using LangChain_
 
