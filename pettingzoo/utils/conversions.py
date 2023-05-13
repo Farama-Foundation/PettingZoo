@@ -312,8 +312,6 @@ class parallel_to_aec_wrapper(AECEnv):
         self._cumulative_rewards[new_agent] = 0
 
     def step(self, action: ActionType):
-        if action is not None:
-            action = int(action)
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
