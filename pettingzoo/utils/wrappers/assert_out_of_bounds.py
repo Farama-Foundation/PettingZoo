@@ -16,7 +16,7 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
             for agent in getattr(self, "possible_agents", [])
         ), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
-    def step(self, action: ActionType):
+    def step(self, action: ActionType) -> None:
         assert (
             action is None
             and (

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import warnings
+from typing import Any
 
 import gymnasium.spaces
 import numpy as np
@@ -46,7 +47,7 @@ class BaseWrapper(AECEnv):
         except AttributeError:
             pass
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> Any:
         """Returns an attribute with ``name``, unless ``name`` starts with an underscore."""
         if name.startswith("_"):
             raise AttributeError(f"accessing private attribute '{name}' is prohibited")
@@ -88,7 +89,7 @@ class BaseWrapper(AECEnv):
     def unwrapped(self) -> AECEnv:
         return self.env.unwrapped
 
-    def close(self):
+    def close(self) -> None:
         self.env.close()
 
     def render(self) -> None | np.ndarray | str | list:
@@ -111,7 +112,7 @@ class BaseWrapper(AECEnv):
     def state(self) -> np.ndarray:
         return self.env.state()
 
-    def step(self, action: ActionType):
+    def step(self, action: ActionType) -> None:
         self.env.step(action)
 
         self.agent_selection = self.env.agent_selection

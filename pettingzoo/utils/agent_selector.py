@@ -33,7 +33,7 @@ class agent_selector:
     def is_first(self) -> bool:
         return self.selected_agent == self.agent_order[0]
 
-    def __eq__(self, other: agent_selector):
+    def __eq__(self, other: agent_selector) -> bool:
         if not isinstance(other, agent_selector):
             return NotImplemented
 
