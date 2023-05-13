@@ -1,7 +1,7 @@
 Gymnasium==0.28.1
 PettingZoo[classic, butterfly] @ git+https://github.com/Farama-Foundation/PettingZoo.git
 Pillow==9.4.0
-ray[rllib]==3.0.0.dev0
+ray[rllib]==2.4.0
 SuperSuit==3.7.2
 torch==1.13.1
 tensorflow-probability==0.19.0
