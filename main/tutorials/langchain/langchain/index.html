@@ -1033,6 +1033,72 @@ Action: None
 <section id="full-code">
 <h2>Full Code<a class="headerlink" href="#full-code" title="Permalink to this heading">#</a></h2>
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with LangChain. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">langchain.chat_models</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span> <span class="nn">pettingzoo_agent</span> <span class="kn">import</span> <span class="n">PettingZooAgent</span>
+
+<span class="kn">from</span> <span class="nn">action_masking_agent</span> <span class="kn">import</span> <span class="n">ActionMaskAgent</span>  <span class="c1"># isort: skip</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+        <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+        <span class="n">obs_message</span> <span class="o">=</span> <span class="n">agents</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span>
+            <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">obs_message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">agents</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span><span class="o">.</span><span class="n">act</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Action: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">rock_paper_scissors</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">rps_v2</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">rps_v2</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">max_cycles</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">PettingZooAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
+    <span class="p">}</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">tic_tac_toe</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">tictactoe_v3</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">tictactoe_v3</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
+    <span class="p">}</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">texas_holdem_no_limit</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">texas_holdem_no_limit_v6</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">texas_holdem_no_limit_v6</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">num_players</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+    <span class="n">agents</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">ActionMaskAgent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span>
+    <span class="p">}</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">agents</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">rock_paper_scissors</span><span class="p">()</span>
+    <span class="n">tic_tac_toe</span><span class="p">()</span>
+    <span class="n">texas_holdem_no_limit</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 </section>
 
