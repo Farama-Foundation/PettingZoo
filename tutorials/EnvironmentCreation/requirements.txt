@@ -1,1 +1,1 @@
-pettingzoo==1.22.4
+pettingzoo==git+https://github.com/Farama-Foundation/PettingZoo.git
