@@ -388,7 +388,10 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.utils.wrappers.terminate_illegal</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">ObsType</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.wrappers.base</span> <span class="kn">import</span> <span class="n">BaseWrapper</span>
 
 
@@ -399,23 +402,23 @@
 <span class="sd">        illegal_reward: number that is the value of the player making an illegal move.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_illegal_value</span> <span class="o">=</span> <span class="n">illegal_reward</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_terminated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObsType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">obs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="o">=</span> <span class="n">obs</span>
         <span class="k">return</span> <span class="n">obs</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">ActionType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">current_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
@@ -429,7 +432,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
         <span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_was_dead_step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
         <span class="k">elif</span> <span class="p">(</span>
             <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
@@ -448,7 +451,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span></div>
 </pre></div>
           </article>

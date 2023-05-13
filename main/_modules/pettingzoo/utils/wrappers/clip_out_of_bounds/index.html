@@ -388,9 +388,12 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.utils.wrappers.clip_out_of_bounds</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span>
 
+<span class="kn">from</span> <span class="nn">pettingzoo.utils.env</span> <span class="kn">import</span> <span class="n">AECEnv</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.env_logger</span> <span class="kn">import</span> <span class="n">EnvLogger</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.utils.wrappers.base</span> <span class="kn">import</span> <span class="n">BaseWrapper</span>
 
@@ -401,14 +404,14 @@
 <span class="sd">    Applied to continuous environments in pettingzoo.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">AECEnv</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">),</span> <span class="n">Box</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;possible_agents&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="p">),</span> <span class="s2">&quot;should only use ClipOutOfBoundsWrapper for Box spaces&quot;</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
             <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -417,20 +420,25 @@
                 <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">space</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">action</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="p">(</span>
-                <span class="n">space</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">shape</span>
-            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;action should have shape </span><span class="si">{</span><span class="n">space</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, has shape </span><span class="si">{</span><span class="n">action</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">action</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
                 <span class="n">EnvLogger</span><span class="o">.</span><span class="n">error_nan_action</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">space</span><span class="o">.</span><span class="n">shape</span>
+                <span class="o">==</span> <span class="n">action</span><span class="o">.</span><span class="n">shape</span>  <span class="c1"># pyright: ignore[reportOptionalMemberAccess]</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;action should have shape </span><span class="si">{</span><span class="n">space</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, has shape </span><span class="si">{</span><span class="n">action</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># pyright: ignore[reportOptionalMemberAccess]</span>
 
             <span class="n">EnvLogger</span><span class="o">.</span><span class="n">warn_action_out_of_bound</span><span class="p">(</span>
                 <span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">action_space</span><span class="o">=</span><span class="n">space</span><span class="p">,</span> <span class="n">backup_policy</span><span class="o">=</span><span class="s2">&quot;clipping to space&quot;</span>
             <span class="p">)</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">space</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">space</span><span class="o">.</span><span class="n">high</span><span class="p">)</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+                <span class="n">action</span><span class="p">,</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
+                <span class="n">space</span><span class="o">.</span><span class="n">low</span><span class="p">,</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
+                <span class="n">space</span><span class="o">.</span><span class="n">high</span><span class="p">,</span>  <span class="c1"># pyright: ignore[reportGeneralTypeIssues]</span>
+            <span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span></div>
 </pre></div>
           </article>
