@@ -1,1 +1,1 @@
-pettingzoo==git+https://github.com/Farama-Foundation/PettingZoo.git
+pettingzoo @ git+https://github.com/Farama-Foundation/PettingZoo.git
