@@ -12,7 +12,7 @@ git+https://github.com/thu-ml/tianshou
 import os
 from typing import Optional, Tuple
 
-import gym
+import gymnasium as gym
 import numpy as np
 import torch
 from tianshou.data import Collector, VectorReplayBuffer
@@ -39,8 +39,7 @@ def _get_agents(
     if agent_learn is None:
         # model
         net = Net(
-            state_shape=observation_space["observation"].shape
-            or observation_space["observation"].n,
+            state_shape=observation_space.shape or observation_space.n,
             action_shape=env.action_space.shape or env.action_space.n,
             hidden_sizes=[128, 128, 128, 128],
             device="cuda" if torch.cuda.is_available() else "cpu",
