@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from pettingzoo.utils.env import ActionType, AECEnv, ObsType
 from pettingzoo.utils.env_logger import EnvLogger
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
@@ -9,23 +12,23 @@ class TerminateIllegalWrapper(BaseWrapper):
         illegal_reward: number that is the value of the player making an illegal move.
     """
 
-    def __init__(self, env, illegal_reward):
+    def __init__(self, env: AECEnv, illegal_reward: float):
         super().__init__(env)
         self._illegal_value = illegal_reward
         self._prev_obs = None
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
         self._terminated = False
         self._prev_obs = None
         super().reset(seed=seed, options=options)
 
-    def observe(self, agent):
+    def observe(self, agent: str) -> ObsType | None:
         obs = super().observe(agent)
         if agent == self.agent_selection:
             self._prev_obs = obs
         return obs
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         current_agent = self.agent_selection
         if self._prev_obs is None:
             self.observe(self.agent_selection)
@@ -39,7 +42,7 @@ class TerminateIllegalWrapper(BaseWrapper):
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
         ):
-            self._was_dead_step(action)
+            self._was_dead_step(action)  # pyright: ignore[reportGeneralTypeIssues]
         elif (
             not self.terminations[self.agent_selection]
             and not self.truncations[self.agent_selection]
@@ -58,5 +61,5 @@ class TerminateIllegalWrapper(BaseWrapper):
         else:
             super().step(action)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.env)

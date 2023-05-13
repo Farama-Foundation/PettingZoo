@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import importlib.util
 import pkgutil
 import re
+from types import ModuleType
+from typing import Iterable
 
 
 class DeprecatedEnv(ImportError):
@@ -8,7 +12,7 @@ class DeprecatedEnv(ImportError):
 
 
 class DeprecatedModule:
-    def __init__(self, name, old_version, new_version):
+    def __init__(self, name: str, old_version: str | int, new_version: str | int):
         def env(*args, **kwargs):
             raise DeprecatedEnv(
                 f"{name}_v{old_version} is now deprecated, use {name}_v{new_version} instead"
@@ -20,11 +24,13 @@ class DeprecatedModule:
         self.manual_control = env
 
 
-def is_env(env_name):
+def is_env(env_name: str) -> bool:
     return bool(re.fullmatch("[a-zA-Z_]+_v[0-9]+", env_name))
 
 
-def deprecated_handler(env_name, module_path, module_name):
+def deprecated_handler(
+    env_name: str, module_path: Iterable[str], module_name: str
+) -> DeprecatedModule | ModuleType:
     spec = importlib.util.find_spec(f"{module_name}.{env_name}")
 
     if spec is None:

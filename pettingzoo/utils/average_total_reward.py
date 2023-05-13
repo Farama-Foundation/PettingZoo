@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 import random
 
 import numpy as np
 
+from pettingzoo.utils.env import AECEnv
 
-def average_total_reward(env, max_episodes=100, max_steps=10000000000):
-    """Calculates the average total reward over the episodes.
+
+def average_total_reward(
+    env: AECEnv, max_episodes: int = 100, max_steps: int = 10000000000
+) -> float:
+    """Calculates the average total reward over the episodes for AEC environments.
 
     Runs an env object with random actions until either max_episodes or
     max_steps is reached.
@@ -21,6 +27,7 @@ def average_total_reward(env, max_episodes=100, max_steps=10000000000):
 
         env.reset()
         for agent in env.agent_iter():
+            # Because we call env.last() this function only works with AEC envs
             obs, reward, termination, truncation, _ = env.last(observe=False)
             total_reward += reward
             total_steps += 1
