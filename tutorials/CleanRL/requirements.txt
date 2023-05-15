@@ -1,4 +1,4 @@
-SuperSuit==3.7.2
+git+https://github.com/elliottower/SuperSuit.git@return-info-fix
 torch==1.13.1
 pettingzoo[butterfly]==1.23.0
 # remove this line when SuperSuit has been updated to 3.7.3

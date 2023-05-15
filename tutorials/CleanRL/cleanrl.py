@@ -57,7 +57,10 @@ class Agent(nn.Module):
 def batchify_obs(obs, device):
     """Converts PZ style observations to batch of torch arrays."""
     # convert to list of np arrays
-    obs = np.stack([obs[a] for a in obs], axis=0)
+    try:
+        obs = np.stack([obs[a] for a in obs], axis=0)
+    except TypeError:
+        obs = np.stack([obs[a] for a in obs], axis=0)
     # transpose to be (batch, channel, height, width)
     obs = obs.transpose(0, -1, 1, 2)
     # convert to torch
@@ -265,7 +268,8 @@ if __name__ == "__main__":
     with torch.no_grad():
         # render 5 episodes out
         for episode in range(5):
-            obs = batchify_obs(env.reset(seed=None), device)
+            obs, infos = env.reset(seed=None)
+            obs = batchify_obs(obs, device)
             terms = [False]
             truncs = [False]
             while not any(terms) and not any(truncs):
