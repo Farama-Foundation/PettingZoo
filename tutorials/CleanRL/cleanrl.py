@@ -265,7 +265,8 @@ if __name__ == "__main__":
     with torch.no_grad():
         # render 5 episodes out
         for episode in range(5):
-            obs = batchify_obs(env.reset(seed=None), device)
+            obs, infos = env.reset(seed=None)
+            obs = batchify_obs(obs, device)
             terms = [False]
             truncs = [False]
             while not any(terms) and not any(truncs):
