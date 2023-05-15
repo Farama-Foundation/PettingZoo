@@ -4,26 +4,26 @@ import gymnasium
 import numpy as np
 
 env_pos_inf_state = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 env_neg_inf_state = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 
 

@@ -16,11 +16,11 @@ from pettingzoo.classic import (
     texas_holdem_v4,
 )
 from pettingzoo.mpe import (
-    simple_adversary_v2,
-    simple_reference_v2,
-    simple_spread_v2,
-    simple_tag_v2,
-    simple_world_comm_v2,
+    simple_adversary_v3,
+    simple_reference_v3,
+    simple_spread_v3,
+    simple_tag_v3,
+    simple_world_comm_v3,
 )
 from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 from pettingzoo.test.api_test import api_test
@@ -153,53 +153,53 @@ parameterized_envs = [
     ["classic/hanabi_v4", hanabi_v4, dict(observation_type=1)],
     ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=False)],
     ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=True)],
-    ["mpe/simple_adversary_v2", simple_adversary_v2, dict(N=4)],
-    ["mpe/simple_reference_v2", simple_reference_v2, dict(local_ratio=0.2)],
-    ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5)],
+    ["mpe/simple_adversary_v3", simple_adversary_v3, dict(N=4)],
+    ["mpe/simple_reference_v3", simple_reference_v3, dict(local_ratio=0.2)],
+    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5)],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4),
     ],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1),
     ],
     [
-        "mpe/simple_adversary_v2",
-        simple_adversary_v2,
+        "mpe/simple_adversary_v3",
+        simple_adversary_v3,
         dict(N=4, continuous_actions=True),
     ],
     [
-        "mpe/simple_reference_v2",
-        simple_reference_v2,
+        "mpe/simple_reference_v3",
+        simple_reference_v3,
         dict(local_ratio=0.2, continuous_actions=True),
     ],
-    ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5, continuous_actions=True)],
+    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5, continuous_actions=True)],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4, continuous_actions=True),
     ],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1, continuous_actions=True),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(
             num_good=5,
             num_adversaries=10,
@@ -209,8 +209,8 @@ parameterized_envs = [
         ),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(
             num_good=1,
             num_adversaries=1,

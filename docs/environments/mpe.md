@@ -36,9 +36,9 @@ pip install pettingzoo[mpe]
 ### Usage
 To launch a [Simple Tag](https://pettingzoo.farama.org/environments/mpe/simple_tag/) environment with random agents:
 
-```python
-from pettingzoo.mpe import simple_tag_v2
-env = simple_tag_v2.env(render_mode='human')
+``` python
+from pettingzoo.mpe import simple_tag_v3
+env = simple_tag_v3.env(render_mode='human')
 
 env.reset()
 for agent in env.agent_iter():
