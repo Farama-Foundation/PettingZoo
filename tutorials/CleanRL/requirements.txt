@@ -1,6 +1,6 @@
 SuperSuit==3.7.2
 torch==1.13.1
-pettingzoo[butterfly] @ git+https://github.com/Farama-Foundation/PettingZoo.git
+pettingzoo[butterfly]==1.22.4
 # remove this line when SuperSuit has been updated to 3.7.3
 tinyscaler==1.2.5
 # note: tinyscaler 1.2.5 is not available on macOS, use 1.2.4 instead
