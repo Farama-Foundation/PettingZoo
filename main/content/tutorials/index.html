@@ -668,7 +668,8 @@
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="c1"># render 5 episodes out</span>
         <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-            <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
             <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
             <span class="n">truncs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">truncs</span><span class="p">):</span>
