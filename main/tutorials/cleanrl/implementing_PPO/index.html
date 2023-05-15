@@ -404,9 +404,9 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SuperSuit==3.7.2
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SuperSuit==3.8.0
 torch==1.13.1
-pettingzoo[butterfly]==1.22.4
+pettingzoo[butterfly]==1.23.0
 # remove this line when SuperSuit has been updated to 3.7.3
 tinyscaler==1.2.5
 </pre></div>
@@ -682,7 +682,8 @@ tinyscaler==1.2.5
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="c1"># render 5 episodes out</span>
         <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-            <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span> <span class="n">device</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">batchify_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
             <span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
             <span class="n">truncs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">terms</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">truncs</span><span class="p">):</span>
