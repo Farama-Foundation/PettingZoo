@@ -434,7 +434,8 @@ def play_test(env, observation_0, num_cycles):
 
 
 def test_action_flexibility(env):
-    env.reset()
+    """Tests that a given action is valid given a seeded environment reset"""
+    env.reset(seed=0)
     agent = env.agent_selection
     action_space = env.action_space(agent)
     if isinstance(action_space, gymnasium.spaces.Discrete):
@@ -448,11 +449,11 @@ def test_action_flexibility(env):
         else:
             action = 0
         env.step(action)
-        env.reset()
+        env.reset(seed=0)
         env.step(np.int32(action))
     elif isinstance(action_space, gymnasium.spaces.Box):
         env.step(np.zeros_like(action_space.low))
-        env.reset()
+        env.reset(seed=0)
         env.step(np.zeros_like(action_space.low))
 
 
