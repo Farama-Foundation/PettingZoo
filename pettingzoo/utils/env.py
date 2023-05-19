@@ -304,12 +304,6 @@ class ParallelEnv:
         """
         raise NotImplementedError
 
-    def seed(self, seed=None):
-        """Reseeds the environment (making it deterministic)."""
-        raise NotImplementedError(
-            "Calling seed externally is deprecated; call reset(seed=seed) instead"
-        )
-
     def step(
         self, actions: ActionDict
     ) -> tuple[
