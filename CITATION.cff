@@ -1,0 +1,75 @@
+cff-version: 1.2.0
+title: 'PettingZoo: Gym for multi-agent reinforcement learning'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jordan
+    family-names: Terry
+    email: j.k.terry@swarmlabs.com
+  - given-names: Benjamin
+    family-names: Black
+    email: benjamin.black@swarmlabs.com
+  - given-names: Nathaniel
+    family-names: Grammel
+    email: ngrammel@umd.edu
+  - given-names: Mario
+    family-names: Jayakumar
+    email: mariojay@umd.edu
+  - given-names: Ananth
+    family-names: Hari
+    email: aharil@umd.edu
+  - given-names: Ryan
+    family-names: Sullivan
+    email: ryna.sullivan@swarmlabs.com
+  - given-names: Luis
+    family-names: Santos
+    email: lss@umd.edu
+  - given-names: Rodrigo
+    family-names: Perez
+    email: rlazcano@umd.edu
+  - given-names: Caroline
+    family-names: Horsch
+    email: caroline.horsch@swarmlabs.com
+  - given-names: Clemens
+    family-names: Dieffendahl
+    email: dieffendahl@campus.tu-berlin.de
+  - given-names: Niall
+    family-names: Williams
+    email: niallw@umd.edu
+  - given-names: Yashas
+    family-names: Lokesh
+    email: yashloke@umd.edu
+identifiers:
+  - type: url
+    value: >-
+      https://proceedings.neurips.cc/paper_files/paper/2021/file/7ed2d3454c5eea71148b11d0c25104ff-Paper.pdf
+  - type: doi
+    value: 10.48550/arXiv.2009.14471
+repository-code: 'https://github.com/Farama-Foundation/PettingZoo'
+url: 'https://pettingzoo.farama.org/'
+abstract: >-
+  This paper introduces the PettingZoo library and the
+  accompanying Agent Environment Cycle ("AEC") games model.
+  PettingZoo is a library of diverse sets of multi-agent
+  environments with a universal, elegant Python API.
+  PettingZoo was developed with the goal of accelerating
+  research in Multi-Agent Reinforcement Learning ("MARL"),
+  by making work more interchangeable, accessible and
+  reproducible akin to what OpenAI's Gym library did for
+  single-agent reinforcement learning. PettingZoo's API,
+  while inheriting many features of Gym, is unique amongst
+  MARL APIs in that it's based around the novel AEC games
+  model. We argue, in part through case studies on major
+  problems in popular MARL environments, that the popular
+  game models are poor conceptual models of games commonly
+  used in MARL and accordingly can promote confusing bugs
+  that are hard to detect, and that the AEC games model
+  addresses these problems.
+keywords:
+  - Machine Learning
+  - Reinforcement Learning
+  - Multiagent Reinforcement Learning
+  - Multiagent Systems
+license: MIT
