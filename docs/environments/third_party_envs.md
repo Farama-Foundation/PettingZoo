@@ -91,6 +91,13 @@ Interactive PettingZoo implementation of the [Gobblet](https://en.wikipedia.org/
 
 Interactive PettingZoo implementation of the [Cathedral](https://en.wikipedia.org/wiki/Cathedral_(board_game)) board game.
 
+### [Carla Gym](https://github.com/johnMinelli/carla-gym/)
+
+[![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.23.0-blue)]()
+[![GitHub stars](https://img.shields.io/github/stars/johnMinelli/carla-gym)]()
+
+PettingZoo interface for CARLA Autonomous Driving simulator.
+
 
 ___
 
