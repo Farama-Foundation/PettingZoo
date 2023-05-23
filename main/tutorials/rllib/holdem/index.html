@@ -405,14 +405,12 @@
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Gymnasium==0.28.1
-PettingZoo[classic, butterfly]==1.23.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic, butterfly]==1.23.0
 Pillow==9.4.0
-ray[rllib]==2.4.0
-SuperSuit==3.7.2
+ray[rllib]==2.4.0 # Note: RLlib&#39;s PettingZoo wrapper is currently broken, but will be fixed with https://github.com/ray-project/ray/pull/34696
+SuperSuit==3.8.0
 torch==1.13.1
 tensorflow-probability==0.19.0
-rlcard==1.1.0
 </pre></div>
 </div>
 </section>
