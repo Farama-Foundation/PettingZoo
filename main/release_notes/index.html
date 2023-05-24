@@ -399,6 +399,32 @@
             
             <section id="release-notes">
 <h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this heading">#</a></h1>
+<section id="release-1-23-1">
+<h2>PettingZoo 1.23.1<a class="headerlink" href="#release-1-23-1" title="Permalink to this heading">#</a></h2>
+<p><em>Released on 2023-05-24 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.23.1">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.23.1/">PyPI</a></em></p>
+<h2><strong>PettingZoo 1.23.1 Release Notes:</strong></h2>
+<p>This release is a small hotfix to fix compatibility issues with <a href="https://github.com/Farama-Foundation/shimmy">Shimmy</a> and other small bugs.</p>
+<h3><strong>Bug Fixes:</strong></h3>
+<ul>
+<li>Fix bug in API test <code>test_action_flexibility()</code> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1712478120" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/986" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/986/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/986">#986</a>)
+<ul>
+<li>Fixes tests for Shimmy's OpenSpiel wrapper</li>
+</ul>
+</li>
+<li>Remove <code>ParrellEnv.seed()</code> (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1713217745" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/987" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/987/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/987">#987</a>)</li>
+<li>Update RLlib requirements (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1722700571" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/992" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/992/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/992">#992</a>)
+<ul>
+<li>Note: RLlib's PettingZoo wrapper is currently broken, but will be fixed with <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1679764610" data-permission-text="Title is private" data-url="https://github.com/ray-project/ray/issues/34696" data-hovercard-type="pull_request" data-hovercard-url="/ray-project/ray/pull/34696/hovercard" href="https://github.com/ray-project/ray/pull/34696">ray-project/ray#34696</a> and <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1608885798" data-permission-text="Title is private" data-url="https://github.com/ray-project/ray/issues/32999" data-hovercard-type="pull_request" data-hovercard-url="/ray-project/ray/pull/32999/hovercard" href="https://github.com/ray-project/ray/pull/32999">ray-project/ray#32999</a></li>
+</ul>
+</li>
+</ul>
+<h3><strong>Documentation Updates:</strong></h3>
+<ul>
+<li>Add info about aec and parallel APIs to homepage (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1712297584" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/985" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/985/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/985">#985</a>)</li>
+<li>Create CITATION.cff (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1716650619" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/990" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/990/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/990">#990</a>)</li>
+<li>Added Carla gym to third_party_envs.md (<a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="1720224851" data-permission-text="Title is private" data-url="https://github.com/Farama-Foundation/PettingZoo/issues/991" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/991/hovercard" href="https://github.com/Farama-Foundation/PettingZoo/pull/991">#991</a>)</li>
+</ul>
+<p><strong>Full Changelog</strong>: <a class="commit-link" href="https://github.com/Farama-Foundation/PettingZoo/compare/1.23.0...1.23.1"><tt>1.23.0...1.23.1</tt></a></p></section>
 <section id="release-1-23-0">
 <h2>PettingZoo 1.23.0<a class="headerlink" href="#release-1-23-0" title="Permalink to this heading">#</a></h2>
 <p><em>Released on 2023-05-15 - <a class="reference external" href="https://github.com/Farama-Foundation/PettingZoo/releases/tag/1.23.0">GitHub</a> - <a class="reference external" href="https://pypi.org/project/pettingzoo/1.23.0/">PyPI</a></em></p>
@@ -900,6 +926,7 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             <div class="toc-tree">
               <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#release-1-23-1">PettingZoo 1.23.1</a></li>
 <li><a class="reference internal" href="#release-1-23-0">PettingZoo 1.23.0</a></li>
 <li><a class="reference internal" href="#release-1-22-4">1.22.4</a></li>
 <li><a class="reference internal" href="#release-1-22-3">1.22.3</a></li>
