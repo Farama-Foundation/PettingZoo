@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Texas Hold'em
 
@@ -76,6 +76,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
 
@@ -121,9 +122,15 @@ class raw_env(RLCardBase):
         "render_fps": 1,
     }
 
-    def __init__(self, num_players=2, render_mode=None):
+    def __init__(
+        self,
+        num_players: int = 2,
+        render_mode: str | None = None,
+        screen_height: int | None = 1000,
+    ):
         super().__init__("limit-holdem", num_players, (72,))
         self.render_mode = render_mode
+        self.screen_height = screen_height
 
     def step(self, action):
         super().step(action)
@@ -156,7 +163,7 @@ class raw_env(RLCardBase):
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
-        screen_height = 1000
+        screen_height = self.screen_height
         screen_width = int(
             screen_height * (1 / 20)
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)

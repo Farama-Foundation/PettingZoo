@@ -6,7 +6,7 @@ from pettingzoo import AECEnv
 
 
 class RLCardBase(AECEnv):
-    def __init__(self, name, num_players, obs_shape):
+    def __init__(self, name: str, num_players: int, obs_shape: tuple):
         super().__init__()
         self.name = name
         self.num_players = num_players
