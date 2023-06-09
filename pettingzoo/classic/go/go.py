@@ -152,7 +152,7 @@ class raw_env(AECEnv):
         board_size: int = 19,
         komi: float = 7.5,
         render_mode: str | None = None,
-        screen_width: int | None = 800,
+        screen_height: int | None = 800,
     ):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
@@ -195,7 +195,7 @@ class raw_env(AECEnv):
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
         self.render_mode = render_mode
-        self.screen_width = self.screen_height = screen_width
+        self.screen_width = self.screen_height = screen_height
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]

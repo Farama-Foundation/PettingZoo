@@ -115,7 +115,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, render_mode: str | None = None, screen_width: int | None = 800):
+    def __init__(self, render_mode: str | None = None, screen_height: int | None = 800):
         super().__init__()
 
         self.board = chess.Board()
@@ -151,7 +151,7 @@ class raw_env(AECEnv):
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
-        self.screen_width = screen_width
+        self.screen_height = self.screen_width = screen_height
 
         if self.render_mode in {"human", "rgb_array"}:
             try:
@@ -161,7 +161,7 @@ class raw_env(AECEnv):
                     f"pygame is needed for {self.render_mode} rendering, run with `pip install pettingzoo[classic]`"
                 )
 
-            self.BOARD_SIZE = (self.screen_width, self.screen_width)
+            self.BOARD_SIZE = (self.screen_width, self.screen_height)
             self.window_surface = None
             self.clock = pygame.time.Clock()
             self.cell_size = (self.BOARD_SIZE[0] / 8, self.BOARD_SIZE[1] / 8)
