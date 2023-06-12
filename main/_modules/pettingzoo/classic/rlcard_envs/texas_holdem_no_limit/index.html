@@ -388,7 +388,7 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.classic.rlcard_envs.texas_holdem_no_limit</h1><div class="highlight"><pre>
-<span></span><span class="c1"># noqa</span>
+<span></span><span class="c1"># noqa: D212, D415</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd"># Texas Hold&#39;em No Limit</span>
 
@@ -478,6 +478,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -524,7 +525,12 @@
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_players</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;no-limit-holdem&quot;</span><span class="p">,</span> <span class="n">num_players</span><span class="p">,</span> <span class="p">(</span><span class="mi">54</span><span class="p">,))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_dict</span><span class="p">(</span>
             <span class="p">[</span>
@@ -552,6 +558,7 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_height</span>
 
 <div class="viewcode-block" id="raw_env.step"><a class="viewcode-back" href="../../../../../environments/classic/texas_holdem_no_limit/#pettingzoo.classic.rlcard_envs.texas_holdem_no_limit.raw_env.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
@@ -584,7 +591,7 @@
         <span class="k">def</span> <span class="nf">calculate_height</span><span class="p">(</span><span class="n">screen_height</span><span class="p">,</span> <span class="n">divisor</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">multiplier</span> <span class="o">*</span> <span class="n">screen_height</span> <span class="o">/</span> <span class="n">divisor</span> <span class="o">+</span> <span class="n">tile_size</span> <span class="o">*</span> <span class="n">offset</span><span class="p">)</span>
 
-        <span class="n">screen_height</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span>
         <span class="n">screen_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
             <span class="n">screen_height</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
             <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>

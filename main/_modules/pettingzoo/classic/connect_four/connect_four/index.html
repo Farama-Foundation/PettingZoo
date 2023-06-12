@@ -388,7 +388,7 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.classic.connect_four.connect_four</h1><div class="highlight"><pre>
-<span></span><span class="c1"># noqa</span>
+<span></span><span class="c1"># noqa: D212, D415</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd"># Connect Four</span>
 
@@ -447,6 +447,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 
@@ -472,8 +473,8 @@
     <span class="k">return</span> <span class="n">sfc</span>
 
 
-<div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/connect_four/#pettingzoo.classic.connect_four.connect_four.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">)</span>
+<div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/classic/connect_four/#pettingzoo.classic.connect_four.connect_four.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">raw_env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">TerminateIllegalWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">illegal_reward</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">AssertOutOfBoundsWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">wrappers</span><span class="o">.</span><span class="n">OrderEnforcingWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -488,7 +489,7 @@
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">screen_scaling</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">9</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="c1"># 6 rows x 7 columns</span>
         <span class="c1"># blank space = 0</span>
@@ -497,6 +498,7 @@
         <span class="c1"># flat representation in row major order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_scaling</span> <span class="o">=</span> <span class="n">screen_scaling</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
 
@@ -615,8 +617,8 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="n">screen_width</span> <span class="o">=</span> <span class="mi">1287</span>
-        <span class="n">screen_height</span> <span class="o">=</span> <span class="mi">1118</span>
+        <span class="n">screen_width</span> <span class="o">=</span> <span class="mi">99</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_scaling</span>
+        <span class="n">screen_height</span> <span class="o">=</span> <span class="mi">86</span> <span class="o">/</span> <span class="mi">99</span> <span class="o">*</span> <span class="n">screen_width</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
