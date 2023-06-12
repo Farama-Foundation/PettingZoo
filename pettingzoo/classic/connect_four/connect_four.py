@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Connect Four
 
@@ -57,6 +57,7 @@ If an agent successfully connects four of their tokens, they will be rewarded 1 
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
 
@@ -82,8 +83,8 @@ def get_image(path):
     return sfc
 
 
-def env(render_mode=None):
-    env = raw_env(render_mode=render_mode)
+def env(**kwargs):
+    env = raw_env(**kwargs)
     env = wrappers.TerminateIllegalWrapper(env, illegal_reward=-1)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
@@ -98,7 +99,7 @@ class raw_env(AECEnv):
         "render_fps": 2,
     }
 
-    def __init__(self, render_mode=None):
+    def __init__(self, render_mode: str | None = None, screen_scaling: int = 9):
         super().__init__()
         # 6 rows x 7 columns
         # blank space = 0
@@ -107,6 +108,7 @@ class raw_env(AECEnv):
         # flat representation in row major order
         self.screen = None
         self.render_mode = render_mode
+        self.screen_scaling = screen_scaling
 
         self.board = [0] * (6 * 7)
 
@@ -225,8 +227,8 @@ class raw_env(AECEnv):
             )
             return
 
-        screen_width = 1287
-        screen_height = 1118
+        screen_width = 99 * self.screen_scaling
+        screen_height = 86 / 99 * screen_width
         if self.render_mode == "human":
             if self.screen is None:
                 pygame.init()

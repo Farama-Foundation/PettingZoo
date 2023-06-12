@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 r"""
 # Go
 
@@ -106,9 +106,9 @@ For example, you would use action `4` to place a stone on the board at the (0,3)
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
-from typing import Optional
 
 import gymnasium
 import numpy as np
@@ -148,7 +148,11 @@ class raw_env(AECEnv):
     }
 
     def __init__(
-        self, board_size: int = 19, komi: float = 7.5, render_mode: Optional[str] = None
+        self,
+        board_size: int = 19,
+        komi: float = 7.5,
+        render_mode: str | None = None,
+        screen_height: int | None = 800,
     ):
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
@@ -191,6 +195,7 @@ class raw_env(AECEnv):
         self.board_history = np.zeros((self._N, self._N, 16), dtype=bool)
 
         self.render_mode = render_mode
+        self.screen_width = self.screen_height = screen_height
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -333,22 +338,21 @@ class raw_env(AECEnv):
             )
             return
 
-        screen_width = 1026
-        screen_height = 1026
-
         if self.screen is None:
             if self.render_mode == "human":
                 pygame.init()
-                self.screen = pygame.display.set_mode((screen_width, screen_height))
+                self.screen = pygame.display.set_mode(
+                    (self.screen_width, self.screen_height)
+                )
             else:
-                self.screen = pygame.Surface((screen_width, screen_height))
+                self.screen = pygame.Surface((self.screen_width, self.screen_height))
         if self.render_mode == "human":
             pygame.event.get()
 
         size = go_base.N
 
         # Load and scale all of the necessary images
-        tile_size = (screen_width) / size
+        tile_size = self.screen_width / size
 
         black_stone = get_image(os.path.join("img", "GoBlackPiece.png"))
         black_stone = pygame.transform.scale(

@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Volleyball Pong
 
