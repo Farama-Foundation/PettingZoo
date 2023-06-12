@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Gin Rummy
 
@@ -108,6 +108,7 @@ Penalties of `deadwood_count / 100` ensure that the reward never goes below -1.
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import gymnasium
 import numpy as np
@@ -148,8 +149,8 @@ class raw_env(RLCardBase, EzPickle):
         self,
         knock_reward: float = 0.5,
         gin_reward: float = 1.0,
-        opponents_hand_visible=False,
-        render_mode=None,
+        opponents_hand_visible: bool | None = False,
+        render_mode: str | None = None,
     ):
         EzPickle.__init__(
             self,

@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Leduc Hold'em
 
@@ -80,6 +80,7 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import gymnasium
 from rlcard.utils.utils import print_card
@@ -110,7 +111,11 @@ class raw_env(RLCardBase):
         "render_fps": 1,
     }
 
-    def __init__(self, num_players=2, render_mode=None):
+    def __init__(
+        self,
+        num_players: int = 2,
+        render_mode: str | None = None,
+    ):
         super().__init__("leduc-holdem", num_players, (36,))
         self.render_mode = render_mode
 
