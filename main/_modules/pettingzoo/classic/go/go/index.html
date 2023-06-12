@@ -388,7 +388,7 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.classic.go.go</h1><div class="highlight"><pre>
-<span></span><span class="c1"># noqa</span>
+<span></span><span class="c1"># noqa: D212, D415</span>
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd"># Go</span>
 
@@ -496,9 +496,9 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">gymnasium</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -538,7 +538,11 @@
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">board_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">19</span><span class="p">,</span> <span class="n">komi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">7.5</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">board_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">19</span><span class="p">,</span>
+        <span class="n">komi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">7.5</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># board_size: a int, representing the board size (board has a board_size x board_size shape)</span>
         <span class="c1"># komi: a float, representing points given to the second player.</span>
@@ -581,6 +585,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">board_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_N</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_height</span>
 
 <div class="viewcode-block" id="raw_env.observation_space"><a class="viewcode-back" href="../../../../../environments/classic/go/#pettingzoo.classic.go.go.raw_env.observation_space">[docs]</a>    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
@@ -723,22 +728,21 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="n">screen_width</span> <span class="o">=</span> <span class="mi">1026</span>
-        <span class="n">screen_height</span> <span class="o">=</span> <span class="mi">1026</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
         <span class="n">size</span> <span class="o">=</span> <span class="n">go_base</span><span class="o">.</span><span class="n">N</span>
 
         <span class="c1"># Load and scale all of the necessary images</span>
-        <span class="n">tile_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">screen_width</span><span class="p">)</span> <span class="o">/</span> <span class="n">size</span>
+        <span class="n">tile_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">/</span> <span class="n">size</span>
 
         <span class="n">black_stone</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;GoBlackPiece.png&quot;</span><span class="p">))</span>
         <span class="n">black_stone</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>

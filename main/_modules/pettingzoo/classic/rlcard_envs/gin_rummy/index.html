@@ -388,7 +388,7 @@
           <article role="main">
             
             <h1>Source code for pettingzoo.classic.rlcard_envs.gin_rummy</h1><div class="highlight"><pre>
-<span></span><span class="c1"># noqa</span>
+<span></span><span class="c1"># noqa: D212, D415</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd"># Gin Rummy</span>
 
@@ -498,6 +498,7 @@
 <span class="sd">* v0: Initial versions release (1.0.0)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">gymnasium</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -538,8 +539,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">knock_reward</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
         <span class="n">gin_reward</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">opponents_hand_visible</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">opponents_hand_visible</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
