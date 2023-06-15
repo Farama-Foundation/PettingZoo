@@ -643,10 +643,9 @@
         <span class="n">is_stale_or_checkmate</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">next_legal_moves</span><span class="p">)</span>
 
         <span class="c1"># claim draw is set to be true to align with normal tournament rules</span>
-        <span class="n">is_repetition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">is_repetition</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">is_50_move_rule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">can_claim_fifty_moves</span><span class="p">()</span>
-        <span class="n">is_claimable_draw</span> <span class="o">=</span> <span class="n">is_repetition</span> <span class="ow">or</span> <span class="n">is_50_move_rule</span>
-        <span class="n">game_over</span> <span class="o">=</span> <span class="n">is_claimable_draw</span> <span class="ow">or</span> <span class="n">is_stale_or_checkmate</span>
+        <span class="n">is_insufficient_material</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">is_insufficient_material</span><span class="p">()</span>
+        <span class="n">can_claim_draw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">can_claim_draw</span><span class="p">()</span>
+        <span class="n">game_over</span> <span class="o">=</span> <span class="n">can_claim_draw</span> <span class="ow">or</span> <span class="n">is_stale_or_checkmate</span> <span class="ow">or</span> <span class="n">is_insufficient_material</span>
 
         <span class="k">if</span> <span class="n">game_over</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">claim_draw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
