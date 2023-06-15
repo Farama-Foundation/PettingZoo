@@ -95,8 +95,8 @@ if __name__ == "__main__":
 
     # ======== Step 4: Callback functions setup =========
     def save_best_fn(policy):
-        model_save_path = os.path.join("log", "rps", "dqn", "policy.pth")
-        os.makedirs(os.path.join("log", "rps", "dqn"), exist_ok=True)
+        model_save_path = os.path.join("log", "ttt", "dqn", "policy.pth")
+        os.makedirs(os.path.join("log", "ttt", "dqn"), exist_ok=True)
         torch.save(policy.policies[agents[1]].state_dict(), model_save_path)
 
     def stop_fn(mean_rewards):
