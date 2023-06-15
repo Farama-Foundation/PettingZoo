@@ -16,7 +16,7 @@ To follow this tutorial, you will need to install the dependencies shown below. 
 ```
 
 ## Code
-The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
+The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with Tianshou. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
 ```{eval-rst}
 .. literalinclude:: ../../../tutorials/Tianshou/1_basic_api_usage.py
    :language: python
