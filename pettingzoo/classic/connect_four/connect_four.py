@@ -131,7 +131,6 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-
     # Key
     # ----
     # blank space = 0

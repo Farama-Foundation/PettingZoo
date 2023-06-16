@@ -200,7 +200,6 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-
     def observation_space(self, agent):
         return self.observation_spaces[agent]
 
@@ -425,7 +424,6 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             pygame.display.update()
             self.clock.tick(self.metadata["render_fps"])
-
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 

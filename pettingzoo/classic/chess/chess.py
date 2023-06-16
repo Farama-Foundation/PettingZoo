@@ -310,7 +310,9 @@ class raw_env(AECEnv):
         self.screen.blit(self.bg_image, (0, 0))
         for square, piece in self.board.piece_map().items():
             pos_x = square % 8 * self.cell_size[0]
-            pos_y = self.BOARD_SIZE[1] - (square // 8 + 1) * self.cell_size[1]  # offset because pygame display is flipped
+            pos_y = (
+                self.BOARD_SIZE[1] - (square // 8 + 1) * self.cell_size[1]
+            )  # offset because pygame display is flipped
             piece_name = chess.piece_name(piece.piece_type)
             piece_img = self.piece_images[piece_name][piece.color]
             self.screen.blit(piece_img, (pos_x, pos_y))

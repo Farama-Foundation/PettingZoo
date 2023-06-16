@@ -135,7 +135,6 @@ class raw_env(RLCardBase):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-
     def step(self, action):
         super().step(action)
 

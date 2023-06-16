@@ -206,7 +206,6 @@ class raw_env(AECEnv):
         if self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
-
         self.reinit()
 
     def observation_space(self, agent):
