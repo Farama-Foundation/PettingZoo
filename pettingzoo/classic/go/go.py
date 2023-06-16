@@ -114,6 +114,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.go import coords, go_base
@@ -139,7 +140,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "go_v5",
@@ -154,6 +155,7 @@ class raw_env(AECEnv):
         render_mode: str | None = None,
         screen_height: int | None = 800,
     ):
+        EzPickle.__init__(self, board_size, komi, render_mode, screen_height)
         # board_size: a int, representing the board size (board has a board_size x board_size shape)
         # komi: a float, representing points given to the second player.
         super().__init__()

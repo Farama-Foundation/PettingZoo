@@ -83,6 +83,7 @@ import os
 import gymnasium
 import numpy as np
 import pygame
+from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
@@ -114,7 +115,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_v4",
@@ -128,6 +129,7 @@ class raw_env(RLCardBase):
         render_mode: str | None = None,
         screen_height: int | None = 1000,
     ):
+        EzPickle.__init__(self, num_players, render_mode, screen_height)
         super().__init__("limit-holdem", num_players, (72,))
         self.render_mode = render_mode
         self.screen_height = screen_height
