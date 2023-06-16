@@ -253,7 +253,6 @@ class raw_env(AECEnv, EzPickle):
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))
@@ -447,7 +446,9 @@ class raw_env(AECEnv, EzPickle):
         return np.array(self.observations[agent])
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def reset(self, seed=None, options=None):
         self.reinit()

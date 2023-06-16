@@ -249,10 +249,9 @@ class CooperativePong:
         self.draw()
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
-            self.renderOn = False
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def enable_render(self):
         self.screen = pygame.display.set_mode(self.screen.get_size())
@@ -335,8 +334,6 @@ class CooperativePong:
                     self.truncations[ag] = self.truncate
                     self.infos[ag] = {}
 
-        if self.renderOn:
-            pygame.event.pump()
         self.draw()
 
 

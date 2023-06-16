@@ -165,7 +165,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.agents = ["black_0", "white_0"]
         self.possible_agents = self.agents[:]
-        self.has_reset = False
 
         self.screen = None
 
@@ -317,7 +316,6 @@ class raw_env(AECEnv, EzPickle):
             self.render()
 
     def reset(self, seed=None, options=None):
-        self.has_reset = True
         self._go = go_base.Position(board=None, komi=self._komi)
 
         self.agents = self.possible_agents[:]
@@ -351,8 +349,6 @@ class raw_env(AECEnv, EzPickle):
                 )
             else:
                 self.screen = pygame.Surface((self.screen_width, self.screen_height))
-        if self.render_mode == "human":
-            pygame.event.get()
 
         size = go_base.N
 
@@ -436,4 +432,6 @@ class raw_env(AECEnv, EzPickle):
         )
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None

@@ -90,8 +90,9 @@ from os import path
 import chess
 import gymnasium
 import numpy as np
+import pygame
 from gymnasium import spaces
-from gymnasium.error import DependencyNotInstalled
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.chess import chess_utils
@@ -107,7 +108,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
         "name": "chess_v6",
@@ -116,6 +117,7 @@ class raw_env(AECEnv):
     }
 
     def __init__(self, render_mode: str | None = None, screen_height: int | None = 800):
+        EzPickle.__init__(self, render_mode, screen_height)
         super().__init__()
 
         self.board = chess.Board()
@@ -154,13 +156,6 @@ class raw_env(AECEnv):
         self.screen_height = self.screen_width = screen_height
 
         if self.render_mode in ["human", "rgb_array"]:
-            try:
-                import pygame
-            except ImportError:
-                raise DependencyNotInstalled(
-                    f"pygame is needed for {self.render_mode} rendering, run with `pip install pettingzoo[classic]`"
-                )
-
             self.BOARD_SIZE = (self.screen_width, self.screen_height)
             self.screen = None
             self.clock = pygame.time.Clock()
@@ -208,8 +203,6 @@ class raw_env(AECEnv):
         return {"observation": observation, "action_mask": action_mask}
 
     def reset(self, seed=None, options=None):
-        self.has_reset = True
-
         self.agents = self.possible_agents[:]
 
         self.board = chess.Board()
@@ -291,13 +284,6 @@ class raw_env(AECEnv):
             )
 
     def _render_gui(self):
-        try:
-            import pygame
-        except ImportError:
-            raise DependencyNotInstalled(
-                "pygame is not installed, run `pip install pettingzoo[classic]`"
-            )
-
         if self.screen is None:
             pygame.init()
 
@@ -318,7 +304,6 @@ class raw_env(AECEnv):
             self.screen.blit(piece_img, (pos_x, pos_y))
 
         if self.render_mode == "human":
-            pygame.event.pump()
             pygame.display.update()
             self.clock.tick(self.metadata["render_fps"])
         elif self.render_mode == "rgb_array":
@@ -327,4 +312,6 @@ class raw_env(AECEnv):
             )
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None

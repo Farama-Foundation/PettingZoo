@@ -149,6 +149,7 @@ class Pursuit:
         self.surround = surround
 
         self.render_mode = render_mode
+        self.screen = None
         self.constraint_window = constraint_window
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
@@ -167,11 +168,9 @@ class Pursuit:
         return self.action_spaces[agent]
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
+        if self.screen is not None:
             pygame.quit()
-            self.renderOn = False
+            self.screen = None
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #

@@ -296,9 +296,7 @@ class raw_env(AECEnv, EzPickle):
         )
 
     def close(self):
-        if self.screen in ["human", "rgb_array"]:
-            import pygame
-
+        if self.screen is not None:
             pygame.quit()
             self.screen = None
 

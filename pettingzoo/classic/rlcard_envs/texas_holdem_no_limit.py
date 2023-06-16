@@ -216,7 +216,6 @@ class raw_env(RLCardBase, EzPickle):
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))

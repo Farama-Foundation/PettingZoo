@@ -217,9 +217,9 @@ class WaterworldBase:
             )
 
     def close(self):
-        if self.renderOn:
-            pygame.display.quit()
+        if self.screen is not None:
             pygame.quit()
+            self.screen = None
 
     def convert_coordinates(self, value, option="position"):
         """This function converts coordinates in pymunk into pygame coordinates.
@@ -310,7 +310,7 @@ class WaterworldBase:
         """Draw all moving objects and obstacles in PyGame."""
         for obj_list in [self.pursuers, self.evaders, self.poisons, self.obstacles]:
             for obj in obj_list:
-                obj.draw(self.display, self.convert_coordinates)
+                obj.draw(self.screen, self.convert_coordinates)
 
     def add_handlers(self):
         # Collision handlers for pursuers v.s. evaders & poisons
@@ -726,19 +726,19 @@ class WaterworldBase:
         if not self.renderOn:
             if self.render_mode == "human":
                 pygame.init()
-                self.display = pygame.display.set_mode(
+                self.screen = pygame.display.set_mode(
                     (self.pixel_scale, self.pixel_scale)
                 )
             else:
-                self.display = pygame.Surface((self.pixel_scale, self.pixel_scale))
+                self.screen = pygame.Surface((self.pixel_scale, self.pixel_scale))
 
             self.renderOn = True
 
-        self.display.fill((255, 255, 255))
+        self.screen.fill((255, 255, 255))
         self.draw()
         self.clock.tick(self.FPS)
 
-        observation = pygame.surfarray.pixels3d(self.display)
+        observation = pygame.surfarray.pixels3d(self.screen)
         new_observation = np.copy(observation)
         del observation
 
