@@ -170,6 +170,9 @@ class raw_env(RLCardBase):
         self.render_mode = render_mode
         self.screen_height = screen_height
 
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
     def step(self, action):
         super().step(action)
 

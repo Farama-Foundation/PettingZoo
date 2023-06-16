@@ -132,6 +132,10 @@ class raw_env(RLCardBase):
         self.render_mode = render_mode
         self.screen_height = screen_height
 
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
+
     def step(self, action):
         super().step(action)
 
@@ -373,6 +377,7 @@ class raw_env(RLCardBase):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 

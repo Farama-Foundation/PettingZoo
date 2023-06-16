@@ -128,6 +128,10 @@ class raw_env(AECEnv):
             for i in self.agents
         }
 
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
+
+
     # Key
     # ----
     # blank space = 0
@@ -229,13 +233,15 @@ class raw_env(AECEnv):
 
         screen_width = 99 * self.screen_scaling
         screen_height = 86 / 99 * screen_width
-        if self.render_mode == "human":
-            if self.screen is None:
-                pygame.init()
+
+        if self.screen is None:
+            pygame.init()
+
+            if self.render_mode == "human":
+                pygame.display.set_caption("Connect Four")
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
-        elif self.screen is None:
-            self.screen = pygame.Surface((screen_width, screen_height))
+            elif self.render_mode == "rgb_array":
+                self.screen = pygame.Surface((screen_width, screen_height))
 
         # Load and scale all of the necessary images
         tile_size = (screen_width * (91 / 99)) / 7
@@ -278,6 +284,7 @@ class raw_env(AECEnv):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
@@ -288,7 +295,7 @@ class raw_env(AECEnv):
         )
 
     def close(self):
-        if self.screen is not None:
+        if self.screen in ["human", "rgb_array"]:
             import pygame
 
             pygame.quit()
