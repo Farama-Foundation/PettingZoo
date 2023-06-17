@@ -243,6 +243,11 @@ class CooperativePong:
 
         self.reinit()
 
+        # Pygame surface required even for render_mode == None, as observations are taken from pixel values
+        # Observe
+        if self.render_mode != "human":
+            self.screen = pygame.Surface((self.s_width, self.s_height))
+
         self.render()
 
     def close(self):
@@ -261,8 +266,6 @@ class CooperativePong:
             if self.render_mode == "human":
                 self.screen = pygame.display.set_mode((self.s_width, self.s_height))
                 pygame.display.set_caption("Cooperative Pong")
-            else:
-                self.screen = pygame.Surface((self.s_width, self.s_height))
             self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
