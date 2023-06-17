@@ -243,7 +243,7 @@ class CooperativePong:
 
         self.reinit()
 
-        self.draw()
+        self.render()
 
     def close(self):
         if self.screen is not None:
