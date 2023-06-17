@@ -399,7 +399,7 @@
 
 <span class="sd">This environment is part of the &lt;a href=&#39;..&#39;&gt;classic environments&lt;/a&gt;. Please read that page first for general information.</span>
 
-<span class="sd">| Import             | `from pettingzoo.classic import chess_v5` |</span>
+<span class="sd">| Import             | `from pettingzoo.classic import chess_v6` |</span>
 <span class="sd">|--------------------|------------------------------------|</span>
 <span class="sd">| Actions            | Discrete                           |</span>
 <span class="sd">| Parallel API       | Yes                                |</span>
@@ -465,6 +465,7 @@
 
 <span class="sd">### Version History</span>
 
+<span class="sd">* v6: Fixed wrong player starting first, check for insufficient material/50-turn rule/three fold repetition (1.23.2)</span>
 <span class="sd">* v5: Changed python-chess version to version 1.7 (1.13.1)</span>
 <span class="sd">* v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)</span>
 <span class="sd">* v3: Fixed bug in arbitrary calls to observe() (1.8.0)</span>
@@ -480,8 +481,9 @@
 <span class="kn">import</span> <span class="nn">chess</span>
 <span class="kn">import</span> <span class="nn">gymnasium</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">from</span> <span class="nn">gymnasium</span> <span class="kn">import</span> <span class="n">spaces</span>
-<span class="kn">from</span> <span class="nn">gymnasium.error</span> <span class="kn">import</span> <span class="n">DependencyNotInstalled</span>
+<span class="kn">from</span> <span class="nn">gymnasium.utils</span> <span class="kn">import</span> <span class="n">EzPickle</span>
 
 <span class="kn">from</span> <span class="nn">pettingzoo</span> <span class="kn">import</span> <span class="n">AECEnv</span>
 <span class="kn">from</span> <span class="nn">pettingzoo.classic.chess</span> <span class="kn">import</span> <span class="n">chess_utils</span>
@@ -497,15 +499,16 @@
     <span class="k">return</span> <span class="n">env</span></div>
 
 
-<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">):</span>
+<div class="viewcode-block" id="raw_env"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env">[docs]</a><span class="k">class</span> <span class="nc">raw_env</span><span class="p">(</span><span class="n">AECEnv</span><span class="p">,</span> <span class="n">EzPickle</span><span class="p">):</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;render_modes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;ansi&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;chess_v5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;chess_v6&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_parallelizable&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;render_fps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">800</span><span class="p">):</span>
+        <span class="n">EzPickle</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">chess</span><span class="o">.</span><span class="n">Board</span><span class="p">()</span>
@@ -543,16 +546,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">=</span> <span class="n">screen_height</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">}:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">import</span> <span class="nn">pygame</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">DependencyNotInstalled</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;pygame is needed for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span><span class="si">}</span><span class="s2"> rendering, run with `pip install pettingzoo[classic]`&quot;</span>
-                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">8</span><span class="p">)</span>
 
@@ -568,12 +565,12 @@
                 <span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">piece_images</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;pawn&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;pawn_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;pawn_black&quot;</span><span class="p">)],</span>
-                <span class="s2">&quot;knight&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;knight_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;knight_black&quot;</span><span class="p">)],</span>
-                <span class="s2">&quot;bishop&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;bishop_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;bishop_black&quot;</span><span class="p">)],</span>
-                <span class="s2">&quot;rook&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;rook_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;rook_black&quot;</span><span class="p">)],</span>
-                <span class="s2">&quot;queen&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;queen_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;queen_black&quot;</span><span class="p">)],</span>
-                <span class="s2">&quot;king&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_white&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_black&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;pawn&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;pawn_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;pawn_white&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;knight&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;knight_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;knight_white&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;bishop&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;bishop_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;bishop_white&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;rook&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;rook_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;rook_white&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;queen&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;queen_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;queen_white&quot;</span><span class="p">)],</span>
+                <span class="s2">&quot;king&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_black&quot;</span><span class="p">),</span> <span class="n">load_piece</span><span class="p">(</span><span class="s2">&quot;king_white&quot;</span><span class="p">)],</span>
             <span class="p">}</span>
 
 <div class="viewcode-block" id="raw_env.observation_space"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observation_space">[docs]</a>    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
@@ -598,8 +595,6 @@
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">observation</span><span class="p">,</span> <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">action_mask</span><span class="p">}</span></div>
 
 <div class="viewcode-block" id="raw_env.reset"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">has_reset</span> <span class="o">=</span> <span class="kc">True</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[:]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">chess</span><span class="o">.</span><span class="n">Board</span><span class="p">()</span>
@@ -681,41 +676,37 @@
             <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_render_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">pygame</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">DependencyNotInstalled</span><span class="p">(</span>
-                <span class="s2">&quot;pygame is not installed, run `pip install pettingzoo[classic]`&quot;</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
                 <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Chess&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bg_image</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bg_image</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">square</span><span class="p">,</span> <span class="n">piece</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">piece_map</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">square</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">square</span> <span class="o">//</span> <span class="mi">8</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">pos_x</span> <span class="o">=</span> <span class="n">square</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">pos_y</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">BOARD_SIZE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">square</span> <span class="o">//</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>  <span class="c1"># offset because pygame display is flipped</span>
             <span class="n">piece_name</span> <span class="o">=</span> <span class="n">chess</span><span class="o">.</span><span class="n">piece_name</span><span class="p">(</span><span class="n">piece</span><span class="o">.</span><span class="n">piece_type</span><span class="p">)</span>
             <span class="n">piece_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">piece_images</span><span class="p">[</span><span class="n">piece_name</span><span class="p">][</span><span class="n">piece</span><span class="o">.</span><span class="n">color</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">piece_img</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">piece_img</span><span class="p">,</span> <span class="p">(</span><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">pump</span><span class="p">()</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_surface</span><span class="p">)),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="raw_env.close"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div></div>
 </pre></div>
           </article>
         </div>

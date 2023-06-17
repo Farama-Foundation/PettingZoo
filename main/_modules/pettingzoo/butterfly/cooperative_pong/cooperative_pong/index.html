@@ -548,10 +548,7 @@
 
         <span class="c1"># Display screen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span> <span class="o">=</span> <span class="mi">960</span> <span class="o">//</span> <span class="n">render_ratio</span><span class="p">,</span> <span class="mi">560</span> <span class="o">//</span> <span class="n">render_ratio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">)</span>
-        <span class="p">)</span>  <span class="c1"># (960, 720) # (640, 480) # (100, 200)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_reward</span> <span class="o">=</span> <span class="n">max_reward</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">off_screen_penalty</span> <span class="o">=</span> <span class="n">off_screen_penalty</span>
 
@@ -575,7 +572,7 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># set speed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="p">[</span><span class="n">ball_speed</span><span class="p">,</span> <span class="n">left_paddle_speed</span><span class="p">,</span> <span class="n">right_paddle_speed</span><span class="p">]</span>
@@ -636,18 +633,17 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reinit</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="c1"># Pygame surface required even for render_mode == None, as observations are taken from pixel values</span>
+        <span class="c1"># Observe</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">!=</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span><span class="p">:</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">pump</span><span class="p">()</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="k">def</span> <span class="nf">enable_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_size</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -656,9 +652,11 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="c1"># sets self.renderOn to true and initializes display</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">enable_render</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">s_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_height</span><span class="p">))</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Cooperative Pong&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
@@ -725,9 +723,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">truncations</span><span class="p">[</span><span class="n">ag</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncate</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">infos</span><span class="p">[</span><span class="n">ag</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">renderOn</span><span class="p">:</span>
-            <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">pump</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="env"><a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.env">[docs]</a><span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -756,7 +752,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render_mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span> <span class="o">=</span> <span class="n">agent_selector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
@@ -773,6 +768,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">infos</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">score</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">render_mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="raw_env.observation_space"><a class="viewcode-back" href="../../../../../environments/butterfly/cooperative_pong/#pettingzoo.butterfly.cooperative_pong.cooperative_pong.raw_env.observation_space">[docs]</a>    <span class="k">def</span> <span class="nf">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>

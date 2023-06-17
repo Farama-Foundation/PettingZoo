@@ -400,7 +400,7 @@
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Import</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">chess_v5</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pettingzoo.classic</span> <span class="pre">import</span> <span class="pre">chess_v6</span></code></p></th>
 </tr>
 </thead>
 <tbody>
@@ -500,6 +500,7 @@ queen.</p>
 <section id="version-history">
 <h2>Version History<a class="headerlink" href="#version-history" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
+<li><p>v6: Fixed wrong player starting first, check for insufficient material/50-turn rule/three fold repetition (1.23.2)</p></li>
 <li><p>v5: Changed python-chess version to version 1.7 (1.13.1)</p></li>
 <li><p>v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)</p></li>
 <li><p>v3: Fixed bug in arbitrary calls to observe() (1.8.0)</p></li>
@@ -518,7 +519,8 @@ queen.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pettingzoo.classic.chess.chess.</span></span><span class="sig-name descname"><span class="pre">raw_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">800</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
+<dd><p>Uses the <code class="docutils literal notranslate"><span class="pre">args</span></code> and <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> from the object’s constructor for pickling.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="pettingzoo.classic.chess.chess.raw_env.action_space">
 <span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pettingzoo/classic/chess/chess/#raw_env.action_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pettingzoo.classic.chess.chess.raw_env.action_space" title="Permalink to this definition">#</a></dt>
 <dd><p>Takes in agent and returns the action space for that agent.</p>

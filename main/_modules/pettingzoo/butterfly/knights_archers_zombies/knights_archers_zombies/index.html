@@ -666,10 +666,8 @@
 
         <span class="c1"># Game Status</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">has_reset</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">=</span> <span class="n">render_mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_on</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Game Constants</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">()</span>
@@ -749,11 +747,9 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span>
 
-        <span class="c1"># Initializing Pygame</span>
-        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-        <span class="c1"># self.WINDOW = pygame.display.set_mode([self.WIDTH, self.HEIGHT])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
-        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Knights, Archers, Zombies&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;left_wall.png&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">right_wall</span> <span class="o">=</span> <span class="n">get_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">,</span> <span class="s2">&quot;right_wall.png&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">right_wall_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
@@ -899,7 +895,7 @@
 
 <div class="viewcode-block" id="raw_env.observe"><a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
-            <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span>
+            <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
 
             <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
             <span class="n">agent_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -980,7 +976,7 @@
 <div class="viewcode-block" id="raw_env.state"><a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.state">[docs]</a>    <span class="k">def</span> <span class="nf">state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns an observation of the global environment.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector_state</span><span class="p">:</span>
-            <span class="n">state</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1128,7 +1124,8 @@
             <span class="c1"># Spawning Zombies at Random Location at every 100 iterations</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">spawn_zombie</span><span class="p">()</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">check_game_end</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1170,28 +1167,22 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">enable_render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">([</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">])</span>
-        <span class="c1"># self.WINDOW = pygame.Surface((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_on</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">66</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">53</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_wall_rect</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch1</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch2</span><span class="p">,</span> <span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch3</span><span class="p">,</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">430</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch4</span><span class="p">,</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">250</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">66</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">53</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_wall</span><span class="o">.</span><span class="n">get_rect</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right_wall</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_wall_rect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch1</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch2</span><span class="p">,</span> <span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch3</span><span class="p">,</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">430</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch4</span><span class="p">,</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">floor_patch1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">250</span><span class="p">))</span>
 
         <span class="c1"># draw all the sprites</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zombie_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_list</span><span class="p">:</span>
-            <span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">archer_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">)</span>
+            <span class="n">agent</span><span class="o">.</span><span class="n">weapons</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">archer_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knight_list</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
 
 <div class="viewcode-block" id="raw_env.render"><a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1200,13 +1191,23 @@
             <span class="p">)</span>
             <span class="k">return</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_on</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
-            <span class="c1"># sets self.render_on to true and initializes display</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">enable_render</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
-        <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">&quot;Knights, Archers, Zombies&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+        <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">surfarray</span><span class="o">.</span><span class="n">pixels3d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;human&quot;</span><span class="p">:</span>
             <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span>
@@ -1214,14 +1215,9 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="raw_env.close"><a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_on</span><span class="p">:</span>
-                <span class="c1"># self.WINDOW = pygame.display.set_mode([const.SCREEN_WIDTH, const.SCREEN_HEIGHT])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">render_on</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">pump</span><span class="p">()</span>
-                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">check_game_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Zombie reaches the End of the Screen</span>
@@ -1287,13 +1283,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">agent_name_mapping</span><span class="p">[</span><span class="n">k_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">a_count</span>
             <span class="n">a_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">const</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames</span> <span class="o">=</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="raw_env.reset"><a class="viewcode-back" href="../../../../../environments/butterfly/knights_archers_zombies/#pettingzoo.butterfly.knights_archers_zombies.knights_archers_zombies.raw_env.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">has_reset</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">reinit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_selector</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
