@@ -255,6 +255,7 @@ class CooperativePong:
 
     def enable_render(self):
         self.screen = pygame.display.set_mode(self.screen.get_size())
+        pygame.display.set_caption("Cooperative Pong")
         self.renderOn = True
         self.draw()
 

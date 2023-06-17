@@ -401,6 +401,7 @@ class Pursuit:
                 self.screen = pygame.display.set_mode(
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)
                 )
+                pygame.display.set_caption("Pursuit")
             else:
                 self.screen = pygame.Surface(
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)

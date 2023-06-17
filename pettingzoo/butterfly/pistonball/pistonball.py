@@ -304,6 +304,7 @@ class raw_env(AECEnv, EzPickle):
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        pygame.display.set_caption("Pistonball")
 
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))

@@ -342,11 +342,13 @@ class raw_env(AECEnv, EzPickle):
             return
 
         if self.screen is None:
+            pygame.init()
+
             if self.render_mode == "human":
-                pygame.init()
                 self.screen = pygame.display.set_mode(
                     (self.screen_width, self.screen_height)
                 )
+                pygame.display.set_caption("Go")
             else:
                 self.screen = pygame.Surface((self.screen_width, self.screen_height))
 

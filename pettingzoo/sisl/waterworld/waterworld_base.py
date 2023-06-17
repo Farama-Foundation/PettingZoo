@@ -729,6 +729,7 @@ class WaterworldBase:
                 self.screen = pygame.display.set_mode(
                     (self.pixel_scale, self.pixel_scale)
                 )
+                pygame.display.set_caption("Waterworld")
             else:
                 self.screen = pygame.Surface((self.pixel_scale, self.pixel_scale))
 

@@ -559,6 +559,7 @@ class MultiWalkerEnv:
         if self.screen is None:
             pygame.init()
             self.screen = pygame.display.set_mode((VIEWPORT_W, VIEWPORT_H))
+            pygame.display.set_caption("Multiwalker")
 
         self.surf = pygame.Surface(
             (VIEWPORT_W + self.scroll * render_scale + offset, VIEWPORT_H)

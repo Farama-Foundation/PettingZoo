@@ -212,10 +212,13 @@ class raw_env(RLCardBase, EzPickle):
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
 
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
         if self.render_mode == "human":
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
+                pygame.display.set_caption("Texas Hold'em No Limit")
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))
