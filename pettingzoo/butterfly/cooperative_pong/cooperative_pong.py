@@ -330,7 +330,7 @@ class CooperativePong:
                     self.truncations[ag] = self.truncate
                     self.infos[ag] = {}
 
-        self.draw()
+        self.render()
 
 
 def env(**kwargs):
