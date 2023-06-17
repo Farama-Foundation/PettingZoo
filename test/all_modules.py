@@ -29,7 +29,7 @@ from pettingzoo.butterfly import (
     pistonball_v6,
 )
 from pettingzoo.classic import (
-    chess_v5,
+    chess_v6,
     connect_four_v3,
     gin_rummy_v4,
     go_v5,
@@ -86,7 +86,7 @@ all_environments = {
     "atari/volleyball_pong_v3": volleyball_pong_v3,
     "atari/wizard_of_wor_v3": wizard_of_wor_v3,
     "atari/warlords_v3": warlords_v3,
-    "classic/chess_v5": chess_v5,
+    "classic/chess_v6": chess_v6,
     "classic/rps_v2": rps_v2,
     "classic/connect_four_v3": connect_four_v3,
     "classic/tictactoe_v3": tictactoe_v3,

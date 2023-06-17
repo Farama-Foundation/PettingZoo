@@ -3,6 +3,7 @@ from pathlib import Path
 import gymnasium
 import multi_agent_ale_py
 import numpy as np
+import pygame
 from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
@@ -251,8 +252,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if self.render_mode == "human":
-            import pygame
-
             zoom_factor = 4
             if self._screen is None:
                 pygame.init()
@@ -276,8 +275,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def close(self):
         if self._screen is not None:
-            import pygame
-
             pygame.quit()
             self._screen = None
 

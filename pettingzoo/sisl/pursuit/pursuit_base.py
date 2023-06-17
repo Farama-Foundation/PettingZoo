@@ -149,12 +149,12 @@ class Pursuit:
         self.surround = surround
 
         self.render_mode = render_mode
+        self.screen = None
         self.constraint_window = constraint_window
 
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
 
         self.model_state = np.zeros((4,) + self.map_matrix.shape, dtype=np.float32)
-        self.renderOn = False
         self.pixel_scale = 30
 
         self.frames = 0
@@ -167,11 +167,9 @@ class Pursuit:
         return self.action_spaces[agent]
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
+        if self.screen is not None:
             pygame.quit()
-            self.renderOn = False
+            self.screen = None
 
     #################################################################
     # The functions below are the interface with MultiAgentSiulator #
@@ -240,7 +238,6 @@ class Pursuit:
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
         self.frames = 0
-        self.renderOn = False
 
         return self.safely_observe(0)
 
@@ -396,18 +393,18 @@ class Pursuit:
             )
             return
 
-        if not self.renderOn:
+        if self.screen is None:
             if self.render_mode == "human":
                 pygame.display.init()
                 self.screen = pygame.display.set_mode(
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)
                 )
+                pygame.display.set_caption("Pursuit")
             else:
                 self.screen = pygame.Surface(
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)
                 )
 
-            self.renderOn = True
         self.draw_model_state()
 
         self.draw_pursuers_observations()

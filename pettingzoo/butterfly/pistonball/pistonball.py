@@ -271,8 +271,6 @@ class raw_env(AECEnv, EzPickle):
 
         self.frames = 0
 
-        self.has_reset = False
-        self.closed = False
         self._seed()
 
     def observation_space(self, agent):
@@ -306,6 +304,7 @@ class raw_env(AECEnv, EzPickle):
 
     def enable_render(self):
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        pygame.display.set_caption("Pistonball")
 
         self.renderOn = True
         # self.screen.blit(self.background, (0, 0))
@@ -313,13 +312,9 @@ class raw_env(AECEnv, EzPickle):
         self.draw()
 
     def close(self):
-        if not self.closed:
-            self.closed = True
-            if self.renderOn:
-                self.screen = pygame.Surface((self.screen_width, self.screen_height))
-                self.renderOn = False
-                pygame.event.pump()
-                pygame.display.quit()
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def add_walls(self):
         top_left = (self.wall_width, self.wall_width)
@@ -479,7 +474,6 @@ class raw_env(AECEnv, EzPickle):
         self._agent_selector.reinit(self.agents)
         self.agent_selection = self._agent_selector.next()
 
-        self.has_reset = True
         self.terminate = False
         self.truncate = False
         self.rewards = dict(zip(self.agents, [0 for _ in self.agents]))

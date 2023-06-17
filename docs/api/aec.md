@@ -39,9 +39,9 @@ AEC environments often include action masks, in order to mark valid/invalid acti
 
 To sample actions using action masking: 
 ```python
-from pettingzoo.classic import chess_v5
+from pettingzoo.classic import chess_v6
 
-env = chess_v5.env(render_mode="human")
+env = chess_v6.env(render_mode="human")
 env.reset(seed=42)
 
 for agent in env.agent_iter():

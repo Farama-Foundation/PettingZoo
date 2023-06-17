@@ -338,7 +338,6 @@ class SimpleEnv(AECEnv):
                 text_line += 1
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
-            self.renderOn = False
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None

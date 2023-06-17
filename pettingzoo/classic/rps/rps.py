@@ -118,6 +118,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium.spaces import Discrete
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
@@ -154,7 +155,7 @@ def env(**kwargs):
 parallel_env = parallel_wrapper_fn(env)
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     """Two-player environment for rock paper scissors.
 
     Expandable environment to rock paper scissors lizard spock action_6 action_7 ...
@@ -175,6 +176,7 @@ class raw_env(AECEnv):
         render_mode: str | None = None,
         screen_height: int | None = 800,
     ):
+        EzPickle.__init__(self, num_actions, max_cycles, render_mode, screen_height)
         super().__init__()
         self.max_cycles = max_cycles
 
@@ -202,6 +204,9 @@ class raw_env(AECEnv):
         self.render_mode = render_mode
         self.screen_height = screen_height
         self.screen = None
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
         self.reinit()
 
@@ -244,11 +249,13 @@ class raw_env(AECEnv):
         screen_height = self.screen_height
         screen_width = int(screen_height * 5 / 14)
 
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
         if self.render_mode == "human":
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
+                pygame.display.set_caption("Rock Paper Scissors")
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))
@@ -427,6 +434,7 @@ class raw_env(AECEnv):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
@@ -441,7 +449,9 @@ class raw_env(AECEnv):
         return np.array(self.observations[agent])
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def reset(self, seed=None, options=None):
         self.reinit()
