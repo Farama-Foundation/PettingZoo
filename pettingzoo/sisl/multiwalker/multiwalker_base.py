@@ -333,7 +333,6 @@ class MultiWalkerEnv:
         self._seed()
         self.setup()
         self.screen = None
-        self.isopen = True
         self.agent_list = list(range(self.n_walkers))
         self.last_rewards = [0 for _ in range(self.n_walkers)]
         self.last_dones = [False for _ in range(self.n_walkers)]
@@ -399,7 +398,7 @@ class MultiWalkerEnv:
     def close(self):
         if self.screen is not None:
             pygame.quit()
-            self.isopen = False
+            self.screen = None
 
     def reset(self):
         self.setup()
@@ -560,6 +559,7 @@ class MultiWalkerEnv:
         if self.screen is None:
             pygame.init()
             self.screen = pygame.display.set_mode((VIEWPORT_W, VIEWPORT_H))
+            pygame.display.set_caption("Multiwalker")
 
         self.surf = pygame.Surface(
             (VIEWPORT_W + self.scroll * render_scale + offset, VIEWPORT_H)

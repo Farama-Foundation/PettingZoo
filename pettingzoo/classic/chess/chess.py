@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>classic environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.classic import chess_v5` |
+| Import             | `from pettingzoo.classic import chess_v6` |
 |--------------------|------------------------------------|
 | Actions            | Discrete                           |
 | Parallel API       | Yes                                |
@@ -75,6 +75,7 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 
 ### Version History
 
+* v6: Fixed wrong player starting first, check for insufficient material/50-turn rule/three fold repetition (1.23.2)
 * v5: Changed python-chess version to version 1.7 (1.13.1)
 * v4: Changed observation space to proper AlphaZero style frame stacking (1.11.0)
 * v3: Fixed bug in arbitrary calls to observe() (1.8.0)
@@ -90,8 +91,9 @@ from os import path
 import chess
 import gymnasium
 import numpy as np
+import pygame
 from gymnasium import spaces
-from gymnasium.error import DependencyNotInstalled
+from gymnasium.utils import EzPickle
 
 from pettingzoo import AECEnv
 from pettingzoo.classic.chess import chess_utils
@@ -107,15 +109,16 @@ def env(**kwargs):
     return env
 
 
-class raw_env(AECEnv):
+class raw_env(AECEnv, EzPickle):
     metadata = {
         "render_modes": ["human", "ansi", "rgb_array"],
-        "name": "chess_v5",
+        "name": "chess_v6",
         "is_parallelizable": False,
         "render_fps": 2,
     }
 
     def __init__(self, render_mode: str | None = None, screen_height: int | None = 800):
+        EzPickle.__init__(self, render_mode, screen_height)
         super().__init__()
 
         self.board = chess.Board()
@@ -153,16 +156,10 @@ class raw_env(AECEnv):
         self.render_mode = render_mode
         self.screen_height = self.screen_width = screen_height
 
-        if self.render_mode in {"human", "rgb_array"}:
-            try:
-                import pygame
-            except ImportError:
-                raise DependencyNotInstalled(
-                    f"pygame is needed for {self.render_mode} rendering, run with `pip install pettingzoo[classic]`"
-                )
+        self.screen = None
 
+        if self.render_mode in ["human", "rgb_array"]:
             self.BOARD_SIZE = (self.screen_width, self.screen_height)
-            self.window_surface = None
             self.clock = pygame.time.Clock()
             self.cell_size = (self.BOARD_SIZE[0] / 8, self.BOARD_SIZE[1] / 8)
 
@@ -178,12 +175,12 @@ class raw_env(AECEnv):
                 )
 
             self.piece_images = {
-                "pawn": [load_piece("pawn_white"), load_piece("pawn_black")],
-                "knight": [load_piece("knight_white"), load_piece("knight_black")],
-                "bishop": [load_piece("bishop_white"), load_piece("bishop_black")],
-                "rook": [load_piece("rook_white"), load_piece("rook_black")],
-                "queen": [load_piece("queen_white"), load_piece("queen_black")],
-                "king": [load_piece("king_white"), load_piece("king_black")],
+                "pawn": [load_piece("pawn_black"), load_piece("pawn_white")],
+                "knight": [load_piece("knight_black"), load_piece("knight_white")],
+                "bishop": [load_piece("bishop_black"), load_piece("bishop_white")],
+                "rook": [load_piece("rook_black"), load_piece("rook_white")],
+                "queen": [load_piece("queen_black"), load_piece("queen_white")],
+                "king": [load_piece("king_black"), load_piece("king_white")],
             }
 
     def observation_space(self, agent):
@@ -208,8 +205,6 @@ class raw_env(AECEnv):
         return {"observation": observation, "action_mask": action_mask}
 
     def reset(self, seed=None, options=None):
-        self.has_reset = True
-
         self.agents = self.possible_agents[:]
 
         self.board = chess.Board()
@@ -291,38 +286,34 @@ class raw_env(AECEnv):
             )
 
     def _render_gui(self):
-        try:
-            import pygame
-        except ImportError:
-            raise DependencyNotInstalled(
-                "pygame is not installed, run `pip install pettingzoo[classic]`"
-            )
-
-        if self.window_surface is None:
+        if self.screen is None:
             pygame.init()
 
             if self.render_mode == "human":
-                pygame.display.init()
                 pygame.display.set_caption("Chess")
-                self.window_surface = pygame.display.set_mode(self.BOARD_SIZE)
+                self.screen = pygame.display.set_mode(self.BOARD_SIZE)
             elif self.render_mode == "rgb_array":
-                self.window_surface = pygame.Surface(self.BOARD_SIZE)
+                self.screen = pygame.Surface(self.BOARD_SIZE)
 
-        self.window_surface.blit(self.bg_image, (0, 0))
+        self.screen.blit(self.bg_image, (0, 0))
         for square, piece in self.board.piece_map().items():
-            pos = (square % 8 * self.cell_size[0], square // 8 * self.cell_size[1])
+            pos_x = square % 8 * self.cell_size[0]
+            pos_y = (
+                self.BOARD_SIZE[1] - (square // 8 + 1) * self.cell_size[1]
+            )  # offset because pygame display is flipped
             piece_name = chess.piece_name(piece.piece_type)
             piece_img = self.piece_images[piece_name][piece.color]
-            self.window_surface.blit(piece_img, pos)
+            self.screen.blit(piece_img, (pos_x, pos_y))
 
         if self.render_mode == "human":
-            pygame.event.pump()
             pygame.display.update()
             self.clock.tick(self.metadata["render_fps"])
         elif self.render_mode == "rgb_array":
             return np.transpose(
-                np.array(pygame.surfarray.pixels3d(self.window_surface)), axes=(1, 0, 2)
+                np.array(pygame.surfarray.pixels3d(self.screen)), axes=(1, 0, 2)
             )
 
     def close(self):
-        pass
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None

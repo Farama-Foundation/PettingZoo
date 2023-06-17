@@ -96,6 +96,7 @@ import gymnasium
 import numpy as np
 import pygame
 from gymnasium import spaces
+from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
@@ -127,7 +128,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_no_limit_v6",
@@ -141,6 +142,7 @@ class raw_env(RLCardBase):
         render_mode: str | None = None,
         screen_height: int | None = 1000,
     ):
+        EzPickle.__init__(self, num_players, render_mode, screen_height)
         super().__init__("no-limit-holdem", num_players, (54,))
         self.observation_spaces = self._convert_to_dict(
             [
@@ -169,6 +171,9 @@ class raw_env(RLCardBase):
 
         self.render_mode = render_mode
         self.screen_height = screen_height
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def step(self, action):
         super().step(action)
@@ -207,11 +212,13 @@ class raw_env(RLCardBase):
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
 
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
         if self.render_mode == "human":
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
+                pygame.display.set_caption("Texas Hold'em No Limit")
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))

@@ -158,10 +158,7 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
-        self.screen = pygame.Surface(
-            (self.s_width, self.s_height)
-        )  # (960, 720) # (640, 480) # (100, 200)
-        self.area = self.screen.get_rect()
+        self.area = pygame.Rect(0, 0, self.s_width, self.s_height)
         self.max_reward = max_reward
         self.off_screen_penalty = off_screen_penalty
 
@@ -185,7 +182,7 @@ class CooperativePong:
         )
 
         self.render_mode = render_mode
-        self.renderOn = False
+        self.screen = None
 
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
@@ -246,18 +243,17 @@ class CooperativePong:
 
         self.reinit()
 
-        self.draw()
+        # Pygame surface required even for render_mode == None, as observations are taken from pixel values
+        # Observe
+        if self.render_mode != "human":
+            self.screen = pygame.Surface((self.s_width, self.s_height))
+
+        self.render()
 
     def close(self):
-        if self.renderOn:
-            pygame.event.pump()
-            pygame.display.quit()
-            self.renderOn = False
-
-    def enable_render(self):
-        self.screen = pygame.display.set_mode(self.screen.get_size())
-        self.renderOn = True
-        self.draw()
+        if self.screen is not None:
+            pygame.quit()
+            self.screen = None
 
     def render(self):
         if self.render_mode is None:
@@ -266,9 +262,11 @@ class CooperativePong:
             )
             return
 
-        if not self.renderOn and self.render_mode == "human":
-            # sets self.renderOn to true and initializes display
-            self.enable_render()
+        if self.screen is None:
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode((self.s_width, self.s_height))
+                pygame.display.set_caption("Cooperative Pong")
+            self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
@@ -335,9 +333,7 @@ class CooperativePong:
                     self.truncations[ag] = self.truncate
                     self.infos[ag] = {}
 
-        if self.renderOn:
-            pygame.event.pump()
-        self.draw()
+        self.render()
 
 
 def env(**kwargs):
@@ -366,7 +362,6 @@ class raw_env(AECEnv, EzPickle):
 
         self._seed()
 
-        self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -383,6 +378,9 @@ class raw_env(AECEnv, EzPickle):
         self.infos = self.env.infos
 
         self.score = self.env.score
+
+        self.render_mode = self.env.render_mode
+        self.screen = None
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
