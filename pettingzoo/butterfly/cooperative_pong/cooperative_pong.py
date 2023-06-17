@@ -182,7 +182,7 @@ class CooperativePong:
         )
 
         self.render_mode = render_mode
-        self.renderOn = False
+        self.screen = None
 
         # set speed
         self.speed = [ball_speed, left_paddle_speed, right_paddle_speed]
