@@ -158,7 +158,7 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
-        self.area = self.screen.get_rect()
+        self.area = pygame.Rect(0, 0, self.s_width, self.s_height)
         self.max_reward = max_reward
         self.off_screen_penalty = off_screen_penalty
 
