@@ -99,7 +99,6 @@ class WaterworldBase:
         self.thrust_penalty = thrust_penalty
 
         self.max_cycles = max_cycles
-        self.renderOn = False
 
         self.control_rewards = [0 for _ in range(self.n_pursuers)]
         self.behavior_rewards = [0 for _ in range(self.n_pursuers)]
@@ -114,7 +113,7 @@ class WaterworldBase:
             self.initial_obstacle_coord = obstacle_coord
 
         self.render_mode = render_mode
-        self.renderOn = False
+        self.screen = None
         self.frames = 0
         self.num_agents = self.n_pursuers
         self.get_spaces()
@@ -723,7 +722,7 @@ class WaterworldBase:
             )
             return
 
-        if not self.renderOn:
+        if self.screen is None:
             if self.render_mode == "human":
                 pygame.init()
                 self.screen = pygame.display.set_mode(
@@ -732,8 +731,6 @@ class WaterworldBase:
                 pygame.display.set_caption("Waterworld")
             else:
                 self.screen = pygame.Surface((self.pixel_scale, self.pixel_scale))
-
-            self.renderOn = True
 
         self.screen.fill((255, 255, 255))
         self.draw()

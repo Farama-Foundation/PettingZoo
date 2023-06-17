@@ -155,7 +155,6 @@ class Pursuit:
         self.surround_mask = np.array([[-1, 0], [1, 0], [0, 1], [0, -1]])
 
         self.model_state = np.zeros((4,) + self.map_matrix.shape, dtype=np.float32)
-        self.renderOn = False
         self.pixel_scale = 30
 
         self.frames = 0
@@ -239,7 +238,6 @@ class Pursuit:
         self.model_state[2] = self.evader_layer.get_state_matrix()
 
         self.frames = 0
-        self.renderOn = False
 
         return self.safely_observe(0)
 
@@ -395,7 +393,7 @@ class Pursuit:
             )
             return
 
-        if not self.renderOn:
+        if self.screen is not None:
             if self.render_mode == "human":
                 pygame.display.init()
                 self.screen = pygame.display.set_mode(
@@ -407,7 +405,6 @@ class Pursuit:
                     (self.pixel_scale * self.x_size, self.pixel_scale * self.y_size)
                 )
 
-            self.renderOn = True
         self.draw_model_state()
 
         self.draw_pursuers_observations()

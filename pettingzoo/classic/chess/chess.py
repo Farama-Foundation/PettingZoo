@@ -155,9 +155,10 @@ class raw_env(AECEnv, EzPickle):
         self.render_mode = render_mode
         self.screen_height = self.screen_width = screen_height
 
+        self.screen = None
+
         if self.render_mode in ["human", "rgb_array"]:
             self.BOARD_SIZE = (self.screen_width, self.screen_height)
-            self.screen = None
             self.clock = pygame.time.Clock()
             self.cell_size = (self.BOARD_SIZE[0] / 8, self.BOARD_SIZE[1] / 8)
 
