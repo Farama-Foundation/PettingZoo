@@ -158,9 +158,6 @@ class CooperativePong:
 
         # Display screen
         self.s_width, self.s_height = 960 // render_ratio, 560 // render_ratio
-        self.screen = pygame.Surface(
-            (self.s_width, self.s_height)
-        )  # (960, 720) # (640, 480) # (100, 200)
         self.area = self.screen.get_rect()
         self.max_reward = max_reward
         self.off_screen_penalty = off_screen_penalty
@@ -253,12 +250,6 @@ class CooperativePong:
             pygame.quit()
             self.screen = None
 
-    def enable_render(self):
-        self.screen = pygame.display.set_mode(self.screen.get_size())
-        pygame.display.set_caption("Cooperative Pong")
-        self.renderOn = True
-        self.draw()
-
     def render(self):
         if self.render_mode is None:
             gymnasium.logger.warn(
@@ -266,9 +257,13 @@ class CooperativePong:
             )
             return
 
-        if not self.renderOn and self.render_mode == "human":
-            # sets self.renderOn to true and initializes display
-            self.enable_render()
+        if self.screen is None:
+            if self.render_mode == "human":
+                self.screen = pygame.display.set_mode((self.s_width, self.s_height))
+                pygame.display.set_caption("Cooperative Pong")
+            else:
+                self.screen = pygame.Surface((self.s_width, self.s_height))
+            self.draw()
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
         if self.render_mode == "human":
@@ -364,7 +359,6 @@ class raw_env(AECEnv, EzPickle):
 
         self._seed()
 
-        self.render_mode = self.env.render_mode
         self.agents = self.env.agents[:]
         self.possible_agents = self.agents[:]
         self._agent_selector = agent_selector(self.agents)
@@ -381,6 +375,9 @@ class raw_env(AECEnv, EzPickle):
         self.infos = self.env.infos
 
         self.score = self.env.score
+
+        self.render_mode = self.env.render_mode
+        self.screen = None
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
