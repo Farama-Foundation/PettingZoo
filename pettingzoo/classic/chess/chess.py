@@ -73,7 +73,7 @@ You can get back the original (x,y,c) coordinates from the integer action `a` wi
 > a = x*(8*73) + y*73 + c
 > print(a // (8*73), a % (8*73) // 73, a % (8*73) % 73)  # -> 6 0 12
 
-Note: the coordinates (6, 0, 12) correspond to row 6, column 0, plane 12. In chess notation, this would signify square G1:
+Note: the coordinates (6, 0, 12) correspond to column 6, row 0, plane 12. In chess notation, this would signify square G1:
 
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
