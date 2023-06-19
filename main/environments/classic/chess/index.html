@@ -476,7 +476,41 @@ rook respectively. Other pawn moves or captures from the seventh rank are promot
 queen.</p>
 </div></blockquote>
 <p>We instead flatten this into 8×8×73 = 4672 discrete action space.</p>
-<p>You can get back the original (x,y,c) coordinates from the integer action <code class="docutils literal notranslate"><span class="pre">a</span></code> with the following expression: <code class="docutils literal notranslate"><span class="pre">(a/(8*73),</span> <span class="pre">(a/73)%8,</span> <span class="pre">a%(8*8))</span></code></p>
+<p>You can get back the original (x,y,c) coordinates from the integer action <code class="docutils literal notranslate"><span class="pre">a</span></code> with the following expression: <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">//</span> <span class="pre">(8*73),</span> <span class="pre">(a</span> <span class="pre">//</span> <span class="pre">73)</span> <span class="pre">%</span> <span class="pre">8,</span> <span class="pre">a</span> <span class="pre">%</span> <span class="pre">(8*73)</span> <span class="pre">%</span> <span class="pre">73)</span></code></p>
+<blockquote>
+<div><p>x = 6
+y = 0
+c = 12
+a = x*(8<em>73) + y</em>73 + c
+print(a // (8<em>73), a % (8</em>73) // 73, a % (8*73) % 73)  # -&gt; 6 0 12</p>
+</div></blockquote>
+<p>Note: the coordinates (6, 0, 12) correspond to row 6, column 0, plane 12. In chess notation, this would signify square G1:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>0</p></th>
+<th class="head text-center"><p>1</p></th>
+<th class="head text-center"><p>2</p></th>
+<th class="head text-center"><p>3</p></th>
+<th class="head text-center"><p>4</p></th>
+<th class="head text-center"><p>5</p></th>
+<th class="head text-center"><p>6</p></th>
+<th class="head text-center"><p>7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>A</p></td>
+<td class="text-center"><p>B</p></td>
+<td class="text-center"><p>C</p></td>
+<td class="text-center"><p>D</p></td>
+<td class="text-center"><p>E</p></td>
+<td class="text-center"><p>F</p></td>
+<td class="text-center"><p>G</p></td>
+<td class="text-center"><p>H</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="rewards">
 <h2>Rewards<a class="headerlink" href="#rewards" title="Permalink to this heading">#</a></h2>
