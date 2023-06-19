@@ -65,7 +65,19 @@ queen.
 
 We instead flatten this into 8×8×73 = 4672 discrete action space.
 
-You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a/(8*73), (a/73)%8, a%(8*8))`
+You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a // (8*73), (a // 73) % 8, a % (8*73) % 73)`
+
+> x = 6
+> y = 0
+> c = 12
+> a = x*(8*73) + y*73 + c
+> print(a // (8*73), a % (8*73) // 73, a % (8*73) % 73)  # -> 6 0 12
+
+Note: the coordinates (6, 0, 12) correspond to row 6, column 0, plane 12. In chess notation, this would signify square G1:
+
+| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| A | B | C | D | E | F | G | H |
 
 ### Rewards
 
