@@ -73,9 +73,9 @@ import gymnasium
 import numpy as np
 from gymnasium import spaces
 
-from pettingzoo import AECEnv
 from pettingzoo.classic.tictactoe.board import Board
 from pettingzoo.utils import agent_selector, wrappers
+from pettingzoo.utils.env import AECEnv
 
 
 def env(render_mode=None):
