@@ -18,7 +18,7 @@ This environment is part of the <a href='..'>classic environments</a>. Please re
 | Agents             | 2                                  |
 | Action Shape       | Discrete(4672)                     |
 | Action Values      | Discrete(4672)                     |
-| Observation Shape  | (8,8,20)                           |
+| Observation Shape  | (8,8,111)                          |
 | Observation Values | [0,1]                              |
 
 
@@ -28,7 +28,7 @@ Chess is one of the oldest studied games in AI. Our implementation of the observ
 
 The observation is a dictionary which contains an `'observation'` element which is the usual RL observation described below, and an  `'action_mask'` which holds the legal moves, described in the Legal Actions Mask section.
 
-Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:
+Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 111 channels representing:
 
 * Channels 0 - 3: Castling rights:
   * Channel 0: All ones if white can castle queenside
@@ -41,10 +41,13 @@ Like AlphaZero, the main observation space is an 8x8 image representing the boar
 * Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant
 possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
 * Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
+* Channel 20 - 111 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 20.
 
-Like AlphaZero, the board is always oriented towards the current agent (the currant agent's king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.
+Similar to AlphaZero, our observation space follows a stacking approach, where it accumulates the previous 8 board observations.
 
-Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the `frame_stacking` argument of our wrapper.
+Unlike AlphaZero, where the board orientation may vary, in our system, the `env.board_history` always maintains the orientation towards the white agent, with the white agent's king consistently positioned on the 1st row. In simpler terms, both players are observing the same board layout.
+
+Nevertheless, we have incorporated a convenient feature, the env.observe('player_1') function, specifically for the black agent's orientation. This facilitates the training of agents capable of playing proficiently as both black and white.
 
 #### Legal Actions Mask
 
@@ -202,10 +205,21 @@ class raw_env(AECEnv, EzPickle):
         return self.action_spaces[agent]
 
     def observe(self, agent):
-        observation = chess_utils.get_observation(
-            self.board, self.possible_agents.index(agent)
-        )
+        agent_index = self.possible_agents.index(agent)
+
+        observation = chess_utils.get_observation(self.board, agent_index)
         observation = np.dstack((observation[:, :, :7], self.board_history))
+        # We need to swap the white 6 channels with black 6 channels
+        if agent_index == 1:
+            # 1. Mirror the board
+            observation = np.flip(observation, axis=0)
+            # 2. Swap the white 6 channels with the black 6 channels
+            for i in range(1, 9):
+                tmp = observation[..., 13 * i - 6 : 13 * i].copy()
+                observation[..., 13 * i - 6 : 13 * i] = observation[
+                    ..., 13 * i : 13 * i + 6
+                ]
+                observation[..., 13 * i : 13 * i + 6] = tmp
         legal_moves = (
             chess_utils.legal_moves(self.board) if agent == self.agent_selection else []
         )
@@ -272,7 +286,7 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
 
         # Update board after applying action
-        next_board = chess_utils.get_observation(self.board, current_agent)
+        next_board = chess_utils.get_observation(self.board, 0)
         self.board_history = np.dstack(
             (next_board[:, :, 7:], self.board_history[:, :, :-13])
         )

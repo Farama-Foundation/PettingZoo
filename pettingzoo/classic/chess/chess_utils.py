@@ -8,8 +8,8 @@ def boards_to_ndarray(boards):
     bits = np.unpackbits(arr8)
     floats = bits.astype(bool)
     boardstack = floats.reshape([len(boards), 8, 8])
-    boardimage = np.transpose(boardstack, [1, 2, 0])
-    return boardimage
+    boardstack = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=[0, 1])
+    return boardstack
 
 
 def square_to_coord(s):
@@ -194,7 +194,7 @@ def legal_moves(orig_board):
     return legal_moves
 
 
-def get_observation(orig_board, player):
+def get_observation(orig_board, player: int):
     """Returns observation array.
 
     Observation is an 8x8x(P + L) dimensional array.
@@ -206,6 +206,9 @@ def get_observation(orig_board, player):
         board = board.mirror()
     else:
         board = board
+
+    # print("Chess black is: ", chess.BLACK) # 0
+    # print("Chess white is: ", chess.WHITE) # 1
 
     all_squares = chess.SquareSet(chess.BB_ALL)
     HISTORY_LEN = 1
@@ -281,8 +284,8 @@ def get_observation(orig_board, player):
 
         """
     base = BASE
-    OURS = 0
-    THEIRS = 1
+    OURS = 1
+    THEIRS = 0
     result[base + 0] = board.pieces(chess.PAWN, OURS)
     result[base + 1] = board.pieces(chess.KNIGHT, OURS)
     result[base + 2] = board.pieces(chess.BISHOP, OURS)
@@ -321,17 +324,18 @@ def get_observation(orig_board, player):
       }
     """
     # from 0-63
-    square = board.ep_square
+    # Adjust the row number for the white pawn to the 8th if the en passant flag is set, and vice versa for black pawns.
+    square = board.ep_square  # (int) where the en passant happened
     if square:
-        ours = square > 32
+        ours = square < 32
         row = square % 8
-        dest_col_add = 8 * 7 if ours else 0
+        dest_col_add = 0 if ours else 8 * 7
         dest_square = dest_col_add + row
         if ours:
-            result[base + 0].remove(square - 8)
+            result[base + 0].remove(square + 8)
             result[base + 0].add(dest_square)
         else:
-            result[base + 6].remove(square + 8)
+            result[base + 6].remove(square - 8)
             result[base + 6].add(dest_square)
 
     return boards_to_ndarray(result)
