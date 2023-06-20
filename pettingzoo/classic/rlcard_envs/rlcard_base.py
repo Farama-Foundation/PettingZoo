@@ -2,7 +2,7 @@ import numpy as np
 import rlcard
 from gymnasium import spaces
 
-from pettingzoo import AECEnv
+from pettingzoo.utils.env import AECEnv
 
 
 class RLCardBase(AECEnv):

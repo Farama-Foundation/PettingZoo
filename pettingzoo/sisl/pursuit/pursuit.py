@@ -82,11 +82,11 @@ import numpy as np
 import pygame
 from gymnasium.utils import EzPickle
 
-from pettingzoo import AECEnv
 from pettingzoo.sisl.pursuit.manual_policy import ManualPolicy
 from pettingzoo.sisl.pursuit.pursuit_base import Pursuit as _env
 from pettingzoo.utils import agent_selector, wrappers
 from pettingzoo.utils.conversions import parallel_wrapper_fn
+from pettingzoo.utils.env import AECEnv
 
 __all__ = ["ManualPolicy", "env", "parallel_env", "raw_env"]
 
