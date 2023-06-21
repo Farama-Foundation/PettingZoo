@@ -8,8 +8,9 @@ def boards_to_ndarray(boards):
     bits = np.unpackbits(arr8)
     floats = bits.astype(bool)
     boardstack = floats.reshape([len(boards), 8, 8])
-    boardstack = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=[0, 1])
-    return boardstack
+    # We do np.flip() onto `boardstack` because the board is 180 degrees rotated after the process above.
+    boardimage = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=[0, 1])
+    return boardimage
 
 
 def square_to_coord(s):
@@ -135,7 +136,7 @@ moves_to_actions = {}
 actions_to_moves = {}
 
 
-def action_to_move(board, action, player):
+def action_to_move(board: chess.Board, action, player: int):
     base_move = chess.Move.from_uci(actions_to_moves[action])
 
     base_coord = square_to_coord(base_move.from_square)
@@ -164,7 +165,7 @@ def make_move_mapping(uci_move):
     actions_to_moves[cur_action] = uci_move
 
 
-def legal_moves(orig_board):
+def legal_moves(orig_board: chess.Board):
     """Returns legal moves.
 
     action space is a 8x8x73 dimensional array
@@ -194,7 +195,7 @@ def legal_moves(orig_board):
     return legal_moves
 
 
-def get_observation(orig_board, player: int):
+def get_observation(orig_board: chess.Board, player: int):
     """Returns observation array.
 
     Observation is an 8x8x(P + L) dimensional array.
@@ -206,9 +207,6 @@ def get_observation(orig_board, player: int):
         board = board.mirror()
     else:
         board = board
-
-    # print("Chess black is: ", chess.BLACK) # 0
-    # print("Chess white is: ", chess.WHITE) # 1
 
     all_squares = chess.SquareSet(chess.BB_ALL)
     HISTORY_LEN = 1
@@ -284,6 +282,7 @@ def get_observation(orig_board, player: int):
 
         """
     base = BASE
+    # In the module `chess`, the color is represented by 1 for white and 0 for black.
     OURS = 1
     THEIRS = 0
     result[base + 0] = board.pieces(chess.PAWN, OURS)
@@ -324,18 +323,31 @@ def get_observation(orig_board, player: int):
       }
     """
     # from 0-63
-    # Adjust the row number for the white pawn to the 8th if the en passant flag is set, and vice versa for black pawns.
-    square = board.ep_square  # (int) where the en passant happened
+    # Adjust the row number for the white pawn to the 1st if the en passant flag is set, and vice versa for black pawns.
+    # For example
+    # If the white play an en passant move, the opponent can play a special move called en passant capture.
+    # To show this, we denote the pawn at (row, col) = (1, `dest_square`) instead of (5, `dest_square`).
+    square = board.ep_square  # square where the en passant happened (int)
     if square:
-        ours = square < 32
+        ours = (
+            square < 32
+        )  # Less than 32 is a white square, otherwise it's a black square
         row = square % 8
         dest_col_add = 0 if ours else 8 * 7
         dest_square = dest_col_add + row
         if ours:
-            result[base + 0].remove(square + 8)
-            result[base + 0].add(dest_square)
+            result[base + 0].remove(
+                square + 8
+            )  # Set the `square + 8` position in channel `base` to 0
+            result[base + 0].add(
+                dest_square
+            )  # Set the `dest_square` position in channel `base` to 1
         else:
-            result[base + 6].remove(square - 8)
-            result[base + 6].add(dest_square)
+            result[base + 6].remove(
+                square - 8
+            )  # Set the `square + 8` position in channel `base` to 0
+            result[base + 6].add(
+                dest_square
+            )  # Set the `dest_square` position in channel `base` to 1
 
     return boards_to_ndarray(result)

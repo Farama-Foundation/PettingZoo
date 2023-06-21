@@ -205,12 +205,12 @@ class raw_env(AECEnv, EzPickle):
         return self.action_spaces[agent]
 
     def observe(self, agent):
-        agent_index = self.possible_agents.index(agent)
+        current_index = self.possible_agents.index(agent)
 
-        observation = chess_utils.get_observation(self.board, agent_index)
+        observation = chess_utils.get_observation(self.board, current_index)
         observation = np.dstack((observation[:, :, :7], self.board_history))
         # We need to swap the white 6 channels with black 6 channels
-        if agent_index == 1:
+        if current_index == 1:
             # 1. Mirror the board
             observation = np.flip(observation, axis=0)
             # 2. Swap the white 6 channels with the black 6 channels
@@ -286,7 +286,8 @@ class raw_env(AECEnv, EzPickle):
         self._accumulate_rewards()
 
         # Update board after applying action
-        next_board = chess_utils.get_observation(self.board, 0)
+        # We always take the perspective of the white agent
+        next_board = chess_utils.get_observation(self.board, player=0)
         self.board_history = np.dstack(
             (next_board[:, :, 7:], self.board_history[:, :, :-13])
         )
