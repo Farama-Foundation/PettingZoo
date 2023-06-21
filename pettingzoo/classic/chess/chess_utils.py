@@ -329,9 +329,8 @@ def get_observation(orig_board: chess.Board, player: int):
     # To show this, we denote the pawn at (row, col) = (1, `dest_square`) instead of (5, `dest_square`).
     square = board.ep_square  # square where the en passant happened (int)
     if square:
-        ours = (
-            square < 32
-        )  # Less than 32 is a white square, otherwise it's a black square
+        # Less than 32 is a white square, otherwise it's a black square
+        ours = square < 32
         row = square % 8
         dest_col_add = 0 if ours else 8 * 7
         dest_square = dest_col_add + row
