@@ -336,18 +336,14 @@ def get_observation(orig_board: chess.Board, player: int):
         dest_col_add = 0 if ours else 8 * 7
         dest_square = dest_col_add + row
         if ours:
-            result[base + 0].remove(
-                square + 8
-            )  # Set the `square + 8` position in channel `base` to 0
-            result[base + 0].add(
-                dest_square
-            )  # Set the `dest_square` position in channel `base` to 1
+            # Set the `square + 8` position in channel `base` to False
+            result[base + 0].remove(square + 8)
+            # Set the `dest_square` position in channel `base` to True
+            result[base + 0].add(dest_square)
         else:
-            result[base + 6].remove(
-                square - 8
-            )  # Set the `square + 8` position in channel `base` to 0
-            result[base + 6].add(
-                dest_square
-            )  # Set the `dest_square` position in channel `base` to 1
+            # Set the `square + 8` position in channel `base` to False
+            result[base + 6].remove(square - 8)
+            # Set the `dest_square` position in channel `base` to True
+            result[base + 6].add(dest_square)
 
     return boards_to_ndarray(result)
