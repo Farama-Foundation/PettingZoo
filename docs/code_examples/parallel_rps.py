@@ -3,8 +3,8 @@ import functools
 import gymnasium
 from gymnasium.spaces import Discrete
 
-from pettingzoo.utils import parallel_to_aec, wrappers
 from pettingzoo import ParallelEnv
+from pettingzoo.utils import parallel_to_aec, wrappers
 
 ROCK = 0
 PAPER = 1

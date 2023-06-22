@@ -113,7 +113,6 @@ from __future__ import annotations
 import gymnasium
 import numpy as np
 from gymnasium.utils import EzPickle
-
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils import melding as melding
 from rlcard.games.gin_rummy.utils import utils

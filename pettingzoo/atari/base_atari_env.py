@@ -7,9 +7,9 @@ import pygame
 from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
+from pettingzoo import ParallelEnv
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
-from pettingzoo import ParallelEnv
 
 __all__ = [
     "parallel_wrapper_fn",

@@ -83,8 +83,8 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 from __future__ import annotations
 
 import gymnasium
-
 from rlcard.utils.utils import print_card
+
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
 
