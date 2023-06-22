@@ -1,4 +1,4 @@
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 
 class CustomEnvironment(ParallelEnv):

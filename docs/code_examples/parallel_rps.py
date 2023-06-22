@@ -4,7 +4,7 @@ import gymnasium
 from gymnasium.spaces import Discrete
 
 from pettingzoo.utils import parallel_to_aec, wrappers
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 ROCK = 0
 PAPER = 1

@@ -114,16 +114,11 @@ import gymnasium
 import numpy as np
 from gymnasium.utils import EzPickle
 
-from pettingzoo.classic.rlcard.games.gin_rummy.player import GinRummyPlayer
-from pettingzoo.classic.rlcard.games.gin_rummy.utils import melding as melding
-from pettingzoo.classic.rlcard.games.gin_rummy.utils import utils
-from pettingzoo.classic.rlcard.games.gin_rummy.utils.action_event import (
-    GinAction,
-    KnockAction,
-)
-from pettingzoo.classic.rlcard.utils.utils import print_card
-from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
-from pettingzoo.utils import wrappers
+from rlcard.games.gin_rummy.player import GinRummyPlayer
+from rlcard.games.gin_rummy.utils import melding as melding
+from rlcard.games.gin_rummy.utils import utils
+from rlcard.games.gin_rummy.utils.action_event import GinAction, KnockAction
+from rlcard.utils.utils import print_card
 
 
 def env(**kwargs):

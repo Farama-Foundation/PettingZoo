@@ -2,7 +2,7 @@ import gymnasium
 from gymnasium.utils import seeding
 
 from pettingzoo.utils import conversions, wrappers
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 
 def env(**kwargs):

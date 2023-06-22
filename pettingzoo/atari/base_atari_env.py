@@ -9,7 +9,7 @@ from gymnasium.utils import EzPickle, seeding
 
 from pettingzoo.utils import wrappers
 from pettingzoo.utils.conversions import parallel_to_aec_wrapper, parallel_wrapper_fn
-from pettingzoo.utils.env import ParallelEnv
+from pettingzoo import ParallelEnv
 
 __all__ = [
     "parallel_wrapper_fn",
