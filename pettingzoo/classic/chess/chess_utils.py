@@ -5,11 +5,12 @@ import numpy as np
 def boards_to_ndarray(boards):
     arr64 = np.array(boards, dtype=np.uint64)
     arr8 = arr64.view(dtype=np.uint8)
-    bits = np.unpackbits(arr8)
+    # a bit array increment from LHS to RHS
+    bits = np.unpackbits(arr8, bitorder="little")
     floats = bits.astype(bool)
     boardstack = floats.reshape([len(boards), 8, 8])
-    # We do np.flip() onto `boardstack` because the board is 180 degrees rotated after the process above.
-    boardimage = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=[0, 1])
+    # We do np.flip() onto `boardstack` because the 1st line of the boardimage is the 8th line of the ndarray.
+    boardimage = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=0)
     return boardimage
 
 
@@ -322,12 +323,34 @@ def get_observation(orig_board: chess.Board, player: int):
         if (history_idx > 0) flip = !flip;
       }
     """
+
     # from 0-63
-    # Adjust the row number for the white pawn to the 1st if the en passant flag is set, and vice versa for black pawns.
-    # For example
-    # If the white play an en passant move, the opponent can play a special move called en passant capture.
-    # To show this, we denote the pawn at (row, col) = (1, `dest_square`) instead of (5, `dest_square`).
-    square = board.ep_square  # square where the en passant happened (int)
+    """
+    Adjust the row number for the white pawn to the 1st if the en passant flag is set, and vice versa for black pawns.
+    E.g. A white pawn(e2) just made an initial two-square advance, `e2e4`.
+         A black pawn(f4) next to that white pawn(e4) can play en passant capture on it.
+         To show this chance, we denote the white pawn at `e1` instead of `e4` once that white pawn play two-square advance.
+         The en passant flag is set only for one turn, and it is reset after the next turn.
+         Note that the en passant flag has nothing to do with the opponent's pawn.
+         i.e. an en passant flag always set after an initial two-square advance.
+
+    FEN: 4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50
+       The board             The observation of the 7th channel(white pawn)
+    8  · · · · ♚ · · ·    8  · · · · · · · ·
+    7  · · · · · · · ·    7  · · · · · · · ·
+    6  · · · · · · · ·    6  · · · · · · · ·
+    5  · · · · · · · ·    5  · · · · · · · ·
+    4  · · · · ♙ ♟ · ·    4  · · · · · · · ·
+    3  · · · · · · · ·    3  · · · · · · · ·
+    2  · · · · · · · ·    2  · · · · · · · ·
+    1  · · · · ♔ · · ·    1  · · · · 1 · · ·
+       a b c d e f g h       a b c d e f g h
+
+    More details: pettingzoo/classic/chess/chess.py Line 41
+    """
+
+    # square where the en passant happened (int)
+    square = board.ep_square
     if square:
         # Less than 32 is a white square, otherwise it's a black square
         ours = square < 32
