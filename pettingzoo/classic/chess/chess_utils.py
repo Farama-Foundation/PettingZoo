@@ -326,6 +326,7 @@ def get_observation(orig_board: chess.Board, player: int):
 
     # from 0-63
     """
+    The LeelaChessZero-style en passant flag.
     Adjust the row number for the white pawn to the 1st if the en passant flag is set, and vice versa for black pawns.
     E.g. A white pawn(e2) just made an initial two-square advance, `e2e4`.
          A black pawn(f4) next to that white pawn(e4) can play en passant capture on it.
@@ -346,7 +347,9 @@ def get_observation(orig_board: chess.Board, player: int):
     1  · · · · ♔ · · ·    1  · · · · 1 · · ·
        a b c d e f g h       a b c d e f g h
 
-    More details: pettingzoo/classic/chess/chess.py Line 41
+    More details:
+    https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py#L42
+    https://github.com/LeelaChessZero/lc0/blob/master/src/chess/board.cc#L1114
     """
 
     # square where the en passant happened (int)

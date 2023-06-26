@@ -38,10 +38,11 @@ Like AlphaZero, the main observation space is an 8x8 image representing the boar
 * Channel 4: Is black or white
 * Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves
 * Channel 6: All ones to help neural networks find board edges in padded convolutions
-* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant
-possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
+* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0.
+Similar to LeelaChessZero, en passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.
 * Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)
 * Channel 20 - 111 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 20.
+
 
 Similar to AlphaZero, our observation space follows a stacking approach, where it accumulates the previous 8 board observations.
 
