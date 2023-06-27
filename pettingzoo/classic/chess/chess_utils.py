@@ -324,10 +324,11 @@ def get_observation(orig_board: chess.Board, player: int):
       }
     """
 
-    # from 0-63
     """
     The LeelaChessZero-style en passant flag.
-    Adjust the row number for the white pawn to the 1st if the en passant flag is set, and vice versa for black pawns.
+    In FEN, the en passant flag is represented by the square that can be a possible target of an en passant, e.g. the `e3` in `4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50`.
+    However, for a neural network, it is not easy to train the network to recognize sparse and unstructured data.
+    Therefore, we adhere to LeelaChessZero's convention, which adjusts the row number to the 1st for white pawns if the en passant flag is set, and vice versa for black pawns.
     E.g. A white pawn(e2) just made an initial two-square advance, `e2e4`.
          A black pawn(f4) next to that white pawn(e4) can play en passant capture on it.
          To show this chance, we denote the white pawn at `e1` instead of `e4` once that white pawn play two-square advance.
@@ -335,7 +336,6 @@ def get_observation(orig_board: chess.Board, player: int):
          Note that the en passant flag has nothing to do with the opponent's pawn.
          i.e. an en passant flag always set after an initial two-square advance.
 
-    FEN: 4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50
        The board             The observation of the 7th channel(white pawn)
     8  · · · · ♚ · · ·    8  · · · · · · · ·
     7  · · · · · · · ·    7  · · · · · · · ·
@@ -346,13 +346,14 @@ def get_observation(orig_board: chess.Board, player: int):
     2  · · · · · · · ·    2  · · · · · · · ·
     1  · · · · ♔ · · ·    1  · · · · 1 · · ·
        a b c d e f g h       a b c d e f g h
+    FEN: 4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50
 
     More details:
     https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py#L42
     https://github.com/LeelaChessZero/lc0/blob/master/src/chess/board.cc#L1114
     """
 
-    # square where the en passant happened (int)
+    # square where the en passant happened, ranging from 0 to 63 (int)
     square = board.ep_square
     if square:
         # Less than 32 is a white square, otherwise it's a black square
