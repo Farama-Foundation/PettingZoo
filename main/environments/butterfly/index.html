@@ -470,7 +470,7 @@
 
 <span class="k">while</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
     <span class="c1"># this is where you would insert your policy</span>
-    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>  
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
 
     <span class="n">observations</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">terminations</span><span class="p">,</span> <span class="n">truncations</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -489,7 +489,7 @@
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
     <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;render_fps&quot;</span><span class="p">])</span>
     <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-    
+
     <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">manual_policy</span><span class="o">.</span><span class="n">agent</span><span class="p">:</span>
         <span class="c1"># get user input (controls are WASD and space)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">manual_policy</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">agent</span><span class="p">)</span>
@@ -497,7 +497,7 @@
         <span class="c1"># this is where you would insert your policy (for non-player agents)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
 
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> 
+    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
