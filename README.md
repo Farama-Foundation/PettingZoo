@@ -20,7 +20,7 @@ PettingZoo includes the following families of environments:
 
 To install the base PettingZoo library: `pip install pettingzoo`.
 
-This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems). 
+This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).
 
 To install the dependencies for one family, use `pip install pettingzoo[atari]`, or use `pip install pettingzoo[all]` to install all dependencies.
 
@@ -28,7 +28,7 @@ We support Python 3.7, 3.8, 3.9 and 3.10 on Linux and macOS. We will accept PRs 
 
 ## Getting started
 
-For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/environmentcreation/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/). 
+For an introduction to PettingZoo, see [Basic Usage](https://pettingzoo.farama.org/content/basic_usage/). To create a new environment, see our [Environment Creation Tutorial](https://pettingzoo.farama.org/tutorials/environmentcreation/1-project-structure/) and [Custom Environment Examples](https://pettingzoo.farama.org/content/environment_creation/).
 For examples of training RL models using PettingZoo see our tutorials:
 * [CleanRL: Implementing PPO](https://pettingzoo.farama.org/tutorials/cleanrl/implementing_PPO/):train multiple PPO agents in the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment.
 * [Tianshou: Training Agents](https://pettingzoo.farama.org/tutorials/tianshou/intermediate/): train DQN agents in the [Tic-Tac-Toe](https://pettingzoo.farama.org/environments/classic/tictactoe/) environment.

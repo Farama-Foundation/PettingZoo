@@ -16,7 +16,7 @@ butterfly/pistonball
     :file: butterfly/list.html
 ```
 
-Butterfly environments are challenging scenarios created by Farama, using Pygame with visual Atari spaces. 
+Butterfly environments are challenging scenarios created by Farama, using Pygame with visual Atari spaces.
 
 All environments require a high degree of coordination and require learning of emergent behaviors to achieve an optimal policy. As such, these environments are currently very challenging to learn.
 
@@ -25,7 +25,7 @@ Environments are highly configurable via arguments specified in their respective
 [Knights Archers Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/),
 [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/).
 
-### Installation 
+### Installation
 The unique dependencies for this set of environments can be installed via:
 
 ````bash
@@ -43,7 +43,7 @@ observations = env.reset()
 
 while env.agents:
     # this is where you would insert your policy
-    actions = {agent: env.action_space(agent).sample() for agent in env.agents}  
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
 
     observations, rewards, terminations, truncations, infos = env.step(actions)
 env.close()
@@ -63,7 +63,7 @@ manual_policy = knights_archers_zombies_v10.ManualPolicy(env)
 for agent in env.agent_iter():
     clock.tick(env.metadata["render_fps"])
     observation, reward, termination, truncation, info = env.last()
-    
+
     if agent == manual_policy.agent:
         # get user input (controls are WASD and space)
         action = manual_policy(observation, agent)
@@ -71,7 +71,6 @@ for agent in env.agent_iter():
         # this is where you would insert your policy (for non-player agents)
         action = env.action_space(agent).sample()
 
-    env.step(action) 
+    env.step(action)
 env.close()
 ```
-
