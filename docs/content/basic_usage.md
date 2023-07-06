@@ -7,7 +7,7 @@ title: API
 
 To install the base PettingZoo library: `pip install pettingzoo`.
 
-This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems). 
+This does not include dependencies for all families of environments (some environments can be problematic to install on certain systems).
 
 To install the dependencies for one family, use `pip install pettingzoo[atari]`, or use `pip install pettingzoo[all]` to install all dependencies.
 
