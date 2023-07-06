@@ -426,7 +426,7 @@
 <td><p>Discrete(4672)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Observation Shape</p></td>
-<td><p>(8,8,20)</p></td>
+<td><p>(8,8,111)</p></td>
 </tr>
 <tr class="row-even"><td><p>Observation Values</p></td>
 <td><p>[0,1]</p></td>
@@ -438,7 +438,7 @@
 <section id="observation-space">
 <h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this heading">#</a></h2>
 <p>The observation is a dictionary which contains an <code class="docutils literal notranslate"><span class="pre">'observation'</span></code> element which is the usual RL observation described below, and an  <code class="docutils literal notranslate"><span class="pre">'action_mask'</span></code> which holds the legal moves, described in the Legal Actions Mask section.</p>
-<p>Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:</p>
+<p>Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 111 channels representing:</p>
 <ul class="simple">
 <li><p>Channels 0 - 3: Castling rights:</p>
 <ul>
@@ -451,12 +451,14 @@
 <li><p>Channel 4: Is black or white</p></li>
 <li><p>Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the <em>n</em> th element in the flattened channel is set if there has been <em>n</em> moves</p></li>
 <li><p>Channel 6: All ones to help neural networks find board edges in padded convolutions</p></li>
-<li><p>Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant
-possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</p></li>
+<li><p>Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0.
+Similar to LeelaChessZero, en passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</p></li>
 <li><p>Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)</p></li>
+<li><p>Channel 20 - 111 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 20.</p></li>
 </ul>
-<p>Like AlphaZero, the board is always oriented towards the current agent (the currant agent’s king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.</p>
-<p>Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the <code class="docutils literal notranslate"><span class="pre">frame_stacking</span></code> argument of our wrapper.</p>
+<p>Similar to AlphaZero, our observation space follows a stacking approach, where it accumulates the previous 8 board observations.</p>
+<p>Unlike AlphaZero, where the board orientation may vary, in our system, the <code class="docutils literal notranslate"><span class="pre">env.board_history</span></code> always maintains the orientation towards the white agent, with the white agent’s king consistently positioned on the 1st row. In simpler terms, both players are observing the same board layout.</p>
+<p>Nevertheless, we have incorporated a convenient feature, the env.observe(‘player_1’) function, specifically for the black agent’s orientation. This facilitates the training of agents capable of playing proficiently as both black and white.</p>
 <section id="legal-actions-mask">
 <h3>Legal Actions Mask<a class="headerlink" href="#legal-actions-mask" title="Permalink to this heading">#</a></h3>
 <p>The legal moves available to the current agent are found in the <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> element of the dictionary observation. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> is a binary vector where each index of the vector represents whether the action is legal or not. The <code class="docutils literal notranslate"><span class="pre">action_mask</span></code> will be all zeros for any agent except the one

@@ -408,7 +408,7 @@
 <span class="sd">| Agents             | 2                                  |</span>
 <span class="sd">| Action Shape       | Discrete(4672)                     |</span>
 <span class="sd">| Action Values      | Discrete(4672)                     |</span>
-<span class="sd">| Observation Shape  | (8,8,20)                           |</span>
+<span class="sd">| Observation Shape  | (8,8,111)                          |</span>
 <span class="sd">| Observation Values | [0,1]                              |</span>
 
 
@@ -418,7 +418,7 @@
 
 <span class="sd">The observation is a dictionary which contains an `&#39;observation&#39;` element which is the usual RL observation described below, and an  `&#39;action_mask&#39;` which holds the legal moves, described in the Legal Actions Mask section.</span>
 
-<span class="sd">Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 20 channels representing:</span>
+<span class="sd">Like AlphaZero, the main observation space is an 8x8 image representing the board. It has 111 channels representing:</span>
 
 <span class="sd">* Channels 0 - 3: Castling rights:</span>
 <span class="sd">  * Channel 0: All ones if white can castle queenside</span>
@@ -428,13 +428,17 @@
 <span class="sd">* Channel 4: Is black or white</span>
 <span class="sd">* Channel 5: A move clock counting up to the 50 move rule. Represented by a single channel where the *n* th element in the flattened channel is set if there has been *n* moves</span>
 <span class="sd">* Channel 6: All ones to help neural networks find board edges in padded convolutions</span>
-<span class="sd">* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0. En passant</span>
-<span class="sd">possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</span>
+<span class="sd">* Channel 7 - 18: One channel for each piece type and player color combination. For example, there is a specific channel that represents black knights. An index of this channel is set to 1 if a black knight is in the corresponding spot on the game board, otherwise, it is set to 0.</span>
+<span class="sd">Similar to LeelaChessZero, en passant possibilities are represented by displaying the vulnerable pawn on the 8th row instead of the 5th.</span>
 <span class="sd">* Channel 19: represents whether a position has been seen before (whether a position is a 2-fold repetition)</span>
+<span class="sd">* Channel 20 - 111 represents the previous 7 boards, with each board represented by 13 channels. The latest board occupies the first 13 channels, followed by the second latest board, and so on. These 13 channels correspond to channels 7 - 20.</span>
 
-<span class="sd">Like AlphaZero, the board is always oriented towards the current agent (the currant agent&#39;s king starts on the 1st row). In other words, the two players are looking at mirror images of the board, not the same board.</span>
 
-<span class="sd">Unlike AlphaZero, the observation space does not stack the observations previous moves by default. This can be accomplished using the `frame_stacking` argument of our wrapper.</span>
+<span class="sd">Similar to AlphaZero, our observation space follows a stacking approach, where it accumulates the previous 8 board observations.</span>
+
+<span class="sd">Unlike AlphaZero, where the board orientation may vary, in our system, the `env.board_history` always maintains the orientation towards the white agent, with the white agent&#39;s king consistently positioned on the 1st row. In simpler terms, both players are observing the same board layout.</span>
+
+<span class="sd">Nevertheless, we have incorporated a convenient feature, the env.observe(&#39;player_1&#39;) function, specifically for the black agent&#39;s orientation. This facilitates the training of agents capable of playing proficiently as both black and white.</span>
 
 <span class="sd">#### Legal Actions Mask</span>
 
@@ -592,10 +596,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spaces</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="raw_env.observe"><a class="viewcode-back" href="../../../../../environments/classic/chess/#pettingzoo.classic.chess.chess.raw_env.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
-        <span class="n">observation</span> <span class="o">=</span> <span class="n">chess_utils</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">current_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+
+        <span class="n">observation</span> <span class="o">=</span> <span class="n">chess_utils</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">current_index</span><span class="p">)</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">observation</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_history</span><span class="p">))</span>
+        <span class="c1"># We need to swap the white 6 channels with black 6 channels</span>
+        <span class="k">if</span> <span class="n">current_index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># 1. Mirror the board</span>
+            <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># 2. Swap the white 6 channels with the black 6 channels</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">6</span> <span class="p">:</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">observation</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">6</span> <span class="p">:</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span>
+                    <span class="o">...</span><span class="p">,</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span>
+                <span class="p">]</span>
+                <span class="n">observation</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">13</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
         <span class="n">legal_moves</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">chess_utils</span><span class="o">.</span><span class="n">legal_moves</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">)</span> <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="p">)</span>
@@ -662,7 +677,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
 
         <span class="c1"># Update board after applying action</span>
-        <span class="n">next_board</span> <span class="o">=</span> <span class="n">chess_utils</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">current_agent</span><span class="p">)</span>
+        <span class="c1"># We always take the perspective of the white agent</span>
+        <span class="n">next_board</span> <span class="o">=</span> <span class="n">chess_utils</span><span class="o">.</span><span class="n">get_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">board_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span>
             <span class="p">(</span><span class="n">next_board</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">7</span><span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_history</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">13</span><span class="p">])</span>
         <span class="p">)</span>
