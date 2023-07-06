@@ -57,7 +57,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: 3
@@ -65,7 +65,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: 1
@@ -73,7 +73,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 2
 
 Observation: 1
@@ -81,7 +81,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: 1
@@ -89,7 +89,7 @@ Reward: 1
 Termination: False
 Truncation: False
 Return: 1
-        
+
 Action: 0
 
 Observation: 2
@@ -97,7 +97,7 @@ Reward: -1
 Termination: False
 Truncation: False
 Return: -1
-        
+
 Action: 0
 
 Observation: 0
@@ -105,7 +105,7 @@ Reward: 0
 Termination: False
 Truncation: True
 Return: 1
-        
+
 Action: None
 
 Observation: 0
@@ -113,7 +113,7 @@ Reward: 0
 Termination: False
 Truncation: True
 Return: -1
-        
+
 Action: None
 ```
 
@@ -149,17 +149,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 0
-     |     |     
-  X  |  -  |  -  
+     |     |
+  X  |  -  |  -
 _____|_____|_____
-     |     |     
-  -  |  -  |  -  
+     |     |
+  -  |  -  |  -
 _____|_____|_____
-     |     |     
-  -  |  -  |  -  
-     |     |     
+     |     |
+  -  |  -  |  -
+     |     |
 
 Observation: {'observation': array([[[0, 1],
         [0, 0],
@@ -176,17 +176,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
-     |     |     
-  X  |  -  |  -  
+     |     |
+  X  |  -  |  -
 _____|_____|_____
-     |     |     
-  O  |  -  |  -  
+     |     |
+  O  |  -  |  -
 _____|_____|_____
-     |     |     
-  -  |  -  |  -  
-     |     |     
+     |     |
+  -  |  -  |  -
+     |     |
 
 Observation: {'observation': array([[[1, 0],
         [0, 1],
@@ -203,17 +203,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 2
-     |     |     
-  X  |  -  |  -  
+     |     |
+  X  |  -  |  -
 _____|_____|_____
-     |     |     
-  O  |  -  |  -  
+     |     |
+  O  |  -  |  -
 _____|_____|_____
-     |     |     
-  X  |  -  |  -  
-     |     |     
+     |     |
+  X  |  -  |  -
+     |     |
 
 Observation: {'observation': array([[[0, 1],
         [1, 0],
@@ -230,17 +230,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 3
-     |     |     
-  X  |  O  |  -  
+     |     |
+  X  |  O  |  -
 _____|_____|_____
-     |     |     
-  O  |  -  |  -  
+     |     |
+  O  |  -  |  -
 _____|_____|_____
-     |     |     
-  X  |  -  |  -  
-     |     |     
+     |     |
+  X  |  -  |  -
+     |     |
 
 Observation: {'observation': array([[[1, 0],
         [0, 1],
@@ -257,17 +257,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 4
-     |     |     
-  X  |  O  |  -  
+     |     |
+  X  |  O  |  -
 _____|_____|_____
-     |     |     
-  O  |  X  |  -  
+     |     |
+  O  |  X  |  -
 _____|_____|_____
-     |     |     
-  X  |  -  |  -  
-     |     |     
+     |     |
+  X  |  -  |  -
+     |     |
 
 Observation: {'observation': array([[[0, 1],
         [1, 0],
@@ -284,17 +284,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 5
-     |     |     
-  X  |  O  |  -  
+     |     |
+  X  |  O  |  -
 _____|_____|_____
-     |     |     
-  O  |  X  |  -  
+     |     |
+  O  |  X  |  -
 _____|_____|_____
-     |     |     
-  X  |  O  |  -  
-     |     |     
+     |     |
+  X  |  O  |  -
+     |     |
 
 Observation: {'observation': array([[[1, 0],
         [0, 1],
@@ -311,17 +311,17 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 6
-     |     |     
-  X  |  O  |  X  
+     |     |
+  X  |  O  |  X
 _____|_____|_____
-     |     |     
-  O  |  X  |  -  
+     |     |
+  O  |  X  |  -
 _____|_____|_____
-     |     |     
-  X  |  O  |  -  
-     |     |     
+     |     |
+  X  |  O  |  -
+     |     |
 
 Observation: {'observation': array([[[0, 1],
         [1, 0],
@@ -338,7 +338,7 @@ Reward: -1
 Termination: True
 Truncation: False
 Return: -1
-        
+
 Action: None
 
 Observation: {'observation': array([[[1, 0],
@@ -356,7 +356,7 @@ Reward: 1
 Termination: True
 Truncation: False
 Return: 1
-        
+
 Action: None
 ```
 
@@ -368,7 +368,7 @@ Here is an example of a Texas Hold'em No Limit game that uses the `ActionMaskAge
    :language: python
 ```
 
-```text 
+```text
 Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 1., 0., 0., 0., 0.,
@@ -377,7 +377,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: {'observation': array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -388,7 +388,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -399,7 +399,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 1
 
 Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -410,7 +410,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 0
 
 Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -421,7 +421,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 2
 
 Observation: {'observation': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -432,7 +432,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 2
 
 Observation: {'observation': array([0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
@@ -443,7 +443,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 3
 
 Observation: {'observation': array([ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
@@ -455,7 +455,7 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 4
 
 Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -468,9 +468,9 @@ Reward: 0
 Termination: False
 Truncation: False
 Return: 0
-        
+
 Action: 4
-[WARNING]: Illegal move made, game terminating with current player losing. 
+[WARNING]: Illegal move made, game terminating with current player losing.
 obs['action_mask'] contains a mask of all legal moves that can be chosen.
 
 Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -483,7 +483,7 @@ Reward: -1.0
 Termination: True
 Truncation: True
 Return: -1.0
-        
+
 Action: None
 
 Observation: {'observation': array([  0.,   0.,   1.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -496,7 +496,7 @@ Reward: 0
 Termination: True
 Truncation: True
 Return: 0
-        
+
 Action: None
 
 Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
@@ -509,7 +509,7 @@ Reward: 0
 Termination: True
 Truncation: True
 Return: 0
-        
+
 Action: None
 
 Observation: {'observation': array([  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   1.,   0.,   0.,
@@ -522,7 +522,7 @@ Reward: 0
 Termination: True
 Truncation: True
 Return: 0
-        
+
 Action: None
 ```
 

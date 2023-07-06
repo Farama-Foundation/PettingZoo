@@ -58,7 +58,7 @@ Tutorials are a crucial way to help people learn how to use PettingZoo and we gr
 - You should make a `.md` file for each tutorial within the above directory.
 - Each `.md` file should have an "Environment Setup" section and a "Code" section. The title should be of the format `<TUTORIAL_THEME>: <TUTORIAL_TOPIC>`.
 - The Environment Setup section should reference the `requirements.txt` file you created using `literalinclude`.
-- The Code section should reference the `.py` file you created using `literalinclude`. 
+- The Code section should reference the `.py` file you created using `literalinclude`.
 - `/docs/index.md` should be modified to include every new tutorial.
 
 ### Testing your tutorial

@@ -29,11 +29,11 @@ Environment repositories are usually laid out using the following structure:
 - `/requirements.txt` is a file used to keep track of your environment dependencies. At the very least, `pettingzoo` should be in there. **Please version control all your dependencies via `==`**.
 
 ### Advanced: Additional (optional) files
-The above file structure is minimal. A more deployment-ready environment would include 
-- `/docs/` for documentation, 
-- `/setup.py` for packaging, 
-- `/custom-environment/__init__.py` for depreciation handling, and 
-- Github actions for continuous integration of environment tests. 
+The above file structure is minimal. A more deployment-ready environment would include
+- `/docs/` for documentation,
+- `/setup.py` for packaging,
+- `/custom-environment/__init__.py` for depreciation handling, and
+- Github actions for continuous integration of environment tests.
 
 Implementing these are outside the scope of this tutorial.
 

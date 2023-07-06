@@ -6,7 +6,7 @@ title: Wrapper
 
 ## Using Wrappers
 
-A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied. 
+A wrapper is an environment transformation that takes in an environment as input, and outputs a new environment that is similar to the input environment, but with some transformation or validation applied.
 
 The following wrappers can be used with PettingZoo environments:
 
@@ -16,7 +16,7 @@ The following wrappers can be used with PettingZoo environments:
 
 [Supersuit Wrappers](/api/wrappers/supersuit_wrappers/) include commonly used pre-processing functions such as frame-stacking and color reduction, compatible with both PettingZoo and Gymnasium.
 
-[Shimmy Compatibility Wrappers](/api/wrappers/shimmy_wrappers/) allow commonly used external reinforcement learning environments to be used with PettingZoo and Gymnasium. 
+[Shimmy Compatibility Wrappers](/api/wrappers/shimmy_wrappers/) allow commonly used external reinforcement learning environments to be used with PettingZoo and Gymnasium.
 
 
 ```{toctree}

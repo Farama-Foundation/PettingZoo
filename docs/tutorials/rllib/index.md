@@ -25,8 +25,8 @@ See the [documentation](https://docs.ray.io/en/latest/rllib/index.html) for more
  * [simple multi-agent: rock-paper-scissors](https://github.com/ray-project/ray/blob/master/rllib/examples/rock_paper_scissors_multiagent.py)
  * [multi-agent parameter sharing: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_parameter_sharing.py)
  * [multi-agent independent learning: waterworld](https://github.com/ray-project/ray/blob/master/rllib/examples/multi_agent_independent_learning.py)
- * [multi-agent leela chess zero](https://github.com/ray-project/ray/blob/master/rllib/examples/multi-agent-leela-chess-zero.py) 
- * [PR: connect four self-play with pettingzoo](https://github.com/ray-project/ray/pull/33481) 
+ * [multi-agent leela chess zero](https://github.com/ray-project/ray/blob/master/rllib/examples/multi-agent-leela-chess-zero.py)
+ * [PR: connect four self-play with pettingzoo](https://github.com/ray-project/ray/pull/33481)
 
 [//]: # (TODO: test waterworld, leela chess zero, add PR to pettingzoo if it isn't merged)
 

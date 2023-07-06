@@ -4,7 +4,7 @@ title: PettingZoo Wrappers
 
 # PettingZoo Wrappers
 
-PettingZoo includes the following types of wrappers: 
+PettingZoo includes the following types of wrappers:
 * [Conversion Wrappers](#conversion-wrappers): wrappers for converting environments between the [AEC](/api/aec/) and [Parallel](/api/parallel/) APIs
 * [Utility Wrappers](#utility-wrappers): a set of wrappers which provide convenient reusable logic, such as enforcing turn order or clipping out-of-bounds actions.
 
