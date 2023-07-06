@@ -531,6 +531,8 @@ class raw_env(AECEnv, EzPickle):
             x_pos += self.piston_width
 
     def draw(self):
+        if self.render_mode is None:
+            return
         # redraw the background image if ball goes outside valid position
         if not self.valid_ball_position_rect.collidepoint(self.ball.position):
             # self.screen.blit(self.background, (0, 0))
