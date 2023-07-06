@@ -23,7 +23,7 @@ classic/tictactoe
     :file: classic/list.html
 ```
 
-Classic environments represent implementations of popular turn-based human games and are mostly competitive. 
+Classic environments represent implementations of popular turn-based human games and are mostly competitive.
 
 
 ### Installation
@@ -45,14 +45,14 @@ env.reset(seed=42)
 
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
-    
+
     if termination or truncation:
         break
-    
+
     mask = observation["action_mask"]
     action = env.action_space(agent).sample(mask)  # this is where you would insert your policy
-        
-    env.step(action)  
+
+    env.step(action)
 env.close()
 ```
 

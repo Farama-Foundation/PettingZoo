@@ -10,7 +10,7 @@ Now that our environment is complete, we can test it to make sure it works as in
 
 ## Code
 
-Note: This code can be added to the bottom of the same file, without using any imports, but it is best practice to keep tests in a separate file, and use modular imports, as shown below.. 
+Note: This code can be added to the bottom of the same file, without using any imports, but it is best practice to keep tests in a separate file, and use modular imports, as shown below..
 
 Relative importing is used for simplicity, and assumes your custom environment is in the same directory. If your test is in another location (e.g., a root-level `/test/` directory), it is recommended to import using absolute path.
 
