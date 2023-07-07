@@ -1,8 +1,11 @@
 """Test file to ensure that action masking code works for all PettingZoo classic environments (except rps, which has no action mask)."""
 
-import pytest
-from tutorials.SB3.render_sb3_chess_action_mask import watch_action_mask
-from tutorials.SB3.sb3_chess_action_mask import train_action_mask
+try:
+    import pytest
+    from tutorials.SB3.render_sb3_chess_action_mask import watch_action_mask
+    from tutorials.SB3.sb3_chess_action_mask import train_action_mask
+except ModuleNotFoundError:
+    pass
 
 from pettingzoo.classic import (
     chess_v6,
