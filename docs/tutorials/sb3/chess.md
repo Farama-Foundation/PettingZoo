@@ -1,10 +1,14 @@
 ---
-title: "SB3: PPO for Pistonball (Parallel)"
+title: "SB3: Action Masking for Chess (AEC)"
 ---
 
-# SB3: PPO for Pistonball
+# SB3: Action Masking for Chess (AEC)
 
-This tutorial shows how to train a [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) model on the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment ([parallel](https://pettingzoo.farama.org/api/parallel/)).
+This tutorial shows how to train a Maskable [Proximal Policy Optimization](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html) (PPO) model on the [Chess](https://pettingzoo.farama.org/environments/classic/chess/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
+
+It creates a custom Wrapper to convert to a Gymnasium-like environment which is compatible with SB3's action masking format.
+
+Note: This assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.
 
 After training, run the provided code to watch your trained agent play vs itself. See the [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information about saving and loading models.
 
@@ -22,13 +26,13 @@ The following code should run without any issues. The comments are designed to h
 ### Training the RL agent
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/sb3_pistonball.py
+.. literalinclude:: ../../../tutorials/SB3/sb3_chess_action_mask.py
    :language: python
 ```
 
 ### Watching the trained RL agent play
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/render_sb3_pistonball.py
+.. literalinclude:: ../../../tutorials/SB3/render_sb3_chess_action_mask.py
    :language: python
 ```

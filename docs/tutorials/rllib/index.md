@@ -2,9 +2,9 @@
 title: "RLlib"
 ---
 
-# RLlib Tutorial
+# Ray RLlib Tutorial
 
-These tutorials show you how to use [RLlib](https://docs.ray.io/en/latest/rllib/index.html) to train agents in PettingZoo environments.
+These tutorials show you how to use [Ray](https://docs.ray.io/en/latest/index.html)'s [RLlib](https://docs.ray.io/en/latest/rllib/index.html) library to train agents in PettingZoo environments.
 
 * [PPO for Pistonball](/tutorials/rllib/pistonball/): _Train a PPO model in a parallel environment_
 

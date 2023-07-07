@@ -1,8 +1,10 @@
-"""Uses Stable-Baselines3 to train agents to play Pistonball.
+"""Uses Stable-Baselines3 to train agents to play Pistonball using SuperSuit vector envs.
 
 Adapted from https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b
 
-Authors: Jordan (https://github.com/jkterry1), Elliot (https://github.com/elliottower)
+For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
+
+Author: Elliot (https://github.com/elliottower)
 """
 import time
 
@@ -13,6 +15,7 @@ from stable_baselines3.ppo import CnnPolicy
 from pettingzoo.butterfly import pistonball_v6
 
 if __name__ == "__main__":
+    # Train a single agent to play both sides in a PettingZoo Pistonball environment
     env = pistonball_v6.parallel_env(
         n_pistons=20,
         time_penalty=-0.1,

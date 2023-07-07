@@ -1,8 +1,8 @@
-"""Uses Stable-Baselines3 to train agents to play Rock-Paper-Scissors.
+"""Uses Stable-Baselines3 to train agents to play Rock-Paper-Scissors using SuperSuit vector envs.
 
-Adapted from https://towardsdatascience.com/multi-agent-deep-reinforcement-learning-in-15-lines-of-code-using-pettingzoo-e0b963c0820b
+For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
 
-Authors: Jordan (https://github.com/jkterry1), Elliot (https://github.com/elliottower)
+Author: Elliot (https://github.com/elliottower)
 """
 import time
 
@@ -43,6 +43,3 @@ if __name__ == "__main__":
 
     print("Model has been saved.")
     env.close()
-    import sys
-
-    sys.exit(0)
