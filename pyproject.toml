@@ -108,3 +108,4 @@ reportMissingImports = false
 norecursedirs = [
     "pettingzoo"
 ]
+addopts = ["--doctest-modules"]
