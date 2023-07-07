@@ -339,7 +339,7 @@ def test_rewards_terminations_truncations(env, agent_0):
         test_reward(env.rewards[agent])
 
 
-def play_test(env, observation_1, num_cycles):
+def play_test(env, observation_0, num_cycles):
     """
     plays through environment and does dynamic checks to make
     sure the state returned by the environment is
@@ -429,7 +429,7 @@ def play_test(env, observation_1, num_cycles):
                 env.observation_space(agent)["observation"].dtype
                 == prev_observe["observation"].dtype
             )
-        test_observation(prev_observe, observation_1, str(env.unwrapped))
+        test_observation(prev_observe, observation_0, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
                 "The info of each agent should be a dict, use {} if you aren't using info"
