@@ -73,11 +73,12 @@ import numpy as np
 import pygame
 from gymnasium.utils import EzPickle, seeding
 
+from pettingzoo import AECEnv
 from pettingzoo.butterfly.cooperative_pong.ball import Ball
 from pettingzoo.butterfly.cooperative_pong.cake_paddle import CakePaddle
 from pettingzoo.butterfly.cooperative_pong.manual_policy import ManualPolicy
 from pettingzoo.butterfly.cooperative_pong.paddle import Paddle
-from pettingzoo.utils import AECEnv, wrappers
+from pettingzoo.utils import wrappers
 from pettingzoo.utils.agent_selector import agent_selector
 from pettingzoo.utils.conversions import parallel_wrapper_fn
 
