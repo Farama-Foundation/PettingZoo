@@ -461,11 +461,13 @@
 
 <span class="sd">You can get back the original (x,y,c) coordinates from the integer action `a` with the following expression: `(a // (8*73), (a // 73) % 8, a % (8*73) % 73)`</span>
 
-<span class="sd">&gt; x = 6</span>
-<span class="sd">&gt; y = 0</span>
-<span class="sd">&gt; c = 12</span>
-<span class="sd">&gt; a = x*(8*73) + y*73 + c</span>
-<span class="sd">&gt; print(a // (8*73), a % (8*73) // 73, a % (8*73) % 73)  # -&gt; 6 0 12</span>
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; x = 6</span>
+<span class="sd">    &gt;&gt;&gt; y = 0</span>
+<span class="sd">    &gt;&gt;&gt; c = 12</span>
+<span class="sd">    &gt;&gt;&gt; a = x*(8*73) + y*73 + c</span>
+<span class="sd">    &gt;&gt;&gt; print(a // (8*73), a % (8*73) // 73, a % (8*73) % 73)</span>
+<span class="sd">    6 0 12</span>
 
 <span class="sd">Note: the coordinates (6, 0, 12) correspond to column 6, row 0, plane 12. In chess notation, this would signify square G1:</span>
 
