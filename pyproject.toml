@@ -108,4 +108,4 @@ reportMissingImports = false
 norecursedirs = [
     "pettingzoo"
 ]
-addopts = ["--doctest-modules"]
+addopts = ["--doctest-modules", "--cov=pettingzoo", "--cov-report term"]
