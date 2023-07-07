@@ -921,6 +921,8 @@
             <span class="n">x_pos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">piston_width</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
         <span class="c1"># redraw the background image if ball goes outside valid position</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_ball_position_rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ball</span><span class="o">.</span><span class="n">position</span><span class="p">):</span>
             <span class="c1"># self.screen.blit(self.background, (0, 0))</span>
