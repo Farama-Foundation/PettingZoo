@@ -28,16 +28,12 @@ try:
     def env_name():
         return "generated_agents_env_v0"
 
-    @pytest.fixture
-    def observation():
-        env = generated_agents_env_v0.env()
-        env.reset()
+    @pytest.fixture()
+    def observation(env):
         return env.observation_space(env.agents[0]).sample()
 
-    @pytest.fixture
-    def observation_0():
-        env = generated_agents_env_v0.env()
-        env.reset()
+    @pytest.fixture()
+    def observation_0(env):
         return env.observation_space(env.agents[1]).sample()
 
     @pytest.fixture
