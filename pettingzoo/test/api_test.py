@@ -12,6 +12,47 @@ from pettingzoo.utils.conversions import (
 )
 from pettingzoo.utils.wrappers import BaseWrapper
 
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import generated_agents_env_v0
+
+    @pytest.fixture
+    def env():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env
+
+    @pytest.fixture
+    def env_name():
+        return "generated_agents_env_v0"
+
+    @pytest.fixture
+    def observation():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env.observation_space(env.agents[0]).sample()
+
+    @pytest.fixture
+    def observation_0():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env.observation_space(env.agents[1]).sample()
+
+    @pytest.fixture
+    def reward():
+        return 0
+
+    @pytest.fixture
+    def agent_0():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env.agents[0]
+
+except ModuleNotFoundError:
+    pass
+
 missing_attr_warning = """This environment does not have {name} defined.
 This is not a required part 'of the API as environments with procedurally
 generated agents cannot always have this property defined. However, this is
@@ -87,6 +128,7 @@ env_neg_inf_obs = [
 ]
 
 
+# @pytest.mark.skip(reason="fixtures not found even though they are defined")
 def test_observation(observation, observation_0, env_name=None):
     if not isinstance(observation, np.ndarray) or (
         env_name is not None and env_name not in env_obs_dicts
@@ -302,7 +344,7 @@ def test_rewards_terminations_truncations(env, agent_0):
         test_reward(env.rewards[agent])
 
 
-def play_test(env, observation_0, num_cycles):
+def play_test(env, observation_1, num_cycles):
     """
     plays through environment and does dynamic checks to make
     sure the state returned by the environment is
@@ -392,7 +434,7 @@ def play_test(env, observation_0, num_cycles):
                 env.observation_space(agent)["observation"].dtype
                 == prev_observe["observation"].dtype
             )
-        test_observation(prev_observe, observation_0, str(env.unwrapped))
+        test_observation(prev_observe, observation_1, str(env.unwrapped))
         if not isinstance(env.infos[env.agent_selection], dict):
             warnings.warn(
                 "The info of each agent should be a dict, use {} if you aren't using info"
