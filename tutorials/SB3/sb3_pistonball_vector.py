@@ -28,6 +28,8 @@ if __name__ == "__main__":
         max_cycles=125,
     )
 
+    print(f"Starting training on {str(env.metadata['name'])}.")
+
     env = ss.color_reduction_v0(env, mode="B")
     env = ss.resize_v1(env, x_size=84, y_size=84)
     env = ss.frame_stack_v1(env, 3)
@@ -51,9 +53,12 @@ if __name__ == "__main__":
         batch_size=256,
     )
 
-    model.learn(total_timesteps=2048)
+    model.learn(total_timesteps=4096)
 
     model.save(f"{env.unwrapped.metadata.get('name')}_{time.strftime('%Y%m%d-%H%M%S')}")
 
     print("Model has been saved.")
+
+    print(f"Finished training on {str(env.unwrapped.metadata['name'])}.\n")
+
     env.close()

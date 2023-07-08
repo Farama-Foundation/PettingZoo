@@ -77,9 +77,10 @@ def train_action_mask(env_fn, steps=10_000):
     model.save(f"{env.unwrapped.metadata.get('name')}_{time.strftime('%Y%m%d-%H%M%S')}")
 
     print("Model has been saved.")
-    env.close()
 
-    print(f"Finished training on {str(env.metadata['name'])}.\n")
+    print(f"Finished training on {str(env.unwrapped.metadata['name'])}.\n")
+
+    env.close()
 
 
 if __name__ == "__main__":

@@ -17,6 +17,8 @@ if __name__ == "__main__":
     env = rps_v2.env()
     env = turn_based_aec_to_parallel(env)
 
+    print(f"Starting training on {str(env.metadata['name'])}.")
+
     env = ss.pettingzoo_env_to_vec_env_v1(env)
     env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
 
@@ -42,4 +44,7 @@ if __name__ == "__main__":
     model.save(f"{env.unwrapped.metadata.get('name')}_{time.strftime('%Y%m%d-%H%M%S')}")
 
     print("Model has been saved.")
+
+    print(f"Finished training on {str(env.unwrapped.metadata['name'])}.\n")
+
     env.close()
