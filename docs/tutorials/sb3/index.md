@@ -6,11 +6,11 @@ title: "Stable-Baselines3"
 
 These tutorials show you how to use the [SB3](https://stable-baselines3.readthedocs.io/en/master/) library to train agents in PettingZoo environments.
 
-* [PPO for Rock-Paper-Scissors](/tutorials/sb3/rps/) _Train a PPO model in a vectorized AEC environment_
+* [PPO for Pistonball](/tutorials/sb3/pistonball/): _Train a PPO model in vectorized Parallel environments_
 
-* [PPO for Pistonball](/tutorials/sb3/pistonball/): _Train a PPO model in a vectorized Parallel environment_
+* [PPO for Rock-Paper-Scissors](/tutorials/sb3/rps/) _Train a PPO model in vectorized AEC environments_
 
-* [Action Masking for Chess](/tutorials/sb3/chess/): _Train an action masked PPO model in an AEC environment_
+* [Action Masked PPO for Chess](/tutorials/sb3/chess/): _Train an action masked PPO model in an AEC environment_
 
 
 ## Stable-Baselines Overview

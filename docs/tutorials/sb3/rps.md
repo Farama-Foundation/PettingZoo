@@ -1,5 +1,5 @@
 ---
-title: "SB3: PPO for Rock-Paper-Scissors (AEC)"
+title: "SB3: PPO for Rock-Paper-Scissors"
 ---
 
 # SB3: PPO for Rock-Paper-Scissors

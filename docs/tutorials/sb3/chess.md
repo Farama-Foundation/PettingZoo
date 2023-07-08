@@ -1,8 +1,8 @@
 ---
-title: "SB3: Action Masking for Chess (AEC)"
+title: "SB3: Action Masked PPO for Chess"
 ---
 
-# SB3: Action Masking for Chess (AEC)
+# SB3: Action Masked PPO for Chess
 
 This tutorial shows how to train a Maskable [Proximal Policy Optimization](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html) (PPO) model on the [Chess](https://pettingzoo.farama.org/environments/classic/chess/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
 
