@@ -11,7 +11,20 @@ def watch_action_mask(env_fn):
     env = env_fn.env(render_mode="human")
     env.reset()
 
-    latest_policy = max(glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime)
+    # If training script has not been run, run it now
+    try:
+        latest_policy = max(
+            glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
+        )
+    except ValueError:
+        from tutorials.SB3.sb3_chess_action_mask import train_action_mask
+
+        train_action_mask(env_fn)
+
+        latest_policy = max(
+            glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
+        )
+
     model = MaskablePPO.load(latest_policy)
 
     for agent in env.agent_iter():
@@ -23,11 +36,8 @@ def watch_action_mask(env_fn):
         if termination or truncation:
             act = None
         else:
-            # Note that use of masks is manual and optional outside of learning,
-            # so masking can be "removed" at testing time
-            act = int(
-                model.predict(observation, action_masks=action_mask)[0]
-            )  # PettingZoo expects integer actions
+            # Note: PettingZoo expects integer actions
+            act = int(model.predict(observation, action_masks=action_mask)[0])
         env.step(act)
     env.close()
 
