@@ -15,7 +15,14 @@ from pettingzoo.classic import rps_v2
 if __name__ == "__main__":
     env = rps_v2.env(render_mode="human")
 
-    latest_policy = max(glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime)
+    try:
+        latest_policy = max(
+            glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
+        )
+    except ValueError:
+        raise UserWarning("Policy not found.")
+        pass
+
     model = PPO.load(latest_policy)
 
     env.reset()

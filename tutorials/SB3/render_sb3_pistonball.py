@@ -20,7 +20,14 @@ if __name__ == "__main__":
     env = ss.resize_v1(env, x_size=84, y_size=84)
     env = ss.frame_stack_v1(env, 3)
 
-    latest_policy = max(glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime)
+    try:
+        latest_policy = max(
+            glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
+        )
+    except ValueError:
+        raise UserWarning("Policy not found.")
+        pass
+
     model = PPO.load(latest_policy)
 
     env.reset()
