@@ -17,7 +17,8 @@ def watch_action_mask(env_fn):
             glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
         )
     except ValueError:
-        raise UserWarning("Policy not found.")
+        print("Policy not found.")
+        exit(0)
 
     model = MaskablePPO.load(latest_policy)
 

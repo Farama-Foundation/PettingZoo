@@ -20,8 +20,8 @@ if __name__ == "__main__":
             glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
         )
     except ValueError:
-        raise UserWarning("Policy not found.")
-        pass
+        print("Policy not found.")
+        exit(0)
 
     model = PPO.load(latest_policy)
 
