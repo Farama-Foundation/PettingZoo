@@ -17,15 +17,7 @@ def watch_action_mask(env_fn):
             glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
         )
     except ValueError:
-        print("Policy not found. Running training to generate new policy.")
-
-        from tutorials.SB3.sb3_chess_action_mask import train_action_mask
-
-        train_action_mask(env_fn)
-
-        latest_policy = max(
-            glob.glob(f"{env.metadata['name']}*.zip"), key=os.path.getctime
-        )
+        raise UserWarning("Policy not found.")
 
     model = MaskablePPO.load(latest_policy)
 
