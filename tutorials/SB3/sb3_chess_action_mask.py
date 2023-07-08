@@ -83,4 +83,4 @@ def train_action_mask(env_fn, steps=10_000):
 
 
 if __name__ == "__main__":
-    train_action_mask(chess_v6, steps=10_000)
+    train_action_mask(chess_v6, steps=2048)

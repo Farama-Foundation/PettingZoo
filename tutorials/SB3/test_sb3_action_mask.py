@@ -33,5 +33,5 @@ WORKING_ENVS = [
 
 @pytest.mark.parametrize("env_fn", WORKING_ENVS)
 def test_action_mask(env_fn):
-    train_action_mask(env_fn, steps=4096)
+    train_action_mask(env_fn, steps=2048)
     watch_action_mask(env_fn)

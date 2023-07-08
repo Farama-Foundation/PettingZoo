@@ -37,7 +37,7 @@ if __name__ == "__main__":
         batch_size=256,
     )
 
-    model.learn(total_timesteps=10_000)
+    model.learn(total_timesteps=2048)
 
     model.save(f"{env.unwrapped.metadata.get('name')}_{time.strftime('%Y%m%d-%H%M%S')}")
 
