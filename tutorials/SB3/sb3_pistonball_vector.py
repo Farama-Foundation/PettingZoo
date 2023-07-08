@@ -33,7 +33,7 @@ if __name__ == "__main__":
     env = ss.frame_stack_v1(env, 3)
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
-    env = ss.concat_vec_envs_v1(env, 8, num_cpus=4, base_class="stable_baselines3")
+    env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
 
     model = PPO(
         CnnPolicy,
