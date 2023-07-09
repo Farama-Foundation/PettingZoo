@@ -3,7 +3,7 @@
 try:
     import pytest
     from tutorials.SB3.render_sb3_chess_action_mask import watch_action_mask
-    from tutorials.SB3.sb3_chess_action_mask import train_action_mask
+    from tutorials.SB3.sb3_connect_four_action_mask import train_action_mask
 except ModuleNotFoundError:
     pass
 
