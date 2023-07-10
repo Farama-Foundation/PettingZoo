@@ -71,7 +71,7 @@ def test_action_mask_easy(env_fn):
 
 
 @pytest.mark.skip(
-    reason="training can be compute intensive and hyperparameters have not been tuned, disabled for CI"
+    reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
 )
 @pytest.mark.parametrize("env_fn", MEDIUM_ENVS)
 def test_action_mask_medium(env_fn):
@@ -99,7 +99,7 @@ def test_action_mask_medium(env_fn):
 
 
 @pytest.mark.skip(
-    reason="training can be compute intensive and hyperparameters have not been tuned, disabled for CI"
+    reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
 )
 @pytest.mark.parametrize("env_fn", HARD_ENVS)
 def test_action_mask_hard(env_fn):
