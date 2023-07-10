@@ -120,9 +120,14 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
             if termination or truncation:
                 # If there is a winner, keep track, otherwise don't change the scores (tie)
-                if env.rewards[env.possible_agents[0]] != env.rewards[env.possible_agents[1]]:
+                if (
+                    env.rewards[env.possible_agents[0]]
+                    != env.rewards[env.possible_agents[1]]
+                ):
                     winner = max(env.rewards, key=env.rewards.get)
-                    scores[winner] += env.rewards[winner]  # only tracks the largest reward (winner of game)
+                    scores[winner] += env.rewards[
+                        winner
+                    ]  # only tracks the largest reward (winner of game)
                 # Also track negative and positive rewards (penalizes illegal moves)
                 for a in env.possible_agents:
                     total_rewards[a] += env.rewards[a]
