@@ -6,11 +6,17 @@ title: "Stable-Baselines3"
 
 These tutorials show you how to use the [SB3](https://stable-baselines3.readthedocs.io/en/master/) library to train agents in PettingZoo environments.
 
-* [PPO for Pistonball](/tutorials/sb3/pistonball/): _Train a PPO model in vectorized Parallel environment_
+For environments with visual observations, we use a [CNN](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html#stable_baselines3.ppo.CnnPolicy) policy and perform pre-processing steps such as frame-stacking, color reduction, and resizing using [SuperSuit](/api/wrappers/supersuit_wrappers/)
 
-* [PPO for Knights-Archers-Zombies](/tutorials/sb3/kaz/) _Train a PPO model in a vectorized AEC environment_
+* [PPO for Pistonball](/tutorials/sb3/pistonball/): _Train agents using PPO in vectorized Parallel environment_
 
-* [Action Masked PPO for Chess](/tutorials/sb3/connect_four/): _Train an action masked PPO model in an AEC environment_
+* [PPO for Knights-Archers-Zombies](/tutorials/sb3/kaz/) _Train agents using PPO in a vectorized AEC environment_
+
+For non-visual environments, we use [Actor Critic](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html#stable_baselines3.ppo.CnnPolicy) or [Maskable Actor Critic](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html#maskableppo-policies) policies and do not perform any pre-processing steps.
+
+* [PPO for Multiwalker](/tutorials/sb3/multiwalker/): _Train agents using PPO in a vectorized AEC environment_
+
+* [Action Masked PPO for Connect Four](/tutorials/sb3/connect_four/): _Train an agent using Action Masked PPO in an AEC environment_
 
 
 ## Stable-Baselines Overview
@@ -33,5 +39,6 @@ Note: SB3 does not officially support PettingZoo, as it is designed for single-a
 
 pistonball
 kaz
+multiwalker
 connect_four
 ```

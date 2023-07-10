@@ -1,4 +1,4 @@
-"""Uses Stable-Baselines3 to train agents in the Pistonball environment using SuperSuit vector envs.
+"""Uses Stable-Baselines3 to train agents to play the Multiwalker environment using SuperSuit vector envs.
 
 For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
 
@@ -12,9 +12,9 @@ import time
 
 import supersuit as ss
 from stable_baselines3 import PPO
-from stable_baselines3.ppo import CnnPolicy
+from stable_baselines3.ppo import MlpPolicy
 
-from pettingzoo.butterfly import pistonball_v6
+from pettingzoo.sisl import multiwalker_v9
 
 
 def train_butterfly_supersuit(
@@ -23,31 +23,19 @@ def train_butterfly_supersuit(
     # Train a single agent to play both sides in a Parallel environment,
     env = env_fn.parallel_env(**env_kwargs)
 
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    env = ss.color_reduction_v0(env, mode="B")
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
-
     env.reset(seed=seed)
 
     print(f"Starting training on {str(env.metadata['name'])}.")
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
-    env = ss.concat_vec_envs_v1(env, 4, num_cpus=2, base_class="stable_baselines3")
+    env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
 
+    # Note: Multiwalker's observation space is discrete, therefore we use an MLP policy rather than CNN
     model = PPO(
-        CnnPolicy,
+        MlpPolicy,
         env,
         verbose=3,
-        gamma=0.95,
-        n_steps=256,
-        ent_coef=0.0905168,
-        learning_rate=0.00062211,
-        vf_coef=0.042202,
-        max_grad_norm=0.9,
-        gae_lambda=0.99,
-        n_epochs=5,
-        clip_range=0.3,
+        learning_rate=1e-3,
         batch_size=256,
     )
 
@@ -59,18 +47,12 @@ def train_butterfly_supersuit(
 
     print(f"Finished training on {str(env.unwrapped.metadata['name'])}.")
 
-    # TODO: fix SuperSuit bug where closing the vector env can sometimes crash (disabled for CI)
-    # env.close()
+    env.close()
 
 
 def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
     # Evaluate a trained agent vs a random agent
     env = env_fn.env(render_mode=render_mode, **env_kwargs)
-
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    env = ss.color_reduction_v0(env, mode="B")
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
 
     print(
         f"\nStarting evaluation on {str(env.metadata['name'])} (num_games={num_games}, render_mode={render_mode})"
@@ -112,23 +94,13 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 
 if __name__ == "__main__":
-    env_fn = pistonball_v6
+    env_fn = multiwalker_v9
 
-    env_kwargs = dict(
-        n_pistons=20,
-        time_penalty=-0.1,
-        continuous=True,
-        random_drop=True,
-        random_rotate=True,
-        ball_mass=0.75,
-        ball_friction=0.3,
-        ball_elasticity=1.5,
-        max_cycles=25,
-    )
+    env_kwargs = {}
 
     # Train a model (takes ~3 minutes on a laptop CPU)
-    # Note: stochastic environment makes training difficult, for better results try order of 2 million (~2 hours on GPU)
-    train_butterfly_supersuit(env_fn, steps=40_960, seed=0, **env_kwargs)
+    # Note: stochastic environment makes training difficult, hyperparameters have not been fully tuned for this example
+    train_butterfly_supersuit(env_fn, steps=49_152 * 4, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
     eval(env_fn, num_games=10, render_mode=None, **env_kwargs)

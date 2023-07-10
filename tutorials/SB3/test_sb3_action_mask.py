@@ -1,4 +1,4 @@
-"""Test file to ensure that action masking code works for all PettingZoo classic environments (except rps, which has no action mask)."""
+"""Tests that action masking code works properly with all PettingZoo classic environments."""
 
 try:
     import pytest

@@ -1,4 +1,4 @@
-"""Uses Stable-Baselines3 to train agents to play Knights-Archers-Zombies using SuperSuit vector envs.
+"""Uses Stable-Baselines3 to train agents in the Knights-Archers-Zombies environment using SuperSuit vector envs.
 
 This environment requires using SuperSuit's Black Death wrapper, to handle agent death.
 
