@@ -2,12 +2,14 @@
 
 try:
     import pytest
-    from tutorials.SB3.sb3_connect_four_action_mask import (
-        eval_action_mask,
-        train_action_mask,
-    )
-except ModuleNotFoundError:
-    pass
+except ModuleNotFoundError as e:
+    print(e)
+    exit()
+
+from tutorials.SB3.sb3_connect_four_action_mask import (
+    eval_action_mask,
+    train_action_mask,
+)
 
 from pettingzoo.classic import (
     chess_v6,
