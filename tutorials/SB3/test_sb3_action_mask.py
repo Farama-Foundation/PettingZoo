@@ -1,10 +1,6 @@
 """Tests that action masking code works properly with all PettingZoo classic environments."""
 
 import pytest
-from tutorials.SB3.sb3_connect_four_action_mask import (
-    eval_action_mask,
-    train_action_mask,
-)
 
 from pettingzoo.classic import (
     chess_v6,
@@ -17,6 +13,9 @@ from pettingzoo.classic import (
     texas_holdem_v4,
     tictactoe_v3,
 )
+
+pytest.importorskip("stable_baselines3")
+pytest.importorskip("sb3_contrib")
 
 # Note: Rock-Paper-Scissors has no action masking and does not seem to learn well playing against itself
 
@@ -45,7 +44,10 @@ HARD_ENVS = [
 
 @pytest.mark.parametrize("env_fn", EASY_ENVS)
 def test_action_mask_easy(env_fn):
-    pytest.importorskip("stable_baselines3")
+    from tutorials.SB3.sb3_connect_four_action_mask import (
+        eval_action_mask,
+        train_action_mask,
+    )
 
     env_kwargs = {}
 
@@ -71,7 +73,10 @@ def test_action_mask_easy(env_fn):
 
 @pytest.mark.parametrize("env_fn", MEDIUM_ENVS)
 def test_action_mask_medium(env_fn):
-    pytest.importorskip("stable_baselines3")
+    from tutorials.SB3.sb3_connect_four_action_mask import (
+        eval_action_mask,
+        train_action_mask,
+    )
 
     env_kwargs = {}
 
@@ -93,7 +98,10 @@ def test_action_mask_medium(env_fn):
 
 @pytest.mark.parametrize("env_fn", HARD_ENVS)
 def test_action_mask_hard(env_fn):
-    pytest.importorskip("stable_baselines3")
+    from tutorials.SB3.sb3_connect_four_action_mask import (
+        eval_action_mask,
+        train_action_mask,
+    )
 
     env_kwargs = {}
 
