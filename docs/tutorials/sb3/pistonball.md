@@ -27,6 +27,6 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/sb3_pistonball_vector.py
+.. literalinclude:: ../../../tutorials/SB3/pistonball/sb3_pistonball_vector.py
    :language: python
 ```

@@ -23,18 +23,13 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     # Train a single agent to play both sides in an AEC environment
     env = env_fn.parallel_env(**env_kwargs)
 
-    env = ss.black_death_v3(env)
-
-    # Convert into a Parallel environment in order to vectorize it (SuperSuit does not currently support vectorized AEC envs)
-    # env = turn_based_aec_to_parallel(env)
-
-    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    # env = ss.color_reduction_v0(env, mode="B")
-    env = ss.resize_v1(env, x_size=84, y_size=84)
-    env = ss.frame_stack_v1(env, 3)
-
     # Add black death wrapper so the number of agents stays constant
     # MarkovVectorEnv does not support environments with varying numbers of active agents unless black_death is set to True
+    env = ss.black_death_v3(env)
+
+    # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
+    env = ss.resize_v1(env, x_size=84, y_size=84)
+    env = ss.frame_stack_v1(env, 3)
 
     env.reset(seed=seed)
 

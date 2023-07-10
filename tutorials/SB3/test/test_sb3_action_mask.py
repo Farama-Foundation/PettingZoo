@@ -43,7 +43,7 @@ HARD_ENVS = [
 
 @pytest.mark.parametrize("env_fn", EASY_ENVS)
 def test_action_mask_easy(env_fn):
-    from tutorials.SB3.sb3_connect_four_action_mask import (
+    from tutorials.SB3.connect_four.sb3_connect_four_action_mask import (
         eval_action_mask,
         train_action_mask,
     )
@@ -75,7 +75,7 @@ def test_action_mask_easy(env_fn):
 )
 @pytest.mark.parametrize("env_fn", MEDIUM_ENVS)
 def test_action_mask_medium(env_fn):
-    from tutorials.SB3.sb3_connect_four_action_mask import (
+    from tutorials.SB3.connect_four.sb3_connect_four_action_mask import (
         eval_action_mask,
         train_action_mask,
     )
@@ -103,7 +103,7 @@ def test_action_mask_medium(env_fn):
 )
 @pytest.mark.parametrize("env_fn", HARD_ENVS)
 def test_action_mask_hard(env_fn):
-    from tutorials.SB3.sb3_connect_four_action_mask import (
+    from tutorials.SB3.connect_four.sb3_connect_four_action_mask import (
         eval_action_mask,
         train_action_mask,
     )

@@ -37,7 +37,7 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/sb3_connect_four_action_mask.py
+.. literalinclude:: ../../../tutorials/SB3/connect_four/sb3_connect_four_action_mask.py
    :language: python
 ```
 

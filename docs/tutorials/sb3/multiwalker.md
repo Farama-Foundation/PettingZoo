@@ -28,6 +28,6 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/sb3_multiwalker_vector.py
+.. literalinclude:: ../../../tutorials/SB3/multiwalker/sb3_multiwalker_vector.py
    :language: python
 ```

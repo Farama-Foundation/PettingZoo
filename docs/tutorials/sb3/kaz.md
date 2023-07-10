@@ -36,6 +36,6 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/sb3_kaz_vector.py
+.. literalinclude:: ../../../tutorials/SB3/kaz/sb3_kaz_vector.py
    :language: python
 ```
