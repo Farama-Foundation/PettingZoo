@@ -25,7 +25,12 @@ For non-visual environments, we use [Actor Critic](https://stable-baselines3.rea
 
 For more information, see the [Stable-Baselines3 v1.0 Blog Post](https://araffin.github.io/post/sb3/)
 
-Note: SB3 does not officially support PettingZoo, as it is designed for single-agent RL. These tutorials demonstrate how to adapt SB3 to work in multi-agent settings, but we cannot guarantee training convergence.
+
+```{eval-rst}
+.. warning::
+
+    Note: SB3 is designed for single-agent RL and does not plan on natively supporting multi-agent PettingZoo environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work in multi-agent settings.
+```
 
 
 ```{figure} https://raw.githubusercontent.com/DLR-RM/stable-baselines3/master/docs/_static/img/logo.png

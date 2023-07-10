@@ -6,8 +6,13 @@ title: "SB3: PPO for Pistonball (Parallel)"
 
 This tutorial shows how to train a [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) model on the [Pistonball](https://pettingzoo.farama.org/environments/butterfly/pistonball/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
 
-After training and evaluation, this script will launch a demo game human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
+After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
+```{eval-rst}
+.. note::
+
+    This environment has a visual (3-dimensional) observation space, so we use a CNN feature extractor.
+```
 
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.

@@ -43,7 +43,7 @@ MEDIUM_ENVS = [
 # TODO: test board_size to see if smaller go board is more easily solvable
 HARD_ENVS = [
     chess_v6,  # difficult to train because games take so long, 0.28 winrate even after 10x
-    go_v5,  # difficult to train because games take so long,
+    go_v5,  # difficult to train because games take so long
 ]
 
 

@@ -8,9 +8,20 @@ This tutorial shows how to train a [Proximal Policy Optimization](https://stable
 
 It converts the environment into a Parallel environment and uses SuperSuit to create vectorized environments, leveraging multithreading to speed up training.
 
-After training and evaluation, this script will launch a demo game human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
+After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
-Note: because this environment allows agents to spawn and die, it requires using SuperSuit's [Black Death](https://pettingzoo.farama.org/api/wrappers/supersuit_wrappers/#black_death_v2) wrapper, which provides blank observations to dead agents, rather than removing them from the environment.
+```{eval-rst}
+.. note::
+
+    This environment has a visual (3-dimensional) observation space, so we use a CNN feature extractor.
+```
+
+```{eval-rst}
+.. warning::
+
+    Because this environment allows agents to spawn and die, it requires using SuperSuit's Black Death wrapper, which provides blank observations to dead agents, rather than removing them from the environment.
+```
+
 
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.
