@@ -113,6 +113,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
 if __name__ == "__main__":
     env_fn = pistonball_v6
+
     env_kwargs = dict(
         n_pistons=20,
         time_penalty=-0.1,
@@ -124,9 +125,6 @@ if __name__ == "__main__":
         ball_elasticity=1.5,
         max_cycles=25,
     )
-
-    # TODO: figure out why pistonball takes so long to train and seems to not save the model?
-    # 296 seconds for 81_920 steps (n_updates = 5) vs 46 seconds for 40_960
 
     # Train a model (takes ~3 minutes on a laptop CPU)
     # Note: stochastic environment makes training difficult, for better results try order of 2 million (~2 hours on GPU)

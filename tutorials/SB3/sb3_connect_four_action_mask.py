@@ -161,7 +161,13 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
 
 if __name__ == "__main__":
     env_fn = connect_four_v3
+
     env_kwargs = {}
+
+    # Evaluation/training hyperparameter notes:
+    # 10k steps: Winrate:  0.76, loss order of 1e-03
+    # 20k steps: Winrate:  0.86, loss order of 1e-04
+    # 40k steps: Winrate:  0.86, loss order of 7e-06
 
     # Train a model against itself (takes ~20 seconds on a laptop CPU)
     train_action_mask(env_fn, steps=20_480, seed=0, **env_kwargs)
