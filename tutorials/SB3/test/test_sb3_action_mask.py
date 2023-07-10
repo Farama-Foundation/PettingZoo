@@ -70,9 +70,9 @@ def test_action_mask_easy(env_fn):
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
 
 
-@pytest.mark.skip(
-    reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
-)
+# @pytest.mark.skip(
+#     reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
+# )
 @pytest.mark.parametrize("env_fn", MEDIUM_ENVS)
 def test_action_mask_medium(env_fn):
     from tutorials.SB3.connect_four.sb3_connect_four_action_mask import (
@@ -98,9 +98,9 @@ def test_action_mask_medium(env_fn):
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
 
 
-@pytest.mark.skip(
-    reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
-)
+# @pytest.mark.skip(
+#     reason="training is compute intensive and hyperparameters have not been tuned, disabled for CI"
+# )
 @pytest.mark.parametrize("env_fn", HARD_ENVS)
 def test_action_mask_hard(env_fn):
     from tutorials.SB3.connect_four.sb3_connect_four_action_mask import (
