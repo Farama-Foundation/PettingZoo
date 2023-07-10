@@ -33,7 +33,7 @@ def train_butterfly_supersuit(
     print(f"Starting training on {str(env.metadata['name'])}.")
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
-    env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
+    env = ss.concat_vec_envs_v1(env, 4, num_cpus=2, base_class="stable_baselines3")
 
     model = PPO(
         CnnPolicy,
@@ -59,7 +59,8 @@ def train_butterfly_supersuit(
 
     print(f"Finished training on {str(env.unwrapped.metadata['name'])}.")
 
-    env.close()
+    # TODO: fix SuperSuit bug where closing the vector env can sometimes crash (disabled for CI)
+    # env.close()
 
 
 def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
@@ -128,6 +129,7 @@ if __name__ == "__main__":
     # 296 seconds for 81_920 steps (n_updates = 5) vs 46 seconds for 40_960
 
     # Train a model (takes ~3 minutes on a laptop CPU)
+    # Note: stochastic environment makes training difficult, for better results try order of 2 million (~2 hours on GPU)
     train_butterfly_supersuit(env_fn, steps=40_960, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)

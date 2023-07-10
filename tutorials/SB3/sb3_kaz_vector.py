@@ -155,15 +155,13 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 if __name__ == "__main__":
     env_fn = knights_archers_zombies_v10
 
-    # TODO: test out more hyperparameter combos
-    # max_cycles 100, max zombies 4, 8192 * 10 works decently, but sometimes fails due to agents dying
-    # black death wrapper, max cycles 100, max zombies 4, 8192*10, seems to work well (13 points over 10 games)
-    # black death wrapper, max_cycles 900 (default) allowed the knights to get kills 1/10 games, but worse archer performance (6 points)
-
+    # Notes on environment configuration:
+    # max_cycles 100, max_zombies 4, seems to work well (13 points over 10 games)
+    # max_cycles 900 (default) allowed the knights to get kills 1/10 games, but worse archer performance (6 points)
     env_kwargs = dict(max_cycles=100, max_zombies=4)
 
     # Train a model (takes ~5 minutes on a laptop CPU)
-    train(env_fn, steps=8192*10, seed=0, **env_kwargs)
+    train(env_fn, steps=81_920, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
     eval(env_fn, num_games=10, render_mode=None, **env_kwargs)

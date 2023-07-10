@@ -164,7 +164,7 @@ if __name__ == "__main__":
     env_kwargs = {}
 
     # Train a model against itself (takes ~20 seconds on a laptop CPU)
-    train_action_mask(env_fn, steps=20480, seed=0, **env_kwargs)
+    train_action_mask(env_fn, steps=20_480, seed=0, **env_kwargs)
 
     # Evaluate 100 games against a random agent (winrate should be ~80%)
     eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs)

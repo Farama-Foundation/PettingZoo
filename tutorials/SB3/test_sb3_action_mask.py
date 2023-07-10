@@ -95,7 +95,7 @@ def test_action_mask_hard(env_fn):
     env_kwargs = {}
 
     # Train a model against itself
-    train_action_mask(env_fn, steps=2048 * 10, seed=0, **env_kwargs)
+    train_action_mask(env_fn, steps=20_480, seed=0, **env_kwargs)
 
     # Evaluate 2 games against a random agent
     round_rewards, total_rewards, winrate, scores = eval_action_mask(
