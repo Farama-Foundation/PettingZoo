@@ -1,8 +1,8 @@
 ---
-title: "SB3: PPO for Pistonball (Parallel)"
+title: "SB3: PPO for Multiwalker (Parallel)"
 ---
 
-# SB3: PPO for Pistonball
+# SB3: PPO for Multiwalker
 
 This tutorial shows how to train a [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) model on the [Multiwalker](https://pettingzoo.farama.org/environments/sisl/multiwalker/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
 
