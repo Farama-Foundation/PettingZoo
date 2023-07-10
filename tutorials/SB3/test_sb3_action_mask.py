@@ -2,9 +2,8 @@
 
 try:
     import pytest
-except ModuleNotFoundError as e:
-    print(e)
-    exit()
+except ModuleNotFoundError:
+    return
 
 from tutorials.SB3.sb3_connect_four_action_mask import (
     eval_action_mask,
