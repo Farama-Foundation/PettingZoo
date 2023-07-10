@@ -4,7 +4,6 @@ import pytest
 
 from pettingzoo.classic import (
     chess_v6,
-    connect_four_v3,
     gin_rummy_v4,
     go_v5,
     hanabi_v4,
@@ -17,11 +16,11 @@ from pettingzoo.classic import (
 pytest.importorskip("stable_baselines3")
 pytest.importorskip("sb3_contrib")
 
+# Note: Connect Four is tested in sb3_connect_four_action_mask.py
 # Note: Rock-Paper-Scissors has no action masking and does not seem to learn well playing against itself
 
 # These environments do better than random even after the minimum number of timesteps
 EASY_ENVS = [
-    connect_four_v3,
     gin_rummy_v4,
     texas_holdem_no_limit_v6,  # texas holdem human rendered game ends instantly, but with random actions it works fine
     texas_holdem_v4,
@@ -71,6 +70,9 @@ def test_action_mask_easy(env_fn):
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
 
 
+@pytest.mark.skip(
+    reason="training can be compute intensive and hyperparameters have not been tuned, disabled for CI"
+)
 @pytest.mark.parametrize("env_fn", MEDIUM_ENVS)
 def test_action_mask_medium(env_fn):
     from tutorials.SB3.sb3_connect_four_action_mask import (
@@ -96,6 +98,9 @@ def test_action_mask_medium(env_fn):
     # eval_action_mask(env_fn, num_games=2, render_mode="human", **env_kwargs)
 
 
+@pytest.mark.skip(
+    reason="training can be compute intensive and hyperparameters have not been tuned, disabled for CI"
+)
 @pytest.mark.parametrize("env_fn", HARD_ENVS)
 def test_action_mask_hard(env_fn):
     from tutorials.SB3.sb3_connect_four_action_mask import (
