@@ -91,8 +91,7 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
     env = env_fn.env(render_mode=render_mode, **env_kwargs)
 
     print(
-        f"Starting evaluation on {str(env.metadata['name'])} vs a random agent."
-        f"Trained agent will play as {env.possible_agents[1]}"
+        f"Starting evaluation vs a random agent. Trained agent will play as {env.possible_agents[1]}."
     )
 
     try:
@@ -106,6 +105,9 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
     model = MaskablePPO.load(latest_policy)
 
     scores = {agent: 0 for agent in env.possible_agents}
+    total_rewards = {agent: 0 for agent in env.possible_agents}
+    round_rewards = []
+
     for i in range(num_games):
         env.reset(seed=i)
         env.action_space(env.possible_agents[0]).seed(i)
@@ -117,7 +119,15 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
             observation, action_mask = obs.values()
 
             if termination or truncation:
-                scores[agent] += reward  # winning agent gets +1
+                # If there is a winner, keep track, otherwise don't change the scores (tie)
+                if env.rewards[env.possible_agents[0]] != env.rewards[env.possible_agents[1]]:
+                    winner = max(env.rewards, key=env.rewards.get)
+                    scores[winner] += env.rewards[winner]  # only tracks the largest reward (winner of game)
+                # Also track negative and positive rewards (penalizes illegal moves)
+                for a in env.possible_agents:
+                    total_rewards[a] += env.rewards[a]
+                # List of rewards by round, for reference
+                round_rewards.append(env.rewards)
                 break
             else:
                 if agent == env.possible_agents[0]:
@@ -132,10 +142,16 @@ def eval_action_mask(env_fn, num_games=100, render_mode=None, **env_kwargs):
             env.step(act)
     env.close()
 
-    winrate = scores[env.possible_agents[1]] / sum(scores.values())
+    # Avoid dividing by zero
+    if sum(scores.values()) == 0:
+        winrate = 0
+    else:
+        winrate = scores[env.possible_agents[1]] / sum(scores.values())
+    print("Rewards by round: ", round_rewards)
+    print("Total rewards (incl. negative rewards): ", total_rewards)
     print("Winrate: ", winrate)
     print("Final scores: ", scores)
-    return winrate
+    return round_rewards, total_rewards, winrate, scores
 
 
 if __name__ == "__main__":
