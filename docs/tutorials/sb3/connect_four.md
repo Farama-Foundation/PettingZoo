@@ -27,7 +27,7 @@ After training and evaluation, this script will launch a demo game using human r
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/requirements.txt
+.. literalinclude:: ../../../tutorials/SB3/connect_four/requirements.txt
    :language: text
 ```
 

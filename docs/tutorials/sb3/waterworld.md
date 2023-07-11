@@ -18,7 +18,7 @@ After training and evaluation, this script will launch a demo game using human r
 ## Environment Setup
 To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/requirements.txt
+.. literalinclude:: ../../../tutorials/SB3/waterworld/requirements.txt
    :language: text
 ```
 
@@ -28,6 +28,6 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/multiwalker/sb3_multiwalker_vector.py
+.. literalinclude:: ../../../tutorials/SB3/multiwalker/sb3_waterworld_vector.py
    :language: python
 ```

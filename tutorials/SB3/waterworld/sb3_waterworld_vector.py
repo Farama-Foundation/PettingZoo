@@ -1,4 +1,4 @@
-"""Uses Stable-Baselines3 to train agents to play the Multiwalker environment using SuperSuit vector envs.
+"""Uses Stable-Baselines3 to train agents to play the Waterworld environment using SuperSuit vector envs.
 
 For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
 
@@ -14,13 +14,13 @@ import supersuit as ss
 from stable_baselines3 import PPO
 from stable_baselines3.ppo import MlpPolicy
 
-from pettingzoo.sisl import multiwalker_v9
+from pettingzoo.sisl import waterworld_v4
 
 
 def train_butterfly_supersuit(
     env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs
 ):
-    # Train a single agent to play both sides in a Parallel environment,
+    # Train a single a model to play as each agent in a cooperative Parallel environment,
     env = env_fn.parallel_env(**env_kwargs)
 
     env.reset(seed=seed)
@@ -30,7 +30,7 @@ def train_butterfly_supersuit(
     env = ss.pettingzoo_env_to_vec_env_v1(env)
     env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
 
-    # Note: Multiwalker's observation space is discrete, therefore we use an MLP policy rather than CNN
+    # Note: Waterworld's observation space is discrete (242,) so we use an MLP policy rather than CNN
     model = PPO(
         MlpPolicy,
         env,
@@ -78,9 +78,9 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
         for agent in env.agent_iter():
             obs, reward, termination, truncation, info = env.last()
 
+            for agent in env.agents:
+                rewards[agent] += env.rewards[agent]
             if termination or truncation:
-                for agent in env.agents:
-                    rewards[agent] += env.rewards[agent]
                 break
             else:
                 act = model.predict(obs, deterministic=True)[0]
@@ -89,21 +89,20 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
     env.close()
 
     avg_reward = sum(rewards.values()) / len(rewards.values())
+    print("Rewards: ", rewards)
     print(f"Avg reward: {avg_reward}")
     return avg_reward
 
 
 if __name__ == "__main__":
-    env_fn = multiwalker_v9
-
+    env_fn = waterworld_v4
     env_kwargs = {}
 
-    # Train a model (takes ~3 minutes on a laptop CPU)
-    # Note: stochastic environment makes training difficult, hyperparameters have not been fully tuned for this example
-    train_butterfly_supersuit(env_fn, steps=49_152 * 4, seed=0, **env_kwargs)
+    # Train a model (takes ~3 minutes on GPU)
+    train_butterfly_supersuit(env_fn, steps=196_608, seed=0, **env_kwargs)
 
-    # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
+    # Evaluate 10 games (average reward should be positive but can vary significantly)
     eval(env_fn, num_games=10, render_mode=None, **env_kwargs)
 
-    # Watch 2 games (takes ~10 seconds on a laptop CPU)
+    # Watch 2 games
     eval(env_fn, num_games=2, render_mode="human", **env_kwargs)

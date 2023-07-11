@@ -60,7 +60,7 @@ def train_butterfly_supersuit(
     print(f"Finished training on {str(env.unwrapped.metadata['name'])}.")
 
     # TODO: fix SuperSuit bug where closing the vector env can sometimes crash (disabled for CI)
-    # env.close()
+    env.close()
 
 
 def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwargs):
@@ -106,7 +106,7 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
             env.step(act)
 
     # TODO: fix SuperSuit bug where closing the vector env can sometimes crash (disabled for CI)
-    # env.close()
+    env.close()
 
     avg_reward = sum(rewards.values()) / len(rewards.values())
     print(f"Avg reward: {avg_reward}")
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
     # Train a model (takes ~3 minutes on a laptop CPU)
     # Note: stochastic environment makes training difficult, for better results try order of 2 million (~2 hours on GPU)
-    train_butterfly_supersuit(env_fn, steps=40_960, seed=0, **env_kwargs)
+    train_butterfly_supersuit(env_fn, steps=40_960 * 2, seed=0, **env_kwargs)
 
     # Evaluate 10 games (takes ~10 seconds on a laptop CPU)
     eval(env_fn, num_games=10, render_mode=None, **env_kwargs)

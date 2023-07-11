@@ -90,31 +90,6 @@ def eval(env_fn, num_games: int = 100, render_mode: str | None = None, **env_kwa
 
     rewards = {agent: 0 for agent in env.possible_agents}
 
-    # TODO: figure out why Parallel performs differently at test time (my guess is maybe the way it counts num_cycles is different?)
-    # # It seems to make the rewards worse, the same policy scores 2/3 points per archer vs 6/7 with AEC. n
-
-    # from pettingzoo.utils.wrappers import RecordEpisodeStatistics
-    #
-    # env = env_fn.parallel_env(render_mode=render_mode, **env_kwargs)
-    #
-    # # Pre-process using SuperSuit (color reduction, resizing and frame stacking)
-    # env = ss.resize_v1(env, x_size=84, y_size=84)
-    # env = ss.frame_stack_v1(env, 3)
-    # env = RecordEpisodeStatistics(env)
-    #
-    # stats = []
-    # for i in range(num_games):
-    #     observations, infos = env.reset(seed=i)
-    #     done = False
-    #     while not done:
-    #         actions = {agent:  model.predict(observations[agent], deterministic=True)[0] for agent in env.agents}
-    #         obss, rews, terms, truncs, infos = env.step(actions)
-    #
-    #         for agent in env.possible_agents:
-    #             rewards[agent] += rews[agent]
-    #         done = any(terms.values()) or any(truncs.values())
-    #     stats.append(infos["episode"])
-
     # Note: we evaluate here using an AEC environments, to allow for easy A/B testing against random policies
     # For example, we can see here that using a random agent for archer_0 results in less points than the trained agent
     for i in range(num_games):
