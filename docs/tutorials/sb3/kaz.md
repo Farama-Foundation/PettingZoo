@@ -4,7 +4,7 @@ title: "SB3: PPO for Knights-Archers-Zombies"
 
 # SB3: PPO for Knights-Archers-Zombies
 
-This tutorial shows how to train a [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) model on the [Knights-Archers-Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
+This tutorial shows how to train agents using [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) on the [Knights-Archers-Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
 
 It converts the environment into a Parallel environment and uses SuperSuit to create vectorized environments, leveraging multithreading to speed up training.
 
