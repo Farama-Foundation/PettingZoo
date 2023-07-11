@@ -1,7 +1,32 @@
+"""Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
 
 import gymnasium
 import numpy as np
+
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import (
+        generated_agents_env_v0,
+        generated_agents_parallel_v0,
+    )
+
+    @pytest.fixture
+    def env():
+        return generated_agents_env_v0.env()
+
+    @pytest.fixture
+    def parallel_env():
+        return generated_agents_parallel_v0.parallel_env()
+
+    @pytest.fixture
+    def num_cycles():
+        return 1000
+
+except ModuleNotFoundError:
+    pass
 
 env_pos_inf_state = [
     "simple_adversary_v3",

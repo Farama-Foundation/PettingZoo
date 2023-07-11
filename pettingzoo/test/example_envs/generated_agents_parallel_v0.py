@@ -1,4 +1,5 @@
 import gymnasium
+import numpy as np
 from gymnasium.utils import seeding
 
 from pettingzoo import ParallelEnv
@@ -27,6 +28,11 @@ class parallel_env(ParallelEnv):
         super().__init__()
         self._obs_spaces = {}
         self._act_spaces = {}
+
+        # dummy state space, not actually used
+        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self._state = self.state_space.sample()
+
         self.types = []
         self._agent_counters = {}
         self.max_cycles = max_cycles
@@ -41,6 +47,9 @@ class parallel_env(ParallelEnv):
 
     def action_space(self, agent):
         return self._act_spaces[get_type(agent)]
+
+    def state(self) -> np.ndarray:
+        return self._state
 
     def observe(self, agent):
         return self.observation_space(agent).sample()
@@ -77,6 +86,9 @@ class parallel_env(ParallelEnv):
         # Reset spaces and types
         self._obs_spaces = {}
         self._act_spaces = {}
+        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self._state = self.state_space.sample()
+
         self.types = []
         self._agent_counters = {}
         for i in range(3):

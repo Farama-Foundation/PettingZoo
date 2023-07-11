@@ -5,6 +5,32 @@ import numpy as np
 
 from pettingzoo.test.api_test import test_observation
 
+try:
+    import pytest
+
+    from pettingzoo.test.example_envs import generated_agents_env_v0
+
+    @pytest.fixture
+    def env():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env
+
+    @pytest.fixture
+    def observation(env):
+        return env.observation_space(env.agents[0]).sample()
+
+    @pytest.fixture()
+    def observation_0(env):
+        return env.observation_space(env.agents[1]).sample()
+
+    @pytest.fixture
+    def cycles():
+        return 1000
+
+except ModuleNotFoundError:
+    pass
+
 
 def bombardment_test(env, cycles=10000):
     print("Starting bombardment test")
