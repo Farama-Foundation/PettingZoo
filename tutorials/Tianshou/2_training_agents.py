@@ -12,7 +12,7 @@ git+https://github.com/thu-ml/tianshou
 import os
 from typing import Optional, Tuple
 
-import gymnasium as gym
+import gymnasium
 import numpy as np
 import torch
 from tianshou.data import Collector, VectorReplayBuffer
@@ -33,7 +33,7 @@ def _get_agents(
     env = _get_env()
     observation_space = (
         env.observation_space["observation"]
-        if isinstance(env.observation_space, gym.spaces.Dict)
+        if isinstance(env.observation_space, gymnasium.spaces.Dict)
         else env.observation_space
     )
     if agent_learn is None:

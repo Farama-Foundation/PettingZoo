@@ -1,3 +1,5 @@
-stable-baselines3 >= 2.0.0
-pettingzoo >= 1.23.1
-supersuit >= 3.8.1
+stable-baselines3>=2.0.0
+pettingzoo[classic,butterfly,sisl]>=1.23.1
+supersuit>=3.8.1
+sb3-contrib>=2.0.0
+pytest
