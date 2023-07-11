@@ -1,10 +1,10 @@
 ---
-title: "SB3: PPO for Multiwalker (Parallel)"
+title: "SB3: PPO for Waterworld (Parallel)"
 ---
 
-# SB3: PPO for Multiwalker
+# SB3: PPO for Waterworld
 
-This tutorial shows how to train a [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) model on the [Multiwalker](https://pettingzoo.farama.org/environments/sisl/multiwalker/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
+This tutorial shows how to train agents using [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) on the [Waterworld](https://pettingzoo.farama.org/environments/sisl/waterworld/) environment ([Parallel](https://pettingzoo.farama.org/api/parallel/)).
 
 After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
@@ -28,6 +28,6 @@ The following code should run without any issues. The comments are designed to h
 ### Training and Evaluation
 
 ```{eval-rst}
-.. literalinclude:: ../../../tutorials/SB3/multiwalker/sb3_waterworld_vector.py
+.. literalinclude:: ../../../tutorials/SB3/waterworld/sb3_waterworld_vector.py
    :language: python
 ```
