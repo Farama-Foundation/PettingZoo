@@ -268,6 +268,9 @@ class raw_env(AECEnv, EzPickle):
         current_agent = self.agent_selection
         current_index = self.agents.index(current_agent)
 
+        # Cast action into int
+        action = int(action)
+
         chosen_move = chess_utils.action_to_move(self.board, action, current_index)
         assert chosen_move in self.board.legal_moves
         self.board.push(chosen_move)

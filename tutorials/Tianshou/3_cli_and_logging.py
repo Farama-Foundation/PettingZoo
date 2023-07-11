@@ -14,7 +14,7 @@ import os
 from copy import deepcopy
 from typing import Optional, Tuple
 
-import gymnasium as gym
+import gymnasium
 import numpy as np
 import torch
 from tianshou.data import Collector, VectorReplayBuffer
@@ -105,7 +105,7 @@ def get_agents(
     env = get_env()
     observation_space = (
         env.observation_space["observation"]
-        if isinstance(env.observation_space, gym.spaces.Dict)
+        if isinstance(env.observation_space, gymnasium.spaces.Dict)
         else env.observation_space
     )
     args.state_shape = observation_space.shape or observation_space.n

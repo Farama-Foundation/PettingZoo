@@ -1,4 +1,4 @@
-"""Uses Ray's RLLib to view trained agents playing Pistonball.
+"""Uses Ray's RLlib to view trained agents playing Pistonball.
 
 Author: Rohan (https://github.com/Rohan138)
 """
