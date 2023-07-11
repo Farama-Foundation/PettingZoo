@@ -105,6 +105,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-norecursedirs = [
-    "pettingzoo"
-]
+addopts = [ "--ignore-glob=*/__init__.py" ]

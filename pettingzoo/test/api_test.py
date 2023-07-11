@@ -12,6 +12,43 @@ from pettingzoo.utils.conversions import (
 )
 from pettingzoo.utils.wrappers import BaseWrapper
 
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import generated_agents_env_v0
+
+    @pytest.fixture
+    def env():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env
+
+    @pytest.fixture
+    def env_name():
+        return "generated_agents_env_v0"
+
+    @pytest.fixture()
+    def observation(env):
+        return env.observation_space(env.agents[0]).sample()
+
+    @pytest.fixture()
+    def observation_0(env):
+        return env.observation_space(env.agents[1]).sample()
+
+    @pytest.fixture
+    def reward():
+        return 0
+
+    @pytest.fixture
+    def agent_0():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env.agents[0]
+
+except ModuleNotFoundError:
+    pass
+
 missing_attr_warning = """This environment does not have {name} defined.
 This is not a required part 'of the API as environments with procedurally
 generated agents cannot always have this property defined. However, this is
