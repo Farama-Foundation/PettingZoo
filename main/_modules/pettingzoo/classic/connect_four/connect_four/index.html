@@ -597,9 +597,8 @@
         <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="p">):</span>
             <span class="c1"># once either play wins or there is a draw, game over, both players are done</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="kc">True</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># no winner yet</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="n">next_agent</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span> <span class="o">=</span> <span class="n">next_agent</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_accumulate_rewards</span><span class="p">()</span>
 
