@@ -8,7 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/sb3/kaz.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="SB3: PPO for Multiwalker" href="../waterworld/" /><link rel="prev" title="Stable-Baselines3 Tutorial" href="../" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="SB3: PPO for Waterworld" href="../waterworld/" /><link rel="prev" title="Stable-Baselines3 Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/kaz.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
@@ -337,7 +337,7 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Stable-Baselines3 Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SB3: PPO for Knights-Archers-Zombies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../waterworld/">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../waterworld/">SB3: PPO for Waterworld</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
@@ -406,7 +406,7 @@
             
             <section id="sb3-ppo-for-knights-archers-zombies">
 <h1>SB3: PPO for Knights-Archers-Zombies<a class="headerlink" href="#sb3-ppo-for-knights-archers-zombies" title="Permalink to this heading">#</a></h1>
-<p>This tutorial shows how to train a <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights-Archers-Zombies</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
+<p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights-Archers-Zombies</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
 <p>It converts the environment into a Parallel environment and uses SuperSuit to create vectorized environments, leveraging multithreading to speed up training.</p>
 <p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
 <div class="admonition note">
@@ -587,7 +587,7 @@ supersuit&gt;=3.8.1
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">SB3: PPO for Multiwalker</div>
+                <div class="title">SB3: PPO for Waterworld</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>

@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/waterworld.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
-        <title>SB3: PPO for Multiwalker - PettingZoo Documentation</title>
+        <title>SB3: PPO for Waterworld - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=a022fd11c0d7e10ac71ac296890386cea7a2fa24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=093e2efd5a2c7b46ab7c7157e45f5f05a1e0a463" />
@@ -337,7 +337,7 @@
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../">Stable-Baselines3 Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SB3: PPO for Waterworld</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
@@ -404,9 +404,9 @@
           </div>
           <article role="main">
             
-            <section id="sb3-ppo-for-multiwalker">
-<h1>SB3: PPO for Multiwalker<a class="headerlink" href="#sb3-ppo-for-multiwalker" title="Permalink to this heading">#</a></h1>
-<p>This tutorial shows how to train a <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/sisl/multiwalker/">Multiwalker</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">Parallel</a>).</p>
+            <section id="sb3-ppo-for-waterworld">
+<h1>SB3: PPO for Waterworld<a class="headerlink" href="#sb3-ppo-for-waterworld" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference external" href="https://pettingzoo.farama.org/environments/sisl/waterworld/">Waterworld</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">Parallel</a>).</p>
 <p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -427,6 +427,116 @@ pymunk
 <p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-and-evaluation">
 <h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Stable-Baselines3 to train agents to play the Waterworld environment using SuperSuit vector envs.</span>
+
+<span class="sd">For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html</span>
+
+<span class="sd">Author: Elliot (https://github.com/elliottower)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">supersuit</span> <span class="k">as</span> <span class="nn">ss</span>
+<span class="kn">from</span> <span class="nn">stable_baselines3</span> <span class="kn">import</span> <span class="n">PPO</span>
+<span class="kn">from</span> <span class="nn">stable_baselines3.ppo</span> <span class="kn">import</span> <span class="n">MlpPolicy</span>
+
+<span class="kn">from</span> <span class="nn">pettingzoo.sisl</span> <span class="kn">import</span> <span class="n">waterworld_v4</span>
+
+
+<span class="k">def</span> <span class="nf">train_butterfly_supersuit</span><span class="p">(</span>
+    <span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span>
+<span class="p">):</span>
+    <span class="c1"># Train a single a model to play as each agent in a cooperative Parallel environment,</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">parallel_env</span><span class="p">(</span><span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">pettingzoo_env_to_vec_env_v1</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">concat_vec_envs_v1</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">base_class</span><span class="o">=</span><span class="s2">&quot;stable_baselines3&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Note: Waterworld&#39;s observation space is discrete (242,) so we use an MLP policy rather than CNN</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span>
+        <span class="n">MlpPolicy</span><span class="p">,</span>
+        <span class="n">env</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model has been saved.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+    <span class="c1"># Evaluate a trained agent vs a random agent</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Starting evaluation on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> (num_games=</span><span class="si">{</span><span class="n">num_games</span><span class="si">}</span><span class="s2">, render_mode=</span><span class="si">{</span><span class="n">render_mode</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">latest_policy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Policy not found.&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">latest_policy</span><span class="p">)</span>
+
+    <span class="n">rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
+
+    <span class="c1"># Note: We train using the Parallel API but evaluate using the AEC API</span>
+    <span class="c1"># SB3 models are designed for single-agent settings, we get around this by using he same model for every agent</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_games</span><span class="p">):</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
+                <span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">avg_reward</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rewards</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rewards: &quot;</span><span class="p">,</span> <span class="n">rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg reward: </span><span class="si">{</span><span class="n">avg_reward</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">avg_reward</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">env_fn</span> <span class="o">=</span> <span class="n">waterworld_v4</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Train a model (takes ~3 minutes on GPU)</span>
+    <span class="n">train_butterfly_supersuit</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">196_608</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Evaluate 10 games (average reward should be positive but can vary significantly)</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Watch 2 games</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -500,7 +610,7 @@ pymunk
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">SB3: PPO for Multiwalker</a><ul>
+<li><a class="reference internal" href="#">SB3: PPO for Waterworld</a><ul>
 <li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
 <li><a class="reference internal" href="#code">Code</a><ul>
 <li><a class="reference internal" href="#training-and-evaluation">Training and Evaluation</a></li>
