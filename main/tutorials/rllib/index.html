@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/index.html" />
 
     <link rel="shortcut icon" href="../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
-        <title>RLlib Tutorial - PettingZoo Documentation</title>
+        <title>Ray RLlib Tutorial - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=a022fd11c0d7e10ac71ac296890386cea7a2fa24" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=093e2efd5a2c7b46ab7c7157e45f5f05a1e0a463" />
@@ -326,13 +326,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Ray RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="pistonball/">RLlib: PPO for Pistonball</a></li>
 <li class="toctree-l2"><a class="reference internal" href="holdem/">RLlib: DQN for Simple Poker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LangChain Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../langchain/langchain/">LangChain: Creating LLM agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../sb3/">Stable-Baselines3 Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../sb3/kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sb3/waterworld/">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sb3/connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
 </ul>
@@ -398,9 +404,9 @@
           </div>
           <article role="main">
             
-            <section id="rllib-tutorial">
-<h1>RLlib Tutorial<a class="headerlink" href="#rllib-tutorial" title="Permalink to this heading">#</a></h1>
-<p>These tutorials show you how to use <a class="reference external" href="https://docs.ray.io/en/latest/rllib/index.html">RLlib</a> to train agents in PettingZoo environments.</p>
+            <section id="ray-rllib-tutorial">
+<h1>Ray RLlib Tutorial<a class="headerlink" href="#ray-rllib-tutorial" title="Permalink to this heading">#</a></h1>
+<p>These tutorials show you how to use <a class="reference external" href="https://docs.ray.io/en/latest/index.html">Ray</a>’s <a class="reference external" href="https://docs.ray.io/en/latest/rllib/index.html">RLlib</a> library to train agents in PettingZoo environments.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="pistonball/"><span class="doc std std-doc">PPO for Pistonball</span></a>: <em>Train a PPO model in a parallel environment</em></p></li>
 <li><p><a class="reference internal" href="holdem/"><span class="doc std std-doc">DQN for Simple Poker</span></a> <em>Train a DQN model in an AEC environment</em></p></li>
@@ -514,7 +520,7 @@ It is a part of <a class="reference external" href="https://github.com/ray-proje
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">RLlib Tutorial</a><ul>
+<li><a class="reference internal" href="#">Ray RLlib Tutorial</a><ul>
 <li><a class="reference internal" href="#rllib-overview">RLlib Overview</a></li>
 <li><a class="reference internal" href="#examples-using-pettingzoo">Examples using PettingZoo:</a><ul>
 <li><a class="reference internal" href="#training">Training:</a></li>

@@ -8,7 +8,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
     <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/rllib/pistonball.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="RLlib: DQN for Simple Poker" href="../holdem/" /><link rel="prev" title="RLlib Tutorial" href="../" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="RLlib: DQN for Simple Poker" href="../holdem/" /><link rel="prev" title="Ray RLlib Tutorial" href="../" />
         <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/pistonball.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
@@ -326,13 +326,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Ray RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RLlib: PPO for Pistonball</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../holdem/">RLlib: DQN for Simple Poker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LangChain Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../langchain/langchain/">LangChain: Creating LLM agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../sb3/">Stable-Baselines3 Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/waterworld/">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sb3/connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
 </ul>
@@ -416,10 +422,10 @@ tensorflow-probability==0.19.0
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
-<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLLib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
+<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLlib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
 <section id="training-the-rl-agent">
 <h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLLib to train agents to play Pistonball.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to train agents to play Pistonball.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -529,7 +535,7 @@ tensorflow-probability==0.19.0
 </section>
 <section id="watching-the-trained-rl-agent-play">
 <h3>Watching the trained RL agent play<a class="headerlink" href="#watching-the-trained-rl-agent-play" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLLib to view trained agents playing Pistonball.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to view trained agents playing Pistonball.</span>
 
 <span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -651,7 +657,7 @@ tensorflow-probability==0.19.0
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">RLlib Tutorial</div>
+                <div class="title">Ray RLlib Tutorial</div>
                 
               </div>
             </a>
