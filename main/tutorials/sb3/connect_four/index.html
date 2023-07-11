@@ -7,12 +7,12 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="LangChain Tutorial" href="../../langchain/" /><link rel="prev" title="RLlib: PPO for Pistonball" href="../pistonball/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/sb3/connect_four.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="Release Notes" href="../../../release_notes/" /><link rel="prev" title="SB3: PPO for Multiwalker" href="../waterworld/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/connect_four.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
-        <title>RLlib: DQN for Simple Poker - PettingZoo Documentation</title>
+        <title>SB3: Action Masked PPO for Connect Four - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=a022fd11c0d7e10ac71ac296890386cea7a2fa24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=093e2efd5a2c7b46ab7c7157e45f5f05a1e0a463" />
@@ -326,19 +326,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Ray RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../pistonball/">RLlib: PPO for Pistonball</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RLlib: DQN for Simple Poker</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../rllib/">Ray RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LangChain Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../langchain/langchain/">LangChain: Creating LLM agents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../sb3/">Stable-Baselines3 Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/waterworld/">SB3: PPO for Multiwalker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Stable-Baselines3 Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../waterworld/">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
 </ul>
@@ -373,7 +373,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/rllib/holdem.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/sb3/connect_four.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -404,245 +404,219 @@
           </div>
           <article role="main">
             
-            <section id="rllib-dqn-for-simple-poker">
-<h1>RLlib: DQN for Simple Poker<a class="headerlink" href="#rllib-dqn-for-simple-poker" title="Permalink to this heading">#</a></h1>
-<p>This tutorial shows how to train a <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#deep-q-networks-dqn-rainbow-parametric-dqn">Deep Q-Network</a> (DQN) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/classic/leduc_holdem/">Leduc Hold’em</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
-<p>After training, run the provided code to watch your trained agent play vs itself. See the <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html">documentation</a> for more information.</p>
+            <section id="sb3-action-masked-ppo-for-connect-four">
+<h1>SB3: Action Masked PPO for Connect Four<a class="headerlink" href="#sb3-action-masked-ppo-for-connect-four" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train a Maskable <a class="reference external" href="https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html">Proximal Policy Optimization</a> (PPO) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/classic/chess/">Connect Four</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
+<p>It creates a custom Wrapper to convert to a <a class="reference external" href="https://gymnasium.farama.org/">Gymnasium</a>-like environment which is compatible with <a class="reference external" href="https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html">SB3 action masking</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This environment has a discrete (1-dimensional) observation space with an illegal action mask, so we use a masked MLP feature extractor.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.</p>
+</div>
+<p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic, butterfly]==1.23.0
-Pillow==9.4.0
-ray[rllib]==2.4.0 # Note: RLlib&#39;s PettingZoo wrapper is currently broken, but will be fixed with https://github.com/ray-project/ray/pull/34696
-SuperSuit==3.8.0
-torch==1.13.1
-tensorflow-probability==0.19.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[classic]&gt;=1.23.1
+stable-baselines3&gt;=2.0.0
+sb3-contrib&gt;=2.0.0
 </pre></div>
 </div>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
-<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLlib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
-<section id="training-the-rl-agent">
-<h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to train agents to play Leduc Holdem.</span>
+<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
+<section id="training-and-evaluation">
+<h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Stable-Baselines3 to train agents in the Connect Four environment using invalid action masking.</span>
 
-<span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
+<span class="sd">For information about invalid action masking in PettingZoo, see https://pettingzoo.farama.org/api/aec/#action-masking</span>
+<span class="sd">For more information about invalid action masking in SB3, see https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html</span>
+
+<span class="sd">Author: Elliot (https://github.com/elliottower)</span>
 <span class="sd">&quot;&quot;&quot;</span>
-
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">import</span> <span class="nn">ray</span>
-<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span>
-<span class="kn">from</span> <span class="nn">ray</span> <span class="kn">import</span> <span class="n">tune</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn</span> <span class="kn">import</span> <span class="n">DQNConfig</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn.dqn_torch_model</span> <span class="kn">import</span> <span class="n">DQNTorchModel</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models</span> <span class="kn">import</span> <span class="n">ModelCatalog</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models.torch.fcnet</span> <span class="kn">import</span> <span class="n">FullyConnectedNetwork</span> <span class="k">as</span> <span class="n">TorchFC</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.utils.framework</span> <span class="kn">import</span> <span class="n">try_import_torch</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.utils.torch_utils</span> <span class="kn">import</span> <span class="n">FLOAT_MAX</span>
-<span class="kn">from</span> <span class="nn">ray.tune.registry</span> <span class="kn">import</span> <span class="n">register_env</span>
+<span class="kn">from</span> <span class="nn">sb3_contrib</span> <span class="kn">import</span> <span class="n">MaskablePPO</span>
+<span class="kn">from</span> <span class="nn">sb3_contrib.common.maskable.policies</span> <span class="kn">import</span> <span class="n">MaskableActorCriticPolicy</span>
+<span class="kn">from</span> <span class="nn">sb3_contrib.common.wrappers</span> <span class="kn">import</span> <span class="n">ActionMasker</span>
 
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
-
-<span class="n">torch</span><span class="p">,</span> <span class="n">nn</span> <span class="o">=</span> <span class="n">try_import_torch</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">pettingzoo.utils</span>
+<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">connect_four_v3</span>
 
 
-<span class="k">class</span> <span class="nc">TorchMaskedActions</span><span class="p">(</span><span class="n">DQNTorchModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">pettingzoo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">BaseWrapper</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to allow PettingZoo environments to be used with SB3 illegal action masking.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">obs_space</span><span class="p">:</span> <span class="n">Box</span><span class="p">,</span>
-        <span class="n">action_space</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">,</span>
-        <span class="n">num_outputs</span><span class="p">,</span>
-        <span class="n">model_config</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="n">DQNTorchModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">,</span> <span class="n">model_config</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like reset function which assigns obs/action spaces to be the same for each agent.</span>
+
+<span class="sd">        This is required as SB3 is designed for single-agent RL and doesn&#39;t expect obs/action spaces to be functions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="c1"># Strip the action mask out from the observation space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observation_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span>
+            <span class="s2">&quot;observation&quot;</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Return initial observation, info (PettingZoo AEC envs do not by default)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">),</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gymnasium-like step function, returning observation, reward, termination, truncation, info.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return only raw observation, removing action mask.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">agent</span><span class="p">)[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">action_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Separate function used in order to access the action mask.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_selection</span><span class="p">)[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">mask_fn</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
+    <span class="c1"># Do whatever you&#39;d like in this function to return the action mask</span>
+    <span class="c1"># for the current env. In this example, we assume the env has a</span>
+    <span class="c1"># helpful method we can rely on.</span>
+    <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_mask</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a single agent to play both sides in a PettingZoo environment using invalid action masking.&quot;&quot;&quot;</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Custom wrapper to convert PettingZoo envs to work with SB3 action masking</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">SB3ActionMaskWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># Must call reset() in order to re-define the spaces</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ActionMasker</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">mask_fn</span><span class="p">)</span>  <span class="c1"># Wrap to enable masking (SB3 function)</span>
+    <span class="c1"># MaskablePPO behaves the same as SB3&#39;s PPO unless the env is wrapped</span>
+    <span class="c1"># with ActionMasker. If the wrapper is detected, the masks are automatically</span>
+    <span class="c1"># retrieved and used when learning. Note that MaskablePPO does not accept</span>
+    <span class="c1"># a new action_mask_fn kwarg, as it did in an earlier draft.</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">MaskablePPO</span><span class="p">(</span><span class="n">MaskableActorCriticPolicy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">set_random_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model has been saved.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished training on </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">unwrapped</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">):</span>
+    <span class="c1"># Evaluate a trained agent vs a random agent</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">render_mode</span><span class="o">=</span><span class="n">render_mode</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Starting evaluation vs a random agent. Trained agent will play as </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">latest_policy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">*.zip&quot;</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span>
         <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Policy not found.&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">obs_len</span> <span class="o">=</span> <span class="n">obs_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">MaskablePPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">latest_policy</span><span class="p">)</span>
 
-        <span class="n">orig_obs_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span>
-            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">obs_len</span><span class="p">,),</span> <span class="n">low</span><span class="o">=</span><span class="n">obs_space</span><span class="o">.</span><span class="n">low</span><span class="p">[:</span><span class="n">obs_len</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="n">obs_space</span><span class="o">.</span><span class="n">high</span><span class="p">[:</span><span class="n">obs_len</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span> <span class="o">=</span> <span class="n">TorchFC</span><span class="p">(</span>
-            <span class="n">orig_obs_space</span><span class="p">,</span>
-            <span class="n">action_space</span><span class="p">,</span>
-            <span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-            <span class="n">model_config</span><span class="p">,</span>
-            <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_action_embed&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
+    <span class="n">total_rewards</span> <span class="o">=</span> <span class="p">{</span><span class="n">agent</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
+    <span class="n">round_rewards</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">seq_lens</span><span class="p">):</span>
-        <span class="c1"># Extract the available actions tensor from the observation.</span>
-        <span class="n">action_mask</span> <span class="o">=</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_games</span><span class="p">):</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-        <span class="c1"># Compute the predicted action embedding</span>
-        <span class="n">action_logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="p">(</span>
-            <span class="p">{</span><span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;observation&quot;</span><span class="p">]}</span>
-        <span class="p">)</span>
-        <span class="c1"># turns probit action mask into logit action mask</span>
-        <span class="n">inf_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">action_mask</span><span class="p">),</span> <span class="o">-</span><span class="mf">1e10</span><span class="p">,</span> <span class="n">FLOAT_MAX</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">action_logits</span> <span class="o">+</span> <span class="n">inf_mask</span><span class="p">,</span> <span class="n">state</span>
+            <span class="c1"># Separate observation and action mask</span>
+            <span class="n">observation</span><span class="p">,</span> <span class="n">action_mask</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">value_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="o">.</span><span class="n">value_function</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
+                <span class="c1"># If there is a winner, keep track, otherwise don&#39;t change the scores (tie)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                    <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="p">):</span>
+                    <span class="n">winner</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+                    <span class="n">scores</span><span class="p">[</span><span class="n">winner</span><span class="p">]</span> <span class="o">+=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span>
+                        <span class="n">winner</span>
+                    <span class="p">]</span>  <span class="c1"># only tracks the largest reward (winner of game)</span>
+                <span class="c1"># Also track negative and positive rewards (penalizes illegal moves)</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">:</span>
+                    <span class="n">total_rewards</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+                <span class="c1"># List of rewards by round, for reference</span>
+                <span class="n">round_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">rewards</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">agent</span> <span class="o">==</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">act</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">action_mask</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Note: PettingZoo expects integer actions # TODO: change chess to cast actions to type int?</span>
+                    <span class="n">act</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                        <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                            <span class="n">observation</span><span class="p">,</span> <span class="n">action_masks</span><span class="o">=</span><span class="n">action_mask</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span>
+                        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Avoid dividing by zero</span>
+    <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">winrate</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">winrate</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rewards by round: &quot;</span><span class="p">,</span> <span class="n">round_rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total rewards (incl. negative rewards): &quot;</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Winrate: &quot;</span><span class="p">,</span> <span class="n">winrate</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final scores: &quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">round_rewards</span><span class="p">,</span> <span class="n">total_rewards</span><span class="p">,</span> <span class="n">winrate</span><span class="p">,</span> <span class="n">scores</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">env_fn</span> <span class="o">=</span> <span class="n">connect_four_v3</span>
 
-    <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
-    <span class="c1"># function that outputs the environment you wish to register.</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">env_creator</span><span class="p">():</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">env</span>
+    <span class="c1"># Evaluation/training hyperparameter notes:</span>
+    <span class="c1"># 10k steps: Winrate:  0.76, loss order of 1e-03</span>
+    <span class="c1"># 20k steps: Winrate:  0.86, loss order of 1e-04</span>
+    <span class="c1"># 40k steps: Winrate:  0.86, loss order of 7e-06</span>
 
-    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
-    <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
+    <span class="c1"># Train a model against itself (takes ~20 seconds on a laptop CPU)</span>
+    <span class="n">train_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">20_480</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
-    <span class="n">test_env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">())</span>
-    <span class="n">obs_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">observation_space</span>
-    <span class="n">act_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">action_space</span>
+    <span class="c1"># Evaluate 100 games against a random agent (winrate should be ~80%)</span>
+    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 
-    <span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">DQNConfig</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="n">env_name</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">rollouts</span><span class="p">(</span><span class="n">num_rollout_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rollout_fragment_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">training</span><span class="p">(</span>
-            <span class="n">train_batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-            <span class="n">hiddens</span><span class="o">=</span><span class="p">[],</span>
-            <span class="n">dueling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;custom_model&quot;</span><span class="p">:</span> <span class="s2">&quot;pa_model&quot;</span><span class="p">},</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">multi_agent</span><span class="p">(</span>
-            <span class="n">policies</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;player_0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
-                <span class="s2">&quot;player_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
-            <span class="p">},</span>
-            <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">agent_id</span><span class="p">),</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
-        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span>
-            <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span>
-        <span class="p">)</span>  <span class="c1"># TODO: change to ERROR to match pistonball example</span>
-        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">exploration</span><span class="p">(</span>
-            <span class="n">exploration_config</span><span class="o">=</span><span class="p">{</span>
-                <span class="c1"># The Exploration class to use.</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;EpsilonGreedy&quot;</span><span class="p">,</span>
-                <span class="c1"># Config for the Exploration class&#39; constructor:</span>
-                <span class="s2">&quot;initial_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;final_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;epsilon_timesteps&quot;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Timesteps over which to anneal epsilon.</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-
-    <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-        <span class="n">alg_name</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DQN&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">},</span>
-        <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
-    <span class="p">)</span>
+    <span class="c1"># Watch two games vs a random agent</span>
+    <span class="n">eval_action_mask</span><span class="p">(</span><span class="n">env_fn</span><span class="p">,</span> <span class="n">num_games</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">render_mode</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="watching-the-trained-rl-agent-play">
-<h3>Watching the trained RL agent play<a class="headerlink" href="#watching-the-trained-rl-agent-play" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to view trained agents playing Leduoc Holdem.</span>
-
-<span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">ray</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.algorithm</span> <span class="kn">import</span> <span class="n">Algorithm</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.env.wrappers.pettingzoo_env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models</span> <span class="kn">import</span> <span class="n">ModelCatalog</span>
-<span class="kn">from</span> <span class="nn">ray.tune.registry</span> <span class="kn">import</span> <span class="n">register_env</span>
-<span class="kn">from</span> <span class="nn">rllib_leduc_holdem</span> <span class="kn">import</span> <span class="n">TorchMaskedActions</span>
-
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
-
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
-
-<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Render pretrained policy loaded from checkpoint&quot;</span>
-<span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-    <span class="s2">&quot;--checkpoint-path&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-<span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">)</span>
-
-
-<span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
-<span class="c1"># function that outputs the environment you wish to register.</span>
-
-
-<span class="k">def</span> <span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">env</span>
-
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">()</span>
-<span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
-<span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
-
-
-<span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-<span class="n">DQNAgent</span> <span class="o">=</span> <span class="n">Algorithm</span><span class="o">.</span><span class="n">from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
-
-<span class="n">reward_sums</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
-    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-    <span class="n">obs</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
-    <span class="n">reward_sums</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
-    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
-        <span class="n">policy</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
-        <span class="n">batch_obs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
-                <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">batched_action</span><span class="p">,</span> <span class="n">state_out</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">compute_actions_from_input_dict</span><span class="p">(</span>
-            <span class="n">batch_obs</span>
-        <span class="p">)</span>
-        <span class="n">single_action</span> <span class="o">=</span> <span class="n">batched_action</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">single_action</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rewards:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">reward_sums</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="testing-other-pettingzoo-classic-environments">
+<h3>Testing other PettingZoo Classic environments<a class="headerlink" href="#testing-other-pettingzoo-classic-environments" title="Permalink to this heading">#</a></h3>
+<p>The following script uses <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> to test all other PettingZoo environments which support action masking.</p>
+<p>This code yields good results on simpler environments like <a class="reference internal" href="../../../environments/classic/gin_rummy/"><span class="doc std std-doc">Gin Rummy</span></a> and <a class="reference internal" href="../../../environments/classic/texas_holdem_no_limit/"><span class="doc std std-doc">Texas Hold’em No Limit</span></a>, while failing to perform better than random in more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a>.</p>
 </section>
 </section>
 </section>
@@ -652,18 +626,18 @@ tensorflow-probability==0.19.0
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../../langchain/">
+            <a class="next-page" href="../../../release_notes/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">LangChain Tutorial</div>
+                <div class="title">Release Notes</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../pistonball/">
+            <a class="prev-page" href="../waterworld/">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -672,7 +646,7 @@ tensorflow-probability==0.19.0
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">RLlib: PPO for Pistonball</div>
+                <div class="title">SB3: PPO for Multiwalker</div>
                 
               </div>
             </a>
@@ -716,11 +690,11 @@ tensorflow-probability==0.19.0
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">RLlib: DQN for Simple Poker</a><ul>
+<li><a class="reference internal" href="#">SB3: Action Masked PPO for Connect Four</a><ul>
 <li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
 <li><a class="reference internal" href="#code">Code</a><ul>
-<li><a class="reference internal" href="#training-the-rl-agent">Training the RL agent</a></li>
-<li><a class="reference internal" href="#watching-the-trained-rl-agent-play">Watching the trained RL agent play</a></li>
+<li><a class="reference internal" href="#training-and-evaluation">Training and Evaluation</a></li>
+<li><a class="reference internal" href="#testing-other-pettingzoo-classic-environments">Testing other PettingZoo Classic environments</a></li>
 </ul>
 </li>
 </ul>

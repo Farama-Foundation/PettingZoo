@@ -7,12 +7,12 @@
     <meta property="og:title" content="PettingZoo Documentation" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="" />
-    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="LangChain Tutorial" href="../../langchain/" /><link rel="prev" title="RLlib: PPO for Pistonball" href="../pistonball/" />
-        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/rllib/holdem.html" />
+    <meta property="og:url" content="https://pettingzoo.farama.org/tutorials/sb3/waterworld.html" /><meta name="twitter:card" content="summary_large_image"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="next" title="SB3: Action Masked PPO for Connect Four" href="../connect_four/" /><link rel="prev" title="SB3: PPO for Knights-Archers-Zombies" href="../kaz/" />
+        <link rel="canonical" href="https://pettingzoo.farama.org/tutorials/sb3/waterworld.html" />
 
     <link rel="shortcut icon" href="../../../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
-        <title>RLlib: DQN for Simple Poker - PettingZoo Documentation</title>
+        <title>SB3: PPO for Multiwalker - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=a022fd11c0d7e10ac71ac296890386cea7a2fa24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=093e2efd5a2c7b46ab7c7157e45f5f05a1e0a463" />
@@ -326,19 +326,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../tianshou/advanced/">Tianshou: CLI and Logging</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Ray RLlib Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../pistonball/">RLlib: PPO for Pistonball</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RLlib: DQN for Simple Poker</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../rllib/">Ray RLlib Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Ray RLlib Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/pistonball/">RLlib: PPO for Pistonball</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rllib/holdem/">RLlib: DQN for Simple Poker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../langchain/">LangChain Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LangChain Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../langchain/langchain/">LangChain: Creating LLM agents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../sb3/">Stable-Baselines3 Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/waterworld/">SB3: PPO for Multiwalker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../sb3/connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../">Stable-Baselines3 Tutorial</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Stable-Baselines3 Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../kaz/">SB3: PPO for Knights-Archers-Zombies</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">SB3: PPO for Multiwalker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connect_four/">SB3: Action Masked PPO for Connect Four</a></li>
 </ul>
 </li>
 </ul>
@@ -373,7 +373,7 @@
           </a>
           <div class="content-icon-container">
       <div class="edit-this-page">
-  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/rllib/holdem.py" title="Edit this page">
+  <a class="muted-link" href="https://github.com/Farama-Foundation/PettingZoo/edit/master/docs/tutorials/sb3/waterworld.py" title="Edit this page">
     <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
       <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
       <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
@@ -404,245 +404,29 @@
           </div>
           <article role="main">
             
-            <section id="rllib-dqn-for-simple-poker">
-<h1>RLlib: DQN for Simple Poker<a class="headerlink" href="#rllib-dqn-for-simple-poker" title="Permalink to this heading">#</a></h1>
-<p>This tutorial shows how to train a <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#deep-q-networks-dqn-rainbow-parametric-dqn">Deep Q-Network</a> (DQN) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/classic/leduc_holdem/">Leduc Hold’em</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
-<p>After training, run the provided code to watch your trained agent play vs itself. See the <a class="reference external" href="https://docs.ray.io/en/latest/rllib/rllib-saving-and-loading-algos-and-policies.html">documentation</a> for more information.</p>
+            <section id="sb3-ppo-for-multiwalker">
+<h1>SB3: PPO for Multiwalker<a class="headerlink" href="#sb3-ppo-for-multiwalker" title="Permalink to this heading">#</a></h1>
+<p>This tutorial shows how to train a <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) model on the <a class="reference external" href="https://pettingzoo.farama.org/environments/sisl/multiwalker/">Multiwalker</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/parallel/">Parallel</a>).</p>
+<p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This environment has a discrete (1-dimensional) observation space, so we use an MLP feature extractor.</p>
+</div>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
 <p>To follow this tutorial, you will need to install the dependencies shown below. It is recommended to use a newly-created virtual environment to avoid dependency conflicts.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PettingZoo[classic, butterfly]==1.23.0
-Pillow==9.4.0
-ray[rllib]==2.4.0 # Note: RLlib&#39;s PettingZoo wrapper is currently broken, but will be fixed with https://github.com/ray-project/ray/pull/34696
-SuperSuit==3.8.0
-torch==1.13.1
-tensorflow-probability==0.19.0
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pettingzoo[sisl]&gt;=1.23.1
+stable-baselines3&gt;=2.0.0
+supersuit&gt;=3.8.1
+pymunk
 </pre></div>
 </div>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h2>
-<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with RLlib. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
-<section id="training-the-rl-agent">
-<h3>Training the RL agent<a class="headerlink" href="#training-the-rl-agent" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to train agents to play Leduc Holdem.</span>
-
-<span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">import</span> <span class="nn">ray</span>
-<span class="kn">from</span> <span class="nn">gymnasium.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Discrete</span>
-<span class="kn">from</span> <span class="nn">ray</span> <span class="kn">import</span> <span class="n">tune</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn</span> <span class="kn">import</span> <span class="n">DQNConfig</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.dqn.dqn_torch_model</span> <span class="kn">import</span> <span class="n">DQNTorchModel</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models</span> <span class="kn">import</span> <span class="n">ModelCatalog</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models.torch.fcnet</span> <span class="kn">import</span> <span class="n">FullyConnectedNetwork</span> <span class="k">as</span> <span class="n">TorchFC</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.utils.framework</span> <span class="kn">import</span> <span class="n">try_import_torch</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.utils.torch_utils</span> <span class="kn">import</span> <span class="n">FLOAT_MAX</span>
-<span class="kn">from</span> <span class="nn">ray.tune.registry</span> <span class="kn">import</span> <span class="n">register_env</span>
-
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
-
-<span class="n">torch</span><span class="p">,</span> <span class="n">nn</span> <span class="o">=</span> <span class="n">try_import_torch</span><span class="p">()</span>
-
-
-<span class="k">class</span> <span class="nc">TorchMaskedActions</span><span class="p">(</span><span class="n">DQNTorchModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PyTorch version of above ParametricActionsModel.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">obs_space</span><span class="p">:</span> <span class="n">Box</span><span class="p">,</span>
-        <span class="n">action_space</span><span class="p">:</span> <span class="n">Discrete</span><span class="p">,</span>
-        <span class="n">num_outputs</span><span class="p">,</span>
-        <span class="n">model_config</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="n">DQNTorchModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">num_outputs</span><span class="p">,</span> <span class="n">model_config</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
-        <span class="p">)</span>
-
-        <span class="n">obs_len</span> <span class="o">=</span> <span class="n">obs_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
-
-        <span class="n">orig_obs_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span>
-            <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">obs_len</span><span class="p">,),</span> <span class="n">low</span><span class="o">=</span><span class="n">obs_space</span><span class="o">.</span><span class="n">low</span><span class="p">[:</span><span class="n">obs_len</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="n">obs_space</span><span class="o">.</span><span class="n">high</span><span class="p">[:</span><span class="n">obs_len</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span> <span class="o">=</span> <span class="n">TorchFC</span><span class="p">(</span>
-            <span class="n">orig_obs_space</span><span class="p">,</span>
-            <span class="n">action_space</span><span class="p">,</span>
-            <span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-            <span class="n">model_config</span><span class="p">,</span>
-            <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_action_embed&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">seq_lens</span><span class="p">):</span>
-        <span class="c1"># Extract the available actions tensor from the observation.</span>
-        <span class="n">action_mask</span> <span class="o">=</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;action_mask&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Compute the predicted action embedding</span>
-        <span class="n">action_logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="p">(</span>
-            <span class="p">{</span><span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="n">input_dict</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">][</span><span class="s2">&quot;observation&quot;</span><span class="p">]}</span>
-        <span class="p">)</span>
-        <span class="c1"># turns probit action mask into logit action mask</span>
-        <span class="n">inf_mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">action_mask</span><span class="p">),</span> <span class="o">-</span><span class="mf">1e10</span><span class="p">,</span> <span class="n">FLOAT_MAX</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">action_logits</span> <span class="o">+</span> <span class="n">inf_mask</span><span class="p">,</span> <span class="n">state</span>
-
-    <span class="k">def</span> <span class="nf">value_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_embed_model</span><span class="o">.</span><span class="n">value_function</span><span class="p">()</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-
-    <span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-    <span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
-    <span class="c1"># function that outputs the environment you wish to register.</span>
-
-    <span class="k">def</span> <span class="nf">env_creator</span><span class="p">():</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">env</span>
-
-    <span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
-    <span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
-
-    <span class="n">test_env</span> <span class="o">=</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">())</span>
-    <span class="n">obs_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">observation_space</span>
-    <span class="n">act_space</span> <span class="o">=</span> <span class="n">test_env</span><span class="o">.</span><span class="n">action_space</span>
-
-    <span class="n">config</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">DQNConfig</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">environment</span><span class="p">(</span><span class="n">env</span><span class="o">=</span><span class="n">env_name</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">rollouts</span><span class="p">(</span><span class="n">num_rollout_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rollout_fragment_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">training</span><span class="p">(</span>
-            <span class="n">train_batch_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-            <span class="n">hiddens</span><span class="o">=</span><span class="p">[],</span>
-            <span class="n">dueling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">model</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;custom_model&quot;</span><span class="p">:</span> <span class="s2">&quot;pa_model&quot;</span><span class="p">},</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">multi_agent</span><span class="p">(</span>
-            <span class="n">policies</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;player_0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
-                <span class="s2">&quot;player_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">obs_space</span><span class="p">,</span> <span class="n">act_space</span><span class="p">,</span> <span class="p">{}),</span>
-            <span class="p">},</span>
-            <span class="n">policy_mapping_fn</span><span class="o">=</span><span class="p">(</span><span class="k">lambda</span> <span class="n">agent_id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">agent_id</span><span class="p">),</span>
-        <span class="p">)</span>
-        <span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">num_gpus</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RLLIB_NUM_GPUS&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">)))</span>
-        <span class="o">.</span><span class="n">debugging</span><span class="p">(</span>
-            <span class="n">log_level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span>
-        <span class="p">)</span>  <span class="c1"># TODO: change to ERROR to match pistonball example</span>
-        <span class="o">.</span><span class="n">framework</span><span class="p">(</span><span class="n">framework</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
-        <span class="o">.</span><span class="n">exploration</span><span class="p">(</span>
-            <span class="n">exploration_config</span><span class="o">=</span><span class="p">{</span>
-                <span class="c1"># The Exploration class to use.</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;EpsilonGreedy&quot;</span><span class="p">,</span>
-                <span class="c1"># Config for the Exploration class&#39; constructor:</span>
-                <span class="s2">&quot;initial_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;final_epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;epsilon_timesteps&quot;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>  <span class="c1"># Timesteps over which to anneal epsilon.</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-
-    <span class="n">tune</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-        <span class="n">alg_name</span><span class="p">,</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DQN&quot;</span><span class="p">,</span>
-        <span class="n">stop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timesteps_total&quot;</span><span class="p">:</span> <span class="mi">10000000</span><span class="p">},</span>
-        <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="watching-the-trained-rl-agent-play">
-<h3>Watching the trained RL agent play<a class="headerlink" href="#watching-the-trained-rl-agent-play" title="Permalink to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Uses Ray&#39;s RLlib to view trained agents playing Leduoc Holdem.</span>
-
-<span class="sd">Author: Rohan (https://github.com/Rohan138)</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">ray</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.algorithms.algorithm</span> <span class="kn">import</span> <span class="n">Algorithm</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.env.wrappers.pettingzoo_env</span> <span class="kn">import</span> <span class="n">PettingZooEnv</span>
-<span class="kn">from</span> <span class="nn">ray.rllib.models</span> <span class="kn">import</span> <span class="n">ModelCatalog</span>
-<span class="kn">from</span> <span class="nn">ray.tune.registry</span> <span class="kn">import</span> <span class="n">register_env</span>
-<span class="kn">from</span> <span class="nn">rllib_leduc_holdem</span> <span class="kn">import</span> <span class="n">TorchMaskedActions</span>
-
-<span class="kn">from</span> <span class="nn">pettingzoo.classic</span> <span class="kn">import</span> <span class="n">leduc_holdem_v4</span>
-
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SDL_VIDEODRIVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dummy&quot;</span>
-
-<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Render pretrained policy loaded from checkpoint&quot;</span>
-<span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-    <span class="s2">&quot;--checkpoint-path&quot;</span><span class="p">,</span>
-    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the checkpoint. This path will likely be something like this: `~/ray_results/pistonball_v6/PPO/PPO_pistonball_v6_660ce_00000_0_2021-06-11_12-30-57/checkpoint_000050/checkpoint-50`&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-<span class="n">checkpoint_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">checkpoint_path</span><span class="p">)</span>
-
-
-<span class="n">alg_name</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span>
-<span class="n">ModelCatalog</span><span class="o">.</span><span class="n">register_custom_model</span><span class="p">(</span><span class="s2">&quot;pa_model&quot;</span><span class="p">,</span> <span class="n">TorchMaskedActions</span><span class="p">)</span>
-<span class="c1"># function that outputs the environment you wish to register.</span>
-
-
-<span class="k">def</span> <span class="nf">env_creator</span><span class="p">():</span>
-    <span class="n">env</span> <span class="o">=</span> <span class="n">leduc_holdem_v4</span><span class="o">.</span><span class="n">env</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">env</span>
-
-
-<span class="n">env</span> <span class="o">=</span> <span class="n">env_creator</span><span class="p">()</span>
-<span class="n">env_name</span> <span class="o">=</span> <span class="s2">&quot;leduc_holdem_v4&quot;</span>
-<span class="n">register_env</span><span class="p">(</span><span class="n">env_name</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">config</span><span class="p">:</span> <span class="n">PettingZooEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="p">()))</span>
-
-
-<span class="n">ray</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-<span class="n">DQNAgent</span> <span class="o">=</span> <span class="n">Algorithm</span><span class="o">.</span><span class="n">from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">)</span>
-
-<span class="n">reward_sums</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">possible_agents</span><span class="p">}</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">agent_iter</span><span class="p">():</span>
-    <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">termination</span><span class="p">,</span> <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
-    <span class="n">obs</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">]</span>
-    <span class="n">reward_sums</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
-    <span class="k">if</span> <span class="n">termination</span> <span class="ow">or</span> <span class="n">truncation</span><span class="p">:</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
-        <span class="n">policy</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="o">.</span><span class="n">get_policy</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
-        <span class="n">batch_obs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
-                <span class="s2">&quot;action_mask&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">observation</span><span class="p">[</span><span class="s2">&quot;action_mask&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="n">batched_action</span><span class="p">,</span> <span class="n">state_out</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">compute_actions_from_input_dict</span><span class="p">(</span>
-            <span class="n">batch_obs</span>
-        <span class="p">)</span>
-        <span class="n">single_action</span> <span class="o">=</span> <span class="n">batched_action</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="n">single_action</span>
-
-    <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rewards:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">reward_sums</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with SB3. If you have any questions, please feel free to ask in the <a class="reference external" href="https://discord.gg/nhvKkYa6qX">Discord server</a>.</p>
+<section id="training-and-evaluation">
+<h3>Training and Evaluation<a class="headerlink" href="#training-and-evaluation" title="Permalink to this heading">#</a></h3>
 </section>
 </section>
 </section>
@@ -652,18 +436,18 @@ tensorflow-probability==0.19.0
         <footer>
           
           <div class="related-pages">
-            <a class="next-page" href="../../langchain/">
+            <a class="next-page" href="../connect_four/">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">LangChain Tutorial</div>
+                <div class="title">SB3: Action Masked PPO for Connect Four</div>
               </div>
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
             </a>
-            <a class="prev-page" href="../pistonball/">
+            <a class="prev-page" href="../kaz/">
               <svg class="furo-related-icon">
                 <use href="#svg-arrow-right"></use>
               </svg>
@@ -672,7 +456,7 @@ tensorflow-probability==0.19.0
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">RLlib: PPO for Pistonball</div>
+                <div class="title">SB3: PPO for Knights-Archers-Zombies</div>
                 
               </div>
             </a>
@@ -716,11 +500,10 @@ tensorflow-probability==0.19.0
           <div class="toc-tree-container">
             <div class="toc-tree">
               <ul>
-<li><a class="reference internal" href="#">RLlib: DQN for Simple Poker</a><ul>
+<li><a class="reference internal" href="#">SB3: PPO for Multiwalker</a><ul>
 <li><a class="reference internal" href="#environment-setup">Environment Setup</a></li>
 <li><a class="reference internal" href="#code">Code</a><ul>
-<li><a class="reference internal" href="#training-the-rl-agent">Training the RL agent</a></li>
-<li><a class="reference internal" href="#watching-the-trained-rl-agent-play">Watching the trained RL agent play</a></li>
+<li><a class="reference internal" href="#training-and-evaluation">Training and Evaluation</a></li>
 </ul>
 </li>
 </ul>
