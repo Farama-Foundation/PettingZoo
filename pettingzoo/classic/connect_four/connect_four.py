@@ -201,9 +201,8 @@ class raw_env(AECEnv, EzPickle):
         elif all(x in [1, 2] for x in self.board):
             # once either play wins or there is a draw, game over, both players are done
             self.terminations = {i: True for i in self.agents}
-        else:
-            # no winner yet
-            self.agent_selection = next_agent
+
+        self.agent_selection = next_agent
 
         self._accumulate_rewards()
 
