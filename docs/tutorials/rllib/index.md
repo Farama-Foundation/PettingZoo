@@ -6,9 +6,9 @@ title: "RLlib"
 
 These tutorials show you how to use [Ray](https://docs.ray.io/en/latest/index.html)'s [RLlib](https://docs.ray.io/en/latest/rllib/index.html) library to train agents in PettingZoo environments.
 
-* [PPO for Pistonball](/tutorials/rllib/pistonball/): _Train a PPO model in a parallel environment_
+* [PPO for Pistonball](/tutorials/rllib/pistonball/): _Train PPO agents in a parallel environment_
 
-* [DQN for Simple Poker](/tutorials/rllib/holdem/) _Train a DQN model in an AEC environment_
+* [DQN for Simple Poker](/tutorials/rllib/holdem/) _Train a DQN agent in an AEC environment_
 
 ##  RLlib Overview
 

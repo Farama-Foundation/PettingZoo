@@ -4,9 +4,9 @@ title: "CleanRL"
 
 # CleanRL Tutorial
 
-This tutorial shows how to use [CleanRL](https://github.com/vwxyzjn/cleanrl) to implement a model and train it on a PettingZoo environment.
+This tutorial shows how to use [CleanRL](https://github.com/vwxyzjn/cleanrl) to implement a training algorithm from scratch and train it on the Pistonball environment.
 
-* [Implementing PPO](/tutorials/cleanrl/implementing_PPO.md): _Implement and train a PPO model_
+* [Implementing PPO](/tutorials/cleanrl/implementing_PPO.md): _Implement and train an agent using PPO_
 
 
 ## CleanRL Overview
