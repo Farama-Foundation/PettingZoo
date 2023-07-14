@@ -20,7 +20,7 @@ from pettingzoo.butterfly import knights_archers_zombies_v10
 
 
 def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
-    # Train a single agent to play both sides in an AEC environment
+    # Train a single model to play as each agent in an AEC environment
     env = env_fn.parallel_env(**env_kwargs)
 
     # Add black death wrapper so the number of agents stays constant

@@ -20,7 +20,7 @@ from pettingzoo.sisl import waterworld_v4
 def train_butterfly_supersuit(
     env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs
 ):
-    # Train a single a model to play as each agent in a cooperative Parallel environment,
+    # Train a single model to play as each agent in a cooperative Parallel environment
     env = env_fn.parallel_env(**env_kwargs)
 
     env.reset(seed=seed)
