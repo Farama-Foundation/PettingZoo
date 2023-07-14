@@ -34,7 +34,7 @@ dynamic = ["version"]
 # Update dependencies in `all` if any are added or removed
 atari = ["multi_agent_ale_py==0.1.11", "pygame==2.3.0"]
 classic = [
-    "chess==1.7.0",
+    "chess==1.9.4",
     "rlcard==1.0.5",
     "pygame==2.3.0",
     "hanabi_learning_environment==0.0.4",
@@ -54,7 +54,7 @@ testing = [
 all = [
     "multi_agent_ale_py==0.1.11",
     "pygame==2.3.0",
-    "chess==1.7.0",
+    "chess==1.9.4",
     "rlcard==1.0.5",
     "hanabi_learning_environment==0.0.4",
     "pymunk==6.2.0",
