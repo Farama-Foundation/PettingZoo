@@ -416,14 +416,22 @@
 <li><p><a class="reference internal" href="waterworld/"><span class="doc std std-doc">PPO for Waterworld</span></a>: <em>Train agents using PPO in a vectorized environment with discrete observations</em></p></li>
 <li><p><a class="reference internal" href="connect_four/"><span class="doc std std-doc">Action Masked PPO for Connect Four</span></a>: <em>Train agents using Action Masked PPO in an AEC environment</em></p></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note: SB3 is designed for single-agent RL and does not directly support multi-agent algorithms or environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work with PettingZoo.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These tutorials utilize PPO with parameter sharing, allowing a single model to control all the agents in an environment.</p>
+<p>For more information on PPO implementation details and multi-agent environments, see <a class="reference external" href="https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/">https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/</a></p>
+<blockquote>
+<div><p>For example, if there is a two-player game, we can create a vectorized environment that spawns two sub-environments. Then, the vectorized environment produces a batch of two observations, where the first observation is from player 1 and the second observation is from player 2. Next, the vectorized environment takes a batch of two actions and tells the game engine to let player 1 execute the first action and player 2 execute the second action. Consequently, PPO learns to control both player 1 and player 2 in this vectorized environment.</p>
+</div></blockquote>
+</div>
 <section id="stable-baselines-overview">
 <h2>Stable-Baselines Overview<a class="headerlink" href="#stable-baselines-overview" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/">Stable-Baselines3</a> (SB3) is a library providing reliable implementations of reinforcement learning algorithms in <a class="reference external" href="https://pytorch.org/">PyTorch</a>. It provides a clean and simple interface, giving you access to off-the-shelf state-of-the-art model-free RL algorithms. It allows training of RL agents with only a few lines of code.</p>
 <p>For more information, see the <a class="reference external" href="https://araffin.github.io/post/sb3/">Stable-Baselines3 v1.0 Blog Post</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Note: SB3 is designed for single-agent RL and does not plan on natively supporting multi-agent PettingZoo environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work in multi-agent settings.</p>
-</div>
 <figure class="align-default">
 <a class="reference internal image-reference" href="https://raw.githubusercontent.com/DLR-RM/stable-baselines3/master/docs/_static/img/logo.png"><img alt="SB3 Logo" src="https://raw.githubusercontent.com/DLR-RM/stable-baselines3/master/docs/_static/img/logo.png" style="width: 80%;" /></a>
 </figure>
