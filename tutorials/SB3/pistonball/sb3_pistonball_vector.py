@@ -1,5 +1,7 @@
 """Uses Stable-Baselines3 to train agents in the Pistonball environment using SuperSuit vector envs.
 
+NOTE: this tutorial is currently broken due to issues with SuperSuit
+
 For more information, see https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
 
 Author: Elliot (https://github.com/elliottower)
@@ -20,7 +22,7 @@ from pettingzoo.butterfly import pistonball_v6
 def train_butterfly_supersuit(
     env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs
 ):
-    # Train a single agent to play both sides in a Parallel environment,
+    # Train a single model to play as each agent in a cooperative Parallel environment
     env = env_fn.parallel_env(**env_kwargs)
 
     # Pre-process using SuperSuit (color reduction, resizing and frame stacking)

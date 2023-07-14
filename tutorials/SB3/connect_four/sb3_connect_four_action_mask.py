@@ -58,7 +58,7 @@ def mask_fn(env):
 
 
 def train_action_mask(env_fn, steps=10_000, seed=0, **env_kwargs):
-    """Train a single agent to play both sides in a PettingZoo environment using invalid action masking."""
+    """Train a single model to play as each agent in a zero-sum game environment using invalid action masking."""
     env = env_fn.env(**env_kwargs)
 
     print(f"Starting training on {str(env.metadata['name'])}.")
