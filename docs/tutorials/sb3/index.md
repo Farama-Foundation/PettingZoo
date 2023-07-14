@@ -16,6 +16,25 @@ For non-visual environments, we use [MLP](https://stable-baselines3.readthedocs.
 
 * [Action Masked PPO for Connect Four](/tutorials/sb3/connect_four/): _Train agents using Action Masked PPO in an AEC environment_
 
+```{eval-rst}
+.. warning::
+
+    Note: SB3 is designed for single-agent RL and does not directly support multi-agent algorithms or environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work with PettingZoo.
+```
+
+```{eval-rst}
+.. note::
+
+    These tutorials utilize PPO with parameter sharing, allowing a single model to control all the agents in an environment.
+
+    For more information on PPO implementation details and multi-agent environments, see https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/
+
+        For example, if there is a two-player game, we can create a vectorized environment that spawns two sub-environments. Then, the vectorized environment produces a batch of two observations, where the first observation is from player 1 and the second observation is from player 2. Next, the vectorized environment takes a batch of two actions and tells the game engine to let player 1 execute the first action and player 2 execute the second action. Consequently, PPO learns to control both player 1 and player 2 in this vectorized environment.
+
+```
+
+
+
 
 ## Stable-Baselines Overview
 
@@ -24,11 +43,14 @@ For non-visual environments, we use [MLP](https://stable-baselines3.readthedocs.
 For more information, see the [Stable-Baselines3 v1.0 Blog Post](https://araffin.github.io/post/sb3/)
 
 
-```{eval-rst}
-.. warning::
+[//]: # (```{eval-rst})
 
-    Note: SB3 is designed for single-agent RL and does not plan on natively supporting multi-agent PettingZoo environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work in multi-agent settings.
-```
+[//]: # (.. warning::)
+
+[//]: # ()
+[//]: # (    Note: SB3 is designed for single-agent RL and does not plan on natively supporting multi-agent PettingZoo environments. These tutorials are only intended for demonstration purposes, to show how SB3 can be adapted to work in multi-agent settings.)
+
+[//]: # (```)
 
 
 ```{figure} https://raw.githubusercontent.com/DLR-RM/stable-baselines3/master/docs/_static/img/logo.png
