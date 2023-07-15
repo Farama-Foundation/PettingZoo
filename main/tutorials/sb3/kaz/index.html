@@ -407,15 +407,15 @@
             <section id="sb3-ppo-for-knights-archers-zombies">
 <h1>SB3: PPO for Knights-Archers-Zombies<a class="headerlink" href="#sb3-ppo-for-knights-archers-zombies" title="Permalink to this heading">#</a></h1>
 <p>This tutorial shows how to train agents using <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">Proximal Policy Optimization</a> (PPO) on the <a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/">Knights-Archers-Zombies</a> environment (<a class="reference external" href="https://pettingzoo.farama.org/api/aec/">AEC</a>).</p>
-<p>It converts the environment into a Parallel environment and uses SuperSuit to create vectorized environments, leveraging multithreading to speed up training.</p>
-<p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">documentation</a> for more information).</p>
+<p>We use SuperSuit to create vectorized environments, leveraging multithreading to speed up training (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html">vector environments documentation</a>).</p>
+<p>After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3’s <a class="reference external" href="https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html">model saving documentation</a>).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This environment has a visual (3-dimensional) observation space, so we use a CNN feature extractor.</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Because this environment allows agents to spawn and die, it requires using SuperSuit’s Black Death wrapper, which provides blank observations to dead agents, rather than removing them from the environment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This environment allows agents to spawn and die, so it requires using SuperSuit’s Black Death wrapper, which provides blank observations to dead agents rather than removing them from the environment.</p>
 </div>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
