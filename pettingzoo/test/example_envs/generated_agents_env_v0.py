@@ -1,4 +1,5 @@
 import gymnasium
+import numpy as np
 
 from pettingzoo import AECEnv
 from pettingzoo.utils import wrappers
@@ -23,10 +24,15 @@ class raw_env(AECEnv):
         super().__init__()
         self._obs_spaces = {}
         self._act_spaces = {}
+
+        # dummy state space, not actually used
+        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self._state = self.state_space.sample()
+
         self.types = []
         self._agent_counters = {}
         self.max_cycles = max_cycles
-        self.seed()
+        self._seed()
         self.render_mode = render_mode
         for i in range(3):
             self.add_type()
@@ -36,6 +42,9 @@ class raw_env(AECEnv):
 
     def action_space(self, agent):
         return self._act_spaces[get_type(agent)]
+
+    def state(self) -> np.ndarray:
+        return self._state
 
     def observe(self, agent):
         return self.observation_space(agent).sample()
@@ -67,7 +76,7 @@ class raw_env(AECEnv):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.agents = []
         self.rewards = {}
         self._cumulative_rewards = {}
@@ -78,6 +87,9 @@ class raw_env(AECEnv):
 
         self._obs_spaces = {}
         self._act_spaces = {}
+        self.state_space = gymnasium.spaces.MultiDiscrete((10, 10))
+        self._state = self.state_space.sample()
+
         self.types = []
         self._agent_counters = {}
         for i in range(3):
@@ -94,7 +106,7 @@ class raw_env(AECEnv):
         for i, agent in enumerate(self.agents):
             self.action_space(agent).seed(seed)
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         self.np_random, _ = gymnasium.utils.seeding.np_random(seed)
 
     def step(self, action):
@@ -127,6 +139,8 @@ class raw_env(AECEnv):
                 self.truncations[agent] = True
 
         self.rewards[self.np_random.choice(self.agents)] = 1
+
+        self._state = self.state_space.sample()
 
         self._accumulate_rewards()
         self._deads_step_first()

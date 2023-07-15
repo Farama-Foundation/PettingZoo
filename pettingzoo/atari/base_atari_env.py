@@ -3,6 +3,7 @@ from pathlib import Path
 import gymnasium
 import multi_agent_ale_py
 import numpy as np
+import pygame
 from gymnasium import spaces
 from gymnasium.utils import EzPickle, seeding
 
@@ -166,9 +167,9 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         }
 
         self._screen = None
-        self.seed(seed)
+        self._seed(seed)
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         if seed is None:
             _, seed = seeding.np_random()
         self.ale.setInt(b"random_seed", seed)
@@ -177,15 +178,15 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         self.ale.reset_game()
         self.agents = self.possible_agents[:]
         self.terminations = {agent: False for agent in self.possible_agents}
         self.frame = 0
 
         obs = self._observe()
-
-        return {agent: obs for agent in self.agents}
+        infos = {agent: {} for agent in self.possible_agents if agent in self.agents}
+        return {agent: obs for agent in self.agents}, infos
 
     def observation_space(self, agent):
         return self.observation_spaces[agent]
@@ -251,8 +252,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
         (screen_width, screen_height) = self.ale.getScreenDims()
         image = self.ale.getScreenRGB()
         if self.render_mode == "human":
-            import pygame
-
             zoom_factor = 4
             if self._screen is None:
                 pygame.init()
@@ -276,8 +275,6 @@ class ParallelAtariEnv(ParallelEnv, EzPickle):
 
     def close(self):
         if self._screen is not None:
-            import pygame
-
             pygame.quit()
             self._screen = None
 

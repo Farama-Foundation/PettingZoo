@@ -12,7 +12,7 @@ git+https://github.com/thu-ml/tianshou
 import os
 from typing import Optional, Tuple
 
-import gym
+import gymnasium
 import numpy as np
 import torch
 from tianshou.data import Collector, VectorReplayBuffer
@@ -33,14 +33,13 @@ def _get_agents(
     env = _get_env()
     observation_space = (
         env.observation_space["observation"]
-        if isinstance(env.observation_space, gym.spaces.Dict)
+        if isinstance(env.observation_space, gymnasium.spaces.Dict)
         else env.observation_space
     )
     if agent_learn is None:
         # model
         net = Net(
-            state_shape=observation_space["observation"].shape
-            or observation_space["observation"].n,
+            state_shape=observation_space.shape or observation_space.n,
             action_shape=env.action_space.shape or env.action_space.n,
             hidden_sizes=[128, 128, 128, 128],
             device="cuda" if torch.cuda.is_available() else "cpu",
@@ -96,8 +95,8 @@ if __name__ == "__main__":
 
     # ======== Step 4: Callback functions setup =========
     def save_best_fn(policy):
-        model_save_path = os.path.join("log", "rps", "dqn", "policy.pth")
-        os.makedirs(os.path.join("log", "rps", "dqn"), exist_ok=True)
+        model_save_path = os.path.join("log", "ttt", "dqn", "policy.pth")
+        os.makedirs(os.path.join("log", "ttt", "dqn"), exist_ok=True)
         torch.save(policy.policies[agents[1]].state_dict(), model_save_path)
 
     def stop_fn(mean_rewards):

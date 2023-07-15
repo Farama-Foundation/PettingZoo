@@ -26,7 +26,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy>=1.21.0",
-    "gymnasium>=0.26.0",
+    "gymnasium>=0.28.0",
 ]
 dynamic = ["version"]
 
@@ -41,7 +41,7 @@ classic = [
 ]
 butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
 mpe = ["pygame==2.3.0"]
-sisl = ["pygame==2.3.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
+sisl = ["pygame==2.3.0", "pymunk==6.2.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
 other = ["pillow>=8.0.1"]
 testing = [
     "pynput",
@@ -105,6 +105,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-norecursedirs = [
-    "pettingzoo"
-]
+addopts = [ "--ignore-glob=*/__init__.py" ]

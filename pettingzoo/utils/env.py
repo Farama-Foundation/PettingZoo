@@ -71,12 +71,6 @@ class AECEnv:
         """Resets the environment to a starting state."""
         raise NotImplementedError
 
-    def seed(self, seed: int | None = None) -> None:
-        """Reseeds the environment (making the resulting environment deterministic)."""
-        raise NotImplementedError(
-            "Calling seed externally is deprecated; call reset(seed=seed) instead"
-        )
-
     # TODO: Remove `Optional` type below
     def observe(self, agent: str) -> ObsType | None:
         """Returns the observation an agent currently can make.
@@ -183,7 +177,7 @@ class AECEnv:
 
     def last(
         self, observe: bool = True
-    ) -> tuple[ObsType | None, float, bool, bool, dict[str, Any]]:
+    ) -> tuple[ObsType | None, float, bool, bool, dict[AgentID, dict[str, Any]]]:
         """Returns observation, cumulative reward, terminated, truncated, info for the current agent (specified by self.agent_selection)."""
         agent = self.agent_selection
         assert agent
@@ -268,7 +262,7 @@ class AECIterable(Iterable):
 
 
 class AECIterator(Iterator):
-    def __init__(self, env, max_iter):
+    def __init__(self, env: AECEnv, max_iter: int):
         self.env = env
         self.iters_til_term = max_iter
 
@@ -278,7 +272,7 @@ class AECIterator(Iterator):
         self.iters_til_term -= 1
         return self.env.agent_selection
 
-    def __iter__(self):
+    def __iter__(self) -> AECIterator:
         return self
 
 
@@ -303,18 +297,12 @@ class ParallelEnv:
         self,
         seed: int | None = None,
         options: dict | None = None,
-    ) -> ObsDict:
+    ) -> tuple[ObsDict, dict[str, dict]]:
         """Resets the environment.
 
         And returns a dictionary of observations (keyed by the agent name)
         """
         raise NotImplementedError
-
-    def seed(self, seed=None):
-        """Reseeds the environment (making it deterministic)."""
-        raise NotImplementedError(
-            "Calling seed externally is deprecated; call reset(seed=seed) instead"
-        )
 
     def step(
         self, actions: ActionDict

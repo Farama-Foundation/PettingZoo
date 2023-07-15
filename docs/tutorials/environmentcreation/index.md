@@ -4,7 +4,7 @@ title: "Environment Creation"
 
 # Environment Creation Tutorial
 
-These tutorials walk you though creating a custom environment from scratch, and are recommended as a starting point for anyone new to PettingZoo. 
+These tutorials walk you though creating a custom environment from scratch, and are recommended as a starting point for anyone new to PettingZoo.
 
 1. [Project Structure](/tutorials/environmentcreation/1-project-structure.md)
 

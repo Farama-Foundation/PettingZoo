@@ -4,7 +4,7 @@ title: "Tianshou: Basic API Usage"
 
 # Tianshou: Basic API Usage
 
-This tutorial is a simple example of how to use [Tianshou](https://github.com/thu-ml/tianshou) with a PettingZoo environment. 
+This tutorial is a simple example of how to use [Tianshou](https://github.com/thu-ml/tianshou) with a PettingZoo environment.
 
 It demonstrates a game betwenen two [random policy](https://tianshou.readthedocs.io/en/master/_modules/tianshou/policy/random.html) agents in the [rock-paper-scissors](https://pettingzoo.farama.org/environments/classic/rps/) environment.
 
@@ -16,7 +16,7 @@ To follow this tutorial, you will need to install the dependencies shown below. 
 ```
 
 ## Code
-The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
+The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with Tianshou. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX).
 ```{eval-rst}
 .. literalinclude:: ../../../tutorials/Tianshou/1_basic_api_usage.py
    :language: python

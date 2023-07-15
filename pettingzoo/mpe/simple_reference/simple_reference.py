@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Simple Reference
 
@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
 
-| Import             | `from pettingzoo.mpe import simple_reference_v2` |
+| Import             | `from pettingzoo.mpe import simple_reference_v3` |
 |--------------------|--------------------------------------------------|
 | Actions            | Discrete/Continuous                              |
 | Parallel API       | Yes                                              |
@@ -40,7 +40,7 @@ Agent continuous action space: `[no_action, move_left, move_right, move_down, mo
 
 
 ``` python
-simple_reference_v2.env(local_ratio=0.5, max_cycles=25, continuous_actions=False)
+simple_reference_v3.env(local_ratio=0.5, max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -87,7 +87,7 @@ class raw_env(SimpleEnv, EzPickle):
             continuous_actions=continuous_actions,
             local_ratio=local_ratio,
         )
-        self.metadata["name"] = "simple_reference_v2"
+        self.metadata["name"] = "simple_reference_v3"
 
 
 env = make_env(raw_env)

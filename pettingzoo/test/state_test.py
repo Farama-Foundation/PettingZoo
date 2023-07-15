@@ -1,29 +1,54 @@
+"""Tests that the environment's state() and state_space() methods work as expected."""
 import warnings
 
 import gymnasium
 import numpy as np
 
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import (
+        generated_agents_env_v0,
+        generated_agents_parallel_v0,
+    )
+
+    @pytest.fixture
+    def env():
+        return generated_agents_env_v0.env()
+
+    @pytest.fixture
+    def parallel_env():
+        return generated_agents_parallel_v0.parallel_env()
+
+    @pytest.fixture
+    def num_cycles():
+        return 1000
+
+except ModuleNotFoundError:
+    pass
+
 env_pos_inf_state = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 env_neg_inf_state = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 
 

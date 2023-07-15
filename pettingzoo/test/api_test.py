@@ -12,6 +12,43 @@ from pettingzoo.utils.conversions import (
 )
 from pettingzoo.utils.wrappers import BaseWrapper
 
+try:
+    """Allows doctests to be run using pytest"""
+    import pytest
+
+    from pettingzoo.test.example_envs import generated_agents_env_v0
+
+    @pytest.fixture
+    def env():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env
+
+    @pytest.fixture
+    def env_name():
+        return "generated_agents_env_v0"
+
+    @pytest.fixture()
+    def observation(env):
+        return env.observation_space(env.agents[0]).sample()
+
+    @pytest.fixture()
+    def observation_0(env):
+        return env.observation_space(env.agents[1]).sample()
+
+    @pytest.fixture
+    def reward():
+        return 0
+
+    @pytest.fixture
+    def agent_0():
+        env = generated_agents_env_v0.env()
+        env.reset()
+        return env.agents[0]
+
+except ModuleNotFoundError:
+    pass
+
 missing_attr_warning = """This environment does not have {name} defined.
 This is not a required part 'of the API as environments with procedurally
 generated agents cannot always have this property defined. However, this is
@@ -25,20 +62,20 @@ env_obs_dicts = [
     "texas_holdem_v4",
     "go_v5",
     "hanabi_v4",
-    "chess_v5",
+    "chess_v6",
     "connect_four_v3",
     "tictactoe_v3",
     "gin_rummy_v4",
 ]
 env_graphical_obs = ["knights_archers_zombies_v10"]
 env_diff_obs_shapes = [
-    "simple_adversary_v2",
-    "simple_world_comm_v2",
-    "simple_tag_v2",
+    "simple_adversary_v3",
+    "simple_world_comm_v3",
+    "simple_tag_v3",
     "knights_archers_zombies_v10",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_crypto_v2",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_crypto_v3",
 ]
 env_all_zeros_obs = ["knights_archers_zombies_v10"]
 env_obs_space = [
@@ -48,42 +85,42 @@ env_obs_space = [
     "go_v5",
     "hanabi_v4",
     "knights_archers_zombies_v10",
-    "chess_v5",
+    "chess_v6",
     "connect_four_v3",
     "tictactoe_v3",
     "gin_rummy_v4",
 ]
 env_diff_agent_obs_size = [
-    "simple_adversary_v2",
-    "simple_world_comm_v2",
-    "simple_tag_v2",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
+    "simple_adversary_v3",
+    "simple_world_comm_v3",
+    "simple_tag_v3",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
 ]
 env_pos_inf_obs = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
     "multiwalker_v9",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 env_neg_inf_obs = [
-    "simple_adversary_v2",
-    "simple_reference_v2",
-    "simple_spread_v2",
-    "simple_tag_v2",
-    "simple_world_comm_v2",
+    "simple_adversary_v3",
+    "simple_reference_v3",
+    "simple_spread_v3",
+    "simple_tag_v3",
+    "simple_world_comm_v3",
     "multiwalker_v9",
-    "simple_crypto_v2",
-    "simple_push_v2",
-    "simple_speaker_listener_v3",
-    "simple_v2",
+    "simple_crypto_v3",
+    "simple_push_v3",
+    "simple_speaker_listener_v4",
+    "simple_v3",
 ]
 
 
@@ -330,13 +367,12 @@ def play_test(env, observation_0, num_cycles):
         prev_observe, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
+        elif isinstance(prev_observe, dict) and "action_mask" in prev_observe:
+            action = env.action_space(agent).sample(prev_observe["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
-            mask = (
-                prev_observe.get("action_mask")
-                if isinstance(prev_observe, dict)
-                else None
-            )
-            action = env.action_space(agent).sample(mask)
+            action = env.action_space(agent).sample()
 
         if agent not in live_agents:
             live_agents.add(agent)
@@ -409,9 +445,12 @@ def play_test(env, observation_0, num_cycles):
         obs, reward, terminated, truncated, info = env.last()
         if terminated or truncated:
             action = None
+        elif isinstance(obs, dict) and "action_mask" in obs:
+            action = env.action_space(agent).sample(obs["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
-            mask = obs.get("action_mask") if isinstance(obs, dict) else None
-            action = env.action_space(agent).sample(mask)
+            action = env.action_space(agent).sample()
         assert isinstance(terminated, bool), "terminated from last is not True or False"
         assert isinstance(truncated, bool), "terminated from last is not True or False"
         assert (
@@ -432,7 +471,8 @@ def play_test(env, observation_0, num_cycles):
 
 
 def test_action_flexibility(env):
-    env.reset()
+    """Tests that a given action is valid given a seeded environment reset"""
+    env.reset(seed=0)
     agent = env.agent_selection
     action_space = env.action_space(agent)
     if isinstance(action_space, gymnasium.spaces.Discrete):
@@ -441,14 +481,16 @@ def test_action_flexibility(env):
             action = None
         elif isinstance(obs, dict) and "action_mask" in obs:
             action = env.action_space(agent).sample(obs["action_mask"])
+        elif "action_mask" in info:
+            action = env.action_space(agent).sample(info["action_mask"])
         else:
             action = 0
         env.step(action)
-        env.reset()
+        env.reset(seed=0)
         env.step(np.int32(action))
     elif isinstance(action_space, gymnasium.spaces.Box):
         env.step(np.zeros_like(action_space.low))
-        env.reset()
+        env.reset(seed=0)
         env.step(np.zeros_like(action_space.low))
 
 

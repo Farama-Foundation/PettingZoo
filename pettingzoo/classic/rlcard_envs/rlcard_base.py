@@ -6,7 +6,7 @@ from pettingzoo import AECEnv
 
 
 class RLCardBase(AECEnv):
-    def __init__(self, name, num_players, obs_shape):
+    def __init__(self, name: str, num_players: int, obs_shape: tuple):
         super().__init__()
         self.name = name
         self.num_players = num_players
@@ -55,7 +55,7 @@ class RLCardBase(AECEnv):
     def action_space(self, agent):
         return self.action_spaces[agent]
 
-    def seed(self, seed=None):
+    def _seed(self, seed=None):
         config = {
             "allow_step_back": False,
             "seed": seed,
@@ -115,7 +115,7 @@ class RLCardBase(AECEnv):
 
     def reset(self, seed=None, options=None):
         if seed is not None:
-            self.seed(seed=seed)
+            self._seed(seed=seed)
         obs, player_id = self.env.reset()
         self.agents = self.possible_agents[:]
         self.agent_selection = self._int_to_name(player_id)

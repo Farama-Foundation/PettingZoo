@@ -5,10 +5,12 @@ import numpy as np
 def boards_to_ndarray(boards):
     arr64 = np.array(boards, dtype=np.uint64)
     arr8 = arr64.view(dtype=np.uint8)
-    bits = np.unpackbits(arr8)
+    # a bit array increment from LHS to RHS
+    bits = np.unpackbits(arr8, bitorder="little")
     floats = bits.astype(bool)
     boardstack = floats.reshape([len(boards), 8, 8])
-    boardimage = np.transpose(boardstack, [1, 2, 0])
+    # We do np.flip() onto `boardstack` because the 1st line of the boardimage is the 8th line of the ndarray.
+    boardimage = np.flip(np.transpose(boardstack, [1, 2, 0]), axis=0)
     return boardimage
 
 
@@ -135,7 +137,7 @@ moves_to_actions = {}
 actions_to_moves = {}
 
 
-def action_to_move(board, action, player):
+def action_to_move(board: chess.Board, action, player: int):
     base_move = chess.Move.from_uci(actions_to_moves[action])
 
     base_coord = square_to_coord(base_move.from_square)
@@ -164,7 +166,7 @@ def make_move_mapping(uci_move):
     actions_to_moves[cur_action] = uci_move
 
 
-def legal_moves(orig_board):
+def legal_moves(orig_board: chess.Board):
     """Returns legal moves.
 
     action space is a 8x8x73 dimensional array
@@ -194,7 +196,7 @@ def legal_moves(orig_board):
     return legal_moves
 
 
-def get_observation(orig_board, player):
+def get_observation(orig_board: chess.Board, player: int):
     """Returns observation array.
 
     Observation is an 8x8x(P + L) dimensional array.
@@ -281,8 +283,9 @@ def get_observation(orig_board, player):
 
         """
     base = BASE
-    OURS = 0
-    THEIRS = 1
+    # In the module `chess`, the color is represented by 1 for white and 0 for black.
+    OURS = 1
+    THEIRS = 0
     result[base + 0] = board.pieces(chess.PAWN, OURS)
     result[base + 1] = board.pieces(chess.KNIGHT, OURS)
     result[base + 2] = board.pieces(chess.BISHOP, OURS)
@@ -320,18 +323,53 @@ def get_observation(orig_board, player):
         if (history_idx > 0) flip = !flip;
       }
     """
-    # from 0-63
+
+    """
+    The LeelaChessZero-style en passant flag.
+    In FEN, the en passant flag is represented by the square that can be a possible target of an en passant, e.g. the `e3` in `4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50`.
+    However, for a neural network, it is not easy to train the network to recognize sparse and unstructured data.
+    Therefore, we adhere to LeelaChessZero's convention, which adjusts the row number to the 1st for white pawns if the en passant flag is set, and vice versa for black pawns.
+    E.g. A white pawn(e2) just made an initial two-square advance, `e2e4`.
+         A black pawn(f4) next to that white pawn(e4) can play en passant capture on it.
+         To show this chance, we denote the white pawn at `e1` instead of `e4` once that white pawn play two-square advance.
+         The en passant flag is set only for one turn, and it is reset after the next turn.
+         Note that the en passant flag has nothing to do with the opponent's pawn.
+         i.e. an en passant flag always set after an initial two-square advance.
+
+       The board             The observation of the 7th channel(white pawn)
+    8  · · · · ♚ · · ·    8  · · · · · · · ·
+    7  · · · · · · · ·    7  · · · · · · · ·
+    6  · · · · · · · ·    6  · · · · · · · ·
+    5  · · · · · · · ·    5  · · · · · · · ·
+    4  · · · · ♙ ♟ · ·    4  · · · · · · · ·
+    3  · · · · · · · ·    3  · · · · · · · ·
+    2  · · · · · · · ·    2  · · · · · · · ·
+    1  · · · · ♔ · · ·    1  · · · · 1 · · ·
+       a b c d e f g h       a b c d e f g h
+    FEN: 4k3/8/8/8/4Pp2/8/8/4K3 b - e3 99 50
+
+    More details:
+    https://github.com/Farama-Foundation/PettingZoo/blob/master/pettingzoo/classic/chess/chess.py#L42
+    https://github.com/LeelaChessZero/lc0/blob/master/src/chess/board.cc#L1114
+    """
+
+    # square where the en passant happened, ranging from 0 to 63 (int)
     square = board.ep_square
     if square:
-        ours = square > 32
+        # Less than 32 is a white square, otherwise it's a black square
+        ours = square < 32
         row = square % 8
-        dest_col_add = 8 * 7 if ours else 0
+        dest_col_add = 0 if ours else 8 * 7
         dest_square = dest_col_add + row
         if ours:
-            result[base + 0].remove(square - 8)
+            # Set the `square + 8` position in channel `base` to False
+            result[base + 0].remove(square + 8)
+            # Set the `dest_square` position in channel `base` to True
             result[base + 0].add(dest_square)
         else:
-            result[base + 6].remove(square + 8)
+            # Set the `square + 8` position in channel `base` to False
+            result[base + 6].remove(square - 8)
+            # Set the `dest_square` position in channel `base` to True
             result[base + 6].add(dest_square)
 
     return boards_to_ndarray(result)

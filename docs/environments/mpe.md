@@ -34,19 +34,21 @@ pip install pettingzoo[mpe]
 ````
 
 ### Usage
-To launch a [Simple Tag](https://pettingzoo.farama.org/environments/mpe/simple_tag/) environment with agents taking random actions:
+To launch a [Simple Tag](https://pettingzoo.farama.org/environments/mpe/simple_tag/) environment with random agents:
 
 ``` python
-from pettingzoo.mpe import simple_tag_v2
-env = simple_tag_v2.env(render_mode='human')
+from pettingzoo.mpe import simple_tag_v3
+env = simple_tag_v3.env(render_mode='human')
 
 env.reset()
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
+
     if termination or truncation:
         action = None
     else:
-        action = env.action_space(agent).sample()
+        action = env.action_space(agent).sample() # this is where you would insert your policy
+
     env.step(action)
 env.close()
 ```

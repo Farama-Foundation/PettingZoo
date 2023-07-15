@@ -10,17 +10,17 @@ from pettingzoo.atari import (
 from pettingzoo.butterfly import knights_archers_zombies_v10, pistonball_v6
 from pettingzoo.classic import (
     go_v5,
-    hanabi_v5,
+    hanabi_v4,
     leduc_holdem_v4,
     texas_holdem_no_limit_v6,
     texas_holdem_v4,
 )
 from pettingzoo.mpe import (
-    simple_adversary_v2,
-    simple_reference_v2,
-    simple_spread_v2,
-    simple_tag_v2,
-    simple_world_comm_v2,
+    simple_adversary_v3,
+    simple_reference_v3,
+    simple_spread_v3,
+    simple_tag_v3,
+    simple_world_comm_v3,
 )
 from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 from pettingzoo.test.api_test import api_test
@@ -131,15 +131,15 @@ parameterized_envs = [
     ],
     ["classic/go_v5", go_v5, dict(board_size=13, komi=2.5)],
     ["classic/go_v5", go_v5, dict(board_size=9, komi=0.0)],
-    ["classic/hanabi_v5", hanabi_v5, dict(colors=3)],
-    ["classic/hanabi_v5", hanabi_v5, dict(ranks=3)],
-    ["classic/hanabi_v5", hanabi_v5, dict(players=4)],
-    ["classic/hanabi_v5", hanabi_v5, dict(hand_size=5)],
-    ["classic/hanabi_v5", hanabi_v5, dict(max_information_tokens=3)],
-    ["classic/hanabi_v5", hanabi_v5, dict(max_life_tokens=2)],
+    ["classic/hanabi_v4", hanabi_v4, dict(colors=3)],
+    ["classic/hanabi_v4", hanabi_v4, dict(ranks=3)],
+    ["classic/hanabi_v4", hanabi_v4, dict(players=4)],
+    ["classic/hanabi_v4", hanabi_v4, dict(hand_size=5)],
+    ["classic/hanabi_v4", hanabi_v4, dict(max_information_tokens=3)],
+    ["classic/hanabi_v4", hanabi_v4, dict(max_life_tokens=2)],
     [
-        "classic/hanabi_v5",
-        hanabi_v5,
+        "classic/hanabi_v4",
+        hanabi_v4,
         dict(
             colors=5,
             ranks=3,
@@ -149,57 +149,57 @@ parameterized_envs = [
             max_life_tokens=2,
         ),
     ],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type=0)],
-    ["classic/hanabi_v5", hanabi_v5, dict(observation_type=1)],
-    ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=False)],
-    ["classic/hanabi_v5", hanabi_v5, dict(random_start_player=True)],
-    ["mpe/simple_adversary_v2", simple_adversary_v2, dict(N=4)],
-    ["mpe/simple_reference_v2", simple_reference_v2, dict(local_ratio=0.2)],
-    ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5)],
+    ["classic/hanabi_v4", hanabi_v4, dict(observation_type=0)],
+    ["classic/hanabi_v4", hanabi_v4, dict(observation_type=1)],
+    ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=False)],
+    ["classic/hanabi_v4", hanabi_v4, dict(random_start_player=True)],
+    ["mpe/simple_adversary_v3", simple_adversary_v3, dict(N=4)],
+    ["mpe/simple_reference_v3", simple_reference_v3, dict(local_ratio=0.2)],
+    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5)],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4),
     ],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4, num_food=3),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1, num_food=1),
     ],
     [
-        "mpe/simple_adversary_v2",
-        simple_adversary_v2,
+        "mpe/simple_adversary_v3",
+        simple_adversary_v3,
         dict(N=4, continuous_actions=True),
     ],
     [
-        "mpe/simple_reference_v2",
-        simple_reference_v2,
+        "mpe/simple_reference_v3",
+        simple_reference_v3,
         dict(local_ratio=0.2, continuous_actions=True),
     ],
-    ["mpe/simple_spread_v2", simple_spread_v2, dict(N=5, continuous_actions=True)],
+    ["mpe/simple_spread_v3", simple_spread_v3, dict(N=5, continuous_actions=True)],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=5, num_adversaries=10, num_obstacles=4, continuous_actions=True),
     ],
     [
-        "mpe/simple_tag_v2",
-        simple_tag_v2,
+        "mpe/simple_tag_v3",
+        simple_tag_v3,
         dict(num_good=1, num_adversaries=1, num_obstacles=1, continuous_actions=True),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(
             num_good=5,
             num_adversaries=10,
@@ -209,8 +209,8 @@ parameterized_envs = [
         ),
     ],
     [
-        "mpe/simple_world_comm_v2",
-        simple_world_comm_v2,
+        "mpe/simple_world_comm_v3",
+        simple_world_comm_v3,
         dict(
             num_good=1,
             num_adversaries=1,
@@ -247,8 +247,8 @@ def test_module(name, env_module, kwargs):
     _env = env_module.env(**kwargs)
     api_test(_env)
 
-    # some atari environments fail this test, waterworld fails for certain seeds, and hanabi does not support seeding
-    if "atari/" not in name and "waterworld" not in name and "hanabi" not in name:
+    # some atari environments fail this test, waterworld fails for certain seeds
+    if "atari/" not in name and "waterworld" not in name:
         seed_test(lambda: env_module.env(**kwargs), 50)
 
     render_test(lambda render_mode: env_module.env(render_mode=render_mode, **kwargs))

@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Simple Speaker Listener
 
@@ -9,7 +9,7 @@
 
 This environment is part of the <a href='..'>MPE environments</a>. Please read that page first for general information.
 
-| Import               | `from pettingzoo.mpe import simple_speaker_listener_v3` |
+| Import               | `from pettingzoo.mpe import simple_speaker_listener_v4` |
 |----------------------|---------------------------------------------------------|
 | Actions              | Discrete/Continuous                                     |
 | Parallel API         | Yes                                                     |
@@ -37,7 +37,7 @@ Listener action space: `[no_action, move_left, move_right, move_down, move_up]`
 ### Arguments
 
 ``` python
-simple_speaker_listener_v2.env(max_cycles=25, continuous_actions=False)
+simple_speaker_listener_v4.env(max_cycles=25, continuous_actions=False)
 ```
 
 
@@ -75,7 +75,7 @@ class raw_env(SimpleEnv, EzPickle):
             max_cycles=max_cycles,
             continuous_actions=continuous_actions,
         )
-        self.metadata["name"] = "simple_speaker_listener_v3"
+        self.metadata["name"] = "simple_speaker_listener_v4"
 
 
 env = make_env(raw_env)

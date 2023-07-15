@@ -1,19 +1,22 @@
+from __future__ import annotations
+
 from gymnasium.spaces import Discrete
 
+from pettingzoo.utils.env import ActionType, AECEnv
 from pettingzoo.utils.wrappers.base import BaseWrapper
 
 
 class AssertOutOfBoundsWrapper(BaseWrapper):
     """Asserts if the action given to step is outside of the action space. Applied in PettingZoo environments with discrete action spaces."""
 
-    def __init__(self, env):
+    def __init__(self, env: AECEnv):
         super().__init__(env)
         assert all(
             isinstance(self.action_space(agent), Discrete)
             for agent in getattr(self, "possible_agents", [])
         ), "should only use AssertOutOfBoundsWrapper for Discrete spaces"
 
-    def step(self, action):
+    def step(self, action: ActionType) -> None:
         assert (
             action is None
             and (
@@ -25,5 +28,5 @@ class AssertOutOfBoundsWrapper(BaseWrapper):
         ), "action is not in action space"
         super().step(action)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.env)

@@ -128,7 +128,7 @@ if __name__ == "__main__":
         # collect an episode
         with torch.no_grad():
             # collect observations and convert to batch of torch tensors
-            next_obs = env.reset(seed=None)
+            next_obs, info = env.reset(seed=None)
             # reset the episodic return
             total_episodic_return = 0
 
@@ -265,7 +265,8 @@ if __name__ == "__main__":
     with torch.no_grad():
         # render 5 episodes out
         for episode in range(5):
-            obs = batchify_obs(env.reset(seed=None), device)
+            obs, infos = env.reset(seed=None)
+            obs = batchify_obs(obs, device)
             terms = [False]
             truncs = [False]
             while not any(terms) and not any(truncs):

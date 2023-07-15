@@ -17,7 +17,7 @@ class capture_stdout:
     def __init__(self):
         self.old_stdout = None
 
-    def __enter__(self):
+    def __enter__(self) -> io.StringIO:
         self.old_stdout = sys.stdout
         self.buff = io.StringIO()
         sys.stdout = self.buff

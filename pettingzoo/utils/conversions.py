@@ -1,7 +1,7 @@
 import copy
 import warnings
 from collections import defaultdict
-from typing import Dict, Optional
+from typing import Callable, Dict, Optional
 
 from pettingzoo.utils import agent_selector
 from pettingzoo.utils.env import AECEnv, ParallelEnv
@@ -12,7 +12,7 @@ AgentID = str
 ActionDict = Dict[AgentID, ActionType]
 
 
-def parallel_wrapper_fn(env_fn):
+def parallel_wrapper_fn(env_fn: Callable) -> Callable:
     def par_fn(**kwargs):
         env = env_fn(**kwargs)
         env = aec_to_parallel_wrapper(env)
@@ -21,7 +21,7 @@ def parallel_wrapper_fn(env_fn):
     return par_fn
 
 
-def aec_wrapper_fn(par_env_fn):
+def aec_wrapper_fn(par_env_fn: Callable) -> Callable:
     """Converts class(pettingzoo.utils.env.ParallelEnv) -> class(pettingzoo.utils.env.AECEnv).
 
     Args:
@@ -44,7 +44,7 @@ def aec_wrapper_fn(par_env_fn):
     return aec_fn
 
 
-def aec_to_parallel(aec_env):
+def aec_to_parallel(aec_env: AECEnv) -> ParallelEnv:
     """Converts an aec environment to a parallel environment.
 
     In the case of an existing parallel environment wrapped using a `parallel_to_aec_wrapper`, this function will return the original parallel environment.
@@ -59,7 +59,7 @@ def aec_to_parallel(aec_env):
         return par_env
 
 
-def parallel_to_aec(par_env):
+def parallel_to_aec(par_env: ParallelEnv) -> AECEnv:
     """Converts an aec environment to a parallel environment.
 
     In the case of an existing aec environment wrapped using a `aec_to_prallel_wrapper`, this function will return the original AEC environment.
@@ -73,7 +73,7 @@ def parallel_to_aec(par_env):
         return ordered_env
 
 
-def turn_based_aec_to_parallel(aec_env):
+def turn_based_aec_to_parallel(aec_env: AECEnv) -> ParallelEnv:
     if isinstance(aec_env, parallel_to_aec_wrapper):
         return aec_env.env
     else:
@@ -81,14 +81,14 @@ def turn_based_aec_to_parallel(aec_env):
         return par_env
 
 
-def to_parallel(aec_env):
+def to_parallel(aec_env: AECEnv) -> ParallelEnv:
     warnings.warn(
         "The `to_parallel` function is deprecated. Use the `aec_to_parallel` function instead."
     )
     return aec_to_parallel(aec_env)
 
 
-def from_parallel(par_env):
+def from_parallel(par_env: ParallelEnv) -> AECEnv:
     warnings.warn(
         "The `from_parallel` function is deprecated. Use the `parallel_to_aec` function instead."
     )
@@ -168,7 +168,8 @@ class aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         rewards = defaultdict(int)
@@ -280,7 +281,7 @@ class parallel_to_aec_wrapper(AECEnv):
         return self.env.action_space(agent)
 
     def reset(self, seed=None, options=None):
-        self._observations = self.env.reset(seed=seed, options=options)
+        self._observations, self.infos = self.env.reset(seed=seed, options=options)
         self.agents = self.env.agents[:]
         self._live_agents = self.agents[:]
         self._actions: ActionDict = {agent: None for agent in self.agents}
@@ -288,7 +289,6 @@ class parallel_to_aec_wrapper(AECEnv):
         self.agent_selection = self._agent_selector.reset()
         self.terminations = {agent: False for agent in self.agents}
         self.truncations = {agent: False for agent in self.agents}
-        self.infos = {agent: {} for agent in self.agents}
         self.rewards = {agent: 0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0 for agent in self.agents}
         self.new_agents = []
@@ -312,8 +312,6 @@ class parallel_to_aec_wrapper(AECEnv):
         self._cumulative_rewards[new_agent] = 0
 
     def step(self, action: ActionType):
-        if action is not None:
-            action = int(action)
         if (
             self.terminations[self.agent_selection]
             or self.truncations[self.agent_selection]
@@ -435,7 +433,8 @@ class turn_based_aec_to_parallel_wrapper(ParallelEnv):
             if not (self.aec_env.terminations[agent] or self.aec_env.truncations[agent])
         }
 
-        return observations
+        infos = dict(**self.aec_env.infos)
+        return observations, infos
 
     def step(self, actions):
         if not self.agents:

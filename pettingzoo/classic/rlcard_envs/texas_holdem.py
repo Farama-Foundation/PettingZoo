@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Texas Hold'em
 
@@ -76,12 +76,14 @@ whose turn it is. Taking an illegal move ends the game with a reward of -1 for t
 * v0: Initial versions release (1.0.0)
 
 """
+from __future__ import annotations
 
 import os
 
 import gymnasium
 import numpy as np
 import pygame
+from gymnasium.utils import EzPickle
 
 from pettingzoo.classic.rlcard_envs.rlcard_base import RLCardBase
 from pettingzoo.utils import wrappers
@@ -113,7 +115,7 @@ def env(**kwargs):
     return env
 
 
-class raw_env(RLCardBase):
+class raw_env(RLCardBase, EzPickle):
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "name": "texas_holdem_v4",
@@ -121,9 +123,19 @@ class raw_env(RLCardBase):
         "render_fps": 1,
     }
 
-    def __init__(self, num_players=2, render_mode=None):
+    def __init__(
+        self,
+        num_players: int = 2,
+        render_mode: str | None = None,
+        screen_height: int | None = 1000,
+    ):
+        EzPickle.__init__(self, num_players, render_mode, screen_height)
         super().__init__("limit-holdem", num_players, (72,))
         self.render_mode = render_mode
+        self.screen_height = screen_height
+
+        if self.render_mode == "human":
+            self.clock = pygame.time.Clock()
 
     def step(self, action):
         super().step(action)
@@ -156,17 +168,19 @@ class raw_env(RLCardBase):
         def calculate_height(screen_height, divisor, multiplier, tile_size, offset):
             return int(multiplier * screen_height / divisor + tile_size * offset)
 
-        screen_height = 1000
+        screen_height = self.screen_height
         screen_width = int(
             screen_height * (1 / 20)
             + np.ceil(len(self.possible_agents) / 2) * (screen_height * 1 / 2)
         )
 
+        # TODO: refactor this and check if pygame.font init needs to be done
+        # Ideally this should look like all the other environments
         if self.render_mode == "human":
             if self.screen is None:
                 pygame.init()
                 self.screen = pygame.display.set_mode((screen_width, screen_height))
-            pygame.event.get()
+                pygame.display.set_caption("Texas Hold'em")
         elif self.screen is None:
             pygame.font.init()
             self.screen = pygame.Surface((screen_width, screen_height))
@@ -366,6 +380,7 @@ class raw_env(RLCardBase):
 
         if self.render_mode == "human":
             pygame.display.update()
+            self.clock.tick(self.metadata["render_fps"])
 
         observation = np.array(pygame.surfarray.pixels3d(self.screen))
 
