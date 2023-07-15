@@ -8,6 +8,7 @@ This tutorial shows how to train a agents using Maskable [Proximal Policy Optimi
 
 It creates a custom Wrapper to convert to a [Gymnasium](https://gymnasium.farama.org/)-like environment which is compatible with [SB3 action masking](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html).
 
+After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
 ```{eval-rst}
 .. note::
@@ -18,10 +19,8 @@ It creates a custom Wrapper to convert to a [Gymnasium](https://gymnasium.farama
 ```{eval-rst}
 .. warning::
 
-    This wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.
+    The SB3ActionMaskWrapper wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.
 ```
-
-After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
 
 ## Environment Setup
@@ -45,8 +44,7 @@ The following code should run without any issues. The comments are designed to h
 
 The following script uses [pytest](https://docs.pytest.org/en/latest/) to test all other PettingZoo environments which support action masking.
 
-This code yields good results on simpler environments like [Gin Rummy](/environments/classic/gin_rummy/) and [Texas Hold’em No Limit](/environments/classic/texas_holdem_no_limit/), while failing to perform better than random in more difficult environments such as [Chess](/environments/classic/chess/) or [Hanabi](/environments/classic/hanabi/).
-
+This code yields good results on simpler environments like [Gin Rummy](/environments/classic/gin_rummy/) and [Texas Hold’em No Limit](/environments/classic/texas_holdem_no_limit/), while more difficult environments such as [Chess](/environments/classic/chess/) or [Hanabi](/environments/classic/hanabi/) will likely take much more training time and hyperparameter tuning.
 
 ```{eval-rst}
 .. literalinclude:: ../../../tutorials/SB3/test_sb3_action_mask.py

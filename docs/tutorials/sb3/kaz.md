@@ -6,9 +6,9 @@ title: "SB3: PPO for Knights-Archers-Zombies"
 
 This tutorial shows how to train agents using [Proximal Policy Optimization](https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html) (PPO) on the [Knights-Archers-Zombies](https://pettingzoo.farama.org/environments/butterfly/knights_archers_zombies/) environment ([AEC](https://pettingzoo.farama.org/api/aec/)).
 
-It converts the environment into a Parallel environment and uses SuperSuit to create vectorized environments, leveraging multithreading to speed up training.
+We use SuperSuit to create vectorized environments, leveraging multithreading to speed up training (see SB3's [vector environments documentation](https://stable-baselines3.readthedocs.io/en/master/guide/vec_envs.html)).
 
-After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
+After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [model saving documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html)).
 
 ```{eval-rst}
 .. note::
@@ -17,9 +17,9 @@ After training and evaluation, this script will launch a demo game using human r
 ```
 
 ```{eval-rst}
-.. warning::
+.. note::
 
-    Because this environment allows agents to spawn and die, it requires using SuperSuit's Black Death wrapper, which provides blank observations to dead agents, rather than removing them from the environment.
+    This environment allows agents to spawn and die, so it requires using SuperSuit's Black Death wrapper, which provides blank observations to dead agents rather than removing them from the environment.
 ```
 
 
