@@ -415,7 +415,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.</p>
+<p>The SB3ActionMaskWrapper wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.</p>
 </div>
 <section id="environment-setup">
 <h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Permalink to this heading">#</a></h2>
@@ -616,7 +616,7 @@ sb3-contrib&gt;=2.0.0
 <section id="testing-other-pettingzoo-classic-environments">
 <h3>Testing other PettingZoo Classic environments<a class="headerlink" href="#testing-other-pettingzoo-classic-environments" title="Permalink to this heading">#</a></h3>
 <p>The following script uses <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> to test all other PettingZoo environments which support action masking.</p>
-<p>This code yields good results on simpler environments like <a class="reference internal" href="../../../environments/classic/gin_rummy/"><span class="doc std std-doc">Gin Rummy</span></a> and <a class="reference internal" href="../../../environments/classic/texas_holdem_no_limit/"><span class="doc std std-doc">Texas Hold’em No Limit</span></a>, while failing to perform better than random in more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a>.</p>
+<p>This code yields good results on simpler environments like <a class="reference internal" href="../../../environments/classic/gin_rummy/"><span class="doc std std-doc">Gin Rummy</span></a> and <a class="reference internal" href="../../../environments/classic/texas_holdem_no_limit/"><span class="doc std std-doc">Texas Hold’em No Limit</span></a>, while more difficult environments such as <a class="reference internal" href="../../../environments/classic/chess/"><span class="doc std std-doc">Chess</span></a> or <a class="reference internal" href="../../../environments/classic/hanabi/"><span class="doc std std-doc">Hanabi</span></a> will likely take much more training time and hyperparameter tuning.</p>
 </section>
 </section>
 </section>
