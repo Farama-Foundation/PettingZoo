@@ -1,4 +1,4 @@
-# noqa
+# noqa: D212, D415
 """
 # Hanabi
 
@@ -306,9 +306,7 @@ class raw_env(AECEnv, EzPickle):
             "observation_type": observation_type,
             "random_start_player": random_start_player,
         }
-        self.hanabi_env = OpenSpielCompatibilityV0(
-            pyspiel.load_game("hanabi", self._config), render_mode=render_mode
-        )
+        self.hanabi_env = OpenSpielCompatibilityV0(game_name="hanabi", render_mode=render_mode, config=self._config)
 
         # List of agent names
         self.possible_agents = self.hanabi_env.possible_agents
@@ -412,15 +410,34 @@ class raw_env(AECEnv, EzPickle):
             observation: Optional list of integers of length self.observation_vector_dim, describing observations of
             current agent (agent_selection).
         """
-        if seed is not None:
-            config = dict(seed=seed, **self._config)
-            self.hanabi_env = OpenSpielCompatibilityV0(
-                pyspiel.load_game("hanabi", config), render_mode=self.render_mode
-            )
+        # if seed is not None:
+        #     config = dict(seed=seed, **self._config)
+        #     self.hanabi_env = OpenSpielCompatibilityV0(
+        #         pyspiel.load_game("hanabi", config), render_mode=self.render_mode
+        #     )
 
         self.agents = self.possible_agents[:]
 
-        self.hanabi_env.reset()
+        self.hanabi_env.reset(seed=seed)
+
+        # if self.hanabi_env._env.num_distinct_actions() != self.hanabi_env.
+
+        # Reset spaces
+        self.action_spaces = {i: self.hanabi_env.action_space(i) for i in self.agents}
+        self.observation_spaces = {
+            i: spaces.Dict(
+                {
+                    "observation": self.hanabi_env.observation_space(i),
+                    "action_mask": spaces.Box(
+                        low=0,
+                        high=1,
+                        shape=(self.hanabi_env.action_space(i).n,),
+                        dtype=np.int8,
+                    ),
+                }
+            )
+            for i in self.agents
+        }
 
         self.rewards = self.hanabi_env.rewards
         self._cumulative_rewards = self.hanabi_env._cumulative_rewards
@@ -462,8 +479,6 @@ class raw_env(AECEnv, EzPickle):
             self.terminations = self.hanabi_env.terminations
             self.truncations = self.hanabi_env.truncations
             self.infos = self.hanabi_env.infos
-
-            self._accumulate_rewards()
 
     def observe(self, agent_name: str):
         observation = self.hanabi_env.observe(agent_name)
