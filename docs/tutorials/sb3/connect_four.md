@@ -8,6 +8,7 @@ This tutorial shows how to train a agents using Maskable [Proximal Policy Optimi
 
 It creates a custom Wrapper to convert to a [Gymnasium](https://gymnasium.farama.org/)-like environment which is compatible with [SB3 action masking](https://sb3-contrib.readthedocs.io/en/master/modules/ppo_mask.html).
 
+After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
 ```{eval-rst}
 .. note::
@@ -20,8 +21,6 @@ It creates a custom Wrapper to convert to a [Gymnasium](https://gymnasium.farama
 
     This wrapper assumes that the action space and observation space is the same for each agent, this assumption may not hold for custom environments.
 ```
-
-After training and evaluation, this script will launch a demo game using human rendering. Trained models are saved and loaded from disk (see SB3's [documentation](https://stable-baselines3.readthedocs.io/en/master/guide/save_format.html) for more information).
 
 
 ## Environment Setup
