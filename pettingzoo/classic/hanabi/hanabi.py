@@ -165,7 +165,6 @@ from typing import List, Optional, Union
 
 import gymnasium
 import numpy as np
-import pyspiel
 from gymnasium import spaces
 from gymnasium.utils import EzPickle
 from shimmy.openspiel_compatibility import OpenSpielCompatibilityV0
@@ -306,7 +305,9 @@ class raw_env(AECEnv, EzPickle):
             "observation_type": observation_type,
             "random_start_player": random_start_player,
         }
-        self.hanabi_env = OpenSpielCompatibilityV0(game_name="hanabi", render_mode=render_mode, config=self._config)
+        self.hanabi_env = OpenSpielCompatibilityV0(
+            game_name="hanabi", render_mode=render_mode, config=self._config
+        )
 
         # List of agent names
         self.possible_agents = self.hanabi_env.possible_agents
