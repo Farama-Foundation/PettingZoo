@@ -313,7 +313,9 @@ class raw_env(AECEnv, EzPickle):
         self.possible_agents = self.hanabi_env.possible_agents
         self.agent_selection: str
 
-        self.action_spaces = {a: self.hanabi_env.action_space(a) for a in self.possible_agents}
+        self.action_spaces = {
+            a: self.hanabi_env.action_space(a) for a in self.possible_agents
+        }
         self.observation_spaces = {
             a: spaces.Dict(
                 {
