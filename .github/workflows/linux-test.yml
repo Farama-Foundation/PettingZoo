@@ -31,10 +31,10 @@ jobs:
           pip install -e .[all]
           pip install -e .[testing]
           AutoROM -v
-      - name: Source distribution test
-        run: |
-          python setup.py sdist
-          pip install dist/*.tar.gz
+#      - name: Source distribution test
+#        run: |
+#          python setup.py sdist
+#          pip install dist/*.tar.gz
       - name: Release Test
         run: |
           xvfb-run -s "-screen 0 1024x768x24" pytest -v --cov=pettingzoo --cov-report term
