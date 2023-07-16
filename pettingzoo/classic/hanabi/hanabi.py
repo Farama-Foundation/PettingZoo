@@ -311,23 +311,22 @@ class raw_env(AECEnv, EzPickle):
 
         # List of agent names
         self.possible_agents = self.hanabi_env.possible_agents
-        self.agents = self.possible_agents[:]
         self.agent_selection: str
 
-        self.action_spaces = {i: self.hanabi_env.action_space(i) for i in self.agents}
+        self.action_spaces = {a: self.hanabi_env.action_space(a) for a in self.possible_agents}
         self.observation_spaces = {
-            i: spaces.Dict(
+            a: spaces.Dict(
                 {
-                    "observation": self.hanabi_env.observation_space(i),
+                    "observation": self.hanabi_env.observation_space(a),
                     "action_mask": spaces.Box(
                         low=0,
                         high=1,
-                        shape=(self.hanabi_env.action_space(i).n,),
+                        shape=(self.hanabi_env.action_space(a).n,),
                         dtype=np.int8,
                     ),
                 }
             )
-            for i in self.agents
+            for a in self.possible_agents
         }
 
         self.render_mode = render_mode
@@ -424,20 +423,20 @@ class raw_env(AECEnv, EzPickle):
         # if self.hanabi_env._env.num_distinct_actions() != self.hanabi_env.
 
         # Reset spaces
-        self.action_spaces = {i: self.hanabi_env.action_space(i) for i in self.agents}
+        self.action_spaces = {a: self.hanabi_env.action_space(a) for a in self.agents}
         self.observation_spaces = {
-            i: spaces.Dict(
+            a: spaces.Dict(
                 {
-                    "observation": self.hanabi_env.observation_space(i),
+                    "observation": self.hanabi_env.observation_space(a),
                     "action_mask": spaces.Box(
                         low=0,
                         high=1,
-                        shape=(self.hanabi_env.action_space(i).n,),
+                        shape=(self.hanabi_env.action_space(a).n,),
                         dtype=np.int8,
                     ),
                 }
             )
-            for i in self.agents
+            for a in self.agents
         }
 
         self.rewards = self.hanabi_env.rewards
