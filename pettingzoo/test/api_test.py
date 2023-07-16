@@ -183,10 +183,12 @@ def test_observation_action_spaces(env, agent_0):
         ), "Agent space for each agent must extend gymnasium.spaces.Space"
         assert env.observation_space(agent) is env.observation_space(
             agent
-        ), "observation_space should return the exact same space object (not a copy) for an agent (ensures that observation space seeding works as expected). Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None) to enable caching, or changing it to read from a dict such as self.observation_spaces."
+        ), "observation_space should return the exact same space object (not a copy) for an agent (ensures that observation space seeding works as expected). " \
+           "Consider decorating your observation_space(self, agent) method with @functools.lru_cache(maxsize=None) to enable caching, or changing it to read from a dict such as self.observation_spaces."
         assert env.action_space(agent) is env.action_space(
             agent
-        ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None) to enable caching, or changing it to read from a dict such as self.action_spaces."
+        ), "action_space should return the exact same space object (not a copy) for an agent (ensures that action space seeding works as expected). " \
+           "Consider decorating your action_space(self, agent) method with @functools.lru_cache(maxsize=None) to enable caching, or changing it to read from a dict such as self.action_spaces."
         if (
             not (
                 isinstance(env.observation_space(agent), gymnasium.spaces.Box)
