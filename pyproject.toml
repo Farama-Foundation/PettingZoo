@@ -37,7 +37,7 @@ classic = [
     "chess==1.7.0",
     "rlcard==1.0.5",
     "pygame==2.3.0",
-    "shimmy[openspiel] @ https://github.com/Farama-Foundation/Shimmy.gitx"
+    "shimmy[openspiel] @ git+https://github.com/Farama-Foundation/Shimmy.gitx"
 ]
 butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
 mpe = ["pygame==2.3.0"]
@@ -56,7 +56,7 @@ all = [
     "pygame==2.3.0",
     "chess==1.7.0",
     "rlcard==1.0.5",
-    "shimmy[openspiel] @ https://github.com/Farama-Foundation/Shimmy.git",
+    "shimmy[openspiel] @ git+https://github.com/Farama-Foundation/Shimmy.git",
     "pymunk==6.2.0",
     "box2d-py==2.3.5",
     "scipy>=1.4.1",
