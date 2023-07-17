@@ -50,7 +50,7 @@ repos:
     rev: v3.3.2
     hooks:
       - id: pyupgrade
-        args: ["--py37-plus"]
+        args: ["--py38-plus"]
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.3.0
     hooks:
@@ -60,7 +60,7 @@ repos:
           - --explain
           - --convention=google
           - --count
-          # TODO: Remove ignoring rules D101, D102, D103, D105
+          # TODO: Remove ignoring rules D101, D102, D103, D105 (add docstrings to all public methods)
           - --add-ignore=D100,D107,D101,D102,D103,D105
         exclude: "__init__.py$|^pettingzoo.test|^docs"
         additional_dependencies: ["tomli"]
