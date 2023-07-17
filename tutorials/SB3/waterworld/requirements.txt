@@ -1,4 +1,7 @@
 pettingzoo[sisl]>=1.23.1
-stable-baselines3>=2.0.0
-supersuit>=3.8.1
+# TODO: update to v2.1.0 once it is released
+stable-baselines3 @ git+https://github.com/DLR-RM/stable-baselines3
+# TODO: update to SS release once it's done
+supersuit @ git+https://github.com/Farama-Foundation/SuperSuit.git
+# TODO: remove pymunk requirement before 1.24.0 PZ release, as it will be added as a requirement to sisl
 pymunk
