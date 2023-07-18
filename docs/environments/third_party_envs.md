@@ -17,7 +17,7 @@ lastpage:
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.2-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/LucasAlegre/sumo-rl)]()
 
-PettingZoo (and Gymnasium) wrappers for the widely used [SUMO](https://github.com/eclipse/sumo) traffic simulation. 
+PettingZoo (and Gymnasium) wrappers for the widely used [SUMO](https://github.com/eclipse/sumo) traffic simulation.
 
 
 ### [POGEMA](https://github.com/AIRI-Institute/pogema)
@@ -49,7 +49,7 @@ Using [Google DeepMind](https://www.deepmind.com/)'s [MuZero](https://en.wikiped
 [![GitHub stars](https://img.shields.io/github/stars/DavidRother/gym-cooking)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/DavidRother/gym-cooking)]()
 
-Fork of the game *Too Many Cooks*. 
+Fork of the game *Too Many Cooks*.
 
 
 ### [Crazy-RL](https://github.com/ffelten/CrazyRL)
@@ -57,7 +57,7 @@ Fork of the game *Too Many Cooks*.
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.22.3-blue)]()
 [![GitHub stars](https://img.shields.io/github/stars/ffelten/CrazyRL)]()
 
-A library for doing reinforcement learning using [Crazyflie](https://www.bitcraze.io/products/crazyflie-2-1/) drones. 
+A library for doing reinforcement learning using [Crazyflie](https://www.bitcraze.io/products/crazyflie-2-1/) drones.
 
 
 ### [PettingZoo Dilemma Envs](https://github.com/tianyu-z/pettingzoo_dilemma_envs)
@@ -137,8 +137,8 @@ Environments for [Kaggle](https://www.kaggle.com/) machine learning challenges.
 [![PettingZoo version dependency](https://img.shields.io/badge/PettingZoo-v1.18.0-red)]()
 [![GitHub stars](https://img.shields.io/github/stars/cogment/cogment-verse)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/cogment/cogment-verse)]()
- 
-Library of Environments, Human Actor UIs and Agent implementation for Human In the Loop Learning & Reinforcement Learning. 
+
+Library of Environments, Human Actor UIs and Agent implementation for Human In the Loop Learning & Reinforcement Learning.
 
 
 ### [Stone Ground Hearth Battles](https://github.com/JDBumgardner/stone_ground_hearth_battles)
@@ -156,7 +156,7 @@ Simulator and environments for [Blizzard](https://www.blizzard.com/en-us/)'s pop
 [![GitHub stars](https://img.shields.io/github/stars/cage-challenge/CybORG)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/cage-challenge/CybORG)]()
 
-A cyber-security research environment for training and development of security human and autonomous agents. 
+A cyber-security research environment for training and development of security human and autonomous agents.
 
 
 ### [conflict_rez](https://github.com/XuShenLZ/conflict_rez)
@@ -183,7 +183,7 @@ PettingZoo environment for online multi-player game [Battlesnake](https://play.b
 [![GitHub stars](https://img.shields.io/github/stars/NaIwo/BomberManAI)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/NaIwo/BomberManAI)]()
 
-Environment with a simplified version of the video game *BomberMan*. 
+Environment with a simplified version of the video game *BomberMan*.
 
 
 ### [Fanorona AEC](https://github.com/AbhijeetKrishnan/fanorona-aec)
@@ -191,7 +191,7 @@ Environment with a simplified version of the video game *BomberMan*.
 [![GitHub stars](https://img.shields.io/github/stars/AbhijeetKrishnan/fanorona-aec)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/AbhijeetKrishnan/fanorona-aec)]()
 
-Implementation of the board game *Fanorona*. 
+Implementation of the board game *Fanorona*.
 
 
 ### [Galaga AI](https://github.com/SonicKurt/Galaga-AI)
@@ -209,7 +209,7 @@ Implementation of the [Galaga](https://en.wikipedia.org/wiki/Galaga) arcade game
 [![GitHub stars](https://img.shields.io/github/stars/michaelfeil/skyjo_rl)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/michaelfeil/skyjo_rl)]()
 
-Implementation of the board game *SkyJo*. 
+Implementation of the board game *SkyJo*.
 
 
 ### [Mu Torere](https://github.com/Aroksak/MuTorere)
@@ -218,7 +218,7 @@ Implementation of the board game *SkyJo*.
 [![GitHub stars](https://img.shields.io/github/stars/Aroksak/MuTorere)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/DaBultz/pz-battlesnake)]()
 
-Implementation of the board game *Mū tōrere* from New Zealand. 
+Implementation of the board game *Mū tōrere* from New Zealand.
 
 
 ___

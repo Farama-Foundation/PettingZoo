@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 name = "pettingzoo"
 description = "Gymnasium for multi-agent reinforcement learning."
 readme = "README.md"
-requires-python = ">= 3.7"
+requires-python = ">= 3.8"
 authors = [{ name = "Farama Foundation", email = "contact@farama.org" }]
 license = { text = "MIT License" }
 keywords = ["Reinforcement Learning", "game", "RL", "AI", "gymnasium"]
@@ -16,7 +16,6 @@ classifiers = [
     "Development Status :: 4 - Beta",  # change to `5 - Production/Stable` when ready
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -34,14 +33,14 @@ dynamic = ["version"]
 # Update dependencies in `all` if any are added or removed
 atari = ["multi_agent_ale_py==0.1.11", "pygame==2.3.0"]
 classic = [
-    "chess==1.7.0",
+    "chess==1.9.4",
     "rlcard==1.0.5",
     "pygame==2.3.0",
     "hanabi_learning_environment==0.0.4",
 ]
 butterfly = ["pygame==2.3.0", "pymunk==6.2.0"]
 mpe = ["pygame==2.3.0"]
-sisl = ["pygame==2.3.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
+sisl = ["pygame==2.3.0", "pymunk==6.2.0", "box2d-py==2.3.5", "scipy>=1.4.1"]
 other = ["pillow>=8.0.1"]
 testing = [
     "pynput",
@@ -54,7 +53,7 @@ testing = [
 all = [
     "multi_agent_ale_py==0.1.11",
     "pygame==2.3.0",
-    "chess==1.7.0",
+    "chess==1.9.4",
     "rlcard==1.0.5",
     "hanabi_learning_environment==0.0.4",
     "pymunk==6.2.0",
@@ -105,6 +104,4 @@ typeCheckingMode = "basic"
 reportMissingImports = false
 
 [tool.pytest.ini_options]
-norecursedirs = [
-    "pettingzoo"
-]
+addopts = [ "--ignore-glob=*/__init__.py" ]
