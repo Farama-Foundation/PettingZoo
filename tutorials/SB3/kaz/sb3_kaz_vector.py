@@ -36,22 +36,12 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     print(f"Starting training on {str(env.metadata['name'])}.")
 
     env = ss.pettingzoo_env_to_vec_env_v1(env)
-    env = ss.concat_vec_envs_v1(env, 8, num_cpus=2, base_class="stable_baselines3")
+    env = ss.concat_vec_envs_v1(env, 8, num_cpus=1, base_class="stable_baselines3")
 
-    # TODO: test different hyperparameters
     model = PPO(
         MlpPolicy,
         env,
         verbose=3,
-        gamma=0.95,
-        n_steps=256,
-        ent_coef=0.0905168,
-        learning_rate=0.00062211,
-        vf_coef=0.042202,
-        max_grad_norm=0.9,
-        gae_lambda=0.99,
-        n_epochs=5,
-        clip_range=0.3,
         batch_size=256,
     )
 
