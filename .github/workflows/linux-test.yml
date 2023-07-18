@@ -33,7 +33,8 @@ jobs:
           AutoROM -v
       - name: Source distribution test
         run: |
-          python setup.py sdist
+          python -m pip install --upgrade build
+          python -m build --sdist
           pip install dist/*.tar.gz
       - name: Release Test
         run: |
