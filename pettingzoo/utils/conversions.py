@@ -3,8 +3,8 @@ import warnings
 from collections import defaultdict
 from typing import Callable, Dict, Optional
 
-from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils import agent_selector
+from pettingzoo.utils.env import AECEnv, ParallelEnv
 from pettingzoo.utils.wrappers import OrderEnforcingWrapper
 
 ActionType = Optional[int]
