@@ -16,6 +16,8 @@ To follow this tutorial, you will need to install the dependencies shown below. 
    :language: text
 ```
 
+Then, install ROMs using [AutoROM](https://github.com/Farama-Foundation/AutoROM), or specify the path to your Atari rom using the `rom_path` argument (see [Common Parameters](/environments/atari/#common-parameters)).
+
 ## Code
 The following code should run without any issues. The comments are designed to help you understand how to use PettingZoo with CleanRL. If you have any questions, please feel free to ask in the [Discord server](https://discord.gg/nhvKkYa6qX), or create an issue on [CleanRL's GitHub](https://github.com/vwxyzjn/cleanrl/issues).
 ```{eval-rst}
