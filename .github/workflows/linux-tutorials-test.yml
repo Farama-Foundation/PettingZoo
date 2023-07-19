@@ -33,6 +33,6 @@ jobs:
           cd tutorials/${{ matrix.tutorial }}
           pip install -r requirements.txt
           pip uninstall -y pettingzoo
-          pip install -e $root_dir
+          pip install -e $root_dir[testing]
           AutoROM -v
           for f in *.py; do xvfb-run -a -s "-screen 0 1024x768x24" python "$f"; done
