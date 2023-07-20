@@ -14,8 +14,8 @@
     <link rel="shortcut icon" href="../_static/favicon.png"/><!-- Generated with Sphinx 7.0.1 and Furo 2023.05.20.dev1 -->
         <title>Release Notes - PettingZoo Documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=a022fd11c0d7e10ac71ac296890386cea7a2fa24" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=093e2efd5a2c7b46ab7c7157e45f5f05a1e0a463" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=2b6f8eb5452c44539a42dd9ada0a48f56e5f404d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=d98e5db1aa483f10fd0a50bf79700ebb0c5bab79" />
     
     
 
@@ -53,18 +53,6 @@
               <line x1="0.232" y1="12" x2="23.5" y2="12"></line>
               <line x1="0.232" y1="20" x2="23.5" y2="20"></line>
             </svg>
-            <!-- <svg viewBox="0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <line x1="0.5" y1="4.5" x2="23.5" y2="4.5" style="fill: none; "></line>
-              <line x1="0.5" y1="12" x2="14" y2="12" ></line>
-              <line x1="0.5" y1="19.5" x2="23.5" y2="19.5"></line>
-              <polyline style="stroke-width: 0px;" points="17 7 22 12 17 17"></polyline>
-            </svg> -->
-            <!-- <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:20px">
-              <defs></defs>
-              <rect y="1" width="22" height="22" rx="2" ry="2" style="fill: none;" x="1"></rect>
-              <line x1="8" y1="1" x2="8" y2="23"></line>
-              <polyline style="stroke-linecap: round; fill: none; stroke-linejoin: round;" points="13 7 17 12 13 17"></polyline>
-            </svg> -->
           </label>
         </div>
         <div class="farama-header__left farama-header__center--mobile">
@@ -318,6 +306,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/cleanrl/">CleanRL Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of CleanRL Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/cleanrl/implementing_PPO/">CleanRL: Implementing PPO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/cleanrl/advanced_PPO/">CleanRL: Advanced PPO</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials/tianshou/">Tianshou Tutorial</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Tianshou Tutorial</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -437,7 +426,7 @@
 <h2><strong>PettingZoo 1.23.0 Release Notes:</strong></h2>
 <p>This release finishes the process of standardizing the PettingZoo API to fully match <a href="https://github.com/Farama-Foundation/Gymnasium">Gymnasium</a>. The deprecated <code>env.seed()</code> method has been removed in favor of <code>env.reset(seed=seed)</code>, and the <code>return_info</code> argument from <code>reset()</code> has been removed—info is now always returned on reset.</p>
 <p>New features include full support for serialization using <a href="https://docs.python.org/3/library/pickle.html" rel="nofollow">Pickle</a>, and updated testing: <a href="https://github.com/Farama-Foundation/PettingZoo/pull/928" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/928/hovercard">pickle tests</a>, <a href="https://github.com/Farama-Foundation/PettingZoo/pull/946" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/946/hovercard">improved API test</a>, and <a href="https://github.com/Farama-Foundation/PettingZoo/pull/946" data-hovercard-type="pull_request" data-hovercard-url="/Farama-Foundation/PettingZoo/pull/946/hovercard">re-written seed test</a> (matching Gymnasium). The library has also been updated to use <code>pyproject.toml</code>, to make installation more consistent and reliable, and to comply with<a href="https://peps.python.org/pep-0621/" rel="nofollow"> PEP 621</a> standards.</p>
-<p>This release includes significant documentation updates: full installation and usage examples for each environment type (<a href="https://pettingzoo.farama.org/environments/atari/#installation" rel="nofollow">Atari</a>,<a href="https://pettingzoo.farama.org/environments/butterfly/#installation" rel="nofollow"> Butterfly</a>,<a href="https://pettingzoo.farama.org/environments/classic/#installation" rel="nofollow"> Classic</a>,<a href="https://pettingzoo.farama.org/environments/mpe/#installation" rel="nofollow"> MPE</a>,<a href="https://pettingzoo.farama.org/environments/sisl/#installation" rel="nofollow"> SISL</a>), 9+ new<a href="https://pettingzoo.farama.org/environments/third_party_envs/" rel="nofollow"> third-party-environments</a>, new <a href="https://pettingzoo.farama.org/api/aec/#action-masking" rel="nofollow">action masking documentation</a>, new <a href="https://pettingzoo.farama.org/tutorials/langchain/" rel="nofollow">LangChain tutorial</a>, updated <a href="https://pettingzoo.farama.org/tutorials/cleanrl/" rel="nofollow">CleanRL</a>, <a href="https://pettingzoo.farama.org/tutorials/tianshou/" rel="nofollow">Tianshou</a>, and <a href="https://pettingzoo.farama.org/tutorials/rllib/" rel="nofollow">RLlib</a>) tutorials, and more.</p>
+<p>This release includes significant documentation updates: full installation and usage examples for each environment type (<a href="https://pettingzoo.farama.org/environments/atari/#installation" rel="nofollow">Atari</a>,<a href="https://pettingzoo.farama.org/environments/butterfly/#installation" rel="nofollow"> Butterfly</a>,<a href="https://pettingzoo.farama.org/environments/classic/#installation" rel="nofollow"> Classic</a>,<a href="https://pettingzoo.farama.org/environments/mpe/#installation" rel="nofollow"> MPE</a>,<a href="https://pettingzoo.farama.org/environments/sisl/#installation" rel="nofollow"> SISL</a>), 9+ new<a href="https://pettingzoo.farama.org/environments/third_party_envs/" rel="nofollow"> third-party-environments</a>, new <a href="https://pettingzoo.farama.org/api/aec/#action-masking" rel="nofollow">action masking documentation</a>, new <a href="https://pettingzoo.farama.org/tutorials/langchain/" rel="nofollow">LangChain tutorial</a>, updated <a href="https://pettingzoo.farama.org/tutorials/cleanrl/" rel="nofollow">CleanRL</a>, <a href="https://pettingzoo.farama.org/tutorials/tianshou/" rel="nofollow">Tianshou</a>, and <a href="https://pettingzoo.farama.org/tutorials/rllib/" rel="nofollow">RLlib</a> tutorials, and more.</p>
 <h3><strong>Breaking Changes:</strong></h3>
 <p>To ensure full consistency between the PettingZoo and Gymnasium API’s, the following changes have been made:</p>
 <p>The deprecated environment <code>seed()</code> method has been fully removed.</p>
@@ -998,38 +987,58 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
     </script>
 
     
-    <script>
-          (() => {
-              if (!localStorage.getItem("shownCookieAlert")) {
-                  const boxElem = document.createElement("div");
-                  boxElem.classList.add("cookie-alert");
-                  const containerElem = document.createElement("div");
-                  containerElem.classList.add("cookie-alert__container");
-                  const textElem = document.createElement("p");
-                  textElem.innerHTML = `This page uses <a href="https://analytics.google.com/">
-                                      Google Analytics</a> to collect statistics. You can disable it by blocking
-                                      the JavaScript coming from www.google-analytics.com.`;
-                                      containerElem.appendChild(textElem);
-                  const closeBtn = document.createElement("button");
-                  closeBtn.innerHTML = `<?xml version="1.0" ?><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>`
-                  closeBtn.onclick = () => {
-                      localStorage.setItem("shownCookieAlert", "true");
-                      boxElem.style.display = "none";
-                  }
-                  containerElem.appendChild(closeBtn);
-                  boxElem.appendChild(containerElem);
-                  document.body.appendChild(boxElem);
-              }
-          })()
-      </script>
-
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q4EGMJ3R24"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q4EGMJ3R24"></script>
       <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        const enableGtag = () => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Q4EGMJ3R24');
+        }
+        (() => {
+            if (!localStorage.getItem("acceptedCookieAlert")) {
+                const boxElem = document.createElement("div");
+                boxElem.classList.add("cookie-alert");
+                const containerElem = document.createElement("div");
+                containerElem.classList.add("cookie-alert__container");
+                const textElem = document.createElement("p");
+                textElem.innerHTML = `This page uses <a href="https://analytics.google.com/">
+                                    Google Analytics</a> to collect statistics.`;
+                                    containerElem.appendChild(textElem);
 
-        gtag('config', 'G-Q4EGMJ3R24');
+                const declineBtn = Object.assign(document.createElement("button"),
+                  {
+                    innerText: "Deny",
+                    className: "farama-btn cookie-alert__button",
+                    id: "cookie-alert__decline",
+                  }
+                );
+                declineBtn.addEventListener("click", () => {
+                  localStorage.setItem("acceptedCookieAlert", false);
+                  boxElem.remove();
+                });
+
+                const acceptBtn = Object.assign(document.createElement("button"),
+                  {
+                    innerText: "Allow",
+                    className: "farama-btn cookie-alert__button",
+                    id: "cookie-alert__accept",
+                  }
+                );
+                acceptBtn.addEventListener("click", () => {
+                  localStorage.setItem("acceptedCookieAlert", true);
+                  boxElem.remove();
+                  enableGtag();
+                });
+
+                containerElem.appendChild(declineBtn);
+                containerElem.appendChild(acceptBtn);
+                boxElem.appendChild(containerElem);
+                document.body.appendChild(boxElem);
+            } else if (localStorage.getItem("acceptedCookieAlert") === "true") {
+              enableGtag();
+            }
+        })()
       </script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -1038,6 +1047,37 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
     <script src="../_static/scripts/furo.js"></script>
     
     <script>
+
+      const createProjectsList = (projects, displayImages) => {
+        const ulElem = Object.assign(document.createElement('ul'),
+          {
+            className:'farama-header-menu-list',
+          }
+        )
+        for (let project of projects) {
+          const liElem = document.createElement("li");
+          const aElem = Object.assign(document.createElement("a"),
+            {
+              href: project.link
+            }
+          );
+          liElem.appendChild(aElem);
+          if (displayImages) {
+            const imgElem = Object.assign(document.createElement("img"),
+              {
+                src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
+                alt: `${project.name} logo`,
+                className: "farama-black-logo-invert"
+              }
+            );
+            aElem.appendChild(imgElem);
+          }
+          aElem.appendChild(document.createTextNode(project.name));
+          ulElem.appendChild(liElem);
+        }
+        return ulElem;
+      }
+
       // Create menu with Farama projects by using the API at farama.org/api/projects.json
       const createCORSRequest = (method, url) => {
         let xhr = new XMLHttpRequest();
@@ -1064,9 +1104,15 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
       xhr.onload = () => {
         const jsonResponse = xhr.response;
         const sections = {
-          "Documentation": [],
-          "Mature Projects": [],
-          "Incubating Projects": [],
+          "Core Projects": [],
+          "Mature Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          },
+          "Incubating Projects": {
+            "Documentation": [],
+            "Repositories": [],
+          },
           "Foundation": [
             {
               name: "About",
@@ -1082,28 +1128,38 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
             }
           ]
         }
+
+        // Categorize projects
         Object.keys(jsonResponse).forEach(key => {
           projectJson = jsonResponse[key];
           if (projectJson.website !== null) {
             projectJson.link = projectJson.website;
-            sections["Documentation"].push(projectJson)
-          } else if (projectJson.type == "mature") {
-            projectJson.link = projectJson.github;
-            sections["Mature Projects"].push(projectJson)
           } else {
             projectJson.link = projectJson.github;
-            sections["Incubating Projects"].push(projectJson)
+          }
+          if (projectJson.type === "core") {
+            sections["Core Projects"].push(projectJson)
+          } else if (projectJson.type == "mature") {
+            if (projectJson.website !== null) {
+              sections["Mature Projects"]["Documentation"].push(projectJson)
+            } else {
+              sections["Mature Projects"]["Repositories"].push(projectJson)
+            }
+          } else {
+            if (projectJson.website !== null) {
+              sections["Incubating Projects"]["Documentation"].push(projectJson)
+            } else {
+              sections["Incubating Projects"]["Repositories"].push(projectJson)
+            }
           }
         })
 
         const menuContainer = document.querySelector(".farama-header-menu__body");
 
         Object.keys(sections).forEach((key, i) => {
-          projects = sections[key];
           const sectionElem = Object.assign(
             document.createElement('div'), {
               className:'farama-header-menu__section',
-              style: "padding-left: 24px"
             }
           )
           sectionElem.appendChild(Object.assign(document.createElement('span'),
@@ -1112,33 +1168,37 @@ The dependency <code>gym</code> has been switched with <code>gymnasium</code>, w
               innerText: key
             }
           ))
-          const ulElem = Object.assign(document.createElement('ul'),
-            {
-              className:'farama-header-menu-list',
-            }
-          )
-          for (let project of projects) {
-            const liElem = document.createElement("li");
-            const aElem = Object.assign(document.createElement("a"),
-              {
-                href: project.link
-              }
-            );
-            liElem.appendChild(aElem);
-            if (key !== "Foundation") {
-              const imgElem = Object.assign(document.createElement("img"),
-                {
-                  src: project.image ? imagesBasepath + project.image : imagesBasepath + "/farama_black.svg",
-                  alt: `${project.name} logo`,
-                  className: "farama-black-logo-invert"
+          // is not a list
+          if (sections[key].constructor !== Array) {
+            const subSections = sections[key];
+            const subSectionContainerElem = Object.assign(
+                document.createElement('div'), {
+                  className:'farama-header-menu__subsections-container',
+                  style: key == "Mature Projects" ? "display: flex" : ""
                 }
-              );
-              aElem.appendChild(imgElem);
-            }
-            aElem.appendChild(document.createTextNode(project.name));
-            ulElem.appendChild(liElem);
+            )
+            Object.keys(subSections).forEach((subKey, i) => {
+              const subSectionElem = Object.assign(
+                document.createElement('div'), {
+                  className:'farama-header-menu__subsection',
+                }
+              )
+              subSectionElem.appendChild(Object.assign(document.createElement('span'),
+                {
+                  className:'farama-header-menu__subsection-title' ,
+                  innerText: subKey
+                }
+              ))
+              const ulElem = createProjectsList(subSections[subKey], key !== "Foundation");
+              subSectionElem.appendChild(ulElem);
+              subSectionContainerElem.appendChild(subSectionElem);
+            })
+            sectionElem.appendChild(subSectionContainerElem);
+          } else {
+            const projects = sections[key];
+            const ulElem = createProjectsList(projects, true);
+            sectionElem.appendChild(ulElem);
           }
-          sectionElem.appendChild(ulElem);
           menuContainer.appendChild(sectionElem)
         });
       }
