@@ -28,7 +28,7 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     env = ss.black_death_v3(env)
 
     # Pre-process using SuperSuit
-    if env.unwrapped.vector_state == False:
+    if not env.unwrapped.vector_state:
         # If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking
         env = ss.color_reduction_v0(env, mode="B")
         env = ss.resize_v1(env, x_size=84, y_size=84)
@@ -130,18 +130,3 @@ if __name__ == "__main__":
 
     # Watch 2 games (takes ~10 seconds on a laptop CPU)
     eval(env_fn, num_games=2, render_mode="human", **env_kwargs)
-
-## NOTES:
-# with MLP and 81_920 steps:
-# Starting evaluation on knights_archers_zombies_v10 (num_games=10, render_mode=None)
-# Avg reward: 3.0
-# Avg reward per agent, per game:  {'archer_0': 0.3, 'archer_1': 0.7, 'knight_0': 0.1, 'knight_1': 0.1}
-# Full rewards:  {'archer_0': 3, 'archer_1': 7, 'knight_0': 1, 'knight_1': 1}
-#
-# Starting evaluation on knights_archers_zombies_v10 (num_games=2, render_mode=human)
-# Avg reward: 0.75
-# Avg reward per agent, per game:  {'archer_0': 0.0, 'archer_1': 1.0, 'knight_0': 0.0, 'knight_1': 0.5}
-# Full rewards:  {'archer_0': 0, 'archer_1': 2, 'knight_0': 0, 'knight_1': 1}
-
-# with CNN and no vector state and 81_920 steps:
-# takes FOREVER to train, not worth actually running in the CI IMO
