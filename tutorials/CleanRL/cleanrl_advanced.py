@@ -1,8 +1,16 @@
-# flake8: noqa
-# adapted from https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py
-# note: default value for total-timesteps has been changed from 2 million to 8000, for easier testing
+"""Advanced training script adapted from CleanRL's repository: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py
 
-# docs and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy
+This is a full training script including CLI, logging and integration with TensorBoard and WandB for experiment tracking.
+
+Full documentation and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/ppo/#ppo_pettingzoo_ma_ataripy.
+
+Note: default value for total-timesteps has been changed from 2 million to 8000, for easier testing.
+
+Authors: Costa (https://github.com/vwxyzjn), Elliot (https://github.com/elliottower)
+"""
+
+# flake8: noqa
+
 import argparse
 import importlib
 import os
