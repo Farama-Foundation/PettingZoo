@@ -1,4 +1,4 @@
-"""Advanced training script adapted from CleanRL's repository: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py
+"""Advanced training script adapted from CleanRL's repository: https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_pettingzoo_ma_atari.py.
 
 This is a full training script including CLI, logging and integration with TensorBoard and WandB for experiment tracking.
 
