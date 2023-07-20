@@ -28,7 +28,8 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
     env = ss.black_death_v3(env)
 
     # Pre-process using SuperSuit
-    if not env.unwrapped.vector_state:
+    visual_observation = not env.unwrapped.vector_state
+    if visual_observation:
         # If the observation space is visual, reduce the color channels, resize from 512px to 84px, and apply frame stacking
         env = ss.color_reduction_v0(env, mode="B")
         env = ss.resize_v1(env, x_size=84, y_size=84)
@@ -43,7 +44,7 @@ def train(env_fn, steps: int = 10_000, seed: int | None = 0, **env_kwargs):
 
     # Use a CNN policy if the observation space is visual
     model = PPO(
-        MlpPolicy if env.unwrapped.vector_state else CnnPolicy,
+        MlpPolicy if visual_observation else CnnPolicy,
         env,
         verbose=3,
         batch_size=256,
